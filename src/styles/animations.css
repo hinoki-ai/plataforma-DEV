@@ -1,0 +1,772 @@
+/* Enhanced UI Animations */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-subtle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(var(--primary), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(var(--primary), 0.6);
+  }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.4s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Stagger utilities */
+.stagger-50 {
+  animation-delay: 50ms;
+}
+.stagger-100 {
+  animation-delay: 100ms;
+}
+.stagger-150 {
+  animation-delay: 150ms;
+}
+.stagger-200 {
+  animation-delay: 200ms;
+}
+.stagger-250 {
+  animation-delay: 250ms;
+}
+.stagger-300 {
+  animation-delay: 300ms;
+}
+
+/* Hover enhancements */
+.hover-lift {
+  transition:
+    transform 0.2s ease-out,
+    box-shadow 0.2s ease-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Focus enhancements */
+.focus-ring {
+  transition: box-shadow 0.2s ease-out;
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.3);
+}
+
+/* Loading states */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--muted), 1) 0%,
+    rgba(var(--muted), 0.5) 50%,
+    rgba(var(--muted), 1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Button state transitions */
+.btn-state-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-loading {
+  cursor: wait;
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.btn-success {
+  background: rgb(34, 197, 94);
+  transform: scale(1.02);
+}
+
+.btn-success:hover {
+  background: rgb(22, 163, 74);
+}
+
+/* Touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  .touch-feedback:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-out;
+  }
+}
+
+/* Dynamic transition delay utility using data attributes */
+.transition-delay-custom[data-delay] {
+  transition-delay: attr(data-delay ms, 0ms);
+}
+
+/* Fallback for browsers that don't support attr() */
+.transition-delay-custom[data-delay="0"] { transition-delay: 0ms; }
+.transition-delay-custom[data-delay="50"] { transition-delay: 50ms; }
+.transition-delay-custom[data-delay="100"] { transition-delay: 100ms; }
+.transition-delay-custom[data-delay="150"] { transition-delay: 150ms; }
+.transition-delay-custom[data-delay="200"] { transition-delay: 200ms; }
+.transition-delay-custom[data-delay="250"] { transition-delay: 250ms; }
+.transition-delay-custom[data-delay="300"] { transition-delay: 300ms; }
+.transition-delay-custom[data-delay="350"] { transition-delay: 350ms; }
+.transition-delay-custom[data-delay="400"] { transition-delay: 400ms; }
+.transition-delay-custom[data-delay="450"] { transition-delay: 450ms; }
+.transition-delay-custom[data-delay="500"] { transition-delay: 500ms; }
+.transition-delay-custom[data-delay="600"] { transition-delay: 600ms; }
+.transition-delay-custom[data-delay="750"] { transition-delay: 750ms; }
+.transition-delay-custom[data-delay="900"] { transition-delay: 900ms; }
+.transition-delay-custom[data-delay="1000"] { transition-delay: 1000ms; }
+
+/* Theme transition */
+* {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* ===========================================
+   ADVANCED KEYFRAME ANIMATIONS
+   Based on Josh Comeau's Keyframe Animations Guide
+   =========================================== */
+
+/* ===== BASIC KEYFRAME SYNTAX ===== */
+/* Slide-in animation - basic example from the article */
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+/* ===== TIMING FUNCTIONS ===== */
+/* Different timing function examples */
+@keyframes slide-in-ease {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-in-ease-in-out {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-in-cubic-bezier {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+/* ===== LOOPED ANIMATIONS ===== */
+/* Loading spinner - linear timing for consistent speed */
+@keyframes spin-linear {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse-infinite {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ===== MULTI-STEP ANIMATIONS ===== */
+/* Multi-step spin - demonstrates timing function per step */
+@keyframes multi-step-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Complex multi-step entrance animation */
+@keyframes entrance-multi-step {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(25px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== ALTERNATING ANIMATIONS ===== */
+/* Breathing animation - grows and shrinks */
+@keyframes breathe {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes grow-and-shrink {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.5);
+  }
+}
+
+/* Bounce animation */
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-20px);
+  }
+}
+
+/* ===== FILL MODES ===== */
+/* Fade out animation - demonstrates fill modes */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Delayed entrance with backwards fill mode */
+@keyframes delayed-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== DYNAMIC ANIMATIONS WITH CSS VARIABLES ===== */
+/* Customizable bounce animation */
+@keyframes bounce-dynamic {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(calc(var(--bounce-offset, -20px)));
+  }
+}
+
+/* Customizable slide animation */
+@keyframes slide-dynamic {
+  from {
+    transform: translateX(calc(var(--slide-from, -100%)));
+  }
+  to {
+    transform: translateX(calc(var(--slide-to, 0%)));
+  }
+}
+
+/* Customizable scale animation */
+@keyframes scale-dynamic {
+  from {
+    transform: scale(var(--scale-from, 0.8));
+  }
+  to {
+    transform: scale(var(--scale-to, 1));
+  }
+}
+
+/* Customizable rotation */
+@keyframes rotate-dynamic {
+  from {
+    transform: rotate(calc(var(--rotate-from, 0deg)));
+  }
+  to {
+    transform: rotate(calc(var(--rotate-to, 360deg)));
+  }
+}
+
+/* ===== SCHOOL-SPECIFIC ANIMATIONS ===== */
+
+/* Calendar day entrance animation */
+@keyframes calendar-day-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Notification bell ring */
+@keyframes bell-ring {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: rotate(10deg);
+  }
+  20%, 40%, 60%, 80% {
+    transform: rotate(-10deg);
+  }
+}
+
+/* Book page turn animation */
+@keyframes page-turn {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateY(-90deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(-180deg);
+  }
+}
+
+/* Student progress bar fill */
+@keyframes progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-width, 75%);
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+/* Basic keyframe animations */
+.animate-slide-in {
+  animation: slide-in 1s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 1s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 1s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 1s ease-out;
+}
+
+/* Timing function examples */
+.animate-slide-in-ease {
+  animation: slide-in-ease 1s ease;
+}
+
+.animate-slide-in-ease-in-out {
+  animation: slide-in-ease-in-out 1s ease-in-out;
+}
+
+.animate-slide-in-cubic-bezier {
+  animation: slide-in-cubic-bezier 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Looped animations */
+.animate-spin-linear {
+  animation: spin-linear 1s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 1s linear infinite;
+}
+
+.animate-pulse-infinite {
+  animation: pulse-infinite 2s ease-in-out infinite;
+}
+
+/* Multi-step animations */
+.animate-multi-step-spin {
+  animation: multi-step-spin 2s ease-in-out infinite;
+}
+
+.animate-entrance-multi-step {
+  animation: entrance-multi-step 1s ease-out;
+}
+
+/* Alternating animations */
+.animate-breathe {
+  animation: breathe 2s ease-in-out infinite alternate;
+}
+
+.animate-grow-and-shrink {
+  animation: grow-and-shrink 2s ease-in-out infinite alternate;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite alternate;
+}
+
+/* Fill mode examples */
+.animate-fade-out {
+  animation: fade-out 1s ease-out forwards;
+}
+
+.animate-delayed-entrance {
+  animation: delayed-entrance 1s ease-out 500ms both;
+}
+
+/* Dynamic animations */
+.animate-bounce-dynamic {
+  animation: bounce-dynamic 1s ease-in-out infinite alternate;
+}
+
+.animate-slide-dynamic {
+  animation: slide-dynamic 1s ease-out;
+}
+
+.animate-scale-dynamic {
+  animation: scale-dynamic 0.5s ease-out;
+}
+
+.animate-rotate-dynamic {
+  animation: rotate-dynamic 2s linear infinite;
+}
+
+/* School-specific animations */
+
+.animate-calendar-day {
+  animation: calendar-day-entrance 0.5s ease-out;
+}
+
+.animate-bell-ring {
+  animation: bell-ring 1s ease-in-out;
+}
+
+.animate-page-turn {
+  animation: page-turn 1s ease-in;
+  transform-style: preserve-3d;
+}
+
+.animate-progress-fill {
+  animation: progress-fill 2s ease-out forwards;
+}
+
+/* ===== SHORTHAND ANIMATION EXAMPLES ===== */
+/* Shorthand with multiple properties */
+.animate-complex {
+  animation: slide-in 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s infinite alternate both;
+}
+
+/* Delayed animation shorthand */
+.animate-delayed-complex {
+  animation: slide-in 1000ms ease-out infinite alternate both;
+  animation-delay: 500ms;
+}
+
+/* ===== ACCESSIBILITY ===== */
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in,
+  .animate-slide-in-right,
+  .animate-slide-in-up,
+  .animate-slide-in-down,
+  .animate-slide-in-ease,
+  .animate-slide-in-ease-in-out,
+  .animate-slide-in-cubic-bezier,
+  .animate-spin-linear,
+  .animate-spin-reverse,
+  .animate-pulse-infinite,
+  .animate-multi-step-spin,
+  .animate-entrance-multi-step,
+  .animate-breathe,
+  .animate-grow-and-shrink,
+  .animate-bounce,
+  .animate-fade-out,
+  .animate-delayed-entrance,
+  .animate-bounce-dynamic,
+  .animate-slide-dynamic,
+  .animate-scale-dynamic,
+  .animate-rotate-dynamic,
+  .animate-calendar-day,
+  .animate-bell-ring,
+  .animate-page-turn,
+  .animate-progress-fill,
+  .animate-complex,
+  .animate-delayed-complex {
+    animation: none;
+  }
+}
+
+/* ===== ADVANCED TECHNIQUES ===== */
+/* Performance optimized animations using transform and opacity */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Hardware acceleration for smooth animations */
+.hardware-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* CSS Grid animations for dashboard layouts */
+@keyframes grid-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-grid-entrance {
+  animation: grid-entrance 0.6s ease-out;
+}
+
+/* Staggered grid animations using nth-child */
+.grid-staggered > :nth-child(1) { animation-delay: 0ms; }
+.grid-staggered > :nth-child(2) { animation-delay: 100ms; }
+.grid-staggered > :nth-child(3) { animation-delay: 200ms; }
+.grid-staggered > :nth-child(4) { animation-delay: 300ms; }
+.grid-staggered > :nth-child(5) { animation-delay: 400ms; }
+.grid-staggered > :nth-child(6) { animation-delay: 500ms; }
+.grid-staggered > :nth-child(7) { animation-delay: 600ms; }
+.grid-staggered > :nth-child(8) { animation-delay: 700ms; }
+
+/* ===== COMPONENT-SPECIFIC ANIMATIONS ===== */
+/* Button animations */
+@keyframes button-press {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes button-success {
+  0% {
+    transform: scale(1);
+    background-color: var(--primary);
+  }
+  50% {
+    transform: scale(1.05);
+    background-color: rgb(34, 197, 94);
+  }
+  100% {
+    transform: scale(1);
+    background-color: rgb(34, 197, 94);
+  }
+}
+
+.animate-button-press {
+  animation: button-press 0.1s ease-out;
+}
+
+.animate-button-success {
+  animation: button-success 0.6s ease-out;
+}
+
+/* Card hover animations */
+@keyframes card-hover {
+  from {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  to {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.animate-card-hover {
+  animation: card-hover 0.3s ease-out;
+}
+
+/* Modal entrance animations */
+@keyframes modal-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modal-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-modal-entrance {
+  animation: modal-entrance 0.3s ease-out;
+}
+
+.animate-modal-backdrop {
+  animation: modal-backdrop 0.2s ease-out;
+}

@@ -1,0 +1,287 @@
+/* Mobile Dashboard Styles */
+
+/* Mobile-first responsive design */
+@media (max-width: 767px) {
+  /* Dashboard grid adjustments */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Card spacing */
+  .dashboard-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Header adjustments */
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+
+  .dashboard-header p {
+    font-size: 0.875rem;
+  }
+
+  /* Navigation adjustments */
+  .dashboard-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: hsl(var(--background));
+    border-top: 1px solid hsl(var(--border));
+    padding: 0.75rem;
+    z-index: 50;
+  }
+
+  .dashboard-nav .nav-items {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  /* Sidebar adjustments */
+  .dashboard-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    background: hsl(var(--background));
+    border-right: 1px solid hsl(var(--border));
+    transition: left 0.3s ease-in-out;
+    z-index: 40;
+    overflow-y: auto;
+  }
+
+  .dashboard-sidebar.open {
+    left: 0;
+  }
+
+  /* Main content adjustments */
+  .dashboard-main {
+    margin-left: 0;
+    padding-bottom: 5rem; /* Account for fixed navigation */
+  }
+
+  /* Quick actions grid */
+  .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .quick-action-item {
+    min-height: 80px;
+    padding: 0.75rem;
+  }
+
+  .quick-action-item .icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .quick-action-item .title {
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
+
+  .quick-action-item .description {
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+
+  /* Stats cards */
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .stats-card {
+    padding: 1rem;
+  }
+
+  .stats-card .value {
+    font-size: 1.5rem;
+  }
+
+  .stats-card .label {
+    font-size: 0.75rem;
+  }
+
+  /* Notification center */
+  .notification-center {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    background: hsl(var(--background));
+    border-left: 1px solid hsl(var(--border));
+    transition: right 0.3s ease-in-out;
+    z-index: 50;
+    overflow-y: auto;
+  }
+
+  .notification-center.open {
+    right: 0;
+  }
+
+  /* Table responsiveness */
+  .responsive-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .responsive-table th,
+  .responsive-table td {
+    padding: 0.5rem;
+    min-width: 120px;
+  }
+
+  /* Form adjustments */
+  .mobile-form {
+    gap: 1rem;
+  }
+
+  .mobile-form .form-group {
+    width: 100%;
+  }
+
+  .mobile-form input,
+  .mobile-form select,
+  .mobile-form textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 0.75rem;
+  }
+
+  /* Button adjustments */
+  .mobile-button {
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Modal adjustments */
+  .mobile-modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+
+  .mobile-modal .modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .mobile-modal .modal-body {
+    padding: 1rem;
+  }
+
+  .mobile-modal .modal-footer {
+    padding: 1rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Better spacing for touch */
+  .touch-spacing > * + * {
+    margin-top: 0.75rem;
+  }
+
+  /* Prevent text selection on touch */
+  .no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Smooth scrolling for touch devices */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dashboard-card {
+    border-width: 2px;
+  }
+
+  .dashboard-button {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-transition,
+  .dashboard-animation {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Dark mode mobile optimizations */
+@media (max-width: 767px) and (prefers-color-scheme: dark) {
+  .dashboard-sidebar,
+  .notification-center,
+  .mobile-modal {
+    background: hsl(var(--background));
+    border-color: hsl(var(--border));
+  }
+}
+
+/* Print styles */
+@media print {
+  .dashboard-nav,
+  .dashboard-sidebar,
+  .notification-center {
+    display: none !important;
+  }
+
+  .dashboard-main {
+    margin-left: 0 !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

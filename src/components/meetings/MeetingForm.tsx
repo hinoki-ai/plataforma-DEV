@@ -1,0 +1,551 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import type { Meeting } from '@prisma/client';
+import { MeetingType } from '@prisma/client';
+import { createMeeting, updateMeeting } from '@/services/actions/meetings';
+import { useLanguage } from '@/components/language/LanguageContext';
+
+const meetingFormSchema = z.object({
+  title: z.string().min(3, 'El título debe tener al menos 3 caracteres'),
+  description: z.string().optional(),
+  studentName: z.string().min(2, 'El nombre del estudiante es requerido'),
+  studentGrade: z.string().min(1, 'El grado del estudiante es requerido'),
+  guardianName: z.string().min(2, 'El nombre del apoderado es requerido'),
+  guardianEmail: z.string().email('Email inválido'),
+  guardianPhone: z.string().min(8, 'El teléfono debe tener al menos 8 dígitos'),
+  scheduledDate: z.date({
+    message: 'La fecha es requerida',
+  }),
+  scheduledTime: z.string().min(1, 'La hora es requerida'),
+  duration: z.number().min(15).max(120),
+  location: z.string(),
+  type: z.nativeEnum(MeetingType),
+  assignedTo: z.string().uuid('Debe seleccionar un profesor'),
+});
+
+type MeetingFormData = z.infer<typeof meetingFormSchema>;
+
+interface MeetingFormProps {
+  meeting?: Meeting | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess?: () => void;
+  mode: 'create' | 'edit';
+}
+
+const grades = [
+  'Pre-kinder',
+  'Kinder',
+  '1º Básico',
+  '2º Básico',
+  '3º Básico',
+  '4º Básico',
+  '5º Básico',
+  '6º Básico',
+  '7º Básico',
+  '8º Básico',
+];
+
+const timeSlots = [
+  '08:00',
+  '08:30',
+  '09:00',
+  '09:30',
+  '10:00',
+  '10:30',
+  '11:00',
+  '11:30',
+  '12:00',
+  '12:30',
+  '13:00',
+  '13:30',
+  '14:00',
+  '14:30',
+  '15:00',
+  '15:30',
+  '16:00',
+  '16:30',
+  '17:00',
+  '17:30',
+  '18:00',
+  '18:30',
+];
+
+export function MeetingForm({
+  meeting,
+  isOpen,
+  onClose,
+  onSuccess,
+  mode,
+}: MeetingFormProps) {
+  const [users, setUsers] = useState<
+    Array<{ id: string; name: string; email: string }>
+  >([]);
+  const [usersLoading, setUsersLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setUsersLoading(true);
+        const response = await fetch('/api/users');
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data = await response.json();
+        setUsers(data.data || []);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        setUsers([]);
+      } finally {
+        setUsersLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const form = useForm<MeetingFormData>({
+    resolver: zodResolver(meetingFormSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      studentName: '',
+      studentGrade: '',
+      guardianName: '',
+      guardianEmail: '',
+      guardianPhone: '',
+      scheduledDate: new Date(),
+      scheduledTime: '',
+      duration: 30,
+      location: 'Sala de Reuniones',
+      type: MeetingType.PARENT_TEACHER,
+      assignedTo: '',
+    },
+  });
+
+  useEffect(() => {
+    if (meeting && mode === 'edit') {
+      form.reset({
+        title: meeting.title,
+        description: meeting.description || '',
+        studentName: meeting.studentName,
+        studentGrade: meeting.studentGrade,
+        guardianName: meeting.guardianName,
+        guardianEmail: meeting.guardianEmail,
+        guardianPhone: meeting.guardianPhone,
+        scheduledDate: new Date(meeting.scheduledDate),
+        scheduledTime: meeting.scheduledTime,
+        duration: meeting.duration,
+        location: meeting.location,
+        type: meeting.type,
+        assignedTo: meeting.assignedTo,
+      });
+    }
+  }, [meeting, mode, form]);
+
+  const onSubmit = async (data: MeetingFormData) => {
+    setIsSubmitting(true);
+    try {
+      if (mode === 'create') {
+        await createMeeting(data);
+      } else if (meeting) {
+        await updateMeeting(meeting.id, data);
+      }
+      onSuccess?.();
+      onClose();
+    } catch (error) {
+      console.error('Error saving meeting:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>
+            {mode === 'create'
+              ? `${t('common.create', 'common')} ${t('common.title', 'common')}`
+              : `${t('common.edit', 'common')} ${t('common.title', 'common')}`}
+          </DialogTitle>
+          <DialogDescription>
+            {t('forms.description.placeholder', 'common')}
+          </DialogDescription>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('common.title', 'common')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t('placeholders.meeting_title', 'common')}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('common.description', 'common')}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder={t(
+                        'placeholders.meeting_description',
+                        'common'
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('common.title', 'common')} {t('common.type', 'common')}
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('select.type', 'common')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value={MeetingType.PARENT_TEACHER}>
+                        Apoderado-Profesor
+                      </SelectItem>
+                      <SelectItem value={MeetingType.FOLLOW_UP}>
+                        Seguimiento
+                      </SelectItem>
+                      <SelectItem value={MeetingType.EMERGENCY}>
+                        Emergencia
+                      </SelectItem>
+                      <SelectItem value={MeetingType.IEP_REVIEW}>
+                        Revisión IEP
+                      </SelectItem>
+                      <SelectItem value={MeetingType.GRADE_CONFERENCE}>
+                        Conferencia de Grado
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="studentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('user.name.label', 'common')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t('user.name.placeholder', 'common')}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="studentGrade"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Grado</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t('select.grade', 'common')}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {grades.map(grade => (
+                          <SelectItem key={grade} value={grade}>
+                            {grade}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="guardianName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nombre del Apoderado</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nombre del apoderado" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="guardianEmail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email del Apoderado</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="email@ejemplo.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="guardianPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Teléfono del Apoderado</FormLabel>
+                  <FormControl>
+                    <Input placeholder="+56 9 1234 5678" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="scheduledDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Fecha</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            className="w-full pl-3 text-left font-normal"
+                          >
+                            {field.value ? (
+                              format(field.value, 'PPP', { locale: es })
+                            ) : (
+                              <span>Seleccionar fecha</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={date =>
+                            date < new Date() || date < new Date('1900-01-01')
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="scheduledTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hora</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t('select.time', 'common')}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {timeSlots.map(time => (
+                          <SelectItem key={time} value={time}>
+                            {time}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="duration"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duración (minutos)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min={15}
+                        max={120}
+                        {...field}
+                        onChange={e => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ubicación</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Sala de Reuniones" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="assignedTo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Asignar a</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t('select.professor', 'common')}
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {usersLoading ? (
+                        <SelectItem value="" disabled>
+                          Cargando...
+                        </SelectItem>
+                      ) : (
+                        users?.map(user => (
+                          <SelectItem key={user.id} value={user.id}>
+                            {user.name || user.email}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-end space-x-2">
+              <Button type="button" variant="outline" onClick={onClose}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting
+                  ? 'Guardando...'
+                  : mode === 'create'
+                    ? 'Crear Reunión'
+                    : 'Actualizar Reunión'}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}
