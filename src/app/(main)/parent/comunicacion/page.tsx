@@ -61,6 +61,10 @@ export default function ComunicacionPage() {
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showAllMessages, setShowAllMessages] = useState(false);
 
+  useEffect(() => {
+    fetchCommunications();
+  }, []);
+
   // Handle loading state
   if (status === 'loading') {
     return <div>{t('parent.students.loading')}</div>;
@@ -75,10 +79,6 @@ export default function ComunicacionPage() {
   if (!roleAccess.canAccessParent) {
     redirect('/unauthorized');
   }
-
-  useEffect(() => {
-    fetchCommunications();
-  }, []);
 
   const fetchCommunications = async () => {
     try {

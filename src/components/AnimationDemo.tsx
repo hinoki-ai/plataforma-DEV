@@ -82,7 +82,7 @@ export default function AnimationDemo() {
             CSS Keyframe Animations Demo
           </h1>
           <p className="text-lg text-gray-600">
-            Interactive showcase of advanced animation techniques from Josh Comeau's guide
+            Interactive showcase of advanced animation techniques from Josh Comeau&apos;s guide
           </p>
         </div>
 
@@ -594,7 +594,7 @@ export default function AnimationDemo() {
             <CardContent className="pt-6">
               <h3 className="text-lg font-semibold mb-2">About This Demo</h3>
               <p className="text-gray-600 mb-4">
-                This interactive demo showcases all the keyframe animation concepts from Josh Comeau's comprehensive guide.
+                This interactive demo showcases all the keyframe animation concepts from Josh Comeau&apos;s comprehensive guide.
                 Each animation demonstrates a specific technique that can be applied to your school website.
               </p>
               <div className="flex flex-wrap justify-center gap-2">

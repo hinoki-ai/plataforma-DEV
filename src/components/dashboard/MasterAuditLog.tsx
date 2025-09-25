@@ -40,11 +40,6 @@ export function MasterAuditLog() {
   const [selectedSeverity, setSelectedSeverity] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Only render for MASTER users
-  if (!roleAccess.hasMasterGodMode) {
-    return null;
-  }
-
   // Mock audit data for demonstration
   useEffect(() => {
     const mockAuditData: AuditEntry[] = [
@@ -121,6 +116,11 @@ export function MasterAuditLog() {
 
     setFilteredLogs(filtered);
   }, [auditLogs, searchTerm, selectedSeverity]);
+
+  // Only render for MASTER users
+  if (!roleAccess.hasMasterGodMode) {
+    return null;
+  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

@@ -63,6 +63,19 @@ export default function ArchivoPage() {
   const [filterPriority, setFilterPriority] = useState('all');
   const [sortBy, setSortBy] = useState('date-desc');
 
+  useEffect(() => {
+    // Simulate API call
+    const loadMessages = async () => {
+      setLoading(true);
+      // In a real app, this would be an API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setMessages(mockMessages);
+      setLoading(false);
+    };
+
+    loadMessages();
+  }, []);
+
   // Mock archived messages
   const mockMessages: ArchivedMessage[] = [
     {
@@ -143,19 +156,6 @@ export default function ArchivoPage() {
   if (!roleAccess.canAccessParent) {
     redirect('/unauthorized');
   }
-
-  useEffect(() => {
-    // Simulate API call
-    const loadMessages = async () => {
-      setLoading(true);
-      // In a real app, this would be an API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setMessages(mockMessages);
-      setLoading(false);
-    };
-
-    loadMessages();
-  }, []);
 
   const filteredMessages = messages
     .filter(message => {

@@ -102,12 +102,28 @@ export function OptimizedDashboard({ className }: OptimizedDashboardProps) {
   const { data: session, status } = useSession();
   const { stats, loading, error, performance } = useOptimizedDashboard();
 
+  const userRole = session?.user?.role as keyof typeof ROLE_CONFIGS;
+  const config = userRole ? ROLE_CONFIGS[userRole] : null;
+
+  // Memoize expensive calculations
+  const dashboardData = useMemo(() => {
+    if (!stats || loading || !session?.user || !config) return null;
+
+    return {
+      welcomeMessage: `¡Hola, ${session.user.name || session.user.email}!`,
+      roleSpecificStats: extractRoleStats(stats, userRole),
+      recentActivity: stats.recentActivity || [],
+      quickActions: config.primaryActions,
+      alerts: stats.alerts || [],
+    };
+  }, [stats, loading, session?.user, userRole, config]);
+
   // Show loading state
   if (status === 'loading') {
     return <PageLoader text="Cargando panel..." variant="centered" />;
   }
 
-  // Show error state  
+  // Show error state
   if (!session?.user) {
     return (
       <Card className="p-8 text-center">
@@ -118,9 +134,6 @@ export function OptimizedDashboard({ className }: OptimizedDashboardProps) {
     );
   }
 
-  const userRole = session.user.role as keyof typeof ROLE_CONFIGS;
-  const config = ROLE_CONFIGS[userRole];
-  
   if (!config) {
     return (
       <Card className="p-8 text-center">
@@ -130,19 +143,6 @@ export function OptimizedDashboard({ className }: OptimizedDashboardProps) {
       </Card>
     );
   }
-
-  // Memoize expensive calculations
-  const dashboardData = useMemo(() => {
-    if (!stats || loading) return null;
-
-    return {
-      welcomeMessage: `¡Hola, ${session.user.name || session.user.email}!`,
-      roleSpecificStats: extractRoleStats(stats, userRole),
-      recentActivity: stats.recentActivity || [],
-      quickActions: config.primaryActions,
-      alerts: stats.alerts || [],
-    };
-  }, [stats, loading, session.user, userRole, config]);
 
   const IconComponent = config.icon;
 

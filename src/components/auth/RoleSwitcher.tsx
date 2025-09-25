@@ -45,12 +45,6 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
 
   console.log('🎭 RoleSwitcher Debug:', { currentRole, canSwitch, hasSwitched, originalRole });
 
-  // Only show for MASTER users
-  if (!canSwitch) {
-    console.log('🚫 RoleSwitcher hidden - canSwitch is false');
-    return null;
-  }
-
   // Clear error after 5 seconds
   useEffect(() => {
     if (error) {
@@ -60,6 +54,12 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
       return () => clearTimeout(timer);
     }
   }, [error, clearError]);
+
+  // Only show for MASTER users
+  if (!canSwitch) {
+    console.log('🚫 RoleSwitcher hidden - canSwitch is false');
+    return null;
+  }
 
   const handleRoleSwitch = async (targetRole: UserRole) => {
     if (targetRole === currentRole) return;

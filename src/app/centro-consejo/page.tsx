@@ -248,7 +248,7 @@ export default function CentroConsejoPage() {
                                       </div>
                                     </div>
                                     <p className="text-white/90 leading-relaxed text-lg line-clamp-4">
-                                      "{testimonial.content}"
+                                      &ldquo;{testimonial.content}&rdquo;
                                     </p>
                                   </CardContent>
                                 </Card>

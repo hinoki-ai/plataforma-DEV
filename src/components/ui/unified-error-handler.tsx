@@ -547,10 +547,14 @@ export function showError(error: any, options?: Partial<ErrorInfo>) {
 }
 
 export function createErrorHandler(defaultOptions?: Partial<ErrorInfo>) {
-  return (error: any, additionalOptions?: Partial<ErrorInfo>) => {
+  const handler = (error: any, additionalOptions?: Partial<ErrorInfo>) => {
     const mergedOptions = { ...defaultOptions, ...additionalOptions };
     return <UnifiedErrorHandler error={error} errorInfo={mergedOptions} />;
   };
+
+  handler.displayName = 'ErrorHandler';
+
+  return handler;
 }
 
 export default UnifiedErrorHandler;
