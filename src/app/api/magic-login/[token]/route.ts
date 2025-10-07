@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/../convex/_generated/api';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
@@ -23,9 +24,11 @@ export async function GET(
       email: string;
     };
 
+    const client = getConvexClient();
+    
     // Find user
-    const user = await db.user.findUnique({
-      where: { id: decoded.userId, email: decoded.email },
+    const user = await client.query(api.users.getUserByEmail, {
+      email: decoded.email,
     });
 
     if (!user) {
@@ -44,7 +47,7 @@ export async function GET(
     const sessionToken = jwt.sign(
       {
         user: {
-          id: user.id,
+          id: user._id,
           email: user.email,
           name: user.name,
           role: user.role,

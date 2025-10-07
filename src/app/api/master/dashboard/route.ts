@@ -1,22 +1,23 @@
 import { NextRequest } from 'next/server';
-import { prisma, checkDatabaseConnection } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { createApiRoute, REQUIRED_ROLES } from '@/lib/api-validation';
 import { createSuccessResponse } from '@/lib/api-error';
 
 // GET /api/master/dashboard - MASTER system overview
 export const GET = createApiRoute(
   async (request, validated) => {
-    // Verify database health first
-    const isDbHealthy = await checkDatabaseConnection();
-    if (!isDbHealthy) {
-      throw new Error('Database connection failed');
-    }
+    const client = getConvexClient();
 
     // Parallel system metrics queries for maximum performance
     const [
       systemMetrics,
-      userMetrics,
-      contentMetrics,
+      allUsers,
+      allEvents,
+      allDocuments,
+      allMeetings,
+      allPhotos,
+      allVideos,
       errorMetrics,
       performanceMetrics
     ] = await Promise.all([
@@ -29,20 +30,14 @@ export const GET = createApiRoute(
       }),
       
       // User analytics
-      prisma.user.groupBy({
-        by: ['role'],
-        _count: { id: true },
-        where: { isActive: true },
-      }),
+      client.query(api.users.getUsers, { isActive: true }),
       
       // Content metrics
-      Promise.all([
-        prisma.calendarEvent.count(),
-        prisma.planningDocument.count(),
-        prisma.meeting.count(),
-        prisma.photo.count(),
-        prisma.video.count(),
-      ]),
+      client.query(api.calendar.getCalendarEvents, {}),
+      client.query(api.planning.getPlanningDocuments, {}),
+      client.query(api.meetings.getMeetings, {}),
+      client.query(api.media.getPhotos, {}),
+      client.query(api.media.getVideos, {}),
       
       // Error tracking (will work once ErrorLog model is added)
       Promise.resolve({
@@ -60,18 +55,16 @@ export const GET = createApiRoute(
     ]);
 
     // Transform user metrics for easy consumption
-    const usersByRole = userMetrics.reduce((acc, curr) => {
-      acc[curr.role] = curr._count.id;
+    const usersByRole = allUsers.reduce((acc, user) => {
+      acc[user.role] = (acc[user.role] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    const [
-      totalEvents,
-      totalDocuments, 
-      totalMeetings,
-      totalPhotos,
-      totalVideos
-    ] = contentMetrics;
+    const totalEvents = Array.isArray(allEvents) ? allEvents.length : (allEvents as any).events?.length || 0;
+    const totalDocuments = allDocuments.length;
+    const totalMeetings = (allMeetings as any).meetings?.length || allMeetings.length;
+    const totalPhotos = allPhotos.length;
+    const totalVideos = allVideos.length;
 
     const masterDashboard = {
       timestamp: new Date().toISOString(),

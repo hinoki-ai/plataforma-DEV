@@ -5,7 +5,7 @@
  */
 
 import { AppError, classifyError, isCriticalError } from './error-types';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 
 export type ExtendedUserRole = UserRole;
 

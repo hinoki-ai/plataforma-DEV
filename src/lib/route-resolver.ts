@@ -4,7 +4,7 @@
  * Part of Stage 3: Route & Logic Consolidation
  */
 
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 import { getDefaultRedirectPath } from '@/lib/role-utils';
 
 export type ExtendedUserRole = UserRole;

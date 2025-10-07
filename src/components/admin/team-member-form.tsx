@@ -17,7 +17,7 @@ import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, X, Upload } from 'lucide-react';
 import { toast } from 'sonner';
-import { TeamMember } from '@prisma/client';
+import { TeamMember } from '@/lib/prisma-compat-types';
 import { ActionLoader } from '@/components/ui/dashboard-loader';
 
 // i18n

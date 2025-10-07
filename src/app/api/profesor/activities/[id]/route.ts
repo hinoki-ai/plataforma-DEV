@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { canAccessProfesor } from '@/lib/role-utils';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 import { z } from 'zod';
 
 export const runtime = 'nodejs';
@@ -45,17 +47,9 @@ export async function GET(
       }, { status: 403 });
     }
 
-    const activity = await prisma.activity.findUnique({
-      where: { id },
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const client = getConvexClient();
+    const activity = await client.query(api.activities.getActivityById, {
+      id: id as Id<"activities">,
     });
 
     if (!activity) {
@@ -72,9 +66,21 @@ export async function GET(
       }, { status: 403 });
     }
 
+    // Get teacher info
+    const teacher = await client.query(api.users.getUserById, {
+      userId: activity.teacherId,
+    });
+
     return NextResponse.json({
       success: true,
-      data: activity,
+      data: {
+        ...activity,
+        teacher: teacher ? {
+          id: teacher._id,
+          name: teacher.name,
+          email: teacher.email,
+        } : null,
+      },
     });
 
   } catch (error) {
@@ -108,9 +114,11 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updateActivitySchema.parse(body);
 
+    const client = getConvexClient();
+
     // Check if activity exists and belongs to current teacher
-    const existingActivity = await prisma.activity.findUnique({
-      where: { id },
+    const existingActivity = await client.query(api.activities.getActivityById, {
+      id: id as Id<"activities">,
     });
 
     if (!existingActivity) {
@@ -128,26 +136,29 @@ export async function PUT(
 
     const updateData: any = { ...validatedData };
     if (validatedData.scheduledDate) {
-      updateData.scheduledDate = new Date(validatedData.scheduledDate);
+      updateData.scheduledDate = new Date(validatedData.scheduledDate).getTime();
     }
 
-    const activity = await prisma.activity.update({
-      where: { id },
-      data: updateData,
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const activity = await client.mutation(api.activities.updateActivity, {
+      id: id as Id<"activities">,
+      ...updateData,
+    });
+
+    // Get teacher info
+    const teacher = await client.query(api.users.getUserById, {
+      userId: activity.teacherId,
     });
 
     return NextResponse.json({
       success: true,
-      data: activity,
+      data: {
+        ...activity,
+        teacher: teacher ? {
+          id: teacher._id,
+          name: teacher.name,
+          email: teacher.email,
+        } : null,
+      },
     });
 
   } catch (error) {
@@ -185,9 +196,11 @@ export async function DELETE(
       }, { status: 403 });
     }
 
+    const client = getConvexClient();
+
     // Check if activity exists and belongs to current teacher
-    const existingActivity = await prisma.activity.findUnique({
-      where: { id },
+    const existingActivity = await client.query(api.activities.getActivityById, {
+      id: id as Id<"activities">,
     });
 
     if (!existingActivity) {
@@ -203,8 +216,8 @@ export async function DELETE(
       }, { status: 403 });
     }
 
-    await prisma.activity.delete({
-      where: { id },
+    await client.mutation(api.activities.deleteActivity, {
+      id: id as Id<"activities">,
     });
 
     return NextResponse.json({

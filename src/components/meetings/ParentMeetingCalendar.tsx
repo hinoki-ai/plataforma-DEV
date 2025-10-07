@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getMeetingsByParentAction } from '@/services/actions/meetings';
-import type { Meeting } from '@prisma/client';
+import type { Meeting } from '@/lib/prisma-compat-types';
 import type { MeetingsResponse } from '@/lib/types/service-responses';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';

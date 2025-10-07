@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 import { hasPermission, Permission } from '@/lib/authorization';
 import { getRoleAccess } from '@/lib/role-utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';

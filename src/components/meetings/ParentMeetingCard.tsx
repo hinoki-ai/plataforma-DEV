@@ -3,7 +3,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, Clock, MapPin, User, MessageSquare } from 'lucide-react';
-import { Meeting } from '@prisma/client';
+import { Meeting } from '@/lib/prisma-compat-types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { StatusBadge } from '@/components/ui/status-badge';

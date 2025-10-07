@@ -6,7 +6,7 @@
 import { useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 
 interface RoleSwitchState {
   isSwitching: boolean;

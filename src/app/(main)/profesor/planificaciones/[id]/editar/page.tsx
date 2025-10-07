@@ -23,7 +23,7 @@ export default async function EditarPlanificacionPage({ params }: Props) {
 
   const doc = document.data;
 
-  const updateAction = updatePlanningDocument.bind(null, id);
+  const updateAction = updatePlanningDocument.bind(null, doc._id);
 
   return (
     <PageTransition

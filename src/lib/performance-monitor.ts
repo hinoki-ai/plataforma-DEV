@@ -4,7 +4,7 @@
  * Part of Stage 4: Quality & Performance
  */
 
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 export type ExtendedUserRole = UserRole;
 
 export interface PerformanceMetric {

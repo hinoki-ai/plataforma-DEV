@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { canAccessProfesor } from '@/lib/role-utils';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { z } from 'zod';
 import { checkRateLimit, getRateLimitHeaders, RATE_LIMITS } from '@/lib/rate-limiter';
 
@@ -45,56 +46,60 @@ export async function GET(request: NextRequest) {
       }, { status: 403 });
     }
 
+    const client = getConvexClient();
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status'); // upcoming, completed, all
     const type = searchParams.get('type');
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
 
-    const where: any = {
-      teacherId: session.user.id,
-    };
-
-    // Add status filter
-    if (status === 'upcoming') {
-      where.scheduledDate = {
-        gte: new Date(),
-      };
-    } else if (status === 'completed') {
-      where.scheduledDate = {
-        lt: new Date(),
-      };
-    }
-
-    // Add type filter
-    if (type) {
-      where.type = type;
-    }
-
-    const activities = await prisma.activity.findMany({
-      where,
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-      orderBy: {
-        scheduledDate: status === 'upcoming' ? 'asc' : 'desc',
-        createdAt: 'desc',
-      },
-      take: limit,
-      skip: (page - 1) * limit,
+    // Get activities for this teacher
+    const allActivities = await client.query(api.activities.getActivities, {
+      teacherId: session.user.id as any,
+      type: type as any,
     });
 
-    const total = await prisma.activity.count({ where });
+    // Apply status filter
+    const now = Date.now();
+    let filteredActivities = allActivities;
+    if (status === 'upcoming') {
+      filteredActivities = allActivities.filter(a => a.scheduledDate >= now);
+    } else if (status === 'completed') {
+      filteredActivities = allActivities.filter(a => a.scheduledDate < now);
+    }
+
+    // Sort based on status
+    filteredActivities.sort((a, b) => {
+      if (status === 'upcoming') {
+        return a.scheduledDate - b.scheduledDate; // Ascending for upcoming
+      }
+      return b.scheduledDate - a.scheduledDate; // Descending for completed/all
+    });
+
+    // Apply pagination
+    const total = filteredActivities.length;
+    const paginatedActivities = filteredActivities.slice((page - 1) * limit, page * limit);
+
+    // Get teacher info for each activity
+    const activitiesWithTeacher = await Promise.all(
+      paginatedActivities.map(async (activity) => {
+        const teacher = await client.query(api.users.getUserById, {
+          userId: activity.teacherId,
+        });
+        return {
+          ...activity,
+          teacher: teacher ? {
+            id: teacher._id,
+            name: teacher.name,
+            email: teacher.email,
+          } : null,
+        };
+      })
+    );
 
     return NextResponse.json({
       success: true,
-      data: activities,
+      data: activitiesWithTeacher,
       pagination: {
         page,
         limit,
@@ -141,26 +146,31 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = createActivitySchema.parse(body);
 
-    const activity = await prisma.activity.create({
-      data: {
-        ...validatedData,
-        scheduledDate: new Date(validatedData.scheduledDate),
-        teacherId: session.user.id,
-      },
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const client = getConvexClient();
+    const activityId = await client.mutation(api.activities.createActivity, {
+      ...validatedData,
+      scheduledDate: new Date(validatedData.scheduledDate).getTime(),
+      teacherId: session.user.id as any,
+    });
+
+    const activity = await client.query(api.activities.getActivityById, {
+      id: activityId,
+    });
+
+    const teacher = await client.query(api.users.getUserById, {
+      userId: session.user.id as any,
     });
 
     return NextResponse.json({
       success: true,
-      data: activity,
+      data: {
+        ...activity,
+        teacher: teacher ? {
+          id: teacher._id,
+          name: teacher.name,
+          email: teacher.email,
+        } : null,
+      },
     });
 
   } catch (error) {

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 // Popover imports removed
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarIcon, Clock } from 'lucide-react';
-import type { Meeting } from '@prisma/client';
+import type { Meeting } from '@/lib/prisma-compat-types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getUpcomingMeetingsAction } from '@/services/actions/meetings';

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Manitos Pintadas** is a Chilean school management system built with Next.js 15, featuring role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality.
+**Manitos Pintadas** is a Chilean school management system built with Next.js 15 and Convex (serverless backend), featuring role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
 
 ## 📚 Critical Documentation (NEW)
 
@@ -39,18 +39,24 @@ npx vercel env ls | grep NEXTAUTH_URL
 ### Development Setup
 
 ```bash
-# Install and setup database
+# Install dependencies
 npm install
-npm run db:generate && npm run db:push && npm run db:seed
 
-# Development server
+# Initialize Convex (first time only)
+npx convex dev
+# This will open browser, create/select project, and generate types
+
+# Add Convex URL to .env
+NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
+
+# Development server (Terminal 1)
+npx convex dev
+
+# Development server (Terminal 2)
 npm run dev
 
-# Database GUI
-npm run db:studio
-
-# Create admin user
-npm run create-admin
+# View Convex dashboard
+npx convex dashboard
 ```
 
 ### Code Quality & Testing
@@ -61,12 +67,12 @@ npm run format              # Prettier + ESLint fix
 npm run lint                # ESLint check (max 0 warnings)
 npm run type-check          # TypeScript validation
 
-# Testing (all 495+ tests must pass)
-npm run test:unit           # Vitest unit tests (296 tests)
-npm run test:e2e            # Playwright E2E tests (140 tests)
-npm run test:a11y           # Accessibility tests (98 tests)
+# Testing (NOTE: Tests being updated for Convex)
+npm run test:unit           # Vitest unit tests
+npm run test:e2e            # Playwright E2E tests
+npm run test:a11y           # Accessibility tests
 npm run test:performance    # Lighthouse performance tests
-npm run test:all            # Complete test suite (495+ tests)
+npm run test:all            # Complete test suite
 
 # Development testing
 npm run test:unit:watch     # Unit tests in watch mode
@@ -75,28 +81,23 @@ npm run test:e2e:debug      # E2E tests in debug mode
 npm run test:unit:coverage  # Generate coverage report
 ```
 
-### Database Operations
+### Convex Operations
 
 ```bash
-npm run db:generate         # Generate Prisma client
-npm run db:push             # Apply schema changes
-npm run db:migrate          # Create migration
-npm run db:seed             # Seed test data
-npm run db:studio           # Open Prisma Studio GUI
+# Development
+npx convex dev              # Start Convex dev server (watches for changes)
+npx convex dashboard        # Open Convex dashboard in browser
 
-# Production database commands
-npm run db:migrate:deploy   # Deploy migrations (production)
-npm run db:migrate:prod     # Deploy migrations + generate client
-npm run db:seed:production  # Seed production data
-npm run db:seed:emergency   # Emergency seed for recovery
+# Deployment
+npx convex deploy           # Deploy to production
+npx convex deploy --prod    # Deploy with production flag
 
-# User management scripts
-npm run create-admin        # Create admin user
-npm run create-all-test-users # Create all test users
-tsx scripts/create-parent.ts # Create specific parent user
-tsx scripts/verify-users.ts # Verify user accounts
-tsx scripts/count-users.ts  # Count users by role
-tsx scripts/remove-user.ts  # Remove specific user
+# Data Management
+# Use Convex dashboard for data viewing/editing
+# Or create custom scripts using Convex client
+
+# Note: Old Prisma commands (db:*) have been removed
+# Convex handles schema automatically from convex/schema.ts
 ```
 
 ## Architecture Overview
@@ -104,8 +105,8 @@ tsx scripts/remove-user.ts  # Remove specific user
 ### Core Stack
 
 - **Next.js 15** with App Router and React 19
+- **Convex** serverless backend with real-time database
 - **NextAuth.js v5** with role-based middleware protection
-- **Prisma ORM** with PostgreSQL (Supabase in production)
 - **Tailwind CSS** + **shadcn/ui** components
 - **TypeScript** throughout the entire codebase
 
@@ -125,44 +126,65 @@ The system uses a strict role-based access model with middleware enforcement:
 **Key Auth Files**:
 
 - `src/lib/auth.ts` - NextAuth configuration with credentials + OAuth
-- `src/lib/auth-prisma.ts` - User authentication logic
+- `src/lib/auth-convex.ts` - User authentication logic with Convex
+- `src/lib/convex.ts` - Convex client configuration
 - `src/services/actions/auth.ts` - Server Actions for login/logout
 - `src/middleware.ts` - Route protection and role-based redirects
 
 ### Data Layer Architecture
 
-**Services Pattern** (critical for consistency):
+**Backend**: Convex serverless functions in `convex/` directory
+
+```text
+convex/
+├── schema.ts             # Database schema (32 models)
+├── users.ts              # User operations
+├── meetings.ts           # Meeting management
+├── planning.ts           # Planning documents
+├── calendar.ts           # Calendar events
+├── students.ts           # Student management
+├── activities.ts         # Activity tracking
+├── notifications.ts      # Notifications
+├── votes.ts              # Voting system
+├── media.ts              # Photos & videos
+├── teamMembers.ts        # Team management
+├── schoolInfo.ts         # School information
+├── auth.ts               # OAuth & sessions
+└── _generated/           # Auto-generated types
+```
+
+**Services Layer** (backward-compatible wrappers):
 
 ```text
 src/services/
-├── actions/     # Server Actions for CUD operations (Create, Update, Delete)
+├── actions/     # Server Actions wrapping Convex mutations
 │   ├── auth.ts           # Authentication actions
 │   ├── meetings.ts       # Meeting management
 │   ├── planning.ts       # Planning documents
 │   ├── calendar.ts       # Calendar events
 │   ├── team-members.ts   # Team management
-│   ├── magic-links.ts    # Magic link authentication
 │   └── unified-registration.ts # User registration
-├── queries/     # Read operations and data fetching
+├── queries/     # Read operations wrapping Convex queries
 │   ├── meetings.ts       # Meeting queries
 │   ├── planning.ts       # Planning queries
 │   ├── calendar.ts       # Calendar queries
 │   ├── team-members.ts   # Team queries
 │   └── school-info.ts    # School information
 └── calendar/    # Calendar service layer
-    ├── calendar-service.ts
+    ├── calendar-service.ts  # Being migrated to Convex
     ├── calendar-client.ts
     └── types.ts
 ```
 
-**Database Models** (Prisma):
+**Database Models** (Convex Schema):
 
-- `User` - System users with roles
-- `PlanningDocument` - Teacher planning documents
-- `Meeting` - Parent-teacher meetings
-- `CalendarEvent` - School calendar events
-- `TeamMember` - Multidisciplinary team
-- `CentroConsejoMember` - Council members
+- `users` - System users with roles
+- `planningDocuments` - Teacher planning documents
+- `meetings` - Parent-teacher meetings
+- `calendarEvents` - School calendar events
+- `teamMembers` - Multidisciplinary team
+- `centroConsejoMembers` - Council members
+- Plus 26 more models for complete functionality
 
 ### UI Component System
 
@@ -202,8 +224,15 @@ Always use the services layer for database operations:
 // ✅ Correct - use services
 import { createMeeting } from '@/services/actions/meetings';
 
-// ❌ Wrong - direct Prisma calls
-import { db } from '@/lib/db';
+// ✅ Or use Convex client directly in API routes
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
+
+const client = getConvexClient();
+const meetings = await client.query(api.meetings.getMeetings, {});
+
+// ❌ Wrong - old Prisma calls (removed)
+import { db } from '@/lib/db'; // This file no longer exists
 ```
 
 ### Role-Based Component Rendering
@@ -296,21 +325,24 @@ GOOGLE_CLIENT_SECRET=...
 
 ### Database Approach
 
-- PostgreSQL for production (Supabase)
-- SQLite for development convenience
-- Prisma migrations for schema evolution
-- Seed scripts for consistent test data
+- **Convex** serverless database (real-time, type-safe)
+- No migrations needed - schema defined in `convex/schema.ts`
+- Automatic type generation from schema
+- Built-in dashboard for data inspection
+- Real-time subscriptions out of the box
 
 ## Common Pitfalls to Avoid
 
-1. **Never bypass the services layer** - Always use `src/services/actions/` and `src/services/queries/`
-2. **Don't mix auth approaches** - Stick to NextAuth.js patterns, don't create custom auth
-3. **Respect the role hierarchy** - Don't create routes that bypass middleware protection
-4. **Follow the provider nesting order** - Changing provider order can break functionality
-5. **Always test role-based access** - E2E tests must verify route protection works
-6. **Run tests before commits** - All 495+ tests must pass (use `npm run test:all`)
-7. **Don't ignore TypeScript errors** - Use `npm run type-check` and fix all issues
-8. **Follow the zero-warning policy** - ESLint must pass with `--max-warnings=0`
+1. **Never bypass the services layer** - Always use `src/services/actions/` and `src/services/queries/` or Convex client
+2. **Always run `npx convex dev`** - Required for type generation and development
+3. **Don't mix auth approaches** - Stick to NextAuth.js patterns, don't create custom auth
+4. **Respect the role hierarchy** - Don't create routes that bypass middleware protection
+5. **Follow the provider nesting order** - Changing provider order can break functionality
+6. **Always test role-based access** - E2E tests must verify route protection works
+7. **Check migration status** - See `MIGRATION.md` for which API routes are migrated
+8. **Don't ignore TypeScript errors** - Use `npm run type-check` and fix all issues
+9. **Follow the zero-warning policy** - ESLint must pass with `--max-warnings=0`
+10. **Keep Convex dev running** - Required for hot reload and type updates
 
 ## Domain-Specific Features
 
@@ -389,12 +421,12 @@ npm run test:performance:all # All performance tests
 
 ### Build Process
 
-- Development uses SQLite by default for convenience
-- Production builds require PostgreSQL (configured via DATABASE_URL)
-- Build command includes database generation: `npm run build`
-- Vercel deployment uses optimized build: `npm run build:vercel`
+- Development requires Convex dev server running (`npx convex dev`)
+- Production builds require `NEXT_PUBLIC_CONVEX_URL` environment variable
+- Build command: `npm run build`
+- Convex deployment: `npx convex deploy` (separate from Next.js)
+- Deploy Next.js after deploying Convex to production
 - Turbo mode available for faster development: `npm run dev:turbo`
-- Production preparation script: `node scripts/prepare-production.js`
 
 ### Testing Philosophy
 

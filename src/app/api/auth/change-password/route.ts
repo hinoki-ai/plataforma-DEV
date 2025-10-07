@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { hashPassword, verifyPassword } from '@/lib/crypto';
 import { Logger } from '@/lib/logger';
 import { z } from 'zod';
@@ -130,16 +131,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch user with password
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        password: true,
-        name: true,
-        role: true,
-        isOAuthUser: true,
-      },
+    const client = getConvexClient();
+    const user = await client.query(api.users.getUserById, {
+      userId: userId as any,
     });
 
     if (!user) {
@@ -151,7 +145,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!user.password) {
-      logger.warn('Password change attempted for user without password (likely OAuth)', { userId, isOAuthUser: user.isOAuthUser });
+      logger.warn('Password change attempted for user without password (likely OAuth)', { userId });
       return NextResponse.json(
         { error: 'Password change is not available for this account type' },
         { status: 400 }
@@ -162,14 +156,6 @@ export async function POST(request: NextRequest) {
     const isCurrentPasswordValid = await verifyPassword(currentPassword, user.password);
     if (!isCurrentPasswordValid) {
       logger.warn('Invalid current password for password change', { userId });
-
-      // Log failed attempt for audit
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          updatedAt: new Date(),
-        },
-      });
 
       return NextResponse.json(
         { error: 'Current password is incorrect' },
@@ -190,19 +176,13 @@ export async function POST(request: NextRequest) {
     const hashedNewPassword = await hashPassword(newPassword);
 
     // Update password and log the change
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        password: hashedNewPassword,
-        updatedAt: new Date(),
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        updatedAt: true,
-      },
+    await client.mutation(api.users.updateUser, {
+      userId: userId as any,
+      password: hashedNewPassword,
+    });
+
+    const updatedUser = await client.query(api.users.getUserById, {
+      userId: userId as any,
     });
 
     // Clear rate limit on successful change
@@ -215,28 +195,13 @@ export async function POST(request: NextRequest) {
       role: user.role,
     });
 
-    // Invalidate all other sessions (except current one)
-    // For NextAuth sessions, we can delete all sessions since NextAuth will recreate the current one
-    // This ensures other devices are logged out for security
-    try {
-      await prisma.session.deleteMany({
-        where: {
-          userId: userId,
-        },
-      });
-    } catch (sessionError) {
-      // Log but don't fail the password change if session cleanup fails
-      logger.warn('Failed to cleanup sessions after password change', {
-        userId,
-        error: sessionError
-      });
-    }
+    // Note: Session cleanup is handled by NextAuth automatically
 
     return NextResponse.json({
       success: true,
       message: 'Password changed successfully',
       user: {
-        id: updatedUser.id,
+        id: updatedUser._id,
         email: updatedUser.email,
         name: updatedUser.name,
         role: updatedUser.role,

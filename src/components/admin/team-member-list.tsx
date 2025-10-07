@@ -1,6 +1,6 @@
 'use client';
 
-import type { TeamMember } from '@prisma/client';
+import type { TeamMember } from '@/lib/prisma-compat-types';
 import { TeamMemberList as UnifiedTeamMemberList } from '@/components/team/TeamMemberCard';
 import { useRouter } from 'next/navigation';
 

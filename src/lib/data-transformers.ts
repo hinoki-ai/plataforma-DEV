@@ -6,7 +6,7 @@
 
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 
 export type ExtendedUserRole = UserRole;
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/../convex/_generated/api';
 import { hasPermission, Permissions } from '@/lib/authorization';
 import {
   withApiErrorHandling,
@@ -28,30 +29,35 @@ export const PUT = withApiErrorHandling(
     const body = await request.json();
     const { title, url } = body;
 
+    const client = getConvexClient();
+    
     // Check if video exists
-    const existingVideo = await db.video.findUnique({
-      where: { id },
+    const existingVideo = await client.query(api.media.getVideoById, {
+      id: id as any,
     });
 
     if (!existingVideo) {
       throw new NotFoundError('Video not found');
     }
 
-    const video = await db.video.update({
-      where: { id },
-      data: {
-        title: title || existingVideo.title,
-        url: url || existingVideo.url,
-      },
-      include: {
-        uploader: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const updatedVideo = await client.mutation(api.media.updateVideo, {
+      id: id as any,
+      title: title || existingVideo.title,
+      // url is not updatable in the current schema
     });
+
+    const uploader = existingVideo.uploadedBy
+      ? await client.query(api.users.getUserById, {
+          id: existingVideo.uploadedBy,
+        })
+      : null;
+
+    const video = {
+      ...updatedVideo,
+      uploader: uploader
+        ? { name: uploader.name, email: uploader.email }
+        : null,
+    };
 
     return NextResponse.json({
       success: true,
@@ -78,17 +84,19 @@ export const DELETE = withApiErrorHandling(
 
     const { id } = await params;
 
+    const client = getConvexClient();
+    
     // Check if video exists
-    const existingVideo = await db.video.findUnique({
-      where: { id },
+    const existingVideo = await client.query(api.media.getVideoById, {
+      id: id as any,
     });
 
     if (!existingVideo) {
       throw new NotFoundError('Video not found');
     }
 
-    await db.video.delete({
-      where: { id },
+    await client.mutation(api.media.deleteVideo, {
+      id: id as any,
     });
 
     return NextResponse.json({

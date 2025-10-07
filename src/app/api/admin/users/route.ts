@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { hasPermission, Permissions, canCreateUser } from '@/lib/authorization';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { z } from 'zod';
 import { hashPassword } from '@/lib/crypto';
 import { checkRateLimit, getRateLimitHeaders, RATE_LIMITS } from '@/lib/rate-limiter';
 import { sanitizeJsonInput, SANITIZATION_SCHEMAS } from '@/lib/sanitization';
 import { createSuccessResponse, handleApiError, ApiErrorResponse } from '@/lib/api-error';
+import bcryptjs from 'bcryptjs';
 
 export const runtime = 'nodejs';
 
@@ -53,34 +56,27 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        // lastLogin: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    const client = getConvexClient();
+    const allUsers = await client.query(api.users.getUsers, {});
+    
+    // Map to match expected structure
+    const users = allUsers
+      .map(u => ({
+        id: u._id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        createdAt: u.createdAt,
+        updatedAt: u.updatedAt,
+      }))
+      .sort((a, b) => b.createdAt - a.createdAt);
 
     // Get admin creation stats for the current admin
-    const adminStats = await prisma.user.groupBy({
-      by: ['createdByAdmin'],
-      where: {
-        createdByAdmin: session.user.id,
-        role: 'ADMIN',
-      },
-      _count: {
-        id: true,
-      },
-    });
-
-    const adminsCreated = adminStats.length > 0 ? adminStats[0]._count.id : 0;
+    const admins = allUsers.filter(u => 
+      u.role === 'ADMIN' && u.createdByAdmin === session.user.id
+    );
+    
+    const adminsCreated = admins.length;
     const maxAdminsAllowed = 1;
 
     const data = {
@@ -135,9 +131,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const client = getConvexClient();
+    
     // Check if email already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email: validatedData.email },
+    const existingUser = await client.query(api.users.getUserByEmail, {
+      email: validatedData.email,
     });
 
     if (existingUser) {
@@ -150,12 +148,8 @@ export async function POST(request: NextRequest) {
     // Check admin creation limits
     if (validatedData.role === 'ADMIN') {
       // Count how many admins this admin has already created
-      const adminCount = await prisma.user.count({
-        where: {
-          role: 'ADMIN',
-          createdByAdmin: session.user.id,
-        },
-      });
+      const allUsers = await client.query(api.users.getUsers, { role: 'ADMIN' });
+      const adminCount = allUsers.filter(u => u.createdByAdmin === session.user.id).length;
 
       // Limit to 1 secondary admin per main admin
       if (adminCount >= 1) {
@@ -174,45 +168,35 @@ export async function POST(request: NextRequest) {
     }
 
     // Hash the provided password
-    const hashedPassword = await hashPassword(validatedData.password);
+    const hashedPassword = await bcryptjs.hash(validatedData.password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name: validatedData.name,
-        email: validatedData.email,
-        password: hashedPassword,
-        role: validatedData.role,
-        createdByAdmin: session.user.id, // Track which admin created this user
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+    const userId = await client.mutation(api.users.createUser, {
+      name: validatedData.name,
+      email: validatedData.email,
+      password: hashedPassword,
+      role: validatedData.role,
+      createdByAdmin: session.user.id, // Track which admin created this user
     });
+    
+    const user = await client.query(api.users.getUserById, { id: userId });
 
-    // Audit logging removed - using simple error-handler
+    // Map to expected structure
+    const userData = {
+      id: user!._id,
+      name: user!.name,
+      email: user!.email,
+      role: user!.role,
+      createdAt: user!.createdAt,
+      updatedAt: user!.updatedAt,
+    };
 
     // Get updated admin creation stats after creating the user
-    const adminStats = await prisma.user.groupBy({
-      by: ['createdByAdmin'],
-      where: {
-        createdByAdmin: session.user.id,
-        role: 'ADMIN',
-      },
-      _count: {
-        id: true,
-      },
-    });
-
-    const adminsCreated = adminStats.length > 0 ? adminStats[0]._count.id : 0;
+    const allUsers = await client.query(api.users.getUsers, { role: 'ADMIN' });
+    const adminsCreated = allUsers.filter(u => u.createdByAdmin === session.user.id).length;
     const maxAdminsAllowed = 1;
 
     const data = {
-      ...user,
+      ...userData,
       adminLimits: {
         currentAdminsCreated: adminsCreated,
         maxAdminsAllowed,

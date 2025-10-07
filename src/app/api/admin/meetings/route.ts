@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { canAccessAdmin } from '@/lib/role-utils';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { z } from 'zod';
 import { checkRateLimit, getRateLimitHeaders, RATE_LIMITS } from '@/lib/rate-limiter';
 
@@ -45,38 +46,22 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
 
-    const where: any = {};
+    const client = getConvexClient();
 
-    // Add status filter
-    if (status) {
-      where.status = status;
-    }
+    // Build filter object
+    const filter: any = {};
+    if (status) filter.status = status;
+    if (type) filter.type = type;
 
-    // Add type filter
-    if (type) {
-      where.type = type;
-    }
-
-    const meetings = await prisma.meeting.findMany({
-      where,
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-      orderBy: {
-        scheduledDate: 'desc',
-        scheduledTime: 'desc',
-      },
-      take: limit,
-      skip: (page - 1) * limit,
+    // Query Convex for meetings with pagination
+    const result = await client.query(api.meetings.getMeetings, {
+      filter,
+      page,
+      limit,
     });
 
-    const total = await prisma.meeting.count({ where });
+    const meetings = result.meetings;
+    const total = result.total;
 
     return NextResponse.json({
       success: true,
@@ -121,9 +106,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = createMeetingSchema.parse(body);
 
+    const client = getConvexClient();
+
     // Verify that the assigned teacher exists and is active
-    const assignedTeacher = await prisma.user.findUnique({
-      where: { id: validatedData.assignedTo },
+    const assignedTeacher = await client.query(api.users.getUserById, {
+      userId: validatedData.assignedTo as any, // Cast string to Id<"users">
     });
 
     if (!assignedTeacher || assignedTeacher.role !== 'PROFESOR' || !assignedTeacher.isActive) {
@@ -132,22 +119,12 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const meeting = await prisma.meeting.create({
-      data: {
-        ...validatedData,
-        scheduledDate: new Date(validatedData.scheduledDate),
-        source: 'STAFF_CREATED',
-        guardianPhone: validatedData.guardianPhone || '',
-      },
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const meeting = await client.mutation(api.meetings.createMeeting, {
+      ...validatedData,
+      assignedTo: validatedData.assignedTo as any, // Cast string to Id<"users">
+      scheduledDate: new Date(validatedData.scheduledDate).getTime(),
+      guardianPhone: validatedData.guardianPhone || '',
+      parentRequested: false, // Admin-created meetings are not parent-requested
     });
 
     return NextResponse.json({

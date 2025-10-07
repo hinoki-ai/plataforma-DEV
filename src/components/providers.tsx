@@ -8,6 +8,10 @@ import { LanguageProvider } from '@/components/language/LanguageContext';
 import { ContextProvider } from './providers/ContextProvider';
 import { WebVitalsProvider } from './providers/WebVitalsProvider';
 import { usePathname } from 'next/navigation';
+import { ConvexProvider, ConvexReactClient } from 'convex/react';
+
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || '';
+const convex = new ConvexReactClient(convexUrl);
 
 function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -31,24 +35,26 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <OptimizedSessionProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        disableTransitionOnChange
-        storageKey="school-theme"
-        forcedTheme={undefined}
-        nonce={undefined}
-      >
-        <ContextProvider>
-          <LanguageProvider>
-            <DesktopToggleProvider>
-              <WebVitalsProvider>{children}</WebVitalsProvider>
-            </DesktopToggleProvider>
-          </LanguageProvider>
-        </ContextProvider>
-      </ThemeProvider>
-    </OptimizedSessionProvider>
+    <ConvexProvider client={convex}>
+      <OptimizedSessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+          storageKey="school-theme"
+          forcedTheme={undefined}
+          nonce={undefined}
+        >
+          <ContextProvider>
+            <LanguageProvider>
+              <DesktopToggleProvider>
+                <WebVitalsProvider>{children}</WebVitalsProvider>
+              </DesktopToggleProvider>
+            </LanguageProvider>
+          </ContextProvider>
+        </ThemeProvider>
+      </OptimizedSessionProvider>
+    </ConvexProvider>
   );
 }

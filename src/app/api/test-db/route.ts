@@ -1,58 +1,47 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
-
-// Reset connection helper
-const resetConnection = async () => {
-  try {
-    await prisma.$disconnect();
-    await new Promise(resolve => setTimeout(resolve, 100));
-  } catch (error) {
-    console.warn('Error resetting connection:', error);
-  }
-};
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/../convex/_generated/api';
 
 export const runtime = 'nodejs';
 
 // GET /api/test-db - Test database connection
 export async function GET() {
   try {
-    // Reset connection to avoid prepared statement conflicts
-    await resetConnection();
-
-    // Test database connection
-    await prisma.$connect();
+    const client = getConvexClient();
 
     // Test simple user query
-    const userCount = await prisma.user.count();
+    const users = await client.query(api.users.getAllUsers, {});
+    const userCount = users.length;
 
     // Test notifications table specifically
     let notificationsCount = 0;
     let notificationsStatus = 'available';
     try {
-      notificationsCount = await prisma.notification.count();
+      const notifications = await client.query(api.notifications.getNotifications, { limit: 1 });
+      notificationsCount = notifications.length;
     } catch (notificationError) {
-      console.warn('Notifications table not available:', notificationError instanceof Error ? notificationError.message : String(notificationError));
+      console.warn('Notifications query failed:', notificationError instanceof Error ? notificationError.message : String(notificationError));
       notificationsStatus = 'unavailable';
     }
 
     return NextResponse.json({
       status: 'success',
-      databaseUrlAvailable: !!process.env.DATABASE_URL,
+      convexUrlAvailable: !!process.env.NEXT_PUBLIC_CONVEX_URL,
       userCount,
       notifications: {
         count: notificationsCount,
         status: notificationsStatus
       },
-      message: 'Database query successful'
+      message: 'Convex query successful'
     });
   } catch (error) {
-    console.error('Database test failed:', error);
+    console.error('Convex test failed:', error);
     return NextResponse.json(
       {
         status: 'error',
-        databaseUrlAvailable: !!process.env.DATABASE_URL,
+        convexUrlAvailable: !!process.env.NEXT_PUBLIC_CONVEX_URL,
         error: error instanceof Error ? error.message : 'Unknown error',
-        message: 'Database connection failed'
+        message: 'Convex connection failed'
       },
       { status: 500 }
     );

@@ -56,10 +56,10 @@ export default async function PlanificacionDetailPage({ params }: Props) {
           </div>
 
           <div className="flex items-center gap-2">
-            <Link href={`/profesor/planificaciones/${doc.id}/editar`}>
+            <Link href={`/profesor/planificaciones/${doc._id}/editar`}>
               <Button variant="outline">{t('profesor.planning.edit_button', 'profesor')}</Button>
             </Link>
-            <PlanningDocumentActions documentId={doc.id} />
+            <PlanningDocumentActions documentId={doc._id} />
           </div>
         </div>
 
@@ -121,16 +121,16 @@ export default async function PlanificacionDetailPage({ params }: Props) {
                   <label className="text-sm font-medium text-muted-foreground">
                     {t('profesor.planning.created', 'profesor')}
                   </label>
-                  <p className="text-foreground">{formatDate(doc.createdAt)}</p>
+                  <p className="text-foreground">{formatDate(new Date(doc.createdAt))}</p>
                 </div>
 
-                {doc.updatedAt.getTime() !== doc.createdAt.getTime() && (
+                {doc.updatedAt !== doc.createdAt && (
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">
                       {t('profesor.planning.last_updated', 'profesor')}
                     </label>
                     <p className="text-foreground">
-                      {formatDate(doc.updatedAt)}
+                      {formatDate(new Date(doc.updatedAt))}
                     </p>
                   </div>
                 )}
@@ -143,7 +143,7 @@ export default async function PlanificacionDetailPage({ params }: Props) {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Link
-                  href={`/profesor/planificaciones/${doc.id}/editar`}
+                  href={`/profesor/planificaciones/${doc._id}/editar`}
                   className="block"
                 >
                   <Button variant="outline" className="w-full">

@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function MinEducFooter() {
   return (
-    <div className="w-full bg-[#1a3578] text-white">
+    <div className="w-full bg-[#173277] text-white">
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-2">
         {/* Top bars and social icons */}
         <div className="flex items-center justify-between">
@@ -15,8 +15,8 @@ export default function MinEducFooter() {
             className="group focus:outline-none"
           >
             <div className="flex h-3 w-40 mb-2">
-              <div className="bg-[#4ba3dd] h-full w-1/2 group-hover:opacity-80 transition" />
-              <div className="bg-[#e03c31] h-full w-1/2 group-hover:opacity-80 transition" />
+              <div className="bg-[#1a69b1] h-full w-2/5 group-hover:opacity-80 transition" />
+              <div className="bg-[#E73C48] h-full w-3/5 group-hover:opacity-80 transition" />
             </div>
             <div className="text-2xl font-bold group-hover:underline">
               Ministerio de Educación

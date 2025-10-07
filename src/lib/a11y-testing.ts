@@ -4,7 +4,7 @@
  * Part of Stage 4.3: Accessibility & SEO Standardization
  */
 
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 
 export type ExtendedUserRole = UserRole;
 export type ContextType = 'public' | 'auth' | 'admin';

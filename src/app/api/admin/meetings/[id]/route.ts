@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { canAccessAdmin } from '@/lib/role-utils';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 import { z } from 'zod';
 
 export const runtime = 'nodejs';
@@ -44,17 +46,9 @@ export async function GET(
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
-    const meeting = await prisma.meeting.findUnique({
-      where: { id },
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const client = getConvexClient();
+    const meeting = await client.query(api.meetings.getMeetingById, {
+      id: id as Id<"meetings">,
     });
 
     if (!meeting) {
@@ -64,9 +58,21 @@ export async function GET(
       );
     }
 
+    // Get teacher info
+    const teacher = await client.query(api.users.getUserById, {
+      userId: meeting.assignedTo,
+    });
+
     return NextResponse.json({
       success: true,
-      data: meeting,
+      data: {
+        ...meeting,
+        teacher: teacher ? {
+          id: teacher._id,
+          name: teacher.name,
+          email: teacher.email,
+        } : null,
+      },
     });
 
   } catch (error) {
@@ -94,9 +100,11 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updateMeetingSchema.parse(body);
 
+    const client = getConvexClient();
+
     // Check if meeting exists
-    const existingMeeting = await prisma.meeting.findUnique({
-      where: { id },
+    const existingMeeting = await client.query(api.meetings.getMeetingById, {
+      id: id as Id<"meetings">,
     });
 
     if (!existingMeeting) {
@@ -108,8 +116,8 @@ export async function PUT(
 
     // If changing assigned teacher, verify they exist and are active
     if (validatedData.assignedTo && validatedData.assignedTo !== existingMeeting.assignedTo) {
-      const assignedTeacher = await prisma.user.findUnique({
-        where: { id: validatedData.assignedTo },
+      const assignedTeacher = await client.query(api.users.getUserById, {
+        userId: validatedData.assignedTo as Id<"users">,
       });
 
       if (!assignedTeacher || assignedTeacher.role !== 'PROFESOR' || !assignedTeacher.isActive) {
@@ -121,26 +129,33 @@ export async function PUT(
 
     const updateData: any = { ...validatedData };
     if (validatedData.scheduledDate) {
-      updateData.scheduledDate = new Date(validatedData.scheduledDate);
+      updateData.scheduledDate = new Date(validatedData.scheduledDate).getTime();
+    }
+    // Convert assignedTo to Id if present
+    if (validatedData.assignedTo) {
+      updateData.assignedTo = validatedData.assignedTo as Id<"users">;
     }
 
-    const meeting = await prisma.meeting.update({
-      where: { id },
-      data: updateData,
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const meeting = await client.mutation(api.meetings.updateMeeting, {
+      id: id as Id<"meetings">,
+      ...updateData,
+    });
+
+    // Get teacher info
+    const teacher = await client.query(api.users.getUserById, {
+      userId: meeting.assignedTo,
     });
 
     return NextResponse.json({
       success: true,
-      data: meeting,
+      data: {
+        ...meeting,
+        teacher: teacher ? {
+          id: teacher._id,
+          name: teacher.name,
+          email: teacher.email,
+        } : null,
+      },
       message: 'Reunión actualizada exitosamente',
     });
 
@@ -173,9 +188,11 @@ export async function DELETE(
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
+    const client = getConvexClient();
+
     // Check if meeting exists
-    const existingMeeting = await prisma.meeting.findUnique({
-      where: { id },
+    const existingMeeting = await client.query(api.meetings.getMeetingById, {
+      id: id as Id<"meetings">,
     });
 
     if (!existingMeeting) {
@@ -185,8 +202,8 @@ export async function DELETE(
       );
     }
 
-    await prisma.meeting.delete({
-      where: { id },
+    await client.mutation(api.meetings.deleteMeeting, {
+      id: id as Id<"meetings">,
     });
 
     return NextResponse.json({

@@ -11,19 +11,6 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  // Disable static optimization for dynamic routes
-  experimental: {
-    serverComponentsExternalPackages: [],
-  },
-
-  // Generate build ID for consistent deployments
-  generateBuildId: async () => {
-    return 'build-' + Date.now();
-  },
-
-  // Output configuration for deployment
-  output: 'standalone',
-
   // Performance optimizations
   productionBrowserSourceMaps: false,
   compress: true,

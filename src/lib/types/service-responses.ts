@@ -3,7 +3,7 @@
  * Created as part of Stage 1.2: Service Layer Standardization
  */
 
-import { User, PlanningDocument, Meeting, TeamMember } from '@prisma/client';
+import { User, PlanningDocument, Meeting, TeamMember } from '@/lib/prisma-compat-types';
 
 // Base service response types
 export interface ServiceResponse<T = any> {

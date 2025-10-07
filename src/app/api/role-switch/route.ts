@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { Logger } from '@/lib/logger';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 import { ExtendedUserRole } from '@/lib/authorization';
 
 const logger = Logger.getInstance('RoleSwitchAPI');

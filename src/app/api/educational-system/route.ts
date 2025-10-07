@@ -5,22 +5,17 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from '@/lib/server-auth';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { EducationalInstitutionType } from '@/lib/educational-system';
 
 // GET /api/educational-system - Fetch current institution configuration
 export async function GET() {
   try {
+    const client = getConvexClient();
+    
     // Get current institution configuration from school info
-    const schoolInfo = await prisma.schoolInfo.findFirst({
-      select: {
-        institutionType: true,
-        supportedLevels: true,
-        customGrades: true,
-        customSubjects: true,
-        educationalConfig: true,
-      },
-    });
+    const schoolInfo = await client.query(api.schoolInfo.getSchoolInfo, {});
 
     if (!schoolInfo) {
       // Return default configuration if no school info exists
@@ -94,34 +89,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const client = getConvexClient();
+
     // Update or create school info with new institution type
-    const updatedSchoolInfo = await prisma.schoolInfo.upsert({
-      where: { id: 'school-info' },
-      update: {
-        institutionType: institutionType as EducationalInstitutionType,
-        updatedAt: new Date(),
-      },
-      create: {
-        id: 'school-info',
-        name: 'Manitos Pintadas Educational Institution',
-        mission: 'Educating and nurturing young minds',
-        vision: 'A leading educational institution in our community',
-        address: 'To be configured',
-        phone: 'To be configured',
-        email: 'To be configured',
-        website: 'To be configured',
-        logoUrl: null,
-        institutionType: institutionType as EducationalInstitutionType,
-        supportedLevels: [],
-        customGrades: [],
-        customSubjects: [],
-        educationalConfig: {},
-      },
+    await client.mutation(api.schoolInfo.createOrUpdateSchoolInfo, {
+      name: 'Manitos Pintadas Educational Institution',
+      mission: 'Educating and nurturing young minds',
+      vision: 'A leading educational institution in our community',
+      address: 'To be configured',
+      phone: 'To be configured',
+      email: 'To be configured',
+      website: 'To be configured',
+      institutionType: institutionType as EducationalInstitutionType,
+      supportedLevels: [],
+      customGrades: [],
+      customSubjects: [],
+      educationalConfig: {},
     });
 
     return NextResponse.json({
       success: true,
-      institutionType: updatedSchoolInfo.institutionType,
+      institutionType: institutionType,
       message: `Institution type successfully updated to ${institutionType}`,
     });
 

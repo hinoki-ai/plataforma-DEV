@@ -1,6 +1,6 @@
 # Manitos Pintadas - Sistema de Gestión Escolar
 
-Un sistema integral de gestión escolar construido con Next.js 15, diseñado específicamente para instituciones educativas chilenas.
+Un sistema integral de gestión escolar construido con Next.js 15 y Convex (backend serverless en tiempo real), diseñado específicamente para instituciones educativas chilenas.
 
 ## 📋 Índice de Documentación
 
@@ -30,7 +30,7 @@ Un sistema integral de gestión escolar construido con Next.js 15, diseñado esp
 
 - Node.js 18+
 - npm o yarn
-- PostgreSQL (producción) / SQLite (dev opcional)
+- Cuenta Convex (gratis en convex.dev)
 
 ### Instalación
 
@@ -38,12 +38,19 @@ Un sistema integral de gestión escolar construido con Next.js 15, diseñado esp
 # 1. Instalar dependencias
 npm install
 
-# 2. Configurar base de datos
-npm run db:generate
-npm run db:push
-npm run db:seed
+# 2. Inicializar Convex
+npx convex dev
+# Sigue las instrucciones en el navegador para crear/seleccionar proyecto
 
-# 3. Iniciar servidor de desarrollo
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Añade NEXT_PUBLIC_CONVEX_URL del paso 2 a .env
+
+# 4. Iniciar desarrollo
+# Terminal 1: mantén Convex corriendo
+npx convex dev
+
+# Terminal 2: inicia Next.js
 npm run dev
 ```
 
@@ -61,8 +68,8 @@ npm run dev
 
 - **Frontend**: Next.js 15 + React 19 + TypeScript
 - **Build System**: Turbopack (optimizado para máxima velocidad)
-- **Backend**: Server Actions + Prisma ORM
-- **Base de Datos**: PostgreSQL (Supabase en producción)
+- **Backend**: Convex (Serverless con actualizaciones en tiempo real)
+- **Base de Datos**: Convex (NoSQL con TypeScript type-safe)
 - **Autenticación**: NextAuth.js v5
 - **Estilos**: Tailwind CSS + shadcn/ui
 - **Testing**: Vitest + Playwright + Lighthouse CI
@@ -128,20 +135,20 @@ enum UserRole {
 - **TeamMember**: Equipo multidisciplinario
 - **CentroConsejoMember**: Miembros del Centro Consejo
 
-### Comandos de Base de Datos
+### Comandos de Convex
 
 ```bash
-# Generar cliente Prisma
-npm run db:generate
+# Iniciar servidor de desarrollo Convex
+npx convex dev
 
-# Aplicar cambios de esquema
-npm run db:push
+# Abrir dashboard de Convex
+npx convex dashboard
 
-# Sembrar datos de prueba
-npm run db:seed
+# Desplegar a producción
+npx convex deploy
 
-# Interfaz gráfica de base de datos
-npm run db:studio
+# Ver datos en tiempo real
+npx convex dashboard
 ```
 
 ## 🧪 Testing
@@ -261,6 +268,13 @@ After deployment, login with:
 ### Environment Variables
 
 ```bash
+# Convex (requerido)
+NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"
+
+# NextAuth (requerido)
+NEXTAUTH_SECRET="your-secret-key"
+NEXTAUTH_URL="http://localhost:3000"
+
 # Almacenamiento de archivos
 CLOUDINARY_URL="cloudinary://KEY:SECRET@CLOUD_NAME"
 ```

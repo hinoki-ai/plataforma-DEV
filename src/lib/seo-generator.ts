@@ -5,7 +5,7 @@
  */
 
 import { Metadata } from 'next';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 
 export type ExtendedUserRole = UserRole;
 export type ContextType = 'public' | 'auth' | 'admin';

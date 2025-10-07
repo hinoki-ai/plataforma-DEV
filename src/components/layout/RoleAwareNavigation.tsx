@@ -17,7 +17,7 @@ import {
   User,
 } from 'lucide-react';
 import { getRoleDisplayName } from '@/lib/role-utils';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 import { cn } from '@/lib/utils';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 

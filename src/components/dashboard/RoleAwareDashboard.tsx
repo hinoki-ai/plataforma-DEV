@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import { SkeletonLoader, ActionLoader } from '@/components/ui/unified-loader';
 import Link from 'next/link';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 import { getRoleDisplayName } from '@/lib/role-utils';
 import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
 import { RoleGuard, RoleBasedComponent, FeatureToggle } from '@/components/auth/RoleGuard';

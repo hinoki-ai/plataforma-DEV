@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { canCreateParentUser } from '@/lib/authorization';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 import { z } from 'zod';
 import { hashPassword } from '@/lib/crypto';
 import { checkRateLimit, getRateLimitHeaders, RATE_LIMITS } from '@/lib/rate-limiter';
@@ -55,9 +57,11 @@ export async function POST(request: NextRequest) {
     const sanitizedBody = sanitizeJsonInput(body);
     const validatedData = createParentSchema.parse(sanitizedBody);
 
+    const client = getConvexClient();
+
     // Check if email already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email: validatedData.email },
+    const existingUser = await client.query(api.users.getUserByEmail, {
+      email: validatedData.email,
     });
 
     if (existingUser) {
@@ -70,47 +74,44 @@ export async function POST(request: NextRequest) {
     // Hash the provided password
     const hashedPassword = await hashPassword(validatedData.password);
 
-    // Create parent user and meeting record with student info
-    const user = await prisma.user.create({
-      data: {
-        name: validatedData.name,
-        email: validatedData.email,
-        password: hashedPassword,
-        phone: validatedData.phone,
-        role: 'PARENT',
-        createdByAdmin: session.user.id, // Track which teacher created this user
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+    // Create parent user
+    const userId = await client.mutation(api.users.createUser, {
+      name: validatedData.name,
+      email: validatedData.email,
+      password: hashedPassword,
+      phone: validatedData.phone,
+      role: 'PARENT',
+      createdByAdmin: session.user.id, // Track which teacher created this user
+    });
+
+    // Get the created user
+    const user = await client.query(api.users.getUserById, {
+      userId,
     });
 
     // Create a meeting record with student information for future reference
-    await prisma.meeting.create({
-      data: {
-        title: `Registro de Padre/Madre - ${validatedData.studentName}`,
-        description: `Usuario padre creado por profesor. Estudiante: ${validatedData.studentName}`,
-        studentName: validatedData.studentName,
-        studentGrade: validatedData.studentGrade,
-        guardianName: validatedData.name,
-        guardianEmail: validatedData.email,
-        guardianPhone: validatedData.guardianPhone || validatedData.phone || '',
-        scheduledDate: new Date(), // Set to current date for registration tracking
-        scheduledTime: '09:00', // Default time
-        assignedTo: session.user.id,
-        status: 'COMPLETED', // Mark as completed since it's just registration
-        source: 'STAFF_CREATED',
-        reason: `Registro de usuario padre - Relación: ${validatedData.relationship}`,
-      },
+    await client.mutation(api.meetings.createMeeting, {
+      title: `Registro de Padre/Madre - ${validatedData.studentName}`,
+      description: `Usuario padre creado por profesor. Estudiante: ${validatedData.studentName}`,
+      studentName: validatedData.studentName,
+      studentGrade: validatedData.studentGrade,
+      guardianName: validatedData.name,
+      guardianEmail: validatedData.email,
+      guardianPhone: validatedData.guardianPhone || validatedData.phone || '',
+      scheduledDate: Date.now(), // Set to current date for registration tracking
+      scheduledTime: '09:00', // Default time
+      assignedTo: session.user.id as Id<"users">,
+      type: 'PARENT_TEACHER',
+      reason: `Registro de usuario padre - Relación: ${validatedData.relationship}`,
     });
 
     return NextResponse.json({
-      ...user,
+      id: user?._id,
+      name: user?.name,
+      email: user?.email,
+      role: user?.role,
+      createdAt: user?.createdAt ? new Date(user.createdAt).toISOString() : undefined,
+      updatedAt: user?.updatedAt ? new Date(user.updatedAt).toISOString() : undefined,
       studentInfo: {
         studentName: validatedData.studentName,
         studentGrade: validatedData.studentGrade,

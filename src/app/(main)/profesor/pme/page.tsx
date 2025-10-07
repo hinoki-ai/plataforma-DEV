@@ -15,7 +15,7 @@ import { getUpcomingEvents } from '@/services/queries/calendar';
 export const dynamic = 'force-dynamic';
 
 export default async function ProfesorPMEPage() {
-  const planning = await getPlanningDocuments({ limit: 50 });
+  const planning = await getPlanningDocuments({});
   const upcoming = await getUpcomingEvents(8);
 
   const planningCount =

@@ -1,39 +1,33 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 
-// Simple fix to test database connection with proper environment variable handling
+// Simple test to verify Convex connection
 export async function GET() {
   try {
-    // Force use of Vercel environment variables
-    const dbUrl = process.env.DATABASE_URL;
+    // Check if Convex URL is configured
+    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
 
-    if (!dbUrl || dbUrl.includes('${')) {
+    if (!convexUrl) {
       return NextResponse.json(
         {
-          error: 'DATABASE_URL not properly configured',
-          dbUrl: dbUrl,
-          suggestion: 'Check Vercel environment variables',
+          error: 'NEXT_PUBLIC_CONVEX_URL not properly configured',
+          convexUrl: convexUrl,
+          suggestion: 'Check environment variables and run: npx convex dev',
         },
         { status: 500 }
       );
     }
 
-    // Test database connection
-    const prisma = new PrismaClient({
-      datasources: {
-        db: {
-          url: dbUrl,
-        },
-      },
-    });
-
-    // Simple query to test connection
-    await prisma.$queryRaw`SELECT 1 as test`;
-    await prisma.$disconnect();
+    // Test Convex connection by querying users
+    const client = getConvexClient();
+    const users = await client.query(api.users.getUsers, {});
 
     return NextResponse.json({
       status: 'success',
-      message: 'Database connection working',
+      message: 'Convex connection working',
+      convexUrl: convexUrl,
+      userCount: users.length,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

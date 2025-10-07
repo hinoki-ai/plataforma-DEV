@@ -346,7 +346,7 @@ export type TeamMemberInput = z.infer<typeof TeamMemberSchema>;
  * Part of Stage 3: Business Logic Unification
  */
 
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 export type ExtendedUserRole = UserRole;
 
 /**

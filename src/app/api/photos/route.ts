@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/../convex/_generated/api';
 import { hasPermission, Permissions } from '@/lib/authorization';
 import {
   withApiErrorHandling,
@@ -14,21 +15,25 @@ export const GET = withApiErrorHandling(async (request: NextRequest) => {
     throw new AuthenticationError('Authentication required');
   }
 
-  const photos = await db.photo.findMany({
-    orderBy: { createdAt: 'desc' },
-    include: {
-      user: {
-        select: {
-          name: true,
-          email: true,
-        },
-      },
-    },
-  });
+  const client = getConvexClient();
+  const photos = await client.query(api.media.getPhotos, {});
+
+  // Fetch uploader details for each photo
+  const photosWithUploaders = await Promise.all(
+    photos.map(async (photo) => {
+      const user = photo.uploadedBy
+        ? await client.query(api.users.getUserById, { id: photo.uploadedBy })
+        : null;
+      return {
+        ...photo,
+        user: user ? { name: user.name, email: user.email } : null,
+      };
+    })
+  );
 
   return NextResponse.json({
     success: true,
-    photos,
+    photos: photosWithUploaders,
   });
 });
 
@@ -50,26 +55,25 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
     throw new ValidationError('Photo URL is required');
   }
 
-  const photo = await db.photo.create({
-    data: {
-      title: title || null,
-      description: description || null,
-      url,
-      uploadedBy: session.user.id,
-    },
-    include: {
-      user: {
-        select: {
-          name: true,
-          email: true,
-        },
-      },
-    },
+  const client = getConvexClient();
+  const photoId = await client.mutation(api.media.createPhoto, {
+    title: title || undefined,
+    description: description || undefined,
+    url,
+    uploadedBy: session.user.id as any,
+  });
+
+  const photo = await client.query(api.media.getPhotoById, { id: photoId });
+  const user = await client.query(api.users.getUserById, {
+    id: session.user.id as any,
   });
 
   return NextResponse.json({
     success: true,
-    photo,
+    photo: {
+      ...photo,
+      user: { name: user?.name, email: user?.email },
+    },
     message: 'Photo uploaded successfully',
   });
 });

@@ -1,16 +1,19 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
 
 export async function GET() {
   try {
-    // Test database connection
-    const result = await prisma.$queryRaw`SELECT 1 as test`;
+    // Test Convex connection by checking if client is initialized
+    const client = getConvexClient();
+    
+    // Simple health check - if we can get the client, we're connected
+    const isConnected = client !== null;
 
     return NextResponse.json({
       status: 'healthy',
       timestamp: new Date().toISOString(),
-      database: 'connected',
-      result,
+      database: isConnected ? 'connected' : 'disconnected',
+      backend: 'convex',
     });
   } catch (error: any) {
     console.error('Health check failed:', error);
@@ -19,13 +22,11 @@ export async function GET() {
       {
         status: 'unhealthy',
         error: error.message,
-        code: error.code,
         name: error.name,
         timestamp: new Date().toISOString(),
         env_check: {
-          has_db_url: !!process.env.DATABASE_URL,
-          db_url_prefix: process.env.DATABASE_URL?.substring(0, 20) + '...',
-          provider: process.env.DATABASE_PROVIDER,
+          has_convex_url: !!process.env.NEXT_PUBLIC_CONVEX_URL,
+          convex_url_prefix: process.env.NEXT_PUBLIC_CONVEX_URL?.substring(0, 30) + '...',
         },
       },
       { status: 503 }

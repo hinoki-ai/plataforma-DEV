@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { MeetingCard } from './MeetingCard';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import type { Meeting } from '@prisma/client';
+import type { Meeting } from '@/lib/prisma-compat-types';
 import { useSession } from 'next-auth/react';
 import {
   getMeetingsAction,
   getMeetingsByTeacherAction,
 } from '@/services/actions/meetings';
 import { updateMeetingStatus } from '@/services/actions/meetings';
-import { MeetingStatus } from '@prisma/client';
+import { MeetingStatus } from '@/lib/prisma-compat-types';
 import { useResponsiveMode } from '@/lib/hooks/useDesktopToggle';
 import { layout, typography } from '@/lib/responsive-utils';
 import { ActionLoader } from '@/components/ui/dashboard-loader';

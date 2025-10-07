@@ -1,112 +1,55 @@
 import { NextRequest } from 'next/server';
-import { prisma, checkDatabaseConnection } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { createApiRoute } from '@/lib/api-validation';
 import { createSuccessResponse } from '@/lib/api-error';
+import { Id } from '@/convex/_generated/dataModel';
 
 // GET /api/profesor/dashboard - Teacher dashboard metrics
 export const GET = createApiRoute(
   async (request, validated) => {
-    const teacherId = validated.session.user.id;
-    
-    // Verify database health
-    const isDbHealthy = await checkDatabaseConnection();
-    if (!isDbHealthy) {
-      throw new Error('Database connection failed');
-    }
+    const teacherId = validated.session.user.id as Id<"users">;
+    const client = getConvexClient();
 
     // Optimized parallel queries for teacher data
     const [
       teacherInfo,
       studentsData,
       planningData,
-      meetingsData,
-      recentActivity
+      meetingsData
     ] = await Promise.all([
       // Teacher basic info
-      prisma.user.findUnique({
-        where: { id: teacherId },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          createdAt: true,
-        },
-      }),
+      client.query(api.users.getUserById, { userId: teacherId }),
       
       // Students managed by teacher
-      prisma.student.findMany({
-        where: { teacherId },
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          grade: {
-            select: {
-              gradeName: true,
-              gradeCode: true,
-            },
-          },
-          attendanceRate: true,
-          academicProgress: true,
-          isActive: true,
-        },
-        orderBy: { firstName: 'asc' },
+      client.query(api.students.getStudents, {
+        teacherId,
+        isActive: true,
       }),
       
-      // Planning documents by teacher
-      prisma.planningDocument.aggregate({
-        where: { authorId: teacherId },
-        _count: { id: true },
+      // All planning documents by teacher
+      client.query(api.planning.getPlanningDocuments, {
+        authorId: teacherId,
       }),
       
-      // Meetings assigned to teacher
-      Promise.all([
-        prisma.meeting.count({
-          where: {
-            assignedTo: teacherId,
-            scheduledDate: { gte: new Date() },
-          },
-        }),
-        prisma.meeting.count({
-          where: {
-            assignedTo: teacherId,
-            createdAt: {
-              gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
-            },
-          },
-        }),
-      ]),
-      
-      // Recent planning documents
-      prisma.planningDocument.findMany({
-        where: { authorId: teacherId },
-        select: {
-          id: true,
-          title: true,
-          subject: {
-            select: {
-              subjectName: true,
-              subjectCode: true,
-            },
-          },
-          grade: {
-            select: {
-              gradeName: true,
-              gradeCode: true,
-            },
-          },
-          createdAt: true,
-          updatedAt: true,
-        },
-        orderBy: { updatedAt: 'desc' },
-        take: 5,
+      // All meetings assigned to teacher
+      client.query(api.meetings.getMeetingsByTeacher, {
+        teacherId,
       }),
     ]);
 
-    const [upcomingMeetings, recentMeetings] = meetingsData;
+    const now = Date.now();
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+
+    // Filter meetings
+    const upcomingMeetings = meetingsData.filter(m => m.scheduledDate >= now).length;
+    const recentMeetings = meetingsData.filter(m => m.createdAt >= sevenDaysAgo).length;
+    
+    // Get recent planning documents
+    const recentActivity = planningData.slice(0, 5); // Already sorted by updatedAt desc
 
     // Calculate student statistics
-    const activeStudents = studentsData.filter(s => s.isActive);
+    const activeStudents = studentsData;
     const averageAttendance = activeStudents.length > 0
       ? activeStudents.reduce((sum, s) => sum + (s.attendanceRate || 0), 0) / activeStudents.length
       : 0;
@@ -116,7 +59,7 @@ export const GET = createApiRoute(
 
     // Group students by grade for overview
     const studentsByGrade = activeStudents.reduce((acc, student) => {
-      const grade = student.grade?.gradeName || 'Sin Grado';
+      const grade = student.grade || 'Sin Grado';
       if (!acc[grade]) {
         acc[grade] = [];
       }
@@ -125,12 +68,17 @@ export const GET = createApiRoute(
     }, {} as Record<string, typeof activeStudents>);
 
     const profesorDashboard = {
-      teacher: teacherInfo,
+      teacher: teacherInfo ? {
+        id: teacherInfo._id,
+        name: teacherInfo.name,
+        email: teacherInfo.email,
+        createdAt: new Date(teacherInfo.createdAt).toISOString(),
+      } : null,
       
       overview: {
         totalStudents: activeStudents.length,
         totalGrades: Object.keys(studentsByGrade).length,
-        planningDocuments: planningData._count.id,
+        planningDocuments: planningData.length,
         upcomingMeetings,
         averageAttendance: Math.round(averageAttendance * 100) / 100,
         averageProgress: Math.round(averageProgress * 100) / 100,
@@ -149,23 +97,23 @@ export const GET = createApiRoute(
             : 0,
         })),
         recentlyAdded: activeStudents
-          .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+          .sort((a, b) => b.createdAt - a.createdAt)
           .slice(0, 3)
           .map(s => ({
             name: `${s.firstName} ${s.lastName}`,
-            grade: s.grade?.gradeName || 'Sin Grado',
+            grade: s.grade || 'Sin Grado',
           })),
       },
       
       planning: {
-        totalDocuments: planningData._count.id,
+        totalDocuments: planningData.length,
         recentDocuments: recentActivity.map(doc => ({
-          id: doc.id,
+          id: doc._id,
           title: doc.title,
-          subject: doc.subject?.subjectName || 'Sin Materia',
-          grade: doc.grade?.gradeName || 'Sin Grado',
-          lastUpdated: doc.updatedAt,
-          isRecent: new Date(doc.updatedAt).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000,
+          subject: doc.subject || 'Sin Materia',
+          grade: doc.grade || 'Sin Grado',
+          lastUpdated: new Date(doc.updatedAt).toISOString(),
+          isRecent: doc.updatedAt > sevenDaysAgo,
         })),
       },
       
@@ -180,7 +128,7 @@ export const GET = createApiRoute(
           (s.attendanceRate || 0) < 0.8 || (s.academicProgress || 0) < 60
         ).length,
         documentsThisWeek: recentActivity.filter(doc => 
-          new Date(doc.updatedAt).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000
+          doc.updatedAt > sevenDaysAgo
         ).length,
         averageClassSize: activeStudents.length / Math.max(Object.keys(studentsByGrade).length, 1),
       },

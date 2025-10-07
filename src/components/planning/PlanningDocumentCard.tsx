@@ -1,4 +1,4 @@
-import type { PlanningDocument } from '@prisma/client';
+import type { PlanningDocument } from '@/lib/prisma-compat-types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

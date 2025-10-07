@@ -1,240 +1,46 @@
-import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
-import {
-  getRoleFilter,
-  getAuthorFilter,
-  canEditRecord,
-} from '@/lib/role-utils';
-import type {
-  PlanningDocumentsResponse,
-  PlanningDocumentResponse,
-  PlanningFilters,
-} from '@/lib/types/service-responses';
-import type { Prisma } from '@prisma/client';
+/**
+ * Planning Document Queries - Convex Implementation
+ */
 
-export async function getPlanningDocuments(
-  searchParams?: PlanningFilters
-): Promise<PlanningDocumentsResponse> {
+import { getConvexClient } from '@/lib/convex';
+import { api } from '../../../convex/_generated/api';
+import type { Id } from '../../../convex/_generated/dataModel';
+
+export async function getPlanningDocuments(filters: {
+  authorId?: string;
+  subject?: string;
+  grade?: string;
+} = {}) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
-      return { success: false, error: 'No autorizado', data: [] };
-    }
-
-    // Build where conditions using role utilities
-    const where: Prisma.PlanningDocumentWhereInput = getAuthorFilter(
-      session.user.role,
-      session.user.id
-    );
-
-    // Add search term filter
-    if (searchParams?.q) {
-      where.OR = [
-        { title: { contains: searchParams.q } },
-        { content: { contains: searchParams.q } },
-      ];
-    }
-
-    // Add subject filter
-    if (searchParams?.subject) {
-      where.subject = searchParams.subject;
-    }
-
-    // Add grade filter
-    if (searchParams?.grade) {
-      where.grade = searchParams.grade;
-    }
-
-    const page = searchParams?.page || 1;
-    const limit = searchParams?.limit || 50;
-    const skip = (page - 1) * limit;
-
-    const documents = await db.planningDocument.findMany({
-      where,
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      take: limit,
-      skip,
+    const client = getConvexClient();
+    
+    const docs = await client.query(api.planning.getPlanningDocuments, {
+      authorId: filters.authorId as Id<"users"> | undefined,
+      subject: filters.subject,
+      grade: filters.grade,
     });
 
-    return {
-      success: true,
-      data: documents,
-      page,
-      limit,
-      total: documents.length,
-    };
+    return { success: true, data: docs };
   } catch (error) {
     console.error('Failed to fetch planning documents:', error);
-    return {
-      success: false,
-      error: 'No se pudieron cargar los documentos de planificación',
-      data: [],
-    };
+    return { success: false, error: 'No se pudieron cargar los documentos', data: [] };
   }
 }
 
-export async function getPlanningDocumentById(
-  id: string
-): Promise<PlanningDocumentResponse> {
+export async function getPlanningDocumentById(id: string) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
-      return { success: false, error: 'No autorizado' };
-    }
-
-    const document = await db.planningDocument.findUnique({
-      where: { id },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
+    const client = getConvexClient();
+    const doc = await client.query(api.planning.getPlanningDocumentById, {
+      id: id as Id<"planningDocuments">,
     });
 
-    if (!document) {
-      return {
-        success: false,
-        error: 'Documento de planificación no encontrado',
-      };
+    if (!doc) {
+      return { success: false, error: 'Documento no encontrado' };
     }
 
-    // Check permissions using role utilities
-    const hasAccess = canEditRecord(
-      session.user.role,
-      document.authorId,
-      session.user.id
-    );
-
-    if (!hasAccess) {
-      return {
-        success: false,
-        error: 'No tienes permisos para ver este documento',
-      };
-    }
-
-    return { success: true, data: document };
+    return { success: true, data: doc };
   } catch (error) {
-    console.error('Failed to fetch planning document by ID:', error);
-    return {
-      success: false,
-      error: 'No se pudo cargar el documento de planificación',
-    };
-  }
-}
-
-export async function getPlanningDocumentsBySubject(
-  subject: string,
-  page: number = 1,
-  limit: number = 50
-): Promise<PlanningDocumentsResponse> {
-  try {
-    const session = await auth();
-
-    if (!session?.user) {
-      return { success: false, error: 'No autorizado', data: [] };
-    }
-
-    const documents = await db.planningDocument.findMany({
-      where: {
-        subject,
-        ...getAuthorFilter(session.user.role, session.user.id),
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      take: limit,
-      skip: (page - 1) * limit,
-    });
-
-    return {
-      success: true,
-      data: documents,
-      page,
-      limit,
-      total: documents.length,
-    };
-  } catch (error) {
-    console.error('Failed to fetch planning documents by subject:', error);
-    return {
-      success: false,
-      error: 'No se pudieron cargar los documentos por materia',
-      data: [],
-    };
-  }
-}
-
-export async function getPlanningDocumentsByGrade(
-  grade: string,
-  page: number = 1,
-  limit: number = 50
-): Promise<PlanningDocumentsResponse> {
-  try {
-    const session = await auth();
-
-    if (!session?.user) {
-      return { success: false, error: 'No autorizado', data: [] };
-    }
-
-    const documents = await db.planningDocument.findMany({
-      where: {
-        grade,
-        ...getAuthorFilter(session.user.role, session.user.id),
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      take: limit,
-      skip: (page - 1) * limit,
-    });
-
-    return {
-      success: true,
-      data: documents,
-      page,
-      limit,
-      total: documents.length,
-    };
-  } catch (error) {
-    console.error('Failed to fetch planning documents by grade:', error);
-    return {
-      success: false,
-      error: 'No se pudieron cargar los documentos por grado',
-      data: [],
-    };
+    console.error('Failed to fetch planning document:', error);
+    return { success: false, error: 'No se pudo cargar el documento' };
   }
 }

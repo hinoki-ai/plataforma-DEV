@@ -26,7 +26,7 @@ import {
 } from '@/services/actions/team-members';
 
 // Types
-import type { TeamMember as PrismaTeamMember } from '@prisma/client';
+import type { TeamMember as PrismaTeamMember } from '@/lib/prisma-compat-types';
 
 // i18n
 import { useLanguage } from '@/components/language/LanguageContext';

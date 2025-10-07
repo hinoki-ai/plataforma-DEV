@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { hasPermission, Permissions } from '@/lib/authorization';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { z } from 'zod';
 import { hashPassword } from '@/lib/crypto';
 
@@ -31,17 +32,8 @@ export async function GET(
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    const client = getConvexClient();
+    const user = await client.query(api.users.getUserById, { userId: id as any });
 
     if (!user) {
       return NextResponse.json(
@@ -88,19 +80,10 @@ export async function PUT(
       );
     }
 
-    const user = await prisma.user.update({
-      where: { id },
-      data: {
-        ...validatedData,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+    const client = getConvexClient();
+    const user = await client.mutation(api.users.updateUser, {
+      id: id as any,
+      ...validatedData,
     });
 
     // Audit logging removed - using simple error-handler
@@ -143,9 +126,8 @@ export async function DELETE(
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id },
-    });
+    const client = getConvexClient();
+    const user = await client.query(api.users.getUserById, { userId: id as any });
 
     if (!user) {
       return NextResponse.json(
@@ -154,9 +136,7 @@ export async function DELETE(
       );
     }
 
-    await prisma.user.delete({
-      where: { id },
-    });
+    await client.mutation(api.users.deleteUser, { id: id as any });
 
     // Create audit log
     // Audit logging removed - using simple error-handler
@@ -189,9 +169,10 @@ export async function POST(
 
     const hashedPassword = await hashPassword(password);
 
-    await prisma.user.update({
-      where: { id },
-      data: { password: hashedPassword },
+    const client = getConvexClient();
+    await client.mutation(api.users.updateUser, {
+      id: id as any,
+      password: hashedPassword,
     });
 
     // Create audit log

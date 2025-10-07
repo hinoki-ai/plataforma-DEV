@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Crown, Shield, GraduationCap, Users, Eye } from 'lucide-react';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 import { getRoleDisplayName } from '@/lib/role-utils';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { useRoleSwitching } from '@/hooks/useRoleSwitching';

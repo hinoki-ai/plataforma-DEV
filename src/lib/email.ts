@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 
 // Email configuration
 const createTransport = () => {
@@ -126,21 +127,9 @@ export async function sendMeetingRequestNotification(
 ): Promise<boolean> {
   try {
     const transporter = createTransport();
+    const client = getConvexClient();
 
-    const staff = await prisma.user.findMany({
-      where: {
-        role: {
-          in: ['ADMIN', 'PROFESOR'],
-        },
-        email: {
-          not: null as any,
-        },
-      },
-      select: {
-        email: true,
-        name: true,
-      },
-    });
+    const staff = await client.query(api.users.getStaffUsers, {});
 
     const mailOptions = {
       from: process.env.EMAIL_FROM || 'noreply@manitospintadas.cl',

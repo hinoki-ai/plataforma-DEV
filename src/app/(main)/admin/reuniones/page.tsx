@@ -50,7 +50,6 @@ import { LoadingState } from '@/components/ui/loading-states';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { toast } from 'sonner';
 import Link from 'next/link';
-import { Meeting } from '@prisma/client';
 
 interface AdminMeeting {
   id: string;

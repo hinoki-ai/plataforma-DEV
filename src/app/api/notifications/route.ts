@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 import { sendNotificationToUser } from '@/lib/notification-utils';
 
-// Reset connection helper to avoid prepared statement conflicts
-const resetConnection = async () => {
-  try {
-    await prisma.$disconnect();
-    await new Promise(resolve => setTimeout(resolve, 100));
-  } catch (error) {
-    console.warn('Error resetting connection:', error);
-  }
-};
+// Convex doesn't need connection resets
 
 export const runtime = 'nodejs';
 
@@ -24,30 +17,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Reset connection to avoid prepared statement conflicts
-    await resetConnection();
-
+    const client = getConvexClient();
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || 'all';
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    // Try to fetch notifications, but handle database errors gracefully
     try {
-      let whereClause = {};
-
-      if (status === 'unread') {
-        whereClause = { read: false };
-      } else if (status === 'read') {
-        whereClause = { read: true };
-      }
-
-      const notifications = await prisma.notification.findMany({
-        where: {
-          recipientId: session.user.id,
-          ...whereClause,
-        },
-        orderBy: { createdAt: 'desc' },
-        take: limit,
+      const notifications = await client.query(api.notifications.getNotifications, {
+        recipientId: session.user.id as any, // Cast string to Id<"users">
+        status: status as 'all' | 'read' | 'unread',
+        limit,
       });
 
       return NextResponse.json({
@@ -84,34 +63,19 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Reset connection to avoid prepared statement conflicts
-    await resetConnection();
-
+    const client = getConvexClient();
     const body = await request.json();
     const { notificationIds, markAll } = body;
 
     try {
       if (markAll) {
-        await prisma.notification.updateMany({
-          where: {
-            recipientId: session.user.id,
-            read: false,
-          },
-          data: {
-            read: true,
-            readAt: new Date(),
-          },
+        await client.mutation(api.notifications.markAllAsRead, {
+          recipientId: session.user.id as any, // Cast string to Id<"users">
         });
       } else if (notificationIds?.length > 0) {
-        await prisma.notification.updateMany({
-          where: {
-            id: { in: notificationIds },
-            recipientId: session.user.id,
-          },
-          data: {
-            read: true,
-            readAt: new Date(),
-          },
+        await client.mutation(api.notifications.markAsRead, {
+          notificationIds,
+          recipientId: session.user.id as any, // Cast string to Id<"users">
         });
       }
 
@@ -146,9 +110,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
-    // Reset connection to avoid prepared statement conflicts
-    await resetConnection();
-
+    const client = getConvexClient();
     const body = await request.json();
     const {
       title,
@@ -163,42 +125,18 @@ export async function POST(request: NextRequest) {
     } = body;
 
     try {
-      const notificationData = {
+      await client.mutation(api.notifications.createNotification, {
         title,
         message,
         type,
         category,
+        recipientIds,
+        isBroadcast,
         priority,
         actionUrl,
-        expiresAt: expiresAt ? new Date(expiresAt) : null,
+        expiresAt: expiresAt ? new Date(expiresAt).getTime() : undefined,
         senderId: session.user.id,
-      };
-
-      if (isBroadcast) {
-        // Create notification for all users
-        const allUsers = await prisma.user.findMany({
-          select: { id: true },
-        });
-
-        const notifications = allUsers.map(user => ({
-          ...notificationData,
-          recipientId: user.id,
-        }));
-
-        await prisma.notification.createMany({
-          data: notifications,
-        });
-      } else if (recipientIds?.length > 0) {
-        // Create notifications for specific users
-        const notifications = recipientIds.map((recipientId: string) => ({
-          ...notificationData,
-          recipientId,
-        }));
-
-        await prisma.notification.createMany({
-          data: notifications,
-        });
-      }
+      });
 
       return NextResponse.json({ success: true });
     } catch (dbError) {

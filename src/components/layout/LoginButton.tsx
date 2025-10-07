@@ -8,7 +8,7 @@ import { useTheme } from 'next-themes';
 import { useHydrationSafe } from '@/components/ui/hydration-error-boundary';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { useRoleSwitching } from '@/hooks/useRoleSwitching';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 
 import {
   User,

@@ -9,7 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/components/language/LanguageContext';
 import type { User } from 'next-auth';
-import type { UserRole } from '@prisma/client';
+import type { UserRole } from '@/lib/prisma-compat-types';
 
 // Extended user type with additional fields from our database
 interface ExtendedUser extends Omit<User, 'role'> {

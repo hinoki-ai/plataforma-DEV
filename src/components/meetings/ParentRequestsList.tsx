@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ParentRequestCard } from './ParentRequestCard';
 import { getParentMeetingRequestsAction } from '@/services/actions/meetings';
-import type { Meeting } from '@prisma/client';
+import type { Meeting } from '@/lib/prisma-compat-types';
 import { ActionLoader } from '@/components/ui/dashboard-loader';
 
 export function ParentRequestsList() {

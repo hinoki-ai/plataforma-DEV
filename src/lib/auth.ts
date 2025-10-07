@@ -1,7 +1,9 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
-import { authenticateUser, findUserByEmail } from './auth-prisma';
+import { authenticateUser, findUserByEmail } from './auth-convex';
+import { ConvexAdapter } from './convex-adapter';
+import { getConvexClient } from './convex';
 import { Logger } from './logger';
 
 const logger = Logger.getInstance('Authentication');
@@ -26,7 +28,11 @@ const validateOAuthConfig = () => {
 
 const oauthConfig = validateOAuthConfig();
 
+// Initialize Convex adapter only if URL is configured
+const convexClient = process.env.NEXT_PUBLIC_CONVEX_URL ? getConvexClient() : null;
+
 export const authOptions: NextAuthConfig = {
+  adapter: convexClient ? ConvexAdapter(convexClient) : undefined,
   session: {
     strategy: 'jwt' as const,
     maxAge: 24 * 60 * 60, // 24 hours

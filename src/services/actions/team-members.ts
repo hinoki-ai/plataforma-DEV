@@ -1,61 +1,64 @@
-'use server';
+/**
+ * Team Member Actions (Mutations) - Convex Implementation
+ */
 
-import { db } from '@/lib/db';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { TeamMemberSchema } from '@/lib/validation';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '../../../convex/_generated/api';
+import type { Id } from '../../../convex/_generated/dataModel';
 
-export async function createTeamMember(data: unknown) {
-  const validated = TeamMemberSchema.parse(data);
+export async function createTeamMember(data: {
+  name: string;
+  title: string;
+  description: string;
+  specialties: any;
+  imageUrl?: string;
+  order?: number;
+}) {
+  try {
+    const client = getConvexClient();
+    
+    const memberId = await client.mutation(api.teamMembers.createTeamMember, data);
 
-  const teamMember = await db.teamMember.create({
-    data: {
-      ...validated,
-      specialties: JSON.stringify(validated.specialties),
-    },
-  });
-
-  revalidatePath('/admin/equipo-multidisciplinario');
-  revalidatePath('/public/equipo-multidisciplinario');
-  revalidateTag('team-members');
-
-  return teamMember;
+    return { success: true, data: { id: memberId } };
+  } catch (error) {
+    console.error('Failed to create team member:', error);
+    return { success: false, error: 'No se pudo crear el miembro del equipo' };
+  }
 }
 
-export async function updateTeamMember(id: string, data: unknown) {
-  const validated = TeamMemberSchema.parse(data);
+export async function updateTeamMember(id: string, data: {
+  name?: string;
+  title?: string;
+  description?: string;
+  specialties?: any;
+  imageUrl?: string;
+  order?: number;
+  isActive?: boolean;
+}) {
+  try {
+    const client = getConvexClient();
+    
+    await client.mutation(api.teamMembers.updateTeamMember, {
+      id: id as Id<"teamMembers">,
+      ...data,
+    });
 
-  const teamMember = await db.teamMember.update({
-    where: { id },
-    data: {
-      ...validated,
-      specialties: JSON.stringify(validated.specialties),
-    },
-  });
-
-  revalidatePath('/admin/equipo-multidisciplinario');
-  revalidatePath('/public/equipo-multidisciplinario');
-  revalidateTag('team-members');
-
-  return teamMember;
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to update team member:', error);
+    return { success: false, error: 'No se pudo actualizar el miembro del equipo' };
+  }
 }
 
 export async function deleteTeamMember(id: string) {
-  await db.teamMember.delete({
-    where: { id },
-  });
-
-  revalidatePath('/admin/equipo-multidisciplinario');
-  revalidatePath('/public/equipo-multidisciplinario');
-  revalidateTag('team-members');
-}
-
-export async function toggleTeamMemberStatus(id: string, isActive: boolean) {
-  await db.teamMember.update({
-    where: { id },
-    data: { isActive },
-  });
-
-  revalidatePath('/admin/equipo-multidisciplinario');
-  revalidatePath('/public/equipo-multidisciplinario');
-  revalidateTag('team-members');
+  try {
+    const client = getConvexClient();
+    await client.mutation(api.teamMembers.deleteTeamMember, {
+      id: id as Id<"teamMembers">,
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to delete team member:', error);
+    return { success: false, error: 'No se pudo eliminar el miembro del equipo' };
+  }
 }

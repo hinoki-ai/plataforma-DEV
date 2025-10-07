@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/../convex/_generated/api';
 import {
   withApiErrorHandling,
   AuthenticationError,
@@ -15,10 +16,10 @@ export const GET = withApiErrorHandling(async (request: NextRequest) => {
     throw new AuthenticationError('Authentication required');
   }
 
-  // Get the single video capsule (we'll use a fixed ID for simplicity)
-  const videoCapsule = await db.videoCapsule.findFirst({
-    where: { id: 'default-capsule' },
-  });
+  const client = getConvexClient();
+  
+  // Get the active video capsule
+  const videoCapsule = await client.query(api.media.getActiveVideoCapsule, {});
 
   // If no capsule exists, return default structure
   if (!videoCapsule) {
@@ -68,36 +69,20 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  // Check if video capsule exists
-  const existingCapsule = await db.videoCapsule.findFirst({
-    where: { id: 'default-capsule' },
-  });
+  const client = getConvexClient();
+  
+  // Convex handles create-or-update automatically
+  const videoCapsuleId = await client.mutation(
+    api.media.updateVideoCapsule,
+    {
+      title,
+      url: url || '',
+      description,
+      isActive: isActive || false,
+    }
+  );
 
-  let videoCapsule;
-
-  if (existingCapsule) {
-    // Update existing capsule
-    videoCapsule = await db.videoCapsule.update({
-      where: { id: 'default-capsule' },
-      data: {
-        title: title || existingCapsule.title,
-        url: url || existingCapsule.url,
-        description: description || existingCapsule.description,
-        isActive: isActive !== undefined ? isActive : existingCapsule.isActive,
-      },
-    });
-  } else {
-    // Create new capsule
-    videoCapsule = await db.videoCapsule.create({
-      data: {
-        id: 'default-capsule',
-        title,
-        url: url || '',
-        description: description || '',
-        isActive: isActive || false,
-      },
-    });
-  }
+  const videoCapsule = await client.query(api.media.getActiveVideoCapsule, {});
 
   return NextResponse.json({
     success: true,
@@ -120,16 +105,14 @@ export const DELETE = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  // Check if video capsule exists
-  const existingCapsule = await db.videoCapsule.findFirst({
-    where: { id: 'default-capsule' },
+  const client = getConvexClient();
+  
+  // Set video capsule to inactive
+  await client.mutation(api.media.updateVideoCapsule, {
+    title: 'Disabled',
+    url: '',
+    isActive: false,
   });
-
-  if (existingCapsule) {
-    await db.videoCapsule.delete({
-      where: { id: 'default-capsule' },
-    });
-  }
 
   return NextResponse.json({
     success: true,

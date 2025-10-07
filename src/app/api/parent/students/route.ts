@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/convex/_generated/api';
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,13 +11,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
+    const client = getConvexClient();
+
     // Check if user is a parent
-    const user = await db.user.findFirst({
-      where: {
-        email: session.user.email,
-        role: 'PARENT',
-        isActive: true,
-      },
+    const user = await client.query(api.users.getUserByEmail, {
+      email: session.user.email,
     });
 
     if (!user) {

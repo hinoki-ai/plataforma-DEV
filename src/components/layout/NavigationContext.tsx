@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@/lib/prisma-compat-types';
 import { getRoleAccess } from '@/lib/role-utils';
 import { hasPermission, Permission } from '@/lib/authorization';
 

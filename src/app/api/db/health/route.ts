@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/../convex/_generated/api';
 
 export async function GET() {
   try {
-    await prisma.$queryRaw`SELECT 1`;
+    const client = getConvexClient();
+    // Simple health check query
+    await client.query(api.users.getUsers, {});
+    
     return NextResponse.json({
       status: 'healthy',
-      database: 'connected',
+      backend: 'convex',
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

@@ -4,7 +4,8 @@
  * Merges static Chilean calendar data with database events
  */
 
-import { prisma } from '@/lib/db';
+import { getConvexClient } from '@/lib/convex';
+import { api } from '@/../convex/_generated/api';
 import { getServerSession } from '@/lib/server-auth';
 import { getRoleFilter } from '@/lib/role-utils';
 import {

@@ -3,7 +3,7 @@
  * Type-safe interfaces for all calendar operations
  */
 
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/lib/prisma-compat-types';
 
 // Core event categories that map to both static and database events
 export type EventCategory =
