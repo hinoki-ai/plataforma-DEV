@@ -39,7 +39,7 @@ import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Meeting } from '@/lib/prisma-compat-types';
-import { MeetingType } from '@/lib/prisma-compat-types';
+import { MeetingType } from '../../lib/prisma-compat-types.tsx';
 import { createMeeting, updateMeeting } from '@/services/actions/meetings';
 import { useLanguage } from '@/components/language/LanguageContext';
 

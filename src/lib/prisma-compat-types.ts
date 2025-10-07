@@ -1,6 +1,6 @@
 /**
  * Prisma Compatibility Types
- * 
+ *
  * This file provides type exports that replace @prisma/client imports
  * after migration to Convex. These types maintain backward compatibility
  * with existing code while using Convex's type system.
@@ -14,14 +14,11 @@ export type UserStatus = "PENDING" | "ACTIVE" | "INACTIVE" | "SUSPENDED";
 
 // ==================== MEETING TYPES ====================
 
-export type MeetingStatus =
-  | "PENDING"
-  | "CONFIRMED"
-  | "RESCHEDULED"
-  | "CANCELLED"
-  | "COMPLETED";
+export type MeetingStatus = "PENDING" | "CONFIRMED" | "RESCHEDULED" | "CANCELLED" | "COMPLETED";
 
-export type MeetingType = "IN_PERSON" | "VIRTUAL" | "PHONE" | "HYBRID";
+export type MeetingType = "PARENT_TEACHER" | "FOLLOW_UP" | "EMERGENCY" | "IEP_REVIEW" | "GRADE_CONFERENCE";
+
+export type MeetingLocationType = "IN_PERSON" | "VIRTUAL" | "PHONE" | "HYBRID";
 
 // ==================== CALENDAR TYPES ====================
 

@@ -62,3 +62,17 @@ export async function deleteTeamMember(id: string) {
     return { success: false, error: 'No se pudo eliminar el miembro del equipo' };
   }
 }
+
+export async function toggleTeamMemberStatus(id: string, isActive: boolean) {
+  try {
+    const client = getConvexClient();
+    await client.mutation(api.teamMembers.toggleTeamMemberStatus, {
+      id: id as Id<"teamMembers">,
+      isActive,
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to toggle team member status:', error);
+    return { success: false, error: 'No se pudo cambiar el estado del miembro del equipo' };
+  }
+}

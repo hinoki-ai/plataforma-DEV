@@ -6,7 +6,7 @@
     "dev": "npm run convex:dev & next dev --turbo",
     "build": "next build --turbo",
     "build:vercel": "next build --turbo",
-    "vercel-build": "SKIP_ENV_VALIDATION=true DISABLE_ESLINT_PLUGIN=true ESLINT_NO_DEV_ERRORS=true next build --turbo",
+    "vercel-build": "SKIP_ENV_VALIDATION=true DISABLE_ESLINT_PLUGIN=true ESLINT_NO_DEV_ERRORS=true next build",
     "postinstall": "echo 'Convex setup complete'",
     "build:production": "next build --turbo",
     "start": "next start -p 3000",
