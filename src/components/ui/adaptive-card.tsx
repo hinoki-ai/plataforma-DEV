@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { forwardRef } from "react";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-export type CardContext = 'public' | 'auth' | 'auto';
+export type CardContext = "public" | "auth" | "auto";
 
 export interface AdaptiveCardProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,54 +26,54 @@ const AdaptiveCard = forwardRef<HTMLDivElement, AdaptiveCardProps>(
   (
     {
       className,
-      variant = 'auto',
+      variant = "auto",
       hover = true,
       interactive = false,
       ...props
     },
-    ref
+    ref,
   ) => {
     const pathname = usePathname();
     const { data: session } = useSession();
 
     // Auto-detect context based on route and session
-    const detectedContext: Exclude<CardContext, 'auto'> =
-      variant !== 'auto'
+    const detectedContext: Exclude<CardContext, "auto"> =
+      variant !== "auto"
         ? variant
         : session &&
-            (pathname?.startsWith('/admin') ||
-              pathname?.startsWith('/profesor') ||
-              pathname?.startsWith('/parent'))
-          ? 'auth'
-          : 'public';
+            (pathname?.startsWith("/admin") ||
+              pathname?.startsWith("/profesor") ||
+              pathname?.startsWith("/parent"))
+          ? "auth"
+          : "public";
 
-    const getContextStyles = (context: Exclude<CardContext, 'auto'>) => {
+    const getContextStyles = (context: Exclude<CardContext, "auto">) => {
       switch (context) {
-        case 'public':
+        case "public":
           return cn(
             // Glass-morphism base
-            'backdrop-blur-xl bg-gray-900/80 border border-gray-700/50',
-            'rounded-2xl shadow-2xl',
+            "backdrop-blur-xl bg-gray-900/80 border border-gray-700/50",
+            "rounded-2xl shadow-2xl",
             // Hover effects for public context
             hover &&
-              'hover:shadow-2xl hover:-translate-y-1 transition-all duration-300',
+              "hover:shadow-2xl hover:-translate-y-1 transition-all duration-300",
             // Interactive states
-            interactive && 'cursor-pointer hover:bg-gray-900/90'
+            interactive && "cursor-pointer hover:bg-gray-900/90",
           );
 
-        case 'auth':
+        case "auth":
           return cn(
             // Professional clean styling
-            'bg-background border border-border shadow-sm',
-            'rounded-lg',
+            "bg-background border border-border shadow-sm",
+            "rounded-lg",
             // Subtle hover effects for auth context
-            hover && 'hover:shadow-md transition-shadow duration-200',
+            hover && "hover:shadow-md transition-shadow duration-200",
             // Interactive states
-            interactive && 'cursor-pointer hover:bg-muted/50'
+            interactive && "cursor-pointer hover:bg-muted/50",
           );
 
         default:
-          return 'bg-background border border-border rounded-lg shadow-sm';
+          return "bg-background border border-border rounded-lg shadow-sm";
       }
     };
 
@@ -82,19 +82,19 @@ const AdaptiveCard = forwardRef<HTMLDivElement, AdaptiveCardProps>(
         ref={ref}
         className={cn(
           // Base card styling
-          'overflow-hidden',
+          "overflow-hidden",
           // Context-specific styling
           getContextStyles(detectedContext),
           // Custom className override
-          className
+          className,
         )}
         {...props}
       />
     );
-  }
+  },
 );
 
-AdaptiveCard.displayName = 'AdaptiveCard';
+AdaptiveCard.displayName = "AdaptiveCard";
 
 /**
  * Card Header with context-aware styling
@@ -109,26 +109,26 @@ const AdaptiveCardHeader = forwardRef<
   const isPublicContext =
     !session ||
     !(
-      pathname?.startsWith('/admin') ||
-      pathname?.startsWith('/profesor') ||
-      pathname?.startsWith('/parent')
+      pathname?.startsWith("/admin") ||
+      pathname?.startsWith("/profesor") ||
+      pathname?.startsWith("/parent")
     );
 
   return (
     <div
       ref={ref}
       className={cn(
-        'flex flex-col space-y-1.5 p-6',
+        "flex flex-col space-y-1.5 p-6",
         // Context-specific text colors
-        isPublicContext ? 'text-white' : 'text-foreground',
-        className
+        isPublicContext ? "text-white" : "text-foreground",
+        className,
       )}
       {...props}
     />
   );
 });
 
-AdaptiveCardHeader.displayName = 'AdaptiveCardHeader';
+AdaptiveCardHeader.displayName = "AdaptiveCardHeader";
 
 /**
  * Card Title with context-aware typography
@@ -143,19 +143,19 @@ const AdaptiveCardTitle = forwardRef<
   const isPublicContext =
     !session ||
     !(
-      pathname?.startsWith('/admin') ||
-      pathname?.startsWith('/profesor') ||
-      pathname?.startsWith('/parent')
+      pathname?.startsWith("/admin") ||
+      pathname?.startsWith("/profesor") ||
+      pathname?.startsWith("/parent")
     );
 
   return (
     <h3
       ref={ref}
       className={cn(
-        'text-2xl font-semibold leading-none tracking-tight',
+        "text-2xl font-semibold leading-none tracking-tight",
         // Context-specific text colors
-        isPublicContext ? 'text-white' : 'text-foreground',
-        className
+        isPublicContext ? "text-white" : "text-foreground",
+        className,
       )}
       {...props}
     >
@@ -164,7 +164,7 @@ const AdaptiveCardTitle = forwardRef<
   );
 });
 
-AdaptiveCardTitle.displayName = 'AdaptiveCardTitle';
+AdaptiveCardTitle.displayName = "AdaptiveCardTitle";
 
 /**
  * Card Description with context-aware styling
@@ -179,26 +179,26 @@ const AdaptiveCardDescription = forwardRef<
   const isPublicContext =
     !session ||
     !(
-      pathname?.startsWith('/admin') ||
-      pathname?.startsWith('/profesor') ||
-      pathname?.startsWith('/parent')
+      pathname?.startsWith("/admin") ||
+      pathname?.startsWith("/profesor") ||
+      pathname?.startsWith("/parent")
     );
 
   return (
     <p
       ref={ref}
       className={cn(
-        'text-sm',
+        "text-sm",
         // Context-specific text colors
-        isPublicContext ? 'text-gray-300' : 'text-muted-foreground',
-        className
+        isPublicContext ? "text-gray-300" : "text-muted-foreground",
+        className,
       )}
       {...props}
     />
   );
 });
 
-AdaptiveCardDescription.displayName = 'AdaptiveCardDescription';
+AdaptiveCardDescription.displayName = "AdaptiveCardDescription";
 
 /**
  * Card Content with context-aware padding
@@ -207,10 +207,10 @@ const AdaptiveCardContent = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  return <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />;
+  return <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />;
 });
 
-AdaptiveCardContent.displayName = 'AdaptiveCardContent';
+AdaptiveCardContent.displayName = "AdaptiveCardContent";
 
 /**
  * Card Footer with context-aware styling
@@ -222,13 +222,13 @@ const AdaptiveCardFooter = forwardRef<
   return (
     <div
       ref={ref}
-      className={cn('flex items-center p-6 pt-0', className)}
+      className={cn("flex items-center p-6 pt-0", className)}
       {...props}
     />
   );
 });
 
-AdaptiveCardFooter.displayName = 'AdaptiveCardFooter';
+AdaptiveCardFooter.displayName = "AdaptiveCardFooter";
 
 export {
   AdaptiveCard,
@@ -247,26 +247,26 @@ export type { AdaptiveCardProps as CardProps };
  * For use in components that need conditional card styling
  */
 export function getAdaptiveCardStyles(
-  context: 'public' | 'auth' | 'auto' = 'auto',
+  context: "public" | "auth" | "auto" = "auto",
   pathname?: string,
-  session?: any
+  session?: any,
 ): string {
   const detectedContext =
-    context !== 'auto'
+    context !== "auto"
       ? context
       : session &&
-          (pathname?.startsWith('/admin') ||
-            pathname?.startsWith('/profesor') ||
-            pathname?.startsWith('/parent'))
-        ? 'auth'
-        : 'public';
+          (pathname?.startsWith("/admin") ||
+            pathname?.startsWith("/profesor") ||
+            pathname?.startsWith("/parent"))
+        ? "auth"
+        : "public";
 
   switch (detectedContext) {
-    case 'public':
-      return 'backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300';
-    case 'auth':
-      return 'bg-background border border-border shadow-sm hover:shadow-md transition-shadow rounded-lg';
+    case "public":
+      return "backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300";
+    case "auth":
+      return "bg-background border border-border shadow-sm hover:shadow-md transition-shadow rounded-lg";
     default:
-      return 'bg-background border border-border rounded-lg shadow-sm';
+      return "bg-background border border-border rounded-lg shadow-sm";
   }
 }

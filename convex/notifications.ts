@@ -10,7 +10,7 @@ const notificationTypeValidator = v.union(
   v.literal("SUCCESS"),
   v.literal("WARNING"),
   v.literal("ERROR"),
-  v.literal("SYSTEM")
+  v.literal("SYSTEM"),
 );
 
 const notificationCategoryValidator = v.optional(
@@ -20,14 +20,14 @@ const notificationCategoryValidator = v.optional(
     v.literal("SYSTEM"),
     v.literal("ACADEMIC"),
     v.literal("ADMINISTRATIVE"),
-    v.literal("PERSONAL")
-  )
+    v.literal("PERSONAL"),
+  ),
 );
 
 const priorityValidator = v.union(
   v.literal("LOW"),
   v.literal("MEDIUM"),
-  v.literal("HIGH")
+  v.literal("HIGH"),
 );
 
 // ==================== QUERIES ====================
@@ -35,7 +35,9 @@ const priorityValidator = v.union(
 export const getNotifications = query({
   args: {
     recipientId: v.id("users"),
-    status: v.optional(v.union(v.literal("all"), v.literal("read"), v.literal("unread"))),
+    status: v.optional(
+      v.union(v.literal("all"), v.literal("read"), v.literal("unread")),
+    ),
     read: v.optional(v.boolean()),
     limit: v.optional(v.number()),
   },
@@ -55,7 +57,7 @@ export const getNotifications = query({
     // Filter out expired notifications
     const now = Date.now();
     notifications = notifications.filter(
-      (n) => !n.expiresAt || n.expiresAt > now
+      (n) => !n.expiresAt || n.expiresAt > now,
     );
 
     // Sort by creation date (newest first)
@@ -71,12 +73,13 @@ export const getUnreadCount = query({
     const notifications = await ctx.db
       .query("notifications")
       .withIndex("by_recipientId_read", (q) =>
-        q.eq("recipientId", recipientId).eq("read", false)
+        q.eq("recipientId", recipientId).eq("read", false),
       )
       .collect();
 
     const now = Date.now();
-    return notifications.filter((n) => !n.expiresAt || n.expiresAt > now).length;
+    return notifications.filter((n) => !n.expiresAt || n.expiresAt > now)
+      .length;
   },
 });
 
@@ -97,12 +100,12 @@ export const createNotification = mutation({
   },
   handler: async (ctx, args) => {
     const now = Date.now();
-    
+
     // Handle broadcast or specific recipients
     if (args.isBroadcast) {
       const allUsers = await ctx.db.query("users").collect();
       await Promise.all(
-        allUsers.map(user => 
+        allUsers.map((user) =>
           ctx.db.insert("notifications", {
             title: args.title,
             message: args.message,
@@ -116,12 +119,12 @@ export const createNotification = mutation({
             read: false,
             createdAt: now,
             updatedAt: now,
-          })
-        )
+          }),
+        ),
       );
     } else if (args.recipientIds && args.recipientIds.length > 0) {
       await Promise.all(
-        args.recipientIds.map(recipientId =>
+        args.recipientIds.map((recipientId) =>
           ctx.db.insert("notifications", {
             title: args.title,
             message: args.message,
@@ -135,28 +138,28 @@ export const createNotification = mutation({
             read: false,
             createdAt: now,
             updatedAt: now,
-          })
-        )
+          }),
+        ),
       );
     }
   },
 });
 
 export const markAsRead = mutation({
-  args: { 
+  args: {
     notificationIds: v.array(v.id("notifications")),
     recipientId: v.id("users"),
   },
   handler: async (ctx, { notificationIds, recipientId }) => {
     const now = Date.now();
     await Promise.all(
-      notificationIds.map(id =>
+      notificationIds.map((id) =>
         ctx.db.patch(id, {
           read: true,
           readAt: now,
           updatedAt: now,
-        })
-      )
+        }),
+      ),
     );
   },
 });
@@ -167,7 +170,7 @@ export const markAllAsRead = mutation({
     const notifications = await ctx.db
       .query("notifications")
       .withIndex("by_recipientId_read", (q) =>
-        q.eq("recipientId", recipientId).eq("read", false)
+        q.eq("recipientId", recipientId).eq("read", false),
       )
       .collect();
 
@@ -178,8 +181,8 @@ export const markAllAsRead = mutation({
           read: true,
           readAt: now,
           updatedAt: now,
-        })
-      )
+        }),
+      ),
     );
   },
 });

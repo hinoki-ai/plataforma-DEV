@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home, Bug, Zap } from 'lucide-react';
-import { Button } from './button';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home, Bug, Zap } from "lucide-react";
+import { Button } from "./button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from './card';
-import { Badge } from './badge';
+} from "./card";
+import { Badge } from "./badge";
 
 interface Props {
   children: ReactNode;
@@ -58,12 +58,12 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
       ...errorInfo,
       context: this.props.context,
       userAgent:
-        typeof window !== 'undefined' ? window.navigator.userAgent : 'SSR',
+        typeof window !== "undefined" ? window.navigator.userAgent : "SSR",
       timestamp: new Date().toISOString(),
       errorId: this.state.errorId,
     };
 
-    console.error('Advanced Error Boundary caught an error:', {
+    console.error("Advanced Error Boundary caught an error:", {
       error,
       errorInfo: enhancedErrorInfo,
     });
@@ -83,7 +83,7 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
 
   componentWillUnmount() {
     // Clear any pending retry timeouts
-    this.retryTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.retryTimeouts.forEach((timeout) => clearTimeout(timeout));
   }
 
   private generateErrorId(): string {
@@ -99,7 +99,7 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
       /database.*error/i,
     ];
 
-    return criticalPatterns.some(pattern => pattern.test(error.message));
+    return criticalPatterns.some((pattern) => pattern.test(error.message));
   }
 
   private reportError = async (error: Error, errorInfo: ErrorInfo) => {
@@ -112,23 +112,23 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
         context: this.props.context,
         timestamp: new Date().toISOString(),
         userAgent: errorInfo.toString(),
-        url: typeof window !== 'undefined' ? window.location.href : 'SSR',
+        url: typeof window !== "undefined" ? window.location.href : "SSR",
       };
 
       // Send to error reporting service
-      await fetch('/api/errors/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/errors/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reportData),
       });
     } catch (reportError) {
-      console.error('Failed to report error:', reportError);
+      console.error("Failed to report error:", reportError);
     }
   };
 
   private handleRetry = () => {
     if (this.state.retryCount < this.maxRetries) {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         retryCount: prevState.retryCount + 1,
         hasError: false,
         error: null,
@@ -194,7 +194,7 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
                       Error ID: {this.state.errorId}
                     </h4>
                     <p className="text-sm text-red-700">
-                      {this.state.error?.message || 'Error desconocido'}
+                      {this.state.error?.message || "Error desconocido"}
                     </p>
                     {this.props.context && (
                       <p className="text-xs text-red-600 mt-1">
@@ -215,7 +215,7 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
                       className="flex items-center"
                     >
                       <RefreshCw className="w-4 h-4 mr-2" />
-                      Reintentar ({this.maxRetries - this.state.retryCount}{' '}
+                      Reintentar ({this.maxRetries - this.state.retryCount}{" "}
                       intentos restantes)
                     </Button>
                   )}
@@ -230,7 +230,7 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
                 </Button>
 
                 <Button
-                  onClick={() => (window.location.href = '/')}
+                  onClick={() => (window.location.href = "/")}
                   variant="outline"
                   className="flex items-center"
                 >
@@ -260,11 +260,11 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-xs">
                       <div>
-                        <strong>Intentos de reintento:</strong>{' '}
+                        <strong>Intentos de reintento:</strong>{" "}
                         {this.state.retryCount}
                       </div>
                       <div>
-                        <strong>Hora del error:</strong>{' '}
+                        <strong>Hora del error:</strong>{" "}
                         {new Date().toLocaleString()}
                       </div>
                     </div>
@@ -297,7 +297,7 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
 // Higher-order component for easier usage
 export function withAdvancedErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<Props, 'children'>
+  errorBoundaryProps?: Omit<Props, "children">,
 ) {
   const WrappedComponent = (props: P) => (
     <AdvancedErrorBoundary {...errorBoundaryProps}>
@@ -313,12 +313,12 @@ export function withAdvancedErrorBoundary<P extends object>(
 // React Hook for functional components
 export function useErrorHandler() {
   return (error: Error, errorInfo?: { componentStack?: string }) => {
-    console.error('Error caught by useErrorHandler:', error, errorInfo);
+    console.error("Error caught by useErrorHandler:", error, errorInfo);
 
     // Could integrate with error reporting service here
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Store error in session storage for debugging
-      const errors = JSON.parse(sessionStorage.getItem('app_errors') || '[]');
+      const errors = JSON.parse(sessionStorage.getItem("app_errors") || "[]");
       errors.push({
         message: error.message,
         stack: error.stack,
@@ -326,7 +326,7 @@ export function useErrorHandler() {
         timestamp: new Date().toISOString(),
         url: window.location.href,
       });
-      sessionStorage.setItem('app_errors', JSON.stringify(errors.slice(-10))); // Keep last 10 errors
+      sessionStorage.setItem("app_errors", JSON.stringify(errors.slice(-10))); // Keep last 10 errors
     }
   };
 }

@@ -1,35 +1,35 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CalendarDays, List, Plus } from 'lucide-react';
-import { ParentMeetingList } from './ParentMeetingList';
-import { ParentMeetingCalendar } from './ParentMeetingCalendar';
-import { ParentMeetingRequest } from './ParentMeetingRequest';
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CalendarDays, List, Plus } from "lucide-react";
+import { ParentMeetingList } from "./ParentMeetingList";
+import { ParentMeetingCalendar } from "./ParentMeetingCalendar";
+import { ParentMeetingRequest } from "./ParentMeetingRequest";
 
 interface ParentMeetingTabsProps {
   userId: string;
 }
 
 export function ParentMeetingTabs({ userId }: ParentMeetingTabsProps) {
-  const [activeTab, setActiveTab] = useState('list');
+  const [activeTab, setActiveTab] = useState("list");
 
   const tabs = [
     {
-      id: 'list',
-      label: 'Mis Reuniones',
+      id: "list",
+      label: "Mis Reuniones",
       icon: List,
       content: <ParentMeetingList userId={userId} />,
     },
     {
-      id: 'calendar',
-      label: 'Calendario',
+      id: "calendar",
+      label: "Calendario",
       icon: CalendarDays,
       content: <ParentMeetingCalendar userId={userId} />,
     },
     {
-      id: 'request',
-      label: 'Solicitar Reunión',
+      id: "request",
+      label: "Solicitar Reunión",
       icon: Plus,
       content: <ParentMeetingRequest userId={userId} />,
     },
@@ -38,7 +38,7 @@ export function ParentMeetingTabs({ userId }: ParentMeetingTabsProps) {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
       <TabsList className="grid w-full grid-cols-3">
-        {tabs.map(tab => (
+        {tabs.map((tab) => (
           <TabsTrigger
             key={tab.id}
             value={tab.id}
@@ -50,7 +50,7 @@ export function ParentMeetingTabs({ userId }: ParentMeetingTabsProps) {
         ))}
       </TabsList>
 
-      {tabs.map(tab => (
+      {tabs.map((tab) => (
         <TabsContent key={tab.id} value={tab.id} className="mt-6">
           {tab.content}
         </TabsContent>

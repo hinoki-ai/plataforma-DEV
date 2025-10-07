@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Component, ErrorInfo, ReactNode, useState, useEffect } from 'react';
-import { AlertTriangle, RefreshCw, Zap } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ActionLoader } from '@/components/ui/dashboard-loader';
+import { Component, ErrorInfo, ReactNode, useState, useEffect } from "react";
+import { AlertTriangle, RefreshCw, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 interface Props {
   children: ReactNode;
@@ -44,32 +44,32 @@ export class HydrationErrorBoundary extends Component<Props, State> {
 
   private static isHydrationError(error: Error): boolean {
     const hydrationErrorMessages = [
-      'Text content does not match server-rendered HTML',
-      'Hydration failed because the initial UI does not match',
-      'There was an error while hydrating',
-      'useLayoutEffect does nothing on the server',
-      'Cannot read properties of null',
-      'Cannot read property of null',
-      'localStorage is not defined',
-      'window is not defined',
-      'document is not defined',
-      'Expected server HTML to contain',
-      'Hydration error',
-      'hydration',
-      'failed to find all',
-      'server and client must match',
-      'element with tag',
-      'did not expect server HTML',
-      'suppressHydrationWarning',
+      "Text content does not match server-rendered HTML",
+      "Hydration failed because the initial UI does not match",
+      "There was an error while hydrating",
+      "useLayoutEffect does nothing on the server",
+      "Cannot read properties of null",
+      "Cannot read property of null",
+      "localStorage is not defined",
+      "window is not defined",
+      "document is not defined",
+      "Expected server HTML to contain",
+      "Hydration error",
+      "hydration",
+      "failed to find all",
+      "server and client must match",
+      "element with tag",
+      "did not expect server HTML",
+      "suppressHydrationWarning",
     ];
 
     const errorMessage = error.message.toLowerCase();
-    const errorStack = error.stack?.toLowerCase() || '';
+    const errorStack = error.stack?.toLowerCase() || "";
 
     return hydrationErrorMessages.some(
-      msg =>
+      (msg) =>
         errorMessage.includes(msg.toLowerCase()) ||
-        errorStack.includes(msg.toLowerCase())
+        errorStack.includes(msg.toLowerCase()),
     );
   }
 
@@ -78,7 +78,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
 
     // Enhanced logging for hydration errors
     if (isHydrationError) {
-      console.warn('🚧 HYDRATION ERROR DETECTED:', {
+      console.warn("🚧 HYDRATION ERROR DETECTED:", {
         error: error.message,
         stack: error.stack,
         componentStack: errorInfo.componentStack,
@@ -88,7 +88,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
         retryCount: this.state.retryCount,
       });
     } else {
-      console.error('💥 COMPONENT ERROR:', error, errorInfo);
+      console.error("💥 COMPONENT ERROR:", error, errorInfo);
     }
 
     this.setState({
@@ -106,7 +106,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
         () => {
           this.handleRetry();
         },
-        1000 + this.state.retryCount * 1000
+        1000 + this.state.retryCount * 1000,
       ); // Exponential backoff
     }
   }
@@ -118,7 +118,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
   }
 
   private handleRetry = () => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       hasError: false,
       error: null,
       errorInfo: null,
@@ -127,14 +127,14 @@ export class HydrationErrorBoundary extends Component<Props, State> {
   };
 
   private handleHardRefresh = () => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       window.location.reload();
     }
   };
 
   private handleGoHome = () => {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/';
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
     }
   };
 
@@ -161,7 +161,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
               <p className="text-muted-foreground mb-4">
                 {this.state.retryCount > 0
                   ? `Reintentando... (${this.state.retryCount}/${MAX_RETRIES})`
-                  : 'La página se está sincronizando. Esto debería tardar solo un momento.'}
+                  : "La página se está sincronizando. Esto debería tardar solo un momento."}
               </p>
 
               {/* Loading animation */}
@@ -194,14 +194,14 @@ export class HydrationErrorBoundary extends Component<Props, State> {
                 </>
               )}
 
-              {process.env.NODE_ENV === 'development' && (
+              {process.env.NODE_ENV === "development" && (
                 <details className="mt-6 text-left">
                   <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
                     🐛 Detalles técnicos (desarrollo)
                   </summary>
                   <div className="mt-2 text-xs bg-amber-50 dark:bg-amber-900/10 p-3 rounded border">
                     <div className="font-mono mb-2">
-                      <strong>Hydration Error:</strong>{' '}
+                      <strong>Hydration Error:</strong>{" "}
                       {this.state.error?.message}
                     </div>
                     <div className="text-amber-700 dark:text-amber-300">
@@ -250,7 +250,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
               </Button>
             </div>
 
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === "development" && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
                   Ver detalles del error
@@ -293,7 +293,7 @@ export function useHydrationSafe() {
 // HOC for wrapping components that might have hydration issues
 export function withHydrationErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  fallback?: ReactNode
+  fallback?: ReactNode,
 ) {
   return function WrappedComponent(props: P) {
     return (

@@ -4,7 +4,7 @@
  * Part of Stage 4: Quality & Performance
  */
 
-import { UserRole } from '@/lib/prisma-compat-types';
+import { UserRole } from "@/lib/prisma-compat-types";
 export type ExtendedUserRole = UserRole;
 
 export interface PerformanceMetric {
@@ -12,10 +12,10 @@ export interface PerformanceMetric {
   name: string;
   value: number;
   timestamp: Date;
-  context: 'public' | 'auth' | 'admin';
+  context: "public" | "auth" | "admin";
   userRole?: ExtendedUserRole;
   url: string;
-  device: 'mobile' | 'tablet' | 'desktop';
+  device: "mobile" | "tablet" | "desktop";
   connection: string;
   metadata: Record<string, any>;
 }
@@ -26,7 +26,7 @@ export interface ComponentPerformanceMetric {
   mountTime: number;
   updateCount: number;
   errorCount: number;
-  context: 'public' | 'auth' | 'admin';
+  context: "public" | "auth" | "admin";
   timestamp: Date;
 }
 
@@ -47,7 +47,7 @@ export interface PerformanceReport {
   bundleSize: number;
   memoryUsage: number;
   networkRequests: number;
-  context: 'public' | 'auth' | 'admin';
+  context: "public" | "auth" | "admin";
   timestamp: Date;
   url: string;
   userAgent: string;
@@ -76,10 +76,10 @@ class PerformanceMonitor {
    * Setup Performance Observer
    */
   private setupPerformanceObserver(): void {
-    if (typeof window === 'undefined' || !window.PerformanceObserver) return;
+    if (typeof window === "undefined" || !window.PerformanceObserver) return;
 
     try {
-      this.observer = new PerformanceObserver(list => {
+      this.observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           this.processPerformanceEntry(entry);
         }
@@ -88,11 +88,11 @@ class PerformanceMonitor {
       // Observe different performance entry types
       this.observer.observe({
         entryTypes: [
-          'navigation',
-          'resource',
-          'paint',
-          'layout-shift',
-          'first-input',
+          "navigation",
+          "resource",
+          "paint",
+          "layout-shift",
+          "first-input",
         ],
       });
     } catch (error) {}
@@ -102,7 +102,7 @@ class PerformanceMonitor {
    * Setup Core Web Vitals tracking
    */
   private setupWebVitalsTracking(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Largest Contentful Paint (LCP)
     this.trackLCP();
@@ -127,19 +127,19 @@ class PerformanceMonitor {
     if (!window.PerformanceObserver) return;
 
     try {
-      const observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1] as any;
         this.coreWebVitals.lcp = lastEntry.startTime;
 
         this.recordMetric({
-          name: 'lcp',
+          name: "lcp",
           value: lastEntry.startTime,
-          metadata: { type: 'core-web-vital' },
+          metadata: { type: "core-web-vital" },
         });
       });
 
-      observer.observe({ entryTypes: ['largest-contentful-paint'] });
+      observer.observe({ entryTypes: ["largest-contentful-paint"] });
     } catch (error) {}
   }
 
@@ -150,21 +150,21 @@ class PerformanceMonitor {
     if (!window.PerformanceObserver) return;
 
     try {
-      const observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         for (const entry of entries) {
           const fid = (entry as any).processingStart - entry.startTime;
           this.coreWebVitals.fid = fid;
 
           this.recordMetric({
-            name: 'fid',
+            name: "fid",
             value: fid,
-            metadata: { type: 'core-web-vital' },
+            metadata: { type: "core-web-vital" },
           });
         }
       });
 
-      observer.observe({ entryTypes: ['first-input'] });
+      observer.observe({ entryTypes: ["first-input"] });
     } catch (error) {}
   }
 
@@ -176,7 +176,7 @@ class PerformanceMonitor {
 
     try {
       let clsValue = 0;
-      const observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (!(entry as any).hadRecentInput) {
             clsValue += (entry as any).value;
@@ -185,13 +185,13 @@ class PerformanceMonitor {
 
         this.coreWebVitals.cls = clsValue;
         this.recordMetric({
-          name: 'cls',
+          name: "cls",
           value: clsValue,
-          metadata: { type: 'core-web-vital' },
+          metadata: { type: "core-web-vital" },
         });
       });
 
-      observer.observe({ entryTypes: ['layout-shift'] });
+      observer.observe({ entryTypes: ["layout-shift"] });
     } catch (error) {}
   }
 
@@ -202,21 +202,21 @@ class PerformanceMonitor {
     if (!window.PerformanceObserver) return;
 
     try {
-      const observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.name === 'first-contentful-paint') {
+          if (entry.name === "first-contentful-paint") {
             this.coreWebVitals.fcp = entry.startTime;
 
             this.recordMetric({
-              name: 'fcp',
+              name: "fcp",
               value: entry.startTime,
-              metadata: { type: 'core-web-vital' },
+              metadata: { type: "core-web-vital" },
             });
           }
         }
       });
 
-      observer.observe({ entryTypes: ['paint'] });
+      observer.observe({ entryTypes: ["paint"] });
     } catch (error) {}
   }
 
@@ -224,17 +224,17 @@ class PerformanceMonitor {
    * Track Time to First Byte
    */
   private trackTTFB(): void {
-    if (typeof window === 'undefined' || !window.performance.timing) return;
+    if (typeof window === "undefined" || !window.performance.timing) return;
 
-    window.addEventListener('load', () => {
+    window.addEventListener("load", () => {
       const timing = window.performance.timing;
       const ttfb = timing.responseStart - timing.navigationStart;
 
       this.coreWebVitals.ttfb = ttfb;
       this.recordMetric({
-        name: 'ttfb',
+        name: "ttfb",
         value: ttfb,
-        metadata: { type: 'core-web-vital' },
+        metadata: { type: "core-web-vital" },
       });
     });
   }
@@ -246,13 +246,13 @@ class PerformanceMonitor {
     if (!this.isEnabled) return;
 
     switch (entry.entryType) {
-      case 'navigation':
+      case "navigation":
         this.processNavigationEntry(entry as PerformanceNavigationTiming);
         break;
-      case 'resource':
+      case "resource":
         this.processResourceEntry(entry as PerformanceResourceTiming);
         break;
-      case 'paint':
+      case "paint":
         this.processPaintEntry(entry);
         break;
     }
@@ -275,7 +275,7 @@ class PerformanceMonitor {
         this.recordMetric({
           name,
           value,
-          metadata: { type: 'navigation', entryType: entry.entryType },
+          metadata: { type: "navigation", entryType: entry.entryType },
         });
       }
     });
@@ -292,10 +292,10 @@ class PerformanceMonitor {
     if (loadTime > 1000 || resourceSize > 100000) {
       // > 1s or > 100KB
       this.recordMetric({
-        name: 'slow-resource',
+        name: "slow-resource",
         value: loadTime,
         metadata: {
-          type: 'resource',
+          type: "resource",
           url: entry.name,
           size: resourceSize,
           resourceType: this.getResourceType(entry.name),
@@ -311,7 +311,7 @@ class PerformanceMonitor {
     this.recordMetric({
       name: entry.name,
       value: entry.startTime,
-      metadata: { type: 'paint' },
+      metadata: { type: "paint" },
     });
   }
 
@@ -319,12 +319,12 @@ class PerformanceMonitor {
    * Get resource type from URL
    */
   private getResourceType(url: string): string {
-    if (url.match(/\.(js|jsx|ts|tsx)$/)) return 'script';
-    if (url.match(/\.(css)$/)) return 'stylesheet';
-    if (url.match(/\.(png|jpg|jpeg|gif|svg|webp|avif)$/)) return 'image';
-    if (url.match(/\.(woff|woff2|ttf|eot)$/)) return 'font';
-    if (url.includes('/api/')) return 'api';
-    return 'other';
+    if (url.match(/\.(js|jsx|ts|tsx)$/)) return "script";
+    if (url.match(/\.(css)$/)) return "stylesheet";
+    if (url.match(/\.(png|jpg|jpeg|gif|svg|webp|avif)$/)) return "image";
+    if (url.match(/\.(woff|woff2|ttf|eot)$/)) return "font";
+    if (url.includes("/api/")) return "api";
+    return "other";
   }
 
   /**
@@ -333,7 +333,7 @@ class PerformanceMonitor {
   recordMetric(metric: {
     name: string;
     value: number;
-    context?: 'public' | 'auth' | 'admin';
+    context?: "public" | "auth" | "admin";
     userRole?: ExtendedUserRole;
     metadata?: Record<string, any>;
   }): void {
@@ -346,7 +346,7 @@ class PerformanceMonitor {
       timestamp: new Date(),
       context: metric.context || this.detectContext(),
       userRole: metric.userRole,
-      url: typeof window !== 'undefined' ? window.location.href : 'unknown',
+      url: typeof window !== "undefined" ? window.location.href : "unknown",
       device: this.detectDevice(),
       connection: this.detectConnection(),
       metadata: metric.metadata || {},
@@ -360,7 +360,7 @@ class PerformanceMonitor {
     }
 
     // Log performance issues in development
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       this.checkPerformanceThresholds(fullMetric);
     }
   }
@@ -369,7 +369,7 @@ class PerformanceMonitor {
    * Record component performance
    */
   recordComponentMetric(
-    metric: Omit<ComponentPerformanceMetric, 'timestamp' | 'context'>
+    metric: Omit<ComponentPerformanceMetric, "timestamp" | "context">,
   ): void {
     if (!this.isEnabled) return;
 
@@ -390,38 +390,38 @@ class PerformanceMonitor {
   /**
    * Detect current context
    */
-  private detectContext(): 'public' | 'auth' | 'admin' {
-    if (typeof window === 'undefined') return 'public';
+  private detectContext(): "public" | "auth" | "admin" {
+    if (typeof window === "undefined") return "public";
 
     const path = window.location.pathname;
-    if (path.startsWith('/admin')) return 'admin';
-    if (path.startsWith('/profesor') || path.startsWith('/parent'))
-      return 'auth';
-    return 'public';
+    if (path.startsWith("/admin")) return "admin";
+    if (path.startsWith("/profesor") || path.startsWith("/parent"))
+      return "auth";
+    return "public";
   }
 
   /**
    * Detect device type
    */
-  private detectDevice(): 'mobile' | 'tablet' | 'desktop' {
-    if (typeof window === 'undefined') return 'desktop';
+  private detectDevice(): "mobile" | "tablet" | "desktop" {
+    if (typeof window === "undefined") return "desktop";
 
     const width = window.innerWidth;
-    if (width < 768) return 'mobile';
-    if (width < 1024) return 'tablet';
-    return 'desktop';
+    if (width < 768) return "mobile";
+    if (width < 1024) return "tablet";
+    return "desktop";
   }
 
   /**
    * Detect connection type
    */
   private detectConnection(): string {
-    if (typeof navigator === 'undefined' || !(navigator as any).connection) {
-      return 'unknown';
+    if (typeof navigator === "undefined" || !(navigator as any).connection) {
+      return "unknown";
     }
 
     const connection = (navigator as any).connection;
-    return connection.effectiveType || connection.type || 'unknown';
+    return connection.effectiveType || connection.type || "unknown";
   }
 
   /**
@@ -449,23 +449,24 @@ class PerformanceMonitor {
   getReport(): PerformanceReport {
     const now = new Date();
     const recentMetrics = this.metrics.filter(
-      m => now.getTime() - m.timestamp.getTime() < 300000 // Last 5 minutes
+      (m) => now.getTime() - m.timestamp.getTime() < 300000, // Last 5 minutes
     );
 
     return {
-      pageLoadTime: this.getLatestMetricValue('pageLoadTime') || 0,
-      domContentLoaded: this.getLatestMetricValue('domContentLoaded') || 0,
-      resourceLoadTime: this.getAverageMetricValue('slow-resource') || 0,
+      pageLoadTime: this.getLatestMetricValue("pageLoadTime") || 0,
+      domContentLoaded: this.getLatestMetricValue("domContentLoaded") || 0,
+      resourceLoadTime: this.getAverageMetricValue("slow-resource") || 0,
       coreWebVitals: { ...this.coreWebVitals },
       componentMetrics: [...this.componentMetrics.slice(-20)], // Last 20
       bundleSize: this.getBundleSize(),
       memoryUsage: this.getMemoryUsage(),
-      networkRequests: recentMetrics.filter(m => m.metadata.type === 'resource')
-        .length,
+      networkRequests: recentMetrics.filter(
+        (m) => m.metadata.type === "resource",
+      ).length,
       context: this.detectContext(),
       timestamp: now,
-      url: typeof window !== 'undefined' ? window.location.href : '',
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+      url: typeof window !== "undefined" ? window.location.href : "",
+      userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
     };
   }
 
@@ -474,7 +475,7 @@ class PerformanceMonitor {
    */
   private getLatestMetricValue(name: string): number | null {
     const metric = this.metrics
-      .filter(m => m.name === name)
+      .filter((m) => m.name === name)
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())[0];
 
     return metric ? metric.value : null;
@@ -484,7 +485,7 @@ class PerformanceMonitor {
    * Get average metric value
    */
   private getAverageMetricValue(name: string): number | null {
-    const metrics = this.metrics.filter(m => m.name === name);
+    const metrics = this.metrics.filter((m) => m.name === name);
     if (metrics.length === 0) return null;
 
     const sum = metrics.reduce((acc, m) => acc + m.value, 0);
@@ -495,13 +496,13 @@ class PerformanceMonitor {
    * Get bundle size estimate
    */
   private getBundleSize(): number {
-    if (typeof performance === 'undefined') return 0;
+    if (typeof performance === "undefined") return 0;
 
     const resources = performance.getEntriesByType(
-      'resource'
+      "resource",
     ) as PerformanceResourceTiming[];
     return resources
-      .filter(r => r.name.includes('.js') || r.name.includes('.css'))
+      .filter((r) => r.name.includes(".js") || r.name.includes(".css"))
       .reduce((sum, r) => sum + (r.transferSize || 0), 0);
   }
 
@@ -509,7 +510,7 @@ class PerformanceMonitor {
    * Get memory usage
    */
   private getMemoryUsage(): number {
-    if (typeof performance === 'undefined' || !(performance as any).memory)
+    if (typeof performance === "undefined" || !(performance as any).memory)
       return 0;
 
     return (performance as any).memory.usedJSHeapSize || 0;
@@ -590,15 +591,15 @@ export function usePerformanceMonitor(componentName: string) {
  * Setup performance monitoring
  */
 export function setupPerformanceMonitoring(): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   // Track initial page load
-  window.addEventListener('load', () => {
+  window.addEventListener("load", () => {
     const timing = performance.timing;
     performanceMonitor.recordMetric({
-      name: 'page-load-complete',
+      name: "page-load-complete",
       value: timing.loadEventEnd - timing.navigationStart,
-      metadata: { type: 'page-load' },
+      metadata: { type: "page-load" },
     });
   });
 }

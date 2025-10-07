@@ -1,14 +1,30 @@
-'use client';
+"use client";
 
-import React, { Suspense, lazy, ComponentType } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import React, { Suspense, lazy, ComponentType } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load dashboard components
-const RoleAwareDashboard = lazy(() => import('@/components/dashboard/RoleAwareDashboard').then(module => ({ default: module.RoleAwareDashboard })));
-const MasterDashboard = lazy(() => import('@/components/master/MasterDashboard').then(module => ({ default: module.MasterDashboard })));
-const NotificationCenter = lazy(() => import('@/components/notifications/NotificationCenter').then(module => ({ default: module.NotificationCenter })));
-const PerformanceMonitor = lazy(() => import('@/components/performance/PerformanceMonitor').then(module => ({ default: module.PerformanceMonitor })));
+const RoleAwareDashboard = lazy(() =>
+  import("@/components/dashboard/RoleAwareDashboard").then((module) => ({
+    default: module.RoleAwareDashboard,
+  })),
+);
+const MasterDashboard = lazy(() =>
+  import("@/components/master/MasterDashboard").then((module) => ({
+    default: module.MasterDashboard,
+  })),
+);
+const NotificationCenter = lazy(() =>
+  import("@/components/notifications/NotificationCenter").then((module) => ({
+    default: module.NotificationCenter,
+  })),
+);
+const PerformanceMonitor = lazy(() =>
+  import("@/components/performance/PerformanceMonitor").then((module) => ({
+    default: module.PerformanceMonitor,
+  })),
+);
 
 // Loading fallback component
 function DashboardSkeleton() {
@@ -57,7 +73,10 @@ class LazyErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback?: React.ReactNode },
   { hasError: boolean }
 > {
-  constructor(props: { children: React.ReactNode; fallback?: React.ReactNode }) {
+  constructor(props: {
+    children: React.ReactNode;
+    fallback?: React.ReactNode;
+  }) {
     super(props);
     this.state = { hasError: false };
   }
@@ -67,19 +86,21 @@ class LazyErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Lazy loading error:', error, errorInfo);
+    console.error("Lazy loading error:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
-        <Card>
-          <CardContent className="p-6 text-center">
-            <p className="text-muted-foreground">
-              Error al cargar el componente. Inténtalo de nuevo.
-            </p>
-          </CardContent>
-        </Card>
+      return (
+        this.props.fallback || (
+          <Card>
+            <CardContent className="p-6 text-center">
+              <p className="text-muted-foreground">
+                Error al cargar el componente. Inténtalo de nuevo.
+              </p>
+            </CardContent>
+          </Card>
+        )
       );
     }
 
@@ -90,7 +111,7 @@ class LazyErrorBoundary extends React.Component<
 // Lazy wrapper component with intersection observer for performance
 function LazyWrapper({
   children,
-  rootMargin = '50px'
+  rootMargin = "50px",
 }: {
   children: React.ReactNode;
   rootMargin?: string;
@@ -106,7 +127,7 @@ function LazyWrapper({
           observer.disconnect();
         }
       },
-      { rootMargin }
+      { rootMargin },
     );
 
     if (ref.current) {
@@ -116,11 +137,7 @@ function LazyWrapper({
     return () => observer.disconnect();
   }, [rootMargin]);
 
-  return (
-    <div ref={ref}>
-      {isVisible ? children : <DashboardSkeleton />}
-    </div>
-  );
+  return <div ref={ref}>{isVisible ? children : <DashboardSkeleton />}</div>;
 }
 
 // Exported lazy components
@@ -167,14 +184,14 @@ export const LazyPerformanceMonitor = (props: any) => (
 // Utility function to preload critical components
 export const preloadDashboardComponents = () => {
   // Preload critical components
-  import('@/components/dashboard/RoleAwareDashboard');
-  import('@/components/notifications/NotificationCenter');
+  import("@/components/dashboard/RoleAwareDashboard");
+  import("@/components/notifications/NotificationCenter");
 };
 
 // Utility function to preload all dashboard components
 export const preloadAllDashboardComponents = () => {
-  import('@/components/dashboard/RoleAwareDashboard');
-  import('@/components/master/MasterDashboard');
-  import('@/components/notifications/NotificationCenter');
-  import('@/components/performance/PerformanceMonitor');
+  import("@/components/dashboard/RoleAwareDashboard");
+  import("@/components/master/MasterDashboard");
+  import("@/components/notifications/NotificationCenter");
+  import("@/components/performance/PerformanceMonitor");
 };

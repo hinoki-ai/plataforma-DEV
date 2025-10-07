@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useParams } from "next/navigation";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { LoadingState } from '@/components/ui/loading-states';
-import { ErrorBoundary } from '@/components/ui/error-boundary';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { LoadingState } from "@/components/ui/loading-states";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import {
   ArrowLeft,
   Edit,
@@ -24,35 +24,35 @@ import {
   BookOpen,
   Target,
   FileText,
-  StickyNote
-} from 'lucide-react';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
+  StickyNote,
+} from "lucide-react";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 const activityTypeLabels = {
-  CLASS: 'Clase',
-  EVENT: 'Evento',
-  WORKSHOP: 'Taller',
-  EXCURSION: 'Excursión',
-  MEETING: 'Reunión',
-  OTHER: 'Otro',
+  CLASS: "Clase",
+  EVENT: "Evento",
+  WORKSHOP: "Taller",
+  EXCURSION: "Excursión",
+  MEETING: "Reunión",
+  OTHER: "Otro",
 };
 
 const activityTypeColors = {
-  CLASS: 'bg-blue-100 text-blue-800',
-  EVENT: 'bg-purple-100 text-purple-800',
-  WORKSHOP: 'bg-green-100 text-green-800',
-  EXCURSION: 'bg-orange-100 text-orange-800',
-  MEETING: 'bg-red-100 text-red-800',
-  OTHER: 'bg-gray-100 text-gray-800',
+  CLASS: "bg-blue-100 text-blue-800",
+  EVENT: "bg-purple-100 text-purple-800",
+  WORKSHOP: "bg-green-100 text-green-800",
+  EXCURSION: "bg-orange-100 text-orange-800",
+  MEETING: "bg-red-100 text-red-800",
+  OTHER: "bg-gray-100 text-gray-800",
 };
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
-  return date.toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    weekday: 'long',
+  return date.toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
   });
 }
 
@@ -66,7 +66,7 @@ function isUpcoming(dateString: string, timeString: string) {
 }
 
 function VerActividadContent() {
-  const { t } = useDivineParsing(['common', 'profesor']);
+  const { t } = useDivineParsing(["common", "profesor"]);
   const router = useRouter();
   const params = useParams();
   const activityId = params.id as string;
@@ -88,34 +88,38 @@ function VerActividadContent() {
       if (data.success) {
         setActivity(data.data);
       } else {
-        setError(data.error || 'Error al cargar la actividad');
+        setError(data.error || "Error al cargar la actividad");
       }
     } catch (err) {
-      console.error('Error fetching activity:', err);
-      setError('Error al cargar la actividad');
+      console.error("Error fetching activity:", err);
+      setError("Error al cargar la actividad");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteActivity = async () => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta actividad? Esta acción no se puede deshacer.')) {
+    if (
+      !confirm(
+        "¿Estás seguro de que quieres eliminar esta actividad? Esta acción no se puede deshacer.",
+      )
+    ) {
       return;
     }
 
     try {
       const response = await fetch(`/api/profesor/activities/${activityId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
-        router.push('/profesor/actividades');
+        router.push("/profesor/actividades");
       } else {
-        alert(t('profesor.activities.delete_error', 'profesor'));
+        alert(t("profesor.activities.delete_error", "profesor"));
       }
     } catch (err) {
-      console.error('Error deleting activity:', err);
-      alert('Error al eliminar la actividad');
+      console.error("Error deleting activity:", err);
+      alert("Error al eliminar la actividad");
     }
   };
 
@@ -133,20 +137,28 @@ function VerActividadContent() {
             className="mb-4"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            {t('profesor.activities.back', 'profesor')}
+            {t("profesor.activities.back", "profesor")}
           </Button>
         </div>
         <div className="text-center py-16">
           <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            {error || 'Actividad no encontrada'}
+            {error || "Actividad no encontrada"}
           </h3>
           <Button onClick={() => router.back()}>
-            {t('profesor.activities.back_to_activities', 'profesor')}
+            {t("profesor.activities.back_to_activities", "profesor")}
           </Button>
         </div>
       </div>
@@ -156,11 +168,7 @@ function VerActividadContent() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <Button
-          variant="ghost"
-          onClick={() => router.back()}
-          className="mb-4"
-        >
+        <Button variant="ghost" onClick={() => router.back()} className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver
         </Button>
@@ -170,21 +178,39 @@ function VerActividadContent() {
               {activity.title}
             </h1>
             <div className="flex flex-wrap gap-2 mb-4">
-              <Badge className={activityTypeColors[activity.type as keyof typeof activityTypeColors] || 'bg-gray-100 text-gray-800'}>
-                {activityTypeLabels[activity.type as keyof typeof activityTypeLabels] || activity.type}
+              <Badge
+                className={
+                  activityTypeColors[
+                    activity.type as keyof typeof activityTypeColors
+                  ] || "bg-gray-100 text-gray-800"
+                }
+              >
+                {activityTypeLabels[
+                  activity.type as keyof typeof activityTypeLabels
+                ] || activity.type}
               </Badge>
-              <Badge variant={isUpcoming(activity.scheduledDate, activity.scheduledTime) ? "default" : "secondary"}>
-                {isUpcoming(activity.scheduledDate, activity.scheduledTime) ? t('profesor.activities.status.upcoming_short', 'profesor') : t('profesor.activities.status.completed_short', 'profesor')}
+              <Badge
+                variant={
+                  isUpcoming(activity.scheduledDate, activity.scheduledTime)
+                    ? "default"
+                    : "secondary"
+                }
+              >
+                {isUpcoming(activity.scheduledDate, activity.scheduledTime)
+                  ? t("profesor.activities.status.upcoming_short", "profesor")
+                  : t("profesor.activities.status.completed_short", "profesor")}
               </Badge>
             </div>
           </div>
           <div className="flex gap-2">
             <Button
               variant="outline"
-              onClick={() => router.push(`/profesor/actividades/${activityId}/editar`)}
+              onClick={() =>
+                router.push(`/profesor/actividades/${activityId}/editar`)
+              }
             >
               <Edit className="mr-2 h-4 w-4" />
-              {t('profesor.activities.edit_button', 'profesor')}
+              {t("profesor.activities.edit_button", "profesor")}
             </Button>
             <Button
               variant="outline"
@@ -192,7 +218,7 @@ function VerActividadContent() {
               className="text-red-600 hover:text-red-700"
             >
               <Trash2 className="mr-2 h-4 w-4" />
-              {t('profesor.activities.delete_button', 'profesor')}
+              {t("profesor.activities.delete_button", "profesor")}
             </Button>
           </div>
         </div>
@@ -204,7 +230,9 @@ function VerActividadContent() {
           {/* Description */}
           <Card>
             <CardHeader>
-              <CardTitle>{t('profesor.activities.description_title', 'profesor')}</CardTitle>
+              <CardTitle>
+                {t("profesor.activities.description_title", "profesor")}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground leading-relaxed">
@@ -238,7 +266,8 @@ function VerActividadContent() {
                   <div>
                     <div className="font-medium">Hora</div>
                     <div className="text-sm text-muted-foreground">
-                      {formatTime(activity.scheduledTime)} ({activity.duration} minutos)
+                      {formatTime(activity.scheduledTime)} ({activity.duration}{" "}
+                      minutos)
                     </div>
                   </div>
                 </div>
@@ -319,39 +348,53 @@ function VerActividadContent() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <div className="text-sm font-medium text-muted-foreground">Materia</div>
+                <div className="text-sm font-medium text-muted-foreground">
+                  Materia
+                </div>
                 <div className="text-sm">{activity.subject}</div>
               </div>
 
               <div>
-                <div className="text-sm font-medium text-muted-foreground">Grado/Curso</div>
+                <div className="text-sm font-medium text-muted-foreground">
+                  Grado/Curso
+                </div>
                 <div className="text-sm">{activity.grade}</div>
               </div>
 
               {activity.maxParticipants && (
                 <div>
-                  <div className="text-sm font-medium text-muted-foreground">Máximo Participantes</div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Máximo Participantes
+                  </div>
                   <div className="text-sm">{activity.maxParticipants}</div>
                 </div>
               )}
 
               <div>
-                <div className="text-sm font-medium text-muted-foreground">Profesor</div>
-                <div className="text-sm">{activity.teacher?.name || 'No especificado'}</div>
+                <div className="text-sm font-medium text-muted-foreground">
+                  Profesor
+                </div>
+                <div className="text-sm">
+                  {activity.teacher?.name || "No especificado"}
+                </div>
               </div>
 
               <div>
-                <div className="text-sm font-medium text-muted-foreground">Creada</div>
+                <div className="text-sm font-medium text-muted-foreground">
+                  Creada
+                </div>
                 <div className="text-sm">
-                  {new Date(activity.createdAt).toLocaleDateString('es-ES')}
+                  {new Date(activity.createdAt).toLocaleDateString("es-ES")}
                 </div>
               </div>
 
               {activity.updatedAt !== activity.createdAt && (
                 <div>
-                  <div className="text-sm font-medium text-muted-foreground">Última modificación</div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Última modificación
+                  </div>
                   <div className="text-sm">
-                    {new Date(activity.updatedAt).toLocaleDateString('es-ES')}
+                    {new Date(activity.updatedAt).toLocaleDateString("es-ES")}
                   </div>
                 </div>
               )}
@@ -367,10 +410,12 @@ function VerActividadContent() {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => router.push(`/profesor/actividades/${activityId}/editar`)}
+                onClick={() =>
+                  router.push(`/profesor/actividades/${activityId}/editar`)
+                }
               >
                 <Edit className="mr-2 h-4 w-4" />
-                {t('profesor.activities.edit_button', 'profesor')} Actividad
+                {t("profesor.activities.edit_button", "profesor")} Actividad
               </Button>
 
               <Button
@@ -379,7 +424,7 @@ function VerActividadContent() {
                 onClick={handleDeleteActivity}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                {t('profesor.activities.delete_button', 'profesor')} Actividad
+                {t("profesor.activities.delete_button", "profesor")} Actividad
               </Button>
             </CardContent>
           </Card>
@@ -391,7 +436,9 @@ function VerActividadContent() {
 
 export default function VerActividadPage() {
   return (
-    <ErrorBoundary fallback={<div>Error al cargar la página de ver actividad</div>}>
+    <ErrorBoundary
+      fallback={<div>Error al cargar la página de ver actividad</div>}
+    >
       <Suspense fallback={<LoadingState />}>
         <VerActividadContent />
       </Suspense>

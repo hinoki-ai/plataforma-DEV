@@ -1,34 +1,34 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   UserMetricCard,
   MeetingMetricCard,
   DocumentMetricCard,
   TeamMetricCard,
-} from './MetricCard';
-import { MiniCalendarWidget } from './MiniCalendarWidget';
-import { ActivityFeedWidget } from './ActivityFeedWidget';
-import { SystemStatusWidget } from './SystemStatusWidget';
-import { PerformanceMonitor } from './PerformanceMonitor';
+} from "./MetricCard";
+import { MiniCalendarWidget } from "./MiniCalendarWidget";
+import { ActivityFeedWidget } from "./ActivityFeedWidget";
+import { SystemStatusWidget } from "./SystemStatusWidget";
+import { PerformanceMonitor } from "./PerformanceMonitor";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertTriangle,
   Wifi,
   WifiOff,
   RefreshCw,
   TrendingUp,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   AdvancedErrorBoundary,
   useErrorHandler,
-} from '@/components/ui/advanced-error-boundary';
-import { useAdvancedData, useRealTimeData } from '@/hooks/useAdvancedData';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "@/components/ui/advanced-error-boundary";
+import { useAdvancedData, useRealTimeData } from "@/hooks/useAdvancedData";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface DashboardData {
   users: {
@@ -72,11 +72,11 @@ interface DashboardData {
 interface ActivityItem {
   id: string;
   type:
-    | 'user_created'
-    | 'document_uploaded'
-    | 'meeting_scheduled'
-    | 'planning_updated'
-    | 'team_member_added';
+    | "user_created"
+    | "document_uploaded"
+    | "meeting_scheduled"
+    | "planning_updated"
+    | "team_member_added";
   title: string;
   description?: string;
   user?: string;
@@ -96,12 +96,12 @@ function DashboardContent() {
     isStale,
     refetch,
     performance,
-  } = useAdvancedData<DashboardData>('/api/admin/dashboard', {
-    cacheKey: 'admin-dashboard',
+  } = useAdvancedData<DashboardData>("/api/admin/dashboard", {
+    cacheKey: "admin-dashboard",
     ttl: 2 * 60 * 1000, // 2 minutes cache
     retryCount: 3,
     enablePrefetch: true,
-    prefetchUrls: ['/api/admin/dashboard/stats'],
+    prefetchUrls: ["/api/admin/dashboard/stats"],
     enableBackgroundRefresh: true,
     backgroundRefreshInterval: 300000, // 5 minutes
     onError: handleError,
@@ -115,11 +115,11 @@ function DashboardContent() {
       ...(dashboardData.users.recent > 0
         ? [
             {
-              id: '1',
-              type: 'user_created' as const,
-              title: `${dashboardData.users.recent} ${t('messages.new_users_registered', 'common')}`,
-              description: t('messages.activity_description', 'common'),
-              user: 'Sistema',
+              id: "1",
+              type: "user_created" as const,
+              title: `${dashboardData.users.recent} ${t("messages.new_users_registered", "common")}`,
+              description: t("messages.activity_description", "common"),
+              user: "Sistema",
               timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
             },
           ]
@@ -127,11 +127,11 @@ function DashboardContent() {
       ...(dashboardData.documents.recent > 0
         ? [
             {
-              id: '2',
-              type: 'document_uploaded' as const,
-              title: `${dashboardData.documents.recent} ${t('messages.documents_uploaded', 'common')}`,
-              description: t('messages.activity_description', 'common'),
-              user: 'Sistema',
+              id: "2",
+              type: "document_uploaded" as const,
+              title: `${dashboardData.documents.recent} ${t("messages.documents_uploaded", "common")}`,
+              description: t("messages.activity_description", "common"),
+              user: "Sistema",
               timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
             },
           ]
@@ -139,11 +139,11 @@ function DashboardContent() {
       ...(dashboardData.meetings.upcoming > 0
         ? [
             {
-              id: '3',
-              type: 'meeting_scheduled' as const,
-              title: `${dashboardData.meetings.upcoming} ${t('messages.meetings_scheduled', 'common')}`,
-              description: t('messages.activity_description', 'common'),
-              user: 'Sistema',
+              id: "3",
+              type: "meeting_scheduled" as const,
+              title: `${dashboardData.meetings.upcoming} ${t("messages.meetings_scheduled", "common")}`,
+              description: t("messages.activity_description", "common"),
+              user: "Sistema",
               timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
             },
           ]
@@ -161,7 +161,7 @@ function DashboardContent() {
       retryCount: performance.retryCount,
       lastFetch: performance.lastFetch,
     }),
-    [performance]
+    [performance],
   );
 
   // Handle manual refresh
@@ -175,22 +175,22 @@ function DashboardContent() {
 
     return {
       database: {
-        status: 'healthy' as const,
+        status: "healthy" as const,
         responseTime: Math.floor(Math.random() * 50) + 20, // 20-70ms
         connections: Math.floor(Math.random() * 20) + 5, // 5-25 connections
       },
       api: {
-        status: 'healthy' as const,
+        status: "healthy" as const,
         uptime: Date.now() - Math.random() * 86400000, // 0-24 hours ago
         requests: Math.floor(Math.random() * 10000) + 5000, // 5k-15k requests
       },
       auth: {
-        status: 'healthy' as const,
+        status: "healthy" as const,
         activeSessions: dashboardData.users.active,
         failedAttempts: Math.floor(Math.random() * 10), // 0-10 failed attempts
       },
       storage: {
-        status: 'healthy' as const,
+        status: "healthy" as const,
         usedSpace: Math.floor(Math.random() * 1073741824) + 536870912, // 0.5-1.5GB
         totalSpace: 5368709120, // 5GB
       },
@@ -276,18 +276,18 @@ function DashboardContent() {
 
               <div>
                 <h3 className="text-xl font-semibold mb-2">
-                  {t('dashboard.error.loading', 'dashboard')}
+                  {t("dashboard.error.loading", "dashboard")}
                 </h3>
                 <p className="text-muted-foreground text-sm">
                   {error?.message ||
-                    t('dashboard.error.description', 'dashboard')}
+                    t("dashboard.error.description", "dashboard")}
                 </p>
               </div>
 
               <div className="flex justify-center gap-3">
                 <Button onClick={handleRefresh} variant="default" size="sm">
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  {t('dashboard.retry', 'dashboard')}
+                  {t("dashboard.retry", "dashboard")}
                 </Button>
               </div>
 
@@ -295,24 +295,24 @@ function DashboardContent() {
               <div className="text-xs text-muted-foreground bg-gray-50 p-3 rounded">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    {t('dashboard.performance.cache_hit', 'dashboard')}:{' '}
+                    {t("dashboard.performance.cache_hit", "dashboard")}:{" "}
                     {performanceMetrics.cacheHit
-                      ? t('dashboard.performance.cache_hit_yes', 'dashboard')
-                      : t('dashboard.performance.cache_hit_no', 'dashboard')}
+                      ? t("dashboard.performance.cache_hit_yes", "dashboard")
+                      : t("dashboard.performance.cache_hit_no", "dashboard")}
                   </div>
                   <div>
-                    {t('dashboard.performance.retries', 'dashboard')}:{' '}
+                    {t("dashboard.performance.retries", "dashboard")}:{" "}
                     {performanceMetrics.retryCount}
                   </div>
                   <div>
-                    {t('dashboard.performance.load_time', 'dashboard')}:{' '}
+                    {t("dashboard.performance.load_time", "dashboard")}:{" "}
                     {performanceMetrics.loadTime}ms
                   </div>
                   <div>
-                    {t('dashboard.performance.status', 'dashboard')}:{' '}
+                    {t("dashboard.performance.status", "dashboard")}:{" "}
                     {isStale
-                      ? t('dashboard.performance.status_stale', 'dashboard')
-                      : t('dashboard.performance.status_fresh', 'dashboard')}
+                      ? t("dashboard.performance.status_stale", "dashboard")
+                      : t("dashboard.performance.status_fresh", "dashboard")}
                   </div>
                 </div>
               </div>
@@ -331,24 +331,24 @@ function DashboardContent() {
           {performanceMetrics.cacheHit ? (
             <Badge variant="secondary" className="flex items-center gap-1">
               <TrendingUp className="w-3 h-3" />
-              {t('dashboard.performance.cache_hit', 'dashboard')}
+              {t("dashboard.performance.cache_hit", "dashboard")}
             </Badge>
           ) : (
             <Badge variant="outline" className="flex items-center gap-1">
               <RefreshCw className="w-3 h-3" />
-              {t('dashboard.performance.fresh_data', 'dashboard')}
+              {t("dashboard.performance.fresh_data", "dashboard")}
             </Badge>
           )}
           {isStale && (
             <Badge variant="secondary" className="text-yellow-700">
-              {t('dashboard.performance.status_stale', 'dashboard')}
+              {t("dashboard.performance.status_stale", "dashboard")}
             </Badge>
           )}
         </div>
 
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            {t('dashboard.performance.status_fresh', 'dashboard')}:{' '}
+            {t("dashboard.performance.status_fresh", "dashboard")}:{" "}
             {performanceMetrics.lastFetch?.toLocaleTimeString()}
           </span>
           <Button
@@ -357,7 +357,7 @@ function DashboardContent() {
             size="sm"
             disabled={loading}
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </Button>
         </div>
       </div>
@@ -405,7 +405,7 @@ export function DashboardClient() {
     <AdvancedErrorBoundary
       context="Admin Dashboard"
       enableRetry={true}
-      showDetails={process.env.NODE_ENV === 'development'}
+      showDetails={process.env.NODE_ENV === "development"}
     >
       <DashboardContent />
     </AdvancedErrorBoundary>

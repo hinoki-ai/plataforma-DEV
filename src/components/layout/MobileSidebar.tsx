@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Sidebar, SidebarTrigger } from '@/components/layout/Sidebar';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Sidebar, SidebarTrigger } from "@/components/layout/Sidebar";
+import { cn } from "@/lib/utils";
 
 interface MobileSidebarProps {
   isSidebarCollapsed: boolean;
@@ -31,7 +31,7 @@ export function MobileSidebar({
         <div
           className="md:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
           onClick={onToggleSidebar}
-          onTouchEnd={e => {
+          onTouchEnd={(e) => {
             e.preventDefault();
             onToggleSidebar();
           }}
@@ -44,14 +44,14 @@ export function MobileSidebar({
       {!isSidebarCollapsed && (
         <div
           className={cn(
-            'fixed inset-y-0 left-0 z-50 md:hidden transition-all duration-300 ease-out',
-            'translate-x-0 shadow-xl'
+            "fixed inset-y-0 left-0 z-50 md:hidden transition-all duration-300 ease-out",
+            "translate-x-0 shadow-xl",
           )}
-          onTouchStart={e => {
+          onTouchStart={(e) => {
             e.stopPropagation();
             onTouchStart?.(e);
           }}
-          onTouchMove={e => {
+          onTouchMove={(e) => {
             e.stopPropagation();
             onTouchMove?.(e);
           }}

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from "react";
 
 interface ClientOnlyProps {
   children: ReactNode;
@@ -12,10 +12,10 @@ interface ClientOnlyProps {
  * Component that only renders its children on the client side
  * Prevents hydration mismatches for client-only content
  */
-export function ClientOnly({ 
-  children, 
+export function ClientOnly({
+  children,
   fallback = null,
-  className 
+  className,
 }: ClientOnlyProps) {
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -57,10 +57,10 @@ interface ConditionalRenderProps {
  * Component that conditionally renders based on a client-side condition
  * The condition is only evaluated on the client to prevent mismatches
  */
-export function ConditionalRender({ 
-  condition, 
-  children, 
-  fallback = null 
+export function ConditionalRender({
+  condition,
+  children,
+  fallback = null,
 }: ConditionalRenderProps) {
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -88,14 +88,14 @@ interface DynamicContentProps {
 export function DynamicContent({
   children,
   placeholder = null,
-  className
+  className,
 }: DynamicContentProps) {
   const [hasMounted, setHasMounted] = useState(false);
   const [content, setContent] = useState<ReactNode>(placeholder);
 
   useEffect(() => {
     setHasMounted(true);
-    setContent(typeof children === 'function' ? children() : children);
+    setContent(typeof children === "function" ? children() : children);
   }, [children]);
 
   // Don't render anything until after hydration to prevent mismatches
@@ -103,9 +103,5 @@ export function DynamicContent({
     return <div className={className}>{placeholder}</div>;
   }
 
-  return (
-    <div className={className}>
-      {content}
-    </div>
-  );
+  return <div className={className}>{content}</div>;
 }

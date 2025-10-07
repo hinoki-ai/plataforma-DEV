@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Users, Clock, Activity, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Users, Clock, Activity, RefreshCw } from "lucide-react";
 
 interface SessionData {
   id: string;
@@ -39,26 +39,26 @@ export function SessionAnalytics() {
       // For now, we'll show placeholder data
       const mockSessions: SessionData[] = [
         {
-          id: '1',
-          userId: 'user-1',
-          userName: 'Admin User',
-          userRole: 'ADMIN',
+          id: "1",
+          userId: "user-1",
+          userName: "Admin User",
+          userRole: "ADMIN",
           startTime: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
           lastActivity: new Date().toISOString(),
           duration: 30 * 60, // 30 minutes in seconds
           pageViews: 15,
-          actions: ['login', 'view-dashboard', 'create-user', 'logout'],
+          actions: ["login", "view-dashboard", "create-user", "logout"],
         },
         {
-          id: '2',
-          userId: 'user-2',
-          userName: 'Teacher User',
-          userRole: 'PROFESOR',
+          id: "2",
+          userId: "user-2",
+          userName: "Teacher User",
+          userRole: "PROFESOR",
           startTime: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
           lastActivity: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
           duration: 15 * 60,
           pageViews: 8,
-          actions: ['login', 'view-calendar', 'update-activity'],
+          actions: ["login", "view-calendar", "update-activity"],
         },
       ];
 
@@ -72,7 +72,7 @@ export function SessionAnalytics() {
         totalPageViews: mockSessions.reduce((acc, s) => acc + s.pageViews, 0),
       });
     } catch (error) {
-      console.error('Failed to load session data:', error);
+      console.error("Failed to load session data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +157,7 @@ export function SessionAnalytics() {
               disabled={isLoading}
             >
               <RefreshCw
-                className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+                className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
               />
             </Button>
           </div>
@@ -170,7 +170,7 @@ export function SessionAnalytics() {
                 <p>No active sessions</p>
               </div>
             ) : (
-              sessions.map(session => (
+              sessions.map((session) => (
                 <div
                   key={session.id}
                   className="flex items-center justify-between p-4 border rounded-lg"
@@ -184,7 +184,7 @@ export function SessionAnalytics() {
                       Started: {new Date(session.startTime).toLocaleString()}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Last Activity:{' '}
+                      Last Activity:{" "}
                       {new Date(session.lastActivity).toLocaleString()}
                     </div>
                   </div>

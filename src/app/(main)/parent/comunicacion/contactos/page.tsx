@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
-import { getRoleAccess } from '@/lib/role-utils';
-import { redirect } from 'next/navigation';
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { getRoleAccess } from "@/lib/role-utils";
+import { redirect } from "next/navigation";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   Users,
   Mail,
@@ -24,9 +24,9 @@ import {
   MessageCircle,
   Calendar,
   Clock,
-} from 'lucide-react';
-import Link from 'next/link';
-import { FixedBackgroundLayout } from '@/components/layout/FixedBackgroundLayout';
+} from "lucide-react";
+import Link from "next/link";
+import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
 
 interface Contact {
   id: string;
@@ -42,85 +42,85 @@ interface Contact {
 
 export default function ContactosPage() {
   const { data: session, status } = useSession();
-  const { t } = useDivineParsing(['common', 'parent']);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { t } = useDivineParsing(["common", "parent"]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Mock contacts data
   const contacts: Contact[] = [
     {
-      id: '1',
-      name: 'María González',
-      email: 'direccion@manitospintadas.cl',
-      phone: '+56 9 1234 5678',
-      role: 'Directora',
-      department: 'Dirección',
-      schedule: 'Lunes a Viernes: 8:00 - 17:00',
-      specialties: ['Administración', 'Gestión Escolar'],
+      id: "1",
+      name: "María González",
+      email: "direccion@manitospintadas.cl",
+      phone: "+56 9 1234 5678",
+      role: "Directora",
+      department: "Dirección",
+      schedule: "Lunes a Viernes: 8:00 - 17:00",
+      specialties: ["Administración", "Gestión Escolar"],
       isAvailable: true,
     },
     {
-      id: '2',
-      name: 'Carlos Rodríguez',
-      email: 'profesor.jefe@manitospintadas.cl',
-      phone: '+56 9 2345 6789',
-      role: 'Profesor Jefe',
-      department: 'Docencia',
-      schedule: 'Lunes a Viernes: 8:00 - 16:00',
-      specialties: ['Matemáticas', 'Orientación'],
+      id: "2",
+      name: "Carlos Rodríguez",
+      email: "profesor.jefe@manitospintadas.cl",
+      phone: "+56 9 2345 6789",
+      role: "Profesor Jefe",
+      department: "Docencia",
+      schedule: "Lunes a Viernes: 8:00 - 16:00",
+      specialties: ["Matemáticas", "Orientación"],
       isAvailable: true,
     },
     {
-      id: '3',
-      name: 'Ana Silva',
-      email: 'pie@manitospintadas.cl',
-      phone: '+56 9 3456 7890',
-      role: 'Coordinadora PIE',
-      department: 'Educación Especial',
-      schedule: 'Lunes a Viernes: 8:00 - 15:00',
-      specialties: ['Educación Inclusiva', 'Apoyo Especializado'],
+      id: "3",
+      name: "Ana Silva",
+      email: "pie@manitospintadas.cl",
+      phone: "+56 9 3456 7890",
+      role: "Coordinadora PIE",
+      department: "Educación Especial",
+      schedule: "Lunes a Viernes: 8:00 - 15:00",
+      specialties: ["Educación Inclusiva", "Apoyo Especializado"],
       isAvailable: true,
     },
     {
-      id: '4',
-      name: 'Dr. Patricia Morales',
-      email: 'psicopedagoga@manitospintadas.cl',
-      phone: '+56 9 4567 8901',
-      role: 'Psicopedagoga',
-      department: 'Salud Mental',
-      schedule: 'Martes y Jueves: 9:00 - 14:00',
-      specialties: ['Psicología Educacional', 'Apoyo Emocional'],
+      id: "4",
+      name: "Dr. Patricia Morales",
+      email: "psicopedagoga@manitospintadas.cl",
+      phone: "+56 9 4567 8901",
+      role: "Psicopedagoga",
+      department: "Salud Mental",
+      schedule: "Martes y Jueves: 9:00 - 14:00",
+      specialties: ["Psicología Educacional", "Apoyo Emocional"],
       isAvailable: false,
     },
     {
-      id: '5',
-      name: 'Roberto Díaz',
-      email: 'fonoaudiologo@manitospintadas.cl',
-      phone: '+56 9 5678 9012',
-      role: 'Fonoaudiólogo',
-      department: 'Salud',
-      schedule: 'Lunes, Miércoles, Viernes: 9:00 - 13:00',
-      specialties: ['Trastornos del Lenguaje', 'Terapia del Habla'],
+      id: "5",
+      name: "Roberto Díaz",
+      email: "fonoaudiologo@manitospintadas.cl",
+      phone: "+56 9 5678 9012",
+      role: "Fonoaudiólogo",
+      department: "Salud",
+      schedule: "Lunes, Miércoles, Viernes: 9:00 - 13:00",
+      specialties: ["Trastornos del Lenguaje", "Terapia del Habla"],
       isAvailable: true,
     },
     {
-      id: '6',
-      name: 'Secretaría Administrativa',
-      email: 'secretaria@manitospintadas.cl',
-      phone: '+56 9 8765 4321',
-      role: 'Administrativo',
-      department: 'Administración',
-      schedule: 'Lunes a Viernes: 8:00 - 17:00',
-      specialties: ['Información General', 'Trámites'],
+      id: "6",
+      name: "Secretaría Administrativa",
+      email: "secretaria@manitospintadas.cl",
+      phone: "+56 9 8765 4321",
+      role: "Administrativo",
+      department: "Administración",
+      schedule: "Lunes a Viernes: 8:00 - 17:00",
+      specialties: ["Información General", "Trámites"],
       isAvailable: true,
     },
   ];
 
   // Handle loading state
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <FixedBackgroundLayout backgroundImage="/images/backgrounds/communication-bg.jpg">
         <div className="flex items-center justify-center min-h-screen">
-          <div>{t('parent.students.loading')}</div>
+          <div>{t("parent.students.loading")}</div>
         </div>
       </FixedBackgroundLayout>
     );
@@ -128,26 +128,27 @@ export default function ContactosPage() {
 
   // Ensure user has access to parent section
   if (!session || !session.user) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.department?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.specialties?.some(specialty =>
-      specialty.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const filteredContacts = contacts.filter(
+    (contact) =>
+      contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.department?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.specialties?.some((specialty) =>
+        specialty.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
   );
 
   const handleContactClick = (contact: Contact) => {
     // You could implement a quick message feature here
-    console.log('Contact clicked:', contact);
+    console.log("Contact clicked:", contact);
   };
 
   return (
@@ -156,11 +157,7 @@ export default function ContactosPage() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-6">
-            <Button
-              variant="ghost"
-              asChild
-              className="mb-4"
-            >
+            <Button variant="ghost" asChild className="mb-4">
               <Link href="/parent/comunicacion">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Volver
@@ -192,7 +189,10 @@ export default function ContactosPage() {
           {/* Contacts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredContacts.map((contact) => (
-              <Card key={contact.id} className="hover:shadow-md transition-shadow">
+              <Card
+                key={contact.id}
+                className="hover:shadow-md transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -200,7 +200,9 @@ export default function ContactosPage() {
                         <Users className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg">{contact.name}</CardTitle>
+                        <CardTitle className="text-lg">
+                          {contact.name}
+                        </CardTitle>
                         <CardDescription>{contact.role}</CardDescription>
                       </div>
                     </div>
@@ -208,7 +210,7 @@ export default function ContactosPage() {
                       variant={contact.isAvailable ? "default" : "secondary"}
                       className="text-xs"
                     >
-                      {contact.isAvailable ? 'Disponible' : 'No Disponible'}
+                      {contact.isAvailable ? "Disponible" : "No Disponible"}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -233,7 +235,11 @@ export default function ContactosPage() {
                     {contact.specialties && contact.specialties.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {contact.specialties.map((specialty, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className="text-xs"
+                          >
                             {specialty}
                           </Badge>
                         ))}
@@ -248,18 +254,19 @@ export default function ContactosPage() {
                         className="flex-1"
                         asChild
                       >
-                        <Link href={`/parent/comunicacion/nuevo?to=${encodeURIComponent(contact.email)}`}>
+                        <Link
+                          href={`/parent/comunicacion/nuevo?to=${encodeURIComponent(contact.email)}`}
+                        >
                           <Mail className="h-4 w-4 mr-1" />
                           Mensaje
                         </Link>
                       </Button>
                       {contact.phone && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          asChild
-                        >
-                          <a href={`tel:${contact.phone}`} aria-label={`Llamar a ${contact.name}`}>
+                        <Button size="sm" variant="outline" asChild>
+                          <a
+                            href={`tel:${contact.phone}`}
+                            aria-label={`Llamar a ${contact.name}`}
+                          >
                             <Phone className="h-4 w-4" />
                           </a>
                         </Button>
@@ -313,13 +320,16 @@ export default function ContactosPage() {
             <CardContent>
               <div className="space-y-2">
                 <p className="text-red-700">
-                  <strong>Solo para emergencias durante horario escolar:</strong>
+                  <strong>
+                    Solo para emergencias durante horario escolar:
+                  </strong>
                 </p>
                 <p className="text-red-700">
                   📞 <strong>+56 9 8765 4321</strong> - Guardia de Emergencia
                 </p>
                 <p className="text-sm text-red-600">
-                  Este número es exclusivamente para situaciones de emergencia que requieran atención inmediata.
+                  Este número es exclusivamente para situaciones de emergencia
+                  que requieran atención inmediata.
                 </p>
               </div>
             </CardContent>

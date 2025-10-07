@@ -3,46 +3,58 @@
  * Supreme educational institution configuration for master users
  */
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
   Crown,
-  School, 
-  GraduationCap, 
+  School,
+  GraduationCap,
   BookOpen,
   Building2,
   Settings,
   Database,
   Users,
   BarChart3,
-  Shield
-} from 'lucide-react';
-import { 
-  EducationalInstitutionType, 
+  Shield,
+} from "lucide-react";
+import {
+  EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
-  EDUCATIONAL_LEVELS
-} from '@/lib/educational-system';
-import { toast } from 'sonner';
+  EDUCATIONAL_LEVELS,
+} from "@/lib/educational-system";
+import { toast } from "sonner";
 
 interface InstitutionMasterCardProps {
   currentType?: EducationalInstitutionType;
 }
 
-export function InstitutionMasterCard({ currentType = 'PRESCHOOL' }: InstitutionMasterCardProps) {
+export function InstitutionMasterCard({
+  currentType = "PRESCHOOL",
+}: InstitutionMasterCardProps) {
   const [isConfiguring, setIsConfiguring] = useState(false);
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
   const getInstitutionIcon = (type: EducationalInstitutionType) => {
     switch (type) {
-      case 'PRESCHOOL': return <School className="h-6 w-6" />;
-      case 'BASIC_SCHOOL': return <BookOpen className="h-6 w-6" />;
-      case 'HIGH_SCHOOL': return <GraduationCap className="h-6 w-6" />;
-      case 'COLLEGE': return <Building2 className="h-6 w-6" />;
+      case "PRESCHOOL":
+        return <School className="h-6 w-6" />;
+      case "BASIC_SCHOOL":
+        return <BookOpen className="h-6 w-6" />;
+      case "HIGH_SCHOOL":
+        return <GraduationCap className="h-6 w-6" />;
+      case "COLLEGE":
+        return <Building2 className="h-6 w-6" />;
     }
   };
 
@@ -50,10 +62,10 @@ export function InstitutionMasterCard({ currentType = 'PRESCHOOL' }: Institution
     setIsConfiguring(true);
     try {
       // Simulate master-level reconfiguration
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      toast.success('🏛️ MASTER: Configuración educativa actualizada');
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      toast.success("🏛️ MASTER: Configuración educativa actualizada");
     } catch (error) {
-      toast.error('Error en configuración master');
+      toast.error("Error en configuración master");
     } finally {
       setIsConfiguring(false);
     }
@@ -61,33 +73,38 @@ export function InstitutionMasterCard({ currentType = 'PRESCHOOL' }: Institution
 
   const masterActions = [
     {
-      label: 'Configurar Sistema Educativo',
+      label: "Configurar Sistema Educativo",
       icon: Settings,
-      description: 'Control supremo de niveles educativos',
-      action: () => toast.info('🏛️ MASTER: Accediendo a configuración educativa'),
-      color: 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700'
+      description: "Control supremo de niveles educativos",
+      action: () =>
+        toast.info("🏛️ MASTER: Accediendo a configuración educativa"),
+      color:
+        "bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700",
     },
     {
-      label: 'Migrar Estructura Educativa',
+      label: "Migrar Estructura Educativa",
       icon: Database,
-      description: 'Migración masiva de datos educativos',
-      action: () => toast.info('🏛️ MASTER: Iniciendo migración educativa'),
-      color: 'bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700'
+      description: "Migración masiva de datos educativos",
+      action: () => toast.info("🏛️ MASTER: Iniciendo migración educativa"),
+      color:
+        "bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700",
     },
     {
-      label: 'Gestión Universal Usuarios',
+      label: "Gestión Universal Usuarios",
       icon: Users,
-      description: 'Control total de todos los niveles educativos',
-      action: () => toast.info('🏛️ MASTER: Accediendo a gestión universal'),
-      color: 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700'
+      description: "Control total de todos los niveles educativos",
+      action: () => toast.info("🏛️ MASTER: Accediendo a gestión universal"),
+      color:
+        "bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700",
     },
     {
-      label: 'Analytics Institucional',
+      label: "Analytics Institucional",
       icon: BarChart3,
-      description: 'Métricas avanzadas del sistema educativo',
-      action: () => toast.info('🏛️ MASTER: Cargando analytics educativos'),
-      color: 'bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700'
-    }
+      description: "Métricas avanzadas del sistema educativo",
+      action: () => toast.info("🏛️ MASTER: Cargando analytics educativos"),
+      color:
+        "bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700",
+    },
   ];
 
   return (
@@ -100,7 +117,7 @@ export function InstitutionMasterCard({ currentType = 'PRESCHOOL' }: Institution
           Control absoluto del sistema educativo institucional
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="pt-6">
         <div className="space-y-6">
           {/* Current Institution Status */}
@@ -110,10 +127,12 @@ export function InstitutionMasterCard({ currentType = 'PRESCHOOL' }: Institution
               <AlertDescription>
                 <div className="flex items-center justify-between w-full">
                   <div>
-                    <strong>Institución Actual:</strong> {currentInfo.chileanName}
+                    <strong>Institución Actual:</strong>{" "}
+                    {currentInfo.chileanName}
                     <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      {currentInfo.levels.length} niveles educativos •
-                      ISCED {Math.min(...currentInfo.levels.map(l => l.isced))}-{Math.max(...currentInfo.levels.map(l => l.isced))}
+                      {currentInfo.levels.length} niveles educativos • ISCED{" "}
+                      {Math.min(...currentInfo.levels.map((l) => l.isced))}-
+                      {Math.max(...currentInfo.levels.map((l) => l.isced))}
                     </div>
                   </div>
                   <Badge className={currentInfo.color} variant="secondary">
@@ -159,14 +178,18 @@ export function InstitutionMasterCard({ currentType = 'PRESCHOOL' }: Institution
                 return (
                   <Card
                     key={type}
-                    className={`p-3 ${isActive ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-950/20' : 'border-gray-200 dark:border-gray-700'}`}
+                    className={`p-3 ${isActive ? "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-950/20" : "border-gray-200 dark:border-gray-700"}`}
                   >
                     <div className="text-center">
                       <div className="text-2xl mb-1">{info.icon}</div>
                       <div className="text-sm font-medium">{info.name}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">{info.levels.length} niveles</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {info.levels.length} niveles
+                      </div>
                       {isActive && (
-                        <Badge className="mt-1" variant="secondary">Activo</Badge>
+                        <Badge className="mt-1" variant="secondary">
+                          Activo
+                        </Badge>
                       )}
                     </div>
                   </Card>
@@ -184,7 +207,9 @@ export function InstitutionMasterCard({ currentType = 'PRESCHOOL' }: Institution
               size="lg"
             >
               <Crown className="h-5 w-5 mr-2" />
-              {isConfiguring ? 'Reconfigurando Sistema...' : '🏛️ MASTER RECONFIGURACIÓN EDUCATIVA'}
+              {isConfiguring
+                ? "Reconfigurando Sistema..."
+                : "🏛️ MASTER RECONFIGURACIÓN EDUCATIVA"}
             </Button>
           </div>
         </div>

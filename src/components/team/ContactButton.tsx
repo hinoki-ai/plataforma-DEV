@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 
 interface ContactButtonProps {
   members: any[];
@@ -8,18 +8,18 @@ interface ContactButtonProps {
 
 export function ContactButton({ members }: ContactButtonProps) {
   const handleContact = () => {
-    const memberToContact = members.find(m => {
+    const memberToContact = members.find((m) => {
       const specialties = m.specialties;
       if (Array.isArray(specialties)) {
         return specialties.some(
-          (n: any) => typeof n === 'string' && n.includes('Psicología')
+          (n: any) => typeof n === "string" && n.includes("Psicología"),
         );
       }
       return false;
     });
     if (memberToContact) {
       // Handle contact logic here
-      console.log('Contacting member:', memberToContact);
+      console.log("Contacting member:", memberToContact);
     }
   };
 

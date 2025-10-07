@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
 // 🕊️ DIVINE PARSING ORACLE - BACKWARD COMPATIBILITY HOOK
 // PURPOSE: Maintain compatibility with existing useLanguage hook
 // ARCHITECTURE: Adapter pattern for seamless migration
 // USAGE: Drop-in replacement for existing useLanguage calls
 
-import { useDivineParsing } from './ChunkedLanguageProvider';
+import { useDivineParsing } from "./ChunkedLanguageProvider";
 
 export function useLanguage() {
-  const divineContext = useDivineParsing(['common', 'language']);
+  const divineContext = useDivineParsing(["common", "language"]);
 
   // Adapt Divine Parsing Oracle interface to match existing useLanguage
   return {
@@ -21,4 +21,4 @@ export function useLanguage() {
 }
 
 // Export for convenience
-export { useDivineParsing } from './ChunkedLanguageProvider';
+export { useDivineParsing } from "./ChunkedLanguageProvider";

@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { CheckCircle, Circle, ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Circle, ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface ProfileCompletionWizardProps {
   currentStep?: number;
@@ -28,26 +28,26 @@ export function ProfileCompletionWizard({
   const steps = [
     {
       id: 1,
-      title: t('wizard.personal_info', 'common'),
-      description: t('wizard.personal_info_desc', 'common'),
+      title: t("wizard.personal_info", "common"),
+      description: t("wizard.personal_info_desc", "common"),
       completed: currentStep > 1,
     },
     {
       id: 2,
-      title: t('wizard.preferences', 'common'),
-      description: t('wizard.preferences_desc', 'common'),
+      title: t("wizard.preferences", "common"),
+      description: t("wizard.preferences_desc", "common"),
       completed: currentStep > 2,
     },
     {
       id: 3,
-      title: t('wizard.security_settings', 'common'),
-      description: t('wizard.security_settings_desc', 'common'),
+      title: t("wizard.security_settings", "common"),
+      description: t("wizard.security_settings_desc", "common"),
       completed: currentStep > 3,
     },
     {
       id: 4,
-      title: t('wizard.verification', 'common'),
-      description: t('wizard.verification_desc', 'common'),
+      title: t("wizard.verification", "common"),
+      description: t("wizard.verification_desc", "common"),
       completed: currentStep > 4,
     },
   ];
@@ -57,23 +57,26 @@ export function ProfileCompletionWizard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('wizard.profile_completion.title', 'common')}</CardTitle>
+        <CardTitle>{t("wizard.profile_completion.title", "common")}</CardTitle>
         <CardDescription>
-          {t('wizard.profile_completion.description', 'common')}
+          {t("wizard.profile_completion.description", "common")}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium">{t('wizard.progress', 'common')}</label>
+            <label className="text-sm font-medium">
+              {t("wizard.progress", "common")}
+            </label>
             <Progress value={progress} className="h-2" />
             <p className="text-sm text-muted-foreground mt-1">
-              {t('wizard.step', 'common')} {currentStep} {t('wizard.of', 'common')} {totalSteps} ({Math.round(progress)}%)
+              {t("wizard.step", "common")} {currentStep}{" "}
+              {t("wizard.of", "common")} {totalSteps} ({Math.round(progress)}%)
             </p>
           </div>
 
           <div className="space-y-3">
-            {steps.map(step => (
+            {steps.map((step) => (
               <div key={step.id} className="flex items-center space-x-3">
                 <div className="flex-shrink-0">
                   {step.completed ? (
@@ -85,8 +88,8 @@ export function ProfileCompletionWizard({
                 <div className="flex-1">
                   <h4
                     className={cn(
-                      'text-sm font-medium',
-                      step.completed ? 'text-green-600' : 'text-foreground'
+                      "text-sm font-medium",
+                      step.completed ? "text-green-600" : "text-foreground",
                     )}
                   >
                     {step.title}
@@ -106,7 +109,7 @@ export function ProfileCompletionWizard({
                 onClick={() => onStepChange?.(Math.max(1, currentStep - 1))}
                 disabled={currentStep === 1}
               >
-                {t('wizard.previous', 'common')}
+                {t("wizard.previous", "common")}
               </Button>
               <Button
                 onClick={() =>
@@ -114,7 +117,8 @@ export function ProfileCompletionWizard({
                 }
                 disabled={currentStep === totalSteps}
               >
-                {t('wizard.next', 'common')} <ArrowRight className="ml-2 h-4 w-4" />
+                {t("wizard.next", "common")}{" "}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
           )}

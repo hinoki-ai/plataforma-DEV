@@ -1,8 +1,8 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 // Bundle analyzer configuration
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
 
 const nextConfig: NextConfig = {
@@ -20,16 +20,16 @@ const nextConfig: NextConfig = {
   turbopack: {
     // Optimize module resolution
     resolveAlias: {
-      '@/*': ['./src/*'],
-      '@/components': ['./src/components'],
-      '@/lib': ['./src/lib'],
-      '@/styles': ['./src/styles'],
+      "@/*": ["./src/*"],
+      "@/components": ["./src/components"],
+      "@/lib": ["./src/lib"],
+      "@/styles": ["./src/styles"],
     },
     // Optimize chunking strategy
     rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
       },
     },
   },
@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
   // },
 
   // Development optimizations
-  ...(process.env.NODE_ENV === 'development' && {
+  ...(process.env.NODE_ENV === "development" && {
     onDemandEntries: {
       maxInactiveAge: 60 * 1000, // Increased from 25s to 60s for stability
       pagesBufferLength: 5, // Increased from 2 to 5 for better buffering
@@ -50,18 +50,18 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/dashboard',
-        destination: '/admin',
+        source: "/dashboard",
+        destination: "/admin",
         permanent: true,
       },
       {
-        source: '/teacher',
-        destination: '/profesor',
+        source: "/teacher",
+        destination: "/profesor",
         permanent: true,
       },
       {
-        source: '/mineduc',
-        destination: 'https://www.mineduc.cl',
+        source: "/mineduc",
+        destination: "https://www.mineduc.cl",
         permanent: true,
       },
     ];
@@ -69,43 +69,43 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           // Security Headers
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
           },
           {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
           },
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
           },
           {
-            key: 'Permissions-Policy',
+            key: "Permissions-Policy",
             value:
-              'camera=(), microphone=(), geolocation=(), browsing-topics=()',
+              "camera=(), microphone=(), geolocation=(), browsing-topics=()",
           },
           // Content Security Policy (relaxed for development)
           {
-            key: 'Content-Security-Policy',
+            key: "Content-Security-Policy",
             value:
-              process.env.NODE_ENV === 'development'
+              process.env.NODE_ENV === "development"
                 ? [
                     "default-src 'self' 'unsafe-eval' 'unsafe-inline' data: blob: ws: wss: localhost:* *.local",
                     "script-src 'self' 'unsafe-eval' 'unsafe-inline' localhost:* *.local",
@@ -117,7 +117,7 @@ const nextConfig: NextConfig = {
                     "object-src 'none'",
                     "base-uri 'self'",
                     "form-action 'self'",
-                  ].join('; ')
+                  ].join("; ")
                 : [
                     "default-src 'self' https://www.mineduc.cl https://*.mineduc.cl https://facebook.com https://*.facebook.com https://twitter.com https://*.twitter.com https://instagram.com https://*.instagram.com https://youtube.com https://*.youtube.com",
                     "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // Next.js requires unsafe-eval and unsafe-inline
@@ -130,16 +130,16 @@ const nextConfig: NextConfig = {
                     "base-uri 'self'",
                     "form-action 'self' https://www.mineduc.cl https://*.mineduc.cl",
                     "frame-ancestors 'none'",
-                    'upgrade-insecure-requests',
-                  ].join('; '),
+                    "upgrade-insecure-requests",
+                  ].join("; "),
           },
         ],
       },
     ];
   },
   images: {
-    domains: ['localhost', 'res.cloudinary.com'],
-    formats: ['image/webp', 'image/avif'],
+    domains: ["localhost", "res.cloudinary.com"],
+    formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },

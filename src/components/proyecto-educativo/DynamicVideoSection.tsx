@@ -1,15 +1,15 @@
 // ⚡ Performance: Dynamic video section for PPR
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { FileIcons } from '@/components/icons/hero-icons';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { FileIcons } from "@/components/icons/hero-icons";
 import {
   DynamicAdminControls,
   AdminControlsSkeleton,
-} from './DynamicAdminControls';
-import { Suspense } from 'react';
+} from "./DynamicAdminControls";
+import { Suspense } from "react";
 
 type VideoCapsule = {
   id: string;
@@ -21,10 +21,10 @@ type VideoCapsule = {
 
 export function DynamicVideoSection() {
   const [videoCapsule, setVideoCapsule] = useState<VideoCapsule>({
-    id: 'default-capsule',
-    title: 'Cápsula de Video Educativo',
-    url: '',
-    description: 'Video sobre nuestro enfoque educativo',
+    id: "default-capsule",
+    title: "Cápsula de Video Educativo",
+    url: "",
+    description: "Video sobre nuestro enfoque educativo",
     isActive: false,
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ export function DynamicVideoSection() {
 
   const loadVideoCapsule = async () => {
     try {
-      const response = await fetch('/api/proyecto-educativo/video-capsule');
+      const response = await fetch("/api/proyecto-educativo/video-capsule");
       if (response.ok) {
         const data = await response.json();
         if (data.videoCapsule) {
@@ -43,7 +43,7 @@ export function DynamicVideoSection() {
         }
       }
     } catch (error) {
-      console.error('Error loading video capsule:', error);
+      console.error("Error loading video capsule:", error);
     } finally {
       setIsLoading(false);
     }
@@ -53,16 +53,16 @@ export function DynamicVideoSection() {
     if (!url) return null;
 
     // YouTube
-    if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
-      const videoId = url.includes('youtube.com/watch')
-        ? url.split('v=')[1]?.split('&')[0]
-        : url.split('youtu.be/')[1]?.split('?')[0];
+    if (url.includes("youtube.com/watch") || url.includes("youtu.be/")) {
+      const videoId = url.includes("youtube.com/watch")
+        ? url.split("v=")[1]?.split("&")[0]
+        : url.split("youtu.be/")[1]?.split("?")[0];
       return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
     }
 
     // Vimeo
-    if (url.includes('vimeo.com/')) {
-      const videoId = url.split('vimeo.com/')[1]?.split('/')[0];
+    if (url.includes("vimeo.com/")) {
+      const videoId = url.split("vimeo.com/")[1]?.split("/")[0];
       return videoId ? `https://player.vimeo.com/video/${videoId}` : null;
     }
 
@@ -114,12 +114,12 @@ export function DynamicVideoSection() {
                 </div>
                 <span className="text-gray-300 text-lg font-medium">
                   {videoCapsule.isActive
-                    ? 'Video disponible'
-                    : 'No hay video activo'}
+                    ? "Video disponible"
+                    : "No hay video activo"}
                 </span>
                 <p className="text-sm text-gray-400 mt-2">
                   {videoCapsule.description ||
-                    'Estamos preparando contenido especial sobre nuestro enfoque educativo'}
+                    "Estamos preparando contenido especial sobre nuestro enfoque educativo"}
                 </p>
               </div>
             </div>

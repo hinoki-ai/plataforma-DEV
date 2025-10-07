@@ -1,32 +1,39 @@
-'use client';
+"use client";
 
-import { Suspense, useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { RoleAwareDashboard } from '@/components/dashboard/RoleAwareDashboard';
-import { EducationalInstitutionSelector } from '@/components/admin/EducationalInstitutionSelector';
-import { EducationalInstitutionType } from '@/lib/educational-system';
+import { Suspense, useState, useEffect } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { RoleAwareDashboard } from "@/components/dashboard/RoleAwareDashboard";
+import { EducationalInstitutionSelector } from "@/components/admin/EducationalInstitutionSelector";
+import { EducationalInstitutionType } from "@/lib/educational-system";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function AdminDashboard() {
-  const [currentInstitutionType, setCurrentInstitutionType] = useState<EducationalInstitutionType>('PRESCHOOL');
+  const [currentInstitutionType, setCurrentInstitutionType] =
+    useState<EducationalInstitutionType>("PRESCHOOL");
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
 
   // Fetch current institution configuration on mount
   useEffect(() => {
     const fetchInstitutionConfig = async () => {
       try {
-        const response = await fetch('/api/educational-system');
+        const response = await fetch("/api/educational-system");
 
         if (!response.ok) {
           if (response.status === 401) {
-            console.warn('Unauthorized to fetch institution config, using default');
+            console.warn(
+              "Unauthorized to fetch institution config, using default",
+            );
           } else {
-            console.error('Failed to fetch institution config:', response.status, response.statusText);
+            console.error(
+              "Failed to fetch institution config:",
+              response.status,
+              response.statusText,
+            );
           }
           // Keep default 'PRESCHOOL' if API fails
           return;
@@ -37,10 +44,10 @@ export default function AdminDashboard() {
         if (data.success && data.institutionType) {
           setCurrentInstitutionType(data.institutionType);
         } else {
-          console.warn('Invalid response format from institution config API');
+          console.warn("Invalid response format from institution config API");
         }
       } catch (error) {
-        console.error('Error fetching institution configuration:', error);
+        console.error("Error fetching institution configuration:", error);
         // Keep default 'PRESCHOOL' if API fails
       } finally {
         setIsLoadingConfig(false);
@@ -55,9 +62,9 @@ export default function AdminDashboard() {
     // Dashboard will show empty state but remain functional
   } catch (error) {
     dbLogger.error(
-      'Database unavailable in admin dashboard, showing empty state',
+      "Database unavailable in admin dashboard, showing empty state",
       error,
-      { context: 'AdminDashboard', emergencyMode: true }
+      { context: "AdminDashboard", emergencyMode: true },
     );
     // Dashboard will show empty state but remain functional
   }
@@ -66,7 +73,7 @@ export default function AdminDashboard() {
     <AdvancedErrorBoundary
       context="Admin Dashboard Page"
       enableRetry={true}
-      showDetails={process.env.NODE_ENV === 'development'}
+      showDetails={process.env.NODE_ENV === "development"}
     >
       <Suspense
         fallback={
@@ -117,7 +124,10 @@ export default function AdminDashboard() {
                 <div className="h-6 w-64 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="h-32 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                    <div
+                      key={i}
+                      className="h-32 bg-gray-300 dark:bg-gray-700 rounded"
+                    ></div>
                   ))}
                 </div>
                 <div className="h-10 w-48 bg-gray-300 dark:bg-gray-700 rounded"></div>
@@ -131,7 +141,7 @@ export default function AdminDashboard() {
               />
             )}
           </div>
-          
+
           {/* Standard Admin Dashboard */}
           <RoleAwareDashboard />
         </div>

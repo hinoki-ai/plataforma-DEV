@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
-import { UserRole } from '@/lib/prisma-compat-types';
-import { getRoleAccess } from '@/lib/role-utils';
-import { hasPermission, Permission } from '@/lib/authorization';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { UserRole } from "@/lib/prisma-compat-types";
+import { getRoleAccess } from "@/lib/role-utils";
+import { hasPermission, Permission } from "@/lib/authorization";
 
 interface NavigationItem {
   id: string;
@@ -57,272 +63,276 @@ const NavigationContext = createContext<NavigationContextType | null>(null);
 const baseNavigationItems: Record<UserRole, NavigationItem[]> = {
   MASTER: [
     {
-      id: 'master-dashboard',
-      title: 'Panel Maestro',
-      href: '/admin',
-      category: 'principal',
-      description: 'Vista completa del sistema',
-      permissions: ['admin:dashboard'],
+      id: "master-dashboard",
+      title: "Panel Maestro",
+      href: "/admin",
+      category: "principal",
+      description: "Vista completa del sistema",
+      permissions: ["admin:dashboard"],
     },
     {
-      id: 'role-switcher',
-      title: 'Cambiar Rol',
-      href: '#role-switch',
-      category: 'herramientas',
-      description: 'Cambiar entre roles para testing',
-      roles: ['MASTER'],
+      id: "role-switcher",
+      title: "Cambiar Rol",
+      href: "#role-switch",
+      category: "herramientas",
+      description: "Cambiar entre roles para testing",
+      roles: ["MASTER"],
     },
     {
-      id: 'role-examples',
-      title: 'Ejemplos de Roles',
-      href: '/admin/role-examples',
-      category: 'desarrollo',
-      description: 'Demostración de componentes basados en roles',
-      roles: ['MASTER'],
+      id: "role-examples",
+      title: "Ejemplos de Roles",
+      href: "/admin/role-examples",
+      category: "desarrollo",
+      description: "Demostración de componentes basados en roles",
+      roles: ["MASTER"],
     },
     {
-      id: 'system-settings',
-      title: 'Configuración del Sistema',
-      href: '/admin/settings',
-      category: 'sistema',
-      description: 'Configuración avanzada',
-      permissions: ['admin:dashboard'],
+      id: "system-settings",
+      title: "Configuración del Sistema",
+      href: "/admin/settings",
+      category: "sistema",
+      description: "Configuración avanzada",
+      permissions: ["admin:dashboard"],
     },
     {
-      id: 'user-management',
-      title: 'Gestión de Usuarios',
-      href: '/admin/usuarios',
-      category: 'administracion',
-      description: 'Administrar usuarios del sistema',
-      permissions: ['users:manage'],
+      id: "user-management",
+      title: "Gestión de Usuarios",
+      href: "/admin/usuarios",
+      category: "administracion",
+      description: "Administrar usuarios del sistema",
+      permissions: ["users:manage"],
     },
     {
-      id: 'audit-logs',
-      title: 'Registros de Auditoría',
-      href: '/admin/audit',
-      category: 'seguridad',
-      description: 'Ver logs de auditoría',
-      permissions: ['admin:dashboard'],
+      id: "audit-logs",
+      title: "Registros de Auditoría",
+      href: "/admin/audit",
+      category: "seguridad",
+      description: "Ver logs de auditoría",
+      permissions: ["admin:dashboard"],
     },
   ],
   ADMIN: [
     {
-      id: 'admin-dashboard',
-      title: 'Panel Administrativo',
-      href: '/admin',
-      category: 'principal',
-      description: 'Centro de control administrativo',
-      permissions: ['admin:dashboard'],
+      id: "admin-dashboard",
+      title: "Panel Administrativo",
+      href: "/admin",
+      category: "principal",
+      description: "Centro de control administrativo",
+      permissions: ["admin:dashboard"],
     },
     {
-      id: 'user-management',
-      title: 'Usuarios',
-      href: '/admin/usuarios',
-      category: 'administracion',
-      description: 'Gestionar usuarios',
-      permissions: ['users:manage'],
+      id: "user-management",
+      title: "Usuarios",
+      href: "/admin/usuarios",
+      category: "administracion",
+      description: "Gestionar usuarios",
+      permissions: ["users:manage"],
     },
     {
-      id: 'school-calendar',
-      title: 'Calendario Escolar',
-      href: '/admin/calendario-escolar',
-      category: 'academico',
-      description: 'Gestionar calendario académico',
-      permissions: ['admin:dashboard'],
+      id: "school-calendar",
+      title: "Calendario Escolar",
+      href: "/admin/calendario-escolar",
+      category: "academico",
+      description: "Gestionar calendario académico",
+      permissions: ["admin:dashboard"],
     },
     {
-      id: 'team',
-      title: 'Equipo Multidisciplinario',
-      href: '/admin/equipo-multidisciplinario',
-      category: 'equipo',
-      description: 'Gestionar equipo profesional',
-      permissions: ['admin:dashboard'],
+      id: "team",
+      title: "Equipo Multidisciplinario",
+      href: "/admin/equipo-multidisciplinario",
+      category: "equipo",
+      description: "Gestionar equipo profesional",
+      permissions: ["admin:dashboard"],
     },
     {
-      id: 'meetings',
-      title: 'Reuniones',
-      href: '/admin/reuniones',
-      category: 'comunicacion',
-      description: 'Gestionar reuniones',
-      permissions: ['admin:dashboard'],
+      id: "meetings",
+      title: "Reuniones",
+      href: "/admin/reuniones",
+      category: "comunicacion",
+      description: "Gestionar reuniones",
+      permissions: ["admin:dashboard"],
     },
     {
-      id: 'voting',
-      title: 'Votaciones',
-      href: '/admin/votaciones',
-      category: 'gestion',
-      description: 'Sistema de votaciones',
-      permissions: ['admin:dashboard'],
+      id: "voting",
+      title: "Votaciones",
+      href: "/admin/votaciones",
+      category: "gestion",
+      description: "Sistema de votaciones",
+      permissions: ["admin:dashboard"],
     },
     {
-      id: 'documents',
-      title: 'Documentos',
-      href: '/admin/documentos',
-      category: 'recursos',
-      description: 'Gestionar documentos',
-      permissions: ['admin:dashboard'],
+      id: "documents",
+      title: "Documentos",
+      href: "/admin/documentos",
+      category: "recursos",
+      description: "Gestionar documentos",
+      permissions: ["admin:dashboard"],
     },
   ],
   PROFESOR: [
     {
-      id: 'profesor-dashboard',
-      title: 'Panel Docente',
-      href: '/profesor',
-      category: 'principal',
-      description: 'Centro de control docente',
-      permissions: ['profesor:dashboard'],
+      id: "profesor-dashboard",
+      title: "Panel Docente",
+      href: "/profesor",
+      category: "principal",
+      description: "Centro de control docente",
+      permissions: ["profesor:dashboard"],
     },
     {
-      id: 'planning',
-      title: 'Planificaciones',
-      href: '/profesor/planificaciones',
-      category: 'academico',
-      description: 'Planificar lecciones',
-      permissions: ['planning:own'],
+      id: "planning",
+      title: "Planificaciones",
+      href: "/profesor/planificaciones",
+      category: "academico",
+      description: "Planificar lecciones",
+      permissions: ["planning:own"],
     },
     {
-      id: 'calendar',
-      title: 'Calendario',
-      href: '/profesor/calendario-escolar',
-      category: 'academico',
-      description: 'Ver calendario académico',
-      permissions: ['profesor:dashboard'],
+      id: "calendar",
+      title: "Calendario",
+      href: "/profesor/calendario-escolar",
+      category: "academico",
+      description: "Ver calendario académico",
+      permissions: ["profesor:dashboard"],
     },
     {
-      id: 'pme',
-      title: 'PME',
-      href: '/profesor/pme',
-      category: 'academico',
-      description: 'Proyecto Educativo',
-      permissions: ['profesor:dashboard'],
+      id: "pme",
+      title: "PME",
+      href: "/profesor/pme",
+      category: "academico",
+      description: "Proyecto Educativo",
+      permissions: ["profesor:dashboard"],
     },
     {
-      id: 'meetings',
-      title: 'Reuniones',
-      href: '/profesor/reuniones',
-      category: 'comunicacion',
-      description: 'Gestionar reuniones con padres',
-      permissions: ['profesor:dashboard'],
+      id: "meetings",
+      title: "Reuniones",
+      href: "/profesor/reuniones",
+      category: "comunicacion",
+      description: "Gestionar reuniones con padres",
+      permissions: ["profesor:dashboard"],
     },
     {
-      id: 'schedule',
-      title: 'Horarios',
-      href: '/profesor/horarios',
-      category: 'informacion',
-      description: 'Ver horarios',
-      permissions: ['profesor:dashboard'],
+      id: "schedule",
+      title: "Horarios",
+      href: "/profesor/horarios",
+      category: "informacion",
+      description: "Ver horarios",
+      permissions: ["profesor:dashboard"],
     },
     {
-      id: 'profile',
-      title: 'Perfil',
-      href: '/profesor/perfil',
-      category: 'personal',
-      description: 'Gestionar perfil',
-      permissions: ['profesor:dashboard'],
+      id: "profile",
+      title: "Perfil",
+      href: "/profesor/perfil",
+      category: "personal",
+      description: "Gestionar perfil",
+      permissions: ["profesor:dashboard"],
     },
   ],
   PARENT: [
     {
-      id: 'parent-dashboard',
-      title: '🏠 Panel Familiar',
-      href: '/parent',
-      category: 'principal',
-      description: 'Centro de control familiar',
-      permissions: ['parent:dashboard'],
+      id: "parent-dashboard",
+      title: "🏠 Panel Familiar",
+      href: "/parent",
+      category: "principal",
+      description: "Centro de control familiar",
+      permissions: ["parent:dashboard"],
     },
     {
-      id: 'calendar',
-      title: '📅 Calendario Escolar',
-      href: '/parent/calendario-escolar',
-      category: 'calendario',
-      description: 'Eventos, reuniones y actividades',
-      permissions: ['parent:dashboard'],
+      id: "calendar",
+      title: "📅 Calendario Escolar",
+      href: "/parent/calendario-escolar",
+      category: "calendario",
+      description: "Eventos, reuniones y actividades",
+      permissions: ["parent:dashboard"],
     },
     {
-      id: 'communication',
-      title: '💬 Comunicación',
-      href: '/parent/comunicacion',
-      category: 'comunicacion',
-      description: 'Mensajes y notificaciones',
-      permissions: ['parent:dashboard'],
+      id: "communication",
+      title: "💬 Comunicación",
+      href: "/parent/comunicacion",
+      category: "comunicacion",
+      description: "Mensajes y notificaciones",
+      permissions: ["parent:dashboard"],
     },
     {
-      id: 'votaciones',
-      title: '🗳️ Votaciones Escolares',
-      href: '/parent/votaciones',
-      category: 'votaciones',
-      description: 'Participa en decisiones escolares',
-      permissions: ['parent:dashboard'],
+      id: "votaciones",
+      title: "🗳️ Votaciones Escolares",
+      href: "/parent/votaciones",
+      category: "votaciones",
+      description: "Participa en decisiones escolares",
+      permissions: ["parent:dashboard"],
     },
     {
-      id: 'students',
-      title: '👨‍🎓 Estudiantes',
-      href: '/parent/estudiantes',
-      category: 'informacion',
-      description: 'Información de estudiantes',
-      permissions: ['parent:dashboard'],
+      id: "students",
+      title: "👨‍🎓 Estudiantes",
+      href: "/parent/estudiantes",
+      category: "informacion",
+      description: "Información de estudiantes",
+      permissions: ["parent:dashboard"],
     },
     {
-      id: 'meetings',
-      title: '📋 Reuniones',
-      href: '/parent/reuniones',
-      category: 'comunicacion',
-      description: 'Agendar reuniones',
-      permissions: ['parent:dashboard'],
+      id: "meetings",
+      title: "📋 Reuniones",
+      href: "/parent/reuniones",
+      category: "comunicacion",
+      description: "Agendar reuniones",
+      permissions: ["parent:dashboard"],
     },
     {
-      id: 'resources',
-      title: '📚 Recursos',
-      href: '/parent/recursos',
-      category: 'recursos',
-      description: 'Materiales educativos',
-      permissions: ['parent:dashboard'],
+      id: "resources",
+      title: "📚 Recursos",
+      href: "/parent/recursos",
+      category: "recursos",
+      description: "Materiales educativos",
+      permissions: ["parent:dashboard"],
     },
   ],
   PUBLIC: [
     {
-      id: 'home',
-      title: 'Inicio',
-      href: '/',
-      category: 'principal',
-      description: 'Página principal',
+      id: "home",
+      title: "Inicio",
+      href: "/",
+      category: "principal",
+      description: "Página principal",
     },
     {
-      id: 'about',
-      title: 'Centro Consejo',
-      href: '/centro-consejo',
-      category: 'informacion',
-      description: 'Sobre el centro',
+      id: "about",
+      title: "Centro Consejo",
+      href: "/centro-consejo",
+      category: "informacion",
+      description: "Sobre el centro",
     },
     {
-      id: 'educational-project',
-      title: 'Proyecto Educativo',
-      href: '/proyecto-educativo',
-      category: 'academico',
-      description: 'Proyecto educativo',
+      id: "educational-project",
+      title: "Proyecto Educativo",
+      href: "/proyecto-educativo",
+      category: "academico",
+      description: "Proyecto educativo",
     },
     {
-      id: 'photos-videos',
-      title: 'Fotos y Videos',
-      href: '/fotos-videos',
-      category: 'galeria',
-      description: 'Galería multimedia',
+      id: "photos-videos",
+      title: "Fotos y Videos",
+      href: "/fotos-videos",
+      category: "galeria",
+      description: "Galería multimedia",
     },
     {
-      id: 'team',
-      title: 'Equipo Multidisciplinario',
-      href: '/public/equipo-multidisciplinario',
-      category: 'equipo',
-      description: 'Conocer al equipo',
+      id: "team",
+      title: "Equipo Multidisciplinario",
+      href: "/public/equipo-multidisciplinario",
+      category: "equipo",
+      description: "Conocer al equipo",
     },
   ],
 };
 
-export function NavigationProvider({ children }: { children: React.ReactNode }) {
+export function NavigationProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
   const userRole = session?.user?.role as UserRole;
@@ -333,17 +343,21 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
     if (!userRole) return [];
 
     const baseItems = baseNavigationItems[userRole] || [];
-    const userPermissions = (permission: Permission) => hasPermission(userRole, permission);
+    const userPermissions = (permission: Permission) =>
+      hasPermission(userRole, permission);
     const userHasRole = (role: UserRole) => userRole === role;
 
     return baseItems
-      .map(item => ({
+      .map((item) => ({
         ...item,
-        isVisible: !item.permissions || item.permissions.every(userPermissions) &&
-                   (!item.roles || item.roles.every(userHasRole)),
-        isActive: pathname === item.href || pathname.startsWith(item.href + '/'),
+        isVisible:
+          !item.permissions ||
+          (item.permissions.every(userPermissions) &&
+            (!item.roles || item.roles.every(userHasRole))),
+        isActive:
+          pathname === item.href || pathname.startsWith(item.href + "/"),
       }))
-      .filter(item => item.isVisible);
+      .filter((item) => item.isVisible);
   }, [userRole, pathname]);
 
   // Generate breadcrumbs
@@ -352,25 +366,30 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
 
     // Add home based on role
     if (userRole) {
-      const homeItem = navigationItems.find(item => item.category === 'principal');
+      const homeItem = navigationItems.find(
+        (item) => item.category === "principal",
+      );
       if (homeItem) items.push(homeItem);
     }
 
     // Parse current path
-    const pathSegments = pathname.split('/').filter(Boolean);
-    let currentPath = '';
+    const pathSegments = pathname.split("/").filter(Boolean);
+    let currentPath = "";
 
     pathSegments.forEach((segment, index) => {
       currentPath += `/${segment}`;
 
       // Skip role prefix
-      if (index === 0 && ['admin', 'profesor', 'parent', 'public'].includes(segment)) {
+      if (
+        index === 0 &&
+        ["admin", "profesor", "parent", "public"].includes(segment)
+      ) {
         return;
       }
 
       // Find matching navigation item
-      const matchingItem = navigationItems.find(item =>
-        item.href === currentPath || item.href === `/${segment}`
+      const matchingItem = navigationItems.find(
+        (item) => item.href === currentPath || item.href === `/${segment}`,
       );
 
       if (matchingItem) {
@@ -387,7 +406,9 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   // Generate quick actions
   const quickActions = useMemo(() => {
     return navigationItems
-      .filter(item => item.category === 'principal' || item.category === 'personal')
+      .filter(
+        (item) => item.category === "principal" || item.category === "personal",
+      )
       .slice(0, 3);
   }, [navigationItems]);
 
@@ -396,16 +417,17 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
     if (!searchQuery.trim()) return [];
 
     const query = searchQuery.toLowerCase();
-    return navigationItems.filter(item =>
-      item.title.toLowerCase().includes(query) ||
-      item.description?.toLowerCase().includes(query) ||
-      item.category.toLowerCase().includes(query)
+    return navigationItems.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) ||
+        item.description?.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query),
     );
   }, [navigationItems, searchQuery]);
 
   // Active item
   const activeItem = useMemo(() => {
-    return navigationItems.find(item => item.isActive) || null;
+    return navigationItems.find((item) => item.isActive) || null;
   }, [navigationItems]);
 
   const state: NavigationState = {
@@ -425,10 +447,10 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
       setSearchQuery(query);
     },
     clearSearch: () => {
-      setSearchQuery('');
+      setSearchQuery("");
     },
     toggleItem: (id: string) => {
-      setExpandedItems(prev => {
+      setExpandedItems((prev) => {
         const newSet = new Set(prev);
         if (newSet.has(id)) {
           newSet.delete(id);
@@ -439,19 +461,22 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
       });
     },
     getItemsByCategory: (category: string) => {
-      return navigationItems.filter(item => item.category === category);
+      return navigationItems.filter((item) => item.category === category);
     },
     getVisibleItems: () => {
-      return navigationItems.filter(item => item.isVisible);
+      return navigationItems.filter((item) => item.isVisible);
     },
     hasAccess: (item: NavigationItem) => {
       if (!userRole) return false;
 
-      const hasRequiredPermissions = !item.permissions ||
-        item.permissions.every(permission => hasPermission(userRole, permission));
+      const hasRequiredPermissions =
+        !item.permissions ||
+        item.permissions.every((permission) =>
+          hasPermission(userRole, permission),
+        );
 
-      const hasRequiredRoles = !item.roles ||
-        item.roles.every(role => role === userRole);
+      const hasRequiredRoles =
+        !item.roles || item.roles.every((role) => role === userRole);
 
       return hasRequiredPermissions && hasRequiredRoles;
     },
@@ -459,8 +484,10 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
 
   const user = {
     role: userRole || null,
-    hasPermission: (permission: Permission) => hasPermission(userRole, permission),
-    hasAnyRole: (roles: UserRole[]) => userRole ? roles.includes(userRole) : false,
+    hasPermission: (permission: Permission) =>
+      hasPermission(userRole, permission),
+    hasAnyRole: (roles: UserRole[]) =>
+      userRole ? roles.includes(userRole) : false,
     roleAccess,
   };
 
@@ -474,7 +501,7 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
 export function useNavigation() {
   const context = useContext(NavigationContext);
   if (!context) {
-    throw new Error('useNavigation must be used within a NavigationProvider');
+    throw new Error("useNavigation must be used within a NavigationProvider");
   }
   return context;
 }

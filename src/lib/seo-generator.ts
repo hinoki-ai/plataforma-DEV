@@ -4,11 +4,11 @@
  * Part of Stage 4.3: Accessibility & SEO Standardization
  */
 
-import { Metadata } from 'next';
-import { UserRole } from '@/lib/prisma-compat-types';
+import { Metadata } from "next";
+import { UserRole } from "@/lib/prisma-compat-types";
 
 export type ExtendedUserRole = UserRole;
-export type ContextType = 'public' | 'auth' | 'admin';
+export type ContextType = "public" | "auth" | "admin";
 
 export interface SEOOptions {
   title: string;
@@ -21,12 +21,12 @@ export interface SEOOptions {
     languages?: Record<string, string>;
   };
   openGraph?: {
-    type?: 'website' | 'article' | 'profile';
+    type?: "website" | "article" | "profile";
     siteName?: string;
     locale?: string;
   };
   twitter?: {
-    card?: 'summary' | 'summary_large_image';
+    card?: "summary" | "summary_large_image";
     site?: string;
     creator?: string;
   };
@@ -34,17 +34,17 @@ export interface SEOOptions {
 }
 
 const DEFAULT_CONFIG = {
-  siteName: 'Manitos Pintadas - Jardín Infantil',
-  domain: 'https://manitospintadas.cl',
-  defaultImage: '/og-image.jpg',
-  twitter: '@manitospintadas',
+  siteName: "Manitos Pintadas - Jardín Infantil",
+  domain: "https://manitospintadas.cl",
+  defaultImage: "/og-image.jpg",
+  twitter: "@manitospintadas",
   keywords: [
-    'jardín infantil',
-    'educación inicial',
-    'manitos pintadas',
-    'equipo multidisciplinario',
-    'centro y consejo',
-    'proyecto educativo',
+    "jardín infantil",
+    "educación inicial",
+    "manitos pintadas",
+    "equipo multidisciplinario",
+    "centro y consejo",
+    "proyecto educativo",
   ],
 };
 
@@ -53,7 +53,7 @@ const DEFAULT_CONFIG = {
  */
 export function generateMetadata(
   context: ContextType,
-  options: SEOOptions
+  options: SEOOptions,
 ): Metadata {
   const baseUrl = DEFAULT_CONFIG.domain;
   const siteName = DEFAULT_CONFIG.siteName;
@@ -73,19 +73,19 @@ export function generateMetadata(
       googleBot: {
         index: !options.noIndex && contextOptimizations.allowIndexing,
         follow: contextOptimizations.allowFollow,
-        'max-snippet': contextOptimizations.maxSnippet,
-        'max-image-preview':
+        "max-snippet": contextOptimizations.maxSnippet,
+        "max-image-preview":
           (contextOptimizations.maxImagePreview as
-            | 'none'
-            | 'large'
-            | 'standard') || 'large',
-        'max-video-preview': contextOptimizations.maxVideoPreview,
+            | "none"
+            | "large"
+            | "standard") || "large",
+        "max-video-preview": contextOptimizations.maxVideoPreview,
       },
     },
 
     // Open Graph
     openGraph: {
-      type: options.openGraph?.type || 'website',
+      type: options.openGraph?.type || "website",
       siteName: options.openGraph?.siteName || siteName,
       title: options.title,
       description: options.description,
@@ -98,12 +98,12 @@ export function generateMetadata(
           alt: options.title,
         },
       ],
-      locale: options.openGraph?.locale || 'es_CL',
+      locale: options.openGraph?.locale || "es_CL",
     },
 
     // Twitter/X Cards
     twitter: {
-      card: options.twitter?.card || 'summary_large_image',
+      card: options.twitter?.card || "summary_large_image",
       site: options.twitter?.site || DEFAULT_CONFIG.twitter,
       creator: options.twitter?.creator || DEFAULT_CONFIG.twitter,
       title: options.title,
@@ -121,8 +121,8 @@ export function generateMetadata(
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION,
       other: {
-        'facebook-domain-verification':
-          process.env.FACEBOOK_DOMAIN_VERIFICATION || '',
+        "facebook-domain-verification":
+          process.env.FACEBOOK_DOMAIN_VERIFICATION || "",
       },
     },
 
@@ -143,20 +143,20 @@ export function generatePublicPageMetadata(options: {
   keywords?: string[];
   canonical?: string;
 }): Metadata {
-  return generateMetadata('public', {
+  return generateMetadata("public", {
     ...options,
     keywords: [
       ...DEFAULT_CONFIG.keywords,
-      'información pública',
-      'comunidad educativa',
+      "información pública",
+      "comunidad educativa",
       ...(options.keywords || []),
     ],
     openGraph: {
-      type: 'website',
+      type: "website",
       siteName: DEFAULT_CONFIG.siteName,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
     },
   });
 }
@@ -170,23 +170,23 @@ export function generateAuthPageMetadata(
     title: string;
     description: string;
     noIndex?: boolean;
-  }
+  },
 ): Metadata {
-  return generateMetadata('auth', {
+  return generateMetadata("auth", {
     ...options,
     noIndex: options.noIndex ?? true, // Default to no-index for auth pages
     keywords: [
-      'panel de control',
-      'gestión educativa',
-      'sistema interno',
+      "panel de control",
+      "gestión educativa",
+      "sistema interno",
       getRoleKeywords(role),
     ].flat(),
     openGraph: {
-      type: 'website',
+      type: "website",
       siteName: `${DEFAULT_CONFIG.siteName} - Panel de Control`,
     },
     twitter: {
-      card: 'summary',
+      card: "summary",
     },
   });
 }
@@ -199,7 +199,7 @@ export function generateDashboardMetadata(role: ExtendedUserRole): Metadata {
 
   return generateAuthPageMetadata(role, {
     title: `Dashboard ${roleData.title} - ${DEFAULT_CONFIG.siteName}`,
-    description: `Panel de control para ${roleData.description}. Gestiona ${roleData.capabilities.join(', ')}.`,
+    description: `Panel de control para ${roleData.description}. Gestiona ${roleData.capabilities.join(", ")}.`,
     noIndex: true,
   });
 }
@@ -208,25 +208,25 @@ export function generateDashboardMetadata(role: ExtendedUserRole): Metadata {
  * Generate calendar-specific metadata
  */
 export function generateCalendarMetadata(context: ContextType): Metadata {
-  if (context === 'public') {
+  if (context === "public") {
     return generatePublicPageMetadata({
       title: `Calendario Escolar - ${DEFAULT_CONFIG.siteName}`,
       description:
-        'Consulta nuestro calendario escolar con fechas importantes, eventos especiales y actividades educativas programadas.',
+        "Consulta nuestro calendario escolar con fechas importantes, eventos especiales y actividades educativas programadas.",
       keywords: [
-        'calendario escolar',
-        'eventos',
-        'fechas importantes',
-        'actividades educativas',
+        "calendario escolar",
+        "eventos",
+        "fechas importantes",
+        "actividades educativas",
       ],
       canonical: `${DEFAULT_CONFIG.domain}/calendario-escolar`,
     });
   }
 
-  return generateAuthPageMetadata('ADMIN', {
+  return generateAuthPageMetadata("ADMIN", {
     title: `Gestión de Calendario - ${DEFAULT_CONFIG.siteName}`,
     description:
-      'Panel de gestión del calendario escolar. Administra eventos, fechas importantes y actividades.',
+      "Panel de gestión del calendario escolar. Administra eventos, fechas importantes y actividades.",
     noIndex: true,
   });
 }
@@ -235,25 +235,25 @@ export function generateCalendarMetadata(context: ContextType): Metadata {
  * Generate team page metadata
  */
 export function generateTeamMetadata(context: ContextType): Metadata {
-  if (context === 'public') {
+  if (context === "public") {
     return generatePublicPageMetadata({
       title: `Equipo Multidisciplinario - ${DEFAULT_CONFIG.siteName}`,
       description:
-        'Conoce a nuestro equipo multidisciplinario de profesionales dedicados al desarrollo integral de nuestros niños y niñas.',
+        "Conoce a nuestro equipo multidisciplinario de profesionales dedicados al desarrollo integral de nuestros niños y niñas.",
       keywords: [
-        'equipo multidisciplinario',
-        'profesionales',
-        'especialistas',
-        'desarrollo integral',
+        "equipo multidisciplinario",
+        "profesionales",
+        "especialistas",
+        "desarrollo integral",
       ],
       canonical: `${DEFAULT_CONFIG.domain}/equipo-multidisciplinario`,
     });
   }
 
-  return generateAuthPageMetadata('ADMIN', {
+  return generateAuthPageMetadata("ADMIN", {
     title: `Gestión de Equipo - ${DEFAULT_CONFIG.siteName}`,
     description:
-      'Panel de administración del equipo multidisciplinario. Gestiona perfiles, especialidades y disponibilidad.',
+      "Panel de administración del equipo multidisciplinario. Gestiona perfiles, especialidades y disponibilidad.",
     noIndex: true,
   });
 }
@@ -262,26 +262,26 @@ export function generateTeamMetadata(context: ContextType): Metadata {
  * Generate structured data for public pages
  */
 export function generateStructuredData(
-  type: 'Organization' | 'EducationalOrganization' | 'Event',
-  data: any
+  type: "Organization" | "EducationalOrganization" | "Event",
+  data: any,
 ) {
   const baseStructuredData = {
-    '@context': 'https://schema.org',
-    '@type': type,
+    "@context": "https://schema.org",
+    "@type": type,
     name: DEFAULT_CONFIG.siteName,
     url: DEFAULT_CONFIG.domain,
     ...data,
   };
 
-  if (type === 'EducationalOrganization') {
+  if (type === "EducationalOrganization") {
     return {
       ...baseStructuredData,
-      '@type': 'EducationalOrganization',
-      educationalCredentialAwarded: 'Educación Inicial',
+      "@type": "EducationalOrganization",
+      educationalCredentialAwarded: "Educación Inicial",
       address: {
-        '@type': 'PostalAddress',
-        addressCountry: 'CL',
-        addressLocality: 'Chile',
+        "@type": "PostalAddress",
+        addressCountry: "CL",
+        addressLocality: "Chile",
       },
     };
   }
@@ -293,40 +293,40 @@ export function generateStructuredData(
 
 function getContextOptimizations(context: ContextType) {
   switch (context) {
-    case 'public':
+    case "public":
       return {
         allowIndexing: true,
         allowFollow: true,
         maxSnippet: -1,
-        maxImagePreview: 'large',
+        maxImagePreview: "large",
         maxVideoPreview: -1,
         additionalMeta: {
-          category: 'education',
-          'application-name': DEFAULT_CONFIG.siteName,
+          category: "education",
+          "application-name": DEFAULT_CONFIG.siteName,
         },
       };
 
-    case 'auth':
+    case "auth":
       return {
         allowIndexing: false,
         allowFollow: false,
         maxSnippet: 0,
-        maxImagePreview: 'none',
+        maxImagePreview: "none",
         maxVideoPreview: 0,
         additionalMeta: {
-          'application-name': `${DEFAULT_CONFIG.siteName} - Panel`,
+          "application-name": `${DEFAULT_CONFIG.siteName} - Panel`,
         },
       };
 
-    case 'admin':
+    case "admin":
       return {
         allowIndexing: false,
         allowFollow: false,
         maxSnippet: 0,
-        maxImagePreview: 'none',
+        maxImagePreview: "none",
         maxVideoPreview: 0,
         additionalMeta: {
-          'application-name': `${DEFAULT_CONFIG.siteName} - Admin`,
+          "application-name": `${DEFAULT_CONFIG.siteName} - Admin`,
         },
       };
 
@@ -335,7 +335,7 @@ function getContextOptimizations(context: ContextType) {
         allowIndexing: true,
         allowFollow: true,
         maxSnippet: -1,
-        maxImagePreview: 'standard',
+        maxImagePreview: "standard",
         maxVideoPreview: 0,
         additionalMeta: {},
       };
@@ -344,43 +344,43 @@ function getContextOptimizations(context: ContextType) {
 
 function getRoleData(role: ExtendedUserRole) {
   switch (role) {
-    case 'ADMIN':
+    case "ADMIN":
       return {
-        title: 'Administrador',
-        description: 'administradores del sistema',
+        title: "Administrador",
+        description: "administradores del sistema",
         capabilities: [
-          'gestión completa',
-          'informes',
-          'configuración del sistema',
+          "gestión completa",
+          "informes",
+          "configuración del sistema",
         ],
       };
-    case 'PROFESOR':
+    case "PROFESOR":
       return {
-        title: 'Profesor',
-        description: 'profesores y educadores',
+        title: "Profesor",
+        description: "profesores y educadores",
         capabilities: [
-          'planificaciones',
-          'evaluaciones',
-          'reportes de progreso',
+          "planificaciones",
+          "evaluaciones",
+          "reportes de progreso",
         ],
       };
     default:
       return {
-        title: 'Usuario',
-        description: 'usuarios del sistema',
-        capabilities: ['acceso básico', 'consulta de información'],
+        title: "Usuario",
+        description: "usuarios del sistema",
+        capabilities: ["acceso básico", "consulta de información"],
       };
   }
 }
 
 function getRoleKeywords(role: ExtendedUserRole): string[] {
   switch (role) {
-    case 'ADMIN':
-      return ['administración', 'gestión', 'configuración', 'reportes'];
-    case 'PROFESOR':
-      return ['educación', 'planificación', 'evaluación', 'seguimiento'];
+    case "ADMIN":
+      return ["administración", "gestión", "configuración", "reportes"];
+    case "PROFESOR":
+      return ["educación", "planificación", "evaluación", "seguimiento"];
     default:
-      return ['usuario', 'acceso'];
+      return ["usuario", "acceso"];
   }
 }
 
@@ -389,21 +389,21 @@ function getRoleKeywords(role: ExtendedUserRole): string[] {
  */
 export function getPageStructuredData(page: string) {
   switch (page) {
-    case 'home':
-      return generateStructuredData('EducationalOrganization', {
+    case "home":
+      return generateStructuredData("EducationalOrganization", {
         description:
-          'Jardín infantil enfocado en el desarrollo integral de niños y niñas a través de metodologías innovadoras.',
-        telephone: '+56 2 1234 5678',
-        email: 'contacto@manitospintadas.cl',
+          "Jardín infantil enfocado en el desarrollo integral de niños y niñas a través de metodologías innovadoras.",
+        telephone: "+56 2 1234 5678",
+        email: "contacto@manitospintadas.cl",
       });
 
-    case 'team':
-      return generateStructuredData('EducationalOrganization', {
+    case "team":
+      return generateStructuredData("EducationalOrganization", {
         description:
-          'Equipo multidisciplinario de profesionales especializados en educación inicial.',
+          "Equipo multidisciplinario de profesionales especializados en educación inicial.",
         member: {
-          '@type': 'OrganizationRole',
-          roleName: 'Equipo Multidisciplinario',
+          "@type": "OrganizationRole",
+          roleName: "Equipo Multidisciplinario",
         },
       });
 

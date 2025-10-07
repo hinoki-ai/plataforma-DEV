@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, memo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
-import { signIn, useSession } from 'next-auth/react';
-import { ExtendedUserRole } from '@/lib/authorization';
+import { useState, useEffect, useCallback, memo } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { ExtendedUserRole } from "@/lib/authorization";
 
 interface FormData {
   fullName: string;
@@ -23,456 +23,456 @@ interface FormData {
   comuna: string;
   emergencyContact: string;
   emergencyPhone: string;
-  role: 'padre' | 'madre' | 'apoderado' | 'otro';
+  role: "padre" | "madre" | "apoderado" | "otro";
 }
 
 const grades = [
-  { value: 'prekinder', label: 'Pre-Kinder (3-4 años)' },
-  { value: 'kinder', label: 'Kinder (4-5 años)' },
-  { value: 'preparatoria', label: 'Preparatoria (5-6 años)' },
+  { value: "prekinder", label: "Pre-Kinder (3-4 años)" },
+  { value: "kinder", label: "Kinder (4-5 años)" },
+  { value: "preparatoria", label: "Preparatoria (5-6 años)" },
 ];
 
 const relationships = [
-  { value: 'padre', label: 'Padre' },
-  { value: 'madre', label: 'Madre' },
-  { value: 'apoderado', label: 'Apoderado' },
-  { value: 'tutor', label: 'Tutor' },
-  { value: 'abuelo', label: 'Abuelo/a' },
-  { value: 'otro', label: 'Otro' },
+  { value: "padre", label: "Padre" },
+  { value: "madre", label: "Madre" },
+  { value: "apoderado", label: "Apoderado" },
+  { value: "tutor", label: "Tutor" },
+  { value: "abuelo", label: "Abuelo/a" },
+  { value: "otro", label: "Otro" },
 ];
 
 const regions = [
-  { value: 'arica-parinacota', label: 'Región de Arica y Parinacota' },
-  { value: 'tarapaca', label: 'Región de Tarapacá' },
-  { value: 'antofagasta', label: 'Región de Antofagasta' },
-  { value: 'atacama', label: 'Región de Atacama' },
-  { value: 'coquimbo', label: 'Región de Coquimbo' },
-  { value: 'valparaiso', label: 'Región de Valparaíso' },
-  { value: 'metropolitana', label: 'Región Metropolitana de Santiago' },
+  { value: "arica-parinacota", label: "Región de Arica y Parinacota" },
+  { value: "tarapaca", label: "Región de Tarapacá" },
+  { value: "antofagasta", label: "Región de Antofagasta" },
+  { value: "atacama", label: "Región de Atacama" },
+  { value: "coquimbo", label: "Región de Coquimbo" },
+  { value: "valparaiso", label: "Región de Valparaíso" },
+  { value: "metropolitana", label: "Región Metropolitana de Santiago" },
   {
-    value: 'ohiggins',
+    value: "ohiggins",
     label: "Región del Libertador General Bernardo O'Higgins",
   },
-  { value: 'maule', label: 'Región del Maule' },
-  { value: 'nuble', label: 'Región de Ñuble' },
-  { value: 'biobio', label: 'Región del Biobío' },
-  { value: 'araucania', label: 'Región de La Araucanía' },
-  { value: 'los-rios', label: 'Región de Los Ríos' },
-  { value: 'los-lagos', label: 'Región de Los Lagos' },
+  { value: "maule", label: "Región del Maule" },
+  { value: "nuble", label: "Región de Ñuble" },
+  { value: "biobio", label: "Región del Biobío" },
+  { value: "araucania", label: "Región de La Araucanía" },
+  { value: "los-rios", label: "Región de Los Ríos" },
+  { value: "los-lagos", label: "Región de Los Lagos" },
   {
-    value: 'aysen',
-    label: 'Región de Aysén del General Carlos Ibáñez del Campo',
+    value: "aysen",
+    label: "Región de Aysén del General Carlos Ibáñez del Campo",
   },
   {
-    value: 'magallanes',
-    label: 'Región de Magallanes y de la Antártica Chilena',
+    value: "magallanes",
+    label: "Región de Magallanes y de la Antártica Chilena",
   },
 ];
 
 const comunasByRegion: Record<string, string[]> = {
-  'arica-parinacota': ['Arica', 'Camarones', 'General Lagos', 'Putre'],
+  "arica-parinacota": ["Arica", "Camarones", "General Lagos", "Putre"],
   tarapaca: [
-    'Alto Hospicio',
-    'Camiña',
-    'Colchane',
-    'Huara',
-    'Iquique',
-    'Pica',
-    'Pozo Almonte',
+    "Alto Hospicio",
+    "Camiña",
+    "Colchane",
+    "Huara",
+    "Iquique",
+    "Pica",
+    "Pozo Almonte",
   ],
   antofagasta: [
-    'Antofagasta',
-    'Calama',
-    'María Elena',
-    'Mejillones',
-    'Ollagüe',
-    'San Pedro de Atacama',
-    'Sierra Gorda',
-    'Taltal',
-    'Tocopilla',
+    "Antofagasta",
+    "Calama",
+    "María Elena",
+    "Mejillones",
+    "Ollagüe",
+    "San Pedro de Atacama",
+    "Sierra Gorda",
+    "Taltal",
+    "Tocopilla",
   ],
   atacama: [
-    'Alto del Carmen',
-    'Caldera',
-    'Chañaral',
-    'Copiapó',
-    'Diego de Almagro',
-    'Freirina',
-    'Huasco',
-    'Tierra Amarilla',
-    'Vallenar',
+    "Alto del Carmen",
+    "Caldera",
+    "Chañaral",
+    "Copiapó",
+    "Diego de Almagro",
+    "Freirina",
+    "Huasco",
+    "Tierra Amarilla",
+    "Vallenar",
   ],
   coquimbo: [
-    'Andacollo',
-    'Canela',
-    'Combarbalá',
-    'Coquimbo',
-    'Illapel',
-    'La Higuera',
-    'La Serena',
-    'Los Vilos',
-    'Monte Patria',
-    'Ovalle',
-    'Paihuano',
-    'Punitaqui',
-    'Río Hurtado',
-    'Salamanca',
-    'Vicuña',
+    "Andacollo",
+    "Canela",
+    "Combarbalá",
+    "Coquimbo",
+    "Illapel",
+    "La Higuera",
+    "La Serena",
+    "Los Vilos",
+    "Monte Patria",
+    "Ovalle",
+    "Paihuano",
+    "Punitaqui",
+    "Río Hurtado",
+    "Salamanca",
+    "Vicuña",
   ],
   valparaiso: [
-    'Algarrobo',
-    'Cabildo',
-    'Calle Larga',
-    'Cartagena',
-    'Casablanca',
-    'Catemu',
-    'Concón',
-    'El Quisco',
-    'El Tabo',
-    'Hijuelas',
-    'Isla de Pascua',
-    'Juan Fernández',
-    'La Calera',
-    'La Cruz',
-    'La Ligua',
-    'Limache',
-    'Llay-Llay',
-    'Los Andes',
-    'Nogales',
-    'Olmué',
-    'Panquehue',
-    'Papudo',
-    'Petorca',
-    'Puchuncaví',
-    'Putaendo',
-    'Quillota',
-    'Quilpué',
-    'Quintero',
-    'Rinconada',
-    'San Antonio',
-    'San Esteban',
-    'San Felipe',
-    'Santa María',
-    'Santo Domingo',
-    'Valparaíso',
-    'Villa Alemana',
-    'Viña del Mar',
-    'Zapallar',
+    "Algarrobo",
+    "Cabildo",
+    "Calle Larga",
+    "Cartagena",
+    "Casablanca",
+    "Catemu",
+    "Concón",
+    "El Quisco",
+    "El Tabo",
+    "Hijuelas",
+    "Isla de Pascua",
+    "Juan Fernández",
+    "La Calera",
+    "La Cruz",
+    "La Ligua",
+    "Limache",
+    "Llay-Llay",
+    "Los Andes",
+    "Nogales",
+    "Olmué",
+    "Panquehue",
+    "Papudo",
+    "Petorca",
+    "Puchuncaví",
+    "Putaendo",
+    "Quillota",
+    "Quilpué",
+    "Quintero",
+    "Rinconada",
+    "San Antonio",
+    "San Esteban",
+    "San Felipe",
+    "Santa María",
+    "Santo Domingo",
+    "Valparaíso",
+    "Villa Alemana",
+    "Viña del Mar",
+    "Zapallar",
   ],
   metropolitana: [
-    'Alhué',
-    'Buin',
-    'Calera de Tango',
-    'Cerrillos',
-    'Cerro Navia',
-    'Colina',
-    'Conchalí',
-    'Curacaví',
-    'El Bosque',
-    'El Monte',
-    'Estación Central',
-    'Huechuraba',
-    'Independencia',
-    'Isla de Maipo',
-    'La Cisterna',
-    'La Florida',
-    'La Granja',
-    'Lampa',
-    'La Pintana',
-    'La Reina',
-    'Las Condes',
-    'Lo Barnechea',
-    'Lo Espejo',
-    'Lo Prado',
-    'Macul',
-    'Maipú',
-    'María Pinto',
-    'Melipilla',
-    'Ñuñoa',
-    'Padre Hurtado',
-    'Paine',
-    'Peñaflor',
-    'Peñalolén',
-    'Pedro Aguirre Cerda',
-    'Pirque',
-    'Providencia',
-    'Pudahuel',
-    'Puente Alto',
-    'Quilicura',
-    'Quinta Normal',
-    'Recoleta',
-    'Renca',
-    'San Bernardo',
-    'San Joaquín',
-    'San José de Maipo',
-    'San Miguel',
-    'San Pedro',
-    'San Ramón',
-    'Santiago',
-    'Talagante',
-    'Til Til',
-    'Vitacura',
+    "Alhué",
+    "Buin",
+    "Calera de Tango",
+    "Cerrillos",
+    "Cerro Navia",
+    "Colina",
+    "Conchalí",
+    "Curacaví",
+    "El Bosque",
+    "El Monte",
+    "Estación Central",
+    "Huechuraba",
+    "Independencia",
+    "Isla de Maipo",
+    "La Cisterna",
+    "La Florida",
+    "La Granja",
+    "Lampa",
+    "La Pintana",
+    "La Reina",
+    "Las Condes",
+    "Lo Barnechea",
+    "Lo Espejo",
+    "Lo Prado",
+    "Macul",
+    "Maipú",
+    "María Pinto",
+    "Melipilla",
+    "Ñuñoa",
+    "Padre Hurtado",
+    "Paine",
+    "Peñaflor",
+    "Peñalolén",
+    "Pedro Aguirre Cerda",
+    "Pirque",
+    "Providencia",
+    "Pudahuel",
+    "Puente Alto",
+    "Quilicura",
+    "Quinta Normal",
+    "Recoleta",
+    "Renca",
+    "San Bernardo",
+    "San Joaquín",
+    "San José de Maipo",
+    "San Miguel",
+    "San Pedro",
+    "San Ramón",
+    "Santiago",
+    "Talagante",
+    "Til Til",
+    "Vitacura",
   ],
   ohiggins: [
-    'Chimbarongo',
-    'Chépica',
-    'Codegua',
-    'Coinco',
-    'Coltauco',
-    'Doñihue',
-    'Graneros',
-    'La Estrella',
-    'Las Cabras',
-    'Litueche',
-    'Lolol',
-    'Machalí',
-    'Malloa',
-    'Marchihue',
-    'Mostazal',
-    'Nancagua',
-    'Navidad',
-    'Olivar',
-    'Palmilla',
-    'Paredones',
-    'Peralillo',
-    'Peumo',
-    'Pichidegua',
-    'Pichilemu',
-    'Placilla',
-    'Pumanque',
-    'Quinta de Tilcoco',
-    'Rancagua',
-    'Rengo',
-    'Requínoa',
-    'San Fernando',
-    'San Vicente',
-    'Santa Cruz',
+    "Chimbarongo",
+    "Chépica",
+    "Codegua",
+    "Coinco",
+    "Coltauco",
+    "Doñihue",
+    "Graneros",
+    "La Estrella",
+    "Las Cabras",
+    "Litueche",
+    "Lolol",
+    "Machalí",
+    "Malloa",
+    "Marchihue",
+    "Mostazal",
+    "Nancagua",
+    "Navidad",
+    "Olivar",
+    "Palmilla",
+    "Paredones",
+    "Peralillo",
+    "Peumo",
+    "Pichidegua",
+    "Pichilemu",
+    "Placilla",
+    "Pumanque",
+    "Quinta de Tilcoco",
+    "Rancagua",
+    "Rengo",
+    "Requínoa",
+    "San Fernando",
+    "San Vicente",
+    "Santa Cruz",
   ],
   maule: [
-    'Cauquenes',
-    'Chanco',
-    'Colbún',
-    'Constitución',
-    'Curepto',
-    'Curicó',
-    'Empedrado',
-    'Hualañé',
-    'Licantén',
-    'Linares',
-    'Longaví',
-    'Maule',
-    'Molina',
-    'Parral',
-    'Pelarco',
-    'Pelluhue',
-    'Pencahue',
-    'Rauco',
-    'Retiro',
-    'Río Claro',
-    'Romeral',
-    'Sagrada Familia',
-    'San Clemente',
-    'San Javier',
-    'San Rafael',
-    'Talca',
-    'Teno',
-    'Vichuquén',
-    'Villa Alegre',
-    'Yerbas Buenas',
+    "Cauquenes",
+    "Chanco",
+    "Colbún",
+    "Constitución",
+    "Curepto",
+    "Curicó",
+    "Empedrado",
+    "Hualañé",
+    "Licantén",
+    "Linares",
+    "Longaví",
+    "Maule",
+    "Molina",
+    "Parral",
+    "Pelarco",
+    "Pelluhue",
+    "Pencahue",
+    "Rauco",
+    "Retiro",
+    "Río Claro",
+    "Romeral",
+    "Sagrada Familia",
+    "San Clemente",
+    "San Javier",
+    "San Rafael",
+    "Talca",
+    "Teno",
+    "Vichuquén",
+    "Villa Alegre",
+    "Yerbas Buenas",
   ],
   nuble: [
-    'Bulnes',
-    'Cobquecura',
-    'Coelemu',
-    'Chillán',
-    'Chillán Viejo',
-    'El Carmen',
-    'Ninhue',
-    'Ñiquén',
-    'Pemuco',
-    'Pinto',
-    'Portezuelo',
-    'Quillón',
-    'Ránquil',
-    'San Carlos',
-    'San Fabián',
-    'San Ignacio',
-    'San Nicolás',
-    'Treguaco',
-    'Yungay',
+    "Bulnes",
+    "Cobquecura",
+    "Coelemu",
+    "Chillán",
+    "Chillán Viejo",
+    "El Carmen",
+    "Ninhue",
+    "Ñiquén",
+    "Pemuco",
+    "Pinto",
+    "Portezuelo",
+    "Quillón",
+    "Ránquil",
+    "San Carlos",
+    "San Fabián",
+    "San Ignacio",
+    "San Nicolás",
+    "Treguaco",
+    "Yungay",
   ],
   biobio: [
-    'Alto Biobío',
-    'Antuco',
-    'Arauco',
-    'Cabrero',
-    'Cañete',
-    'Chiguayante',
-    'Concepción',
-    'Contulmo',
-    'Coronel',
-    'Curanilahue',
-    'Florida',
-    'Hualpén',
-    'Hualqui',
-    'Laja',
-    'Lebu',
-    'Los Álamos',
-    'Los Ángeles',
-    'Lota',
-    'Mulchén',
-    'Nacimiento',
-    'Negrete',
-    'Penco',
-    'Quilaco',
-    'Quilleco',
-    'San Pedro de la Paz',
-    'San Rosendo',
-    'Santa Bárbara',
-    'Santa Juana',
-    'Talcahuano',
-    'Tirúa',
-    'Tomé',
-    'Tucapel',
-    'Yumbel',
+    "Alto Biobío",
+    "Antuco",
+    "Arauco",
+    "Cabrero",
+    "Cañete",
+    "Chiguayante",
+    "Concepción",
+    "Contulmo",
+    "Coronel",
+    "Curanilahue",
+    "Florida",
+    "Hualpén",
+    "Hualqui",
+    "Laja",
+    "Lebu",
+    "Los Álamos",
+    "Los Ángeles",
+    "Lota",
+    "Mulchén",
+    "Nacimiento",
+    "Negrete",
+    "Penco",
+    "Quilaco",
+    "Quilleco",
+    "San Pedro de la Paz",
+    "San Rosendo",
+    "Santa Bárbara",
+    "Santa Juana",
+    "Talcahuano",
+    "Tirúa",
+    "Tomé",
+    "Tucapel",
+    "Yumbel",
   ],
   araucania: [
-    'Angol',
-    'Carahue',
-    'Cholchol',
-    'Collipulli',
-    'Cunco',
-    'Curacautín',
-    'Curarrehue',
-    'Ercilla',
-    'Freire',
-    'Galvarino',
-    'Gorbea',
-    'Lautaro',
-    'Loncoche',
-    'Lonquimay',
-    'Los Sauces',
-    'Lumaco',
-    'Melipeuco',
-    'Nueva Imperial',
-    'Padre Las Casas',
-    'Perquenco',
-    'Pitrufquén',
-    'Pucón',
-    'Purén',
-    'Renaico',
-    'Saavedra',
-    'Temuco',
-    'Teodoro Schmidt',
-    'Toltén',
-    'Traiguén',
-    'Victoria',
-    'Vilcún',
-    'Villarrica',
+    "Angol",
+    "Carahue",
+    "Cholchol",
+    "Collipulli",
+    "Cunco",
+    "Curacautín",
+    "Curarrehue",
+    "Ercilla",
+    "Freire",
+    "Galvarino",
+    "Gorbea",
+    "Lautaro",
+    "Loncoche",
+    "Lonquimay",
+    "Los Sauces",
+    "Lumaco",
+    "Melipeuco",
+    "Nueva Imperial",
+    "Padre Las Casas",
+    "Perquenco",
+    "Pitrufquén",
+    "Pucón",
+    "Purén",
+    "Renaico",
+    "Saavedra",
+    "Temuco",
+    "Teodoro Schmidt",
+    "Toltén",
+    "Traiguén",
+    "Victoria",
+    "Vilcún",
+    "Villarrica",
   ],
-  'los-rios': [
-    'Corral',
-    'Futrono',
-    'La Unión',
-    'Lago Ranco',
-    'Lanco',
-    'Los Lagos',
-    'Máfil',
-    'Mariquina',
-    'Paillaco',
-    'Panguipulli',
-    'Río Bueno',
-    'Valdivia',
+  "los-rios": [
+    "Corral",
+    "Futrono",
+    "La Unión",
+    "Lago Ranco",
+    "Lanco",
+    "Los Lagos",
+    "Máfil",
+    "Mariquina",
+    "Paillaco",
+    "Panguipulli",
+    "Río Bueno",
+    "Valdivia",
   ],
-  'los-lagos': [
-    'Ancud',
-    'Calbuco',
-    'Castro',
-    'Chaitén',
-    'Chonchi',
-    'Cochamó',
-    'Curaco de Vélez',
-    'Dalcahue',
-    'Fresia',
-    'Frutillar',
-    'Futaleufú',
-    'Hualaihué',
-    'Llanquihue',
-    'Los Muermos',
-    'Maullín',
-    'Osorno',
-    'Palena',
-    'Puerto Montt',
-    'Puerto Octay',
-    'Puerto Varas',
-    'Puqueldón',
-    'Purranque',
-    'Puyehue',
-    'Queilén',
-    'Quellón',
-    'Quemchi',
-    'Quinchao',
-    'Río Negro',
-    'San Juan de la Costa',
-    'San Pablo',
+  "los-lagos": [
+    "Ancud",
+    "Calbuco",
+    "Castro",
+    "Chaitén",
+    "Chonchi",
+    "Cochamó",
+    "Curaco de Vélez",
+    "Dalcahue",
+    "Fresia",
+    "Frutillar",
+    "Futaleufú",
+    "Hualaihué",
+    "Llanquihue",
+    "Los Muermos",
+    "Maullín",
+    "Osorno",
+    "Palena",
+    "Puerto Montt",
+    "Puerto Octay",
+    "Puerto Varas",
+    "Puqueldón",
+    "Purranque",
+    "Puyehue",
+    "Queilén",
+    "Quellón",
+    "Quemchi",
+    "Quinchao",
+    "Río Negro",
+    "San Juan de la Costa",
+    "San Pablo",
   ],
   aysen: [
-    'Aysén',
-    'Chile Chico',
-    'Cisnes',
-    'Cochrane',
-    'Coyhaique',
-    'Guaitecas',
-    'Lago Verde',
+    "Aysén",
+    "Chile Chico",
+    "Cisnes",
+    "Cochrane",
+    "Coyhaique",
+    "Guaitecas",
+    "Lago Verde",
     "O'Higgins",
-    'Río Ibáñez',
-    'Tortel',
+    "Río Ibáñez",
+    "Tortel",
   ],
   magallanes: [
-    'Antártica',
-    'Cabo de Hornos',
-    'Laguna Blanca',
-    'Natales',
-    'Porvenir',
-    'Primavera',
-    'Punta Arenas',
-    'Río Verde',
-    'San Gregorio',
-    'Timaukel',
-    'Torres del Paine',
+    "Antártica",
+    "Cabo de Hornos",
+    "Laguna Blanca",
+    "Natales",
+    "Porvenir",
+    "Primavera",
+    "Punta Arenas",
+    "Río Verde",
+    "San Gregorio",
+    "Timaukel",
+    "Torres del Paine",
   ],
 };
 
 const stepTitles = [
-  'Información Personal',
-  'Datos del Estudiante',
-  'Ubicación',
-  'Contacto de Emergencia',
+  "Información Personal",
+  "Datos del Estudiante",
+  "Ubicación",
+  "Contacto de Emergencia",
 ];
 
 const stepDescriptions = [
-  'Tus datos básicos de contacto',
-  'Datos de tu hijo/a que asiste a Manitos Pintadas',
-  'Tu dirección y ubicación',
-  'Persona a contactar en caso de emergencia',
+  "Tus datos básicos de contacto",
+  "Datos de tu hijo/a que asiste a Manitos Pintadas",
+  "Tu dirección y ubicación",
+  "Persona a contactar en caso de emergencia",
 ];
 
 export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const { data: session } = useSession();
   const [formData, setFormData] = useState<FormData>({
-    fullName: '',
-    email: '',
-    phone: '',
-    rut: '',
-    childName: '',
-    childGrade: '',
-    relationship: '',
-    address: '',
-    region: '',
-    comuna: '',
-    emergencyContact: '',
-    emergencyPhone: '',
-    role: 'padre',
+    fullName: "",
+    email: "",
+    phone: "",
+    rut: "",
+    childName: "",
+    childGrade: "",
+    relationship: "",
+    address: "",
+    region: "",
+    comuna: "",
+    emergencyContact: "",
+    emergencyPhone: "",
+    role: "padre",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -486,14 +486,14 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   useEffect(() => {
     if (
       session?.user &&
-      session.user.role === 'PARENT' &&
+      session.user.role === "PARENT" &&
       session.user.needsRegistration
     ) {
       setIsGoogleUser(true);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        fullName: session.user?.name || '',
-        email: session.user?.email || '',
+        fullName: session.user?.name || "",
+        email: session.user?.email || "",
       }));
     }
   }, [session]);
@@ -502,25 +502,25 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   useEffect(() => {
     if (formData.region) {
       setComunas(comunasByRegion[formData.region] || []);
-      setFormData(prev => ({ ...prev, comuna: '' }));
+      setFormData((prev) => ({ ...prev, comuna: "" }));
     }
   }, [formData.region]);
 
   // Check Google OAuth configuration
   useEffect(() => {
-    fetch('/api/auth/oauth-status')
-      .then(res => res.json())
-      .then(data => setIsGoogleConfigured(data.google.enabled))
+    fetch("/api/auth/oauth-status")
+      .then((res) => res.json())
+      .then((data) => setIsGoogleConfigured(data.google.enabled))
       .catch(() => setIsGoogleConfigured(false));
   }, []);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
-      setFormData(prev => ({ ...prev, [name]: value }));
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     },
-    []
+    [],
   );
 
   const validateStep = useCallback(
@@ -530,39 +530,39 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
       switch (step) {
         case 1:
           if (!formData.fullName.trim())
-            newErrors.fullName = 'El nombre completo es requerido';
-          if (!formData.email.trim()) newErrors.email = 'El email es requerido';
+            newErrors.fullName = "El nombre completo es requerido";
+          if (!formData.email.trim()) newErrors.email = "El email es requerido";
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = 'El email no es válido';
+            newErrors.email = "El email no es válido";
           }
           if (!formData.phone.trim())
-            newErrors.phone = 'El teléfono es requerido';
-          if (!formData.rut.trim()) newErrors.rut = 'El RUT es requerido';
+            newErrors.phone = "El teléfono es requerido";
+          if (!formData.rut.trim()) newErrors.rut = "El RUT es requerido";
           break;
 
         case 2:
           if (!formData.childName.trim())
-            newErrors.childName = 'El nombre del niño/a es requerido';
+            newErrors.childName = "El nombre del niño/a es requerido";
           if (!formData.childGrade)
-            newErrors.childGrade = 'El grado es requerido';
+            newErrors.childGrade = "El grado es requerido";
           if (!formData.relationship)
-            newErrors.relationship = 'La relación es requerida';
+            newErrors.relationship = "La relación es requerida";
           break;
 
         case 3:
           if (!formData.address.trim())
-            newErrors.address = 'La dirección es requerida';
-          if (!formData.region) newErrors.region = 'La región es requerida';
-          if (!formData.comuna) newErrors.comuna = 'La comuna es requerida';
+            newErrors.address = "La dirección es requerida";
+          if (!formData.region) newErrors.region = "La región es requerida";
+          if (!formData.comuna) newErrors.comuna = "La comuna es requerida";
           break;
 
         case 4:
           if (!formData.emergencyContact.trim()) {
             newErrors.emergencyContact =
-              'El contacto de emergencia es requerido';
+              "El contacto de emergencia es requerido";
           }
           if (!formData.emergencyPhone.trim()) {
-            newErrors.emergencyPhone = 'El teléfono de emergencia es requerido';
+            newErrors.emergencyPhone = "El teléfono de emergencia es requerido";
           }
           break;
       }
@@ -570,17 +570,17 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     },
-    [formData]
+    [formData],
   );
 
   const nextStep = useCallback(() => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, 4));
+      setCurrentStep((prev) => Math.min(prev + 1, 4));
     }
   }, [currentStep, validateStep]);
 
   const prevStep = useCallback(() => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   }, []);
 
   const handleSubmit = useCallback(
@@ -596,36 +596,36 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         });
 
         if (isGoogleUser && session?.user?.provider) {
-          form.append('provider', session.user.provider);
-          form.append('providerUserId', session.user.id || '');
+          form.append("provider", session.user.provider);
+          form.append("providerUserId", session.user.id || "");
         }
 
-        const response = await fetch('/api/parent/register', {
-          method: 'POST',
+        const response = await fetch("/api/parent/register", {
+          method: "POST",
           body: form,
         });
         const result = await response.json();
 
         if (result.success) {
-          router.push('/centro-consejo/exito');
+          router.push("/centro-consejo/exito");
         } else {
-          setErrors({ email: result.error || 'Error en el registro' });
+          setErrors({ email: result.error || "Error en el registro" });
         }
       } catch {
         setErrors({
-          email: 'Error interno del servidor. Por favor, intenta nuevamente.',
+          email: "Error interno del servidor. Por favor, intenta nuevamente.",
         });
       } finally {
         setIsLoading(false);
       }
     },
-    [formData, isGoogleUser, session, router, validateStep]
+    [formData, isGoogleUser, session, router, validateStep],
   );
 
   const handleGoogleLogin = useCallback(() => {
     setIsLoading(true);
-    signIn('google', {
-      callbackUrl: '/centro-consejo/exito',
+    signIn("google", {
+      callbackUrl: "/centro-consejo/exito",
       redirect: true,
     }).catch(() => setIsLoading(false));
   }, []);
@@ -633,14 +633,14 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const StepIndicator = memo(function StepIndicator() {
     return (
       <div className="flex items-center justify-center mb-8">
-        {[1, 2, 3, 4].map(step => (
+        {[1, 2, 3, 4].map((step) => (
           <div key={step} className="flex items-center">
             <div
               className={cn(
-                'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
+                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300",
                 currentStep >= step
-                  ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-purple-600/50 scale-110'
-                  : 'bg-gray-700 text-gray-400'
+                  ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-purple-600/50 scale-110"
+                  : "bg-gray-700 text-gray-400",
               )}
             >
               {step}
@@ -648,10 +648,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             {step < 4 && (
               <div
                 className={cn(
-                  'w-12 h-1 mx-2 transition-all duration-300',
+                  "w-12 h-1 mx-2 transition-all duration-300",
                   currentStep > step
-                    ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600'
-                    : 'bg-gray-700'
+                    ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
+                    : "bg-gray-700",
                 )}
               />
             )}
@@ -676,7 +676,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           initial="hidden"
           animate="visible"
           exit="exit"
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {currentStep === 1 && (
             <div className="space-y-6">
@@ -699,8 +699,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     value={formData.fullName}
                     onChange={handleChange}
                     className={cn(
-                      'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                      errors.fullName && 'border-red-500'
+                      "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                      errors.fullName && "border-red-500",
                     )}
                   />
                   {errors.fullName && (
@@ -719,8 +719,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     onChange={handleChange}
                     disabled={isGoogleUser}
                     className={cn(
-                      'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                      errors.email && 'border-red-500'
+                      "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                      errors.email && "border-red-500",
                     )}
                   />
                   {errors.email && <ErrorMessage message={errors.email} />}
@@ -737,8 +737,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.phone}
                       onChange={handleChange}
                       className={cn(
-                        'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                        errors.phone && 'border-red-500'
+                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                        errors.phone && "border-red-500",
                       )}
                     />
                     {errors.phone && <ErrorMessage message={errors.phone} />}
@@ -753,8 +753,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.rut}
                       onChange={handleChange}
                       className={cn(
-                        'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                        errors.rut && 'border-red-500'
+                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                        errors.rut && "border-red-500",
                       )}
                     />
                     {errors.rut && <ErrorMessage message={errors.rut} />}
@@ -786,8 +786,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.childName}
                       onChange={handleChange}
                       className={cn(
-                        'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                        errors.childName && 'border-red-500'
+                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                        errors.childName && "border-red-500",
                       )}
                     />
                     {errors.childName && (
@@ -805,7 +805,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       error={errors.childGrade}
                     >
                       <option value="">Selecciona un grado</option>
-                      {grades.map(grade => (
+                      {grades.map((grade) => (
                         <option key={grade.value} value={grade.value}>
                           {grade.label}
                         </option>
@@ -827,7 +827,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     error={errors.relationship}
                   >
                     <option value="">Selecciona relación</option>
-                    {relationships.map(rel => (
+                    {relationships.map((rel) => (
                       <option key={rel.value} value={rel.value}>
                         {rel.label}
                       </option>
@@ -864,7 +864,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       error={errors.region}
                     >
                       <option value="">Selecciona región</option>
-                      {regions.map(region => (
+                      {regions.map((region) => (
                         <option key={region.value} value={region.value}>
                           {region.label}
                         </option>
@@ -884,7 +884,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       disabled={!formData.region}
                     >
                       <option value="">Selecciona comuna</option>
-                      {comunas.map(comuna => (
+                      {comunas.map((comuna) => (
                         <option key={comuna} value={comuna}>
                           {comuna}
                         </option>
@@ -903,8 +903,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     value={formData.address}
                     onChange={handleChange}
                     className={cn(
-                      'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                      errors.address && 'border-red-500'
+                      "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                      errors.address && "border-red-500",
                     )}
                   />
                   {errors.address && <ErrorMessage message={errors.address} />}
@@ -937,8 +937,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.emergencyContact}
                       onChange={handleChange}
                       className={cn(
-                        'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                        errors.emergencyContact && 'border-red-500'
+                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                        errors.emergencyContact && "border-red-500",
                       )}
                     />
                     {errors.emergencyContact && (
@@ -958,8 +958,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.emergencyPhone}
                       onChange={handleChange}
                       className={cn(
-                        'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500',
-                        errors.emergencyPhone && 'border-red-500'
+                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                        errors.emergencyPhone && "border-red-500",
                       )}
                     />
                     {errors.emergencyPhone && (
@@ -986,8 +986,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         <div className="bg-gradient-to-r from-blue-600/90 via-purple-600/90 to-pink-600/90 p-6 text-white">
           <h2 className="font-bold text-2xl mb-2">
             {isGoogleUser
-              ? 'Completa tu Registro'
-              : 'Registro Centro y Consejo'}
+              ? "Completa tu Registro"
+              : "Registro Centro y Consejo"}
           </h2>
           <p className="text-blue-100">
             Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
@@ -1025,7 +1025,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   disabled={isLoading}
                   className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
                 >
-                  {isLoading ? 'Registrando...' : 'Completar Registro'}
+                  {isLoading ? "Registrando..." : "Completar Registro"}
                 </Button>
               )}
             </div>
@@ -1071,8 +1071,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </svg>
                 <span className="text-base font-semibold">
                   {!isGoogleConfigured
-                    ? 'Google (No disponible)'
-                    : 'Registrarse con Google'}
+                    ? "Google (No disponible)"
+                    : "Registrarse con Google"}
                 </span>
               </Button>
             </div>
@@ -1092,7 +1092,7 @@ const LabelInputContainer = memo(function LabelInputContainer({
   className?: string;
 }) {
   return (
-    <div className={cn('flex flex-col space-y-2 w-full', className)}>
+    <div className={cn("flex flex-col space-y-2 w-full", className)}>
       {children}
     </div>
   );
@@ -1107,11 +1107,11 @@ const Select = memo(function Select({
     <select
       {...props}
       className={cn(
-        'block w-full px-3 py-2 border rounded-md text-sm',
-        'placeholder:text-gray-500 focus:outline-none focus:ring-2',
-        'focus:ring-blue-500 focus:border-transparent transition-colors',
-        'bg-gray-800 border-gray-600 text-gray-100 disabled:bg-gray-700 disabled:cursor-not-allowed',
-        error && 'border-red-500'
+        "block w-full px-3 py-2 border rounded-md text-sm",
+        "placeholder:text-gray-500 focus:outline-none focus:ring-2",
+        "focus:ring-blue-500 focus:border-transparent transition-colors",
+        "bg-gray-800 border-gray-600 text-gray-100 disabled:bg-gray-700 disabled:cursor-not-allowed",
+        error && "border-red-500",
       )}
     >
       {children}
@@ -1132,4 +1132,4 @@ const ErrorMessage = memo(function ErrorMessage({
 });
 
 // Display name for debugging
-UnifiedSignupForm.displayName = 'UnifiedSignupForm';
+UnifiedSignupForm.displayName = "UnifiedSignupForm";

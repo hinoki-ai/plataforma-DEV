@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { dbLogger } from '@/lib/logger';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { dbLogger } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
   try {
     // Check authentication and admin role
     const session = await auth();
-    if (!session?.user || session.user.role !== 'ADMIN') {
+    if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 401 }
+        { error: "Unauthorized - Admin access required" },
+        { status: 401 },
       );
     }
 
@@ -19,18 +19,18 @@ export async function POST(request: NextRequest) {
     // Validate request structure
     if (!type || !data) {
       return NextResponse.json(
-        { error: 'Invalid request structure' },
-        { status: 400 }
+        { error: "Invalid request structure" },
+        { status: 400 },
       );
     }
 
     // Log performance data
-    dbLogger.info('Performance data received', {
+    dbLogger.info("Performance data received", {
       type,
       data,
       timestamp: new Date().toISOString(),
       userId: session.user.id,
-      userAgent: request.headers.get('user-agent'),
+      userAgent: request.headers.get("user-agent"),
     });
 
     // Store in temporary in-memory storage (in production, use database)
@@ -47,13 +47,13 @@ export async function POST(request: NextRequest) {
       id: performanceData.id,
     });
   } catch (error) {
-    dbLogger.error('Error storing performance data', error, {
-      context: 'debug-performance-api',
+    dbLogger.error("Error storing performance data", error, {
+      context: "debug-performance-api",
     });
 
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
@@ -62,45 +62,45 @@ export async function GET(request: NextRequest) {
   try {
     // Check authentication and admin role
     const session = await auth();
-    if (!session?.user || session.user.role !== 'ADMIN') {
+    if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 401 }
+        { error: "Unauthorized - Admin access required" },
+        { status: 401 },
       );
     }
 
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '50');
-    const type = searchParams.get('type');
+    const limit = parseInt(searchParams.get("limit") || "50");
+    const type = searchParams.get("type");
 
     // In production, fetch from database
     // For now, return mock performance data
     const mockData = [
       {
-        id: '1',
-        type: 'navigation',
+        id: "1",
+        type: "navigation",
         data: {
-          endpoint: '/admin',
+          endpoint: "/admin",
           responseTime: 234,
           status: 200,
         },
         timestamp: new Date(Date.now() - 300000).toISOString(),
       },
       {
-        id: '2',
-        type: 'api_call',
+        id: "2",
+        type: "api_call",
         data: {
-          endpoint: '/api/auth/session',
+          endpoint: "/api/auth/session",
           responseTime: 45,
           status: 200,
         },
         timestamp: new Date(Date.now() - 120000).toISOString(),
       },
       {
-        id: '3',
-        type: 'request',
+        id: "3",
+        type: "request",
         data: {
-          endpoint: '/admin/usuarios',
+          endpoint: "/admin/usuarios",
           responseTime: 156,
           status: 200,
         },
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
     ];
 
     const filteredData = type
-      ? mockData.filter(item => item.type === type)
+      ? mockData.filter((item) => item.type === type)
       : mockData;
 
     return NextResponse.json({
@@ -118,13 +118,13 @@ export async function GET(request: NextRequest) {
       total: filteredData.length,
     });
   } catch (error) {
-    dbLogger.error('Error fetching performance data', error, {
-      context: 'debug-performance-api',
+    dbLogger.error("Error fetching performance data", error, {
+      context: "debug-performance-api",
     });
 
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

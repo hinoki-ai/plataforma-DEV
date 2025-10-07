@@ -4,18 +4,18 @@
  * Creates a master user with the specified credentials
  */
 
-import { PrismaClient } from '@prisma/client';
-import { hashPassword } from '../src/lib/crypto';
+import { PrismaClient } from "@prisma/client";
+import { hashPassword } from "../src/lib/crypto";
 
 const prisma = new PrismaClient();
 
 async function createCustomMasterUser() {
-  console.log('🔑 Creating custom master user...');
+  console.log("🔑 Creating custom master user...");
 
   try {
-    const masterEmail = 'agustinaramac@gmail.com';
-    const masterPassword = 'madmin123';
-    const masterName = 'Agustin Arancibia Mac-Guire - Master Deity';
+    const masterEmail = "agustinaramac@gmail.com";
+    const masterPassword = "madmin123";
+    const masterName = "Agustin Arancibia Mac-Guire - Master Deity";
 
     // Hash the password
     const masterPasswordHash = await hashPassword(masterPassword);
@@ -27,35 +27,35 @@ async function createCustomMasterUser() {
         password: masterPasswordHash,
         isActive: true,
         name: masterName,
-        role: 'MASTER',
+        role: "MASTER",
       },
       create: {
         email: masterEmail,
         name: masterName,
         password: masterPasswordHash,
-        role: 'MASTER',
+        role: "MASTER",
         isActive: true,
       },
     });
 
-    console.log('✅ Custom master user created/updated:');
+    console.log("✅ Custom master user created/updated:");
     console.log(`📧 Email: ${masterEmail}`);
     console.log(`👤 Name: ${masterName}`);
     console.log(`🔰 Role: ${master.role}`);
     console.log(`✅ Active: ${master.isActive}`);
     console.log(`🔒 Password: ${masterPassword}`);
-    console.log('🔒 Password is securely hashed in database');
+    console.log("🔒 Password is securely hashed in database");
 
     return master;
   } catch (error) {
-    console.error('❌ Failed to create custom master user:', error);
+    console.error("❌ Failed to create custom master user:", error);
     throw error;
   }
 }
 
 createCustomMasterUser()
-  .catch(error => {
-    console.error('Fatal error during custom master user creation:', error);
+  .catch((error) => {
+    console.error("Fatal error during custom master user creation:", error);
     process.exit(1);
   })
   .finally(async () => {

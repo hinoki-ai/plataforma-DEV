@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect, Suspense } from 'react';
-import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
-import { getRoleAccess } from '@/lib/role-utils';
+import { useState, useEffect, Suspense } from "react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { getRoleAccess } from "@/lib/role-utils";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Users,
   BookOpen,
@@ -29,12 +29,12 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-} from 'lucide-react';
-import { FixedBackgroundLayout } from '@/components/layout/FixedBackgroundLayout';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
-import { LoadingState } from '@/components/ui/loading-states';
-import { ErrorBoundary } from '@/components/ui/error-boundary';
-import Link from 'next/link';
+} from "lucide-react";
+import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { LoadingState } from "@/components/ui/loading-states";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import Link from "next/link";
 
 interface Student {
   id: string;
@@ -67,14 +67,14 @@ interface Student {
 
 function EstudiantesContent() {
   const { data: session, status } = useSession();
-  const { t } = useDivineParsing(['common', 'parent']);
+  const { t } = useDivineParsing(["common", "parent"]);
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
   useEffect(() => {
-    if (session?.user?.role === 'PARENT') {
+    if (session?.user?.role === "PARENT") {
       fetchStudents();
     }
   }, [session]);
@@ -85,9 +85,9 @@ function EstudiantesContent() {
       setError(null);
 
       // Fetch real data from API endpoint
-      const response = await fetch('/api/parent/students');
+      const response = await fetch("/api/parent/students");
       if (!response.ok) {
-        throw new Error('Failed to fetch students');
+        throw new Error("Failed to fetch students");
       }
 
       const result = await response.json();
@@ -102,23 +102,39 @@ function EstudiantesContent() {
           attendance: child.attendance,
           academicProgress: child.average ? child.average * 10 : 0, // Convert to percentage, handle null values
           teacher: {
-            name: 'Profesor Asignado', // This would come from the Student model
-            email: 'profesor@manitospintadas.cl',
-            phone: '+56 9 0000 0000',
+            name: "Profesor Asignado", // This would come from the Student model
+            email: "profesor@manitospintadas.cl",
+            phone: "+56 9 0000 0000",
           },
           subjects: child.subjects || [
-            { name: 'Lenguaje', grade: 'A', progress: 90 },
-            { name: 'Matemáticas', grade: 'B+', progress: 85 },
-            { name: 'Ciencias', grade: 'A-', progress: 92 },
+            { name: "Lenguaje", grade: "A", progress: 90 },
+            { name: "Matemáticas", grade: "B+", progress: 85 },
+            { name: "Ciencias", grade: "A-", progress: 92 },
           ],
           upcomingActivities: [
-            { title: 'Reunión de apoderados', date: '2024-01-25', type: 'Reunión' },
-            { title: 'Evaluación parcial', date: '2024-01-28', type: 'Evaluación' },
-            { title: 'Taller creativo', date: '2024-01-30', type: 'Taller' },
+            {
+              title: "Reunión de apoderados",
+              date: "2024-01-25",
+              type: "Reunión",
+            },
+            {
+              title: "Evaluación parcial",
+              date: "2024-01-28",
+              type: "Evaluación",
+            },
+            { title: "Taller creativo", date: "2024-01-30", type: "Taller" },
           ],
           recentReports: [
-            { title: 'Informe trimestral', date: '2024-01-10', type: 'Informe' },
-            { title: 'Evaluación mensual', date: '2024-01-08', type: 'Evaluación' },
+            {
+              title: "Informe trimestral",
+              date: "2024-01-10",
+              type: "Informe",
+            },
+            {
+              title: "Evaluación mensual",
+              date: "2024-01-08",
+              type: "Evaluación",
+            },
           ],
         }));
 
@@ -128,26 +144,26 @@ function EstudiantesContent() {
         }
       }
     } catch (err) {
-      console.error('Error fetching students:', err);
-      setError('Error al cargar la información de los estudiantes');
+      console.error("Error fetching students:", err);
+      setError("Error al cargar la información de los estudiantes");
     } finally {
       setLoading(false);
     }
   };
 
   // Handle loading state
-  if (status === 'loading') {
+  if (status === "loading") {
     return <LoadingState />;
   }
 
   // Ensure user has access to parent section
   if (!session || !session.user) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   if (loading) {
@@ -158,17 +174,23 @@ function EstudiantesContent() {
     return (
       <div className="space-y-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            Mis Hijos
-          </h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Mis Hijos</h1>
           <p className="text-muted-foreground">
             Información académica y seguimiento de sus hijos
           </p>
         </div>
         <div className="text-center py-16">
           <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -186,11 +208,10 @@ function EstudiantesContent() {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Mis Hijos
-        </h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Mis Hijos</h1>
         <p className="text-muted-foreground">
-          Información académica, asistencia y seguimiento del progreso de sus hijos
+          Información académica, asistencia y seguimiento del progreso de sus
+          hijos
         </p>
       </div>
 
@@ -202,7 +223,8 @@ function EstudiantesContent() {
               No hay estudiantes registrados
             </h3>
             <p className="text-muted-foreground mb-6 text-center">
-              No se encontraron estudiantes asociados a su cuenta. Contacte a la administración si cree que esto es un error.
+              No se encontraron estudiantes asociados a su cuenta. Contacte a la
+              administración si cree que esto es un error.
             </p>
           </CardContent>
         </Card>
@@ -227,17 +249,29 @@ function EstudiantesContent() {
                     onClick={() => setSelectedStudent(student)}
                     className={`p-3 rounded-lg cursor-pointer transition-colors ${
                       selectedStudent?.id === student.id
-                        ? 'bg-primary/10 border border-primary/20'
-                        : 'hover:bg-muted/50'
+                        ? "bg-primary/10 border border-primary/20"
+                        : "hover:bg-muted/50"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="font-medium text-foreground">{student.name}</h4>
-                        <p className="text-sm text-muted-foreground">{student.grade}</p>
+                        <h4 className="font-medium text-foreground">
+                          {student.name}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {student.grade}
+                        </p>
                       </div>
-                      <Badge variant={selectedStudent?.id === student.id ? 'default' : 'secondary'}>
-                        {selectedStudent?.id === student.id ? 'Seleccionado' : 'Ver'}
+                      <Badge
+                        variant={
+                          selectedStudent?.id === student.id
+                            ? "default"
+                            : "secondary"
+                        }
+                      >
+                        {selectedStudent?.id === student.id
+                          ? "Seleccionado"
+                          : "Ver"}
                       </Badge>
                     </div>
                   </div>
@@ -258,7 +292,13 @@ function EstudiantesContent() {
                       {selectedStudent.name}
                     </CardTitle>
                     <CardDescription>
-                      {selectedStudent.grade} • Matriculado desde {new Date(selectedStudent.enrollmentDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long' })}
+                      {selectedStudent.grade} • Matriculado desde{" "}
+                      {new Date(
+                        selectedStudent.enrollmentDate,
+                      ).toLocaleDateString("es-ES", {
+                        year: "numeric",
+                        month: "long",
+                      })}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -266,37 +306,63 @@ function EstudiantesContent() {
                       {/* Attendance */}
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium">Asistencia</span>
-                          <span className="text-sm text-muted-foreground">{selectedStudent.attendance}%</span>
+                          <span className="text-sm font-medium">
+                            Asistencia
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {selectedStudent.attendance}%
+                          </span>
                         </div>
-                        <Progress value={selectedStudent.attendance} className="h-2" />
+                        <Progress
+                          value={selectedStudent.attendance}
+                          className="h-2"
+                        />
                         <p className="text-xs text-muted-foreground">
-                          {selectedStudent.attendance >= 90 ? 'Excelente asistencia' : selectedStudent.attendance >= 80 ? 'Buena asistencia' : 'Asistencia regular'}
+                          {selectedStudent.attendance >= 90
+                            ? "Excelente asistencia"
+                            : selectedStudent.attendance >= 80
+                              ? "Buena asistencia"
+                              : "Asistencia regular"}
                         </p>
                       </div>
 
                       {/* Academic Progress */}
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium">Progreso Académico</span>
-                          <span className="text-sm text-muted-foreground">{selectedStudent.academicProgress}%</span>
+                          <span className="text-sm font-medium">
+                            Progreso Académico
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {selectedStudent.academicProgress}%
+                          </span>
                         </div>
-                        <Progress value={selectedStudent.academicProgress} className="h-2" />
+                        <Progress
+                          value={selectedStudent.academicProgress}
+                          className="h-2"
+                        />
                         <p className="text-xs text-muted-foreground">
-                          {selectedStudent.academicProgress >= 90 ? 'Excelente rendimiento' : selectedStudent.academicProgress >= 80 ? 'Buen rendimiento' : 'Rendimiento regular'}
+                          {selectedStudent.academicProgress >= 90
+                            ? "Excelente rendimiento"
+                            : selectedStudent.academicProgress >= 80
+                              ? "Buen rendimiento"
+                              : "Rendimiento regular"}
                         </p>
                       </div>
                     </div>
 
                     {/* Teacher Info */}
                     <div className="mt-6 pt-6 border-t">
-                      <h4 className="font-medium text-foreground mb-3">Profesor Guía</h4>
+                      <h4 className="font-medium text-foreground mb-3">
+                        Profesor Guía
+                      </h4>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                           <Users className="h-5 w-5 text-primary" />
                         </div>
                         <div className="flex-1">
-                          <h5 className="font-medium">{selectedStudent.teacher.name}</h5>
+                          <h5 className="font-medium">
+                            {selectedStudent.teacher.name}
+                          </h5>
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <Mail className="h-3 w-3" />
@@ -335,9 +401,14 @@ function EstudiantesContent() {
                   <CardContent>
                     <div className="space-y-4">
                       {selectedStudent.subjects.map((subject, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
+                        >
                           <div className="flex-1">
-                            <h5 className="font-medium text-foreground">{subject.name}</h5>
+                            <h5 className="font-medium text-foreground">
+                              {subject.name}
+                            </h5>
                             <div className="flex items-center gap-2 mt-1">
                               <Badge variant="outline" className="text-xs">
                                 Nota: {subject.grade}
@@ -347,7 +418,10 @@ function EstudiantesContent() {
                               </span>
                             </div>
                           </div>
-                          <Progress value={subject.progress} className="w-20 h-2" />
+                          <Progress
+                            value={subject.progress}
+                            className="w-20 h-2"
+                          />
                         </div>
                       ))}
                     </div>
@@ -367,27 +441,43 @@ function EstudiantesContent() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {selectedStudent.upcomingActivities.map((activity, index) => (
-                        <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
-                          <div className={`w-3 h-3 rounded-full ${
-                            activity.type === 'Evaluación' ? 'bg-red-500' :
-                            activity.type === 'Excursión' ? 'bg-green-500' :
-                            activity.type === 'Taller' ? 'bg-blue-500' : 'bg-purple-500'
-                          }`} />
-                          <div className="flex-1">
-                            <h5 className="font-medium text-foreground">{activity.title}</h5>
-                            <p className="text-sm text-muted-foreground">
-                              {new Date(activity.date).toLocaleDateString('es-ES', {
-                                weekday: 'long',
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                              })}
-                            </p>
+                      {selectedStudent.upcomingActivities.map(
+                        (activity, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-3 p-3 border rounded-lg"
+                          >
+                            <div
+                              className={`w-3 h-3 rounded-full ${
+                                activity.type === "Evaluación"
+                                  ? "bg-red-500"
+                                  : activity.type === "Excursión"
+                                    ? "bg-green-500"
+                                    : activity.type === "Taller"
+                                      ? "bg-blue-500"
+                                      : "bg-purple-500"
+                              }`}
+                            />
+                            <div className="flex-1">
+                              <h5 className="font-medium text-foreground">
+                                {activity.title}
+                              </h5>
+                              <p className="text-sm text-muted-foreground">
+                                {new Date(activity.date).toLocaleDateString(
+                                  "es-ES",
+                                  {
+                                    weekday: "long",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  },
+                                )}
+                              </p>
+                            </div>
+                            <Badge variant="outline">{activity.type}</Badge>
                           </div>
-                          <Badge variant="outline">{activity.type}</Badge>
-                        </div>
-                      ))}
+                        ),
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -406,12 +496,19 @@ function EstudiantesContent() {
                   <CardContent>
                     <div className="space-y-3">
                       {selectedStudent.recentReports.map((report, index) => (
-                        <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center gap-3 p-3 border rounded-lg"
+                        >
                           <FileText className="h-5 w-5 text-muted-foreground" />
                           <div className="flex-1">
-                            <h5 className="font-medium text-foreground">{report.title}</h5>
+                            <h5 className="font-medium text-foreground">
+                              {report.title}
+                            </h5>
                             <p className="text-sm text-muted-foreground">
-                              {new Date(report.date).toLocaleDateString('es-ES')}
+                              {new Date(report.date).toLocaleDateString(
+                                "es-ES",
+                              )}
                             </p>
                           </div>
                           <Badge variant="secondary">{report.type}</Badge>
@@ -435,7 +532,9 @@ function EstudiantesContent() {
 
 export default function EstudiantesPage() {
   return (
-    <ErrorBoundary fallback={<div>Error al cargar la página de estudiantes</div>}>
+    <ErrorBoundary
+      fallback={<div>Error al cargar la página de estudiantes</div>}
+    >
       <Suspense fallback={<LoadingState />}>
         <EstudiantesContent />
       </Suspense>

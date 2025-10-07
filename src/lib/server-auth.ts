@@ -1,11 +1,11 @@
-import { auth } from '@/lib/auth';
+import { auth } from "@/lib/auth";
 import {
   hasPermission,
   Permissions,
   ExtendedUserRole,
   isStandardUserRole,
-} from '@/lib/authorization';
-import { redirect } from 'next/navigation';
+} from "@/lib/authorization";
+import { redirect } from "next/navigation";
 
 export async function getServerSession() {
   const session = await auth();
@@ -15,13 +15,13 @@ export async function getServerSession() {
 export async function requireAuth() {
   const session = await auth();
   if (!session?.user) {
-    redirect('/login');
+    redirect("/login");
   }
   return session;
 }
 
 export async function requirePermission(
-  permission: Parameters<typeof hasPermission>[1]
+  permission: Parameters<typeof hasPermission>[1],
 ) {
   const session = await requireAuth();
 
@@ -29,14 +29,14 @@ export async function requirePermission(
     !isStandardUserRole(session.user.role) ||
     !hasPermission(session.user.role, permission)
   ) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   return session;
 }
 
 export async function hasServerPermission(
-  permission: Parameters<typeof hasPermission>[1]
+  permission: Parameters<typeof hasPermission>[1],
 ) {
   const session = await getServerSession();
   if (!session?.user) return false;
@@ -50,15 +50,15 @@ export async function getUserRole(): Promise<ExtendedUserRole | null> {
 
 export async function isAdmin() {
   const role = await getUserRole();
-  return role === 'ADMIN';
+  return role === "ADMIN";
 }
 
 export async function isProfesor() {
   const role = await getUserRole();
-  return role === 'PROFESOR';
+  return role === "PROFESOR";
 }
 
 export async function isParent() {
   const role = await getUserRole();
-  return role === 'PARENT';
+  return role === "PARENT";
 }

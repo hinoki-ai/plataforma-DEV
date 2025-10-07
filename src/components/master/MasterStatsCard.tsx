@@ -1,12 +1,26 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { BarChart3, Users, Database, Server, TrendingUp, Activity, RefreshCw } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import {
+  BarChart3,
+  Users,
+  Database,
+  Server,
+  TrendingUp,
+  Activity,
+  RefreshCw,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SystemMetrics {
   users: {
@@ -38,7 +52,9 @@ interface SystemMetrics {
 export function MasterStatsCard() {
   const [metrics, setMetrics] = useState<SystemMetrics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
+  const [timeRange, setTimeRange] = useState<"1h" | "24h" | "7d" | "30d">(
+    "24h",
+  );
 
   // Mock system metrics data
   useEffect(() => {
@@ -47,26 +63,26 @@ export function MasterStatsCard() {
         total: 1247,
         active: 892,
         newToday: 23,
-        growth: 12.5
+        growth: 12.5,
       },
       performance: {
         responseTime: 145,
         throughput: 15420,
         uptime: 99.97,
-        errorRate: 0.02
+        errorRate: 0.02,
       },
       database: {
         connections: 45,
         queryTime: 23,
         storageUsed: 2.4,
-        storageTotal: 10
+        storageTotal: 10,
       },
       server: {
         cpu: 34,
         memory: 67,
         disk: 45,
-        network: 23
-      }
+        network: 23,
+      },
     };
 
     setTimeout(() => {
@@ -77,13 +93,18 @@ export function MasterStatsCard() {
 
   const storagePercentage = useMemo(() => {
     if (!metrics) return 0;
-    return Math.round((metrics.database.storageUsed / metrics.database.storageTotal) * 100);
+    return Math.round(
+      (metrics.database.storageUsed / metrics.database.storageTotal) * 100,
+    );
   }, [metrics]);
 
-  const getMetricColor = (value: number, thresholds: { good: number; warning: number }) => {
-    if (value <= thresholds.good) return 'text-green-600';
-    if (value <= thresholds.warning) return 'text-yellow-600';
-    return 'text-red-600';
+  const getMetricColor = (
+    value: number,
+    thresholds: { good: number; warning: number },
+  ) => {
+    if (value <= thresholds.good) return "text-green-600";
+    if (value <= thresholds.warning) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const formatNumber = (num: number) => {
@@ -102,7 +123,7 @@ export function MasterStatsCard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map(i => (
+              {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-20 bg-muted rounded" />
               ))}
             </div>
@@ -127,10 +148,10 @@ export function MasterStatsCard() {
         </CardHeader>
         <CardContent>
           <div className="flex gap-2 mb-6">
-            {(['1h', '24h', '7d', '30d'] as const).map((range) => (
+            {(["1h", "24h", "7d", "30d"] as const).map((range) => (
               <Button
                 key={range}
-                variant={timeRange === range ? 'default' : 'outline'}
+                variant={timeRange === range ? "default" : "outline"}
                 size="sm"
                 onClick={() => setTimeRange(range)}
               >
@@ -156,19 +177,27 @@ export function MasterStatsCard() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold">{formatNumber(metrics.users.total)}</div>
+              <div className="text-2xl font-bold">
+                {formatNumber(metrics.users.total)}
+              </div>
               <div className="text-sm text-muted-foreground">Total Users</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{formatNumber(metrics.users.active)}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {formatNumber(metrics.users.active)}
+              </div>
               <div className="text-sm text-muted-foreground">Active Users</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">+{metrics.users.newToday}</div>
+              <div className="text-2xl font-bold text-blue-600">
+                +{metrics.users.newToday}
+              </div>
               <div className="text-sm text-muted-foreground">New Today</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">+{metrics.users.growth}%</div>
+              <div className="text-2xl font-bold text-green-600">
+                +{metrics.users.growth}%
+              </div>
               <div className="text-sm text-muted-foreground">Growth</div>
             </div>
           </div>
@@ -186,21 +215,35 @@ export function MasterStatsCard() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className={cn("text-2xl font-bold", getMetricColor(metrics.performance.responseTime, { good: 100, warning: 200 }))}>
+              <div
+                className={cn(
+                  "text-2xl font-bold",
+                  getMetricColor(metrics.performance.responseTime, {
+                    good: 100,
+                    warning: 200,
+                  }),
+                )}
+              >
                 {metrics.performance.responseTime}ms
               </div>
               <div className="text-sm text-muted-foreground">Response Time</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{formatNumber(metrics.performance.throughput)}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {formatNumber(metrics.performance.throughput)}
+              </div>
               <div className="text-sm text-muted-foreground">Requests/min</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{metrics.performance.uptime}%</div>
+              <div className="text-2xl font-bold text-green-600">
+                {metrics.performance.uptime}%
+              </div>
               <div className="text-sm text-muted-foreground">Uptime</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{metrics.performance.errorRate}%</div>
+              <div className="text-2xl font-bold text-green-600">
+                {metrics.performance.errorRate}%
+              </div>
               <div className="text-sm text-muted-foreground">Error Rate</div>
             </div>
           </div>
@@ -220,19 +263,28 @@ export function MasterStatsCard() {
           <CardContent className="space-y-4">
             <div className="flex justify-between">
               <span className="text-sm">Connections</span>
-              <span className="font-semibold">{metrics.database.connections}</span>
+              <span className="font-semibold">
+                {metrics.database.connections}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm">Avg Query Time</span>
-              <span className="font-semibold">{metrics.database.queryTime}ms</span>
+              <span className="font-semibold">
+                {metrics.database.queryTime}ms
+              </span>
             </div>
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-sm">Storage</span>
-                <span className="text-sm">{metrics.database.storageUsed}GB / {metrics.database.storageTotal}GB</span>
+                <span className="text-sm">
+                  {metrics.database.storageUsed}GB /{" "}
+                  {metrics.database.storageTotal}GB
+                </span>
               </div>
               <Progress value={storagePercentage} className="h-2" />
-              <div className="text-xs text-muted-foreground mt-1">{storagePercentage}% used</div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {storagePercentage}% used
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -290,7 +342,9 @@ export function MasterStatsCard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-4 border rounded-lg">
               <div className="text-lg font-bold text-blue-600">1,247</div>
-              <div className="text-xs text-muted-foreground">Active Sessions</div>
+              <div className="text-xs text-muted-foreground">
+                Active Sessions
+              </div>
             </div>
             <div className="text-center p-4 border rounded-lg">
               <div className="text-lg font-bold text-green-600">15,420</div>
@@ -298,7 +352,9 @@ export function MasterStatsCard() {
             </div>
             <div className="text-center p-4 border rounded-lg">
               <div className="text-lg font-bold text-purple-600">23</div>
-              <div className="text-xs text-muted-foreground">Background Jobs</div>
+              <div className="text-xs text-muted-foreground">
+                Background Jobs
+              </div>
             </div>
             <div className="text-center p-4 border rounded-lg">
               <div className="text-lg font-bold text-orange-600">0</div>

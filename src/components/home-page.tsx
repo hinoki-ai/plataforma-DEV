@@ -1,28 +1,28 @@
 // ⚡ Performance: PPR-optimized HomePage with static shell and dynamic components
-'use client';
+"use client";
 
-import { Suspense, useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Suspense, useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { DesktopToggle } from '@/components/ui/desktop-toggle';
-import Header from '@/components/layout/Header';
-import MinEducFooter from '@/components/layout/MinEducFooter';
-import { useDesktopToggle } from '@/lib/hooks/useDesktopToggle';
-import { layout, typography } from '@/lib/responsive-utils';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { DesktopToggle } from "@/components/ui/desktop-toggle";
+import Header from "@/components/layout/Header";
+import MinEducFooter from "@/components/layout/MinEducFooter";
+import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
+import { layout, typography } from "@/lib/responsive-utils";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // ⚡ Performance: Dynamic components for PPR streaming
 import {
   DynamicPersonalization,
   PersonalizationSkeleton,
-} from '@/components/home/DynamicPersonalization';
+} from "@/components/home/DynamicPersonalization";
 
 export function HomePage() {
   // Layout and responsive state
@@ -40,43 +40,49 @@ export function HomePage() {
             <h1
               className={`${typography.hero(isDesktopForced)} font-bold text-white mb-6`}
             >
-              {t('home.welcome.title', 'common')}
+              {t("home.welcome.title", "common")}
             </h1>
             <p
               className={`${typography.body(isDesktopForced)} text-white mb-8 max-w-4xl mx-auto leading-relaxed text-center`}
             >
-              {t('home.welcome.description', 'common')}
+              {t("home.welcome.description", "common")}
             </p>
           </div>
         </section>
 
         {/* Mission & Vision with Advanced Animations */}
-        <section
-          className="py-4"
-        >
+        <section className="py-4">
           <div className={layout.container(isDesktopForced)}>
             <div
               className={
                 isDesktopForced
-                  ? 'grid grid-cols-2 gap-8'
-                  : 'grid grid-cols-1 md:grid-cols-2 gap-8'
+                  ? "grid grid-cols-2 gap-8"
+                  : "grid grid-cols-1 md:grid-cols-2 gap-8"
               }
             >
               <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <CardTitle className="text-white">{t('home.mission.title', 'common')}</CardTitle>
+                  <CardTitle className="text-white">
+                    {t("home.mission.title", "common")}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300">{t('home.mission.description', 'common')}</CardDescription>
+                  <CardDescription className="text-gray-300">
+                    {t("home.mission.description", "common")}
+                  </CardDescription>
                 </CardContent>
               </Card>
 
               <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <CardTitle className="text-white">{t('home.vision.title', 'common')}</CardTitle>
+                  <CardTitle className="text-white">
+                    {t("home.vision.title", "common")}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300">{t('home.vision.description', 'common')}</CardDescription>
+                  <CardDescription className="text-gray-300">
+                    {t("home.vision.description", "common")}
+                  </CardDescription>
                 </CardContent>
               </Card>
             </div>
@@ -84,28 +90,26 @@ export function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section
-          className={layout.spacing.section(isDesktopForced)}
-        >
+        <section className={layout.spacing.section(isDesktopForced)}>
           <div className={layout.container(isDesktopForced)}>
             <div className="text-center mb-12">
               <h2
                 className={`${typography.heading(isDesktopForced)} font-bold text-white mb-4`}
               >
-                {t('home.features.title', 'common')}
+                {t("home.features.title", "common")}
               </h2>
               <p
                 className={`${typography.body(isDesktopForced)} text-white/90 max-w-2xl mx-auto`}
               >
-                {t('home.features.description', 'common')}
+                {t("home.features.description", "common")}
               </p>
             </div>
 
             <div
               className={
                 isDesktopForced
-                  ? 'grid grid-cols-3 gap-8 grid-staggered'
-                  : 'grid grid-cols-1 md:grid-cols-3 gap-8 grid-staggered'
+                  ? "grid grid-cols-3 gap-8 grid-staggered"
+                  : "grid grid-cols-1 md:grid-cols-3 gap-8 grid-staggered"
               }
             >
               <Card className="text-center backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
@@ -126,12 +130,12 @@ export function HomePage() {
                     </svg>
                   </div>
                   <CardTitle className="text-white">
-                    {t('home.excellence.title', 'common')}
+                    {t("home.excellence.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-gray-300">
-                    {t('home.excellence.description', 'common')}
+                    {t("home.excellence.description", "common")}
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -154,12 +158,12 @@ export function HomePage() {
                     </svg>
                   </div>
                   <CardTitle className="text-white">
-                    {t('home.team.title', 'common')}
+                    {t("home.team.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-gray-300">
-                    {t('home.team.description', 'common')}
+                    {t("home.team.description", "common")}
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -182,12 +186,12 @@ export function HomePage() {
                     </svg>
                   </div>
                   <CardTitle className="text-white">
-                    {t('home.innovation.title', 'common')}
+                    {t("home.innovation.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-gray-300">
-                    {t('home.innovation.description', 'common')}
+                    {t("home.innovation.description", "common")}
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -212,54 +216,54 @@ export function HomePage() {
             <div
               className={
                 isDesktopForced
-                  ? 'grid grid-cols-3 gap-8'
-                  : 'grid grid-cols-1 md:grid-cols-3 gap-8'
+                  ? "grid grid-cols-3 gap-8"
+                  : "grid grid-cols-1 md:grid-cols-3 gap-8"
               }
             >
               <div>
                 <h3 className="text-xl font-bold mb-4 text-white">
-                  {t('home.footer.school.name', 'common')}
+                  {t("home.footer.school.name", "common")}
                 </h3>
                 <p className="text-gray-300 mb-4">
-                  {t('home.footer.school.description', 'common')}
+                  {t("home.footer.school.description", "common")}
                 </p>
                 <div className="space-y-2 text-gray-300">
-                  <p>{t('home.footer.contact.address', 'common')}</p>
-                  <p>{t('home.footer.contact.phone', 'common')}</p>
-                  <p>{t('home.footer.contact.email', 'common')}</p>
+                  <p>{t("home.footer.contact.address", "common")}</p>
+                  <p>{t("home.footer.contact.phone", "common")}</p>
+                  <p>{t("home.footer.contact.email", "common")}</p>
                 </div>
               </div>
 
               <div>
                 <h4 className="text-lg font-semibold mb-4 text-white">
-                  {t('home.footer.quick.links', 'common')}
+                  {t("home.footer.quick.links", "common")}
                 </h4>
                 <ul className="space-y-2">
                   <li>
                     <Link
                       href="/public/equipo-multidisciplinario"
                       className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t('home.footer.aria.team', 'common')}
+                      aria-label={t("home.footer.aria.team", "common")}
                     >
-                      {t('home.footer.links.team', 'common')}
+                      {t("home.footer.links.team", "common")}
                     </Link>
                   </li>
                   <li>
                     <Link
                       href="/login"
                       className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t('home.footer.aria.portal', 'common')}
+                      aria-label={t("home.footer.aria.portal", "common")}
                     >
-                      {t('home.footer.links.portal', 'common')}
+                      {t("home.footer.links.portal", "common")}
                     </Link>
                   </li>
                   <li>
                     <a
                       href="/mineduc"
                       className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t('home.footer.aria.mineduc', 'common')}
+                      aria-label={t("home.footer.aria.mineduc", "common")}
                     >
-                      {t('home.footer.links.mineduc', 'common')}
+                      {t("home.footer.links.mineduc", "common")}
                     </a>
                   </li>
                 </ul>
@@ -267,31 +271,32 @@ export function HomePage() {
 
               <div>
                 <h4 className="text-lg font-semibold mb-4 text-white">
-                  {t('home.footer.information', 'common')}
+                  {t("home.footer.information", "common")}
                 </h4>
                 <ul className="space-y-2 text-gray-300">
-                  <li>{t('home.footer.hours', 'common')}</li>
-                  <li>{t('home.footer.days', 'common')}</li>
-                  <li>{t('home.footer.rbd', 'common')}</li>
+                  <li>{t("home.footer.hours", "common")}</li>
+                  <li>{t("home.footer.days", "common")}</li>
+                  <li>{t("home.footer.rbd", "common")}</li>
                 </ul>
               </div>
             </div>
 
             <div className="border-t border-gray-700 mt-8 pt-8 text-center">
               <p className="text-gray-300 pb-3">
-                {t('home.footer.school.name', 'common')} — {t('home.footer.school.info', 'common')}
+                {t("home.footer.school.name", "common")} —{" "}
+                {t("home.footer.school.info", "common")}
               </p>
               <p className="text-gray-300 pb-3">
-                {t('home.footer.copyright', 'common').replace('{year}', '2024')}
+                {t("home.footer.copyright", "common").replace("{year}", "2024")}
               </p>
               <p className="text-gray-300">
-                {t('home.footer.developed.by', 'common')}{' '}
+                {t("home.footer.developed.by", "common")}{" "}
                 <a
                   href="https://aramac.dev"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition duration-200 underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                  aria-label={t('home.footer.aria.developer', 'common')}
+                  aria-label={t("home.footer.aria.developer", "common")}
                 >
                   ΛRΛMΛC
                 </a>

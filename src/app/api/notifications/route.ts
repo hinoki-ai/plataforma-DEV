@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
-import { sendNotificationToUser } from '@/lib/notification-utils';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
+import { sendNotificationToUser } from "@/lib/notification-utils";
 
 // Convex doesn't need connection resets
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 // GET /api/notifications - Get notifications for the authenticated user
 export async function GET(request: NextRequest) {
@@ -14,42 +14,45 @@ export async function GET(request: NextRequest) {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const client = getConvexClient();
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status') || 'all';
-    const limit = parseInt(searchParams.get('limit') || '50');
+    const status = searchParams.get("status") || "all";
+    const limit = parseInt(searchParams.get("limit") || "50");
 
     try {
-      const notifications = await client.query(api.notifications.getNotifications, {
-        recipientId: session.user.id as any, // Cast string to Id<"users">
-        status: status as 'all' | 'read' | 'unread',
-        limit,
-      });
+      const notifications = await client.query(
+        api.notifications.getNotifications,
+        {
+          recipientId: session.user.id as any, // Cast string to Id<"users">
+          status: status as "all" | "read" | "unread",
+          limit,
+        },
+      );
 
       return NextResponse.json({
         notifications,
         total: notifications.length,
-        unread: notifications.filter(n => !n.read).length,
+        unread: notifications.filter((n) => !n.read).length,
       });
     } catch (dbError) {
-      console.error('Database error fetching notifications:', dbError);
+      console.error("Database error fetching notifications:", dbError);
 
       // Return empty notifications with a warning
       return NextResponse.json({
         notifications: [],
         total: 0,
         unread: 0,
-        warning: 'Notifications temporarily unavailable due to database issues'
+        warning: "Notifications temporarily unavailable due to database issues",
       });
     }
   } catch (error) {
-    console.error('Error in notifications API:', error);
+    console.error("Error in notifications API:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
@@ -60,7 +63,7 @@ export async function PATCH(request: NextRequest) {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const client = getConvexClient();
@@ -81,17 +84,17 @@ export async function PATCH(request: NextRequest) {
 
       return NextResponse.json({ success: true });
     } catch (dbError) {
-      console.error('Database error updating notifications:', dbError);
+      console.error("Database error updating notifications:", dbError);
       return NextResponse.json(
-        { error: 'Unable to update notifications due to database issues' },
-        { status: 500 }
+        { error: "Unable to update notifications due to database issues" },
+        { status: 500 },
       );
     }
   } catch (error) {
-    console.error('Error in notifications PATCH:', error);
+    console.error("Error in notifications PATCH:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
@@ -102,12 +105,15 @@ export async function POST(request: NextRequest) {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Check if user has permission to create notifications (admin/professor)
-    if (!['ADMIN', 'PROFESOR'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    if (!["ADMIN", "PROFESOR"].includes(session.user.role)) {
+      return NextResponse.json(
+        { error: "Insufficient permissions" },
+        { status: 403 },
+      );
     }
 
     const client = getConvexClient();
@@ -119,7 +125,7 @@ export async function POST(request: NextRequest) {
       category,
       recipientIds,
       isBroadcast,
-      priority = 'medium',
+      priority = "medium",
       actionUrl,
       expiresAt,
     } = body;
@@ -135,22 +141,22 @@ export async function POST(request: NextRequest) {
         priority,
         actionUrl,
         expiresAt: expiresAt ? new Date(expiresAt).getTime() : undefined,
-        senderId: session.user.id,
+        senderId: session.user.id as any,
       });
 
       return NextResponse.json({ success: true });
     } catch (dbError) {
-      console.error('Database error creating notification:', dbError);
+      console.error("Database error creating notification:", dbError);
       return NextResponse.json(
-        { error: 'Unable to create notification due to database issues' },
-        { status: 500 }
+        { error: "Unable to create notification due to database issues" },
+        { status: 500 },
       );
     }
   } catch (error) {
-    console.error('Error in notifications POST:', error);
+    console.error("Error in notifications POST:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

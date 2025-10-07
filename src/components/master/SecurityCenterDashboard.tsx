@@ -1,15 +1,34 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
 import {
   Shield,
   AlertTriangle,
@@ -28,70 +47,74 @@ import {
   FileText,
   Zap,
   Target,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface SecurityEvent {
   id: string;
-  type: 'threat' | 'login' | 'access' | 'system';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "threat" | "login" | "access" | "system";
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   source: string;
   timestamp: string;
-  status: 'active' | 'resolved' | 'blocked';
+  status: "active" | "resolved" | "blocked";
 }
 
 interface SecurityMetric {
   label: string;
   value: number;
   change: number;
-  status: 'good' | 'warning' | 'critical';
+  status: "good" | "warning" | "critical";
 }
 
 const securityEvents: SecurityEvent[] = [
   {
-    id: '1',
-    type: 'threat',
-    severity: 'high',
-    message: 'Intento de acceso no autorizado desde IP externa',
-    source: '192.168.1.100',
-    timestamp: '2024-01-15 14:30:25',
-    status: 'blocked',
+    id: "1",
+    type: "threat",
+    severity: "high",
+    message: "Intento de acceso no autorizado desde IP externa",
+    source: "192.168.1.100",
+    timestamp: "2024-01-15 14:30:25",
+    status: "blocked",
   },
   {
-    id: '2',
-    type: 'login',
-    severity: 'medium',
-    message: 'Múltiples intentos de login fallidos',
-    source: 'user@domain.com',
-    timestamp: '2024-01-15 14:25:10',
-    status: 'resolved',
+    id: "2",
+    type: "login",
+    severity: "medium",
+    message: "Múltiples intentos de login fallidos",
+    source: "user@domain.com",
+    timestamp: "2024-01-15 14:25:10",
+    status: "resolved",
   },
   {
-    id: '3',
-    type: 'access',
-    severity: 'low',
-    message: 'Acceso a recurso restringido autorizado',
-    source: 'admin@school.com',
-    timestamp: '2024-01-15 14:20:45',
-    status: 'active',
+    id: "3",
+    type: "access",
+    severity: "low",
+    message: "Acceso a recurso restringido autorizado",
+    source: "admin@school.com",
+    timestamp: "2024-01-15 14:20:45",
+    status: "active",
   },
   {
-    id: '4',
-    type: 'system',
-    severity: 'critical',
-    message: 'Detección de actividad sospechosa en base de datos',
-    source: 'system',
-    timestamp: '2024-01-15 14:15:30',
-    status: 'active',
+    id: "4",
+    type: "system",
+    severity: "critical",
+    message: "Detección de actividad sospechosa en base de datos",
+    source: "system",
+    timestamp: "2024-01-15 14:15:30",
+    status: "active",
   },
 ];
 
 const securityMetrics: SecurityMetric[] = [
-  { label: 'Amenazas Bloqueadas', value: 47, change: -12, status: 'good' },
-  { label: 'Intentos de Login', value: 156, change: 8, status: 'warning' },
-  { label: 'Sesiones Activas', value: 89, change: 5, status: 'good' },
-  { label: 'Alertas Críticas', value: 3, change: -1, status: 'good' },
+  { label: "Amenazas Bloqueadas", value: 47, change: -12, status: "good" },
+  { label: "Intentos de Login", value: 156, change: 8, status: "warning" },
+  { label: "Sesiones Activas", value: 89, change: 5, status: "good" },
+  { label: "Alertas Críticas", value: 3, change: -1, status: "good" },
 ];
 
 function SecurityOverviewCard() {
@@ -102,23 +125,38 @@ function SecurityOverviewCard() {
           <Shield className="h-5 w-5 text-red-600" />
           Resumen de Seguridad
         </CardTitle>
-        <CardDescription>Estado general del sistema de seguridad</CardDescription>
+        <CardDescription>
+          Estado general del sistema de seguridad
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {securityMetrics.map((metric, index) => (
-            <div key={index} className="text-center p-4 bg-red-50 dark:bg-red-950/20 rounded-lg">
-              <div className={`text-2xl font-bold ${
-                metric.status === 'good' ? 'text-green-600' :
-                metric.status === 'warning' ? 'text-yellow-600' : 'text-red-600'
-              }`}>
+            <div
+              key={index}
+              className="text-center p-4 bg-red-50 dark:bg-red-950/20 rounded-lg"
+            >
+              <div
+                className={`text-2xl font-bold ${
+                  metric.status === "good"
+                    ? "text-green-600"
+                    : metric.status === "warning"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                }`}
+              >
                 {metric.value}
               </div>
-              <div className="text-sm text-muted-foreground">{metric.label}</div>
-              <div className={`text-xs ${
-                metric.change > 0 ? 'text-red-600' : 'text-green-600'
-              }`}>
-                {metric.change > 0 ? '+' : ''}{metric.change} vs ayer
+              <div className="text-sm text-muted-foreground">
+                {metric.label}
+              </div>
+              <div
+                className={`text-xs ${
+                  metric.change > 0 ? "text-red-600" : "text-green-600"
+                }`}
+              >
+                {metric.change > 0 ? "+" : ""}
+                {metric.change} vs ayer
               </div>
             </div>
           ))}
@@ -143,25 +181,26 @@ function SecurityOverviewCard() {
 }
 
 function SecurityEventsCard() {
-  const [filter, setFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredEvents = useMemo(() => {
-    return securityEvents.filter(event => {
-      const matchesFilter = filter === 'all' || event.severity === filter;
-      const matchesSearch = event.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           event.source.toLowerCase().includes(searchTerm.toLowerCase());
+    return securityEvents.filter((event) => {
+      const matchesFilter = filter === "all" || event.severity === filter;
+      const matchesSearch =
+        event.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.source.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesFilter && matchesSearch;
     });
   }, [filter, searchTerm]);
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical':
+      case "critical":
         return <XCircle className="h-4 w-4 text-red-600" />;
-      case 'high':
+      case "high":
         return <AlertTriangle className="h-4 w-4 text-orange-600" />;
-      case 'medium':
+      case "medium":
         return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
       default:
         return <CheckCircle className="h-4 w-4 text-green-600" />;
@@ -170,13 +209,13 @@ function SecurityEventsCard() {
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      active: 'destructive',
-      resolved: 'default',
-      blocked: 'secondary',
+      active: "destructive",
+      resolved: "default",
+      blocked: "secondary",
     } as const;
 
     return (
-      <Badge variant={variants[status as keyof typeof variants] || 'outline'}>
+      <Badge variant={variants[status as keyof typeof variants] || "outline"}>
         {status}
       </Badge>
     );
@@ -189,7 +228,9 @@ function SecurityEventsCard() {
           <Activity className="h-5 w-5" />
           Eventos de Seguridad
         </CardTitle>
-        <CardDescription>Monitoreo de eventos de seguridad en tiempo real</CardDescription>
+        <CardDescription>
+          Monitoreo de eventos de seguridad en tiempo real
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -219,15 +260,24 @@ function SecurityEventsCard() {
 
           <div className="space-y-3">
             {filteredEvents.map((event) => (
-              <div key={event.id} className="flex items-start gap-3 p-3 border rounded-lg">
+              <div
+                key={event.id}
+                className="flex items-start gap-3 p-3 border rounded-lg"
+              >
                 {getSeverityIcon(event.severity)}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <Badge variant={
-                      event.severity === 'critical' ? 'destructive' :
-                      event.severity === 'high' ? 'default' :
-                      event.severity === 'medium' ? 'secondary' : 'outline'
-                    }>
+                    <Badge
+                      variant={
+                        event.severity === "critical"
+                          ? "destructive"
+                          : event.severity === "high"
+                            ? "default"
+                            : event.severity === "medium"
+                              ? "secondary"
+                              : "outline"
+                      }
+                    >
                       {event.severity.toUpperCase()}
                     </Badge>
                     {getStatusBadge(event.status)}
@@ -251,12 +301,15 @@ function SecurityEventsCard() {
 }
 
 function ThreatAnalysisCard() {
-  const threats = useMemo(() => [
-    { type: 'SQL Injection', count: 12, blocked: 12, trend: 'down' },
-    { type: 'Brute Force', count: 8, blocked: 7, trend: 'stable' },
-    { type: 'XSS Attempts', count: 5, blocked: 5, trend: 'down' },
-    { type: 'Unauthorized Access', count: 15, blocked: 13, trend: 'up' },
-  ], []);
+  const threats = useMemo(
+    () => [
+      { type: "SQL Injection", count: 12, blocked: 12, trend: "down" },
+      { type: "Brute Force", count: 8, blocked: 7, trend: "stable" },
+      { type: "XSS Attempts", count: 5, blocked: 5, trend: "down" },
+      { type: "Unauthorized Access", count: 15, blocked: 13, trend: "up" },
+    ],
+    [],
+  );
 
   return (
     <Card>
@@ -265,7 +318,9 @@ function ThreatAnalysisCard() {
           <Target className="h-5 w-5" />
           Análisis de Amenazas
         </CardTitle>
-        <CardDescription>Análisis detallado de tipos de amenazas detectadas</CardDescription>
+        <CardDescription>
+          Análisis detallado de tipos de amenazas detectadas
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -277,8 +332,14 @@ function ThreatAnalysisCard() {
                   <span className="text-sm text-muted-foreground">
                     {threat.blocked}/{threat.count} bloqueados
                   </span>
-                  <Badge variant={threat.trend === 'up' ? 'destructive' : 'default'}>
-                    {threat.trend === 'up' ? '↗️' : threat.trend === 'down' ? '↘️' : '→'}
+                  <Badge
+                    variant={threat.trend === "up" ? "destructive" : "default"}
+                  >
+                    {threat.trend === "up"
+                      ? "↗️"
+                      : threat.trend === "down"
+                        ? "↘️"
+                        : "→"}
                   </Badge>
                 </div>
               </div>
@@ -311,25 +372,33 @@ function SecurityControlsCard() {
           <Button variant="outline" className="h-20 flex-col gap-2">
             <Shield className="h-6 w-6" />
             <span>Firewall Avanzado</span>
-            <span className="text-xs text-muted-foreground">Configurar reglas</span>
+            <span className="text-xs text-muted-foreground">
+              Configurar reglas
+            </span>
           </Button>
 
           <Button variant="outline" className="h-20 flex-col gap-2">
             <Lock className="h-6 w-6" />
             <span>Encriptación</span>
-            <span className="text-xs text-muted-foreground">Administrar claves</span>
+            <span className="text-xs text-muted-foreground">
+              Administrar claves
+            </span>
           </Button>
 
           <Button variant="outline" className="h-20 flex-col gap-2">
             <User className="h-6 w-6" />
             <span>Autenticación</span>
-            <span className="text-xs text-muted-foreground">MFA & Políticas</span>
+            <span className="text-xs text-muted-foreground">
+              MFA & Políticas
+            </span>
           </Button>
 
           <Button variant="outline" className="h-20 flex-col gap-2">
             <Eye className="h-6 w-6" />
             <span>Monitoreo</span>
-            <span className="text-xs text-muted-foreground">Logs & Alertas</span>
+            <span className="text-xs text-muted-foreground">
+              Logs & Alertas
+            </span>
           </Button>
         </div>
       </CardContent>
@@ -338,11 +407,32 @@ function SecurityControlsCard() {
 }
 
 function IncidentResponseCard() {
-  const incidents = useMemo(() => [
-    { id: 'INC-001', title: 'SQL Injection Attempt', status: 'resolved', priority: 'high', assigned: 'Security Team' },
-    { id: 'INC-002', title: 'Brute Force Attack', status: 'investigating', priority: 'medium', assigned: 'Admin' },
-    { id: 'INC-003', title: 'Unauthorized Data Access', status: 'contained', priority: 'critical', assigned: 'Master' },
-  ], []);
+  const incidents = useMemo(
+    () => [
+      {
+        id: "INC-001",
+        title: "SQL Injection Attempt",
+        status: "resolved",
+        priority: "high",
+        assigned: "Security Team",
+      },
+      {
+        id: "INC-002",
+        title: "Brute Force Attack",
+        status: "investigating",
+        priority: "medium",
+        assigned: "Admin",
+      },
+      {
+        id: "INC-003",
+        title: "Unauthorized Data Access",
+        status: "contained",
+        priority: "critical",
+        assigned: "Master",
+      },
+    ],
+    [],
+  );
 
   return (
     <Card>
@@ -351,29 +441,41 @@ function IncidentResponseCard() {
           <AlertTriangle className="h-5 w-5" />
           Respuesta a Incidentes
         </CardTitle>
-        <CardDescription>Gestión y respuesta a incidentes de seguridad</CardDescription>
+        <CardDescription>
+          Gestión y respuesta a incidentes de seguridad
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {incidents.map((incident) => (
-            <div key={incident.id} className="flex items-center justify-between p-3 border rounded-lg">
+            <div
+              key={incident.id}
+              className="flex items-center justify-between p-3 border rounded-lg"
+            >
               <div className="flex items-center gap-3">
                 <div>
                   <div className="font-medium text-sm">{incident.title}</div>
-                  <div className="text-xs text-muted-foreground">ID: {incident.id}</div>
+                  <div className="text-xs text-muted-foreground">
+                    ID: {incident.id}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant={
-                  incident.priority === 'critical' ? 'destructive' :
-                  incident.priority === 'high' ? 'default' : 'secondary'
-                }>
+                <Badge
+                  variant={
+                    incident.priority === "critical"
+                      ? "destructive"
+                      : incident.priority === "high"
+                        ? "default"
+                        : "secondary"
+                  }
+                >
                   {incident.priority}
                 </Badge>
-                <Badge variant="outline">
-                  {incident.status}
-                </Badge>
-                <span className="text-xs text-muted-foreground">{incident.assigned}</span>
+                <Badge variant="outline">{incident.status}</Badge>
+                <span className="text-xs text-muted-foreground">
+                  {incident.assigned}
+                </span>
               </div>
             </div>
           ))}
@@ -391,7 +493,7 @@ export function SecurityCenterDashboard() {
       {/* Security Center Header */}
       <RoleAwareHeader
         title="🛡️ SECURITY CENTER - SUPREME SECURITY AUTHORITY"
-        subtitle={`Centro de seguridad absoluto - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Centro de seguridad absoluto - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-red-600 border-red-600">
@@ -402,7 +504,6 @@ export function SecurityCenterDashboard() {
           </div>
         }
       />
-
 
       {/* Security Overview */}
       <SecurityOverviewCard />

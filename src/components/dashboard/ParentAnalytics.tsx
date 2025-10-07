@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   TrendingUp,
   TrendingDown,
@@ -30,13 +30,13 @@ import {
   BookOpen,
   Users,
   Star,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface PerformanceMetric {
   subject: string;
   currentGrade: number;
   previousGrade: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   improvement: number;
   target: number;
 }
@@ -52,76 +52,76 @@ interface BehaviorMetric {
   category: string;
   score: number;
   maxScore: number;
-  status: 'excellent' | 'good' | 'needs_improvement';
+  status: "excellent" | "good" | "needs_improvement";
 }
 
 export default function ParentAnalytics() {
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
-  const [selectedStudent, setSelectedStudent] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("month");
+  const [selectedStudent, setSelectedStudent] = useState("all");
 
   // Mock data - in real implementation, this would come from API
   const performanceMetrics: PerformanceMetric[] = [
     {
-      subject: 'Matemáticas',
+      subject: "Matemáticas",
       currentGrade: 6.8,
       previousGrade: 6.5,
-      trend: 'up',
+      trend: "up",
       improvement: 0.3,
       target: 7.0,
     },
     {
-      subject: 'Lenguaje',
+      subject: "Lenguaje",
       currentGrade: 7.2,
       previousGrade: 7.0,
-      trend: 'up',
+      trend: "up",
       improvement: 0.2,
       target: 7.5,
     },
     {
-      subject: 'Ciencias',
+      subject: "Ciencias",
       currentGrade: 6.5,
       previousGrade: 6.8,
-      trend: 'down',
+      trend: "down",
       improvement: -0.3,
       target: 7.0,
     },
     {
-      subject: 'Historia',
+      subject: "Historia",
       currentGrade: 7.0,
       previousGrade: 6.7,
-      trend: 'up',
+      trend: "up",
       improvement: 0.3,
       target: 7.2,
     },
   ];
 
   const attendanceData: AttendanceData[] = [
-    { month: 'Enero', present: 18, absent: 1, late: 1 },
-    { month: 'Febrero', present: 19, absent: 0, late: 1 },
-    { month: 'Marzo', present: 17, absent: 2, late: 1 },
-    { month: 'Abril', present: 20, absent: 0, late: 0 },
+    { month: "Enero", present: 18, absent: 1, late: 1 },
+    { month: "Febrero", present: 19, absent: 0, late: 1 },
+    { month: "Marzo", present: 17, absent: 2, late: 1 },
+    { month: "Abril", present: 20, absent: 0, late: 0 },
   ];
 
   const behaviorMetrics: BehaviorMetric[] = [
-    { category: 'Respeto', score: 8, maxScore: 10, status: 'excellent' },
-    { category: 'Responsabilidad', score: 7, maxScore: 10, status: 'good' },
-    { category: 'Colaboración', score: 9, maxScore: 10, status: 'excellent' },
+    { category: "Respeto", score: 8, maxScore: 10, status: "excellent" },
+    { category: "Responsabilidad", score: 7, maxScore: 10, status: "good" },
+    { category: "Colaboración", score: 9, maxScore: 10, status: "excellent" },
     {
-      category: 'Puntualidad',
+      category: "Puntualidad",
       score: 6,
       maxScore: 10,
-      status: 'needs_improvement',
+      status: "needs_improvement",
     },
-    { category: 'Organización', score: 8, maxScore: 10, status: 'excellent' },
+    { category: "Organización", score: 8, maxScore: 10, status: "excellent" },
   ];
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
+      case "up":
         return (
           <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
         );
-      case 'down':
+      case "down":
         return <TrendingDown className="h-4 w-4 text-destructive" />;
       default:
         return <BarChart3 className="h-4 w-4 text-muted-foreground" />;
@@ -130,24 +130,24 @@ export default function ParentAnalytics() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
-      case 'good':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
-      case 'needs_improvement':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300';
+      case "excellent":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300";
+      case "good":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300";
+      case "needs_improvement":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300";
       default:
-        return 'bg-muted text-muted-foreground';
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'excellent':
+      case "excellent":
         return Star;
-      case 'good':
+      case "good":
         return CheckCircle;
-      case 'needs_improvement':
+      case "needs_improvement":
         return AlertTriangle;
       default:
         return Clock;
@@ -157,7 +157,7 @@ export default function ParentAnalytics() {
   const calculateOverallProgress = () => {
     const total = performanceMetrics.reduce(
       (sum, metric) => sum + metric.currentGrade,
-      0
+      0,
     );
     return (total / performanceMetrics.length).toFixed(1);
   };
@@ -165,7 +165,7 @@ export default function ParentAnalytics() {
   const calculateAttendanceRate = () => {
     const total = attendanceData.reduce(
       (sum, data) => sum + data.present + data.absent + data.late,
-      0
+      0,
     );
     const present = attendanceData.reduce((sum, data) => sum + data.present, 0);
     return ((present / total) * 100).toFixed(1);
@@ -286,7 +286,7 @@ export default function ParentAnalytics() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {performanceMetrics.map(metric => (
+              {performanceMetrics.map((metric) => (
                 <div
                   key={metric.subject}
                   className="flex items-center justify-between p-3 border rounded-lg"
@@ -305,9 +305,9 @@ export default function ParentAnalytics() {
                       {metric.currentGrade}
                     </div>
                     <div
-                      className={`text-xs ${metric.improvement >= 0 ? 'text-green-600 dark:text-green-400' : 'text-destructive'}`}
+                      className={`text-xs ${metric.improvement >= 0 ? "text-green-600 dark:text-green-400" : "text-destructive"}`}
                     >
-                      {metric.improvement >= 0 ? '+' : ''}
+                      {metric.improvement >= 0 ? "+" : ""}
                       {metric.improvement}
                     </div>
                   </div>
@@ -329,12 +329,12 @@ export default function ParentAnalytics() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {behaviorMetrics.map(metric => (
+              {behaviorMetrics.map((metric) => (
                 <div key={metric.category} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       {React.createElement(getStatusIcon(metric.status), {
-                        className: 'h-4 w-4',
+                        className: "h-4 w-4",
                       })}
                       <span className="text-sm font-medium">
                         {metric.category}
@@ -347,9 +347,13 @@ export default function ParentAnalytics() {
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className="bg-primary h-2 rounded-full transition-all duration-300"
-                      data-progress={Math.round((metric.score / metric.maxScore) * 100)}
+                      data-progress={Math.round(
+                        (metric.score / metric.maxScore) * 100,
+                      )}
                       style={
-                        { width: `${(metric.score / metric.maxScore) * 100}%` } as React.CSSProperties
+                        {
+                          width: `${(metric.score / metric.maxScore) * 100}%`,
+                        } as React.CSSProperties
                       }
                     />
                   </div>
@@ -373,7 +377,7 @@ export default function ParentAnalytics() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {attendanceData.map(data => (
+            {attendanceData.map((data) => (
               <div
                 key={data.month}
                 className="flex items-center justify-between p-3 border rounded-lg"

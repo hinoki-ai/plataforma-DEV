@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import type { TeamMember } from '@/lib/prisma-compat-types';
-import { TeamMemberList as UnifiedTeamMemberList } from '@/components/team/TeamMemberCard';
-import { useRouter } from 'next/navigation';
+import type { TeamMember } from "@/lib/prisma-compat-types";
+import { TeamMemberList as UnifiedTeamMemberList } from "@/components/team/TeamMemberCard";
+import { useRouter } from "next/navigation";
 
 interface TeamMemberListProps {
   teamMembers: TeamMember[];

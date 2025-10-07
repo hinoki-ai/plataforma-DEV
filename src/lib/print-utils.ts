@@ -10,7 +10,7 @@ export function printElement(elementId: string) {
   const element = document.getElementById(elementId);
   if (!element) return;
 
-  const printWindow = window.open('', '_blank');
+  const printWindow = window.open("", "_blank");
   if (!printWindow) return;
 
   const htmlContent = `
@@ -102,7 +102,7 @@ export function printElement(elementId: string) {
  * Generate print-friendly reservation report
  */
 export function generateReservationReport(reservations: any[]) {
-  const reportDate = new Date().toLocaleDateString('es-CL');
+  const reportDate = new Date().toLocaleDateString("es-CL");
 
   return `
     <div class="header">
@@ -115,8 +115,8 @@ export function generateReservationReport(reservations: any[]) {
       <div class="section">
         <div class="section-title">Resumen</div>
         <p>Total de reservas: ${reservations.length}</p>
-        <p>Reservas pendientes: ${reservations.filter(r => r.status === 'PENDING').length}</p>
-        <p>Reservas confirmadas: ${reservations.filter(r => r.status === 'CONFIRMED').length}</p>
+        <p>Reservas pendientes: ${reservations.filter((r) => r.status === "PENDING").length}</p>
+        <p>Reservas confirmadas: ${reservations.filter((r) => r.status === "CONFIRMED").length}</p>
       </div>
       
       <div class="section">
@@ -133,16 +133,16 @@ export function generateReservationReport(reservations: any[]) {
           <tbody>
             ${reservations
               .map(
-                r => `
+                (r) => `
               <tr>
-                <td>${new Date(r.preferredDate).toLocaleDateString('es-CL')}</td>
+                <td>${new Date(r.preferredDate).toLocaleDateString("es-CL")}</td>
                 <td>${r.preferredTime}</td>
                 <td>${r.guardianName}</td>
                 <td>${r.status}</td>
               </tr>
-            `
+            `,
               )
-              .join('')}
+              .join("")}
           </tbody>
         </table>
       </div>
@@ -158,7 +158,7 @@ export function generateReservationReport(reservations: any[]) {
  * Print-friendly meeting document template
  */
 export function generateMeetingDocument(meeting: any) {
-  const meetingDate = new Date(meeting.date).toLocaleDateString('es-CL');
+  const meetingDate = new Date(meeting.date).toLocaleDateString("es-CL");
 
   return `
     <div class="header">
@@ -189,7 +189,7 @@ export function generateMeetingDocument(meeting: any) {
           <p>${meeting.notes}</p>
         </div>
       `
-          : ''
+          : ""
       }
     </div>
     
@@ -203,7 +203,7 @@ export function generateMeetingDocument(meeting: any) {
  * Utility to add print styles to any component
  */
 export function addPrintStyles() {
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     @media print {
       .print-hide { display: none !important; }

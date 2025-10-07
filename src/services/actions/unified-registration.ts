@@ -2,9 +2,9 @@
  * Unified Registration Actions - Convex Implementation
  */
 
-import { getConvexClient } from '@/lib/convex';
-import { api } from '../../../convex/_generated/api';
-import bcryptjs from 'bcryptjs';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "../../../convex/_generated/api";
+import bcryptjs from "bcryptjs";
 
 export async function registerParent(data: {
   email: string;
@@ -14,7 +14,7 @@ export async function registerParent(data: {
 }) {
   try {
     const client = getConvexClient();
-    
+
     // Hash password
     const hashedPassword = await bcryptjs.hash(data.password, 10);
 
@@ -23,18 +23,21 @@ export async function registerParent(data: {
       password: hashedPassword,
       name: data.name,
       phone: data.phone,
-      role: 'PARENT',
+      role: "PARENT",
       isOAuthUser: false,
     });
 
     return { success: true, data: { id: userId } };
-  } catch (error: any) {
-    console.error('Failed to register parent:', error);
-    
-    if (error.message?.includes('already exists')) {
-      return { success: false, error: 'El correo electrónico ya está registrado' };
+  } catch (error) {
+    console.error("Failed to register parent:", error);
+
+    if (error instanceof Error && error.message?.includes("already exists")) {
+      return {
+        success: false,
+        error: "El correo electrónico ya está registrado",
+      };
     }
-    
-    return { success: false, error: 'No se pudo completar el registro' };
+
+    return { success: false, error: "No se pudo completar el registro" };
   }
 }

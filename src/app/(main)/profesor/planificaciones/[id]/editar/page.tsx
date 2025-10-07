@@ -1,24 +1,24 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getPlanningDocumentById } from '@/services/queries/planning';
-import { updatePlanningDocumentAction } from '@/app/actions/planning';
-import { PlanningDocumentForm } from '@/components/planning/PlanningDocumentForm';
-import { Button } from '@/components/ui/button';
-import { PageTransition } from '@/components/ui/page-transition';
-import { t } from '@/lib/server-translations';
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getPlanningDocumentById } from "@/services/queries/planning";
+import { updatePlanningDocumentAction } from "@/app/actions/planning";
+import { PlanningDocumentForm } from "@/components/planning/PlanningDocumentForm";
+import { Button } from "@/components/ui/button";
+import { PageTransition } from "@/components/ui/page-transition";
+import { t } from "@/lib/server-translations";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function EditarPlanificacionPage({ params }: Props) {
   const { id } = await params;
   const document = await getPlanningDocumentById(id);
 
   if (!document.success || !document.data) {
-    return <div>{t('profesor.planning.not_found', 'profesor')}</div>;
+    return <div>{t("profesor.planning.not_found", "profesor")}</div>;
   }
 
   const doc = document.data;
@@ -35,12 +35,12 @@ export default async function EditarPlanificacionPage({ params }: Props) {
         <div className="flex items-center gap-4">
           <Link href={`/profesor/planificaciones/${id}`}>
             <Button variant="outline" size="sm">
-              {t('profesor.planning.back', 'profesor')}
+              {t("profesor.planning.back", "profesor")}
             </Button>
           </Link>
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              {t('profesor.planning.edit', 'profesor')}
+              {t("profesor.planning.edit", "profesor")}
             </h1>
             <p className="text-muted-foreground mt-1">{doc.title}</p>
           </div>

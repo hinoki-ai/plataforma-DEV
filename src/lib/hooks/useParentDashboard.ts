@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSession } from "next-auth/react";
 import {
   parentDashboardAPI,
   type StudentProgress,
   type Communication,
   type AcademicResource,
   type AnalyticsData,
-} from '@/lib/api/parent-dashboard';
+} from "@/lib/api/parent-dashboard";
 
 // Dashboard Overview Hook
 export function useDashboardOverview() {
@@ -42,7 +42,7 @@ export function useDashboardOverview() {
       setData(overview);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to fetch dashboard data'
+        err instanceof Error ? err.message : "Failed to fetch dashboard data",
       );
     } finally {
       setLoading(false);
@@ -77,7 +77,7 @@ export function useStudentProgress(studentId?: string) {
       setData(progress);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to fetch student progress'
+        err instanceof Error ? err.message : "Failed to fetch student progress",
       );
     } finally {
       setLoading(false);
@@ -93,21 +93,21 @@ export function useStudentProgress(studentId?: string) {
       try {
         const updated = await parentDashboardAPI.updateStudentProgress(
           studentId,
-          updates
+          updates,
         );
-        setData(prev =>
-          prev.map(item =>
-            item.id === studentId ? { ...item, ...updated } : item
-          )
+        setData((prev) =>
+          prev.map((item) =>
+            item.id === studentId ? { ...item, ...updated } : item,
+          ),
         );
         return updated;
       } catch (err) {
         throw new Error(
-          err instanceof Error ? err.message : 'Failed to update progress'
+          err instanceof Error ? err.message : "Failed to update progress",
         );
       }
     },
-    []
+    [],
   );
 
   return { data, loading, error, refresh: fetchData, updateProgress };
@@ -115,9 +115,9 @@ export function useStudentProgress(studentId?: string) {
 
 // Communications Hook
 export function useCommunications(filters?: {
-  priority?: 'high' | 'medium' | 'low';
+  priority?: "high" | "medium" | "low";
   isNew?: boolean;
-  type?: 'announcement' | 'message' | 'event';
+  type?: "announcement" | "message" | "event";
 }) {
   const { data: session } = useSession();
   const [data, setData] = useState<Communication[]>([]);
@@ -135,7 +135,7 @@ export function useCommunications(filters?: {
       setData(communications);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to fetch communications'
+        err instanceof Error ? err.message : "Failed to fetch communications",
       );
     } finally {
       setLoading(false);
@@ -149,14 +149,14 @@ export function useCommunications(filters?: {
   const markAsRead = useCallback(async (communicationId: string) => {
     try {
       await parentDashboardAPI.markCommunicationAsRead(communicationId);
-      setData(prev =>
-        prev.map(item =>
-          item.id === communicationId ? { ...item, isNew: false } : item
-        )
+      setData((prev) =>
+        prev.map((item) =>
+          item.id === communicationId ? { ...item, isNew: false } : item,
+        ),
       );
     } catch (err) {
       throw new Error(
-        err instanceof Error ? err.message : 'Failed to mark as read'
+        err instanceof Error ? err.message : "Failed to mark as read",
       );
     }
   }, []);
@@ -166,22 +166,22 @@ export function useCommunications(filters?: {
       try {
         const reply = await parentDashboardAPI.sendReply(
           communicationId,
-          message
+          message,
         );
-        setData(prev => [...prev, reply]);
+        setData((prev) => [...prev, reply]);
         return reply;
       } catch (err) {
         throw new Error(
-          err instanceof Error ? err.message : 'Failed to send reply'
+          err instanceof Error ? err.message : "Failed to send reply",
         );
       }
     },
-    []
+    [],
   );
 
   const newMessagesCount = useMemo(
-    () => data.filter(item => item.isNew).length,
-    [data]
+    () => data.filter((item) => item.isNew).length,
+    [data],
   );
 
   return {
@@ -199,7 +199,7 @@ export function useCommunications(filters?: {
 export function useAcademicResources(filters?: {
   subject?: string;
   grade?: string;
-  type?: 'pdf' | 'video' | 'link';
+  type?: "pdf" | "video" | "link";
 }) {
   const { data: session } = useSession();
   const [data, setData] = useState<AcademicResource[]>([]);
@@ -216,7 +216,7 @@ export function useAcademicResources(filters?: {
       setData(resources);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to fetch resources'
+        err instanceof Error ? err.message : "Failed to fetch resources",
       );
     } finally {
       setLoading(false);
@@ -234,7 +234,7 @@ export function useAcademicResources(filters?: {
       return downloadUrl;
     } catch (err) {
       throw new Error(
-        err instanceof Error ? err.message : 'Failed to download resource'
+        err instanceof Error ? err.message : "Failed to download resource",
       );
     }
   }, []);
@@ -257,12 +257,12 @@ export function useAnalytics(period: string, studentId?: string) {
       setError(null);
       const analytics = await parentDashboardAPI.getAnalyticsData(
         period,
-        studentId
+        studentId,
       );
       setData(analytics);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to fetch analytics'
+        err instanceof Error ? err.message : "Failed to fetch analytics",
       );
     } finally {
       setLoading(false);
@@ -289,12 +289,12 @@ export function useRealTimeUpdates() {
 
     const setupSubscription = async () => {
       try {
-        unsubscribe = await parentDashboardAPI.subscribeToUpdates(data => {
-          setUpdates(prev => [...prev, { ...data, timestamp: new Date() }]);
+        unsubscribe = await parentDashboardAPI.subscribeToUpdates((data) => {
+          setUpdates((prev) => [...prev, { ...data, timestamp: new Date() }]);
         });
         setConnected(true);
       } catch (err) {
-        console.error('Failed to setup real-time updates:', err);
+        console.error("Failed to setup real-time updates:", err);
         setConnected(false);
       }
     };
@@ -321,7 +321,7 @@ export function useParentDashboard(studentId?: string) {
   const progress = useStudentProgress(studentId);
   const communications = useCommunications();
   const resources = useAcademicResources();
-  const analytics = useAnalytics('month', studentId);
+  const analytics = useAnalytics("month", studentId);
   const realTime = useRealTimeUpdates();
 
   const isLoading =

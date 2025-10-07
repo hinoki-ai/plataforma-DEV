@@ -2,7 +2,7 @@
  * Role-based filtering utilities for database queries
  */
 
-import { ExtendedUserRole } from '@/lib/authorization';
+import { ExtendedUserRole } from "@/lib/authorization";
 
 export interface RoleAccess {
   canAccessAdmin: boolean;
@@ -15,29 +15,35 @@ export interface RoleAccess {
 export function getRoleAccess(role?: ExtendedUserRole | string): RoleAccess {
   const userRole = role as ExtendedUserRole;
 
-  console.log('getRoleAccess - Input role:', role, 'userRole:', userRole);
+  console.log("getRoleAccess - Input role:", role, "userRole:", userRole);
 
   const access = {
     // MASTER has access to everything - Supreme Authority
-    canAccessAdmin: userRole === 'MASTER' || userRole === 'ADMIN',
-    canAccessProfesor: userRole === 'MASTER' || userRole === 'ADMIN' || userRole === 'PROFESOR',
+    canAccessAdmin: userRole === "MASTER" || userRole === "ADMIN",
+    canAccessProfesor:
+      userRole === "MASTER" || userRole === "ADMIN" || userRole === "PROFESOR",
     canAccessParent:
-      userRole === 'MASTER' || userRole === 'ADMIN' || userRole === 'PROFESOR' || userRole === 'PARENT',
+      userRole === "MASTER" ||
+      userRole === "ADMIN" ||
+      userRole === "PROFESOR" ||
+      userRole === "PARENT",
     canAccessPublic: true, // Everyone can access public pages
   };
 
-  console.log('getRoleAccess - Access result:', access);
+  console.log("getRoleAccess - Access result:", access);
   return access;
 }
 
 // MASTER Almighty Access Control
-export function hasMasterGodModeAccess(role?: ExtendedUserRole | string): boolean {
-  return role === 'MASTER';
+export function hasMasterGodModeAccess(
+  role?: ExtendedUserRole | string,
+): boolean {
+  return role === "MASTER";
 }
 
 // MASTER Global Oversight Check
 export function canMasterOverride(role?: ExtendedUserRole | string): boolean {
-  return role === 'MASTER';
+  return role === "MASTER";
 }
 
 export function canAccessProfesor(role?: ExtendedUserRole | string): boolean {
@@ -52,18 +58,18 @@ export function canAccessAdmin(role?: ExtendedUserRole | string): boolean {
 
 export function canAccessSection(
   userRole: ExtendedUserRole,
-  section: 'admin' | 'profesor' | 'parent' | 'public'
+  section: "admin" | "profesor" | "parent" | "public",
 ): boolean {
   const access = getRoleAccess(userRole);
 
   switch (section) {
-    case 'admin':
+    case "admin":
       return access.canAccessAdmin;
-    case 'profesor':
+    case "profesor":
       return access.canAccessProfesor;
-    case 'parent':
+    case "parent":
       return access.canAccessParent;
-    case 'public':
+    case "public":
       return access.canAccessPublic;
     default:
       return false;
@@ -74,10 +80,10 @@ export function getAccessibleSections(userRole: ExtendedUserRole): string[] {
   const access = getRoleAccess(userRole);
   const sections: string[] = [];
 
-  if (access.canAccessAdmin) sections.push('admin');
-  if (access.canAccessProfesor) sections.push('profesor');
-  if (access.canAccessParent) sections.push('parent');
-  if (access.canAccessPublic) sections.push('public');
+  if (access.canAccessAdmin) sections.push("admin");
+  if (access.canAccessProfesor) sections.push("profesor");
+  if (access.canAccessParent) sections.push("parent");
+  if (access.canAccessPublic) sections.push("public");
 
   return sections;
 }
@@ -88,14 +94,14 @@ export function getAccessibleSections(userRole: ExtendedUserRole): string[] {
 export function canEditRecord(
   userRole: ExtendedUserRole,
   recordAuthorId: string,
-  currentUserId: string
+  currentUserId: string,
 ): boolean {
   // MASTER has almighty authority - can edit ANY record
   if (hasMasterGodModeAccess(userRole)) return true;
   // ADMIN can edit all records in their school
-  if (userRole === 'ADMIN') return true;
+  if (userRole === "ADMIN") return true;
   // PROFESOR can only edit their own records
-  if (userRole === 'PROFESOR') return recordAuthorId === currentUserId;
+  if (userRole === "PROFESOR") return recordAuthorId === currentUserId;
   return false;
 }
 
@@ -105,14 +111,14 @@ export function canEditRecord(
 export function canDeleteRecord(
   userRole: ExtendedUserRole,
   recordAuthorId: string,
-  currentUserId: string
+  currentUserId: string,
 ): boolean {
   // MASTER has almighty authority - can delete ANY record
   if (hasMasterGodModeAccess(userRole)) return true;
   // ADMIN can delete all records in their school
-  if (userRole === 'ADMIN') return true;
+  if (userRole === "ADMIN") return true;
   // PROFESOR can only delete their own records
-  if (userRole === 'PROFESOR') return recordAuthorId === currentUserId;
+  if (userRole === "PROFESOR") return recordAuthorId === currentUserId;
   return false;
 }
 
@@ -122,20 +128,20 @@ export function canDeleteRecord(
 // MASTER Almighty Filter Override - Supreme Authority
 export function getAuthorFilter(
   role: ExtendedUserRole,
-  userId: string
+  userId: string,
 ): Record<string, any> {
   const baseFilter = getRoleFilter(role);
 
   switch (role) {
-    case 'MASTER':
+    case "MASTER":
       // MASTER has almighty access - sees EVERYTHING
       return {}; // No restrictions whatsoever
 
-    case 'ADMIN':
+    case "ADMIN":
       // ADMIN sees all records in their school
       return baseFilter;
 
-    case 'PROFESOR':
+    case "PROFESOR":
       // Professors can only see their own records + public records
       return {
         ...baseFilter,
@@ -156,35 +162,35 @@ export function getAuthorFilter(
 
 export function getDefaultRedirectPath(role: ExtendedUserRole): string {
   switch (role) {
-    case 'MASTER':
-      return '/master';
-    case 'ADMIN':
-      return '/admin';
-    case 'PROFESOR':
-      return '/profesor';
-    case 'PARENT':
-      return '/parent';
-    case 'PUBLIC':
-      return '/';
+    case "MASTER":
+      return "/master";
+    case "ADMIN":
+      return "/admin";
+    case "PROFESOR":
+      return "/profesor";
+    case "PARENT":
+      return "/parent";
+    case "PUBLIC":
+      return "/";
     default:
-      return '/';
+      return "/";
   }
 }
 
 // MASTER Almighty Role Filter - Supreme Authority
 export function getRoleFilter(
-  role?: ExtendedUserRole | string
+  role?: ExtendedUserRole | string,
 ): Record<string, any> {
   const userRole = role as ExtendedUserRole;
 
   switch (userRole) {
-    case 'MASTER':
+    case "MASTER":
       return {}; // MASTER has ZERO restrictions - Almighty access
-    case 'ADMIN':
+    case "ADMIN":
       return {}; // ADMIN has school-level access
-    case 'PROFESOR':
+    case "PROFESOR":
       return {}; // Professors can see all school content
-    case 'PARENT':
+    case "PARENT":
       return {}; // Parents can see all
     default:
       return {}; // Public users can see all team members (they're public by nature)
@@ -194,16 +200,16 @@ export function getRoleFilter(
 // MASTER Almighty Display Names - Supreme Authority
 export function getRoleDisplayName(role: ExtendedUserRole): string {
   switch (role) {
-    case 'MASTER':
-      return '🏛️ SUPREMO MASTER'; // God Mode indicator
-    case 'ADMIN':
-      return 'Administrador';
-    case 'PROFESOR':
-      return 'Profesor';
-    case 'PARENT':
-      return 'Padre/Apoderado';
-    case 'PUBLIC':
-      return 'Público';
+    case "MASTER":
+      return "🏛️ SUPREMO MASTER"; // God Mode indicator
+    case "ADMIN":
+      return "Administrador";
+    case "PROFESOR":
+      return "Profesor";
+    case "PARENT":
+      return "Padre/Apoderado";
+    case "PUBLIC":
+      return "Público";
     default:
       return role;
   }

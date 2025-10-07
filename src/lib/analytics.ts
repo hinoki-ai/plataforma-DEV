@@ -3,7 +3,7 @@
  * Lightweight tracking without external services
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface AnalyticsData {
   pageViews: number;
@@ -19,14 +19,14 @@ interface AnalyticsData {
 
 class SimpleAnalytics {
   private data: AnalyticsData;
-  private storageKey = 'manitos-analytics';
+  private storageKey = "manitos-analytics";
 
   constructor() {
     this.data = this.loadData();
   }
 
   private loadData(): AnalyticsData {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return {
         pageViews: 0,
         uniqueVisitors: new Set(),
@@ -53,14 +53,14 @@ class SimpleAnalytics {
   }
 
   private saveData() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     localStorage.setItem(
       this.storageKey,
       JSON.stringify({
         ...this.data,
         uniqueVisitors: Array.from(this.data.uniqueVisitors),
-      })
+      }),
     );
   }
 
@@ -78,7 +78,7 @@ class SimpleAnalytics {
   /**
    * Track user action
    */
-  trackAction(action: keyof AnalyticsData['actions']) {
+  trackAction(action: keyof AnalyticsData["actions"]) {
     this.data.actions[action]++;
     this.saveData();
   }
@@ -128,7 +128,7 @@ class SimpleAnalytics {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       return {
-        date: date.toLocaleDateString('es-CL'),
+        date: date.toLocaleDateString("es-CL"),
         pageViews: Math.floor(Math.random() * 50) + 10,
         actions: {
           login: Math.floor(Math.random() * 10) + 1,
@@ -154,7 +154,7 @@ export function useAnalytics() {
     analytics.trackPageView(visitorId);
   };
 
-  const trackAction = (action: keyof AnalyticsData['actions']) => {
+  const trackAction = (action: keyof AnalyticsData["actions"]) => {
     analytics.trackAction(action);
   };
 
@@ -188,10 +188,10 @@ export function AnalyticsDashboard() {
  * Track specific events
  */
 export const analyticsEvents = {
-  trackLogin: () => analytics.trackAction('login'),
-  trackReservation: () => analytics.trackAction('reservation'),
-  trackUpload: () => analytics.trackAction('upload'),
-  trackMeeting: () => analytics.trackAction('meeting'),
+  trackLogin: () => analytics.trackAction("login"),
+  trackReservation: () => analytics.trackAction("reservation"),
+  trackUpload: () => analytics.trackAction("upload"),
+  trackMeeting: () => analytics.trackAction("meeting"),
   trackPageView: (visitorId?: string) => analytics.trackPageView(visitorId),
 };
 

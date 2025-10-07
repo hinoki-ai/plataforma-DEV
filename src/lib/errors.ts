@@ -3,36 +3,36 @@
  */
 
 export class AuthenticationError extends Error {
-  constructor(message = 'Authentication required') {
+  constructor(message = "Authentication required") {
     super(message);
-    this.name = 'AuthenticationError';
+    this.name = "AuthenticationError";
   }
 }
 
 export class AuthorizationError extends Error {
-  constructor(message = 'Access denied') {
+  constructor(message = "Access denied") {
     super(message);
-    this.name = 'AuthorizationError';
+    this.name = "AuthorizationError";
   }
 }
 
 export class ValidationError extends Error {
-  constructor(message = 'Validation failed') {
+  constructor(message = "Validation failed") {
     super(message);
-    this.name = 'ValidationError';
+    this.name = "ValidationError";
   }
 }
 
 export class DatabaseError extends Error {
-  constructor(message = 'Database operation failed') {
+  constructor(message = "Database operation failed") {
     super(message);
-    this.name = 'DatabaseError';
+    this.name = "DatabaseError";
   }
 }
 
 export class FileUploadError extends Error {
-  constructor(message = 'File upload failed') {
+  constructor(message = "File upload failed") {
     super(message);
-    this.name = 'FileUploadError';
+    this.name = "FileUploadError";
   }
 }

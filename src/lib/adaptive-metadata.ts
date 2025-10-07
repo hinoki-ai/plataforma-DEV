@@ -1,6 +1,6 @@
-import { Metadata } from 'next';
+import { Metadata } from "next";
 
-export type MetadataContext = 'public' | 'auth';
+export type MetadataContext = "public" | "auth";
 
 export interface AdaptiveMetadataOptions {
   /**
@@ -52,15 +52,15 @@ export function generateMetadata({
   additionalMeta = {},
 }: AdaptiveMetadataOptions): Metadata {
   // Base metadata
-  const baseTitle = 'Escuela Manitos Pintadas';
+  const baseTitle = "Escuela Manitos Pintadas";
   const baseDescription =
-    'Educación integral y desarrollo humano en un ambiente de amor y respeto';
+    "Educación integral y desarrollo humano en un ambiente de amor y respeto";
   const baseKeywords = [
-    'educación',
-    'escuela',
-    'manitos pintadas',
-    'desarrollo integral',
-    'niños',
+    "educación",
+    "escuela",
+    "manitos pintadas",
+    "desarrollo integral",
+    "niños",
   ];
 
   // Context-specific configurations
@@ -68,24 +68,24 @@ export function generateMetadata({
     public: {
       titleTemplate: `%s | ${baseTitle}`,
       defaultDescription:
-        'Descubre nuestra propuesta educativa centrada en el desarrollo integral de cada niño y niña.',
+        "Descubre nuestra propuesta educativa centrada en el desarrollo integral de cada niño y niña.",
       keywordPrefix: [
-        'educación pública',
-        'comunidad educativa',
-        'proyecto educativo',
+        "educación pública",
+        "comunidad educativa",
+        "proyecto educativo",
       ],
-      robots: 'index, follow',
+      robots: "index, follow",
     },
     auth: {
       titleTemplate: `%s - Panel | ${baseTitle}`,
       defaultDescription:
-        'Panel de gestión educativa para profesores y administradores.',
+        "Panel de gestión educativa para profesores y administradores.",
       keywordPrefix: [
-        'gestión educativa',
-        'panel administrativo',
-        'herramientas docentes',
+        "gestión educativa",
+        "panel administrativo",
+        "herramientas docentes",
       ],
-      robots: 'noindex, nofollow',
+      robots: "noindex, nofollow",
     },
   };
 
@@ -105,15 +105,15 @@ export function generateMetadata({
   const metadata: Metadata = {
     title: finalTitle,
     description: finalDescription,
-    keywords: allKeywords.join(', '),
+    keywords: allKeywords.join(", "),
     robots: config.robots,
 
     // Open Graph
     openGraph: {
       title: finalTitle,
       description: finalDescription,
-      type: 'website',
-      locale: 'es_CL',
+      type: "website",
+      locale: "es_CL",
       siteName: baseTitle,
       ...(image && { images: [{ url: image }] }),
       ...(url && { url }),
@@ -121,7 +121,7 @@ export function generateMetadata({
 
     // Twitter
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: finalTitle,
       description: finalDescription,
       ...(image && { images: [image] }),
@@ -129,17 +129,17 @@ export function generateMetadata({
 
     // Additional meta tags
     other: {
-      'theme-color': context === 'public' ? '#1f2937' : '#ffffff',
-      'msapplication-TileColor': context === 'public' ? '#1f2937' : '#ffffff',
+      "theme-color": context === "public" ? "#1f2937" : "#ffffff",
+      "msapplication-TileColor": context === "public" ? "#1f2937" : "#ffffff",
       ...additionalMeta,
     },
   };
 
   // Context-specific additions
-  if (context === 'public') {
-    metadata.authors = [{ name: 'Escuela Manitos Pintadas' }];
-    metadata.creator = 'Escuela Manitos Pintadas';
-    metadata.publisher = 'Escuela Manitos Pintadas';
+  if (context === "public") {
+    metadata.authors = [{ name: "Escuela Manitos Pintadas" }];
+    metadata.creator = "Escuela Manitos Pintadas";
+    metadata.publisher = "Escuela Manitos Pintadas";
 
     // Canonical URL for public pages
     if (url) {
@@ -159,10 +159,10 @@ export function generateMetadata({
 export function generatePublicPageMetadata(
   title: string,
   description?: string,
-  options?: Partial<AdaptiveMetadataOptions>
+  options?: Partial<AdaptiveMetadataOptions>,
 ): Metadata {
   return generateMetadata({
-    context: 'public',
+    context: "public",
     title,
     description,
     ...options,
@@ -172,10 +172,10 @@ export function generatePublicPageMetadata(
 export function generateAuthPageMetadata(
   title: string,
   description?: string,
-  options?: Partial<AdaptiveMetadataOptions>
+  options?: Partial<AdaptiveMetadataOptions>,
 ): Metadata {
   return generateMetadata({
-    context: 'auth',
+    context: "auth",
     title,
     description,
     ...options,
@@ -184,79 +184,79 @@ export function generateAuthPageMetadata(
 
 export function generateDashboardMetadata(role: string): Metadata {
   const roleLabels = {
-    ADMIN: 'Administrador',
-    PROFESOR: 'Profesor',
-    PARENT: 'Padre/Apoderado',
+    ADMIN: "Administrador",
+    PROFESOR: "Profesor",
+    PARENT: "Padre/Apoderado",
   };
 
-  const roleLabel = roleLabels[role as keyof typeof roleLabels] || 'Usuario';
+  const roleLabel = roleLabels[role as keyof typeof roleLabels] || "Usuario";
 
   return generateAuthPageMetadata(
     `Panel ${roleLabel}`,
     `Panel de control para usuarios con rol ${roleLabel.toLowerCase()}.`,
     {
-      keywords: ['panel', 'dashboard', roleLabel.toLowerCase(), 'gestión'],
-    }
+      keywords: ["panel", "dashboard", roleLabel.toLowerCase(), "gestión"],
+    },
   );
 }
 
 export function generateCalendarMetadata(context: MetadataContext): Metadata {
-  if (context === 'public') {
+  if (context === "public") {
     return generatePublicPageMetadata(
-      'Calendario Escolar',
-      'Consulta todos los eventos, fechas importantes y actividades de nuestra comunidad educativa.',
+      "Calendario Escolar",
+      "Consulta todos los eventos, fechas importantes y actividades de nuestra comunidad educativa.",
       {
         keywords: [
-          'calendario',
-          'eventos',
-          'fechas importantes',
-          'actividades escolares',
+          "calendario",
+          "eventos",
+          "fechas importantes",
+          "actividades escolares",
         ],
-      }
+      },
     );
   } else {
     return generateAuthPageMetadata(
-      'Gestión de Calendario',
-      'Administra eventos, fechas y actividades del calendario escolar.',
+      "Gestión de Calendario",
+      "Administra eventos, fechas y actividades del calendario escolar.",
       {
         keywords: [
-          'gestión calendario',
-          'eventos',
-          'administración',
-          'planificación',
+          "gestión calendario",
+          "eventos",
+          "administración",
+          "planificación",
         ],
-      }
+      },
     );
   }
 }
 
 export function generateTeamMetadata(context: MetadataContext): Metadata {
-  if (context === 'public') {
+  if (context === "public") {
     return generatePublicPageMetadata(
-      'Equipo Multidisciplinario',
-      'Conoce a nuestro equipo de profesionales comprometidos con el desarrollo integral de cada estudiante.',
+      "Equipo Multidisciplinario",
+      "Conoce a nuestro equipo de profesionales comprometidos con el desarrollo integral de cada estudiante.",
       {
         keywords: [
-          'equipo',
-          'profesionales',
-          'multidisciplinario',
-          'psicólogos',
-          'educadores',
+          "equipo",
+          "profesionales",
+          "multidisciplinario",
+          "psicólogos",
+          "educadores",
         ],
-      }
+      },
     );
   } else {
     return generateAuthPageMetadata(
-      'Gestión de Equipo',
-      'Administra la información del equipo multidisciplinario.',
+      "Gestión de Equipo",
+      "Administra la información del equipo multidisciplinario.",
       {
         keywords: [
-          'gestión equipo',
-          'administración',
-          'profesionales',
-          'multidisciplinario',
+          "gestión equipo",
+          "administración",
+          "profesionales",
+          "multidisciplinario",
         ],
-      }
+      },
     );
   }
 }

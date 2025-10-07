@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useCallback, useRef } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter, usePathname } from 'next/navigation';
-import { useHydrationSafe } from '@/components/ui/hydration-error-boundary';
+import { useEffect, useCallback, useRef } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter, usePathname } from "next/navigation";
+import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 
 export function useAuthSync() {
   const { data: session, status, update } = useSession();
@@ -17,7 +17,7 @@ export function useAuthSync() {
     if (!isHydrated) return;
 
     // Only sync on specific auth-related routes when component mounts
-    if (pathname === '/auth-success' || pathname === '/login') {
+    if (pathname === "/auth-success" || pathname === "/login") {
       update().catch(console.error);
     }
   }, [pathname, update, isHydrated]);
@@ -29,11 +29,11 @@ export function useAuthSync() {
       return;
     }
 
-    if (status === 'authenticated' && session?.user) {
-      const isAdminPath = pathname?.startsWith('/admin');
-      const isProfesorPath = pathname?.startsWith('/profesor');
-      const isParentPath = pathname?.startsWith('/parent');
-      const isCentroConsejoPath = pathname?.startsWith('/centro-consejo');
+    if (status === "authenticated" && session?.user) {
+      const isAdminPath = pathname?.startsWith("/admin");
+      const isProfesorPath = pathname?.startsWith("/profesor");
+      const isParentPath = pathname?.startsWith("/parent");
+      const isCentroConsejoPath = pathname?.startsWith("/centro-consejo");
       const userRole = session.user.role;
 
       // Ensure session is fully loaded before redirecting
@@ -43,23 +43,23 @@ export function useAuthSync() {
       }
 
       let shouldRedirect = false;
-      let redirectPath = '';
+      let redirectPath = "";
 
       // Redirect based on role
       switch (userRole) {
-        case 'ADMIN':
+        case "ADMIN":
           // Admin can access all routes - no redirects needed
           break;
-        case 'PROFESOR':
+        case "PROFESOR":
           if (isAdminPath) {
             shouldRedirect = true;
-            redirectPath = '/profesor';
+            redirectPath = "/profesor";
           }
           break;
-        case 'PARENT':
+        case "PARENT":
           if (isAdminPath || isProfesorPath) {
             shouldRedirect = true;
-            redirectPath = '/parent'; // Fix parent dashboard path
+            redirectPath = "/parent"; // Fix parent dashboard path
           }
           break;
         default:
@@ -70,7 +70,7 @@ export function useAuthSync() {
             isCentroConsejoPath
           ) {
             shouldRedirect = true;
-            redirectPath = '/';
+            redirectPath = "/";
           }
       }
 
@@ -78,20 +78,20 @@ export function useAuthSync() {
         hasRedirected.current = true;
         router.replace(redirectPath);
       }
-    } else if (status === 'unauthenticated') {
+    } else if (status === "unauthenticated") {
       const protectedPaths = [
-        '/admin',
-        '/profesor',
-        '/parent',
-        '/centro-consejo/dashboard',
+        "/admin",
+        "/profesor",
+        "/parent",
+        "/centro-consejo/dashboard",
       ];
-      const isProtectedPath = protectedPaths.some(path =>
-        pathname?.startsWith(path)
+      const isProtectedPath = protectedPaths.some((path) =>
+        pathname?.startsWith(path),
       );
 
       if (isProtectedPath) {
         hasRedirected.current = true;
-        router.replace('/login');
+        router.replace("/login");
       }
     }
   }, [status, session, pathname, router, update, isHydrated]);
@@ -115,7 +115,7 @@ export function useAuthSync() {
     let timeoutId: NodeJS.Timeout;
 
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'next-auth.session-token') {
+      if (event.key === "next-auth.session-token") {
         // Debounce updates to prevent excessive calls
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
@@ -124,9 +124,9 @@ export function useAuthSync() {
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
       clearTimeout(timeoutId);
     };
   }, [update, isHydrated]);
@@ -134,8 +134,8 @@ export function useAuthSync() {
   return {
     session,
     status,
-    isAuthenticated: status === 'authenticated',
-    isLoading: status === 'loading',
+    isAuthenticated: status === "authenticated",
+    isLoading: status === "loading",
     userRole: session?.user?.role,
     forceUpdate: update,
   };

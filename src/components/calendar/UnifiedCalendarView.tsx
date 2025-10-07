@@ -4,15 +4,15 @@
  * Uses unified calendar service and provides supreme UX
  */
 
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   motion,
   AnimatePresence,
   useSpring,
   useMotionValue,
-} from 'motion/react';
+} from "motion/react";
 import {
   format,
   isToday,
@@ -24,8 +24,8 @@ import {
   addMonths,
   subMonths,
   isSameDay,
-} from 'date-fns';
-import { es } from 'date-fns/locale';
+} from "date-fns";
+import { es } from "date-fns/locale";
 import {
   ChevronLeft,
   ChevronRight,
@@ -41,21 +41,21 @@ import {
   RefreshCw,
   Eye,
   Plus,
-} from 'lucide-react';
+} from "lucide-react";
 
-import { Calendar } from '@/components/ui/calendar';
-import { Button } from '@/components/ui/button';
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
 import {
   AdaptiveCard,
   AdaptiveCardContent,
   AdaptiveCardHeader,
   AdaptiveCardTitle,
-} from '@/components/ui/adaptive-card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import { useAppContext } from '@/components/providers/ContextProvider';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "@/components/ui/adaptive-card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useAppContext } from "@/components/providers/ContextProvider";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 import {
   getCalendarEventsClient,
@@ -63,20 +63,20 @@ import {
   getUpcomingEventsClient,
   getCalendarStatisticsClient,
   getCalendarEventsGroupedByDateClient,
-} from '@/services/calendar/calendar-client';
-import { exportCalendarEventsInFormat } from '@/services/actions/calendar';
-import { useSession } from 'next-auth/react';
-import { useHydrationSafe } from '@/components/ui/hydration-error-boundary';
+} from "@/services/calendar/calendar-client";
+import { exportCalendarEventsInFormat } from "@/services/actions/calendar";
+import { useSession } from "next-auth/react";
+import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 import {
   UnifiedCalendarEvent,
   EventCategory,
   CalendarQuery,
   CalendarExportFormat,
-} from '@/services/calendar/types';
+} from "@/services/calendar/types";
 
 interface UnifiedCalendarViewProps {
   /** View mode: full calendar, compact, or meeting-focused */
-  mode?: 'full' | 'compact' | 'meetings';
+  mode?: "full" | "compact" | "meetings";
   /** Initial categories to show */
   initialCategories?: EventCategory[];
   /** Whether to show admin controls */
@@ -94,17 +94,17 @@ interface UnifiedCalendarViewProps {
   /** Custom class name */
   className?: string;
   /** User role for determining view/edit permissions */
-  userRole?: 'ADMIN' | 'PROFESOR' | 'CENTRO_CONSEJO' | 'PARENT' | null;
+  userRole?: "ADMIN" | "PROFESOR" | "CENTRO_CONSEJO" | "PARENT" | null;
   /** Enable edit mode regardless of role (for admin override) */
   forceEditMode?: boolean;
 }
 
 export default function UnifiedCalendarView({
-  mode = 'full',
-  initialCategories = ['ACADEMIC', 'HOLIDAY', 'MEETING', 'EVENT'],
+  mode = "full",
+  initialCategories = ["ACADEMIC", "HOLIDAY", "MEETING", "EVENT"],
   showAdminControls = false,
   showExport = true,
-  height = 'auto',
+  height = "auto",
   onEventSelect,
   onDateSelect,
   showSearch = true,
@@ -124,28 +124,28 @@ export default function UnifiedCalendarView({
 
   // Determine user role and permissions with context awareness
   const actualUserRole = session?.user?.role || userRole;
-  const canEdit = forceEditMode || actualUserRole === 'ADMIN';
+  const canEdit = forceEditMode || actualUserRole === "ADMIN";
   const canView = !!actualUserRole || !!userRole || isPublicRoute; // Allow viewing for public routes
 
   // Auto-detect admin controls based on context
   const shouldShowAdminControls =
-    showAdminControls ?? (context === 'auth' && canEdit);
-  const shouldShowExport = showExport ?? context === 'auth';
+    showAdminControls ?? (context === "auth" && canEdit);
+  const shouldShowExport = showExport ?? context === "auth";
   const [selectedCategories, setSelectedCategories] =
     useState<EventCategory[]>(initialCategories);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [announceText, setAnnounceText] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [announceText, setAnnounceText] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Data state
   const [events, setEvents] = useState<Record<string, UnifiedCalendarEvent[]>>(
-    {}
+    {},
   );
   const [monthEvents, setMonthEvents] = useState<UnifiedCalendarEvent[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<UnifiedCalendarEvent[]>(
-    []
+    [],
   );
   const [statistics, setStatistics] = useState<any>(null);
   const [groupedEvents, setGroupedEvents] = useState<
@@ -185,14 +185,14 @@ export default function UnifiedCalendarView({
     if (!isHydrated) return;
 
     const checkMobile = () => {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         setIsMobileView(window.innerWidth < 768);
       }
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, [isHydrated]);
 
   // Load all calendar data
@@ -225,21 +225,23 @@ export default function UnifiedCalendarView({
       setMonthEvents(
         monthEventsResult.success && monthEventsResult.data
           ? monthEventsResult.data
-          : []
+          : [],
       );
       setUpcomingEvents(
-        upcomingResult.success && upcomingResult.data ? upcomingResult.data : []
+        upcomingResult.success && upcomingResult.data
+          ? upcomingResult.data
+          : [],
       );
       setGroupedEvents(
-        groupedResult.success && groupedResult.data ? groupedResult.data : {}
+        groupedResult.success && groupedResult.data ? groupedResult.data : {},
       );
 
       if (statsResult.success && statsResult.data) {
         setStatistics(statsResult.data);
       }
     } catch (error) {
-      console.error('Error loading calendar data:', error);
-      setAnnounceText('Error al cargar los datos del calendario');
+      console.error("Error loading calendar data:", error);
+      setAnnounceText("Error al cargar los datos del calendario");
     } finally {
       setIsLoading(false);
     }
@@ -257,7 +259,7 @@ export default function UnifiedCalendarView({
         setEvents(result.data);
       }
     } catch (error) {
-      console.error('Error refreshing calendar:', error);
+      console.error("Error refreshing calendar:", error);
     } finally {
       setIsLoading(false);
     }
@@ -266,10 +268,10 @@ export default function UnifiedCalendarView({
   // Get events for a specific date
   const getEventsForDate = useCallback(
     (date: Date): UnifiedCalendarEvent[] => {
-      const dateKey = format(date, 'yyyy-MM-dd');
+      const dateKey = format(date, "yyyy-MM-dd");
       return events[dateKey] || [];
     },
-    [events]
+    [events],
   );
 
   // Handle date selection
@@ -281,15 +283,15 @@ export default function UnifiedCalendarView({
         const dateText = format(date, "d 'de' MMMM, yyyy", { locale: es });
         const eventText =
           dateEvents.length > 0
-            ? `${dateEvents.length} evento${dateEvents.length > 1 ? 's' : ''} programado${dateEvents.length > 1 ? 's' : ''}`
-            : 'Sin eventos programados';
+            ? `${dateEvents.length} evento${dateEvents.length > 1 ? "s" : ""} programado${dateEvents.length > 1 ? "s" : ""}`
+            : "Sin eventos programados";
         setAnnounceText(`Fecha seleccionada: ${dateText}. ${eventText}.`);
 
         // Callback for external handling
         onDateSelect?.(date, dateEvents);
       }
     },
-    [getEventsForDate, onDateSelect]
+    [getEventsForDate, onDateSelect],
   );
 
   // Handle category toggle
@@ -297,15 +299,15 @@ export default function UnifiedCalendarView({
     setIsLoading(true);
 
     const newCategories = selectedCategories.includes(category)
-      ? selectedCategories.filter(c => c !== category)
+      ? selectedCategories.filter((c) => c !== category)
       : [...selectedCategories, category];
 
     setSelectedCategories(newCategories);
 
     const action = selectedCategories.includes(category)
-      ? 'desactivado'
-      : 'activado';
-    const categoryLabel = categorySystem[category].label;
+      ? "desactivado"
+      : "activado";
+    const categoryLabel = getCategoryConfig(category).label;
     setAnnounceText(`Filtro ${categoryLabel} ${action}.`);
 
     setIsLoading(false);
@@ -314,9 +316,9 @@ export default function UnifiedCalendarView({
   // Handle export - browser-safe
   const handleExport = async (format: CalendarExportFormat) => {
     // Only run on client side
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
-      console.warn('Export only available on client side');
-      setAnnounceText('Exportar solo disponible en navegador');
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      console.warn("Export only available on client side");
+      setAnnounceText("Exportar solo disponible en navegador");
       return;
     }
 
@@ -326,28 +328,32 @@ export default function UnifiedCalendarView({
         ...(searchTerm && { search: searchTerm }),
       };
 
-      const result = await exportCalendarEventsInFormat(format, query);
+      // Convert format to lowercase and handle ICAL -> ics conversion
+      const formatLower =
+        format === "ICAL"
+          ? "ics"
+          : (format.toLowerCase() as "json" | "csv" | "ics");
+      const result = await exportCalendarEventsInFormat(formatLower);
 
       if (result.success && result.data) {
-        // Create download
-        const data =
-          typeof result.data === 'string'
-            ? result.data
-            : JSON.stringify(result.data);
+        // Create download - result.data has content property
+        const exportData: any = result.data;
         const contentType =
-          format === 'CSV'
-            ? 'text/csv'
-            : format === 'JSON'
-              ? 'application/json'
-              : 'text/calendar';
-        const filename = `calendario.${format.toLowerCase()}`;
+          exportData.mimeType ||
+          (format === "CSV"
+            ? "text/csv"
+            : format === "JSON"
+              ? "application/json"
+              : "text/calendar");
+        const filename =
+          exportData.filename || `calendario.${format.toLowerCase()}`;
 
-        const blob = new Blob([data], {
+        const blob = new Blob([exportData.content], {
           type: contentType,
         });
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
+        const a = document.createElement("a");
+        a.style.display = "none";
         a.href = url;
         a.download = filename;
         document.body.appendChild(a);
@@ -358,25 +364,25 @@ export default function UnifiedCalendarView({
         setAnnounceText(`Calendario exportado como ${format} exitosamente`);
       }
     } catch (error) {
-      console.error('Error exporting calendar:', error);
-      setAnnounceText('Error al exportar el calendario');
+      console.error("Error exporting calendar:", error);
+      setAnnounceText("Error al exportar el calendario");
     }
   };
 
   // Touch gesture handlers - hydration-safe
   const onTouchStart = (e: React.TouchEvent) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
   const onTouchEnd = () => {
-    if (typeof window === 'undefined' || !touchStart || !touchEnd) return;
+    if (typeof window === "undefined" || !touchStart || !touchEnd) return;
 
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
@@ -384,10 +390,10 @@ export default function UnifiedCalendarView({
 
     if (isLeftSwipe) {
       setCurrentMonth(addMonths(safeCurrentMonth, 1));
-      setAnnounceText('Navegando al mes siguiente');
+      setAnnounceText("Navegando al mes siguiente");
     } else if (isRightSwipe) {
       setCurrentMonth(subMonths(safeCurrentMonth, 1));
-      setAnnounceText('Navegando al mes anterior');
+      setAnnounceText("Navegando al mes anterior");
     }
   };
 
@@ -417,92 +423,145 @@ export default function UnifiedCalendarView({
     );
   };
 
-  // Enhanced category system
-  const categorySystem = {
+  // Enhanced category system - covers ALL EventCategory values
+  const categorySystem: Record<EventCategory, {
+    label: string;
+    color: string;
+    accent: string;
+    border: string;
+    icon: string;
+  }> = {
+    ADMIN: {
+      label: "Administración",
+      color: "bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300",
+      accent: "bg-violet-500",
+      border: "border-violet-200 dark:border-violet-800",
+      icon: "🔐",
+    },
+    PROFESOR: {
+      label: "Profesores",
+      color: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300",
+      accent: "bg-emerald-500",
+      border: "border-emerald-200 dark:border-emerald-800",
+      icon: "👨‍🏫",
+    },
+    ACTIVITY: {
+      label: "Actividades",
+      color: "bg-teal-50 text-teal-700 dark:bg-teal-950/30 dark:text-teal-300",
+      accent: "bg-teal-500",
+      border: "border-teal-200 dark:border-teal-800",
+      icon: "🎯",
+    },
+    CULTURAL: {
+      label: "Cultural",
+      color: "bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/30 dark:text-fuchsia-300",
+      accent: "bg-fuchsia-500",
+      border: "border-fuchsia-200 dark:border-fuchsia-800",
+      icon: "🎭",
+    },
+    SPORTS: {
+      label: "Deportes",
+      color: "bg-lime-50 text-lime-700 dark:bg-lime-950/30 dark:text-lime-300",
+      accent: "bg-lime-500",
+      border: "border-lime-200 dark:border-lime-800",
+      icon: "⚽",
+    },
+    PLANNING: {
+      label: "Planificación",
+      color: "bg-sky-50 text-sky-700 dark:bg-sky-950/30 dark:text-sky-300",
+      accent: "bg-sky-500",
+      border: "border-sky-200 dark:border-sky-800",
+      icon: "📋",
+    },
     ACADEMIC: {
-      label: 'Académico',
-      color: 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300',
-      accent: 'bg-blue-500',
-      border: 'border-blue-200 dark:border-blue-800',
-      icon: '📚',
+      label: "Académico",
+      color: "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300",
+      accent: "bg-blue-500",
+      border: "border-blue-200 dark:border-blue-800",
+      icon: "📚",
     },
     HOLIDAY: {
-      label: 'Feriado',
-      color: 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300',
-      accent: 'bg-red-500',
-      border: 'border-red-200 dark:border-red-800',
-      icon: '🎉',
+      label: "Feriado",
+      color: "bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300",
+      accent: "bg-red-500",
+      border: "border-red-200 dark:border-red-800",
+      icon: "🎉",
     },
     MEETING: {
-      label: 'Reuniones',
+      label: "Reuniones",
       color:
-        'bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300',
-      accent: 'bg-purple-500',
-      border: 'border-purple-200 dark:border-purple-800',
-      icon: '👥',
+        "bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300",
+      accent: "bg-purple-500",
+      border: "border-purple-200 dark:border-purple-800",
+      icon: "👥",
     },
     EVENT: {
-      label: 'Eventos',
+      label: "Eventos",
       color:
-        'bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300',
-      accent: 'bg-green-500',
-      border: 'border-green-200 dark:border-green-800',
-      icon: '✨',
+        "bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300",
+      accent: "bg-green-500",
+      border: "border-green-200 dark:border-green-800",
+      icon: "✨",
     },
     SPECIAL: {
-      label: 'Especial',
-      color: 'bg-pink-50 text-pink-700 dark:bg-pink-950/30 dark:text-pink-300',
-      accent: 'bg-pink-500',
-      border: 'border-pink-200 dark:border-pink-800',
-      icon: '🎊',
+      label: "Especial",
+      color: "bg-pink-50 text-pink-700 dark:bg-pink-950/30 dark:text-pink-300",
+      accent: "bg-pink-500",
+      border: "border-pink-200 dark:border-pink-800",
+      icon: "🎊",
     },
     PARENT: {
-      label: 'Padres',
+      label: "Padres",
       color:
-        'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300',
-      accent: 'bg-indigo-500',
-      border: 'border-indigo-200 dark:border-indigo-800',
-      icon: '👨‍��‍👧‍👦',
+        "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300",
+      accent: "bg-indigo-500",
+      border: "border-indigo-200 dark:border-indigo-800",
+      icon: "👨‍��‍👧‍👦",
     },
     ADMINISTRATIVE: {
-      label: 'Administrativo',
+      label: "Administrativo",
       color:
-        'bg-slate-50 text-slate-700 dark:bg-slate-950/30 dark:text-slate-300',
-      accent: 'bg-slate-500',
-      border: 'border-slate-200 dark:border-slate-800',
-      icon: '📋',
+        "bg-slate-50 text-slate-700 dark:bg-slate-950/30 dark:text-slate-300",
+      accent: "bg-slate-500",
+      border: "border-slate-200 dark:border-slate-800",
+      icon: "📋",
     },
     EXAM: {
-      label: 'Exámenes',
+      label: "Exámenes",
       color:
-        'bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-300',
-      accent: 'bg-orange-500',
-      border: 'border-orange-200 dark:border-orange-800',
-      icon: '📝',
+        "bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-300",
+      accent: "bg-orange-500",
+      border: "border-orange-200 dark:border-orange-800",
+      icon: "📝",
     },
     VACATION: {
-      label: 'Vacaciones',
-      color: 'bg-cyan-50 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-300',
-      accent: 'bg-cyan-500',
-      border: 'border-cyan-200 dark:border-cyan-800',
-      icon: '🏖️',
+      label: "Vacaciones",
+      color: "bg-cyan-50 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-300",
+      accent: "bg-cyan-500",
+      border: "border-cyan-200 dark:border-cyan-800",
+      icon: "🏖️",
     },
     DEADLINE: {
-      label: 'Fechas Límite',
+      label: "Fechas Límite",
       color:
-        'bg-yellow-50 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-300',
-      accent: 'bg-yellow-500',
-      border: 'border-yellow-200 dark:border-yellow-800',
-      icon: '⏰',
+        "bg-yellow-50 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-300",
+      accent: "bg-yellow-500",
+      border: "border-yellow-200 dark:border-yellow-800",
+      icon: "⏰",
     },
     OTHER: {
-      label: 'Otros',
-      color: 'bg-gray-50 text-gray-700 dark:bg-gray-950/30 dark:text-gray-300',
-      accent: 'bg-gray-500',
-      border: 'border-gray-200 dark:border-gray-800',
-      icon: '📌',
+      label: "Otros",
+      color: "bg-gray-50 text-gray-700 dark:bg-gray-950/30 dark:text-gray-300",
+      accent: "bg-gray-500",
+      border: "border-gray-200 dark:border-gray-800",
+      icon: "📌",
     },
-  } as const;
+  };
+
+  // Helper function to safely access categorySystem with fallback
+  const getCategoryConfig = (category: EventCategory) => {
+    return categorySystem[category as keyof typeof categorySystem] || categorySystem.OTHER;
+  };
 
   // Animation variants
   const containerVariants = {
@@ -549,7 +608,7 @@ export default function UnifiedCalendarView({
         <div
           className={cn(
             "bg-gradient-to-r px-4 sm:px-6 py-3 sm:py-4 relative overflow-hidden transition-all duration-700 ease-in-out",
-            getMonthGradient(safeCurrentMonth)
+            getMonthGradient(safeCurrentMonth),
           )}
         >
           {/* Subtle overlay pattern for depth */}
@@ -562,39 +621,46 @@ export default function UnifiedCalendarView({
                 size="sm"
                 onClick={() => setCurrentMonth(subMonths(safeCurrentMonth, 1))}
                 className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-300 text-white touch-manipulation focus:outline-none focus:ring-2 focus:ring-white/60 shadow-lg hover:shadow-xl"
-                aria-label={t('calendar.previous_month', 'common')}
+                aria-label={t("calendar.previous_month", "common")}
               >
                 <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 drop-shadow-sm" />
               </Button>
               <h3 className="text-base sm:text-xl font-bold text-white drop-shadow-lg">
-                {format(safeCurrentMonth, 'MMMM yyyy', { locale: es }).replace(/\b\w/g, l => l.toUpperCase())}
+                {format(safeCurrentMonth, "MMMM yyyy", { locale: es }).replace(
+                  /\b\w/g,
+                  (l) => l.toUpperCase(),
+                )}
               </h3>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setCurrentMonth(addMonths(safeCurrentMonth, 1))}
                 className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-300 text-white touch-manipulation focus:outline-none focus:ring-2 focus:ring-white/60 shadow-lg hover:shadow-xl"
-                aria-label={t('calendar.next_month', 'common')}
+                aria-label={t("calendar.next_month", "common")}
               >
                 <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 drop-shadow-sm" />
               </Button>
             </div>
             <div className="text-white/90 text-xs sm:text-sm font-medium drop-shadow-md bg-black/20 px-2 py-1 rounded-full backdrop-blur-sm">
-              {monthEvents.length} {t('calendar.events', 'common')}
+              {monthEvents.length} {t("calendar.events", "common")}
             </div>
           </div>
         </div>
 
         {/* Weekday Headers */}
         <div className="grid grid-cols-7 bg-muted/50">
-          {(String(t('calendar.weekdays', 'common') || 'Dom,Lun,Mar,Mié,Jue,Vie,Sáb')).split(',').map(day => (
-            <div
-              key={day}
-              className="text-center py-2 text-sm font-semibold text-muted-foreground"
-            >
-              {day}
-            </div>
-          ))}
+          {String(
+            t("calendar.weekdays", "common") || "Dom,Lun,Mar,Mié,Jue,Vie,Sáb",
+          )
+            .split(",")
+            .map((day) => (
+              <div
+                key={day}
+                className="text-center py-2 text-sm font-semibold text-muted-foreground"
+              >
+                {day}
+              </div>
+            ))}
         </div>
 
         {/* Calendar Grid */}
@@ -609,10 +675,10 @@ export default function UnifiedCalendarView({
               <motion.div
                 key={index}
                 className={cn(
-                  'relative border-r border-b border-border min-h-[80px] p-2 overflow-hidden z-10',
-                  !isCurrentMonth && 'bg-muted/30',
-                  index % 7 === 6 && 'border-r-0',
-                  index >= 35 && 'border-b-0'
+                  "relative border-r border-b border-border min-h-[80px] p-2 overflow-hidden z-10",
+                  !isCurrentMonth && "bg-muted/30",
+                  index % 7 === 6 && "border-r-0",
+                  index >= 35 && "border-b-0",
                 )}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
@@ -621,21 +687,21 @@ export default function UnifiedCalendarView({
                   variant="ghost"
                   onClick={() => handleDateSelect(day)}
                   className={cn(
-                    'w-full h-full flex flex-col items-start text-left p-1',
-                    isCurrentDay && 'bg-primary/20 ring-2 ring-primary',
+                    "w-full h-full flex flex-col items-start text-left p-1",
+                    isCurrentDay && "bg-primary/20 ring-2 ring-primary",
                     isSelected &&
-                      'bg-blue-50 dark:bg-blue-950/30 ring-2 ring-blue-500',
-                    !isSelected && !isCurrentDay && 'hover:bg-muted/50'
+                      "bg-blue-50 dark:bg-blue-950/30 ring-2 ring-blue-500",
+                    !isSelected && !isCurrentDay && "hover:bg-muted/50",
                   )}
                 >
                   <div
                     className={cn(
-                      'text-sm font-semibold',
-                      isCurrentDay && 'text-primary',
-                      !isCurrentMonth && 'text-muted-foreground/50'
+                      "text-sm font-semibold",
+                      isCurrentDay && "text-primary",
+                      !isCurrentMonth && "text-muted-foreground/50",
                     )}
                   >
-                    {format(day, 'd')}
+                    {format(day, "d")}
                   </div>
 
                   {/* Event indicators */}
@@ -647,19 +713,19 @@ export default function UnifiedCalendarView({
                           <div
                             key={event.id}
                             className={cn(
-                              'text-xs px-1 py-0.5 rounded truncate',
-                              categorySystem[event.category].color,
-                              'border',
-                              categorySystem[event.category].border
+                              "text-xs px-1 py-0.5 rounded truncate",
+                              getCategoryConfig(event.category).color,
+                              "border",
+                              getCategoryConfig(event.category).border,
                             )}
                             title={event.title}
-                            onClick={e => {
+                            onClick={(e) => {
                               e.stopPropagation();
                               onEventSelect?.(event);
                             }}
                           >
                             <span className="mr-1">
-                              {categorySystem[event.category].icon}
+                              {getCategoryConfig(event.category).icon}
                             </span>
                             {event.title}
                           </div>
@@ -681,7 +747,7 @@ export default function UnifiedCalendarView({
   };
 
   // Compact view for when mode is compact
-  if (mode === 'compact') {
+  if (mode === "compact") {
     return (
       <AdaptiveCard variant={context} className={className}>
         <AdaptiveCardHeader className="pb-4">
@@ -697,33 +763,33 @@ export default function UnifiedCalendarView({
           />
           {selectedDate && (
             <div className="mt-4 space-y-2">
-              {getEventsForDate(selectedDate).map(event => (
+              {getEventsForDate(selectedDate).map((event) => (
                 <div
                   key={event.id}
                   className={cn(
-                    'p-2 border rounded text-sm',
-                    context === 'public'
-                      ? 'border-gray-600/50 bg-gray-800/50'
-                      : 'border-border bg-card'
+                    "p-2 border rounded text-sm",
+                    context === "public"
+                      ? "border-gray-600/50 bg-gray-800/50"
+                      : "border-border bg-card",
                   )}
                 >
                   <div
                     className={cn(
-                      'font-medium',
-                      context === 'public' ? 'text-white' : 'text-foreground'
+                      "font-medium",
+                      context === "public" ? "text-white" : "text-foreground",
                     )}
                   >
                     {event.title}
                   </div>
                   <div
                     className={cn(
-                      'text-xs',
-                      context === 'public'
-                        ? 'text-gray-300'
-                        : 'text-muted-foreground'
+                      "text-xs",
+                      context === "public"
+                        ? "text-gray-300"
+                        : "text-muted-foreground",
                     )}
                   >
-                    {categorySystem[event.category].label}
+                    {getCategoryConfig(event.category).label}
                   </div>
                 </div>
               ))}
@@ -738,7 +804,7 @@ export default function UnifiedCalendarView({
 
   return (
     <motion.div
-      className={cn('space-y-4 relative overflow-hidden', className)}
+      className={cn("space-y-4 relative overflow-hidden", className)}
       style={{ height }}
       variants={containerVariants}
       initial="hidden"
@@ -750,14 +816,14 @@ export default function UnifiedCalendarView({
       </div>
 
       {/* Enhanced Header with Stats */}
-      {mode === 'full' && statistics && (
+      {mode === "full" && statistics && (
         <motion.div variants={cardVariants}>
           <AdaptiveCard
             variant={context}
             className={cn(
-              context === 'public'
-                ? 'bg-gradient-to-r from-gray-900/90 to-gray-800/90 border-gray-600/50'
-                : 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20'
+              context === "public"
+                ? "bg-gradient-to-r from-gray-900/90 to-gray-800/90 border-gray-600/50"
+                : "bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20",
             )}
           >
             <AdaptiveCardContent className="p-6">
@@ -838,7 +904,7 @@ export default function UnifiedCalendarView({
                   aria-label="Actualizar calendario"
                 >
                   <RefreshCw
-                    className={cn('w-4 h-4', isRefreshing && 'animate-spin')}
+                    className={cn("w-4 h-4", isRefreshing && "animate-spin")}
                   />
                 </Button>
                 {shouldShowExport && (
@@ -846,7 +912,7 @@ export default function UnifiedCalendarView({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleExport('CSV')}
+                      onClick={() => handleExport("CSV")}
                       className="flex items-center gap-2"
                     >
                       <Download className="w-4 h-4" />
@@ -855,7 +921,7 @@ export default function UnifiedCalendarView({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleExport('ICAL')}
+                      onClick={() => handleExport("ICAL")}
                       className="flex items-center gap-2"
                     >
                       <Download className="w-4 h-4" />
@@ -873,9 +939,9 @@ export default function UnifiedCalendarView({
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
-                    placeholder={t('calendar.search_events', 'common')}
+                    placeholder={t("calendar.search_events", "common")}
                     value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"
                   />
                 </div>
@@ -884,29 +950,29 @@ export default function UnifiedCalendarView({
               {/* Category Filters */}
               <div className="flex flex-wrap gap-2">
                 {(Object.keys(categorySystem) as EventCategory[]).map(
-                  category => (
+                  (category) => (
                     <Badge
                       key={category}
                       variant={
                         selectedCategories.includes(category)
-                          ? 'default'
-                          : 'outline'
+                          ? "default"
+                          : "outline"
                       }
                       className={cn(
-                        'cursor-pointer select-none flex items-center space-x-1.5 px-3 py-1.5',
+                        "cursor-pointer select-none flex items-center space-x-1.5 px-3 py-1.5",
                         selectedCategories.includes(category) &&
-                          categorySystem[category].color,
-                        'transition-all duration-200 hover:shadow-md'
+                          getCategoryConfig(category).color,
+                        "transition-all duration-200 hover:shadow-md",
                       )}
                       onClick={() => handleCategoryToggle(category)}
                     >
-                      <span>{categorySystem[category].icon}</span>
-                      <span>{categorySystem[category].label}</span>
+                      <span>{getCategoryConfig(category).icon}</span>
+                      <span>{getCategoryConfig(category).label}</span>
                       <span className="text-xs opacity-60">
                         ({statistics?.eventsByCategory[category] || 0})
                       </span>
                     </Badge>
-                  )
+                  ),
                 )}
               </div>
             </div>
@@ -933,7 +999,7 @@ export default function UnifiedCalendarView({
               <AdaptiveCardTitle className="text-lg">
                 {selectedDate
                   ? format(selectedDate, "d 'de' MMMM, yyyy", { locale: es })
-                  : t('calendar.select_date', 'common')}
+                  : t("calendar.select_date", "common")}
               </AdaptiveCardTitle>
             </AdaptiveCardHeader>
             <AdaptiveCardContent>
@@ -960,12 +1026,12 @@ export default function UnifiedCalendarView({
                           <Badge
                             variant="secondary"
                             className={cn(
-                              'text-xs',
-                              categorySystem[event.category].color
+                              "text-xs",
+                              getCategoryConfig(event.category).color,
                             )}
                           >
-                            {categorySystem[event.category].icon}{' '}
-                            {categorySystem[event.category].label}
+                            {getCategoryConfig(event.category).icon}{" "}
+                            {getCategoryConfig(event.category).label}
                           </Badge>
                         </div>
                         {event.description && (
@@ -982,8 +1048,8 @@ export default function UnifiedCalendarView({
                         {!event.isAllDay && (
                           <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
                             <Clock className="w-3 h-3" />
-                            {format(event.startDate, 'HH:mm')} -{' '}
-                            {format(event.endDate, 'HH:mm')}
+                            {format(event.startDate, "HH:mm")} -{" "}
+                            {format(event.endDate, "HH:mm")}
                           </div>
                         )}
                       </motion.div>
@@ -1013,7 +1079,7 @@ export default function UnifiedCalendarView({
             </AdaptiveCardHeader>
             <AdaptiveCardContent>
               <div className="space-y-2">
-                {upcomingEvents.slice(0, 5).map(event => (
+                {upcomingEvents.slice(0, 5).map((event) => (
                   <div
                     key={event.id}
                     className="flex items-center justify-between py-2 border-b last:border-0 cursor-pointer hover:bg-muted/50 rounded px-2"
@@ -1022,13 +1088,13 @@ export default function UnifiedCalendarView({
                     <div>
                       <p className="font-medium text-sm">{event.title}</p>
                       <p className="text-xs text-muted-foreground">
-                        {format(event.startDate, 'dd MMM', { locale: es })}
+                        {format(event.startDate, "dd MMM", { locale: es })}
                         {!event.isAllDay &&
-                          ` - ${format(event.startDate, 'HH:mm')}`}
+                          ` - ${format(event.startDate, "HH:mm")}`}
                       </p>
                     </div>
                     <Badge variant="outline" className="text-xs">
-                      {categorySystem[event.category].icon}
+                      {getCategoryConfig(event.category).icon}
                     </Badge>
                   </div>
                 ))}
@@ -1041,14 +1107,16 @@ export default function UnifiedCalendarView({
             <AdaptiveCard variant={context}>
               <AdaptiveCardHeader>
                 <AdaptiveCardTitle className="text-lg">
-                  Resumen de{' '}
-                  {format(safeCurrentMonth, 'MMMM yyyy', { locale: es }).replace(/\b\w/g, l => l.toUpperCase())}
+                  Resumen de{" "}
+                  {format(safeCurrentMonth, "MMMM yyyy", {
+                    locale: es,
+                  }).replace(/\b\w/g, (l) => l.toUpperCase())}
                 </AdaptiveCardTitle>
               </AdaptiveCardHeader>
               <AdaptiveCardContent>
                 <div className="space-y-2">
                   <div className="text-sm">
-                    <span className="font-medium">{monthEvents.length}</span>{' '}
+                    <span className="font-medium">{monthEvents.length}</span>{" "}
                     eventos este mes
                   </div>
                   {Object.entries(categorySystem).map(([category, system]) => {

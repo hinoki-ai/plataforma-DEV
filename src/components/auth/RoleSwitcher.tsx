@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +9,27 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { Loader2, Crown, Shield, GraduationCap, Users, Eye } from 'lucide-react';
-import { UserRole } from '@/lib/prisma-compat-types';
-import { getRoleDisplayName } from '@/lib/role-utils';
-import { useLanguage } from '@/components/language/LanguageContext';
-import { useRoleSwitching } from '@/hooks/useRoleSwitching';
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
+import {
+  Loader2,
+  Crown,
+  Shield,
+  GraduationCap,
+  Users,
+  Eye,
+} from "lucide-react";
+import { UserRole } from "@/lib/prisma-compat-types";
+import { getRoleDisplayName } from "@/lib/role-utils";
+import { useLanguage } from "@/components/language/LanguageContext";
+import { useRoleSwitching } from "@/hooks/useRoleSwitching";
 
-const VALID_SWITCH_ROLES: UserRole[] = ['MASTER', 'ADMIN', 'PROFESOR', 'PARENT'];
+const VALID_SWITCH_ROLES: UserRole[] = [
+  "MASTER",
+  "ADMIN",
+  "PROFESOR",
+  "PARENT",
+];
 
 const roleIcons = {
   MASTER: Crown,
@@ -27,9 +39,11 @@ const roleIcons = {
   PUBLIC: Eye,
 };
 
-
-
-export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean }) {
+export function RoleSwitcher({
+  isCollapsed = false,
+}: {
+  isCollapsed?: boolean;
+}) {
   const { t } = useLanguage();
   const {
     currentRole,
@@ -43,7 +57,12 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
     clearError,
   } = useRoleSwitching();
 
-  console.log('🎭 RoleSwitcher Debug:', { currentRole, canSwitch, hasSwitched, originalRole });
+  console.log("🎭 RoleSwitcher Debug:", {
+    currentRole,
+    canSwitch,
+    hasSwitched,
+    originalRole,
+  });
 
   // Clear error after 5 seconds
   useEffect(() => {
@@ -57,7 +76,7 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
 
   // Only show for MASTER users
   if (!canSwitch) {
-    console.log('🚫 RoleSwitcher hidden - canSwitch is false');
+    console.log("🚫 RoleSwitcher hidden - canSwitch is false");
     return null;
   }
 
@@ -66,7 +85,7 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
 
     const result = await switchRole(targetRole);
     if (!result.success && result.error) {
-      console.error('❌ Role switch failed:', result.error);
+      console.error("❌ Role switch failed:", result.error);
     } else if (result.success) {
       console.log(`✅ Role switched to ${targetRole}`);
     }
@@ -75,7 +94,7 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
   const handleResetToMaster = async () => {
     const result = await resetToMaster();
     if (!result.success && result.error) {
-      console.error('❌ Reset to MASTER failed:', result.error);
+      console.error("❌ Reset to MASTER failed:", result.error);
     }
   };
 
@@ -117,7 +136,11 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
                 >
                   <Icon className="h-4 w-4" />
                   <span className="flex-1">{getRoleDisplayName(role)}</span>
-                  {isActive && <Badge variant="secondary" className="text-xs">Actual</Badge>}
+                  {isActive && (
+                    <Badge variant="secondary" className="text-xs">
+                      Actual
+                    </Badge>
+                  )}
                 </DropdownMenuItem>
               );
             })}
@@ -195,10 +218,11 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
                       {getRoleDisplayName(role)}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {role === 'MASTER' && '🏛️ SUPREMO - Control total del sistema'}
-                      {role === 'ADMIN' && 'Gestión administrativa local'}
-                      {role === 'PROFESOR' && 'Funciones docentes'}
-                      {role === 'PARENT' && 'Vista de padres'}
+                      {role === "MASTER" &&
+                        "🏛️ SUPREMO - Control total del sistema"}
+                      {role === "ADMIN" && "Gestión administrativa local"}
+                      {role === "PROFESOR" && "Funciones docentes"}
+                      {role === "PARENT" && "Vista de padres"}
                     </div>
                   </div>
                   {isActive && (
@@ -238,7 +262,7 @@ export function RoleSwitcher({ isCollapsed = false }: { isCollapsed?: boolean })
       <div className="text-xs text-muted-foreground">
         {hasSwitched ? (
           <span>
-            Rol original: {getRoleDisplayName(originalRole || 'MASTER')}
+            Rol original: {getRoleDisplayName(originalRole || "MASTER")}
           </span>
         ) : (
           <span>Modo desarrollador activo</span>

@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import React, { useMemo, useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useMemo, useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
-  AlertTriangle,
-  Flame,
-  Power,
-  Lock,
-  Skull,
-} from 'lucide-react';
-import { RoleIndicator } from '@/components/layout/RoleAwareNavigation';
-import { MasterPageTemplate } from './MasterPageTemplate';
-import { MasterStatusIndicator } from './MasterStatusIndicator';
-import { GodModeStatusCard } from './GodModeStatusCard';
-import { SystemOverviewCard } from './SystemOverviewCard';
-import { PerformanceMetricsCard } from './PerformanceMetricsCard';
-import { AdvancedControlsCard } from './AdvancedControlsCard';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { AlertTriangle, Flame, Power, Lock, Skull } from "lucide-react";
+import { RoleIndicator } from "@/components/layout/RoleAwareNavigation";
+import { MasterPageTemplate } from "./MasterPageTemplate";
+import { MasterStatusIndicator } from "./MasterStatusIndicator";
+import { GodModeStatusCard } from "./GodModeStatusCard";
+import { SystemOverviewCard } from "./SystemOverviewCard";
+import { PerformanceMetricsCard } from "./PerformanceMetricsCard";
+import { AdvancedControlsCard } from "./AdvancedControlsCard";
 
 function SupremeActionsWarning() {
   return (
@@ -41,13 +41,15 @@ function SupremeActionsWarning() {
           </AlertTitle>
           <AlertDescription className="text-yellow-700 dark:text-yellow-300">
             Para proteger la integridad del sistema, todas las acciones supremas
-            peligrosas han sido consolidadas en la página de <strong>Operaciones Avanzadas</strong>.
+            peligrosas han sido consolidadas en la página de{" "}
+            <strong>Operaciones Avanzadas</strong>.
           </AlertDescription>
         </Alert>
 
         <div className="space-y-3">
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Las siguientes acciones están ahora disponibles en <strong>Operaciones Avanzadas</strong>:
+            Las siguientes acciones están ahora disponibles en{" "}
+            <strong>Operaciones Avanzadas</strong>:
           </p>
           <ul className="list-disc list-inside text-sm space-y-1 text-slate-600 dark:text-slate-400">
             <li>🔥 SUPREME OVERRIDE</li>
@@ -84,7 +86,8 @@ function SupremeAuthorityFooter() {
           </div>
         </div>
         <div className="text-xs text-yellow-600 dark:text-yellow-400 font-mono">
-          Última verificación: {new Date().toISOString()} | Estado: GOD MODE ACTIVE
+          Última verificación: {new Date().toISOString()} | Estado: GOD MODE
+          ACTIVE
         </div>
       </CardContent>
     </Card>
@@ -111,29 +114,32 @@ export function GodModeDashboard() {
 
       <MasterPageTemplate
         title="🏛️ GOD MODE SUPREME AUTHORITY"
-        subtitle={`Bienvenido, Arquitecto Supremo ${session?.user?.name || 'Master Developer'} - Nivel máximo de control`}
+        subtitle={`Bienvenido, Arquitecto Supremo ${session?.user?.name || "Master Developer"} - Nivel máximo de control`}
         context="GOD_MODE_DASHBOARD"
       >
-
-
         {/* Critical Warning - Enhanced */}
         <Alert className="border-yellow-200">
           <AlertTriangle className="h-4 w-4 text-yellow-600" />
           <AlertTitle className="text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
             ⚠️ MODO DIOS ACTIVADO - AUTORIDAD SUPREMA
-            <Badge variant="outline" className="text-xs">CRÍTICO</Badge>
+            <Badge variant="outline" className="text-xs">
+              CRÍTICO
+            </Badge>
           </AlertTitle>
           <AlertDescription className="text-yellow-700 dark:text-yellow-300 space-y-2">
             <p>
-              <strong>🏛️ SUPREME AUTHORITY ACTIVE:</strong> Tienes control absoluto sobre el sistema.
-              Todas las restricciones han sido eliminadas para tu acceso MASTER.
+              <strong>🏛️ SUPREME AUTHORITY ACTIVE:</strong> Tienes control
+              absoluto sobre el sistema. Todas las restricciones han sido
+              eliminadas para tu acceso MASTER.
             </p>
             <p>
-              <strong>⚡ GOD MODE CAPABILITIES:</strong> Sistema de monitoreo en tiempo real,
-              control de amenazas globales, y autoridad para ejecutar cualquier acción crítica.
+              <strong>⚡ GOD MODE CAPABILITIES:</strong> Sistema de monitoreo en
+              tiempo real, control de amenazas globales, y autoridad para
+              ejecutar cualquier acción crítica.
             </p>
             <p className="text-sm font-mono p-2 rounded">
-              🔒 Sistema protegido por encriptación cuántica - Solo MASTER puede acceder
+              🔒 Sistema protegido por encriptación cuántica - Solo MASTER puede
+              acceder
             </p>
           </AlertDescription>
         </Alert>

@@ -1,17 +1,29 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Textarea } from '@/components/ui/textarea';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Settings,
   Database,
@@ -32,8 +44,12 @@ import {
   CheckCircle,
   Eye,
   EyeOff,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface ConfigSection {
   id: string;
@@ -47,7 +63,7 @@ interface ConfigSetting {
   id: string;
   label: string;
   description: string;
-  type: 'text' | 'number' | 'boolean' | 'select' | 'textarea';
+  type: "text" | "number" | "boolean" | "select" | "textarea";
   value: any;
   options?: string[];
   sensitive?: boolean;
@@ -55,160 +71,160 @@ interface ConfigSetting {
 
 const configSections: ConfigSection[] = [
   {
-    id: 'database',
-    title: 'Base de Datos',
-    description: 'Configuración de conexiones y rendimiento',
+    id: "database",
+    title: "Base de Datos",
+    description: "Configuración de conexiones y rendimiento",
     icon: Database,
     settings: [
       {
-        id: 'db_host',
-        label: 'Host',
-        description: 'Dirección del servidor de base de datos',
-        type: 'text',
-        value: 'localhost',
+        id: "db_host",
+        label: "Host",
+        description: "Dirección del servidor de base de datos",
+        type: "text",
+        value: "localhost",
       },
       {
-        id: 'db_port',
-        label: 'Puerto',
-        description: 'Puerto de conexión',
-        type: 'number',
+        id: "db_port",
+        label: "Puerto",
+        description: "Puerto de conexión",
+        type: "number",
         value: 5432,
       },
       {
-        id: 'db_pool_size',
-        label: 'Tamaño del Pool',
-        description: 'Número máximo de conexiones',
-        type: 'number',
+        id: "db_pool_size",
+        label: "Tamaño del Pool",
+        description: "Número máximo de conexiones",
+        type: "number",
         value: 20,
       },
       {
-        id: 'db_ssl',
-        label: 'SSL',
-        description: 'Habilitar conexiones SSL',
-        type: 'boolean',
+        id: "db_ssl",
+        label: "SSL",
+        description: "Habilitar conexiones SSL",
+        type: "boolean",
         value: true,
       },
       {
-        id: 'db_timeout',
-        label: 'Timeout',
-        description: 'Timeout de conexión en segundos',
-        type: 'number',
+        id: "db_timeout",
+        label: "Timeout",
+        description: "Timeout de conexión en segundos",
+        type: "number",
         value: 30,
       },
     ],
   },
   {
-    id: 'security',
-    title: 'Seguridad',
-    description: 'Configuraciones de seguridad y autenticación',
+    id: "security",
+    title: "Seguridad",
+    description: "Configuraciones de seguridad y autenticación",
     icon: Shield,
     settings: [
       {
-        id: 'jwt_secret',
-        label: 'JWT Secret',
-        description: 'Clave secreta para tokens JWT',
-        type: 'text',
-        value: '••••••••••••••••',
+        id: "jwt_secret",
+        label: "JWT Secret",
+        description: "Clave secreta para tokens JWT",
+        type: "text",
+        value: "••••••••••••••••",
         sensitive: true,
       },
       {
-        id: 'session_timeout',
-        label: 'Timeout de Sesión',
-        description: 'Tiempo de expiración de sesión en minutos',
-        type: 'number',
+        id: "session_timeout",
+        label: "Timeout de Sesión",
+        description: "Tiempo de expiración de sesión en minutos",
+        type: "number",
         value: 480,
       },
       {
-        id: 'password_min_length',
-        label: 'Longitud Mínima de Contraseña',
-        description: 'Caracteres mínimos para contraseñas',
-        type: 'number',
+        id: "password_min_length",
+        label: "Longitud Mínima de Contraseña",
+        description: "Caracteres mínimos para contraseñas",
+        type: "number",
         value: 8,
       },
       {
-        id: 'two_factor_required',
-        label: '2FA Requerido',
-        description: 'Exigir autenticación de dos factores',
-        type: 'boolean',
+        id: "two_factor_required",
+        label: "2FA Requerido",
+        description: "Exigir autenticación de dos factores",
+        type: "boolean",
         value: true,
       },
       {
-        id: 'rate_limiting',
-        label: 'Rate Limiting',
-        description: 'Habilitar limitación de peticiones',
-        type: 'boolean',
+        id: "rate_limiting",
+        label: "Rate Limiting",
+        description: "Habilitar limitación de peticiones",
+        type: "boolean",
         value: true,
       },
     ],
   },
   {
-    id: 'server',
-    title: 'Servidor',
-    description: 'Configuración del servidor y rendimiento',
+    id: "server",
+    title: "Servidor",
+    description: "Configuración del servidor y rendimiento",
     icon: Server,
     settings: [
       {
-        id: 'server_port',
-        label: 'Puerto del Servidor',
-        description: 'Puerto en el que corre la aplicación',
-        type: 'number',
+        id: "server_port",
+        label: "Puerto del Servidor",
+        description: "Puerto en el que corre la aplicación",
+        type: "number",
         value: 3000,
       },
       {
-        id: 'max_file_size',
-        label: 'Tamaño Máximo de Archivo',
-        description: 'Tamaño máximo para uploads en MB',
-        type: 'number',
+        id: "max_file_size",
+        label: "Tamaño Máximo de Archivo",
+        description: "Tamaño máximo para uploads en MB",
+        type: "number",
         value: 10,
       },
       {
-        id: 'compression',
-        label: 'Compresión',
-        description: 'Habilitar compresión de respuestas',
-        type: 'boolean',
+        id: "compression",
+        label: "Compresión",
+        description: "Habilitar compresión de respuestas",
+        type: "boolean",
         value: true,
       },
       {
-        id: 'cors_origins',
-        label: 'Orígenes CORS',
-        description: 'Orígenes permitidos para CORS',
-        type: 'textarea',
-        value: 'http://localhost:3000\nhttps://manitos-pintadas.com',
+        id: "cors_origins",
+        label: "Orígenes CORS",
+        description: "Orígenes permitidos para CORS",
+        type: "textarea",
+        value: "http://localhost:3000\nhttps://manitos-pintadas.com",
       },
     ],
   },
   {
-    id: 'notifications',
-    title: 'Notificaciones',
-    description: 'Configuración de emails y alertas',
+    id: "notifications",
+    title: "Notificaciones",
+    description: "Configuración de emails y alertas",
     icon: Bell,
     settings: [
       {
-        id: 'smtp_host',
-        label: 'SMTP Host',
-        description: 'Servidor SMTP para emails',
-        type: 'text',
-        value: 'smtp.gmail.com',
+        id: "smtp_host",
+        label: "SMTP Host",
+        description: "Servidor SMTP para emails",
+        type: "text",
+        value: "smtp.gmail.com",
       },
       {
-        id: 'smtp_port',
-        label: 'SMTP Port',
-        description: 'Puerto SMTP',
-        type: 'number',
+        id: "smtp_port",
+        label: "SMTP Port",
+        description: "Puerto SMTP",
+        type: "number",
         value: 587,
       },
       {
-        id: 'email_notifications',
-        label: 'Notificaciones por Email',
-        description: 'Enviar notificaciones por email',
-        type: 'boolean',
+        id: "email_notifications",
+        label: "Notificaciones por Email",
+        description: "Enviar notificaciones por email",
+        type: "boolean",
         value: true,
       },
       {
-        id: 'admin_alerts',
-        label: 'Alertas de Administrador',
-        description: 'Notificar al administrador de eventos críticos',
-        type: 'boolean',
+        id: "admin_alerts",
+        label: "Alertas de Administrador",
+        description: "Notificar al administrador de eventos críticos",
+        type: "boolean",
         value: true,
       },
     ],
@@ -217,20 +233,20 @@ const configSections: ConfigSection[] = [
 
 function ConfigSectionCard({ section }: { section: ConfigSection }) {
   const [settings, setSettings] = useState<Record<string, any>>(
-    Object.fromEntries(section.settings.map(s => [s.id, s.value]))
+    Object.fromEntries(section.settings.map((s) => [s.id, s.value])),
   );
 
   const Icon = section.icon;
 
   const updateSetting = (id: string, value: any) => {
-    setSettings(prev => ({ ...prev, [id]: value }));
+    setSettings((prev) => ({ ...prev, [id]: value }));
   };
 
   const renderSettingInput = (setting: ConfigSetting) => {
     const value = settings[setting.id];
 
     switch (setting.type) {
-      case 'boolean':
+      case "boolean":
         return (
           <Switch
             checked={value}
@@ -238,24 +254,29 @@ function ConfigSectionCard({ section }: { section: ConfigSection }) {
           />
         );
 
-      case 'number':
+      case "number":
         return (
           <Input
             type="number"
             value={value}
-            onChange={(e) => updateSetting(setting.id, parseInt(e.target.value))}
+            onChange={(e) =>
+              updateSetting(setting.id, parseInt(e.target.value))
+            }
             className="w-32"
           />
         );
 
-      case 'select':
+      case "select":
         return (
-          <Select value={value} onValueChange={(val) => updateSetting(setting.id, val)}>
+          <Select
+            value={value}
+            onValueChange={(val) => updateSetting(setting.id, val)}
+          >
             <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {setting.options?.map(option => (
+              {setting.options?.map((option) => (
                 <SelectItem key={option} value={option}>
                   {option}
                 </SelectItem>
@@ -264,7 +285,7 @@ function ConfigSectionCard({ section }: { section: ConfigSection }) {
           </Select>
         );
 
-      case 'textarea':
+      case "textarea":
         return (
           <Textarea
             value={value}
@@ -277,7 +298,7 @@ function ConfigSectionCard({ section }: { section: ConfigSection }) {
         return (
           <div className="flex items-center gap-2">
             <Input
-              type={setting.sensitive ? 'password' : 'text'}
+              type={setting.sensitive ? "password" : "text"}
               value={value}
               onChange={(e) => updateSetting(setting.id, e.target.value)}
               className="flex-1"
@@ -309,7 +330,9 @@ function ConfigSectionCard({ section }: { section: ConfigSection }) {
                 <Label htmlFor={setting.id} className="text-sm font-medium">
                   {setting.label}
                 </Label>
-                <p className="text-xs text-muted-foreground">{setting.description}</p>
+                <p className="text-xs text-muted-foreground">
+                  {setting.description}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -336,7 +359,7 @@ function ConfigSectionCard({ section }: { section: ConfigSection }) {
 function SystemStatusCard() {
   const [systemStatus] = useState({
     configValid: true,
-    lastBackup: '2 horas atrás',
+    lastBackup: "2 horas atrás",
     pendingUpdates: 3,
     securityScore: 95,
   });
@@ -348,7 +371,9 @@ function SystemStatusCard() {
           <CheckCircle className="h-5 w-5 text-green-600" />
           Estado del Sistema
         </CardTitle>
-        <CardDescription>Validación de configuración y estado general</CardDescription>
+        <CardDescription>
+          Validación de configuración y estado general
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -389,8 +414,6 @@ function SystemStatusCard() {
   );
 }
 
-
-
 export function SystemConfigDashboard() {
   const { data: session } = useSession();
 
@@ -399,7 +422,7 @@ export function SystemConfigDashboard() {
       {/* System Config Header */}
       <RoleAwareHeader
         title="⚙️ SYSTEM CONFIG - SUPREME CONFIGURATION"
-        subtitle={`Configuración absoluta del sistema - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Configuración absoluta del sistema - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-gray-600 border-gray-600">
@@ -411,7 +434,6 @@ export function SystemConfigDashboard() {
         }
       />
 
-
       {/* System Status */}
       <SystemStatusCard />
 
@@ -421,8 +443,6 @@ export function SystemConfigDashboard() {
           <ConfigSectionCard key={section.id} section={section} />
         ))}
       </div>
-
-
     </div>
   );
 }

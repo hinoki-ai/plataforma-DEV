@@ -5,7 +5,7 @@
  * to ensure session synchronization works correctly.
  */
 
-import { signIn } from 'next-auth/react';
+import { signIn } from "next-auth/react";
 
 interface AuthTestResult {
   success: boolean;
@@ -54,17 +54,17 @@ export class AuthFlowTester {
       if (!session) {
         this.addResult(
           true,
-          'Initial session state: No active session (expected)'
+          "Initial session state: No active session (expected)",
         );
       } else {
         this.addResult(
           false,
           `Initial session state: Unexpected active session found`,
-          { session }
+          { session },
         );
       }
     } catch (error) {
-      this.addResult(false, 'Initial session state test failed', { error });
+      this.addResult(false, "Initial session state test failed", { error });
     }
   }
 
@@ -73,31 +73,31 @@ export class AuthFlowTester {
     password: string;
   }): Promise<void> {
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         email: credentials.email,
         password: credentials.password,
         redirect: false,
       });
 
       if (result?.error) {
-        this.addResult(false, 'Login process failed', { error: result.error });
+        this.addResult(false, "Login process failed", { error: result.error });
       } else {
-        this.addResult(true, 'Login process completed successfully');
+        this.addResult(true, "Login process completed successfully");
       }
     } catch (error) {
-      this.addResult(false, 'Login process test failed', { error });
+      this.addResult(false, "Login process test failed", { error });
     }
   }
 
   private async testSessionSync(): Promise<void> {
     try {
       // Wait for session to sync
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const session = await this.getCurrentSession();
 
       if (session?.user) {
-        this.addResult(true, 'Session synchronization successful', {
+        this.addResult(true, "Session synchronization successful", {
           user: session.user,
           hasAllFields: !!(
             session.user.id &&
@@ -106,10 +106,10 @@ export class AuthFlowTester {
           ),
         });
       } else {
-        this.addResult(false, 'Session synchronization failed - no user data');
+        this.addResult(false, "Session synchronization failed - no user data");
       }
     } catch (error) {
-      this.addResult(false, 'Session synchronization test failed', { error });
+      this.addResult(false, "Session synchronization test failed", { error });
     }
   }
 
@@ -118,7 +118,7 @@ export class AuthFlowTester {
       const session = await this.getCurrentSession();
 
       if (!session?.user) {
-        this.addResult(false, 'Redirect test failed - no session available');
+        this.addResult(false, "Redirect test failed - no session available");
         return;
       }
 
@@ -126,34 +126,34 @@ export class AuthFlowTester {
       const currentPath = window.location.pathname;
 
       if (currentPath === expectedPath) {
-        this.addResult(true, 'Redirect behavior correct', {
+        this.addResult(true, "Redirect behavior correct", {
           role: session.user.role,
           expectedPath,
           currentPath,
         });
       } else {
-        this.addResult(false, 'Redirect behavior incorrect', {
+        this.addResult(false, "Redirect behavior incorrect", {
           role: session.user.role,
           expectedPath,
           currentPath,
         });
       }
     } catch (error) {
-      this.addResult(false, 'Redirect behavior test failed', { error });
+      this.addResult(false, "Redirect behavior test failed", { error });
     }
   }
 
   private async testProtectedRouteAccess(): Promise<void> {
     try {
       const protectedRoutes = [
-        '/admin',
-        '/profesor',
-        '/centro-consejo/dashboard',
+        "/admin",
+        "/profesor",
+        "/centro-consejo/dashboard",
       ];
       const session = await this.getCurrentSession();
 
       if (!session?.user) {
-        this.addResult(false, 'Protected route test failed - no session');
+        this.addResult(false, "Protected route test failed - no session");
         return;
       }
 
@@ -164,16 +164,16 @@ export class AuthFlowTester {
         const canAccess = accessibleRoutes.includes(route);
         this.addResult(
           true,
-          `Protected route access: ${route} - ${canAccess ? 'ALLOWED' : 'DENIED'}`,
+          `Protected route access: ${route} - ${canAccess ? "ALLOWED" : "DENIED"}`,
           {
             route,
             userRole,
             canAccess,
-          }
+          },
         );
       }
     } catch (error) {
-      this.addResult(false, 'Protected route access test failed', { error });
+      this.addResult(false, "Protected route access test failed", { error });
     }
   }
 
@@ -182,16 +182,16 @@ export class AuthFlowTester {
       // This would typically involve signing out and checking session state
       this.addResult(
         true,
-        'Logout process test (manual verification required)'
+        "Logout process test (manual verification required)",
       );
     } catch (error) {
-      this.addResult(false, 'Logout process test failed', { error });
+      this.addResult(false, "Logout process test failed", { error });
     }
   }
 
   private async getCurrentSession() {
     try {
-      const response = await fetch('/api/auth/session', { cache: 'no-store' });
+      const response = await fetch("/api/auth/session", { cache: "no-store" });
       return await response.json();
     } catch {
       return null;
@@ -200,25 +200,25 @@ export class AuthFlowTester {
 
   private getExpectedPath(role: string): string {
     switch (role) {
-      case 'ADMIN':
-        return '/admin';
-      case 'PROFESOR':
-        return '/profesor';
-      case 'PARENT':
-        return '/centro-consejo/dashboard';
+      case "ADMIN":
+        return "/admin";
+      case "PROFESOR":
+        return "/profesor";
+      case "PARENT":
+        return "/centro-consejo/dashboard";
       default:
-        return '/';
+        return "/";
     }
   }
 
   private getAccessibleRoutes(role: string): string[] {
     switch (role) {
-      case 'ADMIN':
-        return ['/admin'];
-      case 'PROFESOR':
-        return ['/profesor'];
-      case 'PARENT':
-        return ['/centro-consejo/dashboard'];
+      case "ADMIN":
+        return ["/admin"];
+      case "PROFESOR":
+        return ["/profesor"];
+      case "PARENT":
+        return ["/centro-consejo/dashboard"];
       default:
         return [];
     }

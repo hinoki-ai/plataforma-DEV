@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { Upload, X, File, Image, FileText, Video } from 'lucide-react';
-import { Button } from './button';
-import { cn } from '@/lib/utils';
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { Upload, X, File, Image, FileText, Video } from "lucide-react";
+import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
 export interface FileWithPreview extends File {
   preview?: string;
@@ -25,17 +25,17 @@ export function FileUpload({
   maxFiles = 5,
   maxSize = 10 * 1024 * 1024, // 10MB
   acceptedFileTypes = {
-    'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp'],
-    'application/pdf': ['.pdf'],
-    'application/msword': ['.doc'],
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
-      '.docx',
+    "image/*": [".jpeg", ".jpg", ".png", ".gif", ".webp"],
+    "application/pdf": [".pdf"],
+    "application/msword": [".doc"],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+      ".docx",
     ],
-    'application/vnd.ms-excel': ['.xls'],
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
-      '.xlsx',
+    "application/vnd.ms-excel": [".xls"],
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+      ".xlsx",
     ],
-    'text/plain': ['.txt'],
+    "text/plain": [".txt"],
   },
   className,
   disabled = false,
@@ -45,9 +45,9 @@ export function FileUpload({
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const newFiles = acceptedFiles.map(file => {
+      const newFiles = acceptedFiles.map((file) => {
         const fileWithPreview = Object.assign(file, {
-          preview: file.type.startsWith('image/')
+          preview: file.type.startsWith("image/")
             ? URL.createObjectURL(file)
             : undefined,
         });
@@ -58,7 +58,7 @@ export function FileUpload({
       setFiles(updatedFiles);
       onFilesChange(updatedFiles);
     },
-    [files, maxFiles, onFilesChange]
+    [files, maxFiles, onFilesChange],
   );
 
   const removeFile = useCallback(
@@ -71,7 +71,7 @@ export function FileUpload({
       setFiles(newFiles);
       onFilesChange(newFiles);
     },
-    [files, onFilesChange]
+    [files, onFilesChange],
   );
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
@@ -84,32 +84,32 @@ export function FileUpload({
     });
 
   const getFileIcon = (file: File) => {
-    if (file.type.startsWith('image/')) return <Image className="h-4 w-4" />;
-    if (file.type.includes('pdf')) return <FileText className="h-4 w-4" />;
-    if (file.type.startsWith('video/')) return <Video className="h-4 w-4" />;
+    if (file.type.startsWith("image/")) return <Image className="h-4 w-4" />;
+    if (file.type.includes("pdf")) return <FileText className="h-4 w-4" />;
+    if (file.type.startsWith("video/")) return <Video className="h-4 w-4" />;
     return <File className="h-4 w-4" />;
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Dropzone */}
       <div
         {...getRootProps()}
         className={cn(
-          'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
+          "border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors",
           isDragActive
-            ? 'border-primary bg-primary/5'
-            : 'border-gray-300 hover:border-gray-400',
-          disabled && 'opacity-50 cursor-not-allowed',
-          files.length >= maxFiles && 'opacity-50 cursor-not-allowed'
+            ? "border-primary bg-primary/5"
+            : "border-gray-300 hover:border-gray-400",
+          disabled && "opacity-50 cursor-not-allowed",
+          files.length >= maxFiles && "opacity-50 cursor-not-allowed",
         )}
       >
         <input {...getInputProps()} />
@@ -119,7 +119,7 @@ export function FileUpload({
         ) : (
           <div>
             <p className="text-muted-foreground mb-2">
-              Arrastra y suelta archivos aquí, o{' '}
+              Arrastra y suelta archivos aquí, o{" "}
               <span className="text-primary underline">explora</span>
             </p>
             <p className="text-sm text-gray-500">
@@ -137,8 +137,8 @@ export function FileUpload({
               key={file.name}
               className="text-sm text-red-600 bg-red-50 p-2 rounded"
             >
-              <strong>{file.name}</strong> -{' '}
-              {errors.map(e => e.message).join(', ')}
+              <strong>{file.name}</strong> -{" "}
+              {errors.map((e) => e.message).join(", ")}
             </div>
           ))}
         </div>

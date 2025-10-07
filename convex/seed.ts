@@ -13,9 +13,12 @@ export const seedDatabase = mutation({
 
     // Password: admin123, profesor123, parent123
     // Pre-hashed with bcrypt (10 rounds)
-    const hashedAdminPassword = "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
-    const hashedProfesorPassword = "$2a$10$F4P0HmYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4wYZOLQQYZlYqZWp6K";
-    const hashedParentPassword = "$2a$10$rVEyGPNjGj8bLqTaHhHjYeYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4w";
+    const hashedAdminPassword =
+      "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
+    const hashedProfesorPassword =
+      "$2a$10$F4P0HmYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4wYZOLQQYZlYqZWp6K";
+    const hashedParentPassword =
+      "$2a$10$rVEyGPNjGj8bLqTaHhHjYeYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4w";
 
     // Create Admin User
     const adminId = await ctx.db.insert("users", {

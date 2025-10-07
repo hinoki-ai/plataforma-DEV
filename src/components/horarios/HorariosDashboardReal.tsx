@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Clock, Calendar } from 'lucide-react';
+} from "@/components/ui/card";
+import { Clock, Calendar } from "lucide-react";
 
 export function HorariosDashboardReal() {
   const [stats, setStats] = useState<{
@@ -22,9 +22,9 @@ export function HorariosDashboardReal() {
       try {
         const [eventsRes, statsRes] = await Promise.all([
           fetch(
-            '/api/calendar/events?categories=ACADEMIC,MEETING,ADMINISTRATIVE'
-          ).then(r => r.json()),
-          fetch('/api/calendar/statistics').then(r => r.json()),
+            "/api/calendar/events?categories=ACADEMIC,MEETING,ADMINISTRATIVE",
+          ).then((r) => r.json()),
+          fetch("/api/calendar/statistics").then((r) => r.json()),
         ]);
 
         const total =
@@ -42,8 +42,8 @@ export function HorariosDashboardReal() {
   }, []);
 
   const headerDescription = useMemo(() => {
-    if (loading) return 'Cargando datos de horarios...';
-    if (!stats) return 'No se encontraron datos de horarios';
+    if (loading) return "Cargando datos de horarios...";
+    if (!stats) return "No se encontraron datos de horarios";
     return `Hay ${stats.upcomingEvents} eventos próximos`;
   }, [loading, stats]);
 
@@ -66,7 +66,7 @@ export function HorariosDashboardReal() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {loading ? '—' : (stats?.totalEvents ?? 0)}
+              {loading ? "—" : (stats?.totalEvents ?? 0)}
             </div>
             <p className="text-xs text-muted-foreground">
               Horarios configurados este mes

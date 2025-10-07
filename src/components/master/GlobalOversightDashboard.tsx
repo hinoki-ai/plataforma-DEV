@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import React, { useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React, { useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Globe,
   MapPin,
@@ -25,14 +31,18 @@ import {
   Cpu,
   HardDrive,
   Network,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface GlobalNode {
   id: string;
   region: string;
   country: string;
-  status: 'online' | 'degraded' | 'offline';
+  status: "online" | "degraded" | "offline";
   users: number;
   load: number;
   latency: number;
@@ -49,12 +59,66 @@ interface GlobalMetrics {
 }
 
 const globalNodes: GlobalNode[] = [
-  { id: 'us-east-1', region: 'US East', country: 'USA', status: 'online', users: 1250, load: 45, latency: 12, lastUpdate: '2 min ago' },
-  { id: 'eu-west-1', region: 'EU West', country: 'Germany', status: 'online', users: 890, load: 32, latency: 25, lastUpdate: '1 min ago' },
-  { id: 'ap-southeast-1', region: 'AP Southeast', country: 'Singapore', status: 'online', users: 654, load: 28, latency: 45, lastUpdate: '3 min ago' },
-  { id: 'sa-east-1', region: 'SA East', country: 'Brazil', status: 'degraded', users: 432, load: 67, latency: 89, lastUpdate: '5 min ago' },
-  { id: 'af-south-1', region: 'AF South', country: 'South Africa', status: 'online', users: 298, load: 23, latency: 67, lastUpdate: '4 min ago' },
-  { id: 'me-central-1', region: 'ME Central', country: 'UAE', status: 'online', users: 187, load: 19, latency: 54, lastUpdate: '2 min ago' },
+  {
+    id: "us-east-1",
+    region: "US East",
+    country: "USA",
+    status: "online",
+    users: 1250,
+    load: 45,
+    latency: 12,
+    lastUpdate: "2 min ago",
+  },
+  {
+    id: "eu-west-1",
+    region: "EU West",
+    country: "Germany",
+    status: "online",
+    users: 890,
+    load: 32,
+    latency: 25,
+    lastUpdate: "1 min ago",
+  },
+  {
+    id: "ap-southeast-1",
+    region: "AP Southeast",
+    country: "Singapore",
+    status: "online",
+    users: 654,
+    load: 28,
+    latency: 45,
+    lastUpdate: "3 min ago",
+  },
+  {
+    id: "sa-east-1",
+    region: "SA East",
+    country: "Brazil",
+    status: "degraded",
+    users: 432,
+    load: 67,
+    latency: 89,
+    lastUpdate: "5 min ago",
+  },
+  {
+    id: "af-south-1",
+    region: "AF South",
+    country: "South Africa",
+    status: "online",
+    users: 298,
+    load: 23,
+    latency: 67,
+    lastUpdate: "4 min ago",
+  },
+  {
+    id: "me-central-1",
+    region: "ME Central",
+    country: "UAE",
+    status: "online",
+    users: 187,
+    load: 19,
+    latency: 54,
+    lastUpdate: "2 min ago",
+  },
 ];
 
 function GlobalMapCard() {
@@ -65,7 +129,9 @@ function GlobalMapCard() {
           <Globe className="h-5 w-5 text-blue-600" />
           Mapa Global de Nodos
         </CardTitle>
-        <CardDescription>Distribución mundial de servidores y centros de datos</CardDescription>
+        <CardDescription>
+          Distribución mundial de servidores y centros de datos
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -73,11 +139,11 @@ function GlobalMapCard() {
             <div
               key={node.id}
               className={`p-4 rounded-lg border-2 ${
-                node.status === 'online'
-                  ? 'border-green-200 dark:border-green-800'
-                  : node.status === 'degraded'
-                    ? 'border-yellow-200 dark:border-yellow-800'
-                    : 'border-red-200 dark:border-red-800'
+                node.status === "online"
+                  ? "border-green-200 dark:border-green-800"
+                  : node.status === "degraded"
+                    ? "border-yellow-200 dark:border-yellow-800"
+                    : "border-red-200 dark:border-red-800"
               }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -85,10 +151,15 @@ function GlobalMapCard() {
                   <MapPin className="h-4 w-4" />
                   <span className="font-medium text-sm">{node.region}</span>
                 </div>
-                <div className={`h-2 w-2 rounded-full ${
-                  node.status === 'online' ? 'bg-green-500' :
-                  node.status === 'degraded' ? 'bg-yellow-500' : 'bg-red-500'
-                }`} />
+                <div
+                  className={`h-2 w-2 rounded-full ${
+                    node.status === "online"
+                      ? "bg-green-500"
+                      : node.status === "degraded"
+                        ? "bg-yellow-500"
+                        : "bg-red-500"
+                  }`}
+                />
               </div>
 
               <div className="space-y-2 text-xs">
@@ -123,14 +194,17 @@ function GlobalMapCard() {
 }
 
 function GlobalMetricsCard() {
-  const metrics: GlobalMetrics = useMemo(() => ({
-    totalNodes: 12,
-    activeNodes: 11,
-    totalUsers: 12456,
-    globalLatency: 34,
-    dataTransferred: '2.4 TB',
-    uptime: '99.97%',
-  }), []);
+  const metrics: GlobalMetrics = useMemo(
+    () => ({
+      totalNodes: 12,
+      activeNodes: 11,
+      totalUsers: 12456,
+      globalLatency: 34,
+      dataTransferred: "2.4 TB",
+      uptime: "99.97%",
+    }),
+    [],
+  );
 
   return (
     <Card className="border-green-200 dark:border-green-800">
@@ -139,7 +213,9 @@ function GlobalMetricsCard() {
           <TrendingUp className="h-5 w-5 text-green-600" />
           Métricas Globales
         </CardTitle>
-        <CardDescription>Estado general del sistema distribuido</CardDescription>
+        <CardDescription>
+          Estado general del sistema distribuido
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -156,7 +232,9 @@ function GlobalMetricsCard() {
             <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
               {metrics.totalUsers.toLocaleString()}
             </div>
-            <div className="text-sm text-muted-foreground">Usuarios Globales</div>
+            <div className="text-sm text-muted-foreground">
+              Usuarios Globales
+            </div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -172,7 +250,9 @@ function GlobalMetricsCard() {
             <div className="text-2xl font-bold text-green-700 dark:text-green-300">
               {metrics.dataTransferred}
             </div>
-            <div className="text-sm text-muted-foreground">Datos Transferidos</div>
+            <div className="text-sm text-muted-foreground">
+              Datos Transferidos
+            </div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -197,32 +277,35 @@ function GlobalMetricsCard() {
 }
 
 function GlobalAlertsCard() {
-  const alerts = useMemo(() => [
-    {
-      id: 1,
-      type: 'warning',
-      region: 'SA East',
-      message: 'Latencia elevada detectada',
-      severity: 'medium',
-      time: '5 min ago'
-    },
-    {
-      id: 2,
-      type: 'info',
-      region: 'Global',
-      message: 'Actualización de seguridad aplicada en todos los nodos',
-      severity: 'low',
-      time: '15 min ago'
-    },
-    {
-      id: 3,
-      type: 'success',
-      region: 'EU West',
-      message: 'Optimización de rendimiento completada',
-      severity: 'low',
-      time: '1 hour ago'
-    },
-  ], []);
+  const alerts = useMemo(
+    () => [
+      {
+        id: 1,
+        type: "warning",
+        region: "SA East",
+        message: "Latencia elevada detectada",
+        severity: "medium",
+        time: "5 min ago",
+      },
+      {
+        id: 2,
+        type: "info",
+        region: "Global",
+        message: "Actualización de seguridad aplicada en todos los nodos",
+        severity: "low",
+        time: "15 min ago",
+      },
+      {
+        id: 3,
+        type: "success",
+        region: "EU West",
+        message: "Optimización de rendimiento completada",
+        severity: "low",
+        time: "1 hour ago",
+      },
+    ],
+    [],
+  );
 
   return (
     <Card className="border-orange-200 dark:border-orange-800">
@@ -231,22 +314,34 @@ function GlobalAlertsCard() {
           <Eye className="h-5 w-5 text-orange-600" />
           Alertas Globales
         </CardTitle>
-        <CardDescription>Eventos importantes en la red distribuida</CardDescription>
+        <CardDescription>
+          Eventos importantes en la red distribuida
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {alerts.map((alert) => (
-            <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-              <div className={`mt-0.5 h-2 w-2 rounded-full ${
-                alert.severity === 'high' ? 'bg-red-500' :
-                alert.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-              }`} />
+            <div
+              key={alert.id}
+              className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
+            >
+              <div
+                className={`mt-0.5 h-2 w-2 rounded-full ${
+                  alert.severity === "high"
+                    ? "bg-red-500"
+                    : alert.severity === "medium"
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
+                }`}
+              />
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <Badge variant="outline" className="text-xs">
                     {alert.region}
                   </Badge>
-                  <span className="text-xs text-muted-foreground">{alert.time}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {alert.time}
+                  </span>
                 </div>
                 <p className="text-sm font-medium">{alert.message}</p>
               </div>
@@ -266,7 +361,9 @@ function NetworkTopologyCard() {
           <Network className="h-5 w-5 text-indigo-600" />
           Topología de Red
         </CardTitle>
-        <CardDescription>Arquitectura de la red distribuida global</CardDescription>
+        <CardDescription>
+          Arquitectura de la red distribuida global
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-8">
@@ -329,14 +426,20 @@ function NetworkTopologyCard() {
             <h3 className="text-lg font-semibold">Latencia por Región</h3>
             <div className="space-y-4">
               {globalNodes.map((node) => (
-                <div key={node.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                <div
+                  key={node.id}
+                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                >
                   <div className="flex items-center gap-3">
                     <MapPin className="h-4 w-4" />
                     <span className="font-medium">{node.region}</span>
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="text-sm">{node.latency}ms</span>
-                    <Progress value={Math.max(0, 100 - node.latency)} className="w-20 h-2" />
+                    <Progress
+                      value={Math.max(0, 100 - node.latency)}
+                      className="w-20 h-2"
+                    />
                   </div>
                 </div>
               ))}
@@ -348,7 +451,9 @@ function NetworkTopologyCard() {
             <h3 className="text-lg font-semibold">Tráfico de Red</h3>
             <div className="text-center p-8">
               <Network className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">Visualización de tráfico en desarrollo</p>
+              <p className="text-muted-foreground">
+                Visualización de tráfico en desarrollo
+              </p>
             </div>
           </div>
 
@@ -388,7 +493,7 @@ export function GlobalOversightDashboard() {
       {/* Global Oversight Header */}
       <RoleAwareHeader
         title="🌍 GLOBAL OVERSIGHT - SUPREME MONITORING"
-        subtitle={`Supervisión mundial absoluta - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Supervisión mundial absoluta - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-blue-600 border-blue-600">
@@ -399,7 +504,6 @@ export function GlobalOversightDashboard() {
           </div>
         }
       />
-
 
       {/* Global Metrics */}
       <GlobalMetricsCard />

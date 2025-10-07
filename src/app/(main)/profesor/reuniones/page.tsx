@@ -1,8 +1,8 @@
-import React from 'react';
-import { MeetingTabs } from '@/components/meetings/MeetingTabs';
-import { PageTransition } from '@/components/ui/page-transition';
+import React from "react";
+import { MeetingTabs } from "@/components/meetings/MeetingTabs";
+import { PageTransition } from "@/components/ui/page-transition";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function ReunionesPage() {
   return (

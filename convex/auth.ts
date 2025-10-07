@@ -17,7 +17,7 @@ export const getAccountByProvider = query({
     return await ctx.db
       .query("accounts")
       .withIndex("by_provider_providerAccountId", (q) =>
-        q.eq("provider", provider).eq("providerAccountId", providerAccountId)
+        q.eq("provider", provider).eq("providerAccountId", providerAccountId),
       )
       .first();
   },
@@ -135,10 +135,10 @@ export const deleteExpiredSessions = mutation({
   handler: async (ctx) => {
     const now = Date.now();
     const sessions = await ctx.db.query("sessions").collect();
-    
+
     const expired = sessions.filter((s) => s.expires < now);
     await Promise.all(expired.map((s) => ctx.db.delete(s._id)));
-    
+
     return expired.length;
   },
 });
@@ -154,7 +154,7 @@ export const getVerificationToken = query({
     return await ctx.db
       .query("verificationTokens")
       .withIndex("by_identifier_token", (q) =>
-        q.eq("identifier", identifier).eq("token", token)
+        q.eq("identifier", identifier).eq("token", token),
       )
       .first();
   },
@@ -180,7 +180,7 @@ export const deleteVerificationToken = mutation({
     const verificationToken = await ctx.db
       .query("verificationTokens")
       .withIndex("by_identifier_token", (q) =>
-        q.eq("identifier", identifier).eq("token", token)
+        q.eq("identifier", identifier).eq("token", token),
       )
       .first();
 

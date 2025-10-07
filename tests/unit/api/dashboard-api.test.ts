@@ -1,16 +1,16 @@
-import { NextRequest } from 'next/server';
-import { GET as getAdminDashboard } from '@/app/api/admin/dashboard/route';
-import { GET as getProfesorDashboard } from '@/app/api/profesor/dashboard/route';
-import { GET as getParentDashboard } from '@/app/api/parent/dashboard/overview/route';
-import { GET as getMasterDashboard } from '@/app/api/master/dashboard/route';
+import { NextRequest } from "next/server";
+import { GET as getAdminDashboard } from "@/app/api/admin/dashboard/route";
+import { GET as getProfesorDashboard } from "@/app/api/profesor/dashboard/route";
+import { GET as getParentDashboard } from "@/app/api/parent/dashboard/overview/route";
+import { GET as getMasterDashboard } from "@/app/api/master/dashboard/route";
 
 // Mock the auth function
-jest.mock('@/lib/auth', () => ({
+jest.mock("@/lib/auth", () => ({
   auth: jest.fn(),
 }));
 
 // Mock the database
-jest.mock('@/lib/db', () => ({
+jest.mock("@/lib/db", () => ({
   prisma: {
     user: {
       count: jest.fn(),
@@ -41,32 +41,34 @@ jest.mock('@/lib/db', () => ({
 }));
 
 // Mock the calendar service
-jest.mock('@/services/queries/calendar', () => ({
+jest.mock("@/services/queries/calendar", () => ({
   getUpcomingEvents: jest.fn(),
 }));
 
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
-import { getUpcomingEvents } from '@/services/queries/calendar';
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { getUpcomingEvents } from "@/services/queries/calendar";
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>;
 const mockPrisma = prisma as jest.Mocked<typeof prisma>;
-const mockGetUpcomingEvents = getUpcomingEvents as jest.MockedFunction<typeof getUpcomingEvents>;
+const mockGetUpcomingEvents = getUpcomingEvents as jest.MockedFunction<
+  typeof getUpcomingEvents
+>;
 
-describe('Dashboard API Endpoints', () => {
+describe("Dashboard API Endpoints", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Admin Dashboard API', () => {
-    it('should return dashboard data for admin user', async () => {
+  describe("Admin Dashboard API", () => {
+    it("should return dashboard data for admin user", async () => {
       // Mock authenticated admin user
       mockAuth.mockResolvedValue({
         user: {
-          id: 'admin-1',
-          email: 'admin@test.com',
-          role: 'ADMIN',
-          name: 'Admin User',
+          id: "admin-1",
+          email: "admin@test.com",
+          role: "ADMIN",
+          name: "Admin User",
         },
       });
 
@@ -92,14 +94,16 @@ describe('Dashboard API Endpoints', () => {
 
       mockPrisma.calendarEvent.findMany.mockResolvedValue([
         {
-          id: 'event-1',
-          title: 'School Meeting',
+          id: "event-1",
+          title: "School Meeting",
           startDate: new Date(),
-          category: 'ACADEMIC',
+          category: "ACADEMIC",
         },
       ]);
 
-      const request = new NextRequest('http://localhost:3000/api/admin/dashboard');
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/dashboard",
+      );
       const response = await getAdminDashboard();
 
       expect(response).toBeDefined();
@@ -113,40 +117,44 @@ describe('Dashboard API Endpoints', () => {
       expect(mockPrisma.calendarEvent.findMany).toHaveBeenCalledTimes(1);
     });
 
-    it('should return 401 for unauthenticated user', async () => {
+    it("should return 401 for unauthenticated user", async () => {
       mockAuth.mockResolvedValue(null);
 
-      const request = new NextRequest('http://localhost:3000/api/admin/dashboard');
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/dashboard",
+      );
       const response = await getAdminDashboard();
 
       expect(response.status).toBe(401);
     });
 
-    it('should return 401 for non-admin user', async () => {
+    it("should return 401 for non-admin user", async () => {
       mockAuth.mockResolvedValue({
         user: {
-          id: 'profesor-1',
-          email: 'profesor@test.com',
-          role: 'PROFESOR',
-          name: 'Profesor User',
+          id: "profesor-1",
+          email: "profesor@test.com",
+          role: "PROFESOR",
+          name: "Profesor User",
         },
       });
 
-      const request = new NextRequest('http://localhost:3000/api/admin/dashboard');
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/dashboard",
+      );
       const response = await getAdminDashboard();
 
       expect(response.status).toBe(401);
     });
   });
 
-  describe('Profesor Dashboard API', () => {
-    it('should return dashboard data for profesor user', async () => {
+  describe("Profesor Dashboard API", () => {
+    it("should return dashboard data for profesor user", async () => {
       mockAuth.mockResolvedValue({
         user: {
-          id: 'profesor-1',
-          email: 'profesor@test.com',
-          role: 'PROFESOR',
-          name: 'Profesor User',
+          id: "profesor-1",
+          email: "profesor@test.com",
+          role: "PROFESOR",
+          name: "Profesor User",
         },
       });
 
@@ -170,11 +178,11 @@ describe('Dashboard API Endpoints', () => {
 
       mockPrisma.calendarEvent.findMany.mockResolvedValue([
         {
-          id: 'event-1',
-          title: 'Class Event',
+          id: "event-1",
+          title: "Class Event",
           startDate: new Date(),
-          category: 'ACADEMIC',
-          level: 'class',
+          category: "ACADEMIC",
+          level: "class",
         },
       ]);
 
@@ -189,22 +197,22 @@ describe('Dashboard API Endpoints', () => {
     });
   });
 
-  describe('Parent Dashboard API', () => {
-    it('should return dashboard data for parent user', async () => {
+  describe("Parent Dashboard API", () => {
+    it("should return dashboard data for parent user", async () => {
       mockAuth.mockResolvedValue({
         user: {
-          id: 'parent-1',
-          email: 'parent@test.com',
-          role: 'PARENT',
-          name: 'Parent User',
+          id: "parent-1",
+          email: "parent@test.com",
+          role: "PARENT",
+          name: "Parent User",
         },
       });
 
       // Mock database user lookup
       mockPrisma.user.findFirst.mockResolvedValue({
-        id: 'parent-1',
-        email: 'parent@test.com',
-        role: 'PARENT',
+        id: "parent-1",
+        email: "parent@test.com",
+        role: "PARENT",
         isActive: true,
       });
 
@@ -212,24 +220,26 @@ describe('Dashboard API Endpoints', () => {
         success: true,
         data: [
           {
-            id: 'event-1',
-            title: 'Parent Meeting',
+            id: "event-1",
+            title: "Parent Meeting",
             startDate: new Date().toISOString(),
-            category: 'PARENT',
+            category: "PARENT",
           },
         ],
       });
 
       mockPrisma.meeting.findMany.mockResolvedValue([
         {
-          id: 'meeting-1',
-          title: 'Parent-Teacher Meeting',
+          id: "meeting-1",
+          title: "Parent-Teacher Meeting",
           scheduledDate: new Date(),
-          studentName: 'Student Name',
+          studentName: "Student Name",
         },
       ]);
 
-      const request = new NextRequest('http://localhost:3000/api/parent/dashboard/overview');
+      const request = new NextRequest(
+        "http://localhost:3000/api/parent/dashboard/overview",
+      );
       const response = await getParentDashboard(request);
 
       expect(response).toBeDefined();
@@ -239,14 +249,14 @@ describe('Dashboard API Endpoints', () => {
     });
   });
 
-  describe('Master Dashboard API', () => {
-    it('should return comprehensive dashboard data for master user', async () => {
+  describe("Master Dashboard API", () => {
+    it("should return comprehensive dashboard data for master user", async () => {
       mockAuth.mockResolvedValue({
         user: {
-          id: 'master-1',
-          email: 'master@test.com',
-          role: 'MASTER',
-          name: 'Master User',
+          id: "master-1",
+          email: "master@test.com",
+          role: "MASTER",
+          name: "Master User",
         },
       });
 
@@ -256,10 +266,10 @@ describe('Dashboard API Endpoints', () => {
         .mockResolvedValueOnce(892); // active users
 
       mockPrisma.user.groupBy.mockResolvedValue([
-        { role: 'MASTER', _count: { id: 1 } },
-        { role: 'ADMIN', _count: { id: 5 } },
-        { role: 'PROFESOR', _count: { id: 25 } },
-        { role: 'PARENT', _count: { id: 1216 } },
+        { role: "MASTER", _count: { id: 1 } },
+        { role: "ADMIN", _count: { id: 5 } },
+        { role: "PROFESOR", _count: { id: 25 } },
+        { role: "PARENT", _count: { id: 1216 } },
       ]);
 
       mockPrisma.calendarEvent.count
@@ -280,13 +290,13 @@ describe('Dashboard API Endpoints', () => {
       expect(mockPrisma.meeting.count).toHaveBeenCalledTimes(2);
     });
 
-    it('should return 401 for non-master user', async () => {
+    it("should return 401 for non-master user", async () => {
       mockAuth.mockResolvedValue({
         user: {
-          id: 'admin-1',
-          email: 'admin@test.com',
-          role: 'ADMIN',
-          name: 'Admin User',
+          id: "admin-1",
+          email: "admin@test.com",
+          role: "ADMIN",
+          name: "Admin User",
         },
       });
 

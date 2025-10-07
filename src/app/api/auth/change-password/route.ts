@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
-import { hashPassword, verifyPassword } from '@/lib/crypto';
-import { Logger } from '@/lib/logger';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
+import { hashPassword, verifyPassword } from "@/lib/crypto";
+import { Logger } from "@/lib/logger";
+import { z } from "zod";
 
-const logger = Logger.getInstance('PasswordChange');
+const logger = Logger.getInstance("PasswordChange");
 
 // Rate limiting storage (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
@@ -14,21 +14,23 @@ const MAX_ATTEMPTS = 5;
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
 // Validation schema
-const passwordChangeSchema = z.object({
-  currentPassword: z.string().min(1, 'Current password is required'),
-  newPassword: z
-    .string()
-    .min(8, 'Password must be at least 8 characters long')
-    .max(128, 'Password must be less than 128 characters')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Password must contain at least one lowercase letter, one uppercase letter, and one number'
-    ),
-  confirmPassword: z.string().min(1, 'Password confirmation is required'),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ['confirmPassword'],
-});
+const passwordChangeSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters long")
+      .max(128, "Password must be less than 128 characters")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "Password must contain at least one lowercase letter, one uppercase letter, and one number",
+      ),
+    confirmPassword: z.string().min(1, "Password confirmation is required"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 // Rate limiting function
 function checkRateLimit(userId: string): boolean {
@@ -52,8 +54,16 @@ function checkRateLimit(userId: string): boolean {
 function isPasswordStrong(password: string): boolean {
   // Check for common weak passwords
   const commonPasswords = [
-    'password', '123456', '123456789', 'qwerty', 'abc123',
-    'password123', 'admin', 'letmein', 'welcome', 'monkey'
+    "password",
+    "123456",
+    "123456789",
+    "qwerty",
+    "abc123",
+    "password123",
+    "admin",
+    "letmein",
+    "welcome",
+    "monkey",
   ];
 
   if (commonPasswords.includes(password.toLowerCase())) {
@@ -73,21 +83,18 @@ export async function POST(request: NextRequest) {
     // Get session
     const session = await auth();
     if (!session?.user?.id) {
-      logger.warn('Unauthorized password change attempt');
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      logger.warn("Unauthorized password change attempt");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = session.user.id;
 
     // Rate limiting check
     if (!checkRateLimit(userId)) {
-      logger.warn('Rate limit exceeded for password change', { userId });
+      logger.warn("Rate limit exceeded for password change", { userId });
       return NextResponse.json(
-        { error: 'Too many attempts. Please try again later.' },
-        { status: 429 }
+        { error: "Too many attempts. Please try again later." },
+        { status: 429 },
       );
     }
 
@@ -96,24 +103,21 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json(
-        { error: 'Invalid JSON' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
     }
 
     const validationResult = passwordChangeSchema.safeParse(body);
     if (!validationResult.success) {
-      logger.warn('Password change validation failed', {
+      logger.warn("Password change validation failed", {
         userId,
-        errors: validationResult.error.issues
+        errors: validationResult.error.issues,
       });
       return NextResponse.json(
         {
-          error: 'Validation failed',
-          details: validationResult.error.issues
+          error: "Validation failed",
+          details: validationResult.error.issues,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -121,12 +125,12 @@ export async function POST(request: NextRequest) {
 
     // Additional password strength check
     if (!isPasswordStrong(newPassword)) {
-      logger.warn('Weak password detected', { userId });
+      logger.warn("Weak password detected", { userId });
       return NextResponse.json(
         {
-          error: 'Password is too weak. Please choose a stronger password.'
+          error: "Password is too weak. Please choose a stronger password.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -137,29 +141,32 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      logger.error('User not found', { userId });
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      logger.error("User not found", { userId });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     if (!user.password) {
-      logger.warn('Password change attempted for user without password (likely OAuth)', { userId });
+      logger.warn(
+        "Password change attempted for user without password (likely OAuth)",
+        { userId },
+      );
       return NextResponse.json(
-        { error: 'Password change is not available for this account type' },
-        { status: 400 }
+        { error: "Password change is not available for this account type" },
+        { status: 400 },
       );
     }
 
     // Verify current password
-    const isCurrentPasswordValid = await verifyPassword(currentPassword, user.password);
+    const isCurrentPasswordValid = await verifyPassword(
+      currentPassword,
+      user.password,
+    );
     if (!isCurrentPasswordValid) {
-      logger.warn('Invalid current password for password change', { userId });
+      logger.warn("Invalid current password for password change", { userId });
 
       return NextResponse.json(
-        { error: 'Current password is incorrect' },
-        { status: 400 }
+        { error: "Current password is incorrect" },
+        { status: 400 },
       );
     }
 
@@ -167,8 +174,8 @@ export async function POST(request: NextRequest) {
     const isSamePassword = await verifyPassword(newPassword, user.password);
     if (isSamePassword) {
       return NextResponse.json(
-        { error: 'New password must be different from current password' },
-        { status: 400 }
+        { error: "New password must be different from current password" },
+        { status: 400 },
       );
     }
 
@@ -187,8 +194,8 @@ export async function POST(request: NextRequest) {
 
     if (!updatedUser) {
       return NextResponse.json(
-        { error: 'User not found after update' },
-        { status: 404 }
+        { error: "User not found after update" },
+        { status: 404 },
       );
     }
 
@@ -196,7 +203,7 @@ export async function POST(request: NextRequest) {
     rateLimitStore.delete(userId);
 
     // Log successful password change
-    logger.info('Password changed successfully', {
+    logger.info("Password changed successfully", {
       userId,
       email: user.email,
       role: user.role,
@@ -206,7 +213,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Password changed successfully',
+      message: "Password changed successfully",
       user: {
         id: updatedUser._id,
         email: updatedUser.email,
@@ -215,14 +222,13 @@ export async function POST(request: NextRequest) {
         updatedAt: updatedUser.updatedAt,
       },
     });
-
   } catch (error) {
-    logger.error('Password change error', { error });
+    logger.error("Password change error", { error });
 
     // Don't expose internal errors
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }

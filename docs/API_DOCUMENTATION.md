@@ -32,9 +32,11 @@ https://your-domain.com/api
 ### Authentication Endpoints
 
 #### POST /api/auth/login
+
 Authenticate user credentials.
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -43,6 +45,7 @@ Authenticate user credentials.
 ```
 
 **Response:**
+
 ```json
 {
   "user": {
@@ -58,11 +61,13 @@ Authenticate user credentials.
 ### Dashboard Endpoints
 
 #### GET /api/admin/dashboard
+
 Get administrative dashboard statistics.
 
 **Permissions:** ADMIN, MASTER
 
 **Response:**
+
 ```json
 {
   "users": {
@@ -91,11 +96,13 @@ Get administrative dashboard statistics.
 ```
 
 #### GET /api/profesor/dashboard
+
 Get teacher dashboard statistics.
 
 **Permissions:** PROFESOR, MASTER
 
 **Response:**
+
 ```json
 {
   "plannings": {
@@ -118,11 +125,13 @@ Get teacher dashboard statistics.
 ```
 
 #### GET /api/parent/dashboard/overview
+
 Get parent dashboard overview.
 
 **Permissions:** PARENT, MASTER
 
 **Response:**
+
 ```json
 {
   "overallAverage": 87,
@@ -135,11 +144,13 @@ Get parent dashboard overview.
 ```
 
 #### GET /api/master/dashboard
+
 Get master system dashboard.
 
 **Permissions:** MASTER only
 
 **Response:**
+
 ```json
 {
   "users": {
@@ -171,16 +182,19 @@ Get master system dashboard.
 ### User Management
 
 #### GET /api/admin/users
+
 List all users.
 
 **Permissions:** ADMIN, MASTER
 
 **Query Parameters:**
+
 - `page`: Page number (default: 1)
 - `limit`: Items per page (default: 20)
 - `role`: Filter by role
 
 **Response:**
+
 ```json
 {
   "users": [
@@ -202,11 +216,13 @@ List all users.
 ```
 
 #### POST /api/admin/users
+
 Create new user.
 
 **Permissions:** ADMIN, MASTER
 
 **Request Body:**
+
 ```json
 {
   "name": "New User",
@@ -217,6 +233,7 @@ Create new user.
 ```
 
 **Response:**
+
 ```json
 {
   "id": "string",
@@ -230,16 +247,19 @@ Create new user.
 ### Notification System
 
 #### GET /api/notifications
+
 Get user notifications.
 
 **Permissions:** All authenticated users
 
 **Query Parameters:**
+
 - `status`: "all", "unread", "read" (default: "all")
 - `limit`: Number of notifications (default: 50)
 - `offset`: Pagination offset (default: 0)
 
 **Response:**
+
 ```json
 {
   "notifications": [
@@ -264,11 +284,13 @@ Get user notifications.
 ```
 
 #### POST /api/notifications
+
 Create notification.
 
 **Permissions:** ADMIN, PROFESOR, MASTER
 
 **Request Body:**
+
 ```json
 {
   "title": "System Maintenance",
@@ -281,6 +303,7 @@ Create notification.
 ```
 
 **Response:**
+
 ```json
 {
   "message": "Notification sent to all users",
@@ -289,11 +312,13 @@ Create notification.
 ```
 
 #### PATCH /api/notifications
+
 Mark notifications as read.
 
 **Permissions:** All authenticated users
 
 **Request Body:**
+
 ```json
 {
   "notificationIds": ["notif-1", "notif-2"],
@@ -302,6 +327,7 @@ Mark notifications as read.
 ```
 
 **Response:**
+
 ```json
 {
   "message": "Notifications marked as read"
@@ -309,6 +335,7 @@ Mark notifications as read.
 ```
 
 #### GET /api/notifications/stream
+
 Server-Sent Events stream for real-time notifications.
 
 **Permissions:** All authenticated users
@@ -324,21 +351,25 @@ data: {"type":"heartbeat","timestamp":"2024-01-01T00:00:05Z"}
 ### Meeting Management
 
 #### GET /api/admin/meetings
+
 List meetings.
 
 **Permissions:** ADMIN, MASTER
 
 **Query Parameters:**
+
 - `status`: "scheduled", "completed", "cancelled"
 - `page`: Page number
 - `limit`: Items per page
 
 #### POST /api/admin/meetings
+
 Create meeting.
 
 **Permissions:** ADMIN, MASTER
 
 **Request Body:**
+
 ```json
 {
   "title": "Parent-Teacher Conference",
@@ -357,22 +388,26 @@ Create meeting.
 ### Planning Documents
 
 #### GET /api/profesor/plannings
+
 List planning documents.
 
 **Permissions:** PROFESOR, MASTER
 
 **Query Parameters:**
+
 - `subject`: Filter by subject
 - `grade`: Filter by grade
 - `page`: Page number
 - `limit`: Items per page
 
 #### POST /api/profesor/plannings
+
 Create planning document.
 
 **Permissions:** PROFESOR, MASTER
 
 **Request Body:**
+
 ```json
 {
   "title": "Mathematics Lesson Plan",
@@ -388,22 +423,26 @@ Create planning document.
 ### Activities Management
 
 #### GET /api/profesor/activities
+
 List activities.
 
 **Permissions:** PROFESOR, MASTER
 
 **Query Parameters:**
+
 - `status`: "upcoming", "completed"
 - `type`: Activity type filter
 - `page`: Page number
 - `limit`: Items per page
 
 #### POST /api/profesor/activities
+
 Create activity.
 
 **Permissions:** PROFESOR, MASTER
 
 **Request Body:**
+
 ```json
 {
   "title": "Science Experiment",
@@ -424,21 +463,25 @@ Create activity.
 ### Calendar Events
 
 #### GET /api/calendar/events
+
 List calendar events.
 
 **Permissions:** All authenticated users
 
 **Query Parameters:**
+
 - `start`: Start date (ISO format)
 - `end`: End date (ISO format)
 - `category`: Event category filter
 
 #### POST /api/calendar/events
+
 Create calendar event.
 
 **Permissions:** ADMIN, PROFESOR, MASTER
 
 **Request Body:**
+
 ```json
 {
   "title": "School Assembly",
@@ -482,6 +525,7 @@ API endpoints are protected by rate limiting:
 - **Read operations**: 120 requests per minute
 
 Rate limit headers are included in responses:
+
 ```
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 59
@@ -495,18 +539,18 @@ X-RateLimit-Reset: 1638360000
 The notification system uses Server-Sent Events for real-time updates:
 
 ```javascript
-const eventSource = new EventSource('/api/notifications/stream');
+const eventSource = new EventSource("/api/notifications/stream");
 
 eventSource.onmessage = (event) => {
   const data = JSON.parse(event.data);
-  if (data.type === 'notification') {
+  if (data.type === "notification") {
     // Handle new notification
-    console.log('New notification:', data);
+    console.log("New notification:", data);
   }
 };
 
 eventSource.onerror = (error) => {
-  console.error('SSE error:', error);
+  console.error("SSE error:", error);
   // Implement reconnection logic
 };
 ```
@@ -571,6 +615,7 @@ npm start
 ## Support
 
 For API support and questions:
+
 - Email: support@manitospintadas.com
 - Documentation: https://docs.manitospintadas.com
 - API Status: https://status.manitospintadas.com

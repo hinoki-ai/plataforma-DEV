@@ -1,22 +1,26 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { GlobalSettingsDashboard } from '@/components/master/GlobalSettingsDashboard';
+import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { GlobalSettingsDashboard } from "@/components/master/GlobalSettingsDashboard";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function GlobalSettingsPage() {
   try {
     // Global settings will show advanced configuration options but remain functional
   } catch (error) {
     dbLogger.error(
-      'GLOBAL SETTINGS FAILURE - SUPREME GLOBAL CONTROL COMPROMISED',
+      "GLOBAL SETTINGS FAILURE - SUPREME GLOBAL CONTROL COMPROMISED",
       error,
-      { context: 'GlobalSettingsPage', globalSettings: true, supremeAuthority: true }
+      {
+        context: "GlobalSettingsPage",
+        globalSettings: true,
+        supremeAuthority: true,
+      },
     );
   }
 
@@ -24,14 +28,17 @@ export default function GlobalSettingsPage() {
     <AdvancedErrorBoundary
       context="🌐 GLOBAL SETTINGS - SUPREME GLOBAL CONTROL"
       enableRetry={true}
-      showDetails={process.env.NODE_ENV === 'development'}
+      showDetails={process.env.NODE_ENV === "development"}
     >
       <Suspense
         fallback={
           <div className="space-y-8 p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
-                <Card key={i} className="animate-pulse border-indigo-200 dark:border-indigo-800">
+                <Card
+                  key={i}
+                  className="animate-pulse border-indigo-200 dark:border-indigo-800"
+                >
                   <div className="p-6">
                     <Skeleton className="h-4 w-24 mb-2" />
                     <Skeleton className="h-8 w-16 mb-2" />

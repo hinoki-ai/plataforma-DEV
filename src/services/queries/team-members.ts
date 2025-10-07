@@ -2,54 +2,62 @@
  * Team Member Queries - Convex Implementation
  */
 
-import { getConvexClient } from '@/lib/convex';
-import { api } from '../../../convex/_generated/api';
-import type { TeamMember } from '@/lib/prisma-compat-types';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "../../../convex/_generated/api";
+import type { TeamMember } from "@/lib/prisma-compat-types";
 
 /**
  * Adapter to convert Convex team member data to TeamMember interface
  */
-function adaptTeamMember(convexMember: any): TeamMember {
+function adaptTeamMember(convexMember: Record<string, unknown>): TeamMember {
   return {
-    id: convexMember._id,
-    name: convexMember.name,
-    title: convexMember.title,
-    description: convexMember.description,
-    specialties: convexMember.specialties,
-    imageUrl: convexMember.imageUrl,
-    order: convexMember.order,
-    isActive: convexMember.isActive,
-    createdAt: new Date(convexMember.createdAt),
-    updatedAt: new Date(convexMember.updatedAt),
+    id: convexMember._id as string,
+    name: convexMember.name as string,
+    title: convexMember.title as string,
+    description: convexMember.description as string,
+    specialties: convexMember.specialties as string[],
+    imageUrl: convexMember.imageUrl as string | undefined,
+    order: convexMember.order as number,
+    isActive: convexMember.isActive as boolean,
+    createdAt: new Date(convexMember.createdAt as number),
+    updatedAt: new Date(convexMember.updatedAt as number),
   };
 }
 
 export async function getTeamMembers(isActive?: boolean) {
   try {
     const client = getConvexClient();
-    const members = await client.query(api.teamMembers.getTeamMembers, { isActive });
+    const members = await client.query(api.teamMembers.getTeamMembers, {
+      isActive,
+    });
     const adaptedMembers = members.map(adaptTeamMember);
     return { success: true, data: adaptedMembers };
   } catch (error) {
-    console.error('Failed to fetch team members:', error);
-    return { success: false, error: 'No se pudieron cargar los miembros del equipo', data: [] };
+    console.error("Failed to fetch team members:", error);
+    return {
+      success: false,
+      error: "No se pudieron cargar los miembros del equipo",
+      data: [],
+    };
   }
 }
 
 export async function getTeamMemberById(id: string) {
   try {
     const client = getConvexClient();
-    const member = await client.query(api.teamMembers.getTeamMemberById, { id: id as any });
+    const member = await client.query(api.teamMembers.getTeamMemberById, {
+      id: id as never,
+    });
 
     if (!member) {
-      return { success: false, error: 'Miembro no encontrado' };
+      return { success: false, error: "Miembro no encontrado" };
     }
 
     const adaptedMember = adaptTeamMember(member);
     return { success: true, data: adaptedMember };
   } catch (error) {
-    console.error('Failed to fetch team member:', error);
-    return { success: false, error: 'No se pudo cargar el miembro' };
+    console.error("Failed to fetch team member:", error);
+    return { success: false, error: "No se pudo cargar el miembro" };
   }
 }
 

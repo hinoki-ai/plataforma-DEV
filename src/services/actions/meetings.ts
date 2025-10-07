@@ -2,9 +2,9 @@
  * Meeting Actions (Mutations) - Convex Implementation
  */
 
-import { getConvexClient } from '@/lib/convex';
-import { api } from '../../../convex/_generated/api';
-import type { Id } from '../../../convex/_generated/dataModel';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 export async function createMeeting(data: {
   title: string;
@@ -18,7 +18,12 @@ export async function createMeeting(data: {
   scheduledTime: string;
   duration?: number;
   location?: string;
-  type: 'PARENT_TEACHER' | 'FOLLOW_UP' | 'EMERGENCY' | 'IEP_REVIEW' | 'GRADE_CONFERENCE';
+  type:
+    | "PARENT_TEACHER"
+    | "FOLLOW_UP"
+    | "EMERGENCY"
+    | "IEP_REVIEW"
+    | "GRADE_CONFERENCE";
   assignedTo: string;
   reason?: string;
   parentRequested?: boolean;
@@ -26,7 +31,7 @@ export async function createMeeting(data: {
 }) {
   try {
     const client = getConvexClient();
-    
+
     const meetingId = await client.mutation(api.meetings.createMeeting, {
       ...data,
       scheduledDate: data.scheduledDate.getTime(),
@@ -36,27 +41,36 @@ export async function createMeeting(data: {
 
     return { success: true, data: { id: meetingId } };
   } catch (error) {
-    console.error('Failed to create meeting:', error);
-    return { success: false, error: 'No se pudo crear la reunión' };
+    console.error("Failed to create meeting:", error);
+    return { success: false, error: "No se pudo crear la reunión" };
   }
 }
 
-export async function updateMeeting(id: string, data: {
-  title?: string;
-  description?: string;
-  scheduledDate?: Date;
-  scheduledTime?: string;
-  duration?: number;
-  location?: string;
-  status?: 'SCHEDULED' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'RESCHEDULED';
-  notes?: string;
-  outcome?: string;
-  followUpRequired?: boolean;
-}) {
+export async function updateMeeting(
+  id: string,
+  data: {
+    title?: string;
+    description?: string;
+    scheduledDate?: Date;
+    scheduledTime?: string;
+    duration?: number;
+    location?: string;
+    status?:
+      | "SCHEDULED"
+      | "CONFIRMED"
+      | "IN_PROGRESS"
+      | "COMPLETED"
+      | "CANCELLED"
+      | "RESCHEDULED";
+    notes?: string;
+    outcome?: string;
+    followUpRequired?: boolean;
+  },
+) {
   try {
     const client = getConvexClient();
-    
-    const updates: any = { ...data };
+
+    const updates: Record<string, unknown> = { ...data };
     if (data.scheduledDate) {
       updates.scheduledDate = data.scheduledDate.getTime();
     }
@@ -68,19 +82,21 @@ export async function updateMeeting(id: string, data: {
 
     return { success: true };
   } catch (error) {
-    console.error('Failed to update meeting:', error);
-    return { success: false, error: 'No se pudo actualizar la reunión' };
+    console.error("Failed to update meeting:", error);
+    return { success: false, error: "No se pudo actualizar la reunión" };
   }
 }
 
 export async function deleteMeeting(id: string) {
   try {
     const client = getConvexClient();
-    await client.mutation(api.meetings.deleteMeeting, { id: id as Id<"meetings"> });
+    await client.mutation(api.meetings.deleteMeeting, {
+      id: id as Id<"meetings">,
+    });
     return { success: true };
   } catch (error) {
-    console.error('Failed to delete meeting:', error);
-    return { success: false, error: 'No se pudo eliminar la reunión' };
+    console.error("Failed to delete meeting:", error);
+    return { success: false, error: "No se pudo eliminar la reunión" };
   }
 }
 
@@ -93,8 +109,8 @@ export async function cancelMeeting(id: string, reason?: string) {
     });
     return { success: true };
   } catch (error) {
-    console.error('Failed to cancel meeting:', error);
-    return { success: false, error: 'No se pudo cancelar la reunión' };
+    console.error("Failed to cancel meeting:", error);
+    return { success: false, error: "No se pudo cancelar la reunión" };
   }
 }
 
@@ -105,8 +121,8 @@ export async function getMeetingsAction() {
     const meetings = await client.query(api.meetings.getMeetings, {});
     return { success: true, data: meetings };
   } catch (error) {
-    console.error('Failed to get meetings:', error);
-    return { success: false, error: 'No se pudieron obtener las reuniones' };
+    console.error("Failed to get meetings:", error);
+    return { success: false, error: "No se pudieron obtener las reuniones" };
   }
 }
 
@@ -114,12 +130,15 @@ export async function getMeetingsByTeacherAction(teacherId: string) {
   try {
     const client = getConvexClient();
     const meetings = await client.query(api.meetings.getMeetingsByTeacher, {
-      teacherId: teacherId as Id<"users">
+      teacherId: teacherId as Id<"users">,
     });
     return { success: true, data: meetings };
   } catch (error) {
-    console.error('Failed to get meetings by teacher:', error);
-    return { success: false, error: 'No se pudieron obtener las reuniones del profesor' };
+    console.error("Failed to get meetings by teacher:", error);
+    return {
+      success: false,
+      error: "No se pudieron obtener las reuniones del profesor",
+    };
   }
 }
 
@@ -127,12 +146,15 @@ export async function getMeetingsByParentAction(parentId: string) {
   try {
     const client = getConvexClient();
     const meetings = await client.query(api.meetings.getMeetingsByParent, {
-      parentId: parentId as Id<"users">
+      parentId: parentId as Id<"users">,
     });
     return { success: true, data: meetings };
   } catch (error) {
-    console.error('Failed to get meetings by parent:', error);
-    return { success: false, error: 'No se pudieron obtener las reuniones del padre' };
+    console.error("Failed to get meetings by parent:", error);
+    return {
+      success: false,
+      error: "No se pudieron obtener las reuniones del padre",
+    };
   }
 }
 
@@ -142,19 +164,28 @@ export async function getMeetingStatsAction() {
     const stats = await client.query(api.meetings.getMeetingStats, {});
     return { success: true, data: stats };
   } catch (error) {
-    console.error('Failed to get meeting stats:', error);
-    return { success: false, error: 'No se pudieron obtener las estadísticas de reuniones' };
+    console.error("Failed to get meeting stats:", error);
+    return {
+      success: false,
+      error: "No se pudieron obtener las estadísticas de reuniones",
+    };
   }
 }
 
 export async function getParentMeetingRequestsAction() {
   try {
     const client = getConvexClient();
-    const requests = await client.query(api.meetings.getParentMeetingRequests, {});
+    const requests = await client.query(
+      api.meetings.getParentMeetingRequests,
+      {},
+    );
     return { success: true, data: requests };
   } catch (error) {
-    console.error('Failed to get parent meeting requests:', error);
-    return { success: false, error: 'No se pudieron obtener las solicitudes de reuniones' };
+    console.error("Failed to get parent meeting requests:", error);
+    return {
+      success: false,
+      error: "No se pudieron obtener las solicitudes de reuniones",
+    };
   }
 }
 
@@ -164,8 +195,11 @@ export async function getUpcomingMeetingsAction() {
     const meetings = await client.query(api.meetings.getUpcomingMeetings, {});
     return { success: true, data: meetings };
   } catch (error) {
-    console.error('Failed to get upcoming meetings:', error);
-    return { success: false, error: 'No se pudieron obtener las reuniones próximas' };
+    console.error("Failed to get upcoming meetings:", error);
+    return {
+      success: false,
+      error: "No se pudieron obtener las reuniones próximas",
+    };
   }
 }
 
@@ -178,7 +212,12 @@ export async function requestMeeting(data: {
   preferredDate: Date;
   preferredTime: string;
   reason: string;
-  type: 'PARENT_TEACHER' | 'FOLLOW_UP' | 'EMERGENCY' | 'IEP_REVIEW' | 'GRADE_CONFERENCE';
+  type:
+    | "PARENT_TEACHER"
+    | "FOLLOW_UP"
+    | "EMERGENCY"
+    | "IEP_REVIEW"
+    | "GRADE_CONFERENCE";
 }) {
   try {
     const client = getConvexClient();
@@ -190,22 +229,35 @@ export async function requestMeeting(data: {
 
     return { success: true, data: { id: meetingId } };
   } catch (error) {
-    console.error('Failed to request meeting:', error);
-    return { success: false, error: 'No se pudo solicitar la reunión' };
+    console.error("Failed to request meeting:", error);
+    return { success: false, error: "No se pudo solicitar la reunión" };
   }
 }
 
-export async function updateMeetingStatus(id: string, status: string, notes?: string) {
+export async function updateMeetingStatus(
+  id: string,
+  status:
+    | "SCHEDULED"
+    | "CONFIRMED"
+    | "IN_PROGRESS"
+    | "COMPLETED"
+    | "CANCELLED"
+    | "RESCHEDULED",
+  notes?: string,
+) {
   try {
     const client = getConvexClient();
-    await client.mutation(api.meetings.updateMeetingStatus, {
+    await client.mutation(api.meetings.updateMeeting, {
       id: id as Id<"meetings">,
       status,
       notes,
     });
     return { success: true };
   } catch (error) {
-    console.error('Failed to update meeting status:', error);
-    return { success: false, error: 'No se pudo actualizar el estado de la reunión' };
+    console.error("Failed to update meeting status:", error);
+    return {
+      success: false,
+      error: "No se pudo actualizar el estado de la reunión",
+    };
   }
 }

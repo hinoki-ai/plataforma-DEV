@@ -1,15 +1,17 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getMeetingStatsAction } from '@/services/actions/meetings';
-import { TrendingUp, TrendingDown, Users, Calendar } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getMeetingStatsAction } from "@/services/actions/meetings";
+import { TrendingUp, TrendingDown, Users, Calendar } from "lucide-react";
 
 interface MeetingStatsData {
   total: number;
-  pending: number;
-  completed: number;
-  cancelled: number;
+  upcoming: number;
+  recent: number;
+  pending?: number;
+  completed?: number;
+  cancelled?: number;
 }
 
 export function MeetingStats() {
@@ -24,12 +26,12 @@ export function MeetingStats() {
     try {
       const response = await getMeetingStatsAction();
       if (response.success && response.data) {
-        setStats(response.data);
+        setStats(response.data as MeetingStatsData);
       } else {
-        console.error('Error loading stats:', response.error);
+        console.error("Error loading stats:", response.error);
       }
     } catch (error) {
-      console.error('Error loading stats:', error);
+      console.error("Error loading stats:", error);
     } finally {
       setLoading(false);
     }
@@ -38,7 +40,7 @@ export function MeetingStats() {
   if (loading) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {[1, 2, 3, 4, 5].map(i => (
+        {[1, 2, 3, 4, 5].map((i) => (
           <Card key={i} className="animate-pulse">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -63,46 +65,50 @@ export function MeetingStats() {
   }
 
   const completionRate =
-    stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+    stats.total > 0
+      ? Math.round(((stats.completed ?? 0) / stats.total) * 100)
+      : 0;
 
   const pendingRate =
-    stats.total > 0 ? Math.round((stats.pending / stats.total) * 100) : 0;
+    stats.total > 0
+      ? Math.round(((stats.pending ?? 0) / stats.total) * 100)
+      : 0;
 
   const statCards = [
     {
-      title: 'Total Reuniones',
+      title: "Total Reuniones",
       value: stats.total,
       icon: Calendar,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
     },
     {
-      title: 'Programadas',
+      title: "Programadas",
       value: stats.pending,
       icon: TrendingUp,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-50',
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-50",
     },
     {
-      title: 'Completadas',
+      title: "Completadas",
       value: stats.completed,
       icon: Users,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
+      color: "text-green-600",
+      bgColor: "bg-green-50",
     },
     {
-      title: 'Canceladas',
+      title: "Canceladas",
       value: stats.cancelled,
       icon: TrendingDown,
-      color: 'text-red-600',
-      bgColor: 'bg-red-50',
+      color: "text-red-600",
+      bgColor: "bg-red-50",
     },
   ];
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {statCards.map(card => (
+        {statCards.map((card) => (
           <Card key={card.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">

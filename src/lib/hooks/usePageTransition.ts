@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export interface UsePageTransitionOptions {
   /**
@@ -48,14 +48,14 @@ export function usePageTransition(options: UsePageTransitionOptions = {}) {
 
   useEffect(() => {
     // Mark as mounted for hydration safety
-    setState(prev => ({ ...prev, mounted: true }));
+    setState((prev) => ({ ...prev, mounted: true }));
 
     if (!autoLoad) return;
 
     const startTime = Date.now();
     // Simulate progressive loading
     const progressInterval = setInterval(() => {
-      setState(prev => {
+      setState((prev) => {
         const elapsed = Date.now() - startTime;
         const newProgress = Math.min((elapsed / duration) * 100, 95);
         return { ...prev, progress: newProgress };
@@ -69,7 +69,7 @@ export function usePageTransition(options: UsePageTransitionOptions = {}) {
 
       setTimeout(() => {
         clearInterval(progressInterval);
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           isLoading: false,
           isComplete: true,
@@ -85,7 +85,7 @@ export function usePageTransition(options: UsePageTransitionOptions = {}) {
   }, [autoLoad, duration, minLoadTime]);
 
   const triggerTransition = () => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isLoading: true,
       isComplete: false,
@@ -94,7 +94,7 @@ export function usePageTransition(options: UsePageTransitionOptions = {}) {
   };
 
   const completeTransition = () => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isLoading: false,
       isComplete: true,
@@ -131,11 +131,11 @@ export function useSkeletonTimer(duration: number = 800) {
  */
 export function useProgressiveAnimation(
   elements: number = 5,
-  baseDelay: number = 150
+  baseDelay: number = 150,
 ) {
   const [mounted, setMounted] = useState(false);
   const [visibleElements, setVisibleElements] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
 
   useEffect(() => {
@@ -146,7 +146,7 @@ export function useProgressiveAnimation(
 
     for (let i = 0; i < elements; i++) {
       const timeout = setTimeout(() => {
-        setVisibleElements(prev => new Set([...prev, i]));
+        setVisibleElements((prev) => new Set([...prev, i]));
       }, baseDelay * i);
 
       timeouts.push(timeout);
@@ -160,8 +160,8 @@ export function useProgressiveAnimation(
   const getElementProps = (index: number) => ({
     className: `transition-all duration-700 ease-out ${
       mounted && visibleElements.has(index)
-        ? 'opacity-100 translate-y-0'
-        : 'opacity-0 translate-y-4'
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-4"
     }`,
     style: {
       transitionDelay: `${index * baseDelay}ms`,
@@ -180,7 +180,7 @@ export function useProgressiveAnimation(
  */
 export function createProgressiveReveal(
   totalElements: number,
-  baseDelay: number = 150
+  baseDelay: number = 150,
 ) {
   return Array.from({ length: totalElements }, (_, index) => ({
     delay: index * baseDelay,

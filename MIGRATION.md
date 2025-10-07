@@ -11,16 +11,16 @@
 
 ### Overall Progress: ~40-50% Complete
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| **Infrastructure** | ✅ 100% | Convex SDK, schema, configuration complete |
-| **Backend Functions** | ✅ 100% | 12 Convex function files created |
-| **Service Layer** | ✅ 100% | 11 backward-compatible wrappers |
-| **Authentication** | ✅ 100% | Convex auth integration complete |
-| **API Routes** | 🟡 33% | 11/33 routes migrated |
-| **Calendar Service** | ❌ 0% | Still uses Prisma |
-| **Tests** | ❌ 0% | Need updating for Convex |
-| **Documentation** | ✅ 100% | Complete migration guides |
+| Component             | Status  | Details                                    |
+| --------------------- | ------- | ------------------------------------------ |
+| **Infrastructure**    | ✅ 100% | Convex SDK, schema, configuration complete |
+| **Backend Functions** | ✅ 100% | 12 Convex function files created           |
+| **Service Layer**     | ✅ 100% | 11 backward-compatible wrappers            |
+| **Authentication**    | ✅ 100% | Convex auth integration complete           |
+| **API Routes**        | 🟡 33%  | 11/33 routes migrated                      |
+| **Calendar Service**  | ❌ 0%   | Still uses Prisma                          |
+| **Tests**             | ❌ 0%   | Need updating for Convex                   |
+| **Documentation**     | ✅ 100% | Complete migration guides                  |
 
 ---
 
@@ -33,6 +33,7 @@ npx convex dev
 ```
 
 This will:
+
 - Open browser for Convex authentication
 - Let you create/select a project
 - Generate types in `convex/_generated/`
@@ -64,11 +65,13 @@ curl http://localhost:3000/api/db/health
 ### 1. Core Infrastructure ✅
 
 **Convex Schema** (`convex/schema.ts`):
+
 - 32 complete models migrated from Prisma
 - All relationships preserved
 - Proper indexes and validators
 
 **Key Models**:
+
 - Users & Authentication
 - Meetings & Calendar Events
 - Planning Documents
@@ -102,6 +105,7 @@ convex/
 Created backward-compatible wrappers in `src/services/`:
 
 **Queries** (Read Operations):
+
 - `queries/meetings.ts`
 - `queries/planning.ts`
 - `queries/calendar.ts`
@@ -109,6 +113,7 @@ Created backward-compatible wrappers in `src/services/`:
 - `queries/school-info.ts`
 
 **Actions** (Write Operations):
+
 - `actions/meetings.ts`
 - `actions/planning.ts`
 - `actions/calendar.ts`
@@ -135,6 +140,7 @@ Created backward-compatible wrappers in `src/services/`:
 ### 6. Migrated API Routes ✅
 
 **Working Routes** (11 complete):
+
 - `/api/videos` - GET, POST
 - `/api/videos/[id]` - PUT, DELETE
 - `/api/photos` - GET, POST
@@ -153,6 +159,7 @@ Created backward-compatible wrappers in `src/services/`:
 ### Priority 1: API Routes (22 routes) 🔴
 
 #### Admin Routes (7 files)
+
 ```
 src/app/api/admin/
 ├── users/route.ts                    # User management
@@ -164,6 +171,7 @@ src/app/api/admin/
 ```
 
 #### Parent Routes (4 files)
+
 ```
 src/app/api/parent/
 ├── communications/route.ts          # Parent communications
@@ -173,6 +181,7 @@ src/app/api/parent/
 ```
 
 #### Profesor Routes (4 files)
+
 ```
 src/app/api/profesor/
 ├── dashboard/route.ts               # Teacher dashboard
@@ -182,6 +191,7 @@ src/app/api/profesor/
 ```
 
 #### Other Routes (7 files)
+
 ```
 src/app/api/
 ├── educational-system/route.ts      # Educational system info
@@ -197,6 +207,7 @@ src/app/api/
 **File**: `src/services/calendar/calendar-service.ts`
 
 **Prisma Calls to Replace** (6 locations):
+
 - Line 166: `prisma.calendarEvent.findMany()`
 - Line 249: `prisma.calendarEvent.create()`
 - Line 279: `prisma.recurrenceRule.create()`
@@ -215,101 +226,111 @@ All test files need updating to mock Convex instead of Prisma.
 ### Pattern 1: Simple Query
 
 **Before (Prisma)**:
+
 ```typescript
-import { db } from '@/lib/db';
+import { db } from "@/lib/db";
 
 const users = await db.user.findMany({
-  where: { role: 'ADMIN' }
+  where: { role: "ADMIN" },
 });
 ```
 
 **After (Convex)**:
+
 ```typescript
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/../convex/_generated/api';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/../convex/_generated/api";
 
 const client = getConvexClient();
 const users = await client.query(api.users.getUsersByRole, {
-  role: 'ADMIN'
+  role: "ADMIN",
 });
 ```
 
 ### Pattern 2: Create Operation
 
 **Before (Prisma)**:
+
 ```typescript
 const meeting = await db.meeting.create({
   data: {
     title,
     description,
     date,
-    userId
-  }
+    userId,
+  },
 });
 ```
 
 **After (Convex)**:
+
 ```typescript
 const meetingId = await client.mutation(api.meetings.createMeeting, {
   title,
   description,
   date,
-  userId: userId as any
+  userId: userId as any,
 });
 ```
 
 ### Pattern 3: Update Operation
 
 **Before (Prisma)**:
+
 ```typescript
 const updated = await db.meeting.update({
   where: { id },
-  data: { status: 'APPROVED' }
+  data: { status: "APPROVED" },
 });
 ```
 
 **After (Convex)**:
+
 ```typescript
 await client.mutation(api.meetings.updateMeeting, {
   id: id as any,
-  status: 'APPROVED'
+  status: "APPROVED",
 });
 ```
 
 ### Pattern 4: Delete Operation
 
 **Before (Prisma)**:
+
 ```typescript
 await db.meeting.delete({
-  where: { id }
+  where: { id },
 });
 ```
 
 **After (Convex)**:
+
 ```typescript
 await client.mutation(api.meetings.deleteMeeting, {
-  id: id as any
+  id: id as any,
 });
 ```
 
 ### Pattern 5: Complex Query with Relations
 
 **Before (Prisma)**:
+
 ```typescript
 const meetings = await db.meeting.findMany({
   where: { userId },
   include: {
     user: true,
-    parent: true
-  }
+    parent: true,
+  },
 });
 ```
 
 **After (Convex)**:
+
 ```typescript
 // Convex functions handle relationships internally
 const meetings = await client.query(api.meetings.getMeetingsByUser, {
-  userId: userId as any
+  userId: userId as any,
 });
 // Returns meetings with user and parent data embedded
 ```
@@ -321,21 +342,24 @@ const meetings = await client.query(api.meetings.getMeetingsByUser, {
 ### For Each API Route:
 
 1. **Open the file**:
+
    ```bash
    code src/app/api/[route]/route.ts
    ```
 
 2. **Update imports**:
+
    ```typescript
    // Remove
-   import { db } from '@/lib/db';
-   
+   import { db } from "@/lib/db";
+
    // Add
-   import { getConvexClient } from '@/lib/convex';
-   import { api } from '@/../convex/_generated/api';
+   import { getConvexClient } from "@/lib/convex";
+   import { api } from "@/../convex/_generated/api";
    ```
 
 3. **Initialize client in handler**:
+
    ```typescript
    export async function GET(request: Request) {
      const client = getConvexClient();
@@ -346,6 +370,7 @@ const meetings = await client.query(api.meetings.getMeetingsByUser, {
    Use the patterns above to replace each Prisma call
 
 5. **Test the route**:
+
    ```bash
    curl http://localhost:3000/api/[route]
    ```
@@ -357,6 +382,7 @@ const meetings = await client.query(api.meetings.getMeetingsByUser, {
 ## 💡 Benefits of Convex
 
 ### Real-time Updates
+
 Components automatically refresh when data changes:
 
 ```typescript
@@ -366,7 +392,7 @@ import { api } from "@/convex/_generated/api";
 function MeetingsList() {
   // Auto-updates when meetings change!
   const meetings = useQuery(api.meetings.getMeetings, {});
-  
+
   return (
     <div>
       {meetings?.map(meeting => (
@@ -378,6 +404,7 @@ function MeetingsList() {
 ```
 
 ### Type Safety
+
 Full TypeScript support with auto-generated types:
 
 ```typescript
@@ -389,6 +416,7 @@ const userId: Id<"users"> = ...;
 ```
 
 ### Serverless Architecture
+
 - No database connection management
 - No migration scripts
 - Auto-scaling included
@@ -396,6 +424,7 @@ const userId: Id<"users"> = ...;
 - Real-time dashboard
 
 ### Better Developer Experience
+
 - Hot reload for backend changes
 - Live data inspector
 - Query playground
@@ -406,7 +435,7 @@ const userId: Id<"users"> = ...;
 
 ## 🆘 Troubleshooting
 
-### "Cannot find module '.../_generated/...'"
+### "Cannot find module '.../\_generated/...'"
 
 **Cause**: Convex types not generated  
 **Fix**: Run `npx convex dev` to generate types
@@ -414,7 +443,8 @@ const userId: Id<"users"> = ...;
 ### "Convex client not initialized"
 
 **Cause**: Missing environment variable  
-**Fix**: 
+**Fix**:
+
 ```bash
 # Check .env has NEXT_PUBLIC_CONVEX_URL
 grep NEXT_PUBLIC_CONVEX_URL .env
@@ -436,7 +466,8 @@ npm run dev
 ### Type Errors in Convex Functions
 
 **Cause**: Schema changed without regenerating types  
-**Fix**: 
+**Fix**:
+
 ```bash
 # Restart Convex dev to regenerate
 npx convex dev
@@ -488,22 +519,23 @@ Use this table to track your progress:
 
 ## ⏱️ Time Estimates
 
-| Task | Estimated Time |
-|------|----------------|
-| Setup (Steps 1-3) | 10 minutes |
-| Admin Routes (7) | 1-2 hours |
-| Parent Routes (4) | 45-60 minutes |
-| Profesor Routes (4) | 45-60 minutes |
-| Other Routes (7) | 1-1.5 hours |
-| Calendar Service | 1 hour |
-| Test Updates | 2-3 hours |
-| **Total** | **6-9 hours** |
+| Task                | Estimated Time |
+| ------------------- | -------------- |
+| Setup (Steps 1-3)   | 10 minutes     |
+| Admin Routes (7)    | 1-2 hours      |
+| Parent Routes (4)   | 45-60 minutes  |
+| Profesor Routes (4) | 45-60 minutes  |
+| Other Routes (7)    | 1-1.5 hours    |
+| Calendar Service    | 1 hour         |
+| Test Updates        | 2-3 hours      |
+| **Total**           | **6-9 hours**  |
 
 ---
 
 ## 📚 Additional Resources
 
 ### Convex Documentation
+
 - **Getting Started**: https://docs.convex.dev/
 - **Next.js Integration**: https://docs.convex.dev/quickstart/nextjs
 - **Database Queries**: https://docs.convex.dev/database/reading-data
@@ -511,11 +543,13 @@ Use this table to track your progress:
 - **React Hooks**: https://docs.convex.dev/client/react
 
 ### Project Documentation
+
 - `START_HERE.md` - Getting started guide
 - `DOCUMENTATION_INDEX.md` - All documentation links
 - `docs/` directory - Detailed technical docs
 
 ### Convex Dashboard
+
 ```bash
 # Open dashboard in browser
 npx convex dashboard
@@ -567,10 +601,11 @@ If you have existing production data in PostgreSQL:
 3. **Import data** to Convex
 
 Example seed script:
+
 ```typescript
 // scripts/seed-convex.ts
-import { getConvexClient } from '@/lib/convex';
-import { api } from '../convex/_generated/api';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "../convex/_generated/api";
 
 const client = getConvexClient();
 
@@ -578,7 +613,7 @@ const client = getConvexClient();
 await client.mutation(api.users.createUser, {
   email: "admin@school.com",
   role: "ADMIN",
-  name: "Admin User"
+  name: "Admin User",
 });
 ```
 

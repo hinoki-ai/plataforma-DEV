@@ -1,17 +1,24 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { MasterPageTemplate } from '@/components/master/MasterPageTemplate';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Users, UserCheck, UserX, Crown, Shield, GraduationCap } from 'lucide-react';
+import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Users,
+  UserCheck,
+  UserX,
+  Crown,
+  Shield,
+  GraduationCap,
+} from "lucide-react";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const userManagementFallback = (
   <div className="space-y-8">
@@ -53,7 +60,9 @@ export default function UserManagementPage() {
               <UserCheck className="h-8 w-8 text-green-600" />
               <div>
                 <div className="text-2xl font-bold">1,189</div>
-                <div className="text-sm text-muted-foreground">Active Users</div>
+                <div className="text-sm text-muted-foreground">
+                  Active Users
+                </div>
               </div>
             </div>
           </div>
@@ -65,7 +74,9 @@ export default function UserManagementPage() {
               <UserX className="h-8 w-8 text-red-600" />
               <div>
                 <div className="text-2xl font-bold">58</div>
-                <div className="text-sm text-muted-foreground">Inactive Users</div>
+                <div className="text-sm text-muted-foreground">
+                  Inactive Users
+                </div>
               </div>
             </div>
           </div>
@@ -77,7 +88,9 @@ export default function UserManagementPage() {
               <Crown className="h-8 w-8 text-purple-600" />
               <div>
                 <div className="text-2xl font-bold">12</div>
-                <div className="text-sm text-muted-foreground">Master Users</div>
+                <div className="text-sm text-muted-foreground">
+                  Master Users
+                </div>
               </div>
             </div>
           </div>

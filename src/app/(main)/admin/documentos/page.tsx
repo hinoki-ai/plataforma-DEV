@@ -1,34 +1,52 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { FileText, Trash2, Eye } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { useResponsiveMode } from '@/lib/hooks/useDesktopToggle';
-import { typography, layout } from '@/lib/responsive-utils';
-import { PDFViewer } from '@/components/ui/pdf-viewer';
-import { toast } from 'sonner';
-import { PageTransition } from '@/components/ui/page-transition';
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { FileText, Trash2, Eye } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
+import { typography, layout } from "@/lib/responsive-utils";
+import { PDFViewer } from "@/components/ui/pdf-viewer";
+import { toast } from "sonner";
+import { PageTransition } from "@/components/ui/page-transition";
 
 // i18n
-import { useLanguage } from '@/components/language/LanguageContext';
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface DocumentUpload {
   id: string;
   name: string;
-  type: 'reglamento' | 'plan' | 'manual' | 'protocolo';
+  type: "reglamento" | "plan" | "manual" | "protocolo";
   number: number;
   url: string;
   uploadDate: string;
 }
 
-const getDocumentCategories = (t: (key: string, namespace?: string) => string) => [
-  { type: 'reglamento' as const, label: t('documents.category.reglamentos', 'common'), count: 4 },
-  { type: 'plan' as const, label: t('documents.category.planes', 'common'), count: 5 },
-  { type: 'manual' as const, label: t('documents.category.manuales', 'common'), count: 3 },
-  { type: 'protocolo' as const, label: t('documents.category.protocolos', 'common'), count: 9 },
+const getDocumentCategories = (
+  t: (key: string, namespace?: string) => string,
+) => [
+  {
+    type: "reglamento" as const,
+    label: t("documents.category.reglamentos", "common"),
+    count: 4,
+  },
+  {
+    type: "plan" as const,
+    label: t("documents.category.planes", "common"),
+    count: 5,
+  },
+  {
+    type: "manual" as const,
+    label: t("documents.category.manuales", "common"),
+    count: 3,
+  },
+  {
+    type: "protocolo" as const,
+    label: t("documents.category.protocolos", "common"),
+    count: 9,
+  },
 ];
 
 export default function AdminDocumentosPage() {
@@ -45,34 +63,34 @@ export default function AdminDocumentosPage() {
 
   const handleFileUpload = async (
     file: File,
-    type: 'reglamento' | 'plan' | 'manual' | 'protocolo',
-    number: number
+    type: "reglamento" | "plan" | "manual" | "protocolo",
+    number: number,
   ) => {
-    if (session?.user?.role !== 'ADMIN') {
-      toast.error(t('documents.admin.required', 'common'));
+    if (session?.user?.role !== "ADMIN") {
+      toast.error(t("documents.admin.required", "common"));
       return;
     }
 
     setUploading(true);
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('type', type);
-    formData.append('number', number.toString());
+    formData.append("file", file);
+    formData.append("type", type);
+    formData.append("number", number.toString());
 
     try {
-      const response = await fetch('/api/admin/documents/upload', {
-        method: 'POST',
+      const response = await fetch("/api/admin/documents/upload", {
+        method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error(t('documents.upload.error', 'common'));
+      if (!response.ok) throw new Error(t("documents.upload.error", "common"));
 
       const result = await response.json();
-      setDocuments(prev => [...prev, result.document]);
+      setDocuments((prev) => [...prev, result.document]);
 
-      toast.success(`${file.name} ${t('documents.upload.success', 'common')}`);
+      toast.success(`${file.name} ${t("documents.upload.success", "common")}`);
     } catch {
-      toast.error(t('documents.upload.failure', 'common'));
+      toast.error(t("documents.upload.failure", "common"));
     } finally {
       setUploading(false);
     }
@@ -81,16 +99,16 @@ export default function AdminDocumentosPage() {
   const handleDeleteDocument = async (documentId: string) => {
     try {
       const response = await fetch(`/api/admin/documents/${documentId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
-      if (!response.ok) throw new Error(t('documents.delete.error', 'common'));
+      if (!response.ok) throw new Error(t("documents.delete.error", "common"));
 
-      setDocuments(prev => prev.filter(doc => doc.id !== documentId));
+      setDocuments((prev) => prev.filter((doc) => doc.id !== documentId));
 
-      toast.success(t('documents.delete.success', 'common'));
+      toast.success(t("documents.delete.success", "common"));
     } catch {
-      toast.error(t('documents.delete.failure', 'common'));
+      toast.error(t("documents.delete.failure", "common"));
     }
   };
 
@@ -113,7 +131,7 @@ export default function AdminDocumentosPage() {
           <h1
             className={`${typography.heading(isDesktopForced)} font-bold text-foreground mb-6`}
           >
-            {t('documents.title', 'common')}
+            {t("documents.title", "common")}
           </h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -128,7 +146,7 @@ export default function AdminDocumentosPage() {
                     {[...Array(count)].map((_, i) => {
                       const docNumber = i + 1;
                       const existingDoc = documents.find(
-                        doc => doc.type === type && doc.number === docNumber
+                        (doc) => doc.type === type && doc.number === docNumber,
                       );
 
                       return (
@@ -148,7 +166,7 @@ export default function AdminDocumentosPage() {
                                   onClick={() =>
                                     handleOpenPdf(
                                       existingDoc.url,
-                                      existingDoc.name
+                                      existingDoc.name,
                                     )
                                   }
                                 >
@@ -168,7 +186,7 @@ export default function AdminDocumentosPage() {
                               <Input
                                 type="file"
                                 accept=".pdf"
-                                onChange={e => {
+                                onChange={(e) => {
                                   const file = e.target.files?.[0];
                                   if (file) {
                                     handleFileUpload(file, type, docNumber);
@@ -190,11 +208,10 @@ export default function AdminDocumentosPage() {
 
           <div className="text-sm text-muted-foreground mt-8">
             <p>
-              📁 {t('documents.help.storage', 'common')} <code>/public/uploads/</code>
+              📁 {t("documents.help.storage", "common")}{" "}
+              <code>/public/uploads/</code>
             </p>
-            <p>
-              📝 {t('documents.help.permissions', 'common')}
-            </p>
+            <p>📝 {t("documents.help.permissions", "common")}</p>
           </div>
         </div>
 

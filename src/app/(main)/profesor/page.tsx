@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
   CardDescription,
-} from '@/components/ui/card';
-import UnifiedCalendarView from '@/components/calendar/UnifiedCalendarView';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "@/components/ui/card";
+import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // Removed static revalidation to prevent authentication state conflicts
 
@@ -38,9 +38,11 @@ export default function ProfesorDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">{t('profesor.dashboard.planning.title', 'common')}</CardTitle>
+            <CardTitle className="text-lg">
+              {t("profesor.dashboard.planning.title", "common")}
+            </CardTitle>
             <CardDescription>
-              {t('profesor.dashboard.planning.description', 'common')}
+              {t("profesor.dashboard.planning.description", "common")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -48,15 +50,17 @@ export default function ProfesorDashboard() {
               href="/profesor/planificaciones"
               className="text-primary hover:text-primary/80 font-medium text-sm"
             >
-              {t('profesor.dashboard.view.more', 'common')}
+              {t("profesor.dashboard.view.more", "common")}
             </Link>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">{t('profesor.dashboard.resources.title', 'common')}</CardTitle>
+            <CardTitle className="text-lg">
+              {t("profesor.dashboard.resources.title", "common")}
+            </CardTitle>
             <CardDescription>
-              {t('profesor.dashboard.resources.description', 'common')}
+              {t("profesor.dashboard.resources.description", "common")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -64,15 +68,17 @@ export default function ProfesorDashboard() {
               href="/profesor/recursos"
               className="text-primary hover:text-primary/80 font-medium text-sm"
             >
-              {t('profesor.dashboard.view.more', 'common')}
+              {t("profesor.dashboard.view.more", "common")}
             </Link>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">{t('profesor.dashboard.activities.title', 'common')}</CardTitle>
+            <CardTitle className="text-lg">
+              {t("profesor.dashboard.activities.title", "common")}
+            </CardTitle>
             <CardDescription>
-              {t('profesor.dashboard.activities.description', 'common')}
+              {t("profesor.dashboard.activities.description", "common")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -80,7 +86,7 @@ export default function ProfesorDashboard() {
               href="/profesor/actividades"
               className="text-primary hover:text-primary/80 font-medium text-sm"
             >
-              {t('profesor.dashboard.view.more', 'common')}
+              {t("profesor.dashboard.view.more", "common")}
             </Link>
           </CardContent>
         </Card>

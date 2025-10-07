@@ -1,23 +1,23 @@
-import { Metadata } from 'next';
-import { PageTransition } from '@/components/ui/page-transition';
-import { ParentMeetingTabs } from '@/components/meetings/ParentMeetingTabs';
-import { requireAuth } from '@/lib/server-auth';
-import { getRoleAccess } from '@/lib/role-utils';
-import { redirect } from 'next/navigation';
+import { Metadata } from "next";
+import { PageTransition } from "@/components/ui/page-transition";
+import { ParentMeetingTabs } from "@/components/meetings/ParentMeetingTabs";
+import { requireAuth } from "@/lib/server-auth";
+import { getRoleAccess } from "@/lib/role-utils";
+import { redirect } from "next/navigation";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: 'Reuniones de Apoderados | Manitos Pintadas',
+  title: "Reuniones de Apoderados | Manitos Pintadas",
   description:
-    'Gestiona y visualiza las reuniones con los profesores de tu hijo/a en la Escuela Especial de Lenguaje Manitos Pintadas.',
+    "Gestiona y visualiza las reuniones con los profesores de tu hijo/a en la Escuela Especial de Lenguaje Manitos Pintadas.",
   keywords:
-    'reuniones apoderados, escuela especial lenguaje, Manitos Pintadas, comunicación padres profesores',
+    "reuniones apoderados, escuela especial lenguaje, Manitos Pintadas, comunicación padres profesores",
   openGraph: {
-    title: 'Reuniones de Apoderados | Manitos Pintadas',
+    title: "Reuniones de Apoderados | Manitos Pintadas",
     description:
-      'Mantén una comunicación efectiva con los profesores de tu hijo/a.',
-    type: 'website',
+      "Mantén una comunicación efectiva con los profesores de tu hijo/a.",
+    type: "website",
   },
 };
 
@@ -28,10 +28,10 @@ export default async function ParentReunionesPage() {
   // Ensure user has access to parent dashboard
   if (
     !roleAccess.canAccessParent &&
-    session.user.role !== 'PROFESOR' &&
-    session.user.role !== 'ADMIN'
+    session.user.role !== "PROFESOR" &&
+    session.user.role !== "ADMIN"
   ) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   return (

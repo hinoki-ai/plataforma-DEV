@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   useFormContext,
   useWatch,
@@ -9,15 +9,15 @@ import {
   type FieldPath,
   type FieldValues,
   type ValidationRule,
-} from 'react-hook-form';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+} from "react-hook-form";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   FormField,
   FormItem,
@@ -26,26 +26,26 @@ import {
   FormDescription,
   FormMessage,
   useFormField,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from '@/components/ui/command';
+} from "@/components/ui/command";
 import {
   CheckCircle,
   XCircle,
@@ -65,13 +65,13 @@ import {
   Lock,
   Check,
   ChevronDown,
-} from 'lucide-react';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "lucide-react";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // Enhanced form validation with real-time feedback
 interface ValidationResult {
   isValid: boolean;
-  strength?: 'weak' | 'medium' | 'strong';
+  strength?: "weak" | "medium" | "strong";
   suggestions?: string[];
   errors?: string[];
 }
@@ -92,7 +92,7 @@ interface SmartValidationRules {
 interface ConditionalLogicRule {
   dependsOn: string;
   condition: (value: any) => boolean;
-  action: 'show' | 'hide' | 'require' | 'optional';
+  action: "show" | "hide" | "require" | "optional";
 }
 
 interface FieldConfig {
@@ -100,16 +100,16 @@ interface FieldConfig {
   placeholder?: string;
   description?: string;
   type?:
-    | 'text'
-    | 'email'
-    | 'password'
-    | 'tel'
-    | 'number'
-    | 'textarea'
-    | 'select'
-    | 'combobox'
-    | 'date'
-    | 'time';
+    | "text"
+    | "email"
+    | "password"
+    | "tel"
+    | "number"
+    | "textarea"
+    | "select"
+    | "combobox"
+    | "date"
+    | "time";
   validation?: SmartValidationRules;
   conditional?: ConditionalLogicRule[];
   options?: Array<{ value: string; label: string }>;
@@ -124,13 +124,13 @@ export function usePasswordValidation(password: string) {
   return useMemo(() => {
     const result: ValidationResult = {
       isValid: false,
-      strength: 'weak',
+      strength: "weak",
       suggestions: [],
       errors: [],
     };
 
     if (!password) {
-      result.errors = ['La contraseña es requerida'];
+      result.errors = ["La contraseña es requerida"];
       return result;
     }
 
@@ -141,53 +141,53 @@ export function usePasswordValidation(password: string) {
     if (password.length >= 8) {
       score += 1;
     } else {
-      suggestions.push('Usa al menos 8 caracteres');
+      suggestions.push("Usa al menos 8 caracteres");
     }
 
     // Uppercase check
     if (/[A-Z]/.test(password)) {
       score += 1;
     } else {
-      suggestions.push('Incluye al menos una mayúscula');
+      suggestions.push("Incluye al menos una mayúscula");
     }
 
     // Lowercase check
     if (/[a-z]/.test(password)) {
       score += 1;
     } else {
-      suggestions.push('Incluye al menos una minúscula');
+      suggestions.push("Incluye al menos una minúscula");
     }
 
     // Number check
     if (/\d/.test(password)) {
       score += 1;
     } else {
-      suggestions.push('Incluye al menos un número');
+      suggestions.push("Incluye al menos un número");
     }
 
     // Special character check
     if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
       score += 1;
     } else {
-      suggestions.push('Incluye al menos un carácter especial');
+      suggestions.push("Incluye al menos un carácter especial");
     }
 
     // Common patterns check
     if (!/(.)\1{2,}/.test(password)) {
       score += 1;
     } else {
-      suggestions.push('Evita repetir el mismo carácter');
+      suggestions.push("Evita repetir el mismo carácter");
     }
 
     // Strength assessment
     if (score >= 5) {
-      result.strength = 'strong';
+      result.strength = "strong";
       result.isValid = true;
     } else if (score >= 3) {
-      result.strength = 'medium';
+      result.strength = "medium";
       result.isValid = true;
     } else {
-      result.strength = 'weak';
+      result.strength = "weak";
       result.isValid = false;
     }
 
@@ -206,7 +206,7 @@ export function useEmailValidation(email: string) {
     };
 
     if (!email) {
-      result.errors = [t('form.email_required')];
+      result.errors = [t("form.email_required")];
       return result;
     }
 
@@ -214,30 +214,30 @@ export function useEmailValidation(email: string) {
     const isValidFormat = emailRegex.test(email);
 
     if (!isValidFormat) {
-      result.errors = [t('form.email_invalid_format')];
+      result.errors = [t("form.email_invalid_format")];
       return result;
     }
 
     // Check for common typos and suggest corrections
     const commonDomains = [
-      'gmail.com',
-      'yahoo.com',
-      'hotmail.com',
-      'outlook.com',
-      'icloud.com',
-      'live.com',
-      'msn.com',
+      "gmail.com",
+      "yahoo.com",
+      "hotmail.com",
+      "outlook.com",
+      "icloud.com",
+      "live.com",
+      "msn.com",
     ];
 
-    const domain = email.split('@')[1];
+    const domain = email.split("@")[1];
     if (domain) {
       const suggestion = commonDomains.find(
-        d => d.includes(domain) || domain.includes(d.split('.')[0])
+        (d) => d.includes(domain) || domain.includes(d.split(".")[0]),
       );
 
       if (suggestion && suggestion !== domain) {
         result.suggestions = [
-          `¿Quisiste decir ${email.split('@')[0]}@${suggestion}?`,
+          `¿Quisiste decir ${email.split("@")[0]}@${suggestion}?`,
         ];
       }
     }
@@ -271,21 +271,21 @@ export function SmartFormField({
   // Handle conditional logic
   useEffect(() => {
     if (config.conditional) {
-      config.conditional.forEach(rule => {
+      config.conditional.forEach((rule) => {
         const dependentValue = form.getValues(rule.dependsOn);
         const conditionMet = rule.condition(dependentValue);
 
         switch (rule.action) {
-          case 'show':
+          case "show":
             setIsVisible(conditionMet);
             break;
-          case 'hide':
+          case "hide":
             setIsVisible(!conditionMet);
             break;
-          case 'require':
+          case "require":
             setIsRequired(conditionMet);
             break;
-          case 'optional':
+          case "optional":
             setIsRequired(!conditionMet);
             break;
         }
@@ -295,15 +295,15 @@ export function SmartFormField({
 
   // Real-time validation (hooks must be called unconditionally)
   const passwordValidation = usePasswordValidation(
-    config.type === 'password' ? String(watchedValue ?? '') : ''
+    config.type === "password" ? String(watchedValue ?? "") : "",
   );
   const emailValidation = useEmailValidation(
-    config.type === 'email' ? String(watchedValue ?? '') : ''
+    config.type === "email" ? String(watchedValue ?? "") : "",
   );
   const validationResult = useMemo(() => {
     if (!config.realTimeValidation || !watchedValue) return null;
-    if (config.type === 'password') return passwordValidation;
-    if (config.type === 'email') return emailValidation;
+    if (config.type === "password") return passwordValidation;
+    if (config.type === "email") return emailValidation;
     return null;
   }, [
     config.realTimeValidation,
@@ -317,8 +317,8 @@ export function SmartFormField({
   useEffect(() => {
     if (config.suggestions && watchedValue) {
       const filtered = config.suggestions
-        .filter(suggestion =>
-          suggestion.toLowerCase().includes(watchedValue.toLowerCase())
+        .filter((suggestion) =>
+          suggestion.toLowerCase().includes(watchedValue.toLowerCase()),
         )
         .slice(0, 5);
       setSuggestions(filtered);
@@ -329,21 +329,21 @@ export function SmartFormField({
     const rules: any = {};
 
     if (isRequired) {
-      rules.required = t('form.field_required');
+      rules.required = t("form.field_required");
     }
 
     if (config.validation) {
       if (config.validation.email) {
         rules.pattern = {
           value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-          message: t('form.email_invalid'),
+          message: t("form.email_invalid"),
         };
       }
 
       if (config.validation.phone) {
         rules.pattern = {
           value: /^\+?[\d\s-()]{8,15}$/,
-          message: t('form.phone_invalid'),
+          message: t("form.phone_invalid"),
         };
       }
 
@@ -358,7 +358,9 @@ export function SmartFormField({
       if (config.validation.custom) {
         rules.validate = (value: any) => {
           const result = config.validation!.custom!(value);
-          return result.isValid || result.errors?.[0] || t('form.value_invalid');
+          return (
+            result.isValid || result.errors?.[0] || t("form.value_invalid")
+          );
         };
       }
     }
@@ -373,10 +375,10 @@ export function SmartFormField({
   return (
     <motion.div
       initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: 'auto' }}
+      animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.2 }}
-      className={cn('space-y-2', className)}
+      className={cn("space-y-2", className)}
     >
       <FormField
         control={form.control}
@@ -395,17 +397,17 @@ export function SmartFormField({
 
             <FormControl>
               <div className="relative">
-                {config.type === 'textarea' ? (
+                {config.type === "textarea" ? (
                   <Textarea
                     placeholder={config.placeholder}
                     className={cn(
-                      'min-h-[80px]',
-                      fieldState.error && 'border-destructive',
-                      validationResult?.isValid && 'border-green-500'
+                      "min-h-[80px]",
+                      fieldState.error && "border-destructive",
+                      validationResult?.isValid && "border-green-500",
                     )}
                     {...field}
                   />
-                ) : config.type === 'select' ? (
+                ) : config.type === "select" ? (
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -414,27 +416,27 @@ export function SmartFormField({
                       <SelectValue placeholder={config.placeholder} />
                     </SelectTrigger>
                     <SelectContent>
-                      {config.options?.map(option => (
+                      {config.options?.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                ) : config.type === 'combobox' ? (
+                ) : config.type === "combobox" ? (
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          'w-full justify-between',
-                          !field.value && 'text-muted-foreground'
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground",
                         )}
                       >
                         {field.value
                           ? config.options?.find(
-                              option => option.value === field.value
+                              (option) => option.value === field.value,
                             )?.label
                           : config.placeholder}
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -447,7 +449,7 @@ export function SmartFormField({
                         />
                         <CommandEmpty>No se encontraron opciones.</CommandEmpty>
                         <CommandGroup>
-                          {config.options?.map(option => (
+                          {config.options?.map((option) => (
                             <CommandItem
                               value={option.label}
                               key={option.value}
@@ -457,10 +459,10 @@ export function SmartFormField({
                             >
                               <Check
                                 className={cn(
-                                  'mr-2 h-4 w-4',
+                                  "mr-2 h-4 w-4",
                                   option.value === field.value
-                                    ? 'opacity-100'
-                                    : 'opacity-0'
+                                    ? "opacity-100"
+                                    : "opacity-0",
                                 )}
                               />
                               {option.label}
@@ -473,21 +475,21 @@ export function SmartFormField({
                 ) : (
                   <Input
                     type={
-                      config.type === 'password' && showPassword
-                        ? 'text'
+                      config.type === "password" && showPassword
+                        ? "text"
                         : config.type
                     }
                     placeholder={config.placeholder}
                     className={cn(
-                      fieldState.error && 'border-destructive',
-                      validationResult?.isValid && 'border-green-500',
-                      config.type === 'password' && 'pr-10'
+                      fieldState.error && "border-destructive",
+                      validationResult?.isValid && "border-green-500",
+                      config.type === "password" && "pr-10",
                     )}
                     {...field}
                   />
                 )}
 
-                {config.type === 'password' && (
+                {config.type === "password" && (
                   <Button
                     type="button"
                     variant="ghost"
@@ -506,30 +508,33 @@ export function SmartFormField({
             </FormControl>
 
             {/* Password strength indicator */}
-            {config.type === 'password' && validationResult && watchedValue && (
+            {config.type === "password" && validationResult && watchedValue && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span>{t('auth.password.label')}</span>
+                  <span>{t("auth.password.label")}</span>
                   <span
                     className={cn(
-                      'font-medium',
-                      validationResult.strength === 'strong' &&
-                        'text-green-600',
-                      validationResult.strength === 'medium' &&
-                        'text-yellow-600',
-                      validationResult.strength === 'weak' && 'text-red-600'
+                      "font-medium",
+                      validationResult.strength === "strong" &&
+                        "text-green-600",
+                      validationResult.strength === "medium" &&
+                        "text-yellow-600",
+                      validationResult.strength === "weak" && "text-red-600",
                     )}
                   >
-                    {validationResult.strength === 'strong' && t('form.password_strength_strong')}
-                    {validationResult.strength === 'medium' && t('form.password_strength_medium')}
-                    {validationResult.strength === 'weak' && t('form.password_strength_weak')}
+                    {validationResult.strength === "strong" &&
+                      t("form.password_strength_strong")}
+                    {validationResult.strength === "medium" &&
+                      t("form.password_strength_medium")}
+                    {validationResult.strength === "weak" &&
+                      t("form.password_strength_weak")}
                   </span>
                 </div>
                 <Progress
                   value={
-                    validationResult.strength === 'strong'
+                    validationResult.strength === "strong"
                       ? 100
-                      : validationResult.strength === 'medium'
+                      : validationResult.strength === "medium"
                         ? 60
                         : 20
                   }
@@ -542,7 +547,7 @@ export function SmartFormField({
                         {validationResult.suggestions.map(
                           (suggestion, index) => (
                             <li key={index}>{suggestion}</li>
-                          )
+                          ),
                         )}
                       </ul>
                     </div>
@@ -588,7 +593,7 @@ export function SmartFormField({
             </AnimatePresence>
 
             {/* Email suggestions */}
-            {config.type === 'email' && validationResult?.suggestions && (
+            {config.type === "email" && validationResult?.suggestions && (
               <div className="text-sm text-muted-foreground">
                 {validationResult.suggestions.map((suggestion, index) => (
                   <Button
@@ -599,8 +604,8 @@ export function SmartFormField({
                     className="h-auto p-0 text-blue-600"
                     onClick={() => {
                       const correctedEmail = suggestion
-                        .split('¿Quisiste decir ')[1]
-                        ?.split('?')[0];
+                        .split("¿Quisiste decir ")[1]
+                        ?.split("?")[0];
                       if (correctedEmail) {
                         form.setValue(name, correctedEmail);
                       }
@@ -654,7 +659,7 @@ export function FormProgress({
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm text-muted-foreground">
-        <span>{t('form.progress_title')}</span>
+        <span>{t("form.progress_title")}</span>
         <span>{Math.round(progress)}%</span>
       </div>
       <Progress value={progress} className="h-2" />
@@ -699,11 +704,11 @@ export function SmartForm({
     const interval = setInterval(() => {
       const data = form.getValues();
       localStorage.setItem(
-        'form-autosave',
+        "form-autosave",
         JSON.stringify({
           data,
           timestamp: new Date().toISOString(),
-        })
+        }),
       );
       setLastSaved(new Date());
     }, autoSaveInterval);
@@ -715,7 +720,7 @@ export function SmartForm({
   useEffect(() => {
     if (!autoSave) return;
 
-    const saved = localStorage.getItem('form-autosave');
+    const saved = localStorage.getItem("form-autosave");
     if (saved) {
       try {
         const { data, timestamp } = JSON.parse(saved);
@@ -728,7 +733,7 @@ export function SmartForm({
           setLastSaved(savedDate);
         }
       } catch (error) {
-        console.error('Error loading auto-saved data:', error);
+        console.error("Error loading auto-saved data:", error);
       }
     }
   }, [autoSave, form]);
@@ -740,10 +745,10 @@ export function SmartForm({
     try {
       await onSubmit(data);
       if (autoSave) {
-        localStorage.removeItem('form-autosave');
+        localStorage.removeItem("form-autosave");
       }
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -752,7 +757,7 @@ export function SmartForm({
   return (
     <form
       onSubmit={form.handleSubmit(handleSubmit)}
-      className={cn('space-y-6', className)}
+      className={cn("space-y-6", className)}
     >
       {children}
 
@@ -777,7 +782,7 @@ export function SmartForm({
             isSubmitting || (enableValidation && !form.formState.isValid)
           }
         >
-          {isSubmitting ? t('form.submitting') : t('form.submit')}
+          {isSubmitting ? t("form.submitting") : t("form.submit")}
         </Button>
       </div>
     </form>
@@ -808,7 +813,7 @@ export function FieldArray({
   const form = useFormContext();
   const [items, setItems] = useState([0]);
 
-  const buttonLabel = addButtonLabel || t('form.add_item');
+  const buttonLabel = addButtonLabel || t("form.add_item");
 
   const addItem = () => {
     if (items.length < maxItems) {
@@ -825,7 +830,7 @@ export function FieldArray({
   };
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
         <Label className="text-base font-medium">{label}</Label>
         <Badge variant="secondary">
@@ -838,7 +843,7 @@ export function FieldArray({
           <motion.div
             key={itemId}
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="border rounded-lg p-4 space-y-4"
           >

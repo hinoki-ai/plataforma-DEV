@@ -3,17 +3,17 @@
  * Navigation component that adapts based on educational institution type
  */
 
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  School, 
-  GraduationCap, 
-  BookOpen, 
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  School,
+  GraduationCap,
+  BookOpen,
   Building2,
   Calendar,
   Users,
@@ -23,14 +23,14 @@ import {
   MessageSquare,
   UserCheck,
   Clock,
-  Camera
-} from 'lucide-react';
-import { 
-  EducationalInstitutionType, 
+  Camera,
+} from "lucide-react";
+import {
+  EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
-  shouldShowFeature
-} from '@/lib/educational-system';
-import { cn } from '@/lib/utils';
+  shouldShowFeature,
+} from "@/lib/educational-system";
+import { cn } from "@/lib/utils";
 
 interface NavigationItem {
   label: string;
@@ -43,14 +43,14 @@ interface NavigationItem {
 
 interface EducationalLevelAwareNavigationProps {
   currentType: EducationalInstitutionType;
-  userRole: 'ADMIN' | 'MASTER' | 'PROFESOR' | 'PARENT';
+  userRole: "ADMIN" | "MASTER" | "PROFESOR" | "PARENT";
   className?: string;
 }
 
-export function EducationalLevelAwareNavigation({ 
-  currentType, 
+export function EducationalLevelAwareNavigation({
+  currentType,
   userRole,
-  className 
+  className,
 }: EducationalLevelAwareNavigationProps) {
   const pathname = usePathname();
 
@@ -58,151 +58,166 @@ export function EducationalLevelAwareNavigation({
   const getNavigationItems = (): NavigationItem[] => {
     const baseItems: NavigationItem[] = [
       {
-        label: 'Calendario',
-        href: '/calendario-escolar',
+        label: "Calendario",
+        href: "/calendario-escolar",
         icon: Calendar,
-        institutionTypes: ['PRESCHOOL', 'BASIC_SCHOOL', 'HIGH_SCHOOL', 'COLLEGE']
+        institutionTypes: [
+          "PRESCHOOL",
+          "BASIC_SCHOOL",
+          "HIGH_SCHOOL",
+          "COLLEGE",
+        ],
       },
       {
-        label: 'Equipo',
-        href: '/equipo-multidisciplinario', 
+        label: "Equipo",
+        href: "/equipo-multidisciplinario",
         icon: Users,
-        institutionTypes: ['PRESCHOOL', 'BASIC_SCHOOL', 'HIGH_SCHOOL', 'COLLEGE']
+        institutionTypes: [
+          "PRESCHOOL",
+          "BASIC_SCHOOL",
+          "HIGH_SCHOOL",
+          "COLLEGE",
+        ],
       },
       {
-        label: 'Fotos y Videos',
-        href: '/fotos-videos',
+        label: "Fotos y Videos",
+        href: "/fotos-videos",
         icon: Camera,
-        institutionTypes: ['PRESCHOOL', 'BASIC_SCHOOL', 'HIGH_SCHOOL']
-      }
+        institutionTypes: ["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL"],
+      },
     ];
 
     // Role-specific items
-    if (userRole === 'ADMIN' || userRole === 'MASTER') {
+    if (userRole === "ADMIN" || userRole === "MASTER") {
       baseItems.push(
         {
-          label: 'Panel Admin',
-          href: '/admin',
+          label: "Panel Admin",
+          href: "/admin",
           icon: Settings,
-          badge: userRole === 'MASTER' ? '🏛️' : 'Admin'
+          badge: userRole === "MASTER" ? "🏛️" : "Admin",
         },
         {
-          label: 'Reportes',
-          href: '/admin/reportes',
+          label: "Reportes",
+          href: "/admin/reportes",
           icon: BarChart3,
-          requiredFeatures: ['academic_planning', 'grading_system']
-        }
+          requiredFeatures: ["academic_planning", "grading_system"],
+        },
       );
     }
 
-    if (userRole === 'MASTER') {
+    if (userRole === "MASTER") {
       baseItems.push({
-        label: '🏛️ Master Control',
-        href: '/master',
+        label: "🏛️ Master Control",
+        href: "/master",
         icon: Building2,
-        badge: 'MASTER'
+        badge: "MASTER",
       });
     }
 
     // Educational level specific items
     switch (currentType) {
-      case 'PRESCHOOL':
+      case "PRESCHOOL":
         baseItems.push(
           {
-            label: 'Actividades NT1/NT2',
-            href: '/profesor/actividades',
+            label: "Actividades NT1/NT2",
+            href: "/profesor/actividades",
             icon: School,
-            institutionTypes: ['PRESCHOOL']
+            institutionTypes: ["PRESCHOOL"],
           },
           {
-            label: 'Desarrollo Infantil',
-            href: '/desarrollo-infantil',
+            label: "Desarrollo Infantil",
+            href: "/desarrollo-infantil",
             icon: UserCheck,
-            institutionTypes: ['PRESCHOOL']
-          }
+            institutionTypes: ["PRESCHOOL"],
+          },
         );
         break;
 
-      case 'BASIC_SCHOOL':
+      case "BASIC_SCHOOL":
         baseItems.push(
           {
-            label: 'Planificaciones',
-            href: '/admin/planificaciones',
+            label: "Planificaciones",
+            href: "/admin/planificaciones",
             icon: FileText,
-            institutionTypes: ['BASIC_SCHOOL', 'HIGH_SCHOOL']
+            institutionTypes: ["BASIC_SCHOOL", "HIGH_SCHOOL"],
           },
           {
-            label: 'Reuniones Apoderados',
-            href: '/admin/reuniones',
+            label: "Reuniones Apoderados",
+            href: "/admin/reuniones",
             icon: MessageSquare,
-            institutionTypes: ['BASIC_SCHOOL', 'HIGH_SCHOOL']
+            institutionTypes: ["BASIC_SCHOOL", "HIGH_SCHOOL"],
           },
           {
-            label: 'Horarios',
-            href: '/admin/horarios',
+            label: "Horarios",
+            href: "/admin/horarios",
             icon: Clock,
-            institutionTypes: ['BASIC_SCHOOL', 'HIGH_SCHOOL']
-          }
+            institutionTypes: ["BASIC_SCHOOL", "HIGH_SCHOOL"],
+          },
         );
         break;
 
-      case 'HIGH_SCHOOL':
+      case "HIGH_SCHOOL":
         baseItems.push(
           {
-            label: 'Orientación Vocacional',
-            href: '/orientacion-vocacional',
+            label: "Orientación Vocacional",
+            href: "/orientacion-vocacional",
             icon: GraduationCap,
-            institutionTypes: ['HIGH_SCHOOL']
+            institutionTypes: ["HIGH_SCHOOL"],
           },
           {
-            label: 'Preparación PSU/PAES',
-            href: '/preparacion-psu',
+            label: "Preparación PSU/PAES",
+            href: "/preparacion-psu",
             icon: BookOpen,
-            institutionTypes: ['HIGH_SCHOOL']
+            institutionTypes: ["HIGH_SCHOOL"],
           },
           {
-            label: 'Formación TP',
-            href: '/formacion-tecnica',
+            label: "Formación TP",
+            href: "/formacion-tecnica",
             icon: Settings,
-            institutionTypes: ['HIGH_SCHOOL']
-          }
+            institutionTypes: ["HIGH_SCHOOL"],
+          },
         );
         break;
 
-      case 'COLLEGE':
+      case "COLLEGE":
         baseItems.push(
           {
-            label: 'Investigación',
-            href: '/investigacion',
+            label: "Investigación",
+            href: "/investigacion",
             icon: FileText,
-            institutionTypes: ['COLLEGE']
+            institutionTypes: ["COLLEGE"],
           },
           {
-            label: 'Tesis y Proyectos',
-            href: '/tesis-proyectos',
+            label: "Tesis y Proyectos",
+            href: "/tesis-proyectos",
             icon: GraduationCap,
-            institutionTypes: ['COLLEGE']
+            institutionTypes: ["COLLEGE"],
           },
           {
-            label: 'Biblioteca Digital',
-            href: '/biblioteca-digital',
+            label: "Biblioteca Digital",
+            href: "/biblioteca-digital",
             icon: BookOpen,
-            institutionTypes: ['COLLEGE']
-          }
+            institutionTypes: ["COLLEGE"],
+          },
         );
         break;
     }
 
     // Filter items based on institution type and features
-    return baseItems.filter(item => {
+    return baseItems.filter((item) => {
       // Check institution type compatibility
-      if (item.institutionTypes && !item.institutionTypes.includes(currentType)) {
+      if (
+        item.institutionTypes &&
+        !item.institutionTypes.includes(currentType)
+      ) {
         return false;
       }
 
       // Check required features
       if (item.requiredFeatures) {
-        return item.requiredFeatures.some(feature => shouldShowFeature(feature, currentType));
+        return item.requiredFeatures.some((feature) =>
+          shouldShowFeature(feature, currentType),
+        );
       }
 
       return true;
@@ -235,15 +250,16 @@ export function EducationalLevelAwareNavigation({
       {/* Navigation Items */}
       <div className="space-y-1">
         {navigationItems.map((item, index) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-          
+          const isActive =
+            pathname === item.href || pathname.startsWith(item.href + "/");
+
           return (
             <Link key={index} href={item.href} className="block">
               <Button
                 variant={isActive ? "default" : "ghost"}
                 className={cn(
                   "w-full justify-start gap-3 h-auto py-3 px-4",
-                  isActive && "bg-blue-600 hover:bg-blue-700"
+                  isActive && "bg-blue-600 hover:bg-blue-700",
                 )}
               >
                 <item.icon className="h-4 w-4" />
@@ -263,8 +279,9 @@ export function EducationalLevelAwareNavigation({
       <div className="mt-6 p-3 rounded border border-gray-200 bg-gray-50">
         <div className="text-xs text-gray-600 mb-1">Configuración Actual:</div>
         <div className="text-sm font-medium text-gray-900">
-          {currentInfo.levels.length} Niveles • 
-          ISCED {Math.min(...currentInfo.levels.map(l => l.isced))}-{Math.max(...currentInfo.levels.map(l => l.isced))}
+          {currentInfo.levels.length} Niveles • ISCED{" "}
+          {Math.min(...currentInfo.levels.map((l) => l.isced))}-
+          {Math.max(...currentInfo.levels.map((l) => l.isced))}
         </div>
         <div className="text-xs text-gray-500 mt-1">
           {currentInfo.description}

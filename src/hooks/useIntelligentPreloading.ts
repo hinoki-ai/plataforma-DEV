@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useCallback, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useRef, useCallback, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 interface PreloadingOptions {
   threshold?: number;
   timeout?: number;
-  priority?: 'low' | 'high' | 'auto';
+  priority?: "low" | "high" | "auto";
   prefetchOnHover?: boolean;
   prefetchOnVisible?: boolean;
   trackAnalytics?: boolean;
@@ -35,7 +35,7 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
   const {
     threshold = 0.6,
     timeout = 2000,
-    priority = 'auto',
+    priority = "auto",
     prefetchOnHover = true,
     prefetchOnVisible = true,
     trackAnalytics = true,
@@ -51,7 +51,7 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
     savedLoadTime: 0,
   });
   const [preloadedRoutes, setPreloadedRoutes] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
 
   const navigationPatternsRef = useRef<NavigationPattern[]>([]);
@@ -61,34 +61,34 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
   // Load navigation patterns from localStorage
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     try {
-      const saved = localStorage.getItem('navigation-patterns');
+      const saved = localStorage.getItem("navigation-patterns");
       if (saved) {
         navigationPatternsRef.current = JSON.parse(saved).map(
           (pattern: any) => ({
             ...pattern,
             lastAccess: new Date(pattern.lastAccess),
-          })
+          }),
         );
       }
     } catch (error) {
-      console.error('Failed to load navigation patterns:', error);
+      console.error("Failed to load navigation patterns:", error);
     }
   }, []);
 
   // Save navigation patterns to localStorage
   const savePatterns = useCallback(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     try {
       localStorage.setItem(
-        'navigation-patterns',
-        JSON.stringify(navigationPatternsRef.current)
+        "navigation-patterns",
+        JSON.stringify(navigationPatternsRef.current),
       );
     } catch (error) {
-      console.error('Failed to save navigation patterns:', error);
+      console.error("Failed to save navigation patterns:", error);
     }
   }, []);
 
@@ -98,7 +98,7 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
       if (!trackAnalytics) return;
 
       const existing = navigationPatternsRef.current.find(
-        p => p.from === from && p.to === to
+        (p) => p.from === from && p.to === to,
       );
 
       if (existing) {
@@ -122,14 +122,14 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
       savePatterns();
     },
-    [trackAnalytics, savePatterns]
+    [trackAnalytics, savePatterns],
   );
 
   // Predict next routes based on patterns
   const predictNextRoutes = useCallback(
     (currentRoute: string) => {
       const relevantPatterns = navigationPatternsRef.current
-        .filter(pattern => pattern.from === currentRoute)
+        .filter((pattern) => pattern.from === currentRoute)
         .sort((a, b) => {
           // Score based on frequency and recency
           const aScore =
@@ -147,25 +147,25 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
       const totalFrequency = relevantPatterns.reduce(
         (sum, pattern) => sum + pattern.frequency,
-        0
+        0,
       );
 
       return relevantPatterns
-        .map(pattern => ({
+        .map((pattern) => ({
           route: pattern.to,
           probability: pattern.frequency / totalFrequency,
           avgTime: pattern.avgTime,
         }))
-        .filter(prediction => prediction.probability >= threshold);
+        .filter((prediction) => prediction.probability >= threshold);
     },
-    [threshold]
+    [threshold],
   );
 
   // Preload a route
   const preloadRoute = useCallback(
     (
       route: string,
-      priorityLevel: 'low' | 'high' = priority === 'auto' ? 'low' : priority
+      priorityLevel: "low" | "high" = priority === "auto" ? "low" : priority,
     ) => {
       if (preloadedRoutes.has(route)) return;
 
@@ -173,10 +173,10 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
         // Use Next.js router prefetch
         router.prefetch(route);
 
-        setPreloadedRoutes(prev => new Set(prev).add(route));
+        setPreloadedRoutes((prev) => new Set(prev).add(route));
 
         if (trackAnalytics) {
-          setAnalytics(prev => ({
+          setAnalytics((prev) => ({
             ...prev,
             totalPredictions: prev.totalPredictions + 1,
           }));
@@ -184,7 +184,7 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
         // Clear preload after timeout to manage memory
         const timeoutId = setTimeout(() => {
-          setPreloadedRoutes(prev => {
+          setPreloadedRoutes((prev) => {
             const newSet = new Set(prev);
             newSet.delete(route);
             return newSet;
@@ -194,10 +194,10 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
         preloadTimeoutsRef.current.set(route, timeoutId);
       } catch (error) {
-        console.error('Failed to preload route:', route, error);
+        console.error("Failed to preload route:", route, error);
       }
     },
-    [router, priority, preloadedRoutes, timeout, trackAnalytics]
+    [router, priority, preloadedRoutes, timeout, trackAnalytics],
   );
 
   // Preload predicted routes
@@ -206,15 +206,15 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
     predictions.forEach(({ route, probability }) => {
       if (probability >= threshold) {
-        preloadRoute(route, probability > 0.8 ? 'high' : 'low');
+        preloadRoute(route, probability > 0.8 ? "high" : "low");
       }
     });
 
     if (trackAnalytics) {
-      setAnalytics(prev => ({
+      setAnalytics((prev) => ({
         ...prev,
         predictions: navigationPatternsRef.current.filter(
-          p => p.from === pathname
+          (p) => p.from === pathname,
         ),
       }));
     }
@@ -222,26 +222,26 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
   // Set up intersection observer for visible links
   useEffect(() => {
-    if (!prefetchOnVisible || typeof window === 'undefined') return;
+    if (!prefetchOnVisible || typeof window === "undefined") return;
 
     observerRef.current = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
+      (entries) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const link = entry.target as HTMLAnchorElement;
-            const href = link.getAttribute('href');
-            if (href && href.startsWith('/')) {
+            const href = link.getAttribute("href");
+            if (href && href.startsWith("/")) {
               preloadRoute(href);
             }
           }
         });
       },
-      { rootMargin: '100px' }
+      { rootMargin: "100px" },
     );
 
     // Observe all internal links
     const links = document.querySelectorAll('a[href^="/"]');
-    links.forEach(link => observerRef.current?.observe(link));
+    links.forEach((link) => observerRef.current?.observe(link));
 
     return () => {
       observerRef.current?.disconnect();
@@ -254,14 +254,14 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
       const timeSpent = Date.now() - currentPageStartTime.current;
       const previousRoute = document.referrer
         ? new URL(document.referrer).pathname
-        : '';
+        : "";
 
       if (previousRoute && previousRoute !== pathname) {
         trackNavigation(previousRoute, pathname, timeSpent);
 
         // Check if prediction was correct
         if (trackAnalytics && preloadedRoutes.has(pathname)) {
-          setAnalytics(prev => ({
+          setAnalytics((prev) => ({
             ...prev,
             correctPredictions: prev.correctPredictions + 1,
             hitRate:
@@ -287,7 +287,7 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
   // Hover preloading handler
   const handleLinkHover = useCallback(
     (href: string) => {
-      if (!prefetchOnHover || !href.startsWith('/')) return;
+      if (!prefetchOnHover || !href.startsWith("/")) return;
 
       // Delay preloading to avoid prefetching on accidental hovers
       const timeoutId = setTimeout(() => {
@@ -296,20 +296,20 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
 
       return () => clearTimeout(timeoutId);
     },
-    [prefetchOnHover, preloadRoute]
+    [prefetchOnHover, preloadRoute],
   );
 
   // Manual preload trigger
   const triggerPreload = useCallback(
     (route: string) => {
-      preloadRoute(route, 'high');
+      preloadRoute(route, "high");
     },
-    [preloadRoute]
+    [preloadRoute],
   );
 
   // Clear all preloaded routes
   const clearPreloadedRoutes = useCallback(() => {
-    preloadTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    preloadTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
     preloadTimeoutsRef.current.clear();
     setPreloadedRoutes(new Set());
   }, []);
@@ -352,23 +352,23 @@ export function useIntelligentPreloading(options: PreloadingOptions = {}) {
  */
 export function useResourcePreloading() {
   const [preloadedResources, setPreloadedResources] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [loadingResources, setLoadingResources] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
 
   const preloadImage = useCallback(
-    (src: string, priority: 'high' | 'low' = 'low') => {
+    (src: string, priority: "high" | "low" = "low") => {
       if (preloadedResources.has(src) || loadingResources.has(src)) return;
 
-      setLoadingResources(prev => new Set(prev).add(src));
+      setLoadingResources((prev) => new Set(prev).add(src));
 
       const img = new Image();
 
       img.onload = () => {
-        setPreloadedResources(prev => new Set(prev).add(src));
-        setLoadingResources(prev => {
+        setPreloadedResources((prev) => new Set(prev).add(src));
+        setLoadingResources((prev) => {
           const newSet = new Set(prev);
           newSet.delete(src);
           return newSet;
@@ -376,77 +376,77 @@ export function useResourcePreloading() {
       };
 
       img.onerror = () => {
-        setLoadingResources(prev => {
+        setLoadingResources((prev) => {
           const newSet = new Set(prev);
           newSet.delete(src);
           return newSet;
         });
-        console.error('Failed to preload image:', src);
+        console.error("Failed to preload image:", src);
       };
 
-      if (priority === 'high') {
-        img.fetchPriority = 'high';
+      if (priority === "high") {
+        img.fetchPriority = "high";
       }
 
       img.src = src;
     },
-    [preloadedResources, loadingResources]
+    [preloadedResources, loadingResources],
   );
 
   const preloadFont = useCallback(
-    (href: string, type: string = 'font/woff2') => {
+    (href: string, type: string = "font/woff2") => {
       if (preloadedResources.has(href)) return;
 
-      const link = document.createElement('link');
-      link.rel = 'preload';
+      const link = document.createElement("link");
+      link.rel = "preload";
       link.href = href;
-      link.as = 'font';
+      link.as = "font";
       link.type = type;
-      link.crossOrigin = 'anonymous';
+      link.crossOrigin = "anonymous";
 
       link.onload = () => {
-        setPreloadedResources(prev => new Set(prev).add(href));
+        setPreloadedResources((prev) => new Set(prev).add(href));
       };
 
       document.head.appendChild(link);
     },
-    [preloadedResources]
+    [preloadedResources],
   );
 
   const preloadScript = useCallback(
     (src: string) => {
       if (preloadedResources.has(src)) return;
 
-      const link = document.createElement('link');
-      link.rel = 'preload';
+      const link = document.createElement("link");
+      link.rel = "preload";
       link.href = src;
-      link.as = 'script';
+      link.as = "script";
 
       link.onload = () => {
-        setPreloadedResources(prev => new Set(prev).add(src));
+        setPreloadedResources((prev) => new Set(prev).add(src));
       };
 
       document.head.appendChild(link);
     },
-    [preloadedResources]
+    [preloadedResources],
   );
 
   const preloadCSS = useCallback(
     (href: string) => {
       if (preloadedResources.has(href)) return;
 
-      const link = document.createElement('link');
-      link.rel = 'preload';
+      const link = document.createElement("link");
+      link.rel = "preload";
       link.href = href;
-      link.as = 'style';
+      link.as = "style";
 
       link.onload = () => {
-        setPreloadedResources(prev => new Set(prev).add(href));
+        setPreloadedResources((prev) => new Set(prev).add(href));
       };
 
       document.head.appendChild(link);
     },
-    [preloadedResources]
+    [preloadedResources],
   );
 
   return {
@@ -471,14 +471,14 @@ export function useIntelligentCache<T = any>(
     compress?: boolean;
     persistent?: boolean;
     storageKey?: string;
-  } = {}
+  } = {},
 ) {
   const {
     maxSize = 50,
     maxAge = 1000 * 60 * 60, // 1 hour
     compress = false,
     persistent = false,
-    storageKey = 'intelligent-cache',
+    storageKey = "intelligent-cache",
   } = options;
 
   const [cache, setCache] = useState<
@@ -495,7 +495,7 @@ export function useIntelligentCache<T = any>(
 
   // Load persistent cache
   useEffect(() => {
-    if (!persistent || typeof window === 'undefined') return;
+    if (!persistent || typeof window === "undefined") return;
 
     try {
       const saved = localStorage.getItem(storageKey);
@@ -505,7 +505,7 @@ export function useIntelligentCache<T = any>(
           try {
             data = atob(data);
           } catch (e) {
-            console.warn('Failed to decompress cache data');
+            console.warn("Failed to decompress cache data");
           }
         }
 
@@ -521,14 +521,14 @@ export function useIntelligentCache<T = any>(
         setCache(restoredCache);
       }
     } catch (error) {
-      console.error('Failed to load cache:', error);
+      console.error("Failed to load cache:", error);
     }
   }, [persistent, storageKey, compress, maxAge]);
 
   // Save persistent cache
   const saveCache = useCallback(
     (cacheToSave: typeof cache) => {
-      if (!persistent || typeof window === 'undefined') return;
+      if (!persistent || typeof window === "undefined") return;
 
       try {
         const cacheObject = Object.fromEntries(cacheToSave);
@@ -538,16 +538,16 @@ export function useIntelligentCache<T = any>(
           try {
             serialized = btoa(serialized);
           } catch (e) {
-            console.warn('Failed to compress cache data');
+            console.warn("Failed to compress cache data");
           }
         }
 
         localStorage.setItem(storageKey, serialized);
       } catch (error) {
-        console.error('Failed to save cache:', error);
+        console.error("Failed to save cache:", error);
       }
     },
-    [persistent, storageKey, compress]
+    [persistent, storageKey, compress],
   );
 
   // LRU eviction
@@ -565,7 +565,7 @@ export function useIntelligentCache<T = any>(
 
       return newCache;
     },
-    [maxSize]
+    [maxSize],
   );
 
   const set = useCallback(
@@ -578,7 +578,7 @@ export function useIntelligentCache<T = any>(
         lastAccess: now,
       };
 
-      setCache(prevCache => {
+      setCache((prevCache) => {
         const newCache = new Map(prevCache);
         newCache.set(key, entry);
         const evictedCache = evictLRU(newCache);
@@ -586,7 +586,7 @@ export function useIntelligentCache<T = any>(
         return evictedCache;
       });
     },
-    [evictLRU, saveCache]
+    [evictLRU, saveCache],
   );
 
   const get = useCallback(
@@ -596,7 +596,7 @@ export function useIntelligentCache<T = any>(
 
       // Check if expired
       if (Date.now() - entry.timestamp > maxAge) {
-        setCache(prevCache => {
+        setCache((prevCache) => {
           const newCache = new Map(prevCache);
           newCache.delete(key);
           saveCache(newCache);
@@ -609,7 +609,7 @@ export function useIntelligentCache<T = any>(
       entry.accessCount += 1;
       entry.lastAccess = Date.now();
 
-      setCache(prevCache => {
+      setCache((prevCache) => {
         const newCache = new Map(prevCache);
         newCache.set(key, entry);
         saveCache(newCache);
@@ -618,19 +618,19 @@ export function useIntelligentCache<T = any>(
 
       return entry.data;
     },
-    [cache, maxAge, saveCache]
+    [cache, maxAge, saveCache],
   );
 
   const remove = useCallback(
     (key: string) => {
-      setCache(prevCache => {
+      setCache((prevCache) => {
         const newCache = new Map(prevCache);
         newCache.delete(key);
         saveCache(newCache);
         return newCache;
       });
     },
-    [saveCache]
+    [saveCache],
   );
 
   const clear = useCallback(() => {
@@ -650,8 +650,8 @@ export function useIntelligentCache<T = any>(
           ? entries.reduce((sum, entry) => sum + entry.accessCount, 0) /
             entries.length
           : 0,
-      oldestEntry: Math.min(...entries.map(entry => entry.timestamp)),
-      newestEntry: Math.max(...entries.map(entry => entry.timestamp)),
+      oldestEntry: Math.min(...entries.map((entry) => entry.timestamp)),
+      newestEntry: Math.max(...entries.map((entry) => entry.timestamp)),
     };
   }, [cache]);
 

@@ -1,17 +1,29 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Textarea } from '@/components/ui/textarea';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Settings,
   Globe,
@@ -25,14 +37,18 @@ import {
   Save,
   RefreshCw,
   AlertTriangle,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface GlobalSetting {
   id: string;
   label: string;
   description: string;
-  type: 'text' | 'number' | 'boolean' | 'select' | 'textarea';
+  type: "text" | "number" | "boolean" | "select" | "textarea";
   value: any;
   options?: string[];
   category: string;
@@ -42,121 +58,122 @@ interface GlobalSetting {
 const globalSettings: GlobalSetting[] = [
   // System Settings
   {
-    id: 'system_name',
-    label: 'Nombre del Sistema',
-    description: 'Nombre público del sistema',
-    type: 'text',
-    value: 'Manitos Pintadas',
-    category: 'system',
+    id: "system_name",
+    label: "Nombre del Sistema",
+    description: "Nombre público del sistema",
+    type: "text",
+    value: "Manitos Pintadas",
+    category: "system",
   },
   {
-    id: 'system_timezone',
-    label: 'Zona Horaria',
-    description: 'Zona horaria principal del sistema',
-    type: 'select',
-    value: 'America/Santiago',
-    options: ['America/Santiago', 'UTC', 'America/New_York', 'Europe/London'],
-    category: 'system',
+    id: "system_timezone",
+    label: "Zona Horaria",
+    description: "Zona horaria principal del sistema",
+    type: "select",
+    value: "America/Santiago",
+    options: ["America/Santiago", "UTC", "America/New_York", "Europe/London"],
+    category: "system",
   },
   {
-    id: 'maintenance_mode',
-    label: 'Modo Mantenimiento',
-    description: 'Activar modo mantenimiento del sistema',
-    type: 'boolean',
+    id: "maintenance_mode",
+    label: "Modo Mantenimiento",
+    description: "Activar modo mantenimiento del sistema",
+    type: "boolean",
     value: false,
-    category: 'system',
+    category: "system",
     requiresRestart: true,
   },
 
   // Security Settings
   {
-    id: 'session_timeout',
-    label: 'Timeout de Sesión',
-    description: 'Tiempo máximo de inactividad antes de cerrar sesión (minutos)',
-    type: 'number',
+    id: "session_timeout",
+    label: "Timeout de Sesión",
+    description:
+      "Tiempo máximo de inactividad antes de cerrar sesión (minutos)",
+    type: "number",
     value: 30,
-    category: 'security',
+    category: "security",
   },
   {
-    id: 'password_min_length',
-    label: 'Longitud Mínima de Contraseña',
-    description: 'Longitud mínima requerida para contraseñas',
-    type: 'number',
+    id: "password_min_length",
+    label: "Longitud Mínima de Contraseña",
+    description: "Longitud mínima requerida para contraseñas",
+    type: "number",
     value: 8,
-    category: 'security',
+    category: "security",
   },
   {
-    id: 'two_factor_required',
-    label: '2FA Requerido',
-    description: 'Requerir autenticación de dos factores',
-    type: 'boolean',
+    id: "two_factor_required",
+    label: "2FA Requerido",
+    description: "Requerir autenticación de dos factores",
+    type: "boolean",
     value: true,
-    category: 'security',
+    category: "security",
   },
 
   // Database Settings
   {
-    id: 'db_connection_pool',
-    label: 'Pool de Conexiones DB',
-    description: 'Número máximo de conexiones a la base de datos',
-    type: 'number',
+    id: "db_connection_pool",
+    label: "Pool de Conexiones DB",
+    description: "Número máximo de conexiones a la base de datos",
+    type: "number",
     value: 20,
-    category: 'database',
+    category: "database",
     requiresRestart: true,
   },
   {
-    id: 'db_query_timeout',
-    label: 'Timeout de Queries',
-    description: 'Tiempo máximo para ejecutar queries (segundos)',
-    type: 'number',
+    id: "db_query_timeout",
+    label: "Timeout de Queries",
+    description: "Tiempo máximo para ejecutar queries (segundos)",
+    type: "number",
     value: 30,
-    category: 'database',
+    category: "database",
   },
 
   // Email Settings
   {
-    id: 'smtp_host',
-    label: 'SMTP Host',
-    description: 'Servidor SMTP para envío de emails',
-    type: 'text',
-    value: 'smtp.gmail.com',
-    category: 'email',
+    id: "smtp_host",
+    label: "SMTP Host",
+    description: "Servidor SMTP para envío de emails",
+    type: "text",
+    value: "smtp.gmail.com",
+    category: "email",
   },
   {
-    id: 'email_notifications',
-    label: 'Notificaciones por Email',
-    description: 'Habilitar envío de notificaciones por email',
-    type: 'boolean',
+    id: "email_notifications",
+    label: "Notificaciones por Email",
+    description: "Habilitar envío de notificaciones por email",
+    type: "boolean",
     value: true,
-    category: 'email',
+    category: "email",
   },
 
   // UI Settings
   {
-    id: 'theme_default',
-    label: 'Tema por Defecto',
-    description: 'Tema visual por defecto del sistema',
-    type: 'select',
-    value: 'system',
-    options: ['light', 'dark', 'system'],
-    category: 'ui',
+    id: "theme_default",
+    label: "Tema por Defecto",
+    description: "Tema visual por defecto del sistema",
+    type: "select",
+    value: "system",
+    options: ["light", "dark", "system"],
+    category: "ui",
   },
   {
-    id: 'language_default',
-    label: 'Idioma por Defecto',
-    description: 'Idioma por defecto del sistema',
-    type: 'select',
-    value: 'es',
-    options: ['es', 'en'],
-    category: 'ui',
+    id: "language_default",
+    label: "Idioma por Defecto",
+    description: "Idioma por defecto del sistema",
+    type: "select",
+    value: "es",
+    options: ["es", "en"],
+    category: "ui",
   },
 ];
 
 function SettingsOverviewCard() {
-  const categories = ['system', 'security', 'database', 'email', 'ui'];
-  const categoryStats = categories.map(cat => ({
+  const categories = ["system", "security", "database", "email", "ui"];
+  const categoryStats = categories.map((cat) => ({
     name: cat,
-    count: globalSettings.filter(s => s.category === cat).length,
+    count: globalSettings.filter((s) => s.category === cat).length,
     modified: Math.floor(Math.random() * 5), // Mock data
   }));
 
@@ -167,16 +184,23 @@ function SettingsOverviewCard() {
           <Settings className="h-5 w-5 text-indigo-600" />
           Resumen de Configuración
         </CardTitle>
-        <CardDescription>Estado general de la configuración del sistema</CardDescription>
+        <CardDescription>
+          Estado general de la configuración del sistema
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {categoryStats.map((stat, index) => (
-            <div key={index} className="text-center p-4 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg">
+            <div
+              key={index}
+              className="text-center p-4 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg"
+            >
               <div className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
                 {stat.count}
               </div>
-              <div className="text-sm text-muted-foreground capitalize">{stat.name}</div>
+              <div className="text-sm text-muted-foreground capitalize">
+                {stat.name}
+              </div>
               <div className="text-xs text-muted-foreground mt-1">
                 {stat.modified} modificados
               </div>
@@ -189,24 +213,28 @@ function SettingsOverviewCard() {
 }
 
 function SettingsFormCard({ settings }: { settings: GlobalSetting[] }) {
-  const [modifiedSettings, setModifiedSettings] = useState<Record<string, any>>({});
+  const [modifiedSettings, setModifiedSettings] = useState<Record<string, any>>(
+    {},
+  );
 
   const handleSettingChange = (id: string, value: any) => {
-    setModifiedSettings(prev => ({ ...prev, [id]: value }));
+    setModifiedSettings((prev) => ({ ...prev, [id]: value }));
   };
 
   const renderSettingInput = (setting: GlobalSetting) => {
     const currentValue = modifiedSettings[setting.id] ?? setting.value;
 
     switch (setting.type) {
-      case 'boolean':
+      case "boolean":
         return (
           <Switch
             checked={currentValue}
-            onCheckedChange={(checked) => handleSettingChange(setting.id, checked)}
+            onCheckedChange={(checked) =>
+              handleSettingChange(setting.id, checked)
+            }
           />
         );
-      case 'select':
+      case "select":
         return (
           <Select
             value={currentValue}
@@ -224,7 +252,7 @@ function SettingsFormCard({ settings }: { settings: GlobalSetting[] }) {
             </SelectContent>
           </Select>
         );
-      case 'textarea':
+      case "textarea":
         return (
           <Textarea
             value={currentValue}
@@ -232,12 +260,14 @@ function SettingsFormCard({ settings }: { settings: GlobalSetting[] }) {
             placeholder={setting.description}
           />
         );
-      case 'number':
+      case "number":
         return (
           <Input
             type="number"
             value={currentValue}
-            onChange={(e) => handleSettingChange(setting.id, parseInt(e.target.value))}
+            onChange={(e) =>
+              handleSettingChange(setting.id, parseInt(e.target.value))
+            }
           />
         );
       default:
@@ -271,10 +301,10 @@ function SettingsFormCard({ settings }: { settings: GlobalSetting[] }) {
                   )}
                 </Label>
               </div>
-              <p className="text-sm text-muted-foreground">{setting.description}</p>
-              <div className="max-w-md">
-                {renderSettingInput(setting)}
-              </div>
+              <p className="text-sm text-muted-foreground">
+                {setting.description}
+              </p>
+              <div className="max-w-md">{renderSettingInput(setting)}</div>
             </div>
           ))}
 
@@ -313,7 +343,9 @@ function SystemHealthCard() {
           <Globe className="h-5 w-5" />
           Salud del Sistema
         </CardTitle>
-        <CardDescription>Estado general del sistema después de cambios</CardDescription>
+        <CardDescription>
+          Estado general del sistema después de cambios
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -358,11 +390,11 @@ export function GlobalSettingsDashboard() {
   const { data: session } = useSession();
 
   const settingsByCategory = {
-    system: globalSettings.filter(s => s.category === 'system'),
-    security: globalSettings.filter(s => s.category === 'security'),
-    database: globalSettings.filter(s => s.category === 'database'),
-    email: globalSettings.filter(s => s.category === 'email'),
-    ui: globalSettings.filter(s => s.category === 'ui'),
+    system: globalSettings.filter((s) => s.category === "system"),
+    security: globalSettings.filter((s) => s.category === "security"),
+    database: globalSettings.filter((s) => s.category === "database"),
+    email: globalSettings.filter((s) => s.category === "email"),
+    ui: globalSettings.filter((s) => s.category === "ui"),
   };
 
   return (
@@ -370,10 +402,13 @@ export function GlobalSettingsDashboard() {
       {/* Global Settings Header */}
       <RoleAwareHeader
         title="🌐 GLOBAL SETTINGS - SUPREME GLOBAL CONTROL"
-        subtitle={`Configuración global absoluta del sistema - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Configuración global absoluta del sistema - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-indigo-600 border-indigo-600">
+            <Badge
+              variant="outline"
+              className="text-indigo-600 border-indigo-600"
+            >
               <Globe className="h-3 w-3 mr-1" />
               GLOBAL SETTINGS
             </Badge>
@@ -381,7 +416,6 @@ export function GlobalSettingsDashboard() {
           </div>
         }
       />
-
 
       {/* Settings Overview */}
       <SettingsOverviewCard />

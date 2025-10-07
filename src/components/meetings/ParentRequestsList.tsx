@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ParentRequestCard } from './ParentRequestCard';
-import { getParentMeetingRequestsAction } from '@/services/actions/meetings';
-import type { Meeting } from '@/lib/prisma-compat-types';
-import { ActionLoader } from '@/components/ui/dashboard-loader';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ParentRequestCard } from "./ParentRequestCard";
+import { getParentMeetingRequestsAction } from "@/services/actions/meetings";
+import type { Meeting, User } from "@/lib/prisma-compat-types";
+import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 export function ParentRequestsList() {
   const [requests, setRequests] = useState<Meeting[]>([]);
@@ -23,12 +23,35 @@ export function ParentRequestsList() {
       const response = await getParentMeetingRequestsAction();
 
       if (response.success && response.data) {
-        setRequests(response.data);
+        // Convert Convex meetings to Meeting type with all required fields
+        const convertedRequests: Meeting[] = response.data.map((m: any) => ({
+          id: m._id,
+          title: m.title,
+          meetingType: m.type,
+          studentName: m.studentName,
+          studentGrade: m.studentGrade || '',
+          guardianName: m.guardianName,
+          guardianEmail: m.guardianEmail,
+          guardianPhone: m.guardianPhone || '',
+          scheduledDate: new Date(m.scheduledDate),
+          scheduledTime: m.scheduledTime,
+          status: m.status,
+          assignedTo: m.assignedTo,
+          duration: m.duration || 30,
+          location: m.location,
+          description: m.description,
+          reason: m.reason,
+          notes: m.notes,
+          parentRequested: m.parentRequested,
+          createdAt: new Date(m.createdAt || m._creationTime),
+          updatedAt: new Date(m.updatedAt || m._creationTime),
+        }));
+        setRequests(convertedRequests);
       } else {
-        setError('Error al cargar las solicitudes');
+        setError("Error al cargar las solicitudes");
       }
     } catch (err) {
-      setError('Error al cargar las solicitudes');
+      setError("Error al cargar las solicitudes");
     } finally {
       setLoading(false);
     }
@@ -101,7 +124,7 @@ export function ParentRequestsList() {
       </div>
 
       <div className="grid gap-4">
-        {requests.map(request => (
+        {requests.map((request) => (
           <ParentRequestCard
             key={request.id}
             request={request}

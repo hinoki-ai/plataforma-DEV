@@ -28,6 +28,7 @@ npx convex dev
 ```
 
 This will:
+
 1. Open your browser to the Convex dashboard
 2. Ask you to log in or create a Convex account
 3. Create a new project or select an existing one
@@ -58,13 +59,15 @@ npx convex dashboard
 ```
 
 In the dashboard:
+
 1. Go to the **Functions** tab
 2. Find `seed:seedDatabase`
 3. Click **Run** with empty args `{}`
 
 This creates test users:
+
 - **Admin**: admin@manitospintadas.cl / admin123
-- **Profesor**: profesor@manitospintadas.cl / profesor123  
+- **Profesor**: profesor@manitospintadas.cl / profesor123
 - **Parent**: parent@manitospintadas.cl / parent123
 
 ### Step 4: Start Next.js
@@ -114,6 +117,7 @@ This starts both Convex and Next.js together.
 ### Authentication Flow
 
 1. **Credentials Login**:
+
    ```
    User enters email/password
    → NextAuth calls authorize()
@@ -125,6 +129,7 @@ This starts both Convex and Next.js together.
    ```
 
 2. **OAuth Login (Google)**:
+
    ```
    User clicks "Sign in with Google"
    → NextAuth OAuth flow
@@ -170,17 +175,17 @@ Middleware in `src/middleware.ts` protects routes:
 
 ## 📂 Key Files
 
-| File | Purpose |
-|------|---------|
-| `convex/schema.ts` | Database schema (32 tables) |
-| `convex/users.ts` | User CRUD operations |
-| `convex/auth.ts` | OAuth accounts & sessions |
-| `convex/authAdapter.ts` | NextAuth adapter functions |
-| `convex/seed.ts` | Database seeding |
-| `src/lib/auth.ts` | NextAuth configuration |
-| `src/lib/convex-adapter.ts` | Adapter interface |
-| `src/lib/auth-convex.ts` | Auth helper functions |
-| `src/lib/convex.ts` | Convex client setup |
+| File                        | Purpose                     |
+| --------------------------- | --------------------------- |
+| `convex/schema.ts`          | Database schema (32 tables) |
+| `convex/users.ts`           | User CRUD operations        |
+| `convex/auth.ts`            | OAuth accounts & sessions   |
+| `convex/authAdapter.ts`     | NextAuth adapter functions  |
+| `convex/seed.ts`            | Database seeding            |
+| `src/lib/auth.ts`           | NextAuth configuration      |
+| `src/lib/convex-adapter.ts` | Adapter interface           |
+| `src/lib/auth-convex.ts`    | Auth helper functions       |
+| `src/lib/convex.ts`         | Convex client setup         |
 
 ---
 
@@ -191,6 +196,7 @@ Middleware in `src/middleware.ts` protects routes:
 **Cause**: `NEXT_PUBLIC_CONVEX_URL` not set
 
 **Fix**:
+
 ```bash
 # Check .env file
 cat .env | grep CONVEX
@@ -199,11 +205,12 @@ cat .env | grep CONVEX
 NEXT_PUBLIC_CONVEX_URL=https://...convex.cloud
 ```
 
-### "Cannot find module '.../_generated/...'"
+### "Cannot find module '.../\_generated/...'"
 
 **Cause**: Convex types not generated
 
 **Fix**:
+
 ```bash
 # Make sure convex dev is running
 npx convex dev
@@ -217,6 +224,7 @@ ls convex/_generated/
 **Cause**: User may not exist or password hash mismatch
 
 **Fix**:
+
 ```bash
 # Re-seed database
 npx convex dashboard
@@ -238,6 +246,7 @@ npx convex dashboard
 **Cause**: Token/session configuration issue
 
 **Fix**: Check `authOptions` in `src/lib/auth.ts`:
+
 ```typescript
 session: {
   strategy: 'jwt',
@@ -264,6 +273,7 @@ const isValid = await bcryptjs.compare(password, user.password);
 ### JWT Tokens
 
 NextAuth uses JWT strategy (not database sessions):
+
 - Tokens stored in HTTP-only cookies
 - Tokens expire after 24 hours
 - Auto-refresh every hour
@@ -271,6 +281,7 @@ NextAuth uses JWT strategy (not database sessions):
 ### Role Protection
 
 Middleware enforces role-based access:
+
 - Checks user role from JWT
 - Redirects unauthorized users
 - Logs access attempts
@@ -308,6 +319,7 @@ Middleware enforces role-based access:
 **Your authentication system is production-ready!** 🎉
 
 Once you complete the setup steps, you'll have:
+
 - ✅ Full user authentication (credentials + OAuth)
 - ✅ Role-based access control
 - ✅ Secure password hashing

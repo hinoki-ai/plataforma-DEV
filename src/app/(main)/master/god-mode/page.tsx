@@ -4,29 +4,36 @@
  * Only MASTER users can access this page
  */
 
-import { Suspense } from 'react';
-import { Metadata } from 'next';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { GodModeDashboard } from '@/components/master/GodModeDashboard';
-import { RoleGuard } from '@/components/auth/RoleGuard';
-import { Crown } from 'lucide-react';
+import { Suspense } from "react";
+import { Metadata } from "next";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { GodModeDashboard } from "@/components/master/GodModeDashboard";
+import { RoleGuard } from "@/components/auth/RoleGuard";
+import { Crown } from "lucide-react";
 
 // Force dynamic rendering for real-time updates
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 // Supreme SEO metadata
 export const metadata: Metadata = {
-  title: '🏛️ MASTER God Mode - Supreme Authority Control',
-  description: 'Ultimate system authority and global oversight dashboard - MASTER access only',
-  keywords: ['master', 'god mode', 'supreme authority', 'system control', 'global oversight'],
-  robots: 'noindex, nofollow', // Only MASTER should find this
+  title: "🏛️ MASTER God Mode - Supreme Authority Control",
+  description:
+    "Ultimate system authority and global oversight dashboard - MASTER access only",
+  keywords: [
+    "master",
+    "god mode",
+    "supreme authority",
+    "system control",
+    "global oversight",
+  ],
+  robots: "noindex, nofollow", // Only MASTER should find this
   openGraph: {
-    title: '🏛️ MASTER God Mode - Supreme Control',
-    description: 'Complete system authority and oversight',
-    type: 'website',
+    title: "🏛️ MASTER God Mode - Supreme Control",
+    description: "Complete system authority and oversight",
+    type: "website",
   },
 };
 
@@ -97,7 +104,10 @@ function SupremeLoadingSkeleton() {
 }
 
 // Supreme error boundary fallback
-const SupremeErrorFallback: React.ComponentType<{ error: Error; retry: () => void }> = ({ error, retry }) => {
+const SupremeErrorFallback: React.ComponentType<{
+  error: Error;
+  retry: () => void;
+}> = ({ error, retry }) => {
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-background">
       <Card className="max-w-md w-full border-red-200 bg-red-50 dark:bg-red-950/20">
@@ -107,8 +117,8 @@ const SupremeErrorFallback: React.ComponentType<{ error: Error; retry: () => voi
             🚨 GOD MODE COMPROMISED
           </h2>
           <p className="text-red-700 dark:text-red-300">
-            Supreme authority system encountered a critical error.
-            This should never happen under normal circumstances.
+            Supreme authority system encountered a critical error. This should
+            never happen under normal circumstances.
           </p>
           <div className="text-sm text-red-600 dark:text-red-400 font-mono bg-red-100 dark:bg-red-900/20 p-2 rounded">
             {error.message}
@@ -128,7 +138,7 @@ const SupremeErrorFallback: React.ComponentType<{ error: Error; retry: () => voi
 export default function GodModePage() {
   return (
     <RoleGuard
-      roles={['MASTER']}
+      roles={["MASTER"]}
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-background">
           <Card className="p-8 text-center border-red-200 bg-red-50 dark:bg-red-950/20">
@@ -146,7 +156,7 @@ export default function GodModePage() {
       <AdvancedErrorBoundary
         context="🏛️ GOD MODE - SUPREME AUTHORITY"
         enableRetry={true}
-        showDetails={process.env.NODE_ENV === 'development'}
+        showDetails={process.env.NODE_ENV === "development"}
       >
         <Suspense fallback={<SupremeLoadingSkeleton />}>
           <GodModeDashboard />

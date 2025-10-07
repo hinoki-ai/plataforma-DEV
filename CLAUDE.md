@@ -222,17 +222,17 @@ Always use the services layer for database operations:
 
 ```typescript
 // ✅ Correct - use services
-import { createMeeting } from '@/services/actions/meetings';
+import { createMeeting } from "@/services/actions/meetings";
 
 // ✅ Or use Convex client directly in API routes
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
 
 const client = getConvexClient();
 const meetings = await client.query(api.meetings.getMeetings, {});
 
 // ❌ Wrong - old Prisma calls (removed)
-import { db } from '@/lib/db'; // This file no longer exists
+import { db } from "@/lib/db"; // This file no longer exists
 ```
 
 ### Role-Based Component Rendering
@@ -241,7 +241,7 @@ Check user roles in components using the session:
 
 ```typescript
 const session = await auth();
-const isAdmin = session?.user?.role === 'ADMIN';
+const isAdmin = session?.user?.role === "ADMIN";
 ```
 
 ### Error Handling Standard
@@ -283,11 +283,11 @@ const isAdmin = session?.user?.role === 'ADMIN';
 
 ### Test Users (seeded in development)
 
-| Role      | Email                                 | Password      |
-|-----------|---------------------------------------|---------------|
-| ADMIN     | [admin@manitospintadas.cl](mailto:admin@manitospintadas.cl)     | admin123      |
-| PROFESOR  | [profesor@manitospintadas.cl](mailto:profesor@manitospintadas.cl) | profesor123   |
-| PARENT    | [parent@manitospintadas.cl](mailto:parent@manitospintadas.cl)   | parent123     |
+| Role     | Email                                                             | Password    |
+| -------- | ----------------------------------------------------------------- | ----------- |
+| ADMIN    | [admin@manitospintadas.cl](mailto:admin@manitospintadas.cl)       | admin123    |
+| PROFESOR | [profesor@manitospintadas.cl](mailto:profesor@manitospintadas.cl) | profesor123 |
+| PARENT   | [parent@manitospintadas.cl](mailto:parent@manitospintadas.cl)     | parent123   |
 
 ## Environment Configuration
 
@@ -460,3 +460,4 @@ tsx scripts/verify-users.ts     # Verify test users in database
 ./scripts/unprotect.sh          # Disable branch protection
 ./scripts/check-protected.sh    # Check protection status
 ./scripts/ci-check-protected.sh # CI protection verification
+```

@@ -7,6 +7,7 @@ This application implements a comprehensive role-based access control (RBAC) sys
 ## User Roles
 
 ### 1. **MASTER** (Developer)
+
 - **Purpose**: Full system access for development and testing
 - **Permissions**: Complete access to all features
 - **Special Features**: Can switch between all roles for testing
@@ -14,24 +15,28 @@ This application implements a comprehensive role-based access control (RBAC) sys
 - **Test Account**: `agustinaramac@gmail.com` / `madmin123`
 
 ### 2. **ADMIN** (Administrator)
+
 - **Purpose**: School administration and management
 - **Permissions**: User management, planning, calendar, documents
 - **Display Name**: "Administrador"
 - **Test Account**: `admin@test.com` / `admin123`
 
 ### 3. **PROFESOR** (Teacher)
+
 - **Purpose**: Teaching and classroom management
 - **Permissions**: Lesson planning, student management, calendar
 - **Display Name**: "Profesor"
 - **Test Account**: `profesor@test.com` / `teacher123`
 
 ### 4. **PARENT** (Guardian)
+
 - **Purpose**: Parent/guardian access to student information
 - **Permissions**: View student progress, communications, meetings
 - **Display Name**: "Padre/Apoderado"
 - **Test Account**: `parent@test.com` / `parent123`
 
 ### 5. **PUBLIC** (Anonymous)
+
 - **Purpose**: Public visitors and unregistered users
 - **Permissions**: View public information only
 - **Display Name**: "Público"
@@ -40,11 +45,13 @@ This application implements a comprehensive role-based access control (RBAC) sys
 ## Role Switching Feature (MASTER Only)
 
 ### Purpose
+
 Allows developers to test the application from different user perspectives without creating multiple accounts or logging in/out repeatedly.
 
 ### How to Use
 
 1. **Login as MASTER**
+
    ```bash
    Email: agustinaramac@gmail.com
    Password: madmin123
@@ -77,6 +84,7 @@ Allows developers to test the application from different user perspectives witho
 ### Core Components
 
 #### 1. Database Schema (`prisma/schema.prisma`)
+
 ```prisma
 enum UserRole {
   MASTER
@@ -88,31 +96,37 @@ enum UserRole {
 ```
 
 #### 2. Authorization System (`src/lib/authorization.ts`)
+
 - Permission-based access control
 - Role-specific permission sets
 - Type-safe permission checking
 
 #### 3. Middleware Protection (`src/middleware.ts`)
+
 - Route-level access control
 - Automatic redirects based on role
 - Session validation
 
 #### 4. Role Utilities (`src/lib/role-utils.ts`)
+
 - Role access checking functions
 - Permission helpers
 - Navigation filtering
 
 #### 5. Role Switcher Component (`src/components/auth/RoleSwitcher.tsx`)
+
 - UI for role switching
 - Real-time role updates
 - Error handling and feedback
 
 #### 6. Role Switching Hook (`src/hooks/useRoleSwitching.ts`)
+
 - State management for role switching
 - API integration
 - Error handling
 
 #### 7. API Endpoint (`src/app/api/role-switch/route.ts`)
+
 - Secure role switching endpoint
 - Audit logging
 - Session management
@@ -141,6 +155,7 @@ Routes are automatically protected based on user roles:
 ### Automated Tests
 
 Run role switching tests:
+
 ```bash
 npm run test:role-switching
 ```
@@ -148,6 +163,7 @@ npm run test:role-switching
 ### Manual Testing
 
 1. **Start Development Server**
+
    ```bash
    npm run dev
    ```
@@ -209,8 +225,9 @@ npm run test:role-switching
 ### Debug Mode
 
 Enable debug logging:
+
 ```typescript
-const logger = Logger.getInstance('RoleSwitchAPI');
+const logger = Logger.getInstance("RoleSwitchAPI");
 // Logs are available in server console
 ```
 

@@ -4,8 +4,8 @@
  * Part of Stage 3: Business Logic Unification
  */
 
-import { useCallback, useReducer, useState } from 'react';
-import { UserRole } from '@/lib/prisma-compat-types';
+import { useCallback, useReducer, useState } from "react";
+import { UserRole } from "@/lib/prisma-compat-types";
 
 export type ExtendedUserRole = UserRole;
 
@@ -31,7 +31,7 @@ export interface ListState<T = any> {
   filteredItems: T[];
   searchQuery: string;
   sortBy: string;
-  sortOrder: 'asc' | 'desc';
+  sortOrder: "asc" | "desc";
   pagination: {
     page: number;
     limit: number;
@@ -51,15 +51,15 @@ export function useLoadingState(initialLoading = false) {
   });
 
   const setLoading = useCallback((loading: boolean) => {
-    setState(prev => ({ ...prev, isLoading: loading, error: null }));
+    setState((prev) => ({ ...prev, isLoading: loading, error: null }));
   }, []);
 
   const setError = useCallback((error: string | null) => {
-    setState(prev => ({ ...prev, error, isLoading: false }));
+    setState((prev) => ({ ...prev, error, isLoading: false }));
   }, []);
 
   const setSuccess = useCallback(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isLoading: false,
       error: null,
@@ -93,28 +93,28 @@ export function useFormState<T extends Record<string, any>>(initialData: T) {
   });
 
   const updateField = useCallback((field: keyof T, value: any) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       data: { ...prev.data, [field]: value },
       isDirty: true,
       touched: { ...prev.touched, [field]: true },
-      errors: { ...prev.errors, [field]: '' }, // Clear error when user types
+      errors: { ...prev.errors, [field]: "" }, // Clear error when user types
     }));
   }, []);
 
   const setFieldError = useCallback((field: keyof T, error: string) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       errors: { ...prev.errors, [field]: error },
     }));
   }, []);
 
   const setErrors = useCallback((errors: Record<string, string>) => {
-    setState(prev => ({ ...prev, errors }));
+    setState((prev) => ({ ...prev, errors }));
   }, []);
 
   const setSubmitting = useCallback((submitting: boolean) => {
-    setState(prev => ({ ...prev, isSubmitting: submitting }));
+    setState((prev) => ({ ...prev, isSubmitting: submitting }));
   }, []);
 
   const reset = useCallback(
@@ -127,10 +127,12 @@ export function useFormState<T extends Record<string, any>>(initialData: T) {
         touched: {},
       });
     },
-    [initialData]
+    [initialData],
   );
 
-  const hasErrors = Object.values(state.errors).some(error => error.length > 0);
+  const hasErrors = Object.values(state.errors).some(
+    (error) => error.length > 0,
+  );
   const canSubmit = state.isDirty && !hasErrors && !state.isSubmitting;
 
   return {
@@ -152,9 +154,9 @@ export function useListState<T extends { id: string }>(initialItems: T[] = []) {
   const [state, setState] = useState<ListState<T>>({
     items: initialItems,
     filteredItems: initialItems,
-    searchQuery: '',
-    sortBy: 'id',
-    sortOrder: 'asc',
+    searchQuery: "",
+    sortBy: "id",
+    sortOrder: "asc",
     pagination: {
       page: 1,
       limit: 10,
@@ -167,26 +169,26 @@ export function useListState<T extends { id: string }>(initialItems: T[] = []) {
   });
 
   const setItems = useCallback((items: T[]) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       items,
       filteredItems: filterAndSort(
         items,
         prev.searchQuery,
         prev.sortBy,
-        prev.sortOrder
+        prev.sortOrder,
       ),
       pagination: { ...prev.pagination, total: items.length },
     }));
   }, []);
 
   const setSearchQuery = useCallback((query: string) => {
-    setState(prev => {
+    setState((prev) => {
       const filtered = filterAndSort(
         prev.items,
         query,
         prev.sortBy,
-        prev.sortOrder
+        prev.sortOrder,
       );
       return {
         ...prev,
@@ -198,13 +200,13 @@ export function useListState<T extends { id: string }>(initialItems: T[] = []) {
   }, []);
 
   const setSorting = useCallback(
-    (sortBy: string, sortOrder: 'asc' | 'desc') => {
-      setState(prev => {
+    (sortBy: string, sortOrder: "asc" | "desc") => {
+      setState((prev) => {
         const filtered = filterAndSort(
           prev.items,
           prev.searchQuery,
           sortBy,
-          sortOrder
+          sortOrder,
         );
         return {
           ...prev,
@@ -214,32 +216,32 @@ export function useListState<T extends { id: string }>(initialItems: T[] = []) {
         };
       });
     },
-    []
+    [],
   );
 
   const setPage = useCallback((page: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       pagination: { ...prev.pagination, page },
     }));
   }, []);
 
   const setLimit = useCallback((limit: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       pagination: { ...prev.pagination, limit, page: 1 },
     }));
   }, []);
 
   const setLoading = useCallback((loading: boolean) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       loading: { ...prev.loading, isLoading: loading, error: null },
     }));
   }, []);
 
   const setError = useCallback((error: string | null) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       loading: { ...prev.loading, error, isLoading: false },
     }));
@@ -249,7 +251,7 @@ export function useListState<T extends { id: string }>(initialItems: T[] = []) {
   const paginatedItems = getPaginatedItems(
     state.filteredItems,
     state.pagination.page,
-    state.pagination.limit
+    state.pagination.limit,
   );
 
   return {
@@ -274,7 +276,7 @@ export function useRoleAwareState<T>(
     canRead: boolean;
     canWrite: boolean;
     canDelete: boolean;
-  }
+  },
 ) {
   const [state, setState] = useState<{
     userRole: ExtendedUserRole;
@@ -287,24 +289,24 @@ export function useRoleAwareState<T>(
   });
 
   const checkPermission = useCallback(
-    (action: 'read' | 'write' | 'delete'): boolean => {
+    (action: "read" | "write" | "delete"): boolean => {
       switch (action) {
-        case 'read':
+        case "read":
           return state.permissions.canRead;
-        case 'write':
+        case "write":
           return state.permissions.canWrite;
-        case 'delete':
+        case "delete":
           return state.permissions.canDelete;
         default:
           return false;
       }
     },
-    [state.permissions]
+    [state.permissions],
   );
 
   const updatePermissions = useCallback(
     (newPermissions: Partial<typeof permissions>) => {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         permissions: { ...prev.permissions, ...newPermissions },
         isAuthorized:
@@ -313,7 +315,7 @@ export function useRoleAwareState<T>(
             : prev.permissions.canRead,
       }));
     },
-    []
+    [],
   );
 
   return {
@@ -329,16 +331,16 @@ function filterAndSort<T extends Record<string, any>>(
   items: T[],
   searchQuery: string,
   sortBy: string,
-  sortOrder: 'asc' | 'desc'
+  sortOrder: "asc" | "desc",
 ): T[] {
   let filtered = items;
 
   // Apply search filter
   if (searchQuery.trim()) {
     const query = searchQuery.toLowerCase();
-    filtered = items.filter(item => {
+    filtered = items.filter((item) => {
       return Object.values(item).some(
-        value => value && value.toString().toLowerCase().includes(query)
+        (value) => value && value.toString().toLowerCase().includes(query),
       );
     });
   }
@@ -354,7 +356,7 @@ function filterAndSort<T extends Record<string, any>>(
     if (aValue > bValue) comparison = 1;
     if (aValue < bValue) comparison = -1;
 
-    return sortOrder === 'desc' ? -comparison : comparison;
+    return sortOrder === "desc" ? -comparison : comparison;
   });
 
   return filtered;
@@ -396,6 +398,6 @@ export const statePatterns = {
  */
 export function getStatePattern(userRole?: ExtendedUserRole) {
   if (!userRole) return statePatterns.public;
-  if (userRole === 'ADMIN') return statePatterns.admin;
+  if (userRole === "ADMIN") return statePatterns.admin;
   return statePatterns.authenticated;
 }

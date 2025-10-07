@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import { clsx } from "clsx";
 
 /**
  * Responsive class utility that respects desktop toggle
@@ -10,7 +10,7 @@ import { clsx } from 'clsx';
 export function responsiveClasses(
   mobileClasses: string,
   desktopClasses: string,
-  isDesktopForced: boolean = false
+  isDesktopForced: boolean = false,
 ): string {
   if (isDesktopForced) {
     // When desktop is forced, always use desktop classes
@@ -29,9 +29,9 @@ export function responsiveClasses(
  */
 export function conditionalClasses(
   condition: boolean,
-  classes: string
+  classes: string,
 ): string {
-  return condition ? classes : '';
+  return condition ? classes : "";
 }
 
 /**
@@ -40,27 +40,27 @@ export function conditionalClasses(
 export const typography = {
   hero: (isDesktopForced: boolean = false) =>
     responsiveClasses(
-      'text-3xl sm:text-4xl',
-      'md:text-5xl lg:text-6xl',
-      isDesktopForced
+      "text-3xl sm:text-4xl",
+      "md:text-5xl lg:text-6xl",
+      isDesktopForced,
     ),
 
   heading: (isDesktopForced: boolean = false) =>
     responsiveClasses(
-      'text-2xl sm:text-3xl',
-      'md:text-4xl lg:text-5xl',
-      isDesktopForced
+      "text-2xl sm:text-3xl",
+      "md:text-4xl lg:text-5xl",
+      isDesktopForced,
     ),
 
   subheading: (isDesktopForced: boolean = false) =>
     responsiveClasses(
-      'text-lg sm:text-xl',
-      'md:text-2xl lg:text-3xl',
-      isDesktopForced
+      "text-lg sm:text-xl",
+      "md:text-2xl lg:text-3xl",
+      isDesktopForced,
     ),
 
   body: (isDesktopForced: boolean = false) =>
-    responsiveClasses('text-sm sm:text-base', 'md:text-lg', isDesktopForced),
+    responsiveClasses("text-sm sm:text-base", "md:text-lg", isDesktopForced),
 };
 
 /**
@@ -69,40 +69,40 @@ export const typography = {
 export const layout = {
   container: (isDesktopForced: boolean = false) =>
     responsiveClasses(
-      'container mx-auto px-4',
-      'sm:px-6 lg:px-8',
-      isDesktopForced
+      "container mx-auto px-4",
+      "sm:px-6 lg:px-8",
+      isDesktopForced,
     ),
 
   grid: {
     cards: (isDesktopForced: boolean = false) =>
       responsiveClasses(
-        'grid grid-cols-1',
-        'sm:grid-cols-2 lg:grid-cols-3',
-        isDesktopForced
+        "grid grid-cols-1",
+        "sm:grid-cols-2 lg:grid-cols-3",
+        isDesktopForced,
       ),
 
     form: (isDesktopForced: boolean = false) =>
       responsiveClasses(
-        'grid grid-cols-1 gap-4',
-        'lg:grid-cols-2 sm:gap-6',
-        isDesktopForced
+        "grid grid-cols-1 gap-4",
+        "lg:grid-cols-2 sm:gap-6",
+        isDesktopForced,
       ),
 
     planning: (isDesktopForced: boolean = false) =>
       responsiveClasses(
-        'grid grid-cols-1 gap-4',
-        'sm:grid-cols-2 xl:grid-cols-3 sm:gap-6',
-        isDesktopForced
+        "grid grid-cols-1 gap-4",
+        "sm:grid-cols-2 xl:grid-cols-3 sm:gap-6",
+        isDesktopForced,
       ),
   },
 
   spacing: {
     section: (isDesktopForced: boolean = false) =>
-      responsiveClasses('py-8 sm:py-12', 'lg:py-16', isDesktopForced),
+      responsiveClasses("py-8 sm:py-12", "lg:py-16", isDesktopForced),
 
     component: (isDesktopForced: boolean = false) =>
-      responsiveClasses('p-4 sm:p-6', 'lg:p-8', isDesktopForced),
+      responsiveClasses("p-4 sm:p-6", "lg:p-8", isDesktopForced),
   },
 };
 
@@ -111,19 +111,19 @@ export const layout = {
  */
 export const navigation = {
   logo: (isDesktopForced: boolean = false) =>
-    responsiveClasses('text-lg sm:text-xl', 'md:text-2xl', isDesktopForced),
+    responsiveClasses("text-lg sm:text-xl", "md:text-2xl", isDesktopForced),
 
   menu: {
     desktop: (isDesktopForced: boolean = false) =>
-      conditionalClasses(isDesktopForced, 'flex items-center space-x-6') ||
-      'hidden md:flex items-center space-x-6',
+      conditionalClasses(isDesktopForced, "flex items-center space-x-6") ||
+      "hidden md:flex items-center space-x-6",
 
     mobile: (isDesktopForced: boolean = false) =>
       conditionalClasses(
         !isDesktopForced,
-        'md:hidden flex items-center space-x-4'
+        "md:hidden flex items-center space-x-4",
       ) ||
-      (isDesktopForced ? 'hidden' : 'md:hidden flex items-center space-x-4'),
+      (isDesktopForced ? "hidden" : "md:hidden flex items-center space-x-4"),
   },
 };
 
@@ -132,19 +132,19 @@ export const navigation = {
  */
 export const forms = {
   input: (isDesktopForced: boolean = false) =>
-    responsiveClasses('h-10 text-sm', 'sm:h-12 sm:text-base', isDesktopForced),
+    responsiveClasses("h-10 text-sm", "sm:h-12 sm:text-base", isDesktopForced),
 
   button: (isDesktopForced: boolean = false) =>
     responsiveClasses(
-      'h-10 px-4 text-sm',
-      'sm:h-12 sm:px-6 sm:text-base',
-      isDesktopForced
+      "h-10 px-4 text-sm",
+      "sm:h-12 sm:px-6 sm:text-base",
+      isDesktopForced,
     ),
 
   textarea: (isDesktopForced: boolean = false) =>
     responsiveClasses(
-      'min-h-[120px] text-sm',
-      'sm:min-h-[160px] sm:text-base',
-      isDesktopForced
+      "min-h-[120px] text-sm",
+      "sm:min-h-[160px] sm:text-base",
+      isDesktopForced,
     ),
 };

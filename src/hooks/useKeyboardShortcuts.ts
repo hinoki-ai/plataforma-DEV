@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useCallback, useRef } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useCallback, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 export interface KeyboardShortcut {
   key: string;
@@ -40,12 +40,12 @@ export function useKeyboardShortcuts({
 
   const createShortcutKey = useCallback((shortcut: KeyboardShortcut) => {
     const modifiers = [];
-    if (shortcut.ctrlKey) modifiers.push('ctrl');
-    if (shortcut.altKey) modifiers.push('alt');
-    if (shortcut.metaKey) modifiers.push('meta');
-    if (shortcut.shiftKey) modifiers.push('shift');
+    if (shortcut.ctrlKey) modifiers.push("ctrl");
+    if (shortcut.altKey) modifiers.push("alt");
+    if (shortcut.metaKey) modifiers.push("meta");
+    if (shortcut.shiftKey) modifiers.push("shift");
 
-    return `${modifiers.join('+')}-${shortcut.key.toLowerCase()}`;
+    return `${modifiers.join("+")}-${shortcut.key.toLowerCase()}`;
   }, []);
 
   const handleKeyDown = useCallback(
@@ -56,14 +56,14 @@ export function useKeyboardShortcuts({
       if (ignoreInputFields) {
         const target = event.target as HTMLElement;
         const isInputField =
-          target.tagName === 'INPUT' ||
-          target.tagName === 'TEXTAREA' ||
-          target.contentEditable === 'true' ||
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.contentEditable === "true" ||
           target.isContentEditable;
 
         if (isInputField) {
           if (debugMode)
-            console.log('Ignoring shortcut in input field:', target.tagName);
+            console.log("Ignoring shortcut in input field:", target.tagName);
           return;
         }
       }
@@ -81,7 +81,7 @@ export function useKeyboardShortcuts({
 
         if (matches) {
           if (debugMode) {
-            console.log('Keyboard shortcut matched:', {
+            console.log("Keyboard shortcut matched:", {
               key: shortcut.key,
               description: shortcut.description,
               event: event,
@@ -97,7 +97,7 @@ export function useKeyboardShortcuts({
           try {
             shortcut.action();
           } catch (error) {
-            console.error('Error executing keyboard shortcut:', error);
+            console.error("Error executing keyboard shortcut:", error);
           }
 
           // Clean up active shortcuts after execution
@@ -116,7 +116,7 @@ export function useKeyboardShortcuts({
       ignoreInputFields,
       debugMode,
       createShortcutKey,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -129,20 +129,20 @@ export function useKeyboardShortcuts({
       timeoutId = setTimeout(() => handleKeyDown(event), 10);
     };
 
-    document.addEventListener('keydown', debouncedHandler);
+    document.addEventListener("keydown", debouncedHandler);
 
     return () => {
       clearTimeout(timeoutId);
-      document.removeEventListener('keydown', debouncedHandler);
+      document.removeEventListener("keydown", debouncedHandler);
     };
   }, [handleKeyDown, globalShortcuts]);
 
   // Utility functions
   const getShortcutByKey = useCallback(
     (key: string) => {
-      return shortcuts.find(shortcut => createShortcutKey(shortcut) === key);
+      return shortcuts.find((shortcut) => createShortcutKey(shortcut) === key);
     },
-    [shortcuts, createShortcutKey]
+    [shortcuts, createShortcutKey],
   );
 
   const isShortcutActive = useCallback(
@@ -150,29 +150,29 @@ export function useKeyboardShortcuts({
       const key = createShortcutKey(shortcut);
       return activeShortcuts.current.has(key);
     },
-    [createShortcutKey]
+    [createShortcutKey],
   );
 
   const formatShortcut = useCallback((shortcut: KeyboardShortcut) => {
     const modifiers = [];
-    if (shortcut.ctrlKey) modifiers.push('Ctrl');
-    if (shortcut.altKey) modifiers.push('Alt');
-    if (shortcut.metaKey) modifiers.push('Cmd');
-    if (shortcut.shiftKey) modifiers.push('Shift');
+    if (shortcut.ctrlKey) modifiers.push("Ctrl");
+    if (shortcut.altKey) modifiers.push("Alt");
+    if (shortcut.metaKey) modifiers.push("Cmd");
+    if (shortcut.shiftKey) modifiers.push("Shift");
 
     const key =
       shortcut.key.length === 1 ? shortcut.key.toUpperCase() : shortcut.key;
 
-    return [...modifiers, key].join(' + ');
+    return [...modifiers, key].join(" + ");
   }, []);
 
   const getShortcutsByCategory = useCallback(
     (category?: string) => {
-      return shortcuts.filter(shortcut =>
-        category ? shortcut.category === category : !shortcut.category
+      return shortcuts.filter((shortcut) =>
+        category ? shortcut.category === category : !shortcut.category,
       );
     },
-    [shortcuts]
+    [shortcuts],
   );
 
   return {
@@ -196,105 +196,105 @@ export function useNavigationShortcuts(userRole?: string) {
   const navigationShortcuts: KeyboardShortcut[] = [
     // Global shortcuts
     {
-      key: 'k',
+      key: "k",
       ctrlKey: true,
       action: () => {
         // Trigger global search - this would integrate with your search component
-        const event = new CustomEvent('open-global-search');
+        const event = new CustomEvent("open-global-search");
         document.dispatchEvent(event);
       },
-      description: 'Abrir búsqueda rápida',
-      category: 'Navegación',
+      description: "Abrir búsqueda rápida",
+      category: "Navegación",
     },
     {
-      key: 'h',
+      key: "h",
       altKey: true,
       action: () => {
         const homeRoutes = {
-          ADMIN: '/admin',
-          PROFESOR: '/profesor',
-          PARENT: '/parent',
+          ADMIN: "/admin",
+          PROFESOR: "/profesor",
+          PARENT: "/parent",
         };
-        const route = homeRoutes[userRole as keyof typeof homeRoutes] || '/';
+        const route = homeRoutes[userRole as keyof typeof homeRoutes] || "/";
         router.push(route);
       },
-      description: 'Ir al inicio',
-      category: 'Navegación',
+      description: "Ir al inicio",
+      category: "Navegación",
     },
     {
-      key: '/',
+      key: "/",
       action: () => {
-        const event = new CustomEvent('focus-search');
+        const event = new CustomEvent("focus-search");
         document.dispatchEvent(event);
       },
-      description: 'Enfocar búsqueda',
-      category: 'Navegación',
+      description: "Enfocar búsqueda",
+      category: "Navegación",
     },
     {
-      key: 'Escape',
+      key: "Escape",
       action: () => {
         // Close modals, dropdowns, etc.
-        const event = new CustomEvent('close-overlays');
+        const event = new CustomEvent("close-overlays");
         document.dispatchEvent(event);
       },
-      description: 'Cerrar overlays',
-      category: 'General',
+      description: "Cerrar overlays",
+      category: "General",
     },
 
     // Role-specific shortcuts
-    ...(userRole === 'ADMIN'
+    ...(userRole === "ADMIN"
       ? [
           {
-            key: 'u',
+            key: "u",
             altKey: true,
-            action: () => router.push('/admin/usuarios'),
-            description: 'Gestión de usuarios',
-            category: 'Administración',
+            action: () => router.push("/admin/usuarios"),
+            description: "Gestión de usuarios",
+            category: "Administración",
           },
           {
-            key: 'c',
+            key: "c",
             altKey: true,
-            action: () => router.push('/admin/calendario-escolar'),
-            description: 'Calendario escolar',
-            category: 'Administración',
+            action: () => router.push("/admin/calendario-escolar"),
+            description: "Calendario escolar",
+            category: "Administración",
           },
         ]
       : []),
 
-    ...(userRole === 'PROFESOR'
+    ...(userRole === "PROFESOR"
       ? [
           {
-            key: 'p',
+            key: "p",
             altKey: true,
-            action: () => router.push('/profesor/planificaciones'),
-            description: 'Planificaciones',
-            category: 'Profesor',
+            action: () => router.push("/profesor/planificaciones"),
+            description: "Planificaciones",
+            category: "Profesor",
           },
           {
-            key: 'r',
+            key: "r",
             altKey: true,
-            action: () => router.push('/profesor/reuniones'),
-            description: 'Reuniones',
-            category: 'Profesor',
+            action: () => router.push("/profesor/reuniones"),
+            description: "Reuniones",
+            category: "Profesor",
           },
         ]
       : []),
 
-    ...(userRole === 'PARENT'
+    ...(userRole === "PARENT"
       ? [
           {
-            key: 'e',
+            key: "e",
             altKey: true,
-            action: () => router.push('/parent/estudiantes'),
-            description: 'Información de estudiantes',
-            category: 'Apoderado',
+            action: () => router.push("/parent/estudiantes"),
+            description: "Información de estudiantes",
+            category: "Apoderado",
           },
           {
-            key: 'm',
+            key: "m",
             altKey: true,
-            action: () => router.push('/parent/comunicacion'),
-            description: 'Comunicación',
-            category: 'Apoderado',
+            action: () => router.push("/parent/comunicacion"),
+            description: "Comunicación",
+            category: "Apoderado",
           },
         ]
       : []),
@@ -313,17 +313,17 @@ export function useNavigationShortcuts(userRole?: string) {
  */
 export function useAccessibilityShortcuts() {
   const skipToContent = useCallback(() => {
-    const main = document.querySelector('main');
+    const main = document.querySelector("main");
     if (main) {
       main.focus();
-      main.scrollIntoView({ behavior: 'smooth' });
+      main.scrollIntoView({ behavior: "smooth" });
     }
   }, []);
 
   const skipToNavigation = useCallback(() => {
     const nav = document.querySelector('nav[role="navigation"]');
     if (nav) {
-      const firstLink = nav.querySelector('a, button');
+      const firstLink = nav.querySelector("a, button");
       if (firstLink instanceof HTMLElement) {
         firstLink.focus();
       }
@@ -343,45 +343,45 @@ export function useAccessibilityShortcuts() {
   }, []);
 
   const toggleHighContrast = useCallback(() => {
-    document.body.classList.toggle('high-contrast');
+    document.body.classList.toggle("high-contrast");
   }, []);
 
   const accessibilityShortcuts: KeyboardShortcut[] = [
     {
-      key: '1',
+      key: "1",
       altKey: true,
       action: skipToContent,
-      description: 'Ir al contenido principal',
-      category: 'Accesibilidad',
+      description: "Ir al contenido principal",
+      category: "Accesibilidad",
     },
     {
-      key: '2',
+      key: "2",
       altKey: true,
       action: skipToNavigation,
-      description: 'Ir a la navegación',
-      category: 'Accesibilidad',
+      description: "Ir a la navegación",
+      category: "Accesibilidad",
     },
     {
-      key: '=',
+      key: "=",
       ctrlKey: true,
       action: increaseFont,
-      description: 'Aumentar tamaño de fuente',
-      category: 'Accesibilidad',
+      description: "Aumentar tamaño de fuente",
+      category: "Accesibilidad",
     },
     {
-      key: '-',
+      key: "-",
       ctrlKey: true,
       action: decreaseFont,
-      description: 'Disminuir tamaño de fuente',
-      category: 'Accesibilidad',
+      description: "Disminuir tamaño de fuente",
+      category: "Accesibilidad",
     },
     {
-      key: 'i',
+      key: "i",
       altKey: true,
       shiftKey: true,
       action: toggleHighContrast,
-      description: 'Alto contraste',
-      category: 'Accesibilidad',
+      description: "Alto contraste",
+      category: "Accesibilidad",
     },
   ];
 
@@ -397,28 +397,28 @@ export function useAccessibilityShortcuts() {
  * Development shortcuts (only in development mode)
  */
 export function useDevelopmentShortcuts() {
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   const developmentShortcuts: KeyboardShortcut[] = isDevelopment
     ? [
         {
-          key: 'd',
+          key: "d",
           ctrlKey: true,
           shiftKey: true,
           action: () => {
             // Toggle React DevTools highlighting
             if (
-              typeof window !== 'undefined' &&
+              typeof window !== "undefined" &&
               (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__
             ) {
-              console.log('React DevTools detected');
+              console.log("React DevTools detected");
             }
           },
-          description: 'Toggle React DevTools',
-          category: 'Desarrollo',
+          description: "Toggle React DevTools",
+          category: "Desarrollo",
         },
         {
-          key: 'l',
+          key: "l",
           ctrlKey: true,
           shiftKey: true,
           action: () => {
@@ -426,20 +426,20 @@ export function useDevelopmentShortcuts() {
             sessionStorage.clear();
             location.reload();
           },
-          description: 'Limpiar storage y recargar',
-          category: 'Desarrollo',
+          description: "Limpiar storage y recargar",
+          category: "Desarrollo",
         },
         {
-          key: 'p',
+          key: "p",
           ctrlKey: true,
           shiftKey: true,
           action: () => {
             // Log performance metrics
-            if (typeof window !== 'undefined' && 'performance' in window) {
+            if (typeof window !== "undefined" && "performance" in window) {
               const navigation = performance.getEntriesByType(
-                'navigation'
+                "navigation",
               )[0] as PerformanceNavigationTiming;
-              console.log('Performance Metrics:', {
+              console.log("Performance Metrics:", {
                 domContentLoaded:
                   navigation.domContentLoadedEventEnd -
                     (navigation as any).activationStart || 0,
@@ -447,16 +447,16 @@ export function useDevelopmentShortcuts() {
                   navigation.loadEventEnd -
                     (navigation as any).activationStart || 0,
                 firstPaint: performance
-                  .getEntriesByType('paint')
-                  .find(p => p.name === 'first-paint')?.startTime,
+                  .getEntriesByType("paint")
+                  .find((p) => p.name === "first-paint")?.startTime,
                 firstContentfulPaint: performance
-                  .getEntriesByType('paint')
-                  .find(p => p.name === 'first-contentful-paint')?.startTime,
+                  .getEntriesByType("paint")
+                  .find((p) => p.name === "first-contentful-paint")?.startTime,
               });
             }
           },
-          description: 'Mostrar métricas de rendimiento',
-          category: 'Desarrollo',
+          description: "Mostrar métricas de rendimiento",
+          category: "Desarrollo",
         },
       ]
     : [];

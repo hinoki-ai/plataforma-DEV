@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { useState, useEffect, Suspense } from 'react';
-import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
-import { getRoleAccess } from '@/lib/role-utils';
+import { useState, useEffect, Suspense } from "react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { getRoleAccess } from "@/lib/role-utils";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import {
   Vote,
   Clock,
@@ -26,11 +26,11 @@ import {
   Shield,
   AlertCircle,
   Info,
-} from 'lucide-react';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
-import { LoadingState } from '@/components/ui/loading-states';
-import { ErrorBoundary } from '@/components/ui/error-boundary';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { LoadingState } from "@/components/ui/loading-states";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { toast } from "sonner";
 
 interface VoteOption {
   id: string;
@@ -45,7 +45,7 @@ interface VotingSession {
   description: string;
   category: string;
   endDate: string;
-  status: 'active' | 'closed';
+  status: "active" | "closed";
   isPublic: boolean;
   allowMultipleVotes: boolean;
   totalVotes: number;
@@ -60,17 +60,19 @@ interface VotingSession {
 
 function VotacionesContent() {
   const { data: session, status } = useSession();
-  const { t } = useDivineParsing(['common', 'parent']);
+  const { t } = useDivineParsing(["common", "parent"]);
   const [votingSessions, setVotingSessions] = useState<VotingSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedSession, setSelectedSession] = useState<VotingSession | null>(null);
+  const [selectedSession, setSelectedSession] = useState<VotingSession | null>(
+    null,
+  );
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
-    if (session?.user?.role === 'PARENT') {
+    if (session?.user?.role === "PARENT") {
       fetchVotingSessions();
     }
   }, [session]);
@@ -83,72 +85,93 @@ function VotacionesContent() {
       // For demo purposes, using mock data since we're working with the existing system
       const mockSessions: VotingSession[] = [
         {
-          id: '1',
-          title: 'Presupuesto Escolar 2025',
-          description: '¿Cómo deberían asignarse los fondos para el próximo año escolar?',
-          category: 'FINANCIAL',
-          endDate: '2024-02-15T23:59:59Z',
-          status: 'active',
+          id: "1",
+          title: "Presupuesto Escolar 2025",
+          description:
+            "¿Cómo deberían asignarse los fondos para el próximo año escolar?",
+          category: "FINANCIAL",
+          endDate: "2024-02-15T23:59:59Z",
+          status: "active",
           isPublic: true,
           allowMultipleVotes: false,
           totalVotes: 45,
           totalOptions: 3,
           hasVoted: false,
           options: [
-            { id: 'opt1', text: 'Más inversión en tecnología educativa', votes: 18 },
-            { id: 'opt2', text: 'Mejorar instalaciones deportivas', votes: 15 },
-            { id: 'opt3', text: 'Incrementar programas artísticos', votes: 12 },
+            {
+              id: "opt1",
+              text: "Más inversión en tecnología educativa",
+              votes: 18,
+            },
+            { id: "opt2", text: "Mejorar instalaciones deportivas", votes: 15 },
+            { id: "opt3", text: "Incrementar programas artísticos", votes: 12 },
           ],
-          creator: { name: 'Dirección Escolar' },
+          creator: { name: "Dirección Escolar" },
         },
         {
-          id: '2',
-          title: 'Horario de Clases',
-          description: '¿Qué horario preferirían para las clases de sus hijos?',
-          category: 'ACADEMIC',
-          endDate: '2024-01-30T23:59:59Z',
-          status: 'active',
+          id: "2",
+          title: "Horario de Clases",
+          description: "¿Qué horario preferirían para las clases de sus hijos?",
+          category: "ACADEMIC",
+          endDate: "2024-01-30T23:59:59Z",
+          status: "active",
           isPublic: true,
           allowMultipleVotes: true,
           totalVotes: 67,
           totalOptions: 4,
           hasVoted: true,
-          userVotes: ['opt4', 'opt6'],
+          userVotes: ["opt4", "opt6"],
           options: [
-            { id: 'opt4', text: 'Horario continuo (8:00-14:00)', votes: 28 },
-            { id: 'opt5', text: 'Horario partido (8:00-12:00, 14:00-16:00)', votes: 22 },
-            { id: 'opt6', text: 'Horario flexible', votes: 17 },
-            { id: 'opt7', text: 'Mantener horario actual', votes: 15 },
+            { id: "opt4", text: "Horario continuo (8:00-14:00)", votes: 28 },
+            {
+              id: "opt5",
+              text: "Horario partido (8:00-12:00, 14:00-16:00)",
+              votes: 22,
+            },
+            { id: "opt6", text: "Horario flexible", votes: 17 },
+            { id: "opt7", text: "Mantener horario actual", votes: 15 },
           ],
-          creator: { name: 'Consejo de Padres' },
+          creator: { name: "Consejo de Padres" },
         },
         {
-          id: '3',
-          title: 'Uniformes Escolares',
-          description: '¿Qué tipo de uniforme prefieren para el próximo año?',
-          category: 'GENERAL',
-          endDate: '2024-01-20T23:59:59Z',
-          status: 'closed',
+          id: "3",
+          title: "Uniformes Escolares",
+          description: "¿Qué tipo de uniforme prefieren para el próximo año?",
+          category: "GENERAL",
+          endDate: "2024-01-20T23:59:59Z",
+          status: "closed",
           isPublic: true,
           allowMultipleVotes: false,
           totalVotes: 89,
           totalOptions: 3,
           hasVoted: true,
-          userVotes: ['opt8'],
+          userVotes: ["opt8"],
           options: [
-            { id: 'opt8', text: 'Uniforme tradicional', votes: 45, percentage: 51 },
-            { id: 'opt9', text: 'Uniforme moderno', votes: 32, percentage: 36 },
-            { id: 'opt10', text: 'Sin uniforme obligatorio', votes: 12, percentage: 13 },
+            {
+              id: "opt8",
+              text: "Uniforme tradicional",
+              votes: 45,
+              percentage: 51,
+            },
+            { id: "opt9", text: "Uniforme moderno", votes: 32, percentage: 36 },
+            {
+              id: "opt10",
+              text: "Sin uniforme obligatorio",
+              votes: 12,
+              percentage: 13,
+            },
           ],
-          creator: { name: 'Centro de Padres' },
+          creator: { name: "Centro de Padres" },
         },
       ];
 
       // Calculate percentages for closed votes
-      mockSessions.forEach(session => {
-        if (session.status === 'closed' && session.totalVotes > 0) {
-          session.options.forEach(option => {
-            option.percentage = Math.round((option.votes / session.totalVotes) * 100);
+      mockSessions.forEach((session) => {
+        if (session.status === "closed" && session.totalVotes > 0) {
+          session.options.forEach((option) => {
+            option.percentage = Math.round(
+              (option.votes / session.totalVotes) * 100,
+            );
           });
         }
       });
@@ -158,8 +181,8 @@ function VotacionesContent() {
         setSelectedSession(mockSessions[0]);
       }
     } catch (err) {
-      console.error('Error fetching voting sessions:', err);
-      setError('Error al cargar las votaciones');
+      console.error("Error fetching voting sessions:", err);
+      setError("Error al cargar las votaciones");
     } finally {
       setLoading(false);
     }
@@ -167,26 +190,28 @@ function VotacionesContent() {
 
   const handleVoteSubmit = async () => {
     if (!selectedSession || selectedOptions.length === 0) {
-      toast.error('Por favor selecciona al menos una opción');
+      toast.error("Por favor selecciona al menos una opción");
       return;
     }
 
     setSubmitting(true);
     try {
       // In a real implementation, this would call an API
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       // Update local state
-      const updatedSessions = votingSessions.map(session => {
+      const updatedSessions = votingSessions.map((session) => {
         if (session.id === selectedSession.id) {
           return {
             ...session,
             hasVoted: true,
             userVotes: selectedOptions,
             totalVotes: session.totalVotes + 1,
-            options: session.options.map(option => ({
+            options: session.options.map((option) => ({
               ...option,
-              votes: selectedOptions.includes(option.id) ? option.votes + 1 : option.votes,
+              votes: selectedOptions.includes(option.id)
+                ? option.votes + 1
+                : option.votes,
             })),
           };
         }
@@ -194,12 +219,14 @@ function VotacionesContent() {
       });
 
       setVotingSessions(updatedSessions);
-      setSelectedSession(updatedSessions.find(s => s.id === selectedSession.id) || null);
+      setSelectedSession(
+        updatedSessions.find((s) => s.id === selectedSession.id) || null,
+      );
       setSelectedOptions([]);
-      toast.success('¡Voto registrado exitosamente!');
+      toast.success("¡Voto registrado exitosamente!");
     } catch (err) {
-      console.error('Error submitting vote:', err);
-      toast.error('Error al registrar el voto');
+      console.error("Error submitting vote:", err);
+      toast.error("Error al registrar el voto");
     } finally {
       setSubmitting(false);
     }
@@ -210,38 +237,42 @@ function VotacionesContent() {
     const now = new Date();
     const diff = end.getTime() - now.getTime();
 
-    if (diff <= 0) return 'Finalizada';
+    if (diff <= 0) return "Finalizada";
 
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
     if (days > 0) return `${days} días`;
     if (hours > 0) return `${hours} horas`;
-    return 'Menos de 1 hora';
+    return "Menos de 1 hora";
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'FINANCIAL': return 'bg-green-100 text-green-800';
-      case 'ACADEMIC': return 'bg-blue-100 text-blue-800';
-      case 'GENERAL': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "FINANCIAL":
+        return "bg-green-100 text-green-800";
+      case "ACADEMIC":
+        return "bg-blue-100 text-blue-800";
+      case "GENERAL":
+        return "bg-purple-100 text-purple-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   // Handle loading state
-  if (status === 'loading') {
+  if (status === "loading") {
     return <LoadingState />;
   }
 
   // Ensure user has access to parent section
   if (!session || !session.user) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   if (loading) {
@@ -261,8 +292,16 @@ function VotacionesContent() {
         </div>
         <div className="text-center py-16">
           <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -277,8 +316,8 @@ function VotacionesContent() {
     );
   }
 
-  const activeVotes = votingSessions.filter(v => v.status === 'active');
-  const closedVotes = votingSessions.filter(v => v.status === 'closed');
+  const activeVotes = votingSessions.filter((v) => v.status === "active");
+  const closedVotes = votingSessions.filter((v) => v.status === "closed");
 
   return (
     <div className="space-y-6">
@@ -316,8 +355,8 @@ function VotacionesContent() {
                   }}
                   className={`p-3 rounded-lg cursor-pointer transition-colors ${
                     selectedSession?.id === session.id
-                      ? 'bg-primary/10 border border-primary/20'
-                      : 'hover:bg-muted/50'
+                      ? "bg-primary/10 border border-primary/20"
+                      : "hover:bg-muted/50"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -325,10 +364,12 @@ function VotacionesContent() {
                       {session.title}
                     </h4>
                     <Badge
-                      variant={session.status === 'active' ? 'default' : 'secondary'}
+                      variant={
+                        session.status === "active" ? "default" : "secondary"
+                      }
                       className="text-xs"
                     >
-                      {session.status === 'active' ? 'Activa' : 'Cerrada'}
+                      {session.status === "active" ? "Activa" : "Cerrada"}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -366,7 +407,8 @@ function VotacionesContent() {
               <div className="flex justify-between items-center">
                 <span className="text-sm">Tu participación</span>
                 <Badge variant="outline">
-                  {votingSessions.filter(v => v.hasVoted).length}/{votingSessions.length}
+                  {votingSessions.filter((v) => v.hasVoted).length}/
+                  {votingSessions.length}
                 </Badge>
               </div>
             </CardContent>
@@ -382,7 +424,9 @@ function VotacionesContent() {
                   <div className="flex-1">
                     <CardTitle className="flex items-center gap-2 mb-2">
                       {selectedSession.title}
-                      <Badge className={getCategoryColor(selectedSession.category)}>
+                      <Badge
+                        className={getCategoryColor(selectedSession.category)}
+                      >
                         {selectedSession.category}
                       </Badge>
                     </CardTitle>
@@ -405,40 +449,45 @@ function VotacionesContent() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    {selectedSession.status === 'closed' && (
+                    {selectedSession.status === "closed" && (
                       <Button
-                        variant={showResults ? 'default' : 'outline'}
+                        variant={showResults ? "default" : "outline"}
                         size="sm"
                         onClick={() => setShowResults(!showResults)}
                       >
                         <BarChart3 className="h-4 w-4 mr-2" />
-                        {showResults ? 'Ocultar' : 'Ver'} Resultados
+                        {showResults ? "Ocultar" : "Ver"} Resultados
                       </Button>
                     )}
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                {selectedSession.status === 'active' && !selectedSession.hasVoted ? (
+                {selectedSession.status === "active" &&
+                !selectedSession.hasVoted ? (
                   // Voting Form
                   <div className="space-y-6">
                     <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
                       <Info className="h-5 w-5 text-blue-600" />
                       <p className="text-sm text-blue-800 dark:text-blue-200">
                         {selectedSession.allowMultipleVotes
-                          ? 'Puedes seleccionar múltiples opciones'
-                          : 'Selecciona una opción'}
+                          ? "Puedes seleccionar múltiples opciones"
+                          : "Selecciona una opción"}
                       </p>
                     </div>
 
                     <RadioGroup
-                      value={selectedSession.allowMultipleVotes ? undefined : (selectedOptions[0] || '')}
+                      value={
+                        selectedSession.allowMultipleVotes
+                          ? undefined
+                          : selectedOptions[0] || ""
+                      }
                       onValueChange={(value) => {
                         if (selectedSession.allowMultipleVotes) {
-                          setSelectedOptions(prev =>
+                          setSelectedOptions((prev) =>
                             prev.includes(value)
-                              ? prev.filter(id => id !== value)
-                              : [...prev, value]
+                              ? prev.filter((id) => id !== value)
+                              : [...prev, value],
                           );
                         } else {
                           setSelectedOptions([value]);
@@ -447,9 +496,16 @@ function VotacionesContent() {
                     >
                       <div className="space-y-3">
                         {selectedSession.options.map((option) => (
-                          <div key={option.id} className="flex items-center space-x-3">
+                          <div
+                            key={option.id}
+                            className="flex items-center space-x-3"
+                          >
                             <input
-                              type={selectedSession.allowMultipleVotes ? 'checkbox' : 'radio'}
+                              type={
+                                selectedSession.allowMultipleVotes
+                                  ? "checkbox"
+                                  : "radio"
+                              }
                               id={option.id}
                               name="vote-option"
                               value={option.id}
@@ -457,10 +513,10 @@ function VotacionesContent() {
                               checked={selectedOptions.includes(option.id)}
                               onChange={(e) => {
                                 if (selectedSession.allowMultipleVotes) {
-                                  setSelectedOptions(prev =>
+                                  setSelectedOptions((prev) =>
                                     e.target.checked
                                       ? [...prev, option.id]
-                                      : prev.filter(id => id !== option.id)
+                                      : prev.filter((id) => id !== option.id),
                                   );
                                 } else {
                                   setSelectedOptions([option.id]);
@@ -484,13 +540,15 @@ function VotacionesContent() {
                       disabled={selectedOptions.length === 0 || submitting}
                       className="w-full"
                     >
-                      {submitting ? 'Registrando voto...' : 'Enviar Voto'}
+                      {submitting ? "Registrando voto..." : "Enviar Voto"}
                     </Button>
                   </div>
-                ) : selectedSession.status === 'closed' || showResults ? (
+                ) : selectedSession.status === "closed" || showResults ? (
                   // Results View
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-foreground">Resultados</h4>
+                    <h4 className="font-semibold text-foreground">
+                      Resultados
+                    </h4>
                     <div className="space-y-3">
                       {selectedSession.options.map((option, index) => (
                         <div key={option.id} className="space-y-2">
@@ -499,18 +557,24 @@ function VotacionesContent() {
                               <span className="font-medium text-sm">
                                 {index + 1}. {option.text}
                               </span>
-                              {selectedSession.userVotes?.includes(option.id) && (
+                              {selectedSession.userVotes?.includes(
+                                option.id,
+                              ) && (
                                 <Badge variant="outline" className="text-xs">
                                   Tu voto
                                 </Badge>
                               )}
                             </div>
                             <span className="text-sm text-muted-foreground">
-                              {option.votes} votos {option.percentage && `(${option.percentage}%)`}
+                              {option.votes} votos{" "}
+                              {option.percentage && `(${option.percentage}%)`}
                             </span>
                           </div>
                           {option.percentage && (
-                            <Progress value={option.percentage} className="h-2" />
+                            <Progress
+                              value={option.percentage}
+                              className="h-2"
+                            />
                           )}
                         </div>
                       ))}
@@ -529,7 +593,8 @@ function VotacionesContent() {
                       ¡Ya has votado!
                     </h3>
                     <p className="text-muted-foreground mb-4">
-                      Tu participación es muy importante para la comunidad escolar
+                      Tu participación es muy importante para la comunidad
+                      escolar
                     </p>
                     <Button
                       variant="outline"
@@ -551,7 +616,8 @@ function VotacionesContent() {
                   Selecciona una votación
                 </h3>
                 <p className="text-muted-foreground text-center">
-                  Haz clic en una votación de la lista para participar o ver los resultados
+                  Haz clic en una votación de la lista para participar o ver los
+                  resultados
                 </p>
               </CardContent>
             </Card>
@@ -564,7 +630,9 @@ function VotacionesContent() {
 
 export default function ParentVotacionesPage() {
   return (
-    <ErrorBoundary fallback={<div>Error al cargar la página de votaciones</div>}>
+    <ErrorBoundary
+      fallback={<div>Error al cargar la página de votaciones</div>}
+    >
       <Suspense fallback={<LoadingState />}>
         <VotacionesContent />
       </Suspense>

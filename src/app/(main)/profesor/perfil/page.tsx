@@ -1,43 +1,62 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { PageTransition } from '@/components/ui/page-transition';
-import Image from 'next/image';
-import { FixedBackgroundLayout } from '@/components/layout/FixedBackgroundLayout';
-import { Badge } from '@/components/ui/badge';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { toast } from 'sonner';
-import { User, Mail, Phone, Edit, Download, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { PageTransition } from "@/components/ui/page-transition";
+import Image from "next/image";
+import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
+import { Badge } from "@/components/ui/badge";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+import {
+  User,
+  Mail,
+  Phone,
+  Edit,
+  Download,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+} from "lucide-react";
 
 export default function PerfilPage() {
   const { data: session } = useSession();
-  const { t } = useDivineParsing(['common', 'profesor']);
-  const [activeTab, setActiveTab] = useState('resumen');
+  const { t } = useDivineParsing(["common", "profesor"]);
+  const [activeTab, setActiveTab] = useState("resumen");
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const tabs = [
-    { key: 'resumen', label: t('profesor.tabs.summary', 'Resumen') },
-    { key: 'tareas', label: t('profesor.tabs.tasks', 'Tareas') },
-    { key: 'certificados', label: t('profesor.tabs.certificates', 'Certificados') },
-    { key: 'ajustes', label: t('profesor.tabs.settings', 'Ajustes') },
+    { key: "resumen", label: t("profesor.tabs.summary", "Resumen") },
+    { key: "tareas", label: t("profesor.tabs.tasks", "Tareas") },
+    {
+      key: "certificados",
+      label: t("profesor.tabs.certificates", "Certificados"),
+    },
+    { key: "ajustes", label: t("profesor.tabs.settings", "Ajustes") },
   ];
 
   const [userProfile, setUserProfile] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    bio: '',
-    avatar: '/public/images/avatar-placeholder.png',
+    name: "",
+    email: "",
+    phone: "",
+    bio: "",
+    avatar: "/public/images/avatar-placeholder.png",
   });
 
   const [settings, setSettings] = useState({
@@ -50,65 +69,67 @@ export default function PerfilPage() {
   const [tasks] = useState([
     {
       id: 1,
-      title: 'Revisar planificaciones pendientes',
-      description: 'Tienes 3 planificaciones que necesitan revisión antes del viernes',
-      status: 'pending',
-      priority: 'high',
-      dueDate: '2024-01-20',
+      title: "Revisar planificaciones pendientes",
+      description:
+        "Tienes 3 planificaciones que necesitan revisión antes del viernes",
+      status: "pending",
+      priority: "high",
+      dueDate: "2024-01-20",
     },
     {
       id: 2,
-      title: 'Preparar reunión con padres',
-      description: 'Reunión programada para discutir el progreso de los estudiantes',
-      status: 'in_progress',
-      priority: 'medium',
-      dueDate: '2024-01-22',
+      title: "Preparar reunión con padres",
+      description:
+        "Reunión programada para discutir el progreso de los estudiantes",
+      status: "in_progress",
+      priority: "medium",
+      dueDate: "2024-01-22",
     },
     {
       id: 3,
-      title: 'Actualizar calificaciones',
-      description: 'Ingresar las últimas calificaciones del trimestre',
-      status: 'completed',
-      priority: 'high',
-      dueDate: '2024-01-18',
+      title: "Actualizar calificaciones",
+      description: "Ingresar las últimas calificaciones del trimestre",
+      status: "completed",
+      priority: "high",
+      dueDate: "2024-01-18",
     },
   ]);
 
   const [certificates] = useState([
     {
       id: 1,
-      title: 'Certificado de Especialización en Educación Especial',
-      description: 'Educación Especial de Lenguaje - Universidad de Chile',
-      issuedDate: '2023-06-15',
-      issuer: 'Universidad de Chile',
-      downloadUrl: '#',
+      title: "Certificado de Especialización en Educación Especial",
+      description: "Educación Especial de Lenguaje - Universidad de Chile",
+      issuedDate: "2023-06-15",
+      issuer: "Universidad de Chile",
+      downloadUrl: "#",
     },
     {
       id: 2,
-      title: 'Diploma de Excelencia Docente',
-      description: 'Reconocimiento por 10 años de servicio destacado',
-      issuedDate: '2022-12-10',
-      issuer: 'Ministerio de Educación',
-      downloadUrl: '#',
+      title: "Diploma de Excelencia Docente",
+      description: "Reconocimiento por 10 años de servicio destacado",
+      issuedDate: "2022-12-10",
+      issuer: "Ministerio de Educación",
+      downloadUrl: "#",
     },
     {
       id: 3,
-      title: 'Certificación en Metodologías Activas',
-      description: 'Curso especializado en enseñanza interactiva',
-      issuedDate: '2023-03-20',
-      issuer: 'Centro de Formación Docente',
-      downloadUrl: '#',
+      title: "Certificación en Metodologías Activas",
+      description: "Curso especializado en enseñanza interactiva",
+      issuedDate: "2023-03-20",
+      issuer: "Centro de Formación Docente",
+      downloadUrl: "#",
     },
   ]);
 
   useEffect(() => {
     if (session?.user) {
       setUserProfile({
-        name: session.user.name || 'Nombre del Profesor',
-        email: session.user.email || 'profesor@manitospintadas.cl',
-        phone: '+56 9 1234 5678',
-        bio: 'Apasionado por la educación y el desarrollo de los niños. Siempre aprendiendo y compartiendo.',
-        avatar: '/public/images/avatar-placeholder.png',
+        name: session.user.name || "Nombre del Profesor",
+        email: session.user.email || "profesor@manitospintadas.cl",
+        phone: "+56 9 1234 5678",
+        bio: "Apasionado por la educación y el desarrollo de los niños. Siempre aprendiendo y compartiendo.",
+        avatar: "/public/images/avatar-placeholder.png",
       });
     }
   }, [session]);
@@ -117,11 +138,11 @@ export default function PerfilPage() {
     setIsSaving(true);
     try {
       // In a real implementation, you'd save to an API
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      toast.success('Perfil actualizado exitosamente');
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+      toast.success("Perfil actualizado exitosamente");
       setShowEditDialog(false);
     } catch (error) {
-      toast.error('Error al guardar el perfil');
+      toast.error("Error al guardar el perfil");
     } finally {
       setIsSaving(false);
     }
@@ -131,10 +152,10 @@ export default function PerfilPage() {
     setIsSaving(true);
     try {
       // In a real implementation, you'd save to an API
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      toast.success('Configuración guardada exitosamente');
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+      toast.success("Configuración guardada exitosamente");
     } catch (error) {
-      toast.error('Error al guardar la configuración');
+      toast.error("Error al guardar la configuración");
     } finally {
       setIsSaving(false);
     }
@@ -142,16 +163,16 @@ export default function PerfilPage() {
 
   const handleDownloadCertificate = (certificateId: number) => {
     // In a real implementation, you'd trigger a download
-    toast.success('Descargando certificado...');
+    toast.success("Descargando certificado...");
   };
 
   const getTaskStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case "completed":
         return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'in_progress':
+      case "in_progress":
         return <Clock className="h-5 w-5 text-blue-500" />;
-      case 'pending':
+      case "pending":
         return <AlertCircle className="h-5 w-5 text-orange-500" />;
       default:
         return <AlertCircle className="h-5 w-5 text-gray-500" />;
@@ -160,12 +181,16 @@ export default function PerfilPage() {
 
   const getTaskStatusBadge = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <Badge className="bg-green-100 text-green-800">Completada</Badge>;
-      case 'in_progress':
+      case "completed":
+        return (
+          <Badge className="bg-green-100 text-green-800">Completada</Badge>
+        );
+      case "in_progress":
         return <Badge className="bg-blue-100 text-blue-800">En Progreso</Badge>;
-      case 'pending':
-        return <Badge className="bg-orange-100 text-orange-800">Pendiente</Badge>;
+      case "pending":
+        return (
+          <Badge className="bg-orange-100 text-orange-800">Pendiente</Badge>
+        );
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -187,8 +212,9 @@ export default function PerfilPage() {
                 <Image
                   src={
                     session?.user
-                      ? '/public/images/avatar-placeholder.png'
-                      : userProfile.avatar || '/public/images/avatar-placeholder.png'
+                      ? "/public/images/avatar-placeholder.png"
+                      : userProfile.avatar ||
+                        "/public/images/avatar-placeholder.png"
                   }
                   alt="Avatar del profesor"
                   className="w-full h-full object-cover"
@@ -203,13 +229,13 @@ export default function PerfilPage() {
               {userProfile.name}
             </CardTitle>
             <span className="text-sm text-muted-foreground mb-2">
-              {session?.user?.role || 'Profesor'}
+              {session?.user?.role || "Profesor"}
             </span>
             <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm" className="mb-2">
                   <Edit className="mr-2 h-4 w-4" />
-                  {t('profesor.edit_profile', 'Editar Perfil')}
+                  {t("profesor.edit_profile", "Editar Perfil")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md">
@@ -225,7 +251,12 @@ export default function PerfilPage() {
                     <Input
                       id="name"
                       value={userProfile.name}
-                      onChange={(e) => setUserProfile(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={(e) =>
+                        setUserProfile((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                   <div>
@@ -234,7 +265,12 @@ export default function PerfilPage() {
                       id="email"
                       type="email"
                       value={userProfile.email}
-                      onChange={(e) => setUserProfile(prev => ({ ...prev, email: e.target.value }))}
+                      onChange={(e) =>
+                        setUserProfile((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                   <div>
@@ -242,7 +278,12 @@ export default function PerfilPage() {
                     <Input
                       id="phone"
                       value={userProfile.phone}
-                      onChange={(e) => setUserProfile(prev => ({ ...prev, phone: e.target.value }))}
+                      onChange={(e) =>
+                        setUserProfile((prev) => ({
+                          ...prev,
+                          phone: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                   <div>
@@ -250,15 +291,27 @@ export default function PerfilPage() {
                     <Textarea
                       id="bio"
                       value={userProfile.bio}
-                      onChange={(e) => setUserProfile(prev => ({ ...prev, bio: e.target.value }))}
+                      onChange={(e) =>
+                        setUserProfile((prev) => ({
+                          ...prev,
+                          bio: e.target.value,
+                        }))
+                      }
                       rows={3}
                     />
                   </div>
                   <div className="flex gap-2 pt-4">
-                    <Button onClick={handleSaveProfile} disabled={isSaving} className="flex-1">
-                      {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+                    <Button
+                      onClick={handleSaveProfile}
+                      disabled={isSaving}
+                      className="flex-1"
+                    >
+                      {isSaving ? "Guardando..." : "Guardar Cambios"}
                     </Button>
-                    <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowEditDialog(false)}
+                    >
                       Cancelar
                     </Button>
                   </div>
@@ -268,14 +321,14 @@ export default function PerfilPage() {
           </CardHeader>
           {/* Tab bar */}
           <div className="flex justify-center gap-2 border-b border-border px-6">
-            {tabs.map(tab => (
+            {tabs.map((tab) => (
               <button
                 key={tab.key}
                 className={cn(
-                  'px-4 py-2 font-medium rounded-t transition-all duration-150',
+                  "px-4 py-2 font-medium rounded-t transition-all duration-150",
                   activeTab === tab.key
-                    ? 'bg-primary/10 text-primary shadow-sm'
-                    : 'text-muted-foreground hover:bg-primary/5'
+                    ? "bg-primary/10 text-primary shadow-sm"
+                    : "text-muted-foreground hover:bg-primary/5",
                 )}
                 onClick={() => setActiveTab(tab.key)}
               >
@@ -284,7 +337,7 @@ export default function PerfilPage() {
             ))}
           </div>
           <CardContent className="pt-6 pb-8 px-4">
-            {activeTab === 'resumen' && (
+            {activeTab === "resumen" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <div>
@@ -295,22 +348,34 @@ export default function PerfilPage() {
                       <div className="flex items-center gap-3">
                         <Mail className="h-4 w-4 text-muted-foreground" />
                         <div className="flex-1">
-                          <span className="text-muted-foreground block text-xs">Email</span>
-                          <span className="text-foreground">{userProfile.email}</span>
+                          <span className="text-muted-foreground block text-xs">
+                            Email
+                          </span>
+                          <span className="text-foreground">
+                            {userProfile.email}
+                          </span>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Phone className="h-4 w-4 text-muted-foreground" />
                         <div className="flex-1">
-                          <span className="text-muted-foreground block text-xs">Teléfono</span>
-                          <span className="text-foreground">{userProfile.phone || 'No especificado'}</span>
+                          <span className="text-muted-foreground block text-xs">
+                            Teléfono
+                          </span>
+                          <span className="text-foreground">
+                            {userProfile.phone || "No especificado"}
+                          </span>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <User className="h-4 w-4 text-muted-foreground" />
                         <div className="flex-1">
-                          <span className="text-muted-foreground block text-xs">Rol</span>
-                          <span className="text-foreground">{session?.user?.role || 'Profesor'}</span>
+                          <span className="text-muted-foreground block text-xs">
+                            Rol
+                          </span>
+                          <span className="text-foreground">
+                            {session?.user?.role || "Profesor"}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -360,19 +425,21 @@ export default function PerfilPage() {
               </div>
             )}
 
-            {activeTab === 'tareas' && (
+            {activeTab === "tareas" && (
               <div className="space-y-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-semibold text-foreground">
-                    Mis Tareas
-                  </h3>
+                  <h3 className="font-semibold text-foreground">Mis Tareas</h3>
                   <div className="text-sm text-muted-foreground">
-                    {tasks.filter(t => t.status !== 'completed').length} pendientes
+                    {tasks.filter((t) => t.status !== "completed").length}{" "}
+                    pendientes
                   </div>
                 </div>
                 <div className="space-y-3">
                   {tasks.map((task) => (
-                    <div key={task.id} className="p-4 border border-border rounded-lg hover:shadow-sm transition-shadow">
+                    <div
+                      key={task.id}
+                      className="p-4 border border-border rounded-lg hover:shadow-sm transition-shadow"
+                    >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
@@ -385,19 +452,32 @@ export default function PerfilPage() {
                             {task.description}
                           </p>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                            <span>📅 Vence: {new Date(task.dueDate).toLocaleDateString('es-ES')}</span>
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                              task.priority === 'high' ? 'bg-red-100 text-red-800' :
-                              task.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-green-100 text-green-800'
-                            }`}>
-                              {task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Media' : 'Baja'}
+                            <span>
+                              📅 Vence:{" "}
+                              {new Date(task.dueDate).toLocaleDateString(
+                                "es-ES",
+                              )}
+                            </span>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs ${
+                                task.priority === "high"
+                                  ? "bg-red-100 text-red-800"
+                                  : task.priority === "medium"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-green-100 text-green-800"
+                              }`}
+                            >
+                              {task.priority === "high"
+                                ? "Alta"
+                                : task.priority === "medium"
+                                  ? "Media"
+                                  : "Baja"}
                             </span>
                           </div>
                         </div>
                         <div className="flex flex-col items-end gap-2 ml-4">
                           {getTaskStatusBadge(task.status)}
-                          {task.status !== 'completed' && (
+                          {task.status !== "completed" && (
                             <Button size="sm" variant="outline">
                               Marcar como completada
                             </Button>
@@ -410,7 +490,7 @@ export default function PerfilPage() {
               </div>
             )}
 
-            {activeTab === 'certificados' && (
+            {activeTab === "certificados" && (
               <div className="space-y-4">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="font-semibold text-foreground">
@@ -422,7 +502,10 @@ export default function PerfilPage() {
                 </div>
                 <div className="space-y-3">
                   {certificates.map((cert) => (
-                    <div key={cert.id} className="p-4 border border-border rounded-lg hover:shadow-sm transition-shadow">
+                    <div
+                      key={cert.id}
+                      className="p-4 border border-border rounded-lg hover:shadow-sm transition-shadow"
+                    >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <h4 className="font-medium text-foreground mb-1">
@@ -433,11 +516,17 @@ export default function PerfilPage() {
                           </p>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span>🏫 {cert.issuer}</span>
-                            <span>📅 {new Date(cert.issuedDate).toLocaleDateString('es-ES', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric'
-                            })}</span>
+                            <span>
+                              📅{" "}
+                              {new Date(cert.issuedDate).toLocaleDateString(
+                                "es-ES",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                },
+                              )}
+                            </span>
                           </div>
                         </div>
                         <Button
@@ -463,7 +552,7 @@ export default function PerfilPage() {
               </div>
             )}
 
-            {activeTab === 'ajustes' && (
+            {activeTab === "ajustes" && (
               <div className="space-y-6">
                 <div>
                   <h3 className="font-semibold text-foreground mb-4">
@@ -472,7 +561,9 @@ export default function PerfilPage() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label className="text-sm font-medium">Notificaciones por Email</Label>
+                        <Label className="text-sm font-medium">
+                          Notificaciones por Email
+                        </Label>
                         <p className="text-xs text-muted-foreground">
                           Recibe actualizaciones sobre tus actividades por email
                         </p>
@@ -480,14 +571,19 @@ export default function PerfilPage() {
                       <Switch
                         checked={settings.emailNotifications}
                         onCheckedChange={(checked) =>
-                          setSettings(prev => ({ ...prev, emailNotifications: checked }))
+                          setSettings((prev) => ({
+                            ...prev,
+                            emailNotifications: checked,
+                          }))
                         }
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label className="text-sm font-medium">Notificaciones Push</Label>
+                        <Label className="text-sm font-medium">
+                          Notificaciones Push
+                        </Label>
                         <p className="text-xs text-muted-foreground">
                           Recibe notificaciones en tiempo real en tu navegador
                         </p>
@@ -495,14 +591,19 @@ export default function PerfilPage() {
                       <Switch
                         checked={settings.pushNotifications}
                         onCheckedChange={(checked) =>
-                          setSettings(prev => ({ ...prev, pushNotifications: checked }))
+                          setSettings((prev) => ({
+                            ...prev,
+                            pushNotifications: checked,
+                          }))
                         }
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label className="text-sm font-medium">Reportes Semanales</Label>
+                        <Label className="text-sm font-medium">
+                          Reportes Semanales
+                        </Label>
                         <p className="text-xs text-muted-foreground">
                           Recibe un resumen semanal de tus actividades
                         </p>
@@ -510,14 +611,19 @@ export default function PerfilPage() {
                       <Switch
                         checked={settings.weeklyReports}
                         onCheckedChange={(checked) =>
-                          setSettings(prev => ({ ...prev, weeklyReports: checked }))
+                          setSettings((prev) => ({
+                            ...prev,
+                            weeklyReports: checked,
+                          }))
                         }
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label className="text-sm font-medium">Recordatorios de Tareas</Label>
+                        <Label className="text-sm font-medium">
+                          Recordatorios de Tareas
+                        </Label>
                         <p className="text-xs text-muted-foreground">
                           Recibe recordatorios sobre tareas pendientes
                         </p>
@@ -525,7 +631,10 @@ export default function PerfilPage() {
                       <Switch
                         checked={settings.taskReminders}
                         onCheckedChange={(checked) =>
-                          setSettings(prev => ({ ...prev, taskReminders: checked }))
+                          setSettings((prev) => ({
+                            ...prev,
+                            taskReminders: checked,
+                          }))
                         }
                       />
                     </div>
@@ -534,11 +643,15 @@ export default function PerfilPage() {
 
                 <div className="pt-4 border-t">
                   <div className="space-y-4">
-                    <h4 className="font-medium text-foreground">Privacidad y Seguridad</h4>
+                    <h4 className="font-medium text-foreground">
+                      Privacidad y Seguridad
+                    </h4>
 
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label className="text-sm font-medium">Perfil Público</Label>
+                        <Label className="text-sm font-medium">
+                          Perfil Público
+                        </Label>
                         <p className="text-xs text-muted-foreground">
                           Permitir que otros profesores vean tu perfil
                         </p>
@@ -548,7 +661,9 @@ export default function PerfilPage() {
 
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label className="text-sm font-medium">Actividad en Línea</Label>
+                        <Label className="text-sm font-medium">
+                          Actividad en Línea
+                        </Label>
                         <p className="text-xs text-muted-foreground">
                           Mostrar cuándo estuviste activo por última vez
                         </p>
@@ -564,7 +679,7 @@ export default function PerfilPage() {
                     disabled={isSaving}
                     className="w-full"
                   >
-                    {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+                    {isSaving ? "Guardando..." : "Guardar Cambios"}
                   </Button>
                 </div>
               </div>

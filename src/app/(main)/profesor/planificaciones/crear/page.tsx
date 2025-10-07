@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { createPlanningDocument } from '@/services/actions/planning';
-import { PlanningDocumentForm } from '@/components/planning/PlanningDocumentForm';
-import { Button } from '@/components/ui/button';
-import { PageTransition } from '@/components/ui/page-transition';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
+import Link from "next/link";
+import { createPlanningDocument } from "@/services/actions/planning";
+import { PlanningDocumentForm } from "@/components/planning/PlanningDocumentForm";
+import { Button } from "@/components/ui/button";
+import { PageTransition } from "@/components/ui/page-transition";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function CrearPlanificacionPage() {
-  const { t } = useDivineParsing(['common', 'profesor']);
+  const { t } = useDivineParsing(["common", "profesor"]);
 
   return (
     <PageTransition
@@ -22,11 +22,11 @@ export default function CrearPlanificacionPage() {
         <div className="flex items-center gap-4">
           <Link href="/profesor/planificaciones">
             <Button variant="outline" size="sm">
-              {t('profesor.planning.back')}
+              {t("profesor.planning.back")}
             </Button>
           </Link>
           <h1 className="text-3xl font-bold text-foreground">
-            {t('profesor.planning.new')}
+            {t("profesor.planning.new")}
           </h1>
         </div>
 

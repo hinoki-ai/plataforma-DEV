@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 interface UseFocusManagementOptions {
   trapFocus?: boolean;
@@ -28,7 +28,7 @@ export function useFocusManagement({
 
     // Get all focusable elements
     const focusableElements = container.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
 
     if (focusableElements.length === 0) return;
@@ -41,7 +41,7 @@ export function useFocusManagement({
     // Set initial focus
     if (initialFocus) {
       const initialElement = container.querySelector(
-        initialFocus
+        initialFocus,
       ) as HTMLElement;
       initialElement?.focus();
     } else {
@@ -51,7 +51,7 @@ export function useFocusManagement({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!trapFocus) return;
 
-      if (event.key === 'Tab') {
+      if (event.key === "Tab") {
         if (event.shiftKey) {
           if (document.activeElement === firstElement) {
             event.preventDefault();
@@ -65,15 +65,15 @@ export function useFocusManagement({
         }
       }
 
-      if (event.key === 'Escape') {
-        container.dispatchEvent(new CustomEvent('escape-pressed'));
+      if (event.key === "Escape") {
+        container.dispatchEvent(new CustomEvent("escape-pressed"));
       }
     };
 
-    container.addEventListener('keydown', handleKeyDown);
+    container.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      container.removeEventListener('keydown', handleKeyDown);
+      container.removeEventListener("keydown", handleKeyDown);
 
       if (returnFocus && previousActiveElement.current) {
         previousActiveElement.current.focus();
@@ -95,7 +95,7 @@ export function useAriaLive(regionId: string, message: string, polite = true) {
 
       // Clear after announcement
       setTimeout(() => {
-        region.textContent = '';
+        region.textContent = "";
       }, 1000);
     }
   }, [message, regionId, polite]);
@@ -105,13 +105,13 @@ export function useAriaLive(regionId: string, message: string, polite = true) {
  * Skip to main content function
  */
 export function skipToMainContent() {
-  const mainContent = document.getElementById('main-content');
+  const mainContent = document.getElementById("main-content");
   if (mainContent) {
     mainContent.tabIndex = -1;
     mainContent.focus();
     // Remove tabindex after focus
     setTimeout(() => {
-      mainContent.removeAttribute('tabindex');
+      mainContent.removeAttribute("tabindex");
     }, 100);
   }
 }
@@ -121,7 +121,7 @@ export function skipToMainContent() {
  */
 export function createFocusTrap(element: HTMLElement) {
   const focusableElements = element.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
   ) as NodeListOf<HTMLElement>;
 
   if (focusableElements.length === 0) return;
@@ -130,7 +130,7 @@ export function createFocusTrap(element: HTMLElement) {
   const lastElement = focusableElements[focusableElements.length - 1];
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Tab') {
+    if (event.key === "Tab") {
       if (event.shiftKey) {
         if (document.activeElement === firstElement) {
           event.preventDefault();
@@ -145,9 +145,9 @@ export function createFocusTrap(element: HTMLElement) {
     }
   };
 
-  element.addEventListener('keydown', handleKeyDown);
+  element.addEventListener("keydown", handleKeyDown);
 
   return () => {
-    element.removeEventListener('keydown', handleKeyDown);
+    element.removeEventListener("keydown", handleKeyDown);
   };
 }

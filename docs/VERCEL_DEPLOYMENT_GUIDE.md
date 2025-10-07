@@ -1,4 +1,5 @@
 # Vercel Deployment Guide
+
 **Project**: Manitos Pintadas School Management System  
 **Production URL**: https://school.aramac.dev  
 **Last Updated**: September 1, 2025
@@ -6,6 +7,7 @@
 ## 🚀 DEPLOYMENT OVERVIEW
 
 The Manitos Pintadas system is deployed on Vercel with the following configuration:
+
 - **Framework**: Next.js 15
 - **Build Command**: `npm run build`
 - **Output Directory**: `.next`
@@ -15,6 +17,7 @@ The Manitos Pintadas system is deployed on Vercel with the following configurati
 ## 🔧 VERCEL PROJECT SETUP
 
 ### Project Configuration
+
 ```yaml
 Project Name: school-aramac
 Team: agostinos-projects-903e65da
@@ -24,6 +27,7 @@ Domain: school.aramac.dev
 ```
 
 ### Build Settings
+
 ```json
 {
   "buildCommand": "npm run build",
@@ -37,6 +41,7 @@ Domain: school.aramac.dev
 ## 🌐 ENVIRONMENT VARIABLES
 
 ### Production Environment Variables (Required)
+
 ```bash
 # Core Application
 NEXTAUTH_URL="https://school.aramac.dev"
@@ -60,6 +65,7 @@ SUPABASE_SERVICE_ROLE_KEY="..."
 ```
 
 ### Environment Variable Management
+
 ```bash
 # List all environment variables
 npx vercel env ls
@@ -77,6 +83,7 @@ npx vercel env pull .env.vercel
 ## 🚢 DEPLOYMENT PROCESS
 
 ### 1. Pre-Deployment Checklist
+
 - [ ] All tests passing (`npm run test:all`)
 - [ ] TypeScript compilation successful (`npm run type-check`)
 - [ ] Linting clean (`npm run lint`)
@@ -84,6 +91,7 @@ npx vercel env pull .env.vercel
 - [ ] Database migrations applied (`npm run db:push`)
 
 ### 2. Environment Variable Verification
+
 ```bash
 # Critical variables to verify:
 npx vercel env ls | grep -E "NEXTAUTH_URL|DATABASE_URL|NEXTAUTH_SECRET"
@@ -95,6 +103,7 @@ npx vercel env ls | grep -E "NEXTAUTH_URL|DATABASE_URL|NEXTAUTH_SECRET"
 ### 3. Deployment Commands
 
 #### Standard Deployment
+
 ```bash
 # Deploy to production
 npx vercel --prod
@@ -104,6 +113,7 @@ git push origin prod
 ```
 
 #### Emergency Deployment
+
 ```bash
 # Force redeploy with verbose output
 npx vercel --prod --force --debug
@@ -113,6 +123,7 @@ npx vercel --prod --target production
 ```
 
 ### 4. Post-Deployment Verification
+
 ```bash
 # Check deployment status
 npx vercel ls
@@ -130,6 +141,7 @@ curl -s https://school.aramac.dev/login | grep -i "login\|error"
 ## 📊 MONITORING & LOGS
 
 ### Deployment Monitoring
+
 ```bash
 # View recent deployments
 npx vercel ls --limit 10
@@ -145,6 +157,7 @@ npx vercel logs https://school-aramac-[hash].vercel.app
 ```
 
 ### Build Logs Analysis
+
 ```bash
 # Common build issues to look for:
 # - TypeScript errors
@@ -156,15 +169,18 @@ npx vercel logs https://school-aramac-[hash].vercel.app
 ## 🚨 COMMON DEPLOYMENT ISSUES
 
 ### Issue #1: Build Failures
+
 **Symptoms**: Deployment fails during build phase
 
 #### Common Causes:
+
 - TypeScript compilation errors
 - Missing dependencies
 - Environment variable issues during build
 - Database connection failures during build
 
 #### Solutions:
+
 ```bash
 # Fix TypeScript errors
 npm run type-check
@@ -180,9 +196,11 @@ npx vercel env ls
 ```
 
 ### Issue #2: Authentication Not Working Post-Deploy
+
 **Symptoms**: Login fails after successful deployment
 
 #### Root Cause Check:
+
 ```bash
 # Check NEXTAUTH_URL
 npx vercel env ls | grep NEXTAUTH_URL
@@ -191,6 +209,7 @@ npx vercel env ls | grep NEXTAUTH_URL
 ```
 
 #### Solution:
+
 ```bash
 # Update NEXTAUTH_URL if incorrect
 npx vercel env rm NEXTAUTH_URL production
@@ -202,9 +221,11 @@ npx vercel --prod
 ```
 
 ### Issue #3: Database Connection Errors
+
 **Symptoms**: Runtime errors related to Prisma/database
 
 #### Diagnostic:
+
 ```bash
 # Check database environment variables
 npx vercel env ls | grep -E "DATABASE|POSTGRES|SUPABASE"
@@ -214,6 +235,7 @@ npm run verify-supabase
 ```
 
 #### Solution:
+
 ```bash
 # Regenerate Prisma client for production
 npm run db:generate
@@ -228,6 +250,7 @@ npx vercel --prod
 ## 🔄 ROLLBACK PROCEDURES
 
 ### Quick Rollback
+
 ```bash
 # List recent deployments
 npx vercel ls
@@ -237,6 +260,7 @@ npx vercel promote https://school-aramac-[previous-hash].vercel.app --scope prod
 ```
 
 ### Emergency Rollback
+
 ```bash
 # If current deployment is completely broken:
 # 1. Identify last working deployment from list
@@ -252,40 +276,43 @@ curl -I https://school.aramac.dev
 ## 🔧 ADVANCED CONFIGURATION
 
 ### Custom Headers
+
 ```javascript
 // next.config.js
 module.exports = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'X-Frame-Options',
-            value: 'DENY'
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          }
-        ]
-      }
-    ]
-  }
-}
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+        ],
+      },
+    ];
+  },
+};
 ```
 
 ### Edge Runtime Configuration
+
 ```javascript
 // For specific routes requiring Edge Runtime
-export const runtime = 'edge'
+export const runtime = "edge";
 ```
 
 ### Build Optimization
+
 ```json
 {
   "build": {
@@ -304,6 +331,7 @@ export const runtime = 'edge'
 ## 📋 DEPLOYMENT CHECKLIST TEMPLATE
 
 ### Pre-Deployment
+
 - [ ] Code reviewed and approved
 - [ ] All tests passing (495+ tests)
 - [ ] TypeScript compilation clean
@@ -312,6 +340,7 @@ export const runtime = 'edge'
 - [ ] Database schema up to date
 
 ### Environment Variables
+
 - [ ] NEXTAUTH_URL correct for target environment
 - [ ] DATABASE_URL pointing to correct database
 - [ ] OAuth credentials valid and current
@@ -319,6 +348,7 @@ export const runtime = 'edge'
 - [ ] No sensitive data exposed
 
 ### Post-Deployment
+
 - [ ] Site loads correctly
 - [ ] Authentication working all roles
 - [ ] Database connection verified
@@ -329,6 +359,7 @@ export const runtime = 'edge'
 ## 🔍 PERFORMANCE MONITORING
 
 ### Key Metrics to Track
+
 ```bash
 # Build Time: Target < 2 minutes
 # First Load Time: Target < 3 seconds
@@ -337,16 +368,18 @@ export const runtime = 'edge'
 ```
 
 ### Vercel Analytics
+
 - Core Web Vitals monitoring
 - Real user performance metrics
 - Edge function execution times
 - Error rate tracking
 
 ### Custom Monitoring
+
 ```javascript
 // Performance logging in pages
 export function reportWebVitals(metric) {
-  console.log(metric)
+  console.log(metric);
   // Send to analytics service
 }
 ```
@@ -354,6 +387,7 @@ export function reportWebVitals(metric) {
 ## 🚀 OPTIMIZATION TIPS
 
 ### Build Performance
+
 ```bash
 # Enable SWC minification
 # next.config.js
@@ -369,6 +403,7 @@ npm run analyze
 ```
 
 ### Runtime Performance
+
 ```bash
 # Enable production optimizations
 NODE_ENV=production
@@ -381,6 +416,7 @@ Cache-Control: public, s-maxage=31536000, immutable
 ```
 
 ---
+
 **This guide ensures reliable deployments and quick issue resolution.**  
-**Last major deployment**: September 1, 2025 (Authentication fix)**  
-**Success Rate**: 99.2% (based on deployment history)**
+**Last major deployment**: September 1, 2025 (Authentication fix)\*\*  
+**Success Rate**: 99.2% (based on deployment history)\*\*

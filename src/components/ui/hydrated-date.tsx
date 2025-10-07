@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { format as dateFnsFormat } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { useEffect, useState } from "react";
+import { format as dateFnsFormat } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface HydratedDateProps {
   date: Date | string | number;
@@ -19,9 +19,9 @@ interface HydratedDateProps {
  */
 export function HydratedDate({
   date,
-  format = 'dd MMM yyyy',
+  format = "dd MMM yyyy",
   locale = es,
-  placeholder = '...',
+  placeholder = "...",
   className,
   relative = false,
 }: HydratedDateProps) {
@@ -30,18 +30,21 @@ export function HydratedDate({
 
   useEffect(() => {
     setIsHydrated(true);
-    
+
     try {
-      const dateObj = typeof date === 'string' || typeof date === 'number' 
-        ? new Date(date) 
-        : date;
+      const dateObj =
+        typeof date === "string" || typeof date === "number"
+          ? new Date(date)
+          : date;
 
       if (relative) {
         const now = new Date();
-        const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
-        
+        const diffInSeconds = Math.floor(
+          (now.getTime() - dateObj.getTime()) / 1000,
+        );
+
         if (diffInSeconds < 60) {
-          setFormattedDate('hace un momento');
+          setFormattedDate("hace un momento");
         } else if (diffInSeconds < 3600) {
           setFormattedDate(`hace ${Math.floor(diffInSeconds / 60)} minutos`);
         } else if (diffInSeconds < 86400) {
@@ -55,16 +58,13 @@ export function HydratedDate({
         setFormattedDate(dateFnsFormat(dateObj, format, { locale }));
       }
     } catch (error) {
-      console.error('Date formatting error:', error);
-      setFormattedDate('Invalid date');
+      console.error("Date formatting error:", error);
+      setFormattedDate("Invalid date");
     }
   }, [date, format, locale, relative]);
 
   return (
-    <span 
-      className={className}
-      suppressHydrationWarning
-    >
+    <span className={className} suppressHydrationWarning>
       {formattedDate}
     </span>
   );
@@ -81,7 +81,7 @@ interface HydratedTimeProps {
  */
 export function HydratedTime({
   date,
-  placeholder = '...',
+  placeholder = "...",
   className,
 }: HydratedTimeProps) {
   return (
@@ -105,7 +105,7 @@ interface HydratedDateTimeProps {
  */
 export function HydratedDateTime({
   date,
-  placeholder = '...',
+  placeholder = "...",
   className,
 }: HydratedDateTimeProps) {
   return (
@@ -129,7 +129,7 @@ interface HydratedRelativeTimeProps {
  */
 export function HydratedRelativeTime({
   date,
-  placeholder = '...',
+  placeholder = "...",
   className,
 }: HydratedRelativeTimeProps) {
   return (

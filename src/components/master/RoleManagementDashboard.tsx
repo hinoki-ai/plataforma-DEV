@@ -1,14 +1,33 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import React, { useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Crown,
   Shield,
@@ -23,8 +42,12 @@ import {
   Unlock,
   AlertTriangle,
   CheckCircle,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface Role {
   id: string;
@@ -32,7 +55,7 @@ interface Role {
   description: string;
   users: number;
   permissions: string[];
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   created: string;
 }
 
@@ -46,61 +69,112 @@ interface Permission {
 
 const roles: Role[] = [
   {
-    id: 'master',
-    name: 'MASTER',
-    description: 'Control absoluto del sistema',
+    id: "master",
+    name: "MASTER",
+    description: "Control absoluto del sistema",
     users: 2,
-    permissions: ['all'],
-    status: 'active',
-    created: '2024-01-01',
+    permissions: ["all"],
+    status: "active",
+    created: "2024-01-01",
   },
   {
-    id: 'admin',
-    name: 'ADMIN',
-    description: 'Administración completa del sistema',
+    id: "admin",
+    name: "ADMIN",
+    description: "Administración completa del sistema",
     users: 12,
-    permissions: ['manage_users', 'manage_content', 'view_reports'],
-    status: 'active',
-    created: '2024-01-01',
+    permissions: ["manage_users", "manage_content", "view_reports"],
+    status: "active",
+    created: "2024-01-01",
   },
   {
-    id: 'profesor',
-    name: 'PROFESOR',
-    description: 'Gestión de estudiantes y contenido educativo',
+    id: "profesor",
+    name: "PROFESOR",
+    description: "Gestión de estudiantes y contenido educativo",
     users: 45,
-    permissions: ['manage_students', 'create_content', 'view_reports'],
-    status: 'active',
-    created: '2024-01-01',
+    permissions: ["manage_students", "create_content", "view_reports"],
+    status: "active",
+    created: "2024-01-01",
   },
   {
-    id: 'parent',
-    name: 'PARENT',
-    description: 'Acceso a información de estudiantes',
+    id: "parent",
+    name: "PARENT",
+    description: "Acceso a información de estudiantes",
     users: 38,
-    permissions: ['view_student_info', 'communicate'],
-    status: 'active',
-    created: '2024-01-01',
+    permissions: ["view_student_info", "communicate"],
+    status: "active",
+    created: "2024-01-01",
   },
 ];
 
 const permissions: Permission[] = [
-  { id: 'all', name: 'Acceso Total', description: 'Control completo del sistema', category: 'System', roles: ['MASTER'] },
-  { id: 'manage_users', name: 'Gestionar Usuarios', description: 'Crear, editar y eliminar usuarios', category: 'Users', roles: ['ADMIN'] },
-  { id: 'manage_content', name: 'Gestionar Contenido', description: 'Administrar contenido educativo', category: 'Content', roles: ['ADMIN', 'PROFESOR'] },
-  { id: 'view_reports', name: 'Ver Reportes', description: 'Acceso a reportes y analytics', category: 'Reports', roles: ['ADMIN', 'PROFESOR'] },
-  { id: 'manage_students', name: 'Gestionar Estudiantes', description: 'Administrar estudiantes', category: 'Students', roles: ['PROFESOR'] },
-  { id: 'create_content', name: 'Crear Contenido', description: 'Crear material educativo', category: 'Content', roles: ['PROFESOR'] },
-  { id: 'view_student_info', name: 'Ver Info Estudiantes', description: 'Acceso a información estudiantil', category: 'Students', roles: ['PARENT'] },
-  { id: 'communicate', name: 'Comunicar', description: 'Enviar mensajes y comunicaciones', category: 'Communication', roles: ['PARENT', 'PROFESOR'] },
+  {
+    id: "all",
+    name: "Acceso Total",
+    description: "Control completo del sistema",
+    category: "System",
+    roles: ["MASTER"],
+  },
+  {
+    id: "manage_users",
+    name: "Gestionar Usuarios",
+    description: "Crear, editar y eliminar usuarios",
+    category: "Users",
+    roles: ["ADMIN"],
+  },
+  {
+    id: "manage_content",
+    name: "Gestionar Contenido",
+    description: "Administrar contenido educativo",
+    category: "Content",
+    roles: ["ADMIN", "PROFESOR"],
+  },
+  {
+    id: "view_reports",
+    name: "Ver Reportes",
+    description: "Acceso a reportes y analytics",
+    category: "Reports",
+    roles: ["ADMIN", "PROFESOR"],
+  },
+  {
+    id: "manage_students",
+    name: "Gestionar Estudiantes",
+    description: "Administrar estudiantes",
+    category: "Students",
+    roles: ["PROFESOR"],
+  },
+  {
+    id: "create_content",
+    name: "Crear Contenido",
+    description: "Crear material educativo",
+    category: "Content",
+    roles: ["PROFESOR"],
+  },
+  {
+    id: "view_student_info",
+    name: "Ver Info Estudiantes",
+    description: "Acceso a información estudiantil",
+    category: "Students",
+    roles: ["PARENT"],
+  },
+  {
+    id: "communicate",
+    name: "Comunicar",
+    description: "Enviar mensajes y comunicaciones",
+    category: "Communication",
+    roles: ["PARENT", "PROFESOR"],
+  },
 ];
 
 function RoleOverviewCard() {
-  const stats = useMemo(() => ({
-    totalRoles: roles.length,
-    activeRoles: roles.filter(r => r.status === 'active').length,
-    totalUsers: roles.reduce((sum, role) => sum + role.users, 0),
-    totalPermissions: permissions.length,
-  }), []);
+  const stats = useMemo(
+    () => ({
+      totalRoles: roles.length,
+      activeRoles: roles.filter((r) => r.status === "active").length,
+      totalUsers: roles.reduce((sum, role) => sum + role.users, 0),
+      totalPermissions: permissions.length,
+    }),
+    [],
+  );
 
   return (
     <Card className="border-yellow-200 dark:border-yellow-800">
@@ -108,7 +182,9 @@ function RoleOverviewCard() {
         <CardTitle className="flex items-center gap-2">
           Resumen de Roles
         </CardTitle>
-        <CardDescription>Estado general del sistema de roles y permisos</CardDescription>
+        <CardDescription>
+          Estado general del sistema de roles y permisos
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -133,7 +209,9 @@ function RoleOverviewCard() {
             <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
               {stats.totalUsers}
             </div>
-            <div className="text-sm text-muted-foreground">Usuarios Asignados</div>
+            <div className="text-sm text-muted-foreground">
+              Usuarios Asignados
+            </div>
           </div>
 
           <div className="text-center p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
@@ -141,7 +219,9 @@ function RoleOverviewCard() {
             <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
               {stats.totalPermissions}
             </div>
-            <div className="text-sm text-muted-foreground">Permisos Totales</div>
+            <div className="text-sm text-muted-foreground">
+              Permisos Totales
+            </div>
           </div>
         </div>
       </CardContent>
@@ -159,7 +239,9 @@ function RolesTableCard() {
           <Shield className="h-5 w-5" />
           Gestión de Roles
         </CardTitle>
-        <CardDescription>Administrar roles del sistema y sus permisos</CardDescription>
+        <CardDescription>
+          Administrar roles del sistema y sus permisos
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-4">
@@ -193,17 +275,27 @@ function RolesTableCard() {
                       {role.name}
                     </div>
                   </TableCell>
-                  <TableCell className="max-w-xs truncate">{role.description}</TableCell>
+                  <TableCell className="max-w-xs truncate">
+                    {role.description}
+                  </TableCell>
                   <TableCell>{role.users}</TableCell>
                   <TableCell>{role.permissions.length}</TableCell>
                   <TableCell>
-                    <Badge variant={role.status === 'active' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        role.status === "active" ? "default" : "secondary"
+                      }
+                    >
                       {role.status}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => setSelectedRole(role)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedRole(role)}
+                      >
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="sm">
@@ -226,8 +318,13 @@ function RolesTableCard() {
             <AlertTitle>Detalles del Rol: {selectedRole.name}</AlertTitle>
             <AlertDescription>
               <div className="mt-2 space-y-1 text-sm">
-                <div><strong>Permisos:</strong> {selectedRole.permissions.join(', ')}</div>
-                <div><strong>Creado:</strong> {selectedRole.created}</div>
+                <div>
+                  <strong>Permisos:</strong>{" "}
+                  {selectedRole.permissions.join(", ")}
+                </div>
+                <div>
+                  <strong>Creado:</strong> {selectedRole.created}
+                </div>
               </div>
             </AlertDescription>
           </Alert>
@@ -239,7 +336,7 @@ function RolesTableCard() {
 
 function PermissionsMatrixCard() {
   const categories = useMemo(() => {
-    const cats = new Set(permissions.map(p => p.category));
+    const cats = new Set(permissions.map((p) => p.category));
     return Array.from(cats);
   }, []);
 
@@ -250,7 +347,9 @@ function PermissionsMatrixCard() {
           <Key className="h-5 w-5" />
           Matriz de Permisos
         </CardTitle>
-        <CardDescription>Permisos asignados por rol y categoría</CardDescription>
+        <CardDescription>
+          Permisos asignados por rol y categoría
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
@@ -261,16 +360,27 @@ function PermissionsMatrixCard() {
               </h3>
               <div className="space-y-2">
                 {permissions
-                  .filter(p => p.category === category)
+                  .filter((p) => p.category === category)
                   .map((permission) => (
-                    <div key={permission.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div
+                      key={permission.id}
+                      className="flex items-center justify-between p-3 border rounded-lg"
+                    >
                       <div>
-                        <div className="font-medium text-sm">{permission.name}</div>
-                        <div className="text-xs text-muted-foreground">{permission.description}</div>
+                        <div className="font-medium text-sm">
+                          {permission.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {permission.description}
+                        </div>
                       </div>
                       <div className="flex gap-2">
                         {permission.roles.map((role) => (
-                          <Badge key={role} variant="outline" className="text-xs">
+                          <Badge
+                            key={role}
+                            variant="outline"
+                            className="text-xs"
+                          >
                             {role}
                           </Badge>
                         ))}
@@ -287,8 +397,8 @@ function PermissionsMatrixCard() {
 }
 
 function RoleAssignmentCard() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedRole, setSelectedRole] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
 
   return (
     <Card>
@@ -307,8 +417,9 @@ function RoleAssignmentCard() {
               ⚠️ Operación Sensible
             </AlertTitle>
             <AlertDescription className="text-yellow-700 dark:text-yellow-300">
-              Cambiar roles puede afectar significativamente los permisos de los usuarios.
-              Asegúrate de que los cambios sean necesarios y estén autorizados.
+              Cambiar roles puede afectar significativamente los permisos de los
+              usuarios. Asegúrate de que los cambios sean necesarios y estén
+              autorizados.
             </AlertDescription>
           </Alert>
 
@@ -357,10 +468,13 @@ export function RoleManagementDashboard() {
       {/* Role Management Header */}
       <RoleAwareHeader
         title="👑 ROLE MANAGEMENT - SUPREME ROLE CONTROL"
-        subtitle={`Control absoluto de roles y permisos - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Control absoluto de roles y permisos - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-yellow-600 border-yellow-600">
+            <Badge
+              variant="outline"
+              className="text-yellow-600 border-yellow-600"
+            >
               <Crown className="h-3 w-3 mr-1" />
               ROLE MANAGEMENT
             </Badge>
@@ -368,7 +482,6 @@ export function RoleManagementDashboard() {
           </div>
         }
       />
-
 
       {/* Role Overview */}
       <RoleOverviewCard />

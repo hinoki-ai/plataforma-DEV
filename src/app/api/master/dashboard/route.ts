@@ -1,8 +1,8 @@
-import { NextRequest } from 'next/server';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
-import { createApiRoute, REQUIRED_ROLES } from '@/lib/api-validation';
-import { createSuccessResponse } from '@/lib/api-error';
+import { NextRequest } from "next/server";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
+import { createApiRoute, REQUIRED_ROLES } from "@/lib/api-validation";
+import { createSuccessResponse } from "@/lib/api-error";
 
 // GET /api/master/dashboard - MASTER system overview
 export const GET = createApiRoute(
@@ -19,7 +19,7 @@ export const GET = createApiRoute(
       allPhotos,
       allVideos,
       errorMetrics,
-      performanceMetrics
+      performanceMetrics,
     ] = await Promise.all([
       // System health metrics
       Promise.resolve({
@@ -28,24 +28,24 @@ export const GET = createApiRoute(
         nodeVersion: process.version,
         environment: process.env.NODE_ENV,
       }),
-      
+
       // User analytics
       client.query(api.users.getUsers, { isActive: true }),
-      
+
       // Content metrics
       client.query(api.calendar.getCalendarEvents, {}),
       client.query(api.planning.getPlanningDocuments, {}),
       client.query(api.meetings.getMeetings, {}),
       client.query(api.media.getPhotos, {}),
       client.query(api.media.getVideos, {}),
-      
+
       // Error tracking (will work once ErrorLog model is added)
       Promise.resolve({
         totalErrors: 0,
         criticalErrors: 0,
         recentErrors: 0,
       }),
-      
+
       // Performance metrics
       Promise.resolve({
         avgResponseTime: Math.round(Math.random() * 200 + 50), // Will be real metrics
@@ -55,12 +55,17 @@ export const GET = createApiRoute(
     ]);
 
     // Transform user metrics for easy consumption
-    const usersByRole = allUsers.reduce((acc, user) => {
-      acc[user.role] = (acc[user.role] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const usersByRole = allUsers.reduce(
+      (acc, user) => {
+        acc[user.role] = (acc[user.role] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-    const totalEvents = Array.isArray(allEvents) ? allEvents.length : (allEvents as any).events?.length || 0;
+    const totalEvents = Array.isArray(allEvents)
+      ? allEvents.length
+      : (allEvents as any).events?.length || 0;
     const totalDocuments = allDocuments.length;
     const totalMeetings = (allMeetings as any).meetings?.length || 0;
     const totalPhotos = allPhotos.length;
@@ -69,7 +74,7 @@ export const GET = createApiRoute(
     const masterDashboard = {
       timestamp: new Date().toISOString(),
       system: {
-        status: 'healthy',
+        status: "healthy",
         uptime: systemMetrics.uptime,
         memory: {
           used: Math.round(systemMetrics.memory.heapUsed / 1024 / 1024),
@@ -79,7 +84,7 @@ export const GET = createApiRoute(
         nodeVersion: systemMetrics.nodeVersion,
         environment: systemMetrics.environment,
       },
-      
+
       users: {
         total: Object.values(usersByRole).reduce((a, b) => a + b, 0),
         breakdown: {
@@ -89,36 +94,41 @@ export const GET = createApiRoute(
           parent: usersByRole.PARENT || 0,
         },
       },
-      
+
       content: {
         events: totalEvents,
         documents: totalDocuments,
         meetings: totalMeetings,
         photos: totalPhotos,
         videos: totalVideos,
-        total: totalEvents + totalDocuments + totalMeetings + totalPhotos + totalVideos,
+        total:
+          totalEvents +
+          totalDocuments +
+          totalMeetings +
+          totalPhotos +
+          totalVideos,
       },
-      
+
       errors: errorMetrics,
-      
+
       performance: {
         avgResponseTime: performanceMetrics.avgResponseTime,
         throughput: performanceMetrics.throughput,
         activeConnections: performanceMetrics.activeConnections,
         healthScore: 98.5, // Calculated from various metrics
       },
-      
+
       security: {
         activeThreats: 0,
         blockedAttempts: 0,
         lastSecurityScan: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-        securityScore: 'A+',
+        securityScore: "A+",
       },
-      
+
       database: {
-        status: 'connected',
+        status: "connected",
         connectionPoolSize: 10, // From Prisma config
-        queryPerformance: 'optimal',
+        queryPerformance: "optimal",
         lastBackup: new Date(Date.now() - 86400000).toISOString(), // 24 hours ago
       },
     };
@@ -126,8 +136,8 @@ export const GET = createApiRoute(
     return createSuccessResponse(masterDashboard);
   },
   {
-    requiredRole: 'MASTER_ONLY',
-  }
+    requiredRole: "MASTER_ONLY",
+  },
 );
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";

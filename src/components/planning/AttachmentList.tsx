@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   FileText,
   Image as ImageIcon,
   Download,
   ExternalLink,
   Trash2,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { OptimizedImage } from '@/components/ui/optimized-image';
-import type { SimpleFileMetadata as FileMetadata } from '@/lib/simple-upload';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { OptimizedImage } from "@/components/ui/optimized-image";
+import type { SimpleFileMetadata as FileMetadata } from "@/lib/simple-upload";
 
 // i18n
-import { useLanguage } from '@/components/language/LanguageContext';
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface AttachmentListProps {
   attachments: FileMetadata[];
@@ -34,15 +34,15 @@ export function AttachmentList({
     return (
       <div className="text-center py-8 text-gray-500">
         <FileText className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-        <p>{t('attachment.empty', 'common')}</p>
+        <p>{t("attachment.empty", "common")}</p>
       </div>
     );
   }
 
   const getFileIcon = (fileType: string) => {
     if (
-      fileType.startsWith('image/') ||
-      ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileType)
+      fileType.startsWith("image/") ||
+      ["jpg", "jpeg", "png", "gif", "webp"].includes(fileType)
     ) {
       return <ImageIcon className="h-5 w-5" />;
     }
@@ -51,30 +51,33 @@ export function AttachmentList({
 
   const isImageFile = (fileType: string) => {
     return (
-      fileType.startsWith('image/') ||
-      ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileType)
+      fileType.startsWith("image/") ||
+      ["jpg", "jpeg", "png", "gif", "webp"].includes(fileType)
     );
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const formatUploadDate = (dateString: string) => {
     try {
-      return new Date(dateString).toLocaleDateString(language === 'es' ? 'es-CL' : 'en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
+      return new Date(dateString).toLocaleDateString(
+        language === "es" ? "es-CL" : "en-US",
+        {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        },
+      );
     } catch (error) {
-      return t('attachment.unknown_date', 'common');
+      return t("attachment.unknown_date", "common");
     }
   };
 
@@ -85,7 +88,7 @@ export function AttachmentList({
     try {
       await onDelete(fileId);
     } catch (error) {
-      console.error('Error deleting file:', error);
+      console.error("Error deleting file:", error);
     } finally {
       setDeletingId(null);
     }
@@ -93,7 +96,7 @@ export function AttachmentList({
 
   return (
     <div className="space-y-3">
-      {attachments.map(file => (
+      {attachments.map((file) => (
         <Card key={file.id} className="border border-gray-200">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -121,7 +124,10 @@ export function AttachmentList({
                   <div className="flex items-center space-x-4 mt-1 text-xs text-gray-500">
                     <span>{formatFileSize(file.size)}</span>
                     <span>•</span>
-                    <span>{t('attachment.uploaded', 'common')} {formatUploadDate(file.uploadedAt)}</span>
+                    <span>
+                      {t("attachment.uploaded", "common")}{" "}
+                      {formatUploadDate(file.uploadedAt)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -136,7 +142,9 @@ export function AttachmentList({
                     className="flex items-center space-x-1"
                   >
                     <ExternalLink className="h-3 w-3" />
-                    <span className="hidden sm:inline">{t('attachment.view', 'common')}</span>
+                    <span className="hidden sm:inline">
+                      {t("attachment.view", "common")}
+                    </span>
                   </a>
                 </Button>
 
@@ -148,7 +156,9 @@ export function AttachmentList({
                     className="flex items-center space-x-1"
                   >
                     <Download className="h-3 w-3" />
-                    <span className="hidden sm:inline">{t('attachment.download', 'common')}</span>
+                    <span className="hidden sm:inline">
+                      {t("attachment.download", "common")}
+                    </span>
                   </a>
                 </Button>
 
@@ -163,7 +173,9 @@ export function AttachmentList({
                   >
                     <Trash2 className="h-3 w-3" />
                     <span className="hidden sm:inline">
-                      {deletingId === file.id ? t('planning.deleting', 'common') : t('planning.file.delete', 'common')}
+                      {deletingId === file.id
+                        ? t("planning.deleting", "common")
+                        : t("planning.file.delete", "common")}
                     </span>
                   </Button>
                 )}

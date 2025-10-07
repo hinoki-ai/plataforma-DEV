@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertCircle, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { Component, ErrorInfo, ReactNode } from "react";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface Props {
   children: ReactNode;
@@ -29,8 +29,8 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Use enhanced structured logging
-    import('@/lib/logger').then(({ logger }) =>
-      logger.logErrorBoundary(error, errorInfo, 'ErrorBoundary')
+    import("@/lib/logger").then(({ logger }) =>
+      logger.logErrorBoundary(error, errorInfo, "ErrorBoundary"),
     );
 
     this.setState({
@@ -48,8 +48,8 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   private handleGoHome = () => {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/';
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
     }
   };
 
@@ -72,7 +72,7 @@ export class ErrorBoundary extends Component<Props, State> {
               Lo sentimos, ha ocurrido un error inesperado. Por favor, intenta
               nuevamente.
             </p>
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === "development" && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
                   Ver detalles del error
@@ -86,7 +86,7 @@ export class ErrorBoundary extends Component<Props, State> {
                       <strong>Stack:</strong>
                       <pre className="mt-1 whitespace-pre-wrap">
                         {this.state.error.stack.slice(0, 500)}
-                        {this.state.error.stack.length > 500 ? '...' : ''}
+                        {this.state.error.stack.length > 500 ? "..." : ""}
                       </pre>
                     </div>
                   )}
@@ -96,8 +96,8 @@ export class ErrorBoundary extends Component<Props, State> {
                       <pre className="mt-1 whitespace-pre-wrap">
                         {this.state.errorInfo.componentStack.slice(0, 300)}
                         {this.state.errorInfo.componentStack.length > 300
-                          ? '...'
-                          : ''}
+                          ? "..."
+                          : ""}
                       </pre>
                     </div>
                   )}
@@ -120,7 +120,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="text-xs text-muted-foreground mt-4 pt-4 border-t">
               <p>¿El problema persiste?</p>
               <p>
-                Escríbenos a:{' '}
+                Escríbenos a:{" "}
                 <a
                   href="mailto:soporte@manitospintadas.cl"
                   className="text-primary hover:underline"

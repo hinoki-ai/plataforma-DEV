@@ -26,11 +26,11 @@ graph TB
 
 ## 🌐 Environment Structure
 
-| Environment | Branch | URL | Purpose | Auto-Deploy | Backend |
-|-------------|--------|-----|---------|-------------|---------|
-| **Main Production** | `main` | `manitospintadas.cl` | Primary school site | ❌ Protected | Convex Production |
-| **Development** | `dev` | `school.aramac.dev` | Testing & Integration | ✅ Frequent Auto | Convex Development |
-| **Production** | `prod` | `manitospintadas.cl` | Live Production | ⚠️ Rare Manual | Convex Production |
+| Environment         | Branch | URL                  | Purpose               | Auto-Deploy      | Backend            |
+| ------------------- | ------ | -------------------- | --------------------- | ---------------- | ------------------ |
+| **Main Production** | `main` | `manitospintadas.cl` | Primary school site   | ❌ Protected     | Convex Production  |
+| **Development**     | `dev`  | `school.aramac.dev`  | Testing & Integration | ✅ Frequent Auto | Convex Development |
+| **Production**      | `prod` | `manitospintadas.cl` | Live Production       | ⚠️ Rare Manual   | Convex Production  |
 
 ## 🚀 Deployment Workflows
 
@@ -156,7 +156,7 @@ npm run dev
    This will:
    - Create/open your Convex project
    - Generate deployment URL (NEXT_PUBLIC_CONVEX_URL)
-   - Create convex/_generated/ types
+   - Create convex/\_generated/ types
 
 2. **Configure environment variables**:
 

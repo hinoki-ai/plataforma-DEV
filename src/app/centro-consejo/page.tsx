@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useResponsiveMode } from '@/lib/hooks/useDesktopToggle';
-import { typography, layout } from '@/lib/responsive-utils';
-import { motion, AnimatePresence, Variants } from 'motion/react';
-import Header from '@/components/layout/Header';
-import { FixedBackgroundLayout } from '@/components/layout/FixedBackgroundLayout';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
+import { typography, layout } from "@/lib/responsive-utils";
+import { motion, AnimatePresence, Variants } from "motion/react";
+import Header from "@/components/layout/Header";
+import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
 
 import {
   Users,
@@ -22,18 +22,18 @@ import {
   Phone,
   Mail,
   Check,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UnifiedSignupForm } from '@/components/UnifiedSignupForm';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UnifiedSignupForm } from "@/components/UnifiedSignupForm";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 const fadeInUp: Variants = {
   initial: { opacity: 0, y: 60 },
@@ -50,25 +50,25 @@ const staggerChildren: Variants = {
 
 // Testimonial avatars mapping
 const testimonialAvatars = {
-  'maria_gonzalez': '👩‍👧',
-  'carlos_rodriguez': '👨‍👦',
-  'ana_silva': '👩‍👧‍👦',
-  'pedro_morales': '👨‍👧',
-  'isabel_fernandez': '👩‍👦',
-  'roberto_jimenez': '👨‍👧‍👦',
-  'carmen_vega': '👩‍👧‍👧',
-  'miguel_torres': '👨‍👦‍👦',
-  'patricia_lopez': '👩‍👧‍👦',
-  'francisco_herrera': '👨‍👧',
-  'sofia_mendoza': '👩‍👦',
-  'diego_castro': '👨‍👧‍👦',
-  'valentina_ruiz': '👩‍👧‍👧',
-  'andres_moreno': '👨‍👦‍👦',
-  'daniela_paredes': '👩‍👧‍👦',
+  maria_gonzalez: "👩‍👧",
+  carlos_rodriguez: "👨‍👦",
+  ana_silva: "👩‍👧‍👦",
+  pedro_morales: "👨‍👧",
+  isabel_fernandez: "👩‍👦",
+  roberto_jimenez: "👨‍👧‍👦",
+  carmen_vega: "👩‍👧‍👧",
+  miguel_torres: "👨‍👦‍👦",
+  patricia_lopez: "👩‍👧‍👦",
+  francisco_herrera: "👨‍👧",
+  sofia_mendoza: "👩‍👦",
+  diego_castro: "👨‍👧‍👦",
+  valentina_ruiz: "👩‍👧‍👧",
+  andres_moreno: "👨‍👦‍👦",
+  daniela_paredes: "👩‍👧‍👦",
 };
 
 export default function CentroConsejoPage() {
-  const { t } = useDivineParsing(['common']);
+  const { t } = useDivineParsing(["common"]);
   const { isDesktopForced } = useResponsiveMode();
   const [mounted, setMounted] = useState(false);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
@@ -76,39 +76,39 @@ export default function CentroConsejoPage() {
   const features = [
     {
       icon: UsersRound,
-      title: t('centro_consejo.feature_community', 'common'),
-      description: t('centro_consejo.feature_community_desc', 'common'),
-      color: 'text-blue-600',
+      title: t("centro_consejo.feature_community", "common"),
+      description: t("centro_consejo.feature_community_desc", "common"),
+      color: "text-blue-600",
     },
     {
       icon: Shield,
-      title: t('centro_consejo.feature_transparency', 'common'),
-      description: t('centro_consejo.feature_transparency_desc', 'common'),
-      color: 'text-green-600',
+      title: t("centro_consejo.feature_transparency", "common"),
+      description: t("centro_consejo.feature_transparency_desc", "common"),
+      color: "text-green-600",
     },
     {
       icon: BookOpen,
-      title: t('centro_consejo.feature_resources', 'common'),
-      description: t('centro_consejo.feature_resources_desc', 'common'),
-      color: 'text-purple-600',
+      title: t("centro_consejo.feature_resources", "common"),
+      description: t("centro_consejo.feature_resources_desc", "common"),
+      color: "text-purple-600",
     },
     {
       icon: Handshake,
-      title: t('centro_consejo.feature_support', 'common'),
-      description: t('centro_consejo.feature_support_desc', 'common'),
-      color: 'text-pink-600',
+      title: t("centro_consejo.feature_support", "common"),
+      description: t("centro_consejo.feature_support_desc", "common"),
+      color: "text-pink-600",
     },
     {
       icon: Calendar,
-      title: t('centro_consejo.feature_participation', 'common'),
-      description: t('centro_consejo.feature_participation_desc', 'common'),
-      color: 'text-orange-600',
+      title: t("centro_consejo.feature_participation", "common"),
+      description: t("centro_consejo.feature_participation_desc", "common"),
+      color: "text-orange-600",
     },
     {
       icon: Award,
-      title: t('centro_consejo.feature_recognition', 'common'),
-      description: t('centro_consejo.feature_recognition_desc', 'common'),
-      color: 'text-indigo-600',
+      title: t("centro_consejo.feature_recognition", "common"),
+      description: t("centro_consejo.feature_recognition_desc", "common"),
+      color: "text-indigo-600",
     },
   ];
 
@@ -119,7 +119,7 @@ export default function CentroConsejoPage() {
   // Auto-rotate testimonials every 7 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTestimonialIndex(prev => {
+      setCurrentTestimonialIndex((prev) => {
         const nextIndex = prev + 3;
         const testimonials = getTestimonials();
         return nextIndex >= testimonials.length ? 0 : nextIndex;
@@ -132,18 +132,30 @@ export default function CentroConsejoPage() {
   // Get testimonials from translations
   const getTestimonials = () => {
     const testimonialKeys = [
-      'maria_gonzalez', 'carlos_rodriguez', 'ana_silva', 'pedro_morales',
-      'isabel_fernandez', 'roberto_jimenez', 'carmen_vega', 'miguel_torres',
-      'patricia_lopez', 'francisco_herrera', 'sofia_mendoza', 'diego_castro',
-      'valentina_ruiz', 'andres_moreno', 'daniela_paredes'
+      "maria_gonzalez",
+      "carlos_rodriguez",
+      "ana_silva",
+      "pedro_morales",
+      "isabel_fernandez",
+      "roberto_jimenez",
+      "carmen_vega",
+      "miguel_torres",
+      "patricia_lopez",
+      "francisco_herrera",
+      "sofia_mendoza",
+      "diego_castro",
+      "valentina_ruiz",
+      "andres_moreno",
+      "daniela_paredes",
     ];
-    
-    return testimonialKeys.map(key => ({
+
+    return testimonialKeys.map((key) => ({
       id: key,
-      name: t(`centro_consejo.testimonials.${key}.name`, 'common'),
-      role: t(`centro_consejo.testimonials.${key}.role`, 'common'),
-      content: t(`centro_consejo.testimonials.${key}.content`, 'common'),
-      avatar: testimonialAvatars[key as keyof typeof testimonialAvatars] || '👤'
+      name: t(`centro_consejo.testimonials.${key}.name`, "common"),
+      role: t(`centro_consejo.testimonials.${key}.role`, "common"),
+      content: t(`centro_consejo.testimonials.${key}.content`, "common"),
+      avatar:
+        testimonialAvatars[key as keyof typeof testimonialAvatars] || "👤",
     }));
   };
 
@@ -155,7 +167,7 @@ export default function CentroConsejoPage() {
       const index = (currentTestimonialIndex + i) % testimonials.length;
       indices.push(index);
     }
-    return indices.map(index => testimonials[index]);
+    return indices.map((index) => testimonials[index]);
   };
 
   return (
@@ -164,7 +176,7 @@ export default function CentroConsejoPage() {
       overlayType="gradient"
       responsivePositioning="default"
       pageTransitionProps={{
-        skeletonType: 'centro-consejo',
+        skeletonType: "centro-consejo",
         duration: 700,
         enableProgressiveAnimation: true,
       }}
@@ -184,11 +196,11 @@ export default function CentroConsejoPage() {
                 variants={fadeInUp}
                 className={`${typography.heading(isDesktopForced)} font-bold text-white mb-6 transition-all duration-700 ease-out ${
                   mounted
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-4'
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
                 }`}
               >
-                {t('centro_consejo.title', 'common')}
+                {t("centro_consejo.title", "common")}
               </motion.h1>
 
               {/* Signup Form Section */}
@@ -196,23 +208,23 @@ export default function CentroConsejoPage() {
                 variants={fadeInUp}
                 className={`mt-8 transition-all duration-700 ease-out delay-400 ${
                   mounted
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-4'
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
                 }`}
               >
                 <div
-                  className={`grid ${isDesktopForced ? 'grid-cols-3' : 'grid-cols-1 lg:grid-cols-3'} gap-6 items-start`}
+                  className={`grid ${isDesktopForced ? "grid-cols-3" : "grid-cols-1 lg:grid-cols-3"} gap-6 items-start`}
                 >
                   {/* Unified Signup Form - Left Column (2/3 width) */}
                   <div
-                    className={`${isDesktopForced ? 'col-span-2' : 'col-span-1 lg:col-span-2'}`}
+                    className={`${isDesktopForced ? "col-span-2" : "col-span-1 lg:col-span-2"}`}
                   >
                     <UnifiedSignupForm />
                   </div>
 
                   {/* Testimonials - Right Column (1/3 width) */}
                   <div
-                    className={`${isDesktopForced ? 'col-span-1' : 'col-span-1 lg:col-span-1'}`}
+                    className={`${isDesktopForced ? "col-span-1" : "col-span-1 lg:col-span-1"}`}
                   >
                     {/* Fixed height testimonials container matching form height */}
                     <div className="relative mt-8 mb-8">
@@ -227,7 +239,7 @@ export default function CentroConsejoPage() {
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{
                                   duration: 0.6,
-                                  ease: 'easeInOut',
+                                  ease: "easeInOut",
                                   delay: index * 0.1,
                                 }}
                                 className="flex-1"
@@ -253,7 +265,7 @@ export default function CentroConsejoPage() {
                                   </CardContent>
                                 </Card>
                               </motion.div>
-                            )
+                            ),
                           )}
                         </div>
                       </AnimatePresence>
@@ -269,7 +281,7 @@ export default function CentroConsejoPage() {
       {/* Features Section */}
       <section
         className={`${layout.spacing.section(isDesktopForced)} transition-all duration-700 ease-out delay-500 ${
-          mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
         <div className={`${layout.container(isDesktopForced)}`}>
@@ -277,12 +289,12 @@ export default function CentroConsejoPage() {
             <h2
               className={`${typography.heading(isDesktopForced)} font-bold text-white mb-4`}
             >
-              {t('centro_consejo.subtitle', 'common')}
+              {t("centro_consejo.subtitle", "common")}
             </h2>
             <p
               className={`${typography.body(isDesktopForced)} text-white/80 max-w-2xl mx-auto`}
             >
-              {t('centro_consejo.description', 'common')}
+              {t("centro_consejo.description", "common")}
             </p>
           </div>
 
@@ -322,25 +334,25 @@ export default function CentroConsejoPage() {
       {/* Footer with proper contrast and accessibility */}
       <footer
         className={`bg-gray-900/95 backdrop-blur-sm text-white py-12 transition-all duration-700 ease-out delay-1000 ${
-          mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
         role="contentinfo"
-        aria-label={t('centro_consejo.footer.contact_info_aria', 'common')}
+        aria-label={t("centro_consejo.footer.contact_info_aria", "common")}
       >
         <div className={layout.container(isDesktopForced)}>
           <div
             className={
               isDesktopForced
-                ? 'grid grid-cols-3 gap-8'
-                : 'grid grid-cols-1 md:grid-cols-3 gap-8'
+                ? "grid grid-cols-3 gap-8"
+                : "grid grid-cols-1 md:grid-cols-3 gap-8"
             }
           >
             <div>
               <h3 className="text-xl font-bold mb-4 text-white">
-                {t('centro_consejo.footer.title', 'common')}
+                {t("centro_consejo.footer.title", "common")}
               </h3>
               <p className="text-gray-300 mb-4">
-                {t('centro_consejo.footer.description', 'common')}
+                {t("centro_consejo.footer.description", "common")}
               </p>
               <div className="space-y-2 text-gray-300">
                 <p>📍 Anibal Pinto Nº 160, Los Sauces, Chile</p>
@@ -351,25 +363,31 @@ export default function CentroConsejoPage() {
 
             <div>
               <h4 className="text-lg font-semibold mb-4 text-white">
-                {t('centro_consejo.footer.quick_access', 'common')}
+                {t("centro_consejo.footer.quick_access", "common")}
               </h4>
               <ul className="space-y-2">
                 <li>
                   <Link
                     href="/centro-consejo/dashboard"
                     className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                    aria-label={t('centro_consejo.footer.dashboard_aria', 'common')}
+                    aria-label={t(
+                      "centro_consejo.footer.dashboard_aria",
+                      "common",
+                    )}
                   >
-                    {t('centro_consejo.footer.dashboard_link', 'common')}
+                    {t("centro_consejo.footer.dashboard_link", "common")}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/centro-consejo/profile"
                     className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                    aria-label={t('centro_consejo.footer.profile_aria', 'common')}
+                    aria-label={t(
+                      "centro_consejo.footer.profile_aria",
+                      "common",
+                    )}
                   >
-                    {t('centro_consejo.footer.profile_link', 'common')}
+                    {t("centro_consejo.footer.profile_link", "common")}
                   </Link>
                 </li>
               </ul>
@@ -377,29 +395,32 @@ export default function CentroConsejoPage() {
 
             <div>
               <h4 className="text-lg font-semibold mb-4 text-white">
-                {t('centro_consejo.footer.schedule_title', 'common')}
+                {t("centro_consejo.footer.schedule_title", "common")}
               </h4>
               <ul className="space-y-2 text-gray-300">
-                <li>{t('centro_consejo.footer.meetings', 'common')}</li>
-                <li>{t('centro_consejo.footer.time', 'common')}</li>
-                <li>{t('centro_consejo.footer.location', 'common')}</li>
+                <li>{t("centro_consejo.footer.meetings", "common")}</li>
+                <li>{t("centro_consejo.footer.time", "common")}</li>
+                <li>{t("centro_consejo.footer.location", "common")}</li>
               </ul>
             </div>
           </div>
 
           <div className="border-t border-gray-700 mt-8 pt-8 text-center">
             <p className="text-gray-300 pb-3">
-              {t('centro_consejo.footer.school_info', 'common')}
+              {t("centro_consejo.footer.school_info", "common")}
             </p>
             <p className="text-gray-300 pb-3">
-              {t('centro_consejo.footer.copyright', 'common').replace('{year}', new Date().getFullYear().toString())}
+              {t("centro_consejo.footer.copyright", "common").replace(
+                "{year}",
+                new Date().getFullYear().toString(),
+              )}
             </p>
             <p className="text-gray-300">
-              {t('centro_consejo.footer.part_of', 'common')}{' '}
+              {t("centro_consejo.footer.part_of", "common")}{" "}
               <Link
                 href="/"
                 className="text-gray-300 hover:text-white transition duration-200 underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                aria-label={t('centro_consejo.footer.home_link_aria', 'common')}
+                aria-label={t("centro_consejo.footer.home_link_aria", "common")}
               >
                 Manitos Pintadas
               </Link>

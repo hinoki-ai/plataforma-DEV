@@ -1,23 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-} from '@/components/ui/sheet';
-import {
-  Search,
-  X,
-  ArrowUp,
-  WifiOff,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useSwipeGesture, useHapticFeedback } from '@/hooks/useGestures';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetHeader } from "@/components/ui/sheet";
+import { Search, X, ArrowUp, WifiOff } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useSwipeGesture, useHapticFeedback } from "@/hooks/useGestures";
 
 // Mobile-first bottom navigation
 interface BottomNavigationProps {
@@ -46,11 +37,11 @@ export function BottomNavigation({
       className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border md:hidden"
     >
       <div className="flex items-center justify-around px-2 py-2 safe-area-pb">
-        {items.map(item => {
+        {items.map((item) => {
           const Icon = item.icon;
           const isActive =
             currentPath === item.href ||
-            currentPath.startsWith(item.href + '/');
+            currentPath.startsWith(item.href + "/");
 
           return (
             <motion.button
@@ -61,10 +52,10 @@ export function BottomNavigation({
                 onNavigate(item.href);
               }}
               className={cn(
-                'flex flex-col items-center justify-center p-2 rounded-lg transition-colors min-w-[60px]',
+                "flex flex-col items-center justify-center p-2 rounded-lg transition-colors min-w-[60px]",
                 isActive
-                  ? 'text-primary bg-primary/10'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
               )}
             >
               <div className="relative">
@@ -74,7 +65,7 @@ export function BottomNavigation({
                     variant="destructive"
                     className="absolute -top-2 -right-2 h-4 w-4 p-0 text-xs flex items-center justify-center min-w-[16px]"
                   >
-                    {item.badge > 99 ? '99+' : item.badge}
+                    {item.badge > 99 ? "99+" : item.badge}
                   </Badge>
                 )}
               </div>
@@ -112,15 +103,22 @@ export function PullToRefresh({
 
   const handleTouchStart = useCallback(
     (e: TouchEvent) => {
-      if (disabled || typeof window === 'undefined' || window.scrollY > 10) return;
+      if (disabled || typeof window === "undefined" || window.scrollY > 10)
+        return;
       startYRef.current = e.touches[0].clientY;
     },
-    [disabled]
+    [disabled],
   );
 
   const handleTouchMove = useCallback(
     (e: TouchEvent) => {
-      if (disabled || typeof window === 'undefined' || !startYRef.current || window.scrollY > 10) return;
+      if (
+        disabled ||
+        typeof window === "undefined" ||
+        !startYRef.current ||
+        window.scrollY > 10
+      )
+        return;
 
       const currentY = e.touches[0].clientY;
       const deltaY = currentY - startYRef.current;
@@ -139,7 +137,7 @@ export function PullToRefresh({
         e.preventDefault();
       }
     },
-    [disabled, threshold, isPulling, tapFeedback]
+    [disabled, threshold, isPulling, tapFeedback],
   );
 
   const handleTouchEnd = useCallback(async () => {
@@ -169,18 +167,18 @@ export function PullToRefresh({
     const container = containerRef.current;
     if (!container) return;
 
-    container.addEventListener('touchstart', handleTouchStart, {
+    container.addEventListener("touchstart", handleTouchStart, {
       passive: false,
     });
-    container.addEventListener('touchmove', handleTouchMove, {
+    container.addEventListener("touchmove", handleTouchMove, {
       passive: false,
     });
-    container.addEventListener('touchend', handleTouchEnd);
+    container.addEventListener("touchend", handleTouchEnd);
 
     return () => {
-      container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("touchend", handleTouchEnd);
     };
   }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
 
@@ -196,7 +194,7 @@ export function PullToRefresh({
             animate={{
               opacity: 1,
               y: Math.max(0, pullDistance - 50),
-              transition: { type: 'spring', damping: 20 },
+              transition: { type: "spring", damping: 20 },
             }}
             exit={{ opacity: 0, y: -50 }}
             className="absolute top-0 left-0 right-0 z-10 flex justify-center py-4"
@@ -206,18 +204,18 @@ export function PullToRefresh({
                 animate={{
                   rotate: isRefreshing ? 360 : rotationAngle,
                   transition: isRefreshing
-                    ? { duration: 1, repeat: Infinity, ease: 'linear' }
-                    : { type: 'spring', damping: 20 },
+                    ? { duration: 1, repeat: Infinity, ease: "linear" }
+                    : { type: "spring", damping: 20 },
                 }}
               >
                 <ArrowUp className="h-4 w-4 text-primary" />
               </motion.div>
               <span className="text-sm text-muted-foreground">
                 {isRefreshing
-                  ? 'Actualizando...'
+                  ? "Actualizando..."
                   : pullDistance >= threshold
-                    ? 'Suelta para actualizar'
-                    : 'Desliza para actualizar'}
+                    ? "Suelta para actualizar"
+                    : "Desliza para actualizar"}
               </span>
             </div>
           </motion.div>
@@ -228,7 +226,7 @@ export function PullToRefresh({
       <motion.div
         animate={{
           y: Math.max(0, pullDistance * 0.3),
-          transition: { type: 'spring', damping: 20 },
+          transition: { type: "spring", damping: 20 },
         }}
       >
         {children}
@@ -242,18 +240,18 @@ interface FloatingActionButtonProps {
   icon: React.ComponentType<{ className?: string }>;
   onClick: () => void;
   label?: string;
-  position?: 'bottom-right' | 'bottom-left' | 'bottom-center';
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  position?: "bottom-right" | "bottom-left" | "bottom-center";
+  size?: "sm" | "md" | "lg";
+  variant?: "primary" | "secondary" | "success" | "warning" | "danger";
 }
 
 export function FloatingActionButton({
   icon: Icon,
   onClick,
   label,
-  position = 'bottom-right',
-  size = 'md',
-  variant = 'primary',
+  position = "bottom-right",
+  size = "md",
+  variant = "primary",
 }: FloatingActionButtonProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -261,37 +259,37 @@ export function FloatingActionButton({
 
   // Auto-hide on scroll down, show on scroll up - hydration-safe
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const handleScroll = () => {
-      if (typeof window === 'undefined') return;
+      if (typeof window === "undefined") return;
       const currentScrollY = window.scrollY;
       setIsVisible(currentScrollY < lastScrollY || currentScrollY < 100);
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
   const positionClasses = {
-    'bottom-right': 'bottom-20 right-4',
-    'bottom-left': 'bottom-20 left-4',
-    'bottom-center': 'bottom-20 left-1/2 transform -translate-x-1/2',
+    "bottom-right": "bottom-20 right-4",
+    "bottom-left": "bottom-20 left-4",
+    "bottom-center": "bottom-20 left-1/2 transform -translate-x-1/2",
   };
 
   const sizeClasses = {
-    sm: 'h-12 w-12',
-    md: 'h-14 w-14',
-    lg: 'h-16 w-16',
+    sm: "h-12 w-12",
+    md: "h-14 w-14",
+    lg: "h-16 w-16",
   };
 
   const variantClasses = {
-    primary: 'bg-primary text-primary-foreground shadow-lg',
-    secondary: 'bg-secondary text-secondary-foreground shadow-lg',
-    success: 'bg-green-500 text-white shadow-lg',
-    warning: 'bg-yellow-500 text-white shadow-lg',
-    danger: 'bg-red-500 text-white shadow-lg',
+    primary: "bg-primary text-primary-foreground shadow-lg",
+    secondary: "bg-secondary text-secondary-foreground shadow-lg",
+    success: "bg-green-500 text-white shadow-lg",
+    warning: "bg-yellow-500 text-white shadow-lg",
+    danger: "bg-red-500 text-white shadow-lg",
   };
 
   return (
@@ -308,10 +306,10 @@ export function FloatingActionButton({
             onClick();
           }}
           className={cn(
-            'fixed z-40 rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-xl md:hidden',
+            "fixed z-40 rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-xl md:hidden",
             positionClasses[position],
             sizeClasses[size],
-            variantClasses[variant]
+            variantClasses[variant],
           )}
           aria-label={label}
         >
@@ -320,7 +318,7 @@ export function FloatingActionButton({
           {label && (
             <motion.span
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 'auto', opacity: 1 }}
+              animate={{ width: "auto", opacity: 1 }}
               className="ml-2 text-sm font-medium whitespace-nowrap overflow-hidden"
             >
               {label}
@@ -338,13 +336,13 @@ interface SwipeActionProps {
   leftActions?: Array<{
     icon: React.ComponentType<{ className?: string }>;
     label: string;
-    color: 'red' | 'green' | 'blue' | 'yellow';
+    color: "red" | "green" | "blue" | "yellow";
     action: () => void;
   }>;
   rightActions?: Array<{
     icon: React.ComponentType<{ className?: string }>;
     label: string;
-    color: 'red' | 'green' | 'blue' | 'yellow';
+    color: "red" | "green" | "blue" | "yellow";
     action: () => void;
   }>;
   threshold?: number;
@@ -361,30 +359,27 @@ export function SwipeActions({
   const containerRef = useRef<HTMLDivElement>(null);
   const { tapFeedback } = useHapticFeedback();
 
-  useSwipeGesture(
-    containerRef as unknown as React.RefObject<HTMLElement>,
-    {
-      onSwipeLeft: event => {
-        if (rightActions.length === 0) return;
+  useSwipeGesture(containerRef as unknown as React.RefObject<HTMLElement>, {
+    onSwipeLeft: (event) => {
+      if (rightActions.length === 0) return;
 
-        if (event.distance >= threshold) {
-          tapFeedback();
-          rightActions[0].action();
-          resetSwipe();
-        }
-      },
-      onSwipeRight: event => {
-        if (leftActions.length === 0) return;
+      if (event.distance >= threshold) {
+        tapFeedback();
+        rightActions[0].action();
+        resetSwipe();
+      }
+    },
+    onSwipeRight: (event) => {
+      if (leftActions.length === 0) return;
 
-        if (event.distance >= threshold) {
-          tapFeedback();
-          leftActions[0].action();
-          resetSwipe();
-        }
-      },
-      threshold: threshold / 2,
-    }
-  );
+      if (event.distance >= threshold) {
+        tapFeedback();
+        leftActions[0].action();
+        resetSwipe();
+      }
+    },
+    threshold: threshold / 2,
+  });
 
   const resetSwipe = useCallback(() => {
     setIsAnimating(true);
@@ -393,10 +388,10 @@ export function SwipeActions({
   }, []);
 
   const colorClasses = {
-    red: 'bg-red-500 text-white',
-    green: 'bg-green-500 text-white',
-    blue: 'bg-blue-500 text-white',
-    yellow: 'bg-yellow-500 text-white',
+    red: "bg-red-500 text-white",
+    green: "bg-green-500 text-white",
+    blue: "bg-blue-500 text-white",
+    yellow: "bg-yellow-500 text-white",
   };
 
   return (
@@ -410,8 +405,8 @@ export function SwipeActions({
               <motion.button
                 key={index}
                 className={cn(
-                  'h-full px-4 flex flex-col items-center justify-center',
-                  colorClasses[action.color]
+                  "h-full px-4 flex flex-col items-center justify-center",
+                  colorClasses[action.color],
                 )}
                 animate={{
                   width: Math.max(0, swipeOffset) / leftActions.length,
@@ -436,8 +431,8 @@ export function SwipeActions({
               <motion.button
                 key={index}
                 className={cn(
-                  'h-full px-4 flex flex-col items-center justify-center',
-                  colorClasses[action.color]
+                  "h-full px-4 flex flex-col items-center justify-center",
+                  colorClasses[action.color],
                 )}
                 animate={{
                   width: Math.max(0, -swipeOffset) / rightActions.length,
@@ -459,7 +454,7 @@ export function SwipeActions({
         animate={{
           x: isAnimating ? 0 : swipeOffset,
           transition: isAnimating
-            ? { type: 'spring', damping: 20 }
+            ? { type: "spring", damping: 20 }
             : { duration: 0 },
         }}
         className="relative z-10 bg-background"
@@ -479,13 +474,13 @@ interface MobileSearchProps {
 }
 
 export function MobileSearch({
-  placeholder = 'Buscar...',
+  placeholder = "Buscar...",
   onSearch,
   suggestions = [],
   className,
 }: MobileSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -502,11 +497,11 @@ export function MobileSearch({
       setShowSuggestions(false);
       setIsOpen(false);
     },
-    [onSearch]
+    [onSearch],
   );
 
   return (
-    <div className={cn('md:hidden', className)}>
+    <div className={cn("md:hidden", className)}>
       <Button
         variant="outline"
         className="w-full justify-start text-muted-foreground"
@@ -525,12 +520,12 @@ export function MobileSearch({
                 <Input
                   ref={inputRef}
                   value={query}
-                  onChange={e => {
+                  onChange={(e) => {
                     setQuery(e.target.value);
                     setShowSuggestions(e.target.value.length > 0);
                   }}
-                  onKeyPress={e => {
-                    if (e.key === 'Enter') {
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
                       handleSearch(query);
                     }
                   }}
@@ -554,8 +549,8 @@ export function MobileSearch({
                 Sugerencias
               </h3>
               {suggestions
-                .filter(suggestion =>
-                  suggestion.toLowerCase().includes(query.toLowerCase())
+                .filter((suggestion) =>
+                  suggestion.toLowerCase().includes(query.toLowerCase()),
                 )
                 .slice(0, 8)
                 .map((suggestion, index) => (
@@ -580,8 +575,8 @@ export function MobileSearch({
 export function ConnectionStatus() {
   const [isOnline, setIsOnline] = useState(true);
   const [connection, setConnection] = useState<
-    '4g' | '3g' | '2g' | 'wifi' | 'unknown'
-  >('wifi');
+    "4g" | "3g" | "2g" | "wifi" | "unknown"
+  >("wifi");
 
   useEffect(() => {
     const updateOnlineStatus = () => {
@@ -592,42 +587,44 @@ export function ConnectionStatus() {
     if (navAny.connection) {
       const conn = navAny.connection as any;
       const updateConnection = () => {
-        const raw = (conn.effectiveType as string) || '';
-        const normalized: '4g' | '3g' | '2g' | 'wifi' | 'unknown' =
-          raw === '4g'
-            ? '4g'
-            : raw === '3g'
-              ? '3g'
-              : raw.includes('2g')
-                ? '2g'
-                : 'unknown';
+        const raw = (conn.effectiveType as string) || "";
+        const normalized: "4g" | "3g" | "2g" | "wifi" | "unknown" =
+          raw === "4g"
+            ? "4g"
+            : raw === "3g"
+              ? "3g"
+              : raw.includes("2g")
+                ? "2g"
+                : "unknown";
         setConnection(normalized);
       };
 
-      conn.addEventListener('change', updateConnection);
+      conn.addEventListener("change", updateConnection);
       updateConnection();
     }
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('online', updateOnlineStatus);
-      window.addEventListener('offline', updateOnlineStatus);
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", updateOnlineStatus);
+      window.addEventListener("offline", updateOnlineStatus);
 
       return () => {
-        window.removeEventListener('online', updateOnlineStatus);
-        window.removeEventListener('offline', updateOnlineStatus);
+        window.removeEventListener("online", updateOnlineStatus);
+        window.removeEventListener("offline", updateOnlineStatus);
       };
     }
   }, []);
 
   if (!isOnline) {
     // Trigger unified error page instead of showing banner
-    const offlineError = new Error('Sin conexión a internet. No tienes conexión a internet. Algunas funciones pueden no estar disponibles.');
-    offlineError.name = 'NetworkError';
+    const offlineError = new Error(
+      "Sin conexión a internet. No tienes conexión a internet. Algunas funciones pueden no estar disponibles.",
+    );
+    offlineError.name = "NetworkError";
     throw offlineError;
   }
 
   // Show connection status in development
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     return (
       <motion.div
         initial={{ opacity: 0, y: -50 }}
@@ -660,10 +657,10 @@ export function PerformanceMetrics({
     fps: 0,
     memory: 0,
     loadTime: 0,
-    connection: 'unknown',
+    connection: "unknown",
   });
 
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   useEffect(() => {
     if (!isDevelopment && !showInDevelopment) return;
@@ -672,25 +669,25 @@ export function PerformanceMetrics({
       const navAny = navigator as any;
       const perfAny = performance as any;
       if (perfAny.memory) {
-        setMetrics(prev => ({
+        setMetrics((prev) => ({
           ...prev,
           memory: Math.round(
-            (perfAny.memory.usedJSHeapSize as number) / 1048576
+            (perfAny.memory.usedJSHeapSize as number) / 1048576,
           ),
         }));
       }
 
       if (navAny.connection) {
-        const raw = (navAny.connection.effectiveType as string) || '';
-        const normalized: '4g' | '3g' | '2g' | 'wifi' | 'unknown' =
-          raw === '4g'
-            ? '4g'
-            : raw === '3g'
-              ? '3g'
-              : raw.includes('2g')
-                ? '2g'
-                : 'unknown';
-        setMetrics(prev => ({
+        const raw = (navAny.connection.effectiveType as string) || "";
+        const normalized: "4g" | "3g" | "2g" | "wifi" | "unknown" =
+          raw === "4g"
+            ? "4g"
+            : raw === "3g"
+              ? "3g"
+              : raw.includes("2g")
+                ? "2g"
+                : "unknown";
+        setMetrics((prev) => ({
           ...prev,
           connection: normalized,
         }));

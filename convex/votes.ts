@@ -15,7 +15,7 @@ const voteCategoryValidator = v.union(
   v.literal("CURRICULUM"),
   v.literal("EVENTS"),
   v.literal("POLICIES"),
-  v.literal("OTHER")
+  v.literal("OTHER"),
 );
 
 // ==================== QUERIES ====================
@@ -63,12 +63,12 @@ export const getVoteById = query({
           .query("voteResponses")
           .withIndex("by_optionId", (q) => q.eq("optionId", option._id))
           .collect();
-        
+
         return {
           ...option,
           voteCount: responses.length,
         };
-      })
+      }),
     );
 
     return {
@@ -87,7 +87,7 @@ export const getUserVoteResponse = query({
     return await ctx.db
       .query("voteResponses")
       .withIndex("by_voteId_userId", (q) =>
-        q.eq("voteId", voteId).eq("userId", userId)
+        q.eq("voteId", voteId).eq("userId", userId),
       )
       .first();
   },
@@ -110,7 +110,7 @@ export const createVote = mutation({
   },
   handler: async (ctx, { options, ...args }) => {
     const now = Date.now();
-    
+
     const voteId = await ctx.db.insert("votes", {
       ...args,
       category: args.category ?? "GENERAL",
@@ -129,8 +129,8 @@ export const createVote = mutation({
           text,
           voteId,
           createdAt: now,
-        })
-      )
+        }),
+      ),
     );
 
     return voteId;
@@ -148,7 +148,7 @@ export const castVote = mutation({
     const existingResponse = await ctx.db
       .query("voteResponses")
       .withIndex("by_voteId_userId", (q) =>
-        q.eq("voteId", voteId).eq("userId", userId)
+        q.eq("voteId", voteId).eq("userId", userId),
       )
       .first();
 

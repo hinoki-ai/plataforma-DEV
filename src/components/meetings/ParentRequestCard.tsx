@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Calendar, Clock, User, MessageSquare, Check, X } from 'lucide-react';
-import { Meeting } from '@/lib/prisma-compat-types';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { StatusBadge } from '@/components/ui/status-badge';
-import { toast } from 'sonner';
-import { updateMeetingStatus } from '@/services/actions/meetings';
-import { useLanguage } from '@/components/language/LanguageContext';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Calendar, Clock, User, MessageSquare, Check, X } from "lucide-react";
+import { Meeting } from "@/lib/prisma-compat-types";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { toast } from "sonner";
+import { updateMeetingStatus } from "@/services/actions/meetings";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface ParentRequestCardProps {
   request: Meeting & { teacher?: { name: string; email: string } };
@@ -27,15 +27,15 @@ export function ParentRequestCard({
   const handleApprove = async () => {
     setIsProcessing(true);
     try {
-      const result = await updateMeetingStatus(request.id, 'CONFIRMED');
+      const result = await updateMeetingStatus(request.id, "CONFIRMED");
       if (result.success) {
-        toast.success(t('meeting.approve.success'));
+        toast.success(t("meeting.approve.success"));
         onRefresh?.();
       } else {
-        toast.error(result.error || t('meeting.request.error'));
+        toast.error(result.error || t("meeting.request.error"));
       }
     } catch (error) {
-      toast.error(t('meeting.request.error'));
+      toast.error(t("meeting.request.error"));
     } finally {
       setIsProcessing(false);
     }
@@ -44,15 +44,15 @@ export function ParentRequestCard({
   const handleReject = async () => {
     setIsProcessing(true);
     try {
-      const result = await updateMeetingStatus(request.id, 'CANCELLED');
+      const result = await updateMeetingStatus(request.id, "CANCELLED");
       if (result.success) {
-        toast.success(t('meeting.reject.success'));
+        toast.success(t("meeting.reject.success"));
         onRefresh?.();
       } else {
-        toast.error(result.error || t('meeting.request.error'));
+        toast.error(result.error || t("meeting.request.error"));
       }
     } catch (error) {
-      toast.error(t('meeting.request.error'));
+      toast.error(t("meeting.request.error"));
     } finally {
       setIsProcessing(false);
     }
@@ -91,7 +91,7 @@ export function ParentRequestCard({
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4 text-gray-500" />
             <span>
-              {format(new Date(request.scheduledDate), 'dd MMM yyyy', {
+              {format(new Date(request.scheduledDate), "dd MMM yyyy", {
                 locale: es,
               })}
             </span>

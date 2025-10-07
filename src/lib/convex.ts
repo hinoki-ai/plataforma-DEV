@@ -13,12 +13,16 @@ if (!CONVEX_URL) {
 }
 
 // Create HTTP client for server-side operations
-export const convexHttpClient = CONVEX_URL ? new ConvexHttpClient(CONVEX_URL) : null;
+export const convexHttpClient = CONVEX_URL
+  ? new ConvexHttpClient(CONVEX_URL)
+  : null;
 
 // Helper function to ensure client is available
 export function getConvexClient() {
   if (!convexHttpClient) {
-    throw new Error("Convex client not initialized. Set NEXT_PUBLIC_CONVEX_URL in environment.");
+    throw new Error(
+      "Convex client not initialized. Set NEXT_PUBLIC_CONVEX_URL in environment.",
+    );
   }
   return convexHttpClient;
 }

@@ -1,13 +1,19 @@
-'use client';
+"use client";
 
+import {
+  TeamMemberList,
+  type TeamMember,
+} from "@/components/team/TeamMemberCard";
+import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { useEffect, useState } from "react";
 
-import { TeamMemberList, type TeamMember } from '@/components/team/TeamMemberCard';
-import { FixedBackgroundLayout } from '@/components/layout/FixedBackgroundLayout';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
-import { useEffect, useState } from 'react';
-
-function EquipoMultidisciplinarioContent({ members }: { members: TeamMember[] }) {
-  const { t } = useDivineParsing(['common']);
+function EquipoMultidisciplinarioContent({
+  members,
+}: {
+  members: TeamMember[];
+}) {
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <>
@@ -16,10 +22,10 @@ function EquipoMultidisciplinarioContent({ members }: { members: TeamMember[] })
         <div className="relative z-10 px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl font-bold text-white mb-6 sm:text-5xl lg:text-6xl">
-              {t('team.title', 'common')}
+              {t("team.title", "common")}
             </h1>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              {t('team.description', 'common')}
+              {t("team.description", "common")}
             </p>
           </div>
         </div>
@@ -42,7 +48,7 @@ function EquipoMultidisciplinarioContent({ members }: { members: TeamMember[] })
 }
 
 export default function EquipoMultidisciplinarioPage() {
-  const { t } = useDivineParsing(['common']);
+  const { t } = useDivineParsing(["common"]);
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -50,14 +56,14 @@ export default function EquipoMultidisciplinarioPage() {
   useEffect(() => {
     const loadMembers = async () => {
       try {
-        const response = await fetch('/api/team-members');
+        const response = await fetch("/api/team-members");
         if (!response.ok) {
-          throw new Error('Failed to fetch team members');
+          throw new Error("Failed to fetch team members");
         }
         const result = await response.json();
         setMembers(result.data);
       } catch (err) {
-        console.error('Error loading team members:', err);
+        console.error("Error loading team members:", err);
         setError(true);
       } finally {
         setLoading(false);
@@ -72,7 +78,7 @@ export default function EquipoMultidisciplinarioPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-lg">{t('common.loading', 'common')}</p>
+          <p className="mt-4 text-lg">{t("common.loading", "common")}</p>
         </div>
       </div>
     );
@@ -83,7 +89,7 @@ export default function EquipoMultidisciplinarioPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-600 mb-4">
-            {t('team.error_loading', 'common')}
+            {t("team.error_loading", "common")}
           </h1>
         </div>
       </div>
@@ -96,7 +102,7 @@ export default function EquipoMultidisciplinarioPage() {
       overlayType="gradient"
       responsivePositioning="default"
       pageTransitionProps={{
-        skeletonType: 'equipo-multidisciplinario',
+        skeletonType: "equipo-multidisciplinario",
         duration: 700,
         enableProgressiveAnimation: true,
       }}

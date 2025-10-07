@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 interface SystemStatus {
-  database: 'healthy' | 'warning' | 'error';
-  authentication: 'healthy' | 'warning' | 'error';
-  api: 'healthy' | 'warning' | 'error';
-  storage: 'healthy' | 'warning' | 'error';
+  database: "healthy" | "warning" | "error";
+  authentication: "healthy" | "warning" | "error";
+  api: "healthy" | "warning" | "error";
+  storage: "healthy" | "warning" | "error";
 }
 
 interface PerformanceMetrics {
@@ -22,20 +22,20 @@ interface PerformanceMetrics {
 
 export function SystemHealthMonitor() {
   const [status, setStatus] = useState<SystemStatus>({
-    database: 'healthy',
-    authentication: 'healthy',
-    api: 'healthy',
-    storage: 'healthy',
+    database: "healthy",
+    authentication: "healthy",
+    api: "healthy",
+    storage: "healthy",
   });
 
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     responseTime: 0,
-    uptime: '0d 0h 0m',
+    uptime: "0d 0h 0m",
     activeUsers: 0,
     errorRate: 0,
   });
 
-  const [lastCheck, setLastCheck] = useState<string>('');
+  const [lastCheck, setLastCheck] = useState<string>("");
   const [isChecking, setIsChecking] = useState(false);
 
   const checkSystemHealth = async () => {
@@ -44,16 +44,16 @@ export function SystemHealthMonitor() {
       const start = Date.now();
 
       // Check API health
-      const apiResponse = await fetch('/api/health');
-      const apiStatus = apiResponse.ok ? 'healthy' : 'error';
+      const apiResponse = await fetch("/api/health");
+      const apiStatus = apiResponse.ok ? "healthy" : "error";
 
       // Check database health
-      const dbResponse = await fetch('/api/db/health');
-      const dbStatus = dbResponse.ok ? 'healthy' : 'error';
+      const dbResponse = await fetch("/api/db/health");
+      const dbStatus = dbResponse.ok ? "healthy" : "error";
 
       // Check authentication
-      const authResponse = await fetch('/api/auth/session');
-      const authStatus = authResponse.ok ? 'healthy' : 'warning';
+      const authResponse = await fetch("/api/auth/session");
+      const authStatus = authResponse.ok ? "healthy" : "warning";
 
       const responseTime = Date.now() - start;
 
@@ -61,22 +61,22 @@ export function SystemHealthMonitor() {
         database: dbStatus,
         authentication: authStatus,
         api: apiStatus,
-        storage: 'healthy', // Assume storage is healthy for now
+        storage: "healthy", // Assume storage is healthy for now
       });
 
-      setMetrics(prev => ({
+      setMetrics((prev) => ({
         ...prev,
         responseTime,
       }));
 
       setLastCheck(new Date().toLocaleTimeString());
     } catch (error) {
-      console.error('Health check failed:', error);
+      console.error("Health check failed:", error);
       setStatus({
-        database: 'error',
-        authentication: 'error',
-        api: 'error',
-        storage: 'error',
+        database: "error",
+        authentication: "error",
+        api: "error",
+        storage: "error",
       });
     } finally {
       setIsChecking(false);
@@ -93,7 +93,7 @@ export function SystemHealthMonitor() {
     // Mock some metrics
     setMetrics({
       responseTime: 0,
-      uptime: '2d 14h 23m',
+      uptime: "2d 14h 23m",
       activeUsers: Math.floor(Math.random() * 15) + 1,
       errorRate: Math.random() * 2, // 0-2% error rate
     });
@@ -103,35 +103,35 @@ export function SystemHealthMonitor() {
 
   const getStatusColor = (status: SystemStatus[keyof SystemStatus]) => {
     switch (status) {
-      case 'healthy':
-        return 'default';
-      case 'warning':
-        return 'secondary';
-      case 'error':
-        return 'destructive';
+      case "healthy":
+        return "default";
+      case "warning":
+        return "secondary";
+      case "error":
+        return "destructive";
       default:
-        return 'outline';
+        return "outline";
     }
   };
 
   const getStatusIcon = (status: SystemStatus[keyof SystemStatus]) => {
     switch (status) {
-      case 'healthy':
-        return '✅';
-      case 'warning':
-        return '⚠️';
-      case 'error':
-        return '❌';
+      case "healthy":
+        return "✅";
+      case "warning":
+        return "⚠️";
+      case "error":
+        return "❌";
       default:
-        return '❓';
+        return "❓";
     }
   };
 
-  const overallHealth = Object.values(status).every(s => s === 'healthy')
-    ? 'healthy'
-    : Object.values(status).some(s => s === 'error')
-      ? 'error'
-      : 'warning';
+  const overallHealth = Object.values(status).every((s) => s === "healthy")
+    ? "healthy"
+    : Object.values(status).some((s) => s === "error")
+      ? "error"
+      : "warning";
 
   return (
     <div className="space-y-6">
@@ -144,7 +144,7 @@ export function SystemHealthMonitor() {
               System Health Overview
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              Last checked: {lastCheck || 'Never'}
+              Last checked: {lastCheck || "Never"}
             </p>
           </div>
           <Button
@@ -153,7 +153,7 @@ export function SystemHealthMonitor() {
             onClick={checkSystemHealth}
             disabled={isChecking}
           >
-            {isChecking ? 'Checking...' : 'Check Now'}
+            {isChecking ? "Checking..." : "Check Now"}
           </Button>
         </CardHeader>
         <CardContent>

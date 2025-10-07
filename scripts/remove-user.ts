@@ -4,13 +4,13 @@
  * Removes a specific user by email
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function removeUser(email: string) {
   console.log(`🗑️ Removing user: ${email}`);
-  console.log('🌍 Environment:', process.env.NODE_ENV || 'development');
+  console.log("🌍 Environment:", process.env.NODE_ENV || "development");
 
   try {
     // Find the user first
@@ -40,15 +40,15 @@ async function removeUser(email: string) {
     console.log(`✅ Successfully removed: ${user.name} (${user.email})`);
     return user;
   } catch (error) {
-    console.error('❌ Failed to remove user:', error);
+    console.error("❌ Failed to remove user:", error);
     throw error;
   }
 }
 
 // Remove María López
-removeUser('parent@manitospintadas.cl')
-  .catch(error => {
-    console.error('Fatal error during user removal:', error);
+removeUser("parent@manitospintadas.cl")
+  .catch((error) => {
+    console.error("Fatal error during user removal:", error);
     process.exit(1);
   })
   .finally(async () => {

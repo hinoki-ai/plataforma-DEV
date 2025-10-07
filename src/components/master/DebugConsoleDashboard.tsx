@@ -1,15 +1,34 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import React, { useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Terminal,
   Play,
@@ -25,21 +44,25 @@ import {
   Database,
   Server,
   Globe,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface DebugCommand {
   id: string;
   command: string;
   output: string;
-  status: 'success' | 'error' | 'running';
+  status: "success" | "error" | "running";
   timestamp: string;
   duration: number;
 }
 
 interface SystemLog {
   id: string;
-  level: 'info' | 'warning' | 'error' | 'debug';
+  level: "info" | "warning" | "error" | "debug";
   message: string;
   source: string;
   timestamp: string;
@@ -47,40 +70,64 @@ interface SystemLog {
 
 const debugCommands: DebugCommand[] = [
   {
-    id: '1',
-    command: 'system.health.check',
-    output: 'All systems operational. CPU: 23%, Memory: 67%, Network: 12%',
-    status: 'success',
-    timestamp: '2024-01-15 14:30:25',
+    id: "1",
+    command: "system.health.check",
+    output: "All systems operational. CPU: 23%, Memory: 67%, Network: 12%",
+    status: "success",
+    timestamp: "2024-01-15 14:30:25",
     duration: 45,
   },
   {
-    id: '2',
-    command: 'db.connection.test',
-    output: 'Database connection successful. Pool size: 20, Active: 12',
-    status: 'success',
-    timestamp: '2024-01-15 14:25:10',
+    id: "2",
+    command: "db.connection.test",
+    output: "Database connection successful. Pool size: 20, Active: 12",
+    status: "success",
+    timestamp: "2024-01-15 14:25:10",
     duration: 23,
   },
   {
-    id: '3',
-    command: 'cache.clear.all',
-    output: 'Cache cleared successfully. 1,247 items removed',
-    status: 'success',
-    timestamp: '2024-01-15 14:20:45',
+    id: "3",
+    command: "cache.clear.all",
+    output: "Cache cleared successfully. 1,247 items removed",
+    status: "success",
+    timestamp: "2024-01-15 14:20:45",
     duration: 89,
   },
 ];
 
 const systemLogs: SystemLog[] = [
-  { id: '1', level: 'info', message: 'User authentication successful', source: 'auth-service', timestamp: '2024-01-15 14:30:25' },
-  { id: '2', level: 'warning', message: 'High memory usage detected', source: 'system-monitor', timestamp: '2024-01-15 14:25:10' },
-  { id: '3', level: 'error', message: 'Failed to connect to external API', source: 'api-gateway', timestamp: '2024-01-15 14:20:45' },
-  { id: '4', level: 'debug', message: 'Database query executed in 45ms', source: 'db-service', timestamp: '2024-01-15 14:15:30' },
+  {
+    id: "1",
+    level: "info",
+    message: "User authentication successful",
+    source: "auth-service",
+    timestamp: "2024-01-15 14:30:25",
+  },
+  {
+    id: "2",
+    level: "warning",
+    message: "High memory usage detected",
+    source: "system-monitor",
+    timestamp: "2024-01-15 14:25:10",
+  },
+  {
+    id: "3",
+    level: "error",
+    message: "Failed to connect to external API",
+    source: "api-gateway",
+    timestamp: "2024-01-15 14:20:45",
+  },
+  {
+    id: "4",
+    level: "debug",
+    message: "Database query executed in 45ms",
+    source: "db-service",
+    timestamp: "2024-01-15 14:15:30",
+  },
 ];
 
 function DebugConsoleCard() {
-  const [command, setCommand] = useState('');
+  const [command, setCommand] = useState("");
   const [isExecuting, setIsExecuting] = useState(false);
 
   const handleExecuteCommand = () => {
@@ -90,7 +137,7 @@ function DebugConsoleCard() {
     // Simulate command execution
     setTimeout(() => {
       setIsExecuting(false);
-      console.log('Debug command executed:', command);
+      console.log("Debug command executed:", command);
     }, 2000);
   };
 
@@ -101,7 +148,9 @@ function DebugConsoleCard() {
           <Terminal className="h-5 w-5 text-gray-600" />
           Consola de Debug
         </CardTitle>
-        <CardDescription>Ejecutar comandos de debug y diagnóstico del sistema</CardDescription>
+        <CardDescription>
+          Ejecutar comandos de debug y diagnóstico del sistema
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -111,8 +160,8 @@ function DebugConsoleCard() {
               ⚠️ Comando de Alto Riesgo
             </AlertTitle>
             <AlertDescription className="text-red-700 dark:text-red-300">
-              Los comandos ejecutados aquí pueden afectar el funcionamiento del sistema.
-              Solo para uso de desarrolladores autorizados.
+              Los comandos ejecutados aquí pueden afectar el funcionamiento del
+              sistema. Solo para uso de desarrolladores autorizados.
             </AlertDescription>
           </Alert>
 
@@ -166,7 +215,9 @@ function CommandHistoryCard() {
           <Bug className="h-5 w-5" />
           Historial de Comandos
         </CardTitle>
-        <CardDescription>Historial de comandos de debug ejecutados</CardDescription>
+        <CardDescription>
+          Historial de comandos de debug ejecutados
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -174,17 +225,30 @@ function CommandHistoryCard() {
             <div key={cmd.id} className="border rounded-lg p-4">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  {cmd.status === 'success' && <CheckCircle className="h-4 w-4 text-green-600" />}
-                  {cmd.status === 'error' && <XCircle className="h-4 w-4 text-red-600" />}
-                  {cmd.status === 'running' && <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />}
-                  <Badge variant={
-                    cmd.status === 'success' ? 'default' :
-                    cmd.status === 'error' ? 'destructive' : 'secondary'
-                  }>
+                  {cmd.status === "success" && (
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                  )}
+                  {cmd.status === "error" && (
+                    <XCircle className="h-4 w-4 text-red-600" />
+                  )}
+                  {cmd.status === "running" && (
+                    <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />
+                  )}
+                  <Badge
+                    variant={
+                      cmd.status === "success"
+                        ? "default"
+                        : cmd.status === "error"
+                          ? "destructive"
+                          : "secondary"
+                    }
+                  >
                     {cmd.status}
                   </Badge>
                 </div>
-                <span className="text-sm text-muted-foreground">{cmd.timestamp}</span>
+                <span className="text-sm text-muted-foreground">
+                  {cmd.timestamp}
+                </span>
               </div>
 
               <div className="font-mono text-sm bg-muted p-2 rounded mb-2">
@@ -207,25 +271,26 @@ function CommandHistoryCard() {
 }
 
 function SystemLogsCard() {
-  const [filter, setFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredLogs = useMemo(() => {
-    return systemLogs.filter(log => {
-      const matchesFilter = filter === 'all' || log.level === filter;
-      const matchesSearch = log.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           log.source.toLowerCase().includes(searchTerm.toLowerCase());
+    return systemLogs.filter((log) => {
+      const matchesFilter = filter === "all" || log.level === filter;
+      const matchesSearch =
+        log.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        log.source.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesFilter && matchesSearch;
     });
   }, [filter, searchTerm]);
 
   const getLogIcon = (level: string) => {
     switch (level) {
-      case 'error':
+      case "error":
         return <XCircle className="h-4 w-4 text-red-600" />;
-      case 'warning':
+      case "warning":
         return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
-      case 'info':
+      case "info":
         return <CheckCircle className="h-4 w-4 text-blue-600" />;
       default:
         return <Bug className="h-4 w-4 text-gray-600" />;
@@ -239,7 +304,9 @@ function SystemLogsCard() {
           <AlertTriangle className="h-5 w-5" />
           Logs del Sistema
         </CardTitle>
-        <CardDescription>Monitoreo de logs del sistema en tiempo real</CardDescription>
+        <CardDescription>
+          Monitoreo de logs del sistema en tiempo real
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -269,21 +336,34 @@ function SystemLogsCard() {
 
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {filteredLogs.map((log) => (
-              <div key={log.id} className="flex items-start gap-3 p-3 border rounded-lg">
+              <div
+                key={log.id}
+                className="flex items-start gap-3 p-3 border rounded-lg"
+              >
                 {getLogIcon(log.level)}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <Badge variant={
-                      log.level === 'error' ? 'destructive' :
-                      log.level === 'warning' ? 'default' :
-                      log.level === 'info' ? 'secondary' : 'outline'
-                    }>
+                    <Badge
+                      variant={
+                        log.level === "error"
+                          ? "destructive"
+                          : log.level === "warning"
+                            ? "default"
+                            : log.level === "info"
+                              ? "secondary"
+                              : "outline"
+                      }
+                    >
                       {log.level.toUpperCase()}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">{log.source}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {log.source}
+                    </span>
                   </div>
                   <p className="text-sm">{log.message}</p>
-                  <span className="text-xs text-muted-foreground">{log.timestamp}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {log.timestamp}
+                  </span>
                 </div>
               </div>
             ))}
@@ -313,32 +393,42 @@ function PerformanceProfilerCard() {
           <Zap className="h-5 w-5" />
           Analizador de Rendimiento
         </CardTitle>
-        <CardDescription>Herramientas de profiling y optimización</CardDescription>
+        <CardDescription>
+          Herramientas de profiling y optimización
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-3 md:grid-cols-2">
           <Button variant="outline" className="h-20 flex-col gap-2">
             <Database className="h-6 w-6" />
             <span>Profile DB Queries</span>
-            <span className="text-xs text-muted-foreground">Analizar queries lentas</span>
+            <span className="text-xs text-muted-foreground">
+              Analizar queries lentas
+            </span>
           </Button>
 
           <Button variant="outline" className="h-20 flex-col gap-2">
             <Server className="h-6 w-6" />
             <span>Memory Analysis</span>
-            <span className="text-xs text-muted-foreground">Análisis de memoria</span>
+            <span className="text-xs text-muted-foreground">
+              Análisis de memoria
+            </span>
           </Button>
 
           <Button variant="outline" className="h-20 flex-col gap-2">
             <Globe className="h-6 w-6" />
             <span>Network Tracing</span>
-            <span className="text-xs text-muted-foreground">Trazado de red</span>
+            <span className="text-xs text-muted-foreground">
+              Trazado de red
+            </span>
           </Button>
 
           <Button variant="outline" className="h-20 flex-col gap-2">
             <Bug className="h-6 w-6" />
             <span>Error Tracing</span>
-            <span className="text-xs text-muted-foreground">Trazado de errores</span>
+            <span className="text-xs text-muted-foreground">
+              Trazado de errores
+            </span>
           </Button>
         </div>
       </CardContent>
@@ -354,7 +444,7 @@ export function DebugConsoleDashboard() {
       {/* Debug Console Header */}
       <RoleAwareHeader
         title="🔧 DEBUG CONSOLE - SUPREME DEBUG CONTROL"
-        subtitle={`Herramientas avanzadas de debug y diagnóstico - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Herramientas avanzadas de debug y diagnóstico - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-gray-600 border-gray-600">
@@ -365,7 +455,6 @@ export function DebugConsoleDashboard() {
           </div>
         }
       />
-
 
       {/* Debug Tools Sections */}
       <div className="space-y-6">

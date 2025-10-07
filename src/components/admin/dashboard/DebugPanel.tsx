@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from "react";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   ChevronDown,
   ChevronUp,
@@ -12,26 +12,26 @@ import {
   Globe,
   Database,
   Clock,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+} from "@/components/ui/collapsible";
 
 export function DebugPanel() {
   const divineOracle = useDivineParsing([
-    'common',
-    'navigation',
-    'language',
-    'admin',
+    "common",
+    "navigation",
+    "language",
+    "admin",
   ]);
   const [isOpen, setIsOpen] = useState(false);
 
   const stats = divineOracle.getTranslationStats();
 
   // Only show in development mode
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== "development") {
     return null;
   }
 
@@ -108,10 +108,10 @@ export function DebugPanel() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div
-                  className={`w-2 h-2 rounded-full ${divineOracle.isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}
+                  className={`w-2 h-2 rounded-full ${divineOracle.isLoading ? "bg-yellow-500 animate-pulse" : "bg-green-500"}`}
                 />
                 <span className="text-sm">
-                  {divineOracle.isLoading ? 'Loading...' : 'Ready'}
+                  {divineOracle.isLoading ? "Loading..." : "Ready"}
                 </span>
               </div>
 
@@ -126,7 +126,7 @@ export function DebugPanel() {
             <div>
               <div className="text-sm font-medium mb-2">Loaded Namespaces:</div>
               <div className="flex flex-wrap gap-2">
-                {divineOracle.getLoadedNamespaces().map(namespace => (
+                {divineOracle.getLoadedNamespaces().map((namespace) => (
                   <Badge key={namespace} variant="outline" className="text-xs">
                     {namespace}
                   </Badge>
@@ -143,7 +143,7 @@ export function DebugPanel() {
                     Navigation:
                   </div>
                   <div>
-                    {divineOracle.t('nav.center.council', 'navigation')}
+                    {divineOracle.t("nav.center.council", "navigation")}
                   </div>
                 </div>
 
@@ -151,14 +151,14 @@ export function DebugPanel() {
                   <div className="font-medium text-muted-foreground">
                     Common:
                   </div>
-                  <div>{divineOracle.t('common.save', 'common')}</div>
+                  <div>{divineOracle.t("common.save", "common")}</div>
                 </div>
 
                 <div className="text-xs bg-muted p-2 rounded border">
                   <div className="font-medium text-muted-foreground">
                     Language:
                   </div>
-                  <div>{divineOracle.t('language.toggle', 'language')}</div>
+                  <div>{divineOracle.t("language.toggle", "language")}</div>
                 </div>
 
                 <div className="text-xs bg-muted p-2 rounded border">
@@ -166,8 +166,8 @@ export function DebugPanel() {
                     Admin:
                   </div>
                   <div>
-                    {divineOracle.t('admin.dashboard', 'admin') ||
-                      'admin.dashboard'}
+                    {divineOracle.t("admin.dashboard", "admin") ||
+                      "admin.dashboard"}
                   </div>
                 </div>
               </div>
@@ -180,7 +180,7 @@ export function DebugPanel() {
                 variant="outline"
                 onClick={() =>
                   divineOracle.setLanguage(
-                    divineOracle.language === 'es' ? 'en' : 'es'
+                    divineOracle.language === "es" ? "en" : "es",
                   )
                 }
               >
@@ -190,7 +190,7 @@ export function DebugPanel() {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => divineOracle.invokeOracle('admin')}
+                onClick={() => divineOracle.invokeOracle("admin")}
               >
                 Load Admin
               </Button>
@@ -198,7 +198,7 @@ export function DebugPanel() {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => divineOracle.invokeOracle('dashboard')}
+                onClick={() => divineOracle.invokeOracle("dashboard")}
               >
                 Load Dashboard
               </Button>

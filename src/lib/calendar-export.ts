@@ -19,9 +19,9 @@ interface CalendarEvent {
 function generateICS(event: CalendarEvent): string {
   const formatDate = (date: Date) => {
     return (
-      date.toISOString().replace(/[-:]/g, '').slice(0, 8) +
-      'T' +
-      date.toISOString().replace(/[-:]/g, '').slice(11, 17)
+      date.toISOString().replace(/[-:]/g, "").slice(0, 8) +
+      "T" +
+      date.toISOString().replace(/[-:]/g, "").slice(11, 17)
     );
   };
 
@@ -32,12 +32,12 @@ function generateICS(event: CalendarEvent): string {
   const end = formatDate(event.endDate);
 
   return [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Escuela Manitos Pintadas//Sistema de Reservas//ES',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Escuela Manitos Pintadas//Sistema de Reservas//ES",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
     `UID:${uid}`,
     `DTSTAMP:${created}`,
     `DTSTART:${start}`,
@@ -46,11 +46,11 @@ function generateICS(event: CalendarEvent): string {
     `DESCRIPTION:${event.description}`,
     ...(event.location ? [`LOCATION:${event.location}`] : []),
     ...(event.organizer ? [`ORGANIZER:${event.organizer}`] : []),
-    'STATUS:CONFIRMED',
-    'TRANSP:OPAQUE',
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ].join('\r\n');
+    "STATUS:CONFIRMED",
+    "TRANSP:OPAQUE",
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
 }
 
 /**
@@ -58,13 +58,13 @@ function generateICS(event: CalendarEvent): string {
  */
 export function downloadICS(
   event: CalendarEvent,
-  filename: string = 'event.ics'
+  filename: string = "event.ics",
 ) {
   const icsContent = generateICS(event);
-  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
 
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
   link.download = filename;
   document.body.appendChild(link);
@@ -85,8 +85,8 @@ export function generateReservationEvent(reservation: any) {
     description: `Reunión programada con ${reservation.guardianName} para ${reservation.studentName}. Tipo: ${reservation.meetingType}. Contacto: ${reservation.guardianEmail} - ${reservation.guardianPhone}`,
     startDate,
     endDate,
-    location: 'Escuela Especial de Lenguaje Manitos Pintadas',
-    organizer: 'manitospintadas.cl',
+    location: "Escuela Especial de Lenguaje Manitos Pintadas",
+    organizer: "manitospintadas.cl",
   };
 }
 
@@ -100,12 +100,12 @@ export function generateMeetingEvent(meeting: any) {
   return {
     title: meeting.title,
     description:
-      meeting.description || 'Reunión del Centro de Padres y Consejo Escolar',
+      meeting.description || "Reunión del Centro de Padres y Consejo Escolar",
     startDate,
     endDate,
     location:
-      meeting.location || 'Escuela Especial de Lenguaje Manitos Pintadas',
-    organizer: 'manitospintadas.cl',
+      meeting.location || "Escuela Especial de Lenguaje Manitos Pintadas",
+    organizer: "manitospintadas.cl",
   };
 }
 
@@ -114,15 +114,15 @@ export function generateMeetingEvent(meeting: any) {
  */
 export function getGoogleCalendarUrl(event: CalendarEvent): string {
   const formatDate = (date: Date) =>
-    date.toISOString().replace(/[-:]/g, '').slice(0, 8);
+    date.toISOString().replace(/[-:]/g, "").slice(0, 8);
   const formatTime = (date: Date) =>
-    date.toISOString().replace(/[-:]/g, '').slice(11, 17);
+    date.toISOString().replace(/[-:]/g, "").slice(11, 17);
 
   const start = `${formatDate(event.startDate)}T${formatTime(event.startDate)}`;
   const end = `${formatDate(event.endDate)}T${formatTime(event.endDate)}`;
 
   const params = new URLSearchParams({
-    action: 'TEMPLATE',
+    action: "TEMPLATE",
     text: event.title,
     dates: `${start}/${end}`,
     details: event.description,
@@ -136,11 +136,11 @@ export function getGoogleCalendarUrl(event: CalendarEvent): string {
  * WhatsApp calendar share link
  */
 export function getWhatsAppCalendarUrl(event: CalendarEvent): string {
-  const formatDate = (date: Date) => date.toLocaleDateString('es-CL');
+  const formatDate = (date: Date) => date.toLocaleDateString("es-CL");
   const formatTime = (date: Date) =>
-    date.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    date.toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" });
 
-  const message = `📅 ${event.title}\n\n📍 ${event.location || 'Escuela Manitos Pintadas'}\n📅 ${formatDate(event.startDate)}\n⏰ ${formatTime(event.startDate)}\n\n${event.description}`;
+  const message = `📅 ${event.title}\n\n📍 ${event.location || "Escuela Manitos Pintadas"}\n📅 ${formatDate(event.startDate)}\n⏰ ${formatTime(event.startDate)}\n\n${event.description}`;
 
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
@@ -151,37 +151,37 @@ export function getWhatsAppCalendarUrl(event: CalendarEvent): string {
 export const calendarButtons = {
   reservation: (reservation: any) => [
     {
-      label: 'Agregar a Google Calendar',
+      label: "Agregar a Google Calendar",
       url: getGoogleCalendarUrl(generateReservationEvent(reservation)),
-      icon: '📅',
+      icon: "📅",
     },
     {
-      label: 'Descargar .ics',
+      label: "Descargar .ics",
       action: () =>
         downloadICS(
           generateReservationEvent(reservation),
-          'reunion-manitos-pintadas.ics'
+          "reunion-manitos-pintadas.ics",
         ),
-      icon: '📥',
+      icon: "📥",
     },
     {
-      label: 'Compartir por WhatsApp',
+      label: "Compartir por WhatsApp",
       url: getWhatsAppCalendarUrl(generateReservationEvent(reservation)),
-      icon: '💬',
+      icon: "💬",
     },
   ],
 
   meeting: (meeting: any) => [
     {
-      label: 'Agregar a Google Calendar',
+      label: "Agregar a Google Calendar",
       url: getGoogleCalendarUrl(generateMeetingEvent(meeting)),
-      icon: '📅',
+      icon: "📅",
     },
     {
-      label: 'Descargar .ics',
+      label: "Descargar .ics",
       action: () =>
-        downloadICS(generateMeetingEvent(meeting), 'reunion-centro-padres.ics'),
-      icon: '📥',
+        downloadICS(generateMeetingEvent(meeting), "reunion-centro-padres.ics"),
+      icon: "📥",
     },
   ],
 };

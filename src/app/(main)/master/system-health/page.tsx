@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { MasterPageTemplate } from '@/components/master/MasterPageTemplate';
-import { SystemHealthCard } from '@/components/master/SystemHealthCard';
+import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
+import { SystemHealthCard } from "@/components/master/SystemHealthCard";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function SystemHealthPage() {
   return (

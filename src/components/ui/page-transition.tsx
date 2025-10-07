@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { useResponsiveMode } from '@/lib/hooks/useDesktopToggle';
+import { ReactNode } from "react";
+import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import {
   usePageTransition,
   UsePageTransitionOptions,
-} from '@/lib/hooks/usePageTransition';
+} from "@/lib/hooks/usePageTransition";
 import {
   PageSkeleton,
   CardGridSkeleton,
@@ -18,21 +18,21 @@ import {
   ReservaSkeleton,
   CentroConsejoSkeleton,
   HomePageSkeleton,
-} from '@/components/ui/loading-skeletons';
+} from "@/components/ui/loading-skeletons";
 
 export type SkeletonType =
-  | 'page'
-  | 'cards'
-  | 'table'
-  | 'form'
-  | 'detail'
-  | 'proyecto-educativo'
-  | 'fotos-videos'
-  | 'equipo-multidisciplinario'
-  | 'reserva'
-  | 'centro-consejo'
-  | 'homepage'
-  | 'custom';
+  | "page"
+  | "cards"
+  | "table"
+  | "form"
+  | "detail"
+  | "proyecto-educativo"
+  | "fotos-videos"
+  | "equipo-multidisciplinario"
+  | "reserva"
+  | "centro-consejo"
+  | "homepage"
+  | "custom";
 
 export interface PageTransitionProps extends UsePageTransitionOptions {
   children: ReactNode;
@@ -72,10 +72,10 @@ export interface PageTransitionProps extends UsePageTransitionOptions {
 
 export function PageTransition({
   children,
-  skeletonType = 'page',
+  skeletonType = "page",
   customSkeleton,
   skeletonProps = {},
-  className = '',
+  className = "",
   enableProgressiveAnimation = true,
   ...transitionOptions
 }: PageTransitionProps) {
@@ -105,9 +105,9 @@ export function PageTransition({
       className={`${className} ${
         enableProgressiveAnimation
           ? `transition-all duration-700 ease-out ${
-              mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`
-          : ''
+          : ""
       }`}
     >
       {children}
@@ -134,7 +134,7 @@ function SkeletonRenderer({
   sections?: number;
 }) {
   switch (type) {
-    case 'cards':
+    case "cards":
       return (
         <CardGridSkeleton
           isDesktopForced={isDesktopForced}
@@ -143,7 +143,7 @@ function SkeletonRenderer({
         />
       );
 
-    case 'table':
+    case "table":
       return (
         <TableSkeleton
           isDesktopForced={isDesktopForced}
@@ -152,35 +152,35 @@ function SkeletonRenderer({
         />
       );
 
-    case 'form':
+    case "form":
       return <FormSkeleton isDesktopForced={isDesktopForced} fields={fields} />;
 
-    case 'detail':
+    case "detail":
       return (
         <DetailSkeleton isDesktopForced={isDesktopForced} sections={sections} />
       );
 
-    case 'proyecto-educativo':
+    case "proyecto-educativo":
       return <ProyectoEducativoSkeleton isDesktopForced={isDesktopForced} />;
 
-    case 'fotos-videos':
+    case "fotos-videos":
       return <FotosVideosSkeleton isDesktopForced={isDesktopForced} />;
 
-    case 'equipo-multidisciplinario':
+    case "equipo-multidisciplinario":
       return (
         <EquipoMultidisciplinarioSkeleton isDesktopForced={isDesktopForced} />
       );
 
-    case 'reserva':
+    case "reserva":
       return <ReservaSkeleton isDesktopForced={isDesktopForced} />;
 
-    case 'centro-consejo':
+    case "centro-consejo":
       return <CentroConsejoSkeleton isDesktopForced={isDesktopForced} />;
 
-    case 'homepage':
+    case "homepage":
       return <HomePageSkeleton isDesktopForced={isDesktopForced} />;
 
-    case 'page':
+    case "page":
     default:
       return <PageSkeleton isDesktopForced={isDesktopForced} />;
   }
@@ -192,7 +192,7 @@ function SkeletonRenderer({
 export function ProgressiveReveal({
   children,
   delay = 0,
-  className = '',
+  className = "",
 }: {
   children: ReactNode;
   delay?: number;
@@ -203,7 +203,7 @@ export function ProgressiveReveal({
   return (
     <div
       className={`transition-all duration-700 ease-out transition-delay-custom ${
-        mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       } ${className}`}
       data-delay={delay.toString()}
     >
@@ -218,7 +218,7 @@ export function ProgressiveReveal({
 export function StaggeredContainer({
   children,
   staggerDelay = 150,
-  className = '',
+  className = "",
 }: {
   children: ReactNode[];
   staggerDelay?: number;

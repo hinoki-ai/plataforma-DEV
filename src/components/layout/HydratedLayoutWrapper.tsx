@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useHydrationSafe } from '@/components/ui/hydration-error-boundary';
+import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 
 interface HydratedLayoutWrapperProps {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
-import React from 'react';
-import { CheckCircle, AlertCircle, Clock } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { CheckCircle, AlertCircle, Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface FormSuccessStatesProps {
-  type: 'success' | 'warning' | 'loading';
+  type: "success" | "warning" | "loading";
   title: string;
   description?: string;
   className?: string;
@@ -18,21 +18,21 @@ export function FormSuccessStates({
   const states = {
     success: {
       icon: CheckCircle,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200',
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+      borderColor: "border-green-200",
     },
     warning: {
       icon: AlertCircle,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-50',
-      borderColor: 'border-yellow-200',
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-50",
+      borderColor: "border-yellow-200",
     },
     loading: {
       icon: Clock,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200',
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-200",
     },
   };
 
@@ -42,20 +42,20 @@ export function FormSuccessStates({
   return (
     <div
       className={cn(
-        'flex items-start space-x-3 rounded-lg border p-4',
+        "flex items-start space-x-3 rounded-lg border p-4",
         current.bgColor,
         current.borderColor,
-        className
+        className,
       )}
     >
-      <Icon className={cn('h-5 w-5 mt-0.5', current.color)} />
+      <Icon className={cn("h-5 w-5 mt-0.5", current.color)} />
       <div className="flex-1">
-        <h4 className={cn('text-sm font-medium', current.color)}>{title}</h4>
+        <h4 className={cn("text-sm font-medium", current.color)}>{title}</h4>
         {description && (
           <p
             className={cn(
-              'text-sm mt-1',
-              current.color.replace('text-', 'text-').replace('-600', '-500')
+              "text-sm mt-1",
+              current.color.replace("text-", "text-").replace("-600", "-500"),
             )}
           >
             {description}

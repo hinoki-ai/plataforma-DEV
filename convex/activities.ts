@@ -11,7 +11,7 @@ const activityTypeValidator = v.union(
   v.literal("WORKSHOP"),
   v.literal("EXCURSION"),
   v.literal("MEETING"),
-  v.literal("OTHER")
+  v.literal("OTHER"),
 );
 
 // ==================== QUERIES ====================

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useSession } from 'next-auth/react';
-import { UserRole } from '@/lib/prisma-compat-types';
-import { hasPermission, Permission } from '@/lib/authorization';
-import { getRoleAccess } from '@/lib/role-utils';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Shield, AlertTriangle, EyeOff } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@/lib/prisma-compat-types";
+import { hasPermission, Permission } from "@/lib/authorization";
+import { getRoleAccess } from "@/lib/role-utils";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Shield, AlertTriangle, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface RoleGuardProps {
   children: React.ReactNode;
@@ -33,7 +33,7 @@ export function RoleGuard({
   const router = useRouter();
 
   // Loading state
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex items-center justify-center p-4">
         <div className="animate-pulse text-muted-foreground">Cargando...</div>
@@ -79,8 +79,8 @@ export function RoleGuard({
             <Shield className="h-4 w-4 text-red-600" />
             <AlertTitle>Acceso denegado</AlertTitle>
             <AlertDescription>
-              No tienes los permisos necesarios para acceder a esta funcionalidad.
-              Rol requerido: {roles.join(' o ')}
+              No tienes los permisos necesarios para acceder a esta
+              funcionalidad. Rol requerido: {roles.join(" o ")}
             </AlertDescription>
           </Alert>
         );
@@ -92,8 +92,8 @@ export function RoleGuard({
 
   // Check permissions
   if (permissions && permissions.length > 0) {
-    const hasAllPermissions = permissions.every(permission =>
-      hasPermission(userRole, permission)
+    const hasAllPermissions = permissions.every((permission) =>
+      hasPermission(userRole, permission),
     );
 
     if (!hasAllPermissions) {
@@ -131,7 +131,7 @@ interface ConditionalRenderProps {
 export function ConditionalRender({
   children,
   condition,
-  fallback = null
+  fallback = null,
 }: ConditionalRenderProps) {
   return <>{condition ? children : fallback}</>;
 }
@@ -157,15 +157,15 @@ export function RoleBasedComponent<T = React.ReactNode>({
   const userRole = session?.user?.role as UserRole;
 
   switch (userRole) {
-    case 'MASTER':
+    case "MASTER":
       return <>{master ?? fallback}</>;
-    case 'ADMIN':
+    case "ADMIN":
       return <>{admin ?? fallback}</>;
-    case 'PROFESOR':
+    case "PROFESOR":
       return <>{profesor ?? fallback}</>;
-    case 'PARENT':
+    case "PARENT":
       return <>{parent ?? fallback}</>;
-    case 'PUBLIC':
+    case "PUBLIC":
       return <>{publicComponent ?? fallback}</>;
     default:
       return <>{fallback}</>;
@@ -222,7 +222,7 @@ interface FeatureToggleProps {
 export function FeatureToggle({
   feature,
   children,
-  fallback = null
+  fallback = null,
 }: FeatureToggleProps) {
   const { data: session } = useSession();
   const userRole = session?.user?.role as UserRole;
@@ -230,33 +230,33 @@ export function FeatureToggle({
   // MASTER Almighty Feature Access - Supreme Authority
   const featureAccess: Record<string, UserRole[]> = {
     // MASTER-Only God Mode Features
-    'role-switching': ['MASTER'],
-    'system-god-mode': ['MASTER'],
-    'global-oversight': ['MASTER'],
-    'system-configuration': ['MASTER'],
-    'audit-master-access': ['MASTER'],
-    'user-role-override': ['MASTER'],
-    'data-master-export': ['MASTER'],
-    'backup-master-control': ['MASTER'],
-    'emergency-lockdown': ['MASTER'],
-    'security-master-override': ['MASTER'],
-    'metrics-global-view': ['MASTER'],
-    'config-master-reset': ['MASTER'],
+    "role-switching": ["MASTER"],
+    "system-god-mode": ["MASTER"],
+    "global-oversight": ["MASTER"],
+    "system-configuration": ["MASTER"],
+    "audit-master-access": ["MASTER"],
+    "user-role-override": ["MASTER"],
+    "data-master-export": ["MASTER"],
+    "backup-master-control": ["MASTER"],
+    "emergency-lockdown": ["MASTER"],
+    "security-master-override": ["MASTER"],
+    "metrics-global-view": ["MASTER"],
+    "config-master-reset": ["MASTER"],
 
     // MASTER + ADMIN Features
-    'advanced-analytics': ['MASTER', 'ADMIN'],
-    'user-management': ['MASTER', 'ADMIN'],
-    'bulk-operations': ['MASTER', 'ADMIN'],
-    'voting-system': ['MASTER', 'ADMIN'],
+    "advanced-analytics": ["MASTER", "ADMIN"],
+    "user-management": ["MASTER", "ADMIN"],
+    "bulk-operations": ["MASTER", "ADMIN"],
+    "voting-system": ["MASTER", "ADMIN"],
 
     // Educational Features
-    'planning-templates': ['MASTER', 'ADMIN', 'PROFESOR'],
-    'meeting-scheduling': ['MASTER', 'ADMIN', 'PROFESOR'],
-    'document-uploads': ['MASTER', 'ADMIN', 'PROFESOR'],
+    "planning-templates": ["MASTER", "ADMIN", "PROFESOR"],
+    "meeting-scheduling": ["MASTER", "ADMIN", "PROFESOR"],
+    "document-uploads": ["MASTER", "ADMIN", "PROFESOR"],
 
     // Communication Features
-    'parent-communication': ['MASTER', 'ADMIN', 'PROFESOR', 'PARENT'],
-    'public-content': ['MASTER', 'ADMIN', 'PROFESOR', 'PARENT', 'PUBLIC'],
+    "parent-communication": ["MASTER", "ADMIN", "PROFESOR", "PARENT"],
+    "public-content": ["MASTER", "ADMIN", "PROFESOR", "PARENT", "PUBLIC"],
   };
 
   const allowedRoles = featureAccess[feature];
@@ -287,8 +287,8 @@ export function RoleBasedButton({
 
   // Check permissions
   if (permissions && permissions.length > 0) {
-    const hasAllPermissions = permissions.every(permission =>
-      hasPermission(userRole, permission)
+    const hasAllPermissions = permissions.every((permission) =>
+      hasPermission(userRole, permission),
     );
 
     if (!hasAllPermissions) {
@@ -307,29 +307,31 @@ export function useRoleAccess() {
   return {
     userRole,
     // Basic role checks
-    isMaster: userRole === 'MASTER',
-    isAdmin: userRole === 'ADMIN',
-    isProfesor: userRole === 'PROFESOR',
-    isParent: userRole === 'PARENT',
-    isPublic: userRole === 'PUBLIC',
+    isMaster: userRole === "MASTER",
+    isAdmin: userRole === "ADMIN",
+    isProfesor: userRole === "PROFESOR",
+    isParent: userRole === "PARENT",
+    isPublic: userRole === "PUBLIC",
 
     // MASTER God Mode capabilities
-    hasMasterGodMode: userRole === 'MASTER',
-    hasMasterAuthority: userRole === 'MASTER',
-    hasMasterGlobalOversight: userRole === 'MASTER',
-    hasMasterSystemControl: userRole === 'MASTER',
+    hasMasterGodMode: userRole === "MASTER",
+    hasMasterAuthority: userRole === "MASTER",
+    hasMasterGlobalOversight: userRole === "MASTER",
+    hasMasterSystemControl: userRole === "MASTER",
 
     // Permission checks
-    hasPermission: (permission: Permission) => hasPermission(userRole, permission),
+    hasPermission: (permission: Permission) =>
+      hasPermission(userRole, permission),
     hasAnyRole: (roles: UserRole[]) => userRole && roles.includes(userRole),
-    hasAllRoles: (roles: UserRole[]) => roles.every(role => role === userRole),
+    hasAllRoles: (roles: UserRole[]) =>
+      roles.every((role) => role === userRole),
     roleAccess: userRole ? getRoleAccess(userRole) : null,
 
     // MASTER-specific feature checks
-    canSwitchRoles: userRole === 'MASTER',
-    canAccessGodMode: userRole === 'MASTER',
-    canOverrideRoles: userRole === 'MASTER',
-    canEmergencyLockdown: userRole === 'MASTER',
-    canMasterExport: userRole === 'MASTER',
+    canSwitchRoles: userRole === "MASTER",
+    canAccessGodMode: userRole === "MASTER",
+    canOverrideRoles: userRole === "MASTER",
+    canEmergencyLockdown: userRole === "MASTER",
+    canMasterExport: userRole === "MASTER",
   };
 }

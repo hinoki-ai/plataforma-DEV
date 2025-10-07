@@ -1,9 +1,9 @@
 // ⚡ Performance: Web Vitals monitoring provider
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { initWebVitals } from '@/lib/web-vitals';
-import { toast } from 'sonner';
+import { useEffect } from "react";
+import { initWebVitals } from "@/lib/web-vitals";
+import { toast } from "sonner";
 
 export function WebVitalsProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -14,7 +14,7 @@ export function WebVitalsProvider({ children }: { children: React.ReactNode }) {
     const handlePerformanceAlert = (event: CustomEvent) => {
       const { metric, value, level } = event.detail;
 
-      if (level === 'poor') {
+      if (level === "poor") {
         toast.warning(`Performance Alert: ${metric}`, {
           description: `${metric} is ${value}ms - consider optimizing this page`,
           duration: 5000,
@@ -23,14 +23,14 @@ export function WebVitalsProvider({ children }: { children: React.ReactNode }) {
     };
 
     window.addEventListener(
-      'performance-alert',
-      handlePerformanceAlert as EventListener
+      "performance-alert",
+      handlePerformanceAlert as EventListener,
     );
 
     return () => {
       window.removeEventListener(
-        'performance-alert',
-        handlePerformanceAlert as EventListener
+        "performance-alert",
+        handlePerformanceAlert as EventListener,
       );
     };
   }, []);

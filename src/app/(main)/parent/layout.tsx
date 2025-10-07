@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { getRoleAccess } from '@/lib/role-utils';
-import { DashboardLoader } from '@/components/ui/dashboard-loader';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getRoleAccess } from "@/lib/role-utils";
+import { DashboardLoader } from "@/components/ui/dashboard-loader";
 
 export default function ParentLayout({
   children,
@@ -15,20 +15,22 @@ export default function ParentLayout({
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
   const [hasRedirected, setHasRedirected] = useState(false);
-  const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(
+    null,
+  );
 
   useEffect(() => {
-    if (status === 'loading') return; // Still loading
+    if (status === "loading") return; // Still loading
 
-    if (status === 'unauthenticated' || !session) {
+    if (status === "unauthenticated" || !session) {
       // Only redirect once to prevent infinite loops
       if (!hasRedirected) {
         // Only log error in development or if this is the first attempt
-        if (process.env.NODE_ENV === 'development' || !isChecking) {
-          console.warn('No active session found, redirecting to login');
+        if (process.env.NODE_ENV === "development" || !isChecking) {
+          console.warn("No active session found, redirecting to login");
         }
         setHasRedirected(true);
-        router.push('/login');
+        router.push("/login");
       }
       return;
     }
@@ -40,9 +42,9 @@ export default function ParentLayout({
 
     if (!session.user?.role) {
       if (!hasRedirected) {
-        console.warn('Session missing user role, redirecting to login');
+        console.warn("Session missing user role, redirecting to login");
         setHasRedirected(true);
-        router.push('/login');
+        router.push("/login");
       }
       return;
     }
@@ -51,9 +53,11 @@ export default function ParentLayout({
 
     if (!roleAccess.canAccessParent) {
       if (!hasRedirected) {
-        console.warn(`Access denied to parent section for role: ${session.user.role}`);
+        console.warn(
+          `Access denied to parent section for role: ${session.user.role}`,
+        );
         setHasRedirected(true);
-        router.push('/unauthorized');
+        router.push("/unauthorized");
       }
       return;
     }
@@ -63,9 +67,9 @@ export default function ParentLayout({
 
   // Set up a timeout to prevent indefinite loading
   useEffect(() => {
-    if (status === 'loading' && !loadingTimeout) {
+    if (status === "loading" && !loadingTimeout) {
       const timeout = setTimeout(() => {
-        console.warn('Session loading timeout, checking authentication status');
+        console.warn("Session loading timeout, checking authentication status");
         setIsChecking(false);
       }, 10000); // 10 second timeout
       setLoadingTimeout(timeout);
@@ -88,11 +92,11 @@ export default function ParentLayout({
     };
   }, [loadingTimeout]);
 
-  if (status === 'loading' || isChecking) {
+  if (status === "loading" || isChecking) {
     return <DashboardLoader text="Verificando acceso..." />;
   }
 
-  if (status === 'unauthenticated' || !session) {
+  if (status === "unauthenticated" || !session) {
     return <DashboardLoader text="Redirigiendo..." />;
   }
 

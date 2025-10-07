@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 interface ResponsiveContainerProps {
   children: React.ReactNode;
@@ -18,24 +18,26 @@ export function ResponsiveContainer({
   tabletClassName,
   desktopClassName,
 }: ResponsiveContainerProps) {
-  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [screenSize, setScreenSize] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop",
+  );
 
   useEffect(() => {
     const updateScreenSize = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setScreenSize('mobile');
+        setScreenSize("mobile");
       } else if (width < 1024) {
-        setScreenSize('tablet');
+        setScreenSize("tablet");
       } else {
-        setScreenSize('desktop');
+        setScreenSize("desktop");
       }
     };
 
     updateScreenSize();
-    window.addEventListener('resize', updateScreenSize);
+    window.addEventListener("resize", updateScreenSize);
 
-    return () => window.removeEventListener('resize', updateScreenSize);
+    return () => window.removeEventListener("resize", updateScreenSize);
   }, []);
 
   const responsiveClasses = {
@@ -45,12 +47,7 @@ export function ResponsiveContainer({
   };
 
   return (
-    <div
-      className={cn(
-        className,
-        responsiveClasses[screenSize]
-      )}
-    >
+    <div className={cn(className, responsiveClasses[screenSize])}>
       {children}
     </div>
   );
@@ -65,31 +62,31 @@ interface ResponsiveGridProps {
     tablet?: number;
     desktop?: number;
   };
-  gap?: 'sm' | 'md' | 'lg';
+  gap?: "sm" | "md" | "lg";
 }
 
 export function ResponsiveGrid({
   children,
   className,
   cols = { mobile: 1, tablet: 2, desktop: 3 },
-  gap = 'md'
+  gap = "md",
 }: ResponsiveGridProps) {
   const gapClasses = {
-    sm: 'gap-2',
-    md: 'gap-4',
-    lg: 'gap-6',
+    sm: "gap-2",
+    md: "gap-4",
+    lg: "gap-6",
   };
 
   const gridClasses = {
-    mobile: cols.mobile ? `grid-cols-${cols.mobile}` : 'grid-cols-1',
-    tablet: cols.tablet ? `grid-cols-${cols.tablet}` : 'grid-cols-2',
-    desktop: cols.desktop ? `grid-cols-${cols.desktop}` : 'grid-cols-3',
+    mobile: cols.mobile ? `grid-cols-${cols.mobile}` : "grid-cols-1",
+    tablet: cols.tablet ? `grid-cols-${cols.tablet}` : "grid-cols-2",
+    desktop: cols.desktop ? `grid-cols-${cols.desktop}` : "grid-cols-3",
   };
 
   return (
     <div
       className={cn(
-        'grid',
+        "grid",
         // Mobile first
         gridClasses.mobile,
         // Tablet
@@ -97,7 +94,7 @@ export function ResponsiveGrid({
         // Desktop
         `lg:${gridClasses.desktop}`,
         gapClasses[gap],
-        className
+        className,
       )}
     >
       {children}
@@ -110,37 +107,37 @@ interface ResponsiveTextProps {
   children: React.ReactNode;
   className?: string;
   size?: {
-    mobile?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
-    tablet?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
-    desktop?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    mobile?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+    tablet?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+    desktop?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
   };
 }
 
 export function ResponsiveText({
   children,
   className,
-  size = { mobile: 'sm', tablet: 'base', desktop: 'lg' }
+  size = { mobile: "sm", tablet: "base", desktop: "lg" },
 }: ResponsiveTextProps) {
   const sizeClasses = {
-    xs: 'text-xs',
-    sm: 'text-sm',
-    base: 'text-base',
-    lg: 'text-lg',
-    xl: 'text-xl',
-    '2xl': 'text-2xl',
-    '3xl': 'text-3xl',
+    xs: "text-xs",
+    sm: "text-sm",
+    base: "text-base",
+    lg: "text-lg",
+    xl: "text-xl",
+    "2xl": "text-2xl",
+    "3xl": "text-3xl",
   };
 
   return (
     <div
       className={cn(
         // Mobile first
-        size.mobile ? sizeClasses[size.mobile] : 'text-sm',
+        size.mobile ? sizeClasses[size.mobile] : "text-sm",
         // Tablet
-        size.tablet ? `md:${sizeClasses[size.tablet]}` : 'md:text-base',
+        size.tablet ? `md:${sizeClasses[size.tablet]}` : "md:text-base",
         // Desktop
-        size.desktop ? `lg:${sizeClasses[size.desktop]}` : 'lg:text-lg',
-        className
+        size.desktop ? `lg:${sizeClasses[size.desktop]}` : "lg:text-lg",
+        className,
       )}
     >
       {children}
@@ -153,34 +150,34 @@ interface ResponsiveCardProps {
   children: React.ReactNode;
   className?: string;
   padding?: {
-    mobile?: 'sm' | 'md' | 'lg';
-    tablet?: 'sm' | 'md' | 'lg';
-    desktop?: 'sm' | 'md' | 'lg';
+    mobile?: "sm" | "md" | "lg";
+    tablet?: "sm" | "md" | "lg";
+    desktop?: "sm" | "md" | "lg";
   };
 }
 
 export function ResponsiveCard({
   children,
   className,
-  padding = { mobile: 'md', tablet: 'md', desktop: 'lg' }
+  padding = { mobile: "md", tablet: "md", desktop: "lg" },
 }: ResponsiveCardProps) {
   const paddingClasses = {
-    sm: 'p-3',
-    md: 'p-4',
-    lg: 'p-6',
+    sm: "p-3",
+    md: "p-4",
+    lg: "p-6",
   };
 
   return (
     <div
       className={cn(
-        'bg-card text-card-foreground rounded-lg border shadow-sm',
+        "bg-card text-card-foreground rounded-lg border shadow-sm",
         // Mobile first
-        padding.mobile ? paddingClasses[padding.mobile] : 'p-4',
+        padding.mobile ? paddingClasses[padding.mobile] : "p-4",
         // Tablet
-        padding.tablet ? `md:${paddingClasses[padding.tablet]}` : 'md:p-4',
+        padding.tablet ? `md:${paddingClasses[padding.tablet]}` : "md:p-4",
         // Desktop
-        padding.desktop ? `lg:${paddingClasses[padding.desktop]}` : 'lg:p-6',
-        className
+        padding.desktop ? `lg:${paddingClasses[padding.desktop]}` : "lg:p-6",
+        className,
       )}
     >
       {children}
@@ -203,9 +200,9 @@ export function useResponsive() {
     };
 
     updateResponsive();
-    window.addEventListener('resize', updateResponsive);
+    window.addEventListener("resize", updateResponsive);
 
-    return () => window.removeEventListener('resize', updateResponsive);
+    return () => window.removeEventListener("resize", updateResponsive);
   }, []);
 
   return { isMobile, isTablet, isDesktop };
@@ -217,7 +214,7 @@ interface TouchButtonProps {
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
-  variant?: 'default' | 'outline' | 'ghost';
+  variant?: "default" | "outline" | "ghost";
 }
 
 export function TouchButton({
@@ -225,13 +222,16 @@ export function TouchButton({
   onClick,
   className,
   disabled = false,
-  variant = 'default'
+  variant = "default",
 }: TouchButtonProps) {
-  const baseClasses = 'transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses =
+    "transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
   const variantClasses = {
-    default: 'bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary',
-    outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-primary',
-    ghost: 'hover:bg-accent hover:text-accent-foreground focus:ring-primary',
+    default:
+      "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary",
+    outline:
+      "border border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-primary",
+    ghost: "hover:bg-accent hover:text-accent-foreground focus:ring-primary",
   };
 
   return (
@@ -242,10 +242,10 @@ export function TouchButton({
         baseClasses,
         variantClasses[variant],
         // Mobile-first touch targets (minimum 44px)
-        'min-h-[44px] min-w-[44px] px-4 py-2',
+        "min-h-[44px] min-w-[44px] px-4 py-2",
         // Better touch targets on mobile
-        'sm:min-h-[40px] sm:min-w-[40px] sm:px-3 sm:py-2',
-        className
+        "sm:min-h-[40px] sm:min-w-[40px] sm:px-3 sm:py-2",
+        className,
       )}
     >
       {children}
@@ -257,24 +257,25 @@ export function TouchButton({
 interface ResponsiveNavProps {
   children: React.ReactNode;
   className?: string;
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
 }
 
 export function ResponsiveNav({
   children,
   className,
-  orientation = 'horizontal'
+  orientation = "horizontal",
 }: ResponsiveNavProps) {
   return (
     <nav
       className={cn(
-        'flex',
-        orientation === 'horizontal'
-          ? 'flex-row items-center space-x-4'
-          : 'flex-col space-y-2',
+        "flex",
+        orientation === "horizontal"
+          ? "flex-row items-center space-x-4"
+          : "flex-col space-y-2",
         // Mobile: stack vertically if horizontal
-        orientation === 'horizontal' && 'flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4',
-        className
+        orientation === "horizontal" &&
+          "flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4",
+        className,
       )}
     >
       {children}
@@ -288,7 +289,7 @@ interface MobileDrawerProps {
   onClose: () => void;
   children: React.ReactNode;
   title?: string;
-  position?: 'left' | 'right' | 'bottom';
+  position?: "left" | "right" | "bottom";
 }
 
 export function MobileDrawer({
@@ -296,18 +297,18 @@ export function MobileDrawer({
   onClose,
   children,
   title,
-  position = 'right'
+  position = "right",
 }: MobileDrawerProps) {
   const positionClasses = {
-    left: 'left-0 top-0 h-full w-80 transform -translate-x-full',
-    right: 'right-0 top-0 h-full w-80 transform translate-x-full',
-    bottom: 'bottom-0 left-0 right-0 h-96 transform translate-y-full',
+    left: "left-0 top-0 h-full w-80 transform -translate-x-full",
+    right: "right-0 top-0 h-full w-80 transform translate-x-full",
+    bottom: "bottom-0 left-0 right-0 h-96 transform translate-y-full",
   };
 
   const openClasses = {
-    left: 'translate-x-0',
-    right: 'translate-x-0',
-    bottom: 'translate-y-0',
+    left: "translate-x-0",
+    right: "translate-x-0",
+    bottom: "translate-y-0",
   };
 
   return (
@@ -323,9 +324,9 @@ export function MobileDrawer({
       {/* Drawer */}
       <div
         className={cn(
-          'fixed z-50 bg-background shadow-lg transition-transform duration-300 ease-in-out',
+          "fixed z-50 bg-background shadow-lg transition-transform duration-300 ease-in-out",
           positionClasses[position],
-          isOpen && openClasses[position]
+          isOpen && openClasses[position],
         )}
       >
         {/* Header */}
@@ -343,9 +344,7 @@ export function MobileDrawer({
         )}
 
         {/* Content */}
-        <div className="p-4 overflow-y-auto max-h-full">
-          {children}
-        </div>
+        <div className="p-4 overflow-y-auto max-h-full">{children}</div>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export default function UnauthorizedPage() {
   const [isMounted, setIsMounted] = useState(false);
@@ -11,8 +11,10 @@ export default function UnauthorizedPage() {
 
   // Only throw error after component has mounted (client-side)
   if (isMounted) {
-    const unauthorizedError = new Error('Acceso restringido. Tu sesión terminó o no tienes permiso para entrar aquí. Vuelve a iniciar sesión si es necesario.');
-    unauthorizedError.name = 'UnauthorizedError';
+    const unauthorizedError = new Error(
+      "Acceso restringido. Tu sesión terminó o no tienes permiso para entrar aquí. Vuelve a iniciar sesión si es necesario.",
+    );
+    unauthorizedError.name = "UnauthorizedError";
     throw unauthorizedError;
   }
 

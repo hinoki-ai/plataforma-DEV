@@ -1,17 +1,23 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Bell, Send, Users, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
-import { useNotifications } from '@/hooks/useNotifications';
-import { useSession } from 'next-auth/react';
+import React, { useState } from "react";
+import { Bell, Send, Users, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { useNotifications } from "@/hooks/useNotifications";
+import { useSession } from "next-auth/react";
 
 interface NotificationManagerProps {
   className?: string;
@@ -22,14 +28,14 @@ export function NotificationManager({ className }: NotificationManagerProps) {
   const { createNotification } = useNotifications();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    message: '',
-    type: 'info' as const,
-    category: 'system' as const,
-    priority: 'medium' as const,
+    title: "",
+    message: "",
+    type: "info" as const,
+    category: "system" as const,
+    priority: "medium" as const,
     isBroadcast: false,
     recipientIds: [] as string[],
-    actionUrl: '',
+    actionUrl: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,25 +60,26 @@ export function NotificationManager({ className }: NotificationManagerProps) {
 
       // Reset form
       setFormData({
-        title: '',
-        message: '',
-        type: 'info',
-        category: 'system',
-        priority: 'medium',
+        title: "",
+        message: "",
+        type: "info",
+        category: "system",
+        priority: "medium",
         isBroadcast: false,
         recipientIds: [],
-        actionUrl: '',
+        actionUrl: "",
       });
     } catch (error) {
-      console.error('Error creating notification:', error);
+      console.error("Error creating notification:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const canManageNotifications = session?.user?.role === 'ADMIN' ||
-                                session?.user?.role === 'PROFESOR' ||
-                                session?.user?.role === 'MASTER';
+  const canManageNotifications =
+    session?.user?.role === "ADMIN" ||
+    session?.user?.role === "PROFESOR" ||
+    session?.user?.role === "MASTER";
 
   if (!canManageNotifications) {
     return (
@@ -103,7 +110,9 @@ export function NotificationManager({ className }: NotificationManagerProps) {
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, title: e.target.value }))
+                }
                 placeholder="Título de la notificación"
                 required
               />
@@ -113,7 +122,9 @@ export function NotificationManager({ className }: NotificationManagerProps) {
               <Label htmlFor="type">Tipo</Label>
               <Select
                 value={formData.type}
-                onValueChange={(value: any) => setFormData(prev => ({ ...prev, type: value }))}
+                onValueChange={(value: any) =>
+                  setFormData((prev) => ({ ...prev, type: value }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -121,27 +132,52 @@ export function NotificationManager({ className }: NotificationManagerProps) {
                 <SelectContent>
                   <SelectItem value="info">
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700">Info</Badge>
+                      <Badge
+                        variant="secondary"
+                        className="bg-blue-100 text-blue-700"
+                      >
+                        Info
+                      </Badge>
                     </div>
                   </SelectItem>
                   <SelectItem value="success">
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-green-100 text-green-700">Éxito</Badge>
+                      <Badge
+                        variant="secondary"
+                        className="bg-green-100 text-green-700"
+                      >
+                        Éxito
+                      </Badge>
                     </div>
                   </SelectItem>
                   <SelectItem value="warning">
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-yellow-100 text-yellow-700">Advertencia</Badge>
+                      <Badge
+                        variant="secondary"
+                        className="bg-yellow-100 text-yellow-700"
+                      >
+                        Advertencia
+                      </Badge>
                     </div>
                   </SelectItem>
                   <SelectItem value="error">
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-red-100 text-red-700">Error</Badge>
+                      <Badge
+                        variant="secondary"
+                        className="bg-red-100 text-red-700"
+                      >
+                        Error
+                      </Badge>
                     </div>
                   </SelectItem>
                   <SelectItem value="system">
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-purple-100 text-purple-700">Sistema</Badge>
+                      <Badge
+                        variant="secondary"
+                        className="bg-purple-100 text-purple-700"
+                      >
+                        Sistema
+                      </Badge>
                     </div>
                   </SelectItem>
                 </SelectContent>
@@ -154,7 +190,9 @@ export function NotificationManager({ className }: NotificationManagerProps) {
             <Textarea
               id="message"
               value={formData.message}
-              onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, message: e.target.value }))
+              }
               placeholder="Contenido de la notificación"
               rows={3}
               required
@@ -166,7 +204,9 @@ export function NotificationManager({ className }: NotificationManagerProps) {
               <Label htmlFor="category">Categoría</Label>
               <Select
                 value={formData.category}
-                onValueChange={(value: any) => setFormData(prev => ({ ...prev, category: value }))}
+                onValueChange={(value: any) =>
+                  setFormData((prev) => ({ ...prev, category: value }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -186,7 +226,9 @@ export function NotificationManager({ className }: NotificationManagerProps) {
               <Label htmlFor="priority">Prioridad</Label>
               <Select
                 value={formData.priority}
-                onValueChange={(value: any) => setFormData(prev => ({ ...prev, priority: value }))}
+                onValueChange={(value: any) =>
+                  setFormData((prev) => ({ ...prev, priority: value }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -204,7 +246,12 @@ export function NotificationManager({ className }: NotificationManagerProps) {
               <Input
                 id="actionUrl"
                 value={formData.actionUrl}
-                onChange={(e) => setFormData(prev => ({ ...prev, actionUrl: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    actionUrl: e.target.value,
+                  }))
+                }
                 placeholder="https://..."
               />
             </div>
@@ -214,11 +261,13 @@ export function NotificationManager({ className }: NotificationManagerProps) {
             <Switch
               id="broadcast"
               checked={formData.isBroadcast}
-              onCheckedChange={(checked) => setFormData(prev => ({
-                ...prev,
-                isBroadcast: checked,
-                recipientIds: checked ? [] : prev.recipientIds
-              }))}
+              onCheckedChange={(checked) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  isBroadcast: checked,
+                  recipientIds: checked ? [] : prev.recipientIds,
+                }))
+              }
             />
             <Label htmlFor="broadcast" className="flex items-center gap-2">
               {formData.isBroadcast ? (
@@ -239,23 +288,33 @@ export function NotificationManager({ className }: NotificationManagerProps) {
             <div className="space-y-2">
               <Label>ID de destinatarios (separados por coma)</Label>
               <Input
-                value={formData.recipientIds.join(', ')}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  recipientIds: e.target.value.split(',').map(id => id.trim()).filter(id => id)
-                }))}
+                value={formData.recipientIds.join(", ")}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    recipientIds: e.target.value
+                      .split(",")
+                      .map((id) => id.trim())
+                      .filter((id) => id),
+                  }))
+                }
                 placeholder="user-id-1, user-id-2, user-id-3"
               />
               <p className="text-xs text-muted-foreground">
-                IDs de usuarios separados por coma. Déjalo vacío para enviar a todos.
+                IDs de usuarios separados por coma. Déjalo vacío para enviar a
+                todos.
               </p>
             </div>
           )}
 
           <div className="flex justify-end">
-            <Button type="submit" disabled={loading} className="flex items-center gap-2">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="flex items-center gap-2"
+            >
               <Send className="h-4 w-4" />
-              {loading ? 'Enviando...' : 'Enviar Notificación'}
+              {loading ? "Enviando..." : "Enviar Notificación"}
             </Button>
           </div>
         </form>

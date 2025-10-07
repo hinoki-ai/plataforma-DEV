@@ -1,35 +1,35 @@
-import React from 'react';
+import React from "react";
 
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { Providers } from '@/components/providers';
-import { homeMetadata, organizationSchema } from '@/lib/seo';
-import { ErrorBoundary } from '@/components/ui/error-boundary';
-import { ThemeAwareFavicon } from '@/components/ui/theme-aware-favicon';
-import './globals.css';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { Providers } from "@/components/providers";
+import { homeMetadata, organizationSchema } from "@/lib/seo";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { ThemeAwareFavicon } from "@/components/ui/theme-aware-favicon";
+import "./globals.css";
 
 const inter = Inter({
-  subsets: ['latin', 'latin-ext'],
-  display: 'swap',
-  variable: '--font-inter',
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  variable: "--font-inter",
   fallback: [
-    'system-ui',
-    '-apple-system',
-    'BlinkMacSystemFont',
-    'Segoe UI',
-    'Roboto',
-    'sans-serif',
+    "system-ui",
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "sans-serif",
   ],
   preload: true,
   adjustFontFallback: true,
 });
 
 // Apple touch icon is configured via Next.js metadata API (modern approach)
-// eslint-disable-next-line @next/next/no-head-element
+ 
 export const metadata: Metadata = {
   ...homeMetadata,
   icons: {
-    apple: '/apple-touch-icon-180.png',
+    apple: "/apple-touch-icon-180.png",
   },
 };
 

@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Sun, Moon, Monitor } from 'lucide-react';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Sun, Moon, Monitor } from "lucide-react";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export function AppearanceSettings() {
   const { theme, setTheme, systemTheme } = useTheme();
@@ -28,16 +28,16 @@ export function AppearanceSettings() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{t('appearance.title', 'common')}</CardTitle>
+          <CardTitle>{t("appearance.title", "common")}</CardTitle>
           <CardDescription>
-            {t('appearance.description', 'common')}
+            {t("appearance.description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <Label htmlFor="theme-loading" className="text-muted-foreground">
-                {t('appearance.loading_preferences', 'common')}
+                {t("appearance.loading_preferences", "common")}
               </Label>
             </div>
           </div>
@@ -46,66 +46,68 @@ export function AppearanceSettings() {
     );
   }
 
-  const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
+  const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
     setTheme(newTheme);
   };
 
   const getCurrentTheme = () => {
-    if (theme === 'system') {
-      return systemTheme || 'light';
+    if (theme === "system") {
+      return systemTheme || "light";
     }
-    return theme || 'light';
+    return theme || "light";
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('appearance.title', 'common')}</CardTitle>
+        <CardTitle>{t("appearance.title", "common")}</CardTitle>
         <CardDescription>
-          {t('appearance.description', 'common')}
+          {t("appearance.description", "common")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Theme Selection */}
         <div className="space-y-4">
           <div>
-            <h3 className="text-sm font-medium mb-3">{t('appearance.theme', 'common')}</h3>
+            <h3 className="text-sm font-medium mb-3">
+              {t("appearance.theme", "common")}
+            </h3>
             <div className="grid grid-cols-3 gap-2">
               <Button
-                variant={theme === 'light' ? 'default' : 'outline'}
+                variant={theme === "light" ? "default" : "outline"}
                 className="justify-start"
-                onClick={() => handleThemeChange('light')}
+                onClick={() => handleThemeChange("light")}
               >
                 <Sun className="mr-2 h-4 w-4" />
-                {t('appearance.theme_light', 'common')}
+                {t("appearance.theme_light", "common")}
               </Button>
               <Button
-                variant={theme === 'dark' ? 'default' : 'outline'}
+                variant={theme === "dark" ? "default" : "outline"}
                 className="justify-start"
-                onClick={() => handleThemeChange('dark')}
+                onClick={() => handleThemeChange("dark")}
               >
                 <Moon className="mr-2 h-4 w-4" />
-                {t('appearance.theme_dark', 'common')}
+                {t("appearance.theme_dark", "common")}
               </Button>
               <Button
-                variant={theme === 'system' ? 'default' : 'outline'}
+                variant={theme === "system" ? "default" : "outline"}
                 className="justify-start"
-                onClick={() => handleThemeChange('system')}
+                onClick={() => handleThemeChange("system")}
               >
                 <Monitor className="mr-2 h-4 w-4" />
-                {t('appearance.theme_system', 'common')}
+                {t("appearance.theme_system", "common")}
               </Button>
             </div>
           </div>
 
           {/* Current Theme Indicator */}
           <div className="text-sm text-muted-foreground">
-            {t('appearance.current_theme', 'common')}{' '}
-            {theme === 'system'
-              ? `${t('appearance.system_theme', 'common')} (${systemTheme === 'dark' ? t('appearance.system_dark', 'common') : t('appearance.system_light', 'common')})`
-              : theme === 'light'
-                ? t('appearance.theme_light', 'common')
-                : t('appearance.theme_dark', 'common')}
+            {t("appearance.current_theme", "common")}{" "}
+            {theme === "system"
+              ? `${t("appearance.system_theme", "common")} (${systemTheme === "dark" ? t("appearance.system_dark", "common") : t("appearance.system_light", "common")})`
+              : theme === "light"
+                ? t("appearance.theme_light", "common")
+                : t("appearance.theme_dark", "common")}
           </div>
         </div>
 
@@ -113,23 +115,23 @@ export function AppearanceSettings() {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <Label htmlFor="reduce-motion" className="text-sm font-medium">
-              {t('appearance.reduce_animations', 'common')}
+              {t("appearance.reduce_animations", "common")}
             </Label>
             <p className="text-sm text-muted-foreground">
-              {t('appearance.reduce_animations_desc', 'common')}
+              {t("appearance.reduce_animations_desc", "common")}
             </p>
           </div>
           <Switch
             id="reduce-motion"
-            onCheckedChange={checked => {
+            onCheckedChange={(checked) => {
               if (checked) {
                 document.documentElement.style.setProperty(
-                  '--animation-duration',
-                  '0s'
+                  "--animation-duration",
+                  "0s",
                 );
               } else {
                 document.documentElement.style.removeProperty(
-                  '--animation-duration'
+                  "--animation-duration",
                 );
               }
             }}
@@ -140,19 +142,19 @@ export function AppearanceSettings() {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <Label htmlFor="high-contrast" className="text-sm font-medium">
-              {t('appearance.high_contrast', 'common')}
+              {t("appearance.high_contrast", "common")}
             </Label>
             <p className="text-sm text-muted-foreground">
-              {t('appearance.high_contrast_desc', 'common')}
+              {t("appearance.high_contrast_desc", "common")}
             </p>
           </div>
           <Switch
             id="high-contrast"
-            onCheckedChange={checked => {
+            onCheckedChange={(checked) => {
               if (checked) {
-                document.documentElement.classList.add('high-contrast');
+                document.documentElement.classList.add("high-contrast");
               } else {
-                document.documentElement.classList.remove('high-contrast');
+                document.documentElement.classList.remove("high-contrast");
               }
             }}
           />

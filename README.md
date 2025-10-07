@@ -56,8 +56,8 @@ npm run dev
 
 ### Cuentas de Prueba
 
-| Rol          | Email                       | Contraseña  |
-| ------------ | --------------------------- | ----------- |
+| Rol          | Email                         | Contraseña  |
+| ------------ | ----------------------------- | ----------- |
 | **Admin**    | <admin@manitospintadas.cl>    | admin123    |
 | **Profesor** | <profesor@manitospintadas.cl> | profesor123 |
 | **Padre**    | <parent@manitospintadas.cl>   | parent123   |
@@ -198,11 +198,11 @@ This project uses a **proper 3-tier environment structure** for maximum clarity 
 
 ### Environment Matrix
 
-| Environment | File | Branch | URL | Purpose | NODE_ENV |
-|-------------|------|--------|-----|---------|----------|
-| **Local** | `.env.local` | `main` | `localhost:3000` | Local development | development |
-| **Development** | `.env.development` | `dev` | `dev.school.aramac.dev` | Staging/testing | production |
-| **Production** | `.env.production` | `prod` | `school.aramac.dev` | Live production | production |
+| Environment     | File               | Branch | URL                     | Purpose           | NODE_ENV    |
+| --------------- | ------------------ | ------ | ----------------------- | ----------------- | ----------- |
+| **Local**       | `.env.local`       | `main` | `localhost:3000`        | Local development | development |
+| **Development** | `.env.development` | `dev`  | `dev.school.aramac.dev` | Staging/testing   | production  |
+| **Production**  | `.env.production`  | `prod` | `school.aramac.dev`     | Live production   | production  |
 
 ### Environment Files
 

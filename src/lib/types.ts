@@ -4,7 +4,7 @@ export interface User {
   email: string;
   emailVerified: Date | null;
   image: string | null;
-  role: 'ADMIN' | 'PROFESOR' | 'PARENT' | 'PUBLIC';
+  role: "ADMIN" | "PROFESOR" | "PARENT" | "PUBLIC";
   createdAt: Date;
   updatedAt: Date;
   googleUserId: string | null;
@@ -19,7 +19,7 @@ export interface User {
 export interface UserFormData {
   name: string;
   email: string;
-  role: 'ADMIN' | 'PROFESOR' | 'PARENT';
+  role: "ADMIN" | "PROFESOR" | "PARENT";
   isActive?: boolean;
 }
 
@@ -50,11 +50,11 @@ export interface GoogleWorkspaceUser {
 }
 
 export interface DNSRecord {
-  type: 'MX' | 'SPF' | 'DKIM' | 'DMARC';
+  type: "MX" | "SPF" | "DKIM" | "DMARC";
   host: string;
   value: string;
   priority?: number;
-  status: 'VALID' | 'INVALID' | 'PENDING';
+  status: "VALID" | "INVALID" | "PENDING";
   message?: string;
 }
 

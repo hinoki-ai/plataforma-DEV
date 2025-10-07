@@ -11,12 +11,12 @@
  * - dev: Development mode (real users + tourists)
  */
 
-import { PrismaClient } from '@prisma/client';
-import { hashPassword } from '../src/lib/crypto';
+import { PrismaClient } from "@prisma/client";
+import { hashPassword } from "../src/lib/crypto";
 
 // Create a new Prisma client instance to avoid prepared statement conflicts
 const prisma = new PrismaClient({
-  log: ['error'],
+  log: ["error"],
   datasources: {
     db: {
       url: process.env.DATABASE_URL,
@@ -28,45 +28,45 @@ const prisma = new PrismaClient({
 const realUsers = [
   // Master Developer (Full Access)
   {
-    email: 'agustinaramac@gmail.com',
-    password: 'madmin123',
-    name: 'Agustin Arancibia Mac-Guire',
-    role: 'MASTER' as const,
-    gender: 'male',
+    email: "agustinaramac@gmail.com",
+    password: "madmin123",
+    name: "Agustin Arancibia Mac-Guire",
+    role: "MASTER" as const,
+    gender: "male",
   },
 
   // Real Admin User (Adrina)
   {
-    email: 'inacorgan@gmail.com',
-    password: 'lilo1308',
-    name: 'Andreina Giovanna Salazar Nuñez',
-    role: 'ADMIN' as const,
-    gender: 'female',
+    email: "inacorgan@gmail.com",
+    password: "lilo1308",
+    name: "Andreina Giovanna Salazar Nuñez",
+    role: "ADMIN" as const,
+    gender: "female",
   },
 ];
 
 // Tourist test users (only created in development)
 const touristUsers = [
   {
-    email: 'tourist.admin@manitospintadas.com',
-    password: 'tourist123',
-    name: 'Tourist Administrator',
-    role: 'ADMIN' as const,
-    gender: 'male',
+    email: "tourist.admin@manitospintadas.com",
+    password: "tourist123",
+    name: "Tourist Administrator",
+    role: "ADMIN" as const,
+    gender: "male",
   },
   {
-    email: 'tourist.teacher@manitospintadas.com',
-    password: 'tourist123',
-    name: 'Tourist Teacher',
-    role: 'PROFESOR' as const,
-    gender: 'female',
+    email: "tourist.teacher@manitospintadas.com",
+    password: "tourist123",
+    name: "Tourist Teacher",
+    role: "PROFESOR" as const,
+    gender: "female",
   },
   {
-    email: 'tourist.parent@manitospintadas.com',
-    password: 'tourist123',
-    name: 'Tourist Parent',
-    role: 'PARENT' as const,
-    gender: 'male',
+    email: "tourist.parent@manitospintadas.com",
+    password: "tourist123",
+    name: "Tourist Parent",
+    role: "PARENT" as const,
+    gender: "male",
   },
 ];
 
@@ -75,24 +75,33 @@ function getUsersForEnvironment(): Array<{
   email: string;
   password: string;
   name: string;
-  role: 'MASTER' | 'ADMIN' | 'PROFESOR' | 'PARENT';
+  role: "MASTER" | "ADMIN" | "PROFESOR" | "PARENT";
   gender: string;
 }> {
-  const appEnv = process.env.APP_ENV || process.env.NODE_ENV || 'development';
-  const isProduction = ['prod', 'main', 'production'].includes(appEnv.toLowerCase());
+  const appEnv = process.env.APP_ENV || process.env.NODE_ENV || "development";
+  const isProduction = ["prod", "main", "production"].includes(
+    appEnv.toLowerCase(),
+  );
 
   if (isProduction) {
-    console.log('🏭 Production environment detected - creating only real users');
+    console.log(
+      "🏭 Production environment detected - creating only real users",
+    );
     return realUsers;
   } else {
-    console.log('🧪 Development environment detected - creating real users + tourist accounts');
+    console.log(
+      "🧪 Development environment detected - creating real users + tourist accounts",
+    );
     return [...realUsers, ...touristUsers];
   }
 }
 
 async function createAllTestUsers() {
-  console.log('👥 Creating environment-specific users...');
-  console.log('🌍 Environment:', process.env.APP_ENV || process.env.NODE_ENV || 'development');
+  console.log("👥 Creating environment-specific users...");
+  console.log(
+    "🌍 Environment:",
+    process.env.APP_ENV || process.env.NODE_ENV || "development",
+  );
 
   try {
     const usersToCreate = getUsersForEnvironment();
@@ -106,20 +115,21 @@ async function createAllTestUsers() {
     }> = [];
 
     // First, update the developer to MASTER role
-    console.log('\n🔧 Updating developer to MASTER role...');
+    console.log("\n🔧 Updating developer to MASTER role...");
     const masterUser = await prisma.user.updateMany({
-      where: { email: 'agustinaramac@gmail.com' },
-      data: { role: 'MASTER' },
+      where: { email: "agustinaramac@gmail.com" },
+      data: { role: "MASTER" },
     });
     console.log(`✅ Updated ${masterUser.count} user(s) to MASTER role`);
 
     // Wait a moment to avoid connection issues
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Then create/update the other users based on environment
-    for (const userData of usersToCreate.slice(1)) { // Skip the first user (developer)
+    for (const userData of usersToCreate.slice(1)) {
+      // Skip the first user (developer)
       console.log(
-        `\n🔧 Creating ${userData.role} (${userData.gender}): ${userData.name}`
+        `\n🔧 Creating ${userData.role} (${userData.gender}): ${userData.name}`,
       );
 
       const hashedPassword = await hashPassword(userData.password);
@@ -145,8 +155,8 @@ async function createAllTestUsers() {
       console.log(`✅ Created: ${userData.name} (${userData.email})`);
     }
 
-    console.log('\n📊 Users Summary:');
-    console.log('='.repeat(50));
+    console.log("\n📊 Users Summary:");
+    console.log("=".repeat(50));
 
     const byRole = createdUsers.reduce(
       (acc, user) => {
@@ -154,22 +164,24 @@ async function createAllTestUsers() {
         acc[user.role].push(user);
         return acc;
       },
-      {} as Record<string, Array<typeof createdUsers[0]>>
+      {} as Record<string, Array<(typeof createdUsers)[0]>>,
     );
 
     // Add the MASTER user to the summary
-    byRole['MASTER'] = [{
-      id: 'master-user-summary',
-      name: 'Agustin Arancibia Mac-Guire',
-      email: 'agustinaramac@gmail.com',
-      password: 'madmin123',
-      gender: 'male',
-      role: 'MASTER' as const,
-    }];
+    byRole["MASTER"] = [
+      {
+        id: "master-user-summary",
+        name: "Agustin Arancibia Mac-Guire",
+        email: "agustinaramac@gmail.com",
+        password: "madmin123",
+        gender: "male",
+        role: "MASTER" as const,
+      },
+    ];
 
     Object.entries(byRole).forEach(([role, users]) => {
       console.log(`\n${role}:`);
-      users.forEach(user => {
+      users.forEach((user) => {
         console.log(`  👤 ${user.name}`);
         console.log(`     📧 ${user.email}`);
         console.log(`     🔑 ${user.password}`);
@@ -178,33 +190,39 @@ async function createAllTestUsers() {
     });
 
     const totalUsers = Object.values(byRole).flat().length;
-    const appEnv = process.env.APP_ENV || process.env.NODE_ENV || 'development';
-    const isProduction = ['prod', 'main', 'production'].includes(appEnv.toLowerCase());
+    const appEnv = process.env.APP_ENV || process.env.NODE_ENV || "development";
+    const isProduction = ["prod", "main", "production"].includes(
+      appEnv.toLowerCase(),
+    );
 
     console.log(`\n🎯 Total Registered Users: ${totalUsers}`);
-    console.log('👑 MASTER role created for developer (full access)');
-    console.log('👩‍💼 Real ADMIN user created for Andreina Giovanna Salazar Nuñez (Adrina)');
+    console.log("👑 MASTER role created for developer (full access)");
+    console.log(
+      "👩‍💼 Real ADMIN user created for Andreina Giovanna Salazar Nuñez (Adrina)",
+    );
 
     if (isProduction) {
-      console.log('🏭 Production environment: Only real users created');
+      console.log("🏭 Production environment: Only real users created");
     } else {
-      console.log('🧪 Development environment: 3 Tourist test accounts created for navigation testing');
+      console.log(
+        "🧪 Development environment: 3 Tourist test accounts created for navigation testing",
+      );
     }
 
-    console.log('🔒 All passwords are securely hashed in database');
+    console.log("🔒 All passwords are securely hashed in database");
 
     return createdUsers;
   } catch (error) {
-    console.error('❌ Failed to create test users:', error);
+    console.error("❌ Failed to create test users:", error);
 
     if (error instanceof Error) {
-      if (error.message.includes('ECONNREFUSED')) {
+      if (error.message.includes("ECONNREFUSED")) {
         console.error(
-          '🔍 Database connection refused. Check DATABASE_URL environment variable.'
+          "🔍 Database connection refused. Check DATABASE_URL environment variable.",
         );
-      } else if (error.message.includes('schema')) {
+      } else if (error.message.includes("schema")) {
         console.error(
-          '🔍 Database schema issue. Run: npm run db:generate && npm run db:push'
+          "🔍 Database schema issue. Run: npm run db:generate && npm run db:push",
         );
       }
     }
@@ -214,8 +232,8 @@ async function createAllTestUsers() {
 }
 
 createAllTestUsers()
-  .catch(error => {
-    console.error('Fatal error during user creation:', error);
+  .catch((error) => {
+    console.error("Fatal error during user creation:", error);
     process.exit(1);
   })
   .finally(async () => {

@@ -1,26 +1,26 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface MoonLoaderProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: "sm" | "md" | "lg" | "xl";
   text?: string;
 }
 
 export function MoonLoader({
   className,
-  size = 'md',
-  text = 'Redirigiendo a tu dashboard...',
+  size = "md",
+  text = "Redirigiendo a tu dashboard...",
 }: MoonLoaderProps) {
   const sizeClasses = {
-    sm: 'h-6 w-6',
-    md: 'h-12 w-12',
-    lg: 'h-16 w-16',
-    xl: 'h-20 w-20',
+    sm: "h-6 w-6",
+    md: "h-12 w-12",
+    lg: "h-16 w-16",
+    xl: "h-20 w-20",
   };
 
   return (
-    <div className={cn('flex flex-col items-center justify-center', className)}>
-      <div className={cn('relative', sizeClasses[size])}>
+    <div className={cn("flex flex-col items-center justify-center", className)}>
+      <div className={cn("relative", sizeClasses[size])}>
         {/* Moon shape with gradient */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400 dark:from-slate-600 dark:via-slate-700 dark:to-slate-800 animate-pulse"></div>
 
@@ -50,19 +50,19 @@ export function MoonLoader({
 
 export function DarkMoonLoader({
   className,
-  size = 'md',
-  text = 'Redirigiendo a tu dashboard...',
+  size = "md",
+  text = "Redirigiendo a tu dashboard...",
 }: MoonLoaderProps) {
   const sizeClasses = {
-    sm: 'h-6 w-6',
-    md: 'h-12 w-12',
-    lg: 'h-16 w-16',
-    xl: 'h-20 w-20',
+    sm: "h-6 w-6",
+    md: "h-12 w-12",
+    lg: "h-16 w-16",
+    xl: "h-20 w-20",
   };
 
   return (
-    <div className={cn('flex flex-col items-center justify-center', className)}>
-      <div className={cn('relative', sizeClasses[size])}>
+    <div className={cn("flex flex-col items-center justify-center", className)}>
+      <div className={cn("relative", sizeClasses[size])}>
         {/* Dark moon base */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-slate-800 via-slate-900 to-black animate-pulse"></div>
 

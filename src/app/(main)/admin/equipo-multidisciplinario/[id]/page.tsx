@@ -1,6 +1,6 @@
-import { getTeamMemberById } from '@/services/queries/team-members';
-import { TeamMemberForm } from '@/components/admin/team-member-form';
-import { PageTransition } from '@/components/ui/page-transition';
+import { getTeamMemberById } from "@/services/queries/team-members";
+import { TeamMemberForm } from "@/components/admin/team-member-form";
+import { PageTransition } from "@/components/ui/page-transition";
 
 interface EditTeamMemberPageProps {
   params: Promise<{
@@ -8,7 +8,7 @@ interface EditTeamMemberPageProps {
   }>;
 }
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function EditTeamMemberPage({
   params,

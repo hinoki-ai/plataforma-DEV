@@ -1,18 +1,18 @@
-import Link from 'next/link';
-import { PageTransition } from '@/components/ui/page-transition';
+import Link from "next/link";
+import { PageTransition } from "@/components/ui/page-transition";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Calendar, BookOpen, ArrowRight } from 'lucide-react';
-import { getPlanningDocuments } from '@/services/queries/planning';
-import { getUpcomingEvents } from '@/services/queries/calendar';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Calendar, BookOpen, ArrowRight } from "lucide-react";
+import { getPlanningDocuments } from "@/services/queries/planning";
+import { getUpcomingEvents } from "@/services/queries/calendar";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function ProfesorPMEPage() {
   const planning = await getPlanningDocuments({});

@@ -1,19 +1,31 @@
-'use client';
+"use client";
 
-import React, { ReactNode } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { LucideIcon } from 'lucide-react';
+import React, { ReactNode } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { LucideIcon } from "lucide-react";
 
 interface ActionItem {
   id: string;
   title: string;
   description: string;
   icon: LucideIcon;
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   badge?: string;
-  badgeVariant?: 'default' | 'secondary' | 'destructive' | 'outline';
+  badgeVariant?: "default" | "secondary" | "destructive" | "outline";
   onClick?: () => void;
   href?: string;
   disabled?: boolean;
@@ -28,9 +40,9 @@ interface MasterActionCardProps {
 }
 
 const gridCols = {
-  2: 'grid-cols-1 sm:grid-cols-2',
-  3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-  4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+  2: "grid-cols-1 sm:grid-cols-2",
+  3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+  4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
 };
 
 export function MasterActionCard({
@@ -38,7 +50,7 @@ export function MasterActionCard({
   description,
   actions,
   columns = 3,
-  className = ''
+  className = "",
 }: MasterActionCardProps) {
   return (
     <Card className={`border-slate-200 dark:border-slate-800 ${className}`}>
@@ -63,7 +75,7 @@ export function MasterActionCard({
                 <action.icon className="h-5 w-5 text-slate-600 dark:text-slate-400 mt-0.5" />
                 {action.badge && (
                   <Badge
-                    variant={action.badgeVariant || 'secondary'}
+                    variant={action.badgeVariant || "secondary"}
                     className="text-xs"
                   >
                     {action.badge}
@@ -80,7 +92,7 @@ export function MasterActionCard({
               </p>
 
               <Button
-                variant={action.variant || 'outline'}
+                variant={action.variant || "outline"}
                 size="sm"
                 className="w-full text-xs h-8"
                 onClick={action.onClick}
@@ -88,7 +100,10 @@ export function MasterActionCard({
                 asChild={!!action.href}
               >
                 {action.href ? (
-                  <a href={action.href} className="flex items-center justify-center">
+                  <a
+                    href={action.href}
+                    className="flex items-center justify-center"
+                  >
                     <action.icon className="h-3 w-3 mr-2" />
                     Ejecutar
                   </a>

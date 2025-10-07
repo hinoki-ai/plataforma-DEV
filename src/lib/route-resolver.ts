@@ -4,15 +4,15 @@
  * Part of Stage 3: Route & Logic Consolidation
  */
 
-import { UserRole } from '@/lib/prisma-compat-types';
-import { getDefaultRedirectPath } from '@/lib/role-utils';
+import { UserRole } from "@/lib/prisma-compat-types";
+import { getDefaultRedirectPath } from "@/lib/role-utils";
 
 export type ExtendedUserRole = UserRole;
 
 export interface RouteResolution {
   shouldRedirect: boolean;
   redirectPath: string;
-  reason: 'unauthenticated' | 'role-based' | 'none';
+  reason: "unauthenticated" | "role-based" | "none";
 }
 
 /**
@@ -20,16 +20,16 @@ export interface RouteResolution {
  */
 export function resolveRoute(
   requestedPath: string,
-  session: { user: { role: ExtendedUserRole } } | null
+  session: { user: { role: ExtendedUserRole } } | null,
 ): RouteResolution {
   // Handle calendario-escolar route
-  if (requestedPath === '/calendario-escolar') {
+  if (requestedPath === "/calendario-escolar") {
     if (!session) {
       return {
         shouldRedirect: true,
         redirectPath:
-          '/login?callbackUrl=' + encodeURIComponent('/calendario-escolar'),
-        reason: 'unauthenticated',
+          "/login?callbackUrl=" + encodeURIComponent("/calendario-escolar"),
+        reason: "unauthenticated",
       };
     }
 
@@ -38,20 +38,20 @@ export function resolveRoute(
     return {
       shouldRedirect: true,
       redirectPath: rolePath,
-      reason: 'role-based',
+      reason: "role-based",
     };
   }
 
   // Handle other routes that need intelligent resolution
-  if (requestedPath.startsWith('/equipo-multidisciplinario')) {
+  if (requestedPath.startsWith("/equipo-multidisciplinario")) {
     return resolveTeamRoute(requestedPath, session);
   }
 
   // No redirection needed
   return {
     shouldRedirect: false,
-    redirectPath: '',
-    reason: 'none',
+    redirectPath: "",
+    reason: "none",
   };
 }
 
@@ -60,14 +60,14 @@ export function resolveRoute(
  */
 function getRoleBasedCalendarPath(role: ExtendedUserRole): string {
   switch (role) {
-    case 'ADMIN':
-      return '/admin/calendario-escolar';
-    case 'PROFESOR':
-      return '/profesor/calendario-escolar';
-    case 'PARENT':
-      return '/parent/calendario-escolar';
+    case "ADMIN":
+      return "/admin/calendario-escolar";
+    case "PROFESOR":
+      return "/profesor/calendario-escolar";
+    case "PARENT":
+      return "/parent/calendario-escolar";
     default:
-      return '/calendario-escolar';
+      return "/calendario-escolar";
   }
 }
 
@@ -76,48 +76,48 @@ function getRoleBasedCalendarPath(role: ExtendedUserRole): string {
  */
 function resolveTeamRoute(
   requestedPath: string,
-  session: { user: { role: ExtendedUserRole } } | null
+  session: { user: { role: ExtendedUserRole } } | null,
 ): RouteResolution {
   // Public team route - always accessible
-  if (requestedPath === '/public/equipo-multidisciplinario') {
+  if (requestedPath === "/public/equipo-multidisciplinario") {
     return {
       shouldRedirect: false,
-      redirectPath: '',
-      reason: 'none',
+      redirectPath: "",
+      reason: "none",
     };
   }
 
   // If accessing generic equipo route, determine best path
-  if (requestedPath === '/equipo-multidisciplinario') {
+  if (requestedPath === "/equipo-multidisciplinario") {
     if (!session) {
       // Unauthenticated users go to public view
       return {
         shouldRedirect: true,
-        redirectPath: '/public/equipo-multidisciplinario',
-        reason: 'unauthenticated',
+        redirectPath: "/public/equipo-multidisciplinario",
+        reason: "unauthenticated",
       };
     }
 
     // Authenticated users - route based on role
-    if (session.user.role === 'ADMIN') {
+    if (session.user.role === "ADMIN") {
       return {
         shouldRedirect: true,
-        redirectPath: '/admin/equipo-multidisciplinario',
-        reason: 'role-based',
+        redirectPath: "/admin/equipo-multidisciplinario",
+        reason: "role-based",
       };
     } else {
       return {
         shouldRedirect: true,
-        redirectPath: '/public/equipo-multidisciplinario',
-        reason: 'role-based',
+        redirectPath: "/public/equipo-multidisciplinario",
+        reason: "role-based",
       };
     }
   }
 
   return {
     shouldRedirect: false,
-    redirectPath: '',
-    reason: 'none',
+    redirectPath: "",
+    reason: "none",
   };
 }
 
@@ -132,9 +132,9 @@ export function getRoleDashboardPath(role: ExtendedUserRole): string {
  * Check if a route requires authentication
  */
 export function requiresAuth(path: string): boolean {
-  const authRequiredPaths = ['/admin', '/profesor', '/parent', '/settings'];
+  const authRequiredPaths = ["/admin", "/profesor", "/parent", "/settings"];
 
-  return authRequiredPaths.some(authPath => path.startsWith(authPath));
+  return authRequiredPaths.some((authPath) => path.startsWith(authPath));
 }
 
 /**
@@ -142,19 +142,19 @@ export function requiresAuth(path: string): boolean {
  */
 export function hasRouteAccess(
   path: string,
-  userRole: ExtendedUserRole
+  userRole: ExtendedUserRole,
 ): boolean {
-  if (path.startsWith('/admin')) {
-    return userRole === 'ADMIN';
+  if (path.startsWith("/admin")) {
+    return userRole === "ADMIN";
   }
 
-  if (path.startsWith('/profesor')) {
-    return userRole === 'ADMIN' || userRole === 'PROFESOR';
+  if (path.startsWith("/profesor")) {
+    return userRole === "ADMIN" || userRole === "PROFESOR";
   }
 
-  if (path.startsWith('/parent')) {
+  if (path.startsWith("/parent")) {
     return (
-      userRole === 'ADMIN' || userRole === 'PROFESOR' || userRole === 'PARENT'
+      userRole === "ADMIN" || userRole === "PROFESOR" || userRole === "PARENT"
     );
   }
 

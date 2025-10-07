@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import { useSession } from 'next-auth/react';
-import { hasPermission, Permissions } from '@/lib/authorization';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Header from '@/components/layout/Header';
-import { FixedBackgroundLayout } from '@/components/layout/FixedBackgroundLayout';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
+import { useSession } from "next-auth/react";
+import { hasPermission, Permissions } from "@/lib/authorization";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Header from "@/components/layout/Header";
+import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SkeletonLoader } from '@/components/ui/dashboard-loader';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SkeletonLoader } from "@/components/ui/dashboard-loader";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { FileUpload } from '@/components/ui/file-upload';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { FileUpload } from "@/components/ui/file-upload";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   MoreVertical,
   Edit,
@@ -33,7 +33,7 @@ import {
   RotateCcw,
   Crop,
   AlertTriangle,
-} from 'lucide-react';
+} from "lucide-react";
 
 type Video = {
   id: string;
@@ -60,8 +60,8 @@ type Photo = {
 
 export default function FotosVideosPage() {
   const { data: session } = useSession();
-  const isAdmin = session?.user?.role === 'ADMIN';
-  const { t } = useDivineParsing(['common']);
+  const isAdmin = session?.user?.role === "ADMIN";
+  const { t } = useDivineParsing(["common"]);
   const [videos, setVideos] = useState<Video[]>([]);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -75,9 +75,9 @@ export default function FotosVideosPage() {
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [videoUploadModal, setVideoUploadModal] = useState(false);
-  const [newVideoTitle, setNewVideoTitle] = useState('');
-  const [newVideoUrl, setNewVideoUrl] = useState('');
-  const [uploadType, setUploadType] = useState<'photo' | 'video'>('photo');
+  const [newVideoTitle, setNewVideoTitle] = useState("");
+  const [newVideoUrl, setNewVideoUrl] = useState("");
+  const [uploadType, setUploadType] = useState<"photo" | "video">("photo");
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
 
   useEffect(() => {
@@ -89,8 +89,8 @@ export default function FotosVideosPage() {
     try {
       setLoading(true);
       const [videosResponse, photosResponse] = await Promise.all([
-        fetch('/api/videos'),
-        fetch('/api/photos'),
+        fetch("/api/videos"),
+        fetch("/api/photos"),
       ]);
 
       if (videosResponse.ok) {
@@ -103,7 +103,7 @@ export default function FotosVideosPage() {
         setPhotos(photosData.photos || []);
       }
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error("Error loading data:", error);
     } finally {
       setLoading(false);
     }
@@ -119,9 +119,9 @@ export default function FotosVideosPage() {
     if (editingVideo) {
       try {
         const response = await fetch(`/api/videos/${editingVideo.id}`, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             title: editingVideo.title,
@@ -132,13 +132,15 @@ export default function FotosVideosPage() {
         if (response.ok) {
           const updatedVideo = await response.json();
           setVideos(
-            videos.map(v => (v.id === editingVideo.id ? updatedVideo.video : v))
+            videos.map((v) =>
+              v.id === editingVideo.id ? updatedVideo.video : v,
+            ),
           );
           setUrlEditModal(false);
           setEditingVideo(null);
         }
       } catch (error) {
-        console.error('Error updating video:', error);
+        console.error("Error updating video:", error);
       }
     }
   };
@@ -147,12 +149,12 @@ export default function FotosVideosPage() {
     try {
       // First upload files
       const formData = new FormData();
-      files.forEach(file => {
-        formData.append('files', file);
+      files.forEach((file) => {
+        formData.append("files", file);
       });
 
-      const uploadResponse = await fetch('/api/upload', {
-        method: 'POST',
+      const uploadResponse = await fetch("/api/upload", {
+        method: "POST",
         body: formData,
       });
 
@@ -161,10 +163,10 @@ export default function FotosVideosPage() {
 
         // Then create photo records
         for (const file of uploadResult.files) {
-          const photoResponse = await fetch('/api/photos', {
-            method: 'POST',
+          const photoResponse = await fetch("/api/photos", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
               title: file.originalName,
@@ -174,12 +176,12 @@ export default function FotosVideosPage() {
 
           if (photoResponse.ok) {
             const photoData = await photoResponse.json();
-            setPhotos(prev => [photoData.photo, ...prev]);
+            setPhotos((prev) => [photoData.photo, ...prev]);
           }
         }
       }
     } catch (error) {
-      console.error('Error uploading photos:', error);
+      console.error("Error uploading photos:", error);
     }
   };
 
@@ -192,9 +194,9 @@ export default function FotosVideosPage() {
     if (editingPhoto) {
       try {
         const response = await fetch(`/api/photos/${editingPhoto.id}`, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             title: editingPhoto.title,
@@ -205,13 +207,15 @@ export default function FotosVideosPage() {
         if (response.ok) {
           const updatedPhoto = await response.json();
           setPhotos(
-            photos.map(p => (p.id === editingPhoto.id ? updatedPhoto.photo : p))
+            photos.map((p) =>
+              p.id === editingPhoto.id ? updatedPhoto.photo : p,
+            ),
           );
           setPhotoEditModal(false);
           setEditingPhoto(null);
         }
       } catch (error) {
-        console.error('Error updating photo:', error);
+        console.error("Error updating photo:", error);
       }
     }
   };
@@ -219,26 +223,26 @@ export default function FotosVideosPage() {
   const handlePhotoRemove = async (photoId: string) => {
     try {
       const response = await fetch(`/api/photos/${photoId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
-        setPhotos(photos.filter(photo => photo.id !== photoId));
+        setPhotos(photos.filter((photo) => photo.id !== photoId));
       }
     } catch (error) {
-      console.error('Error deleting photo:', error);
+      console.error("Error deleting photo:", error);
     }
   };
 
   const handleVideoUpload = async (title: string, url: string) => {
     setIsUploadingVideo(true);
     try {
-      console.log('Sending video upload request:', { title, url });
+      console.log("Sending video upload request:", { title, url });
 
-      const response = await fetch('/api/videos', {
-        method: 'POST',
+      const response = await fetch("/api/videos", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title,
@@ -246,27 +250,27 @@ export default function FotosVideosPage() {
         }),
       });
 
-      console.log('Response status:', response.status);
+      console.log("Response status:", response.status);
       console.log(
-        'Response headers:',
-        Object.fromEntries(response.headers.entries())
+        "Response headers:",
+        Object.fromEntries(response.headers.entries()),
       );
 
       if (response.ok) {
         const videoData = await response.json();
-        console.log('Video upload response:', videoData);
-        setVideos(prev => [videoData.video, ...prev]);
-        alert(t('photos.video_upload_success', 'common'));
+        console.log("Video upload response:", videoData);
+        setVideos((prev) => [videoData.video, ...prev]);
+        alert(t("photos.video_upload_success", "common"));
       } else {
         const errorData = await response.json();
-        console.error('Video upload failed:', errorData);
+        console.error("Video upload failed:", errorData);
         alert(
-          `Error uploading video: ${errorData.error?.message || errorData.error || 'Unknown error'}`
+          `Error uploading video: ${errorData.error?.message || errorData.error || "Unknown error"}`,
         );
       }
     } catch (error) {
-      console.error('Error uploading video:', error);
-        alert(t('photos.video_upload_error', 'common'));
+      console.error("Error uploading video:", error);
+      alert(t("photos.video_upload_error", "common"));
     } finally {
       setIsUploadingVideo(false);
     }
@@ -278,7 +282,7 @@ export default function FotosVideosPage() {
       overlayType="gradient"
       responsivePositioning="default"
       pageTransitionProps={{
-        skeletonType: 'fotos-videos',
+        skeletonType: "fotos-videos",
         duration: 700,
         enableProgressiveAnimation: true,
       }}
@@ -290,7 +294,7 @@ export default function FotosVideosPage() {
               mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }"
         >
-          {t('photos.title', 'common')}
+          {t("photos.title", "common")}
         </h1>
 
         {loading ? (
@@ -307,33 +311,33 @@ export default function FotosVideosPage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="default">
-                      {t('buttons.new_component', 'common')}
+                      {t("buttons.new_component", "common")}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-48 bg-white/95 backdrop-blur-sm border-white/20 shadow-lg rounded-lg">
                     <DropdownMenuItem
                       onClick={() => {
-                        setUploadType('photo');
+                        setUploadType("photo");
                         setUploadOpen(true);
                       }}
                       className="cursor-pointer hover:bg-gray-100 transition-colors"
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      {t('photos.add_photo', 'common')}
+                      {t("photos.add_photo", "common")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setVideoUploadModal(true)}
                       className="cursor-pointer hover:bg-gray-100 transition-colors"
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      {t('photos.add_video', 'common')}
+                      {t("photos.add_video", "common")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setSelectionMode(!selectionMode)}
                       className="cursor-pointer hover:bg-gray-100 transition-colors"
                     >
                       <Edit className="h-4 w-4 mr-2" />
-                      {t('photos.multiple_selection', 'common')}
+                      {t("photos.multiple_selection", "common")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -343,7 +347,7 @@ export default function FotosVideosPage() {
                 <div className="flex items-center gap-3">
                   <AlertTriangle className="h-5 w-5 text-yellow-500" />
                   <span className="text-yellow-100 font-medium">
-                    {t('photos.admin_only', 'common')}
+                    {t("photos.admin_only", "common")}
                   </span>
                 </div>
               </div>
@@ -355,9 +359,9 @@ export default function FotosVideosPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <span className="text-white font-medium">
-                      {t('photos.selection_mode', 'common')}:{' '}
-                      {selectedVideos.length + selectedPhotos.length}{' '}
-                      {t('photos.items_selected', 'common')}
+                      {t("photos.selection_mode", "common")}:{" "}
+                      {selectedVideos.length + selectedPhotos.length}{" "}
+                      {t("photos.items_selected", "common")}
                     </span>
                     <Button
                       variant="outline"
@@ -368,7 +372,7 @@ export default function FotosVideosPage() {
                       }}
                       className="text-white border-white/30 hover:bg-white/10"
                     >
-                      {t('photos.clear_selection', 'common')}
+                      {t("photos.clear_selection", "common")}
                     </Button>
                   </div>
                   <div className="flex gap-2">
@@ -380,28 +384,32 @@ export default function FotosVideosPage() {
                           // Delete selected videos
                           for (const videoId of selectedVideos) {
                             await fetch(`/api/videos/${videoId}`, {
-                              method: 'DELETE',
+                              method: "DELETE",
                             });
                           }
 
                           // Delete selected photos
                           for (const photoId of selectedPhotos) {
                             await fetch(`/api/photos/${photoId}`, {
-                              method: 'DELETE',
+                              method: "DELETE",
                             });
                           }
 
                           // Update local state
                           setVideos(
-                            videos.filter(v => !selectedVideos.includes(v.id))
+                            videos.filter(
+                              (v) => !selectedVideos.includes(v.id),
+                            ),
                           );
                           setPhotos(
-                            photos.filter(p => !selectedPhotos.includes(p.id))
+                            photos.filter(
+                              (p) => !selectedPhotos.includes(p.id),
+                            ),
                           );
                           setSelectedVideos([]);
                           setSelectedPhotos([]);
                         } catch (error) {
-                          console.error('Error deleting items:', error);
+                          console.error("Error deleting items:", error);
                         }
                       }}
                       disabled={
@@ -410,7 +418,7 @@ export default function FotosVideosPage() {
                       }
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
-                      {t('photos.delete_selected', 'common')}
+                      {t("photos.delete_selected", "common")}
                     </Button>
                     <Button
                       variant="outline"
@@ -418,7 +426,7 @@ export default function FotosVideosPage() {
                       onClick={() => setSelectionMode(false)}
                       className="text-white border-white/30 hover:bg-white/10"
                     >
-                      {t('photos.exit_selection', 'common')}
+                      {t("photos.exit_selection", "common")}
                     </Button>
                   </div>
                 </div>
@@ -432,10 +440,10 @@ export default function FotosVideosPage() {
             }"
             >
               <h2 className="text-2xl font-semibold text-white mb-4 drop-shadow-md">
-                {t('photos.featured_videos', 'common')}
+                {t("photos.featured_videos", "common")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {videos.map(video => (
+                {videos.map((video) => (
                   <div key={video.id} className="group relative flex flex-col">
                     <div className="aspect-video rounded-lg overflow-hidden mb-2 shadow-lg relative">
                       {selectionMode && isAdmin && (
@@ -450,7 +458,7 @@ export default function FotosVideosPage() {
                             id={`video-${video.id}`}
                             type="checkbox"
                             checked={selectedVideos.includes(video.id)}
-                            onChange={e => {
+                            onChange={(e) => {
                               if (e.target.checked) {
                                 setSelectedVideos([
                                   ...selectedVideos,
@@ -458,7 +466,9 @@ export default function FotosVideosPage() {
                                 ]);
                               } else {
                                 setSelectedVideos(
-                                  selectedVideos.filter(id => id !== video.id)
+                                  selectedVideos.filter(
+                                    (id) => id !== video.id,
+                                  ),
                                 );
                               }
                             }}
@@ -480,8 +490,8 @@ export default function FotosVideosPage() {
                             <DropdownMenuTrigger asChild>
                               <button
                                 aria-label={t(
-                                  'buttons.video_options',
-                                  'common'
+                                  "buttons.video_options",
+                                  "common",
                                 )}
                                 className="p-2 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all duration-150 hover:scale-110"
                               >
@@ -494,7 +504,7 @@ export default function FotosVideosPage() {
                                 className="cursor-pointer hover:bg-gray-100 transition-colors"
                               >
                                 <Edit className="h-4 w-4 mr-2" />
-                                {t('photos.edit_url', 'common')}
+                                {t("photos.edit_url", "common")}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={async () => {
@@ -502,25 +512,25 @@ export default function FotosVideosPage() {
                                     const response = await fetch(
                                       `/api/videos/${video.id}`,
                                       {
-                                        method: 'DELETE',
-                                      }
+                                        method: "DELETE",
+                                      },
                                     );
                                     if (response.ok) {
                                       setVideos(
-                                        videos.filter(v => v.id !== video.id)
+                                        videos.filter((v) => v.id !== video.id),
                                       );
                                     }
                                   } catch (error) {
                                     console.error(
-                                      'Error deleting video:',
-                                      error
+                                      "Error deleting video:",
+                                      error,
                                     );
                                   }
                                 }}
                                 className="cursor-pointer hover:bg-red-50 text-red-600 transition-colors"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
-                                {t('photos.remove', 'common')}
+                                {t("photos.remove", "common")}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -542,11 +552,11 @@ export default function FotosVideosPage() {
             }"
             >
               <p className="text-xl text-white/90 mb-8 drop-shadow-sm">
-                {t('photos.community_moments', 'common')}
+                {t("photos.community_moments", "common")}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {photos.length === 0
-                  ? [1, 2, 3, 4, 5, 6].map(item => (
+                  ? [1, 2, 3, 4, 5, 6].map((item) => (
                       <div key={item} className="group relative flex flex-col">
                         <div className="aspect-video bg-white/10 backdrop-blur-sm rounded-lg mb-2 shadow-lg overflow-hidden border border-white/20 relative">
                           {selectionMode && isAdmin && (
@@ -555,15 +565,15 @@ export default function FotosVideosPage() {
                                 htmlFor={`placeholder-${item}`}
                                 className="sr-only"
                               >
-                                {t('photos.select_activity', 'common')} {item}
+                                {t("photos.select_activity", "common")} {item}
                               </label>
                               <input
                                 id={`placeholder-${item}`}
                                 type="checkbox"
                                 checked={selectedPhotos.includes(
-                                  `placeholder-${item}`
+                                  `placeholder-${item}`,
                                 )}
-                                onChange={e => {
+                                onChange={(e) => {
                                   if (e.target.checked) {
                                     setSelectedPhotos([
                                       ...selectedPhotos,
@@ -572,8 +582,8 @@ export default function FotosVideosPage() {
                                   } else {
                                     setSelectedPhotos(
                                       selectedPhotos.filter(
-                                        id => id !== `placeholder-${item}`
-                                      )
+                                        (id) => id !== `placeholder-${item}`,
+                                      ),
                                     );
                                   }
                                 }}
@@ -585,7 +595,7 @@ export default function FotosVideosPage() {
                             <div className="text-center">
                               <div className="text-4xl mb-2">📸</div>
                               <span className="text-white/80 text-sm">
-                                {t('photos.photo_title', 'common')} {item}
+                                {t("photos.photo_title", "common")} {item}
                               </span>
                             </div>
                           </div>
@@ -595,8 +605,8 @@ export default function FotosVideosPage() {
                                 <DropdownMenuTrigger asChild>
                                   <button
                                     aria-label={t(
-                                      'buttons.upload_photo',
-                                      'common'
+                                      "buttons.upload_photo",
+                                      "common",
                                     )}
                                     className="p-2 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all duration-150 hover:scale-110"
                                   >
@@ -609,7 +619,7 @@ export default function FotosVideosPage() {
                                     className="cursor-pointer hover:bg-gray-100 transition-colors"
                                   >
                                     <Upload className="h-4 w-4 mr-2" />
-                                    {t('photos.upload', 'common')}
+                                    {t("photos.upload", "common")}
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
@@ -617,10 +627,10 @@ export default function FotosVideosPage() {
                           )}
                         </div>
                         <h3 className="font-semibold text-white mb-1 drop-shadow-sm">
-                          {t('photos.activity_title', 'common')} {item}
+                          {t("photos.activity_title", "common")} {item}
                         </h3>
                         <p className="text-sm text-white/80">
-                          {t('photos.activity_description', 'common')}
+                          {t("photos.activity_description", "common")}
                         </p>
                       </div>
                     ))
@@ -636,15 +646,15 @@ export default function FotosVideosPage() {
                                 htmlFor={`photo-${photo.id}`}
                                 className="sr-only"
                               >
-                                {t('photos.select_photo', 'common')}{' '}
+                                {t("photos.select_photo", "common")}{" "}
                                 {photo.title ||
-                                  `${t('photos.photo_title', 'common')} ${idx + 1}`}
+                                  `${t("photos.photo_title", "common")} ${idx + 1}`}
                               </label>
                               <input
                                 id={`photo-${photo.id}`}
                                 type="checkbox"
                                 checked={selectedPhotos.includes(photo.id)}
-                                onChange={e => {
+                                onChange={(e) => {
                                   if (e.target.checked) {
                                     setSelectedPhotos([
                                       ...selectedPhotos,
@@ -653,8 +663,8 @@ export default function FotosVideosPage() {
                                   } else {
                                     setSelectedPhotos(
                                       selectedPhotos.filter(
-                                        id => id !== photo.id
-                                      )
+                                        (id) => id !== photo.id,
+                                      ),
                                     );
                                   }
                                 }}
@@ -675,8 +685,8 @@ export default function FotosVideosPage() {
                                 <DropdownMenuTrigger asChild>
                                   <button
                                     aria-label={t(
-                                      'buttons.photo_options',
-                                      'common'
+                                      "buttons.photo_options",
+                                      "common",
                                     )}
                                     className="p-2 bg-white/10 backdrop-blur-sm rounded-lg hover:bg-white/20 transition-all duration-150 hover:scale-110"
                                   >
@@ -689,14 +699,14 @@ export default function FotosVideosPage() {
                                     className="cursor-pointer hover:bg-gray-100 transition-colors"
                                   >
                                     <Edit className="h-4 w-4 mr-2" />
-                                    {t('common.edit', 'common')}
+                                    {t("common.edit", "common")}
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
                                     onClick={() => handlePhotoRemove(photo.id)}
                                     className="cursor-pointer hover:bg-red-50 text-red-600 transition-colors"
                                   >
                                     <Trash2 className="h-4 w-4 mr-2" />
-                                    {t('photos.remove', 'common')}
+                                    {t("photos.remove", "common")}
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
@@ -708,7 +718,7 @@ export default function FotosVideosPage() {
                         </h3>
                         <p className="text-sm text-white/80">
                           {photo.description ||
-                            'Descripción de la actividad y fecha correspondiente.'}
+                            "Descripción de la actividad y fecha correspondiente."}
                         </p>
                       </div>
                     ))}
@@ -723,38 +733,38 @@ export default function FotosVideosPage() {
             <div className="p-6">
               <DialogHeader>
                 <DialogTitle className="text-xl font-semibold text-gray-900">
-                  {t('photos.edit_url', 'common')}
+                  {t("photos.edit_url", "common")}
                 </DialogTitle>
               </DialogHeader>
               <div className="mt-4 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('photos.video_title', 'common')}
+                    {t("photos.video_title", "common")}
                   </label>
                   <Input
-                    value={editingVideo?.title || ''}
-                    onChange={e =>
+                    value={editingVideo?.title || ""}
+                    onChange={(e) =>
                       setEditingVideo(
                         editingVideo
                           ? { ...editingVideo, title: e.target.value }
-                          : null
+                          : null,
                       )
                     }
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-150"
-                    placeholder={t('forms.title_video.placeholder', 'common')}
+                    placeholder={t("forms.title_video.placeholder", "common")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('photos.youtube_vimeo_url', 'common')}
+                    {t("photos.youtube_vimeo_url", "common")}
                   </label>
                   <Input
-                    value={editingVideo?.url || ''}
-                    onChange={e =>
+                    value={editingVideo?.url || ""}
+                    onChange={(e) =>
                       setEditingVideo(
                         editingVideo
                           ? { ...editingVideo, url: e.target.value }
-                          : null
+                          : null,
                       )
                     }
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-150"
@@ -770,13 +780,13 @@ export default function FotosVideosPage() {
                     variant="outline"
                     className="px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-150"
                   >
-                    {t('common.cancel', 'common')}
+                    {t("common.cancel", "common")}
                   </Button>
                   <Button
                     onClick={handleVideoUrlSave}
                     className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-all duration-150"
                   >
-                    {t('photos.save_changes', 'common')}
+                    {t("photos.save_changes", "common")}
                   </Button>
                 </div>
               </div>
@@ -788,11 +798,11 @@ export default function FotosVideosPage() {
         <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>{t('buttons.upload_photo', 'common')}s</DialogTitle>
+              <DialogTitle>{t("buttons.upload_photo", "common")}s</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <FileUpload
-                onFilesChange={async files => {
+                onFilesChange={async (files) => {
                   await handlePhotoUpload(files);
                   setUploadOpen(false);
                 }}
@@ -807,28 +817,28 @@ export default function FotosVideosPage() {
             <div className="p-6">
               <DialogHeader>
                 <DialogTitle className="text-xl font-semibold text-gray-900">
-                  {t('photos.add_video', 'common')}
+                  {t("photos.add_video", "common")}
                 </DialogTitle>
               </DialogHeader>
               <div className="mt-4 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('photos.video_title_label', 'common')}
+                    {t("photos.video_title_label", "common")}
                   </label>
                   <Input
                     value={newVideoTitle}
-                    onChange={e => setNewVideoTitle(e.target.value)}
+                    onChange={(e) => setNewVideoTitle(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-150"
-                    placeholder={t('forms.title_video.placeholder', 'common')}
+                    placeholder={t("forms.title_video.placeholder", "common")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('photos.video_url_label', 'common')}
+                    {t("photos.video_url_label", "common")}
                   </label>
                   <Input
                     value={newVideoUrl}
-                    onChange={e => setNewVideoUrl(e.target.value)}
+                    onChange={(e) => setNewVideoUrl(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-150"
                     placeholder="{t('forms.video_url.placeholder', 'common')}"
                   />
@@ -837,37 +847,37 @@ export default function FotosVideosPage() {
                   <Button
                     onClick={() => {
                       setVideoUploadModal(false);
-                      setNewVideoTitle('');
-                      setNewVideoUrl('');
+                      setNewVideoTitle("");
+                      setNewVideoUrl("");
                     }}
                     variant="outline"
                     className="px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-150"
                   >
-                    {t('common.cancel', 'common')}
+                    {t("common.cancel", "common")}
                   </Button>
                   <Button
                     onClick={async () => {
-                      console.log('Video upload button clicked');
-                      console.log('Form data:', {
+                      console.log("Video upload button clicked");
+                      console.log("Form data:", {
                         title: newVideoTitle,
                         url: newVideoUrl,
                       });
 
                       if (newVideoTitle && newVideoUrl) {
-                        console.log('Attempting to upload video:', {
+                        console.log("Attempting to upload video:", {
                           title: newVideoTitle,
                           url: newVideoUrl,
                         });
                         await handleVideoUpload(newVideoTitle, newVideoUrl);
                         setVideoUploadModal(false);
-                        setNewVideoTitle('');
-                        setNewVideoUrl('');
+                        setNewVideoTitle("");
+                        setNewVideoUrl("");
                       } else {
-                        console.log('Form validation failed:', {
+                        console.log("Form validation failed:", {
                           title: newVideoTitle,
                           url: newVideoUrl,
                         });
-                        alert(t('photos.form_validation_error', 'common'));
+                        alert(t("photos.form_validation_error", "common"));
                       }
                     }}
                     disabled={
@@ -875,7 +885,9 @@ export default function FotosVideosPage() {
                     }
                     className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-all duration-150"
                   >
-                    {isUploadingVideo ? t('photos.uploading', 'common') : t('photos.add_video', 'common')}
+                    {isUploadingVideo
+                      ? t("photos.uploading", "common")
+                      : t("photos.add_video", "common")}
                   </Button>
                 </div>
               </div>
@@ -889,42 +901,45 @@ export default function FotosVideosPage() {
             <div className="p-6">
               <DialogHeader>
                 <DialogTitle className="text-xl font-semibold text-gray-900">
-                  {t('photos.edit_photo', 'common')}
+                  {t("photos.edit_photo", "common")}
                 </DialogTitle>
               </DialogHeader>
               <div className="mt-4 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('photos.photo_title', 'common')}
+                    {t("photos.photo_title", "common")}
                   </label>
                   <Input
-                    value={editingPhoto?.title || ''}
-                    onChange={e =>
+                    value={editingPhoto?.title || ""}
+                    onChange={(e) =>
                       setEditingPhoto(
                         editingPhoto
                           ? { ...editingPhoto, title: e.target.value }
-                          : null
+                          : null,
                       )
                     }
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-150"
-                    placeholder={t('forms.title_photo.placeholder', 'common')}
+                    placeholder={t("forms.title_photo.placeholder", "common")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('photos.photo_description', 'common')}
+                    {t("photos.photo_description", "common")}
                   </label>
                   <textarea
-                    value={editingPhoto?.description || ''}
-                    onChange={e =>
+                    value={editingPhoto?.description || ""}
+                    onChange={(e) =>
                       setEditingPhoto(
                         editingPhoto
                           ? { ...editingPhoto, description: e.target.value }
-                          : null
+                          : null,
                       )
                     }
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-150 resize-none"
-                    placeholder={t('forms.description_photo.placeholder', 'common')}
+                    placeholder={t(
+                      "forms.description_photo.placeholder",
+                      "common",
+                    )}
                     rows={3}
                   />
                 </div>
@@ -937,13 +952,13 @@ export default function FotosVideosPage() {
                     variant="outline"
                     className="px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-150"
                   >
-                    {t('common.cancel', 'common')}
+                    {t("common.cancel", "common")}
                   </Button>
                   <Button
                     onClick={handlePhotoEditSave}
                     className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-all duration-150"
                   >
-                    {t('photos.save_changes', 'common')}
+                    {t("photos.save_changes", "common")}
                   </Button>
                 </div>
               </div>

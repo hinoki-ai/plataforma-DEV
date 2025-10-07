@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react';
-import { ReactElement } from 'react';
+import { render } from "@testing-library/react";
+import { ReactElement } from "react";
 
 export const renderWithProviders = (ui: ReactElement, options = {}) => {
   return render(ui, {
@@ -8,4 +8,4 @@ export const renderWithProviders = (ui: ReactElement, options = {}) => {
   });
 };
 
-export * from '@testing-library/react';
+export * from "@testing-library/react";

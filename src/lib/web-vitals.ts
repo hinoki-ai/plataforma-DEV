@@ -1,6 +1,6 @@
 // ⚡ Performance: Web Vitals monitoring and performance budgets
-import React from 'react';
-import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
+import React from "react";
+import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from "web-vitals";
 
 // ⚡ Performance: Define performance budgets for Core Web Vitals
 export const PERFORMANCE_BUDGETS = {
@@ -38,21 +38,21 @@ export const PERFORMANCE_BUDGETS = {
 
 // ⚡ Performance: Performance threshold levels
 export type PerformanceLevel =
-  | 'excellent'
-  | 'good'
-  | 'needs-improvement'
-  | 'poor';
+  | "excellent"
+  | "good"
+  | "needs-improvement"
+  | "poor";
 
 export function getPerformanceLevel(
   metricName: keyof typeof PERFORMANCE_BUDGETS,
-  value: number
+  value: number,
 ): PerformanceLevel {
   const budget = PERFORMANCE_BUDGETS[metricName];
 
-  if (value <= budget.target) return 'excellent';
-  if (value <= budget.good) return 'good';
-  if (value <= budget.poor) return 'needs-improvement';
-  return 'poor';
+  if (value <= budget.target) return "excellent";
+  if (value <= budget.good) return "good";
+  if (value <= budget.poor) return "needs-improvement";
+  return "poor";
 }
 
 // ⚡ Performance: Web Vitals analytics interface
@@ -69,10 +69,10 @@ interface WebVitalsAnalytics {
 async function sendToAnalytics(data: WebVitalsAnalytics) {
   try {
     // Send to analytics service (Google Analytics, custom endpoint, etc.)
-    if (typeof window !== 'undefined' && 'gtag' in window) {
+    if (typeof window !== "undefined" && "gtag" in window) {
       // Google Analytics 4
-      (window as any).gtag('event', data.metric.name, {
-        event_category: 'Web Vitals',
+      (window as any).gtag("event", data.metric.name, {
+        event_category: "Web Vitals",
         value: Math.round(data.metric.value),
         metric_id: data.metric.id,
         custom_map: {
@@ -82,19 +82,19 @@ async function sendToAnalytics(data: WebVitalsAnalytics) {
     }
 
     // Send to custom analytics endpoint
-    if (process.env.NODE_ENV === 'production') {
-      await fetch('/api/analytics/web-vitals', {
-        method: 'POST',
+    if (process.env.NODE_ENV === "production") {
+      await fetch("/api/analytics/web-vitals", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
     }
 
     // Console logging for development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔥 Web Vitals:', {
+    if (process.env.NODE_ENV === "development") {
+      console.log("🔥 Web Vitals:", {
         metric: data.metric.name,
         value: data.metric.value,
         level: data.level,
@@ -102,7 +102,7 @@ async function sendToAnalytics(data: WebVitalsAnalytics) {
       });
     }
   } catch (error) {
-    console.error('Failed to send Web Vitals data:', error);
+    console.error("Failed to send Web Vitals data:", error);
   }
 }
 
@@ -129,7 +129,7 @@ function handleMetric(metric: Metric) {
   sendToAnalytics(analyticsData);
 
   // Show performance alerts in development
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     showPerformanceAlert(analyticsData);
   }
 }
@@ -138,24 +138,24 @@ function handleMetric(metric: Metric) {
 function showPerformanceAlert(data: WebVitalsAnalytics) {
   const { metric, level, budget } = data;
 
-  let alertType = '';
-  let message = '';
+  let alertType = "";
+  let message = "";
 
   switch (level) {
-    case 'excellent':
-      alertType = '🎯';
+    case "excellent":
+      alertType = "🎯";
       message = `${metric.name}: ${metric.value}ms - Excellent! (Target: ≤${budget.target}ms)`;
       break;
-    case 'good':
-      alertType = '✅';
+    case "good":
+      alertType = "✅";
       message = `${metric.name}: ${metric.value}ms - Good (Target: ≤${budget.good}ms)`;
       break;
-    case 'needs-improvement':
-      alertType = '⚠️';
+    case "needs-improvement":
+      alertType = "⚠️";
       message = `${metric.name}: ${metric.value}ms - Needs Improvement (Budget: ≤${budget.good}ms)`;
       break;
-    case 'poor':
-      alertType = '🚨';
+    case "poor":
+      alertType = "🚨";
       message = `${metric.name}: ${metric.value}ms - Poor Performance! (Budget: ≤${budget.good}ms)`;
       break;
   }
@@ -163,8 +163,8 @@ function showPerformanceAlert(data: WebVitalsAnalytics) {
   console.log(`${alertType} ${message}`);
 
   // Show toast notification for poor performance
-  if (level === 'poor' && typeof window !== 'undefined') {
-    const event = new CustomEvent('performance-alert', {
+  if (level === "poor" && typeof window !== "undefined") {
+    const event = new CustomEvent("performance-alert", {
       detail: { metric: metric.name, value: metric.value, level },
     });
     window.dispatchEvent(event);
@@ -173,7 +173,7 @@ function showPerformanceAlert(data: WebVitalsAnalytics) {
 
 // ⚡ Performance: Initialize Web Vitals monitoring
 export function initWebVitals() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   // Collect and report Core Web Vitals
   onCLS(handleMetric);
@@ -187,7 +187,7 @@ export function initWebVitals() {
 export function useWebVitals() {
   // Initialize monitoring on component mount
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       initWebVitals();
     }
   }, []);

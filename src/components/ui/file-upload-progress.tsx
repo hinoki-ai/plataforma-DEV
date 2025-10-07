@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { Upload, X, File, Image, FileText, Video } from 'lucide-react';
-import { Button } from './button';
-import { Progress } from './progress';
-import { cn } from '@/lib/utils';
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { Upload, X, File, Image, FileText, Video } from "lucide-react";
+import { Button } from "./button";
+import { Progress } from "./progress";
+import { cn } from "@/lib/utils";
 
 export interface UploadFile extends File {
   preview?: string;
   uploadProgress?: number;
-  uploadStatus?: 'pending' | 'uploading' | 'success' | 'error';
+  uploadStatus?: "pending" | "uploading" | "success" | "error";
   error?: string;
 }
 
@@ -31,17 +31,17 @@ export function FileUploadProgress({
   maxFiles = 5,
   maxSize = 10 * 1024 * 1024, // 10MB
   acceptedFileTypes = {
-    'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp'],
-    'application/pdf': ['.pdf'],
-    'application/msword': ['.doc'],
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
-      '.docx',
+    "image/*": [".jpeg", ".jpg", ".png", ".gif", ".webp"],
+    "application/pdf": [".pdf"],
+    "application/msword": [".doc"],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+      ".docx",
     ],
-    'application/vnd.ms-excel': ['.xls'],
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
-      '.xlsx',
+    "application/vnd.ms-excel": [".xls"],
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+      ".xlsx",
     ],
-    'text/plain': ['.txt'],
+    "text/plain": [".txt"],
   },
   className,
   disabled = false,
@@ -53,13 +53,13 @@ export function FileUploadProgress({
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const newFiles = acceptedFiles.map(file => {
+      const newFiles = acceptedFiles.map((file) => {
         const uploadFile = Object.assign(file, {
-          preview: file.type.startsWith('image/')
+          preview: file.type.startsWith("image/")
             ? URL.createObjectURL(file)
             : undefined,
           uploadProgress: 0,
-          uploadStatus: 'pending' as const,
+          uploadStatus: "pending" as const,
         });
         return uploadFile;
       });
@@ -67,11 +67,11 @@ export function FileUploadProgress({
       const updatedFiles = [...files, ...newFiles].slice(0, maxFiles);
       setFiles(updatedFiles);
     },
-    [files, maxFiles]
+    [files, maxFiles],
   );
 
   const simulateUpload = async (file: UploadFile): Promise<UploadFile> => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let progress = 0;
       const interval = setInterval(() => {
         progress += Math.random() * 15 + 5;
@@ -81,15 +81,15 @@ export function FileUploadProgress({
           resolve({
             ...file,
             uploadProgress: 100,
-            uploadStatus: 'success',
+            uploadStatus: "success",
           });
         } else {
-          setFiles(prev =>
-            prev.map(f =>
+          setFiles((prev) =>
+            prev.map((f) =>
               f === file
-                ? { ...f, uploadProgress: progress, uploadStatus: 'uploading' }
-                : f
-            )
+                ? { ...f, uploadProgress: progress, uploadStatus: "uploading" }
+                : f,
+            ),
           );
         }
       }, 200);
@@ -99,22 +99,22 @@ export function FileUploadProgress({
   const uploadFiles = async () => {
     setIsUploading(true);
     try {
-      const pendingFiles = files.filter(f => f.uploadStatus === 'pending');
+      const pendingFiles = files.filter((f) => f.uploadStatus === "pending");
 
       for (const file of pendingFiles) {
         await simulateUpload(file);
       }
 
-      const completedFiles = files.map(f => ({
+      const completedFiles = files.map((f) => ({
         ...f,
-        uploadStatus: 'success' as const,
+        uploadStatus: "success" as const,
         uploadProgress: 100,
       }));
 
       setFiles(completedFiles);
       onUploadComplete?.(completedFiles);
     } catch (error) {
-      onUploadError?.(error instanceof Error ? error.message : 'Upload failed');
+      onUploadError?.(error instanceof Error ? error.message : "Upload failed");
     } finally {
       setIsUploading(false);
     }
@@ -129,7 +129,7 @@ export function FileUploadProgress({
       }
       setFiles(newFiles);
     },
-    [files]
+    [files],
   );
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
@@ -137,64 +137,65 @@ export function FileUploadProgress({
       onDrop,
       accept: acceptedFileTypes,
       maxSize,
-      maxFiles: maxFiles - files.filter(f => f.uploadStatus !== 'error').length,
+      maxFiles:
+        maxFiles - files.filter((f) => f.uploadStatus !== "error").length,
       disabled: disabled || isUploading,
     });
 
   const getFileIcon = (file: File) => {
-    if (file.type.startsWith('image/')) return <Image className="h-4 w-4" />;
-    if (file.type.includes('pdf')) return <FileText className="h-4 w-4" />;
-    if (file.type.startsWith('video/')) return <Video className="h-4 w-4" />;
+    if (file.type.startsWith("image/")) return <Image className="h-4 w-4" />;
+    if (file.type.includes("pdf")) return <FileText className="h-4 w-4" />;
+    if (file.type.startsWith("video/")) return <Video className="h-4 w-4" />;
     return <File className="h-4 w-4" />;
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getStatusColor = (status?: string) => {
     switch (status) {
-      case 'uploading':
-        return 'text-blue-600';
-      case 'success':
-        return 'text-green-600';
-      case 'error':
-        return 'text-red-600';
+      case "uploading":
+        return "text-blue-600";
+      case "success":
+        return "text-green-600";
+      case "error":
+        return "text-red-600";
       default:
-        return 'text-gray-600';
+        return "text-gray-600";
     }
   };
 
   const getStatusText = (status?: string, progress?: number) => {
     switch (status) {
-      case 'pending':
-        return 'En espera';
-      case 'uploading':
+      case "pending":
+        return "En espera";
+      case "uploading":
         return `Subiendo... ${Math.round(progress || 0)}%`;
-      case 'success':
-        return 'Completado';
-      case 'error':
-        return 'Error';
+      case "success":
+        return "Completado";
+      case "error":
+        return "Error";
       default:
-        return 'Pendiente';
+        return "Pendiente";
     }
   };
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Dropzone */}
       <div
         {...getRootProps()}
         className={cn(
-          'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
-          'hover:border-gray-400 transition-transform',
-          isDragActive ? 'border-primary bg-primary/5' : 'border-gray-300',
-          disabled && 'opacity-50 cursor-not-allowed',
-          files.length >= maxFiles && 'opacity-50 cursor-not-allowed'
+          "border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors",
+          "hover:border-gray-400 transition-transform",
+          isDragActive ? "border-primary bg-primary/5" : "border-gray-300",
+          disabled && "opacity-50 cursor-not-allowed",
+          files.length >= maxFiles && "opacity-50 cursor-not-allowed",
         )}
       >
         <input {...getInputProps()} />
@@ -204,7 +205,7 @@ export function FileUploadProgress({
         ) : (
           <div>
             <p className="text-muted-foreground mb-2">
-              Arrastra y suelta archivos aquí, o{' '}
+              Arrastra y suelta archivos aquí, o{" "}
               <span className="text-primary underline">busca</span>
             </p>
             <p className="text-sm text-gray-500">
@@ -223,8 +224,8 @@ export function FileUploadProgress({
               key={file.name}
               className="text-sm text-red-600 bg-red-50 p-3 rounded-lg"
             >
-              <strong>{file.name}</strong> -{' '}
-              {errors.map(e => e.message).join(', ')}
+              <strong>{file.name}</strong> -{" "}
+              {errors.map((e) => e.message).join(", ")}
             </div>
           ))}
         </div>
@@ -234,7 +235,7 @@ export function FileUploadProgress({
       {files.length > 0 && (
         <div className="space-y-3">
           <h4 className="text-sm font-medium">
-            Archivos ({files.filter(f => f.uploadStatus !== 'error').length}/
+            Archivos ({files.filter((f) => f.uploadStatus !== "error").length}/
             {maxFiles})
           </h4>
           <div className="space-y-3">
@@ -263,13 +264,13 @@ export function FileUploadProgress({
                         </p>
                         <p
                           className={cn(
-                            'text-xs font-medium',
-                            getStatusColor(file.uploadStatus)
+                            "text-xs font-medium",
+                            getStatusColor(file.uploadStatus),
                           )}
                         >
                           {getStatusText(
                             file.uploadStatus,
-                            file.uploadProgress
+                            file.uploadProgress,
                           )}
                         </p>
                       </div>
@@ -281,14 +282,14 @@ export function FileUploadProgress({
                     size="sm"
                     onClick={() => removeFile(index)}
                     className="text-red-500 hover:text-red-700"
-                    disabled={file.uploadStatus === 'uploading'}
+                    disabled={file.uploadStatus === "uploading"}
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
 
                 {/* Progress Bar */}
-                {file.uploadStatus === 'uploading' &&
+                {file.uploadStatus === "uploading" &&
                   file.uploadProgress !== undefined && (
                     <div className="w-full">
                       <Progress value={file.uploadProgress} className="h-2" />
@@ -300,7 +301,7 @@ export function FileUploadProgress({
                           {file.uploadProgress < 100 ? (
                             <div className="h-3 w-3 animate-spin rounded-full border-b-2 border-primary"></div>
                           ) : (
-                            '✓'
+                            "✓"
                           )}
                         </span>
                       </div>
@@ -311,7 +312,7 @@ export function FileUploadProgress({
           </div>
 
           {/* Upload Button */}
-          {files.some(f => f.uploadStatus === 'pending') && (
+          {files.some((f) => f.uploadStatus === "pending") && (
             <Button
               onClick={uploadFiles}
               disabled={isUploading}
@@ -323,7 +324,7 @@ export function FileUploadProgress({
                   Subiendo archivos...
                 </span>
               ) : (
-                'Subir archivos'
+                "Subir archivos"
               )}
             </Button>
           )}

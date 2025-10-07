@@ -4,15 +4,20 @@
  * Only MASTER users can access these endpoints
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { Logger } from '@/lib/logger';
-import { MasterPermissions, ExtendedUserRole } from '@/lib/authorization';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { Logger } from "@/lib/logger";
+import { MasterPermissions, ExtendedUserRole } from "@/lib/authorization";
 
-const logger = Logger.getInstance('MasterSystemControlAPI');
+const logger = Logger.getInstance("MasterSystemControlAPI");
 
 interface MasterSystemCommand {
-  action: 'god_mode_status' | 'emergency_lockdown' | 'system_reset' | 'global_audit' | 'user_override';
+  action:
+    | "god_mode_status"
+    | "emergency_lockdown"
+    | "system_reset"
+    | "global_audit"
+    | "user_override";
   target?: string;
   parameters?: Record<string, any>;
 }
@@ -23,105 +28,106 @@ export async function POST(request: NextRequest) {
     const session = await auth();
 
     // MASTER Almighty Authority Check
-    if (!session?.user || session.user.role !== 'MASTER') {
-      logger.warn('🚫 UNAUTHORIZED: Non-MASTER attempted system control', {
+    if (!session?.user || session.user.role !== "MASTER") {
+      logger.warn("🚫 UNAUTHORIZED: Non-MASTER attempted system control", {
         userId: session?.user?.id,
         userRole: session?.user?.role,
         userEmail: session?.user?.email,
-        attemptedAction: 'system_control',
+        attemptedAction: "system_control",
       });
 
       return NextResponse.json(
         {
           success: false,
-          error: '🚫 ACCESS DENIED: Only MASTER has Almighty Authority',
-          code: 'MASTER_ONLY',
+          error: "🚫 ACCESS DENIED: Only MASTER has Almighty Authority",
+          code: "MASTER_ONLY",
         },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
     const body: MasterSystemCommand = await request.json();
     const { action, target, parameters } = body;
 
-    logger.info('🏛️ MASTER Almighty Action Executed', {
+    logger.info("🏛️ MASTER Almighty Action Executed", {
       masterId: session.user.id,
       masterEmail: session.user.email,
       action,
       target,
       parameters,
       timestamp: new Date().toISOString(),
-      ipAddress: request.headers.get('x-forwarded-for') ||
-                 request.headers.get('x-real-ip') ||
-                 'unknown',
+      ipAddress:
+        request.headers.get("x-forwarded-for") ||
+        request.headers.get("x-real-ip") ||
+        "unknown",
     });
 
     // MASTER God Mode Command Processing
     switch (action) {
-      case 'god_mode_status':
+      case "god_mode_status":
         return NextResponse.json({
           success: true,
-          message: '🏛️ MASTER God Mode Active',
-          status: 'ACTIVE',
+          message: "🏛️ MASTER God Mode Active",
+          status: "ACTIVE",
           capabilities: Object.values(MasterPermissions),
           timestamp: new Date().toISOString(),
         });
 
-      case 'emergency_lockdown':
+      case "emergency_lockdown":
         // MASTER Emergency Lockdown Capability
-        logger.warn('🚨 MASTER Emergency Lockdown Activated', {
+        logger.warn("🚨 MASTER Emergency Lockdown Activated", {
           masterId: session.user.id,
-          target: target || 'ALL_SYSTEMS',
+          target: target || "ALL_SYSTEMS",
           parameters,
         });
 
         return NextResponse.json({
           success: true,
-          message: '🚨 EMERGENCY LOCKDOWN ACTIVATED by MASTER',
+          message: "🚨 EMERGENCY LOCKDOWN ACTIVATED by MASTER",
           lockdownId: `MASTER_LD_${Date.now()}`,
-          affectedSystems: target || 'ALL',
+          affectedSystems: target || "ALL",
           timestamp: new Date().toISOString(),
         });
 
-      case 'system_reset':
+      case "system_reset":
         // MASTER System Reset Capability
-        logger.warn('🔄 MASTER System Reset Initiated', {
+        logger.warn("🔄 MASTER System Reset Initiated", {
           masterId: session.user.id,
-          target: target || 'CURRENT_SYSTEM',
+          target: target || "CURRENT_SYSTEM",
           parameters,
         });
 
         return NextResponse.json({
           success: true,
-          message: '🔄 SYSTEM RESET INITIATED by MASTER',
+          message: "🔄 SYSTEM RESET INITIATED by MASTER",
           resetId: `MASTER_RESET_${Date.now()}`,
-          affectedSystem: target || 'CURRENT',
+          affectedSystem: target || "CURRENT",
           timestamp: new Date().toISOString(),
         });
 
-      case 'global_audit':
+      case "global_audit":
         // MASTER Global Audit Access
         return NextResponse.json({
           success: true,
-          message: '🔍 MASTER Global Audit Access Granted',
-          auditScope: 'GLOBAL_OVERSIGHT',
-          accessibleLogs: ['ALL_SYSTEMS', 'ALL_USERS', 'ALL_ACTIONS'],
+          message: "🔍 MASTER Global Audit Access Granted",
+          auditScope: "GLOBAL_OVERSIGHT",
+          accessibleLogs: ["ALL_SYSTEMS", "ALL_USERS", "ALL_ACTIONS"],
           timestamp: new Date().toISOString(),
         });
 
-      case 'user_override':
+      case "user_override":
         // MASTER User Role Override
         if (!target) {
           return NextResponse.json(
-            { success: false, error: 'Target user required for override' },
-            { status: 400 }
+            { success: false, error: "Target user required for override" },
+            { status: 400 },
           );
         }
 
-        logger.info('👑 MASTER User Role Override', {
+        logger.info("👑 MASTER User Role Override", {
           masterId: session.user.id,
           targetUser: target,
-          overrideType: parameters?.overrideType || 'ROLE_CHANGE',
+          overrideType: parameters?.overrideType || "ROLE_CHANGE",
           parameters,
         });
 
@@ -130,7 +136,7 @@ export async function POST(request: NextRequest) {
           message: `👑 MASTER Override Applied to User: ${target}`,
           overrideId: `MASTER_OVERRIDE_${Date.now()}`,
           targetUser: target,
-          overrideType: parameters?.overrideType || 'ROLE_CHANGE',
+          overrideType: parameters?.overrideType || "ROLE_CHANGE",
           timestamp: new Date().toISOString(),
         });
 
@@ -138,26 +144,31 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Unknown MASTER command',
-            availableCommands: ['god_mode_status', 'emergency_lockdown', 'system_reset', 'global_audit', 'user_override']
+            error: "Unknown MASTER command",
+            availableCommands: [
+              "god_mode_status",
+              "emergency_lockdown",
+              "system_reset",
+              "global_audit",
+              "user_override",
+            ],
           },
-          { status: 400 }
+          { status: 400 },
         );
     }
-
   } catch (error) {
-    logger.error('🏛️ MASTER System Control Error', {
-      error: error instanceof Error ? error.message : 'Unknown error',
+    logger.error("🏛️ MASTER System Control Error", {
+      error: error instanceof Error ? error.message : "Unknown error",
       stack: error instanceof Error ? error.stack : undefined,
     });
 
     return NextResponse.json(
       {
         success: false,
-        error: '🏛️ MASTER System Control Error',
-        code: 'MASTER_ERROR',
+        error: "🏛️ MASTER System Control Error",
+        code: "MASTER_ERROR",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -167,33 +178,32 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session?.user || session.user.role !== 'MASTER') {
+    if (!session?.user || session.user.role !== "MASTER") {
       return NextResponse.json(
-        { success: false, error: 'MASTER access required' },
-        { status: 403 }
+        { success: false, error: "MASTER access required" },
+        { status: 403 },
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: '🏛️ MASTER Almighty Status',
+      message: "🏛️ MASTER Almighty Status",
       godModeActive: true,
       masterUser: session.user.email,
       capabilities: Object.values(MasterPermissions),
-      systemControl: 'ACTIVE',
-      globalOversight: 'ENABLED',
+      systemControl: "ACTIVE",
+      globalOversight: "ENABLED",
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    logger.error('MASTER Status Check Error', { error });
+    logger.error("MASTER Status Check Error", { error });
 
     return NextResponse.json(
       {
         success: false,
-        error: 'MASTER status check failed',
+        error: "MASTER status check failed",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

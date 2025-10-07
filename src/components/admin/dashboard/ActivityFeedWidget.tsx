@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Activity, UserPlus, FileText, Calendar, Users } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Activity, UserPlus, FileText, Calendar, Users } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface ActivityItem {
   id: string;
   type:
-    | 'user_created'
-    | 'document_uploaded'
-    | 'meeting_scheduled'
-    | 'planning_updated'
-    | 'team_member_added';
+    | "user_created"
+    | "document_uploaded"
+    | "meeting_scheduled"
+    | "planning_updated"
+    | "team_member_added";
   title: string;
   description?: string;
   user?: string;
@@ -24,17 +24,17 @@ interface ActivityFeedWidgetProps {
   activities: ActivityItem[];
 }
 
-const getActivityIcon = (type: ActivityItem['type']) => {
+const getActivityIcon = (type: ActivityItem["type"]) => {
   switch (type) {
-    case 'user_created':
+    case "user_created":
       return <UserPlus className="w-4 h-4 text-green-600" />;
-    case 'document_uploaded':
+    case "document_uploaded":
       return <FileText className="w-4 h-4 text-blue-600" />;
-    case 'meeting_scheduled':
+    case "meeting_scheduled":
       return <Calendar className="w-4 h-4 text-purple-600" />;
-    case 'planning_updated':
+    case "planning_updated":
       return <FileText className="w-4 h-4 text-orange-600" />;
-    case 'team_member_added':
+    case "team_member_added":
       return <Users className="w-4 h-4 text-indigo-600" />;
     default:
       return <Activity className="w-4 h-4 text-gray-600" />;
@@ -42,11 +42,11 @@ const getActivityIcon = (type: ActivityItem['type']) => {
 };
 
 const getUserInitials = (name?: string) => {
-  if (!name) return 'S';
+  if (!name) return "S";
   return name
-    .split(' ')
-    .map(n => n[0])
-    .join('')
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
     .toUpperCase()
     .slice(0, 2);
 };
@@ -70,7 +70,7 @@ export function ActivityFeedWidget({ activities }: ActivityFeedWidgetProps) {
           </div>
         ) : (
           <div className="space-y-4">
-            {activities.map(activity => (
+            {activities.map((activity) => (
               <div key={activity.id} className="flex items-start gap-3">
                 <Avatar className="w-8 h-8 flex-shrink-0">
                   <AvatarFallback className="text-xs">

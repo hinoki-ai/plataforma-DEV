@@ -1,14 +1,14 @@
-import nodemailer from 'nodemailer';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
+import nodemailer from "nodemailer";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
 
 // Email configuration
 const createTransport = () => {
   // For development, we'll use console logging instead of actual email sending
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     return nodemailer.createTransport({
       streamTransport: true,
-      newline: 'unix',
+      newline: "unix",
       buffer: true,
     });
   }
@@ -16,7 +16,7 @@ const createTransport = () => {
   // Production email configuration
   return nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
-    port: parseInt(process.env.EMAIL_SERVER_PORT || '587'),
+    port: parseInt(process.env.EMAIL_SERVER_PORT || "587"),
     secure: false, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_SERVER_USER,
@@ -42,14 +42,14 @@ export async function sendConfirmationEmail({
     const verificationUrl = `${process.env.APP_URL}/centro-consejo/verificar?token=${verificationToken}`;
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'noreply@manitospintadas.cl',
+      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
       to,
-      subject: 'Confirma tu registro - Centro de Padres Manitos Pintadas',
+      subject: "Confirma tu registro - Centro de Padres Manitos Pintadas",
       html: getConfirmationEmailTemplate({ name, verificationUrl }),
       text: getConfirmationEmailText({ name, verificationUrl }),
     };
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       // Development logging - these will be removed in production builds
       return true;
     }
@@ -79,14 +79,14 @@ export async function sendWelcomeEmail({
     const dashboardUrl = `${process.env.APP_URL}/centro-consejo/dashboard`;
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'noreply@manitospintadas.cl',
+      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
       to,
-      subject: '¡Bienvenido al Centro de Padres Manitos Pintadas!',
+      subject: "¡Bienvenido al Centro de Padres Manitos Pintadas!",
       html: getWelcomeEmailTemplate({ name, dashboardUrl }),
       text: getWelcomeEmailText({ name, dashboardUrl }),
     };
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       // Development logging - these will be removed in production builds
       return true;
     }
@@ -123,7 +123,7 @@ interface MeetingConfirmationEmail {
 }
 
 export async function sendMeetingRequestNotification(
-  data: MeetingRequestEmail
+  data: MeetingRequestEmail,
 ): Promise<boolean> {
   try {
     const transporter = createTransport();
@@ -132,47 +132,47 @@ export async function sendMeetingRequestNotification(
     const staff = await client.query(api.users.getStaffUsers, {});
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'noreply@manitospintadas.cl',
-      to: staff.map(s => s.email).filter(Boolean),
+      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
+      to: staff.map((s) => s.email).filter(Boolean),
       subject: `Nueva Solicitud de Reunión - ${data.studentName}`,
       html: getMeetingRequestEmailTemplate(data),
       text: getMeetingRequestEmailText(data),
     };
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       return true;
     }
 
     await (transporter as any).sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.error('Error sending meeting request notification:', error);
+    console.error("Error sending meeting request notification:", error);
     return false;
   }
 }
 
 export async function sendMeetingConfirmation(
-  data: MeetingConfirmationEmail
+  data: MeetingConfirmationEmail,
 ): Promise<boolean> {
   try {
     const transporter = createTransport();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'noreply@manitospintadas.cl',
+      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
       to: data.to,
       subject: `Confirmación de Reunión - ${data.meetingTitle}`,
       html: getMeetingConfirmationEmailTemplate(data),
       text: getMeetingConfirmationEmailText(data),
     };
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       return true;
     }
 
     await (transporter as any).sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.error('Error sending meeting confirmation:', error);
+    console.error("Error sending meeting confirmation:", error);
     return false;
   }
 }
@@ -182,13 +182,13 @@ export async function sendMeetingStatusUpdate(
   parentName: string,
   meetingTitle: string,
   status: string,
-  notes?: string
+  notes?: string,
 ): Promise<boolean> {
   try {
     const transporter = createTransport();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'noreply@manitospintadas.cl',
+      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
       to,
       subject: `Actualización de Reunión - ${meetingTitle}`,
       html: getMeetingStatusUpdateTemplate({
@@ -205,14 +205,14 @@ export async function sendMeetingStatusUpdate(
       }),
     };
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       return true;
     }
 
     await (transporter as any).sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.error('Error sending meeting status update:', error);
+    console.error("Error sending meeting status update:", error);
     return false;
   }
 }
@@ -434,7 +434,7 @@ function getMeetingRequestEmailTemplate(data: MeetingRequestEmail) {
               <span class="label">👨‍🎓 Estudiante:</span> ${data.studentName} (${data.studentGrade})
             </div>
             <div class="detail-item">
-              <span class="label">📅 Fecha Preferida:</span> ${data.preferredDate.toLocaleDateString('es-CL')}
+              <span class="label">📅 Fecha Preferida:</span> ${data.preferredDate.toLocaleDateString("es-CL")}
             </div>
             <div class="detail-item">
               <span class="label">🕐 Hora Preferida:</span> ${data.preferredTime}
@@ -442,7 +442,7 @@ function getMeetingRequestEmailTemplate(data: MeetingRequestEmail) {
             <div class="detail-item">
               <span class="label">📝 Motivo:</span> ${data.reason}
             </div>
-            ${data.additionalNotes ? `<div class="detail-item"><span class="label">📋 Notas Adicionales:</span> ${data.additionalNotes}</div>` : ''}
+            ${data.additionalNotes ? `<div class="detail-item"><span class="label">📋 Notas Adicionales:</span> ${data.additionalNotes}</div>` : ""}
           </div>
           
           <p>Por favor, revisa esta solicitud y asigna un profesor para la reunión.</p>
@@ -468,10 +468,10 @@ NUEVA SOLICITUD DE REUNIÓN
 Detalles de la Solicitud:
 - Apoderado: ${data.parentName} (${data.parentEmail})
 - Estudiante: ${data.studentName} (${data.studentGrade})
-- Fecha Preferida: ${data.preferredDate.toLocaleDateString('es-CL')}
+- Fecha Preferida: ${data.preferredDate.toLocaleDateString("es-CL")}
 - Hora Preferida: ${data.preferredTime}
 - Motivo: ${data.reason}
-${data.additionalNotes ? `- Notas Adicionales: ${data.additionalNotes}` : ''}
+${data.additionalNotes ? `- Notas Adicionales: ${data.additionalNotes}` : ""}
 
 Por favor, revisa esta solicitud en el sistema administrativo.
 
@@ -516,7 +516,7 @@ function getMeetingConfirmationEmailTemplate(data: MeetingConfirmationEmail) {
               <span class="label">📋 Título:</span> ${data.meetingTitle}
             </div>
             <div class="detail-item">
-              <span class="label">📅 Fecha:</span> ${data.meetingDate.toLocaleDateString('es-CL')}
+              <span class="label">📅 Fecha:</span> ${data.meetingDate.toLocaleDateString("es-CL")}
             </div>
             <div class="detail-item">
               <span class="label">🕐 Hora:</span> ${data.meetingTime}
@@ -554,7 +554,7 @@ Hola ${data.parentName},
 Tu reunión ha sido confirmada:
 
 - Título: ${data.meetingTitle}
-- Fecha: ${data.meetingDate.toLocaleDateString('es-CL')}
+- Fecha: ${data.meetingDate.toLocaleDateString("es-CL")}
 - Hora: ${data.meetingTime}
 - Profesor Asignado: ${data.assignedTeacher}
 - Ubicación: ${data.location}
@@ -614,7 +614,7 @@ function getMeetingStatusUpdateTemplate({
             <div class="detail-item">
               <span class="label">🔄 Nuevo Estado:</span> ${status}
             </div>
-            ${notes ? `<div class="detail-item"><span class="label">📝 Notas:</span> ${notes}</div>` : ''}
+            ${notes ? `<div class="detail-item"><span class="label">📝 Notas:</span> ${notes}</div>` : ""}
           </div>
           
           <p style="text-align: center;">
@@ -651,7 +651,7 @@ Te informamos que el estado de tu reunión ha sido actualizado:
 
 - Reunión: ${meetingTitle}
 - Nuevo Estado: ${status}
-${notes ? `- Notas: ${notes}` : ''}
+${notes ? `- Notas: ${notes}` : ""}
 
 Ver detalles: ${process.env.APP_URL}/parent/reuniones
 

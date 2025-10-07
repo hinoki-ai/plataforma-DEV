@@ -21,4 +21,3 @@ Set these in Vercel (Production) and locally for development.
 
 - Middleware and NextAuth depend on `NEXTAUTH_URL` being correct per environment.
 - Ensure production `DATABASE_URL` is reachable from Vercel regions.
-

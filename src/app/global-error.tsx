@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { UnifiedErrorBoundary } from '@/components/ui/unified-error-boundary';
+import { useEffect } from "react";
+import { UnifiedErrorBoundary } from "@/components/ui/unified-error-boundary";
 
 export default function GlobalError({
   error,
@@ -13,20 +13,21 @@ export default function GlobalError({
   // Simple fallback translations for global errors
   const t = (key: string, namespace?: string) => {
     const fallbacks: Record<string, string> = {
-      'error.global_title': '¡Ups! Algo salió mal',
-      'error.global_message': 'Lo sentimos, ha ocurrido un error inesperado. Por favor, intenta nuevamente.',
-      'common.retry': 'Intenta nuevamente',
-      'error.dev_info': 'Información adicional (desarrollo)',
+      "error.global_title": "¡Ups! Algo salió mal",
+      "error.global_message":
+        "Lo sentimos, ha ocurrido un error inesperado. Por favor, intenta nuevamente.",
+      "common.retry": "Intenta nuevamente",
+      "error.dev_info": "Información adicional (desarrollo)",
     };
     return fallbacks[key] || key;
   };
 
   useEffect(() => {
-    console.error('Global Error:', error);
+    console.error("Global Error:", error);
 
     // Report to error monitoring service if available
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'exception', {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "exception", {
         description: error.message,
         fatal: true,
       });
@@ -37,7 +38,10 @@ export default function GlobalError({
     <html lang="es-CL">
       <head>
         <title>Global Error - Manitos Pintadas</title>
-        <meta name="description" content="Ha ocurrido un error crítico en la aplicación" />
+        <meta
+          name="description"
+          content="Ha ocurrido un error crítico en la aplicación"
+        />
         <style>{`
           body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -54,7 +58,7 @@ export default function GlobalError({
             variant="full"
             enableRetry={true}
             enableHome={true}
-            showDetails={process.env.NODE_ENV === 'development'}
+            showDetails={process.env.NODE_ENV === "development"}
           >
             {/* Force error to trigger the boundary */}
             <div>Global error occurred: {error.message}</div>

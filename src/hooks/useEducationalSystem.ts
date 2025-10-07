@@ -3,9 +3,12 @@
  * React hook for managing educational institution configuration
  */
 
-import { useState, useEffect } from 'react';
-import { EducationalInstitutionType, INSTITUTION_TYPE_INFO } from '@/lib/educational-system';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import {
+  EducationalInstitutionType,
+  INSTITUTION_TYPE_INFO,
+} from "@/lib/educational-system";
+import { toast } from "sonner";
 
 interface EducationalSystemState {
   currentType: EducationalInstitutionType;
@@ -16,10 +19,10 @@ interface EducationalSystemState {
 
 export function useEducationalSystem() {
   const [state, setState] = useState<EducationalSystemState>({
-    currentType: 'PRESCHOOL',
+    currentType: "PRESCHOOL",
     isLoading: true,
     error: null,
-    settings: null
+    settings: null,
   });
 
   // Load current configuration
@@ -29,9 +32,9 @@ export function useEducationalSystem() {
 
   const loadConfiguration = async () => {
     try {
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
-      
-      const response = await fetch('/api/educational-system');
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+      const response = await fetch("/api/educational-system");
       const data = await response.json();
 
       if (data.success) {
@@ -39,37 +42,39 @@ export function useEducationalSystem() {
           currentType: data.institutionType,
           settings: data.settings,
           isLoading: false,
-          error: null
+          error: null,
         });
       } else {
-        throw new Error(data.error || 'Failed to load configuration');
+        throw new Error(data.error || "Failed to load configuration");
       }
-
     } catch (error) {
-      console.error('Error loading educational configuration:', error);
-      setState(prev => ({
+      console.error("Error loading educational configuration:", error);
+      setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Error loading configuration'
+        error:
+          error instanceof Error
+            ? error.message
+            : "Error loading configuration",
       }));
-      
+
       // Use default fallback
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
-        currentType: 'PRESCHOOL',
-        isLoading: false
+        currentType: "PRESCHOOL",
+        isLoading: false,
       }));
     }
   };
 
   const updateInstitutionType = async (newType: EducationalInstitutionType) => {
     try {
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      const response = await fetch('/api/educational-system', {
-        method: 'POST',
+      const response = await fetch("/api/educational-system", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ institutionType: newType }),
       });
@@ -77,32 +82,32 @@ export function useEducationalSystem() {
       const data = await response.json();
 
       if (data.success) {
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           currentType: newType,
-          isLoading: false
+          isLoading: false,
         }));
-        
+
         toast.success(data.message);
-        
+
         // Reload page to update all components
         window.location.reload();
-        
+
         return { success: true };
       } else {
-        throw new Error(data.error || 'Failed to update configuration');
+        throw new Error(data.error || "Failed to update configuration");
       }
-
     } catch (error) {
-      console.error('Error updating institution type:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Error updating configuration';
-      setState(prev => ({
+      console.error("Error updating institution type:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Error updating configuration";
+      setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: errorMessage
+        error: errorMessage,
       }));
 
-      toast.error('Error al actualizar configuración');
+      toast.error("Error al actualizar configuración");
       return { success: false, error: errorMessage };
     }
   };
@@ -113,17 +118,17 @@ export function useEducationalSystem() {
 
   const isFeatureEnabled = (feature: string): boolean => {
     // Feature matrix - could be moved to settings
-    const featureMatrix = {
-      'parent_meetings': ['PRESCHOOL', 'BASIC_SCHOOL', 'HIGH_SCHOOL'],
-      'academic_planning': ['BASIC_SCHOOL', 'HIGH_SCHOOL', 'COLLEGE'],
-      'grading_system': ['BASIC_SCHOOL', 'HIGH_SCHOOL', 'COLLEGE'],
-      'daycare_features': ['PRESCHOOL'],
-      'university_features': ['COLLEGE'],
-      'technical_training': ['HIGH_SCHOOL', 'COLLEGE'],
-      'thesis_management': ['COLLEGE'],
-      'play_based_learning': ['PRESCHOOL'],
-      'career_guidance': ['HIGH_SCHOOL', 'COLLEGE'],
-      'research_projects': ['COLLEGE'],
+    const featureMatrix: Record<string, string[]> = {
+      parent_meetings: ["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL"],
+      academic_planning: ["BASIC_SCHOOL", "HIGH_SCHOOL", "COLLEGE"],
+      grading_system: ["BASIC_SCHOOL", "HIGH_SCHOOL", "COLLEGE"],
+      daycare_features: ["PRESCHOOL"],
+      university_features: ["COLLEGE"],
+      technical_training: ["HIGH_SCHOOL", "COLLEGE"],
+      thesis_management: ["COLLEGE"],
+      play_based_learning: ["PRESCHOOL"],
+      career_guidance: ["HIGH_SCHOOL", "COLLEGE"],
+      research_projects: ["COLLEGE"],
     };
 
     return featureMatrix[feature]?.includes(state.currentType) ?? true;
@@ -135,7 +140,7 @@ export function useEducationalSystem() {
     loadConfiguration,
     getCurrentInfo,
     isFeatureEnabled,
-    
+
     // Helper functions
     getLevels: () => getCurrentInfo().levels,
     getDescription: () => getCurrentInfo().description,

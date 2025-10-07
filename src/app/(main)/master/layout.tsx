@@ -1,6 +1,6 @@
-import { redirect } from 'next/navigation';
-import { requireAuth } from '@/lib/server-auth';
-import { hasMasterGodModeAccess } from '@/lib/role-utils';
+import { redirect } from "next/navigation";
+import { requireAuth } from "@/lib/server-auth";
+import { hasMasterGodModeAccess } from "@/lib/role-utils";
 
 export default async function MasterLayout({
   children,
@@ -11,12 +11,8 @@ export default async function MasterLayout({
 
   // Ensure user has MASTER access - Supreme Authority Check
   if (!hasMasterGodModeAccess(session.user.role)) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
-  return (
-    <div className="min-h-screen">
-      {children}
-    </div>
-  );
+  return <div className="min-h-screen">{children}</div>;
 }

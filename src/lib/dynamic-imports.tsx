@@ -1,9 +1,9 @@
 // ⚡ Performance: Dynamic imports utility for better code splitting
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-import { SkeletonLoader } from '@/components/ui/dashboard-loader';
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import { SkeletonLoader } from "@/components/ui/dashboard-loader";
 
 // ⚡ Performance: Unified skeleton components for dynamic imports
 const CardSkeleton = () => <SkeletonLoader variant="card" lines={2} />;
@@ -23,7 +23,7 @@ export function createDynamicComponent(
     loading?: () => React.ReactElement;
     ssr?: boolean;
     displayName?: string;
-  }
+  },
 ) {
   const Component = dynamic(importFn, {
     loading: options?.loading || (() => <CardSkeleton />),
@@ -44,58 +44,58 @@ export function createDynamicComponent(
 // ⚡ Performance: Calendar components - lazy loaded to reduce initial bundle
 export const CalendarComponents = {
   UnifiedCalendarView: createDynamicComponent(
-    () => import('@/components/calendar/UnifiedCalendarView'),
+    () => import("@/components/calendar/UnifiedCalendarView"),
     {
       loading: () => <CalendarSkeleton />,
-      displayName: 'UnifiedCalendarView',
+      displayName: "UnifiedCalendarView",
       ssr: false, // Disable SSR for now to avoid hydration issues
-    }
+    },
   ),
 
   AdminCalendarView: createDynamicComponent(
-    () => import('@/components/calendar/AdminCalendarView'),
+    () => import("@/components/calendar/AdminCalendarView"),
     {
       loading: () => <CalendarSkeleton />,
-      displayName: 'AdminCalendarView',
-    }
+      displayName: "AdminCalendarView",
+    },
   ),
 
   CalendarView: createDynamicComponent(
-    () => import('@/components/calendar/CalendarView'),
+    () => import("@/components/calendar/CalendarView"),
     {
       loading: () => <CalendarSkeleton />,
-      displayName: 'CalendarView',
-    }
+      displayName: "CalendarView",
+    },
   ),
 };
 
 // ⚡ Performance: Dashboard components - role-based lazy loading
 export const DashboardComponents = {
   ParentDashboardFeatures: createDynamicComponent(
-    () => import('@/components/dashboard/ParentDashboardFeatures'),
+    () => import("@/components/dashboard/ParentDashboardFeatures"),
     {
       loading: () => <DashboardSkeleton />,
-      displayName: 'ParentDashboardFeatures',
-    }
+      displayName: "ParentDashboardFeatures",
+    },
   ),
 
   ParentAnalytics: createDynamicComponent(
-    () => import('@/components/dashboard/ParentAnalytics'),
+    () => import("@/components/dashboard/ParentAnalytics"),
     {
       loading: () => <ChartSkeleton />,
-      displayName: 'ParentAnalytics',
-    }
+      displayName: "ParentAnalytics",
+    },
   ),
 
   DashboardStats: createDynamicComponent(
     () =>
-      import('@/components/dashboard/DashboardStats').then(mod => ({
+      import("@/components/dashboard/DashboardStats").then((mod) => ({
         default: mod.DashboardStats,
       })),
     {
       loading: () => <StatsSkeleton />,
-      displayName: 'DashboardStats',
-    }
+      displayName: "DashboardStats",
+    },
   ),
 };
 
@@ -173,20 +173,20 @@ export const ConditionalComponents = {
 export const preloadComponents = {
   calendar: () => {
     // Preload calendar components when user hovers over calendar navigation
-    import('@/components/calendar/UnifiedCalendarView');
-    import('@/components/calendar/CalendarView');
+    import("@/components/calendar/UnifiedCalendarView");
+    import("@/components/calendar/CalendarView");
   },
 
   dashboard: () => {
     // Preload dashboard components when user is authenticated
-    import('@/components/dashboard/DashboardStats');
-    import('@/components/dashboard/DashboardWelcome');
+    import("@/components/dashboard/DashboardStats");
+    import("@/components/dashboard/DashboardWelcome");
   },
 
   planning: () => {
     // Preload planning components for teachers/admins
-    import('@/components/planning/PlanningDashboard');
-    import('@/components/planning/PlanningDocumentForm');
+    import("@/components/planning/PlanningDashboard");
+    import("@/components/planning/PlanningDocumentForm");
   },
 };
 
@@ -196,11 +196,12 @@ export const preloadComponents = {
 export const OptimizedImports = {
   // Import only specific parts of large libraries
   DatePicker: createDynamicComponent(
-    () => import('react-day-picker').then(mod => ({ default: mod.DayPicker })),
+    () =>
+      import("react-day-picker").then((mod) => ({ default: mod.DayPicker })),
     {
       loading: () => <InputSkeleton />,
-      displayName: 'DatePicker',
+      displayName: "DatePicker",
       ssr: false,
-    }
+    },
   ),
 };

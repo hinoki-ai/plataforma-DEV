@@ -1,7 +1,7 @@
-import { writeFile, mkdir, unlink, access } from 'fs/promises';
-import { join } from 'path';
-import { NextRequest } from 'next/server';
-import { isCornerstoneLocked, lockCornerstone } from './cornerstone';
+import { writeFile, mkdir, unlink, access } from "fs/promises";
+import { join } from "path";
+import { NextRequest } from "next/server";
+import { isCornerstoneLocked, lockCornerstone } from "./cornerstone";
 
 export interface SimpleFileMetadata {
   id: string;
@@ -14,14 +14,14 @@ export interface SimpleFileMetadata {
 }
 
 export class SimpleFileStorage {
-  private static uploadDir = join(process.cwd(), 'public', 'uploads');
+  private static uploadDir = join(process.cwd(), "public", "uploads");
 
   /**
    * Simple file upload to local storage
    */
   static async uploadFile(
     file: File,
-    options?: { cornerstone?: boolean; note?: string }
+    options?: { cornerstone?: boolean; note?: string },
   ): Promise<SimpleFileMetadata> {
     try {
       // Ensure upload directory exists
@@ -29,7 +29,7 @@ export class SimpleFileStorage {
 
       // Generate unique filename
       const timestamp = Date.now();
-      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
       const filename = `${timestamp}_${sanitizedName}`;
       const filePath = join(this.uploadDir, filename);
 
@@ -55,7 +55,7 @@ export class SimpleFileStorage {
       return meta;
     } catch (error) {
       // Production: Silently handle errors with proper error messages
-      throw new Error('Failed to upload file');
+      throw new Error("Failed to upload file");
     }
   }
 
@@ -65,11 +65,11 @@ export class SimpleFileStorage {
   static validateFile(file: File): { valid: boolean; error?: string } {
     const maxSize = 15 * 1024 * 1024; // 15MB
     const allowedTypes = [
-      'image/jpeg',
-      'image/jpg', // Also accept jpg mime type
-      'image/png',
-      'image/webp',
-      'application/pdf',
+      "image/jpeg",
+      "image/jpg", // Also accept jpg mime type
+      "image/png",
+      "image/webp",
+      "application/pdf",
     ];
 
     if (file.size > maxSize) {
@@ -100,12 +100,12 @@ export class SimpleFileStorage {
       try {
         await access(filePath);
       } catch {
-        throw new Error('File not found');
+        throw new Error("File not found");
       }
 
       // Prevent deletion if file is cornerstone-locked
       if (await isCornerstoneLocked(filename)) {
-        throw new Error('File is cornerstone-locked');
+        throw new Error("File is cornerstone-locked");
       }
 
       // Delete the file
@@ -113,7 +113,7 @@ export class SimpleFileStorage {
     } catch (error) {
       // Production: Silently handle errors
       throw new Error(
-        `Failed to delete file: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to delete file: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }

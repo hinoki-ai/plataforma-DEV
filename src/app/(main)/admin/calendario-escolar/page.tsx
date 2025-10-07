@@ -1,22 +1,22 @@
-import { Metadata } from 'next';
-import { CalendarDays, Plus, Download, Upload } from 'lucide-react';
-import UnifiedCalendarView from '@/components/calendar/UnifiedCalendarView';
-import { Button } from '@/components/ui/button';
-import { PageTransition } from '@/components/ui/page-transition';
+import { Metadata } from "next";
+import { CalendarDays, Plus, Download, Upload } from "lucide-react";
+import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
+import { Button } from "@/components/ui/button";
+import { PageTransition } from "@/components/ui/page-transition";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: 'Calendario Escolar 2025 - Administración | Manitos Pintadas',
+  title: "Calendario Escolar 2025 - Administración | Manitos Pintadas",
   description:
-    'Calendario escolar oficial 2025 para administradores de Escuela Especial de Lenguaje Manitos Pintadas. Gestión completa de fechas importantes, eventos académicos y actividades preescolares.',
+    "Calendario escolar oficial 2025 para administradores de Escuela Especial de Lenguaje Manitos Pintadas. Gestión completa de fechas importantes, eventos académicos y actividades preescolares.",
   keywords:
-    'calendario escolar, administración, educación preescolar, Chile, 2025, NT1, NT2, gestión, Manitos Pintadas',
+    "calendario escolar, administración, educación preescolar, Chile, 2025, NT1, NT2, gestión, Manitos Pintadas",
   openGraph: {
-    title: 'Calendario Escolar 2025 - Administración | Manitos Pintadas',
+    title: "Calendario Escolar 2025 - Administración | Manitos Pintadas",
     description:
-      'Gestiona el calendario escolar completo del año 2025 desde el panel administrativo con funciones avanzadas.',
-    type: 'website',
+      "Gestiona el calendario escolar completo del año 2025 desde el panel administrativo con funciones avanzadas.",
+    type: "website",
   },
 };
 
@@ -78,11 +78,11 @@ export default function CalendarioEscolarAdminPage() {
             showAdminControls={true}
             showExport={true}
             initialCategories={[
-              'ACADEMIC',
-              'HOLIDAY',
-              'SPECIAL',
-              'ADMINISTRATIVE',
-              'MEETING',
+              "ACADEMIC",
+              "HOLIDAY",
+              "SPECIAL",
+              "ADMINISTRATIVE",
+              "MEETING",
             ]}
             userRole="ADMIN"
           />

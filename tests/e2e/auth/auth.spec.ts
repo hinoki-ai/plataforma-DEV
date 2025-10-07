@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
-import { AuthHelper } from './auth-helpers';
+import { test, expect } from "@playwright/test";
+import { AuthHelper } from "./auth-helpers";
 
-test.describe('Authentication System', () => {
+test.describe("Authentication System", () => {
   let authHelper: AuthHelper;
 
   test.beforeEach(async ({ page, context }) => {
@@ -20,14 +20,14 @@ test.describe('Authentication System', () => {
     }
   });
 
-  test('should display login page correctly', async ({ page }) => {
-    await page.goto('/login');
+  test("should display login page correctly", async ({ page }) => {
+    await page.goto("/login");
 
     // Increase timeout for page load
-    await page.waitForLoadState('networkidle', { timeout: 10000 });
+    await page.waitForLoadState("networkidle", { timeout: 10000 });
 
     // Check page elements - verify the actual structure with increased timeout
-    await expect(page.locator('h2')).toContainText('Acceso Sistema Escolar', {
+    await expect(page.locator("h2")).toContainText("Acceso Sistema Escolar", {
       timeout: 10000,
     });
     await expect(page.locator('input[name="email"]')).toBeVisible({
@@ -41,24 +41,24 @@ test.describe('Authentication System', () => {
     });
   });
 
-  test('should show validation errors for invalid data', async ({ page }) => {
-    await page.goto('/login');
-    await page.waitForLoadState('networkidle', { timeout: 10000 });
+  test("should show validation errors for invalid data", async ({ page }) => {
+    await page.goto("/login");
+    await page.waitForLoadState("networkidle", { timeout: 10000 });
 
     // Enter invalid email and short password to trigger validation
-    await page.fill('input[name="email"]', 'invalid-email');
+    await page.fill('input[name="email"]', "invalid-email");
     await page.locator('input[name="email"]').blur(); // Trigger blur event
-    await page.fill('input[name="password"]', '123');
+    await page.fill('input[name="password"]', "123");
     await page.locator('input[name="password"]').blur(); // Trigger blur event
 
     // Look for any form validation errors with flexible selector
     const errorSelectors = [
-      '#email-error',
-      '#password-error',
+      "#email-error",
+      "#password-error",
       '[role="alert"]',
-      '.error-message',
-      '.text-red-500',
-      '.text-destructive',
+      ".error-message",
+      ".text-red-500",
+      ".text-destructive",
     ];
 
     // Wait for any validation error to appear
@@ -80,68 +80,68 @@ test.describe('Authentication System', () => {
     // At least one validation error should be present
     expect(
       foundError ||
-        (await page.locator('text=/invalid|error|requerido/i').isVisible())
+        (await page.locator("text=/invalid|error|requerido/i").isVisible()),
     ).toBe(true);
   });
 
-  test('should show error for invalid credentials', async ({ page }) => {
-    await page.goto('/login');
-    await page.waitForLoadState('networkidle', { timeout: 10000 });
+  test("should show error for invalid credentials", async ({ page }) => {
+    await page.goto("/login");
+    await page.waitForLoadState("networkidle", { timeout: 10000 });
 
     // Fill invalid credentials
-    await page.fill('input[name="email"]', 'invalid@example.com');
-    await page.fill('input[name="password"]', 'wrongpassword');
+    await page.fill('input[name="email"]', "invalid@example.com");
+    await page.fill('input[name="password"]', "wrongpassword");
     await page.click('button[type="submit"]');
 
     // Wait for error message - check for any authentication error with increased timeout
     await expect(
       page.locator(
-        '[role="alert"]:not(#alerts):not(#__next-route-announcer__), .error-message, .alert-error'
-      )
+        '[role="alert"]:not(#alerts):not(#__next-route-announcer__), .error-message, .alert-error',
+      ),
     ).toBeVisible({
       timeout: 15000,
     });
   });
 
-  test('should login admin successfully', async ({ page }) => {
+  test("should login admin successfully", async ({ page }) => {
     // Try to login as admin
     try {
       await authHelper.loginAsAdmin();
 
       // Verify we're on admin dashboard
-      await expect(page.locator('h1')).toContainText('Dashboard');
+      await expect(page.locator("h1")).toContainText("Dashboard");
 
       // Check admin-specific elements
-      await expect(page.locator('text=Gestión de Usuarios')).toBeVisible();
-      await expect(page.locator('text=Planificaciones')).toBeVisible();
+      await expect(page.locator("text=Gestión de Usuarios")).toBeVisible();
+      await expect(page.locator("text=Planificaciones")).toBeVisible();
     } catch (error) {
       // If login fails, it might be because test users don't exist yet
-      console.warn('Admin login failed - test users may not be set up:', error);
+      console.warn("Admin login failed - test users may not be set up:", error);
 
       // Still verify we're on login page with proper error handling
-      await expect(page.url()).toContain('/login');
+      await expect(page.url()).toContain("/login");
     }
   });
 
-  test('should login teacher successfully', async ({ page }) => {
+  test("should login teacher successfully", async ({ page }) => {
     try {
       await authHelper.loginAsTeacher();
 
       // Verify we're on teacher dashboard
-      await expect(page.locator('h1')).toContainText('Dashboard');
+      await expect(page.locator("h1")).toContainText("Dashboard");
 
       // Check teacher-specific elements
-      await expect(page.locator('text=Mis Planificaciones')).toBeVisible();
+      await expect(page.locator("text=Mis Planificaciones")).toBeVisible();
     } catch (error) {
       console.warn(
-        'Teacher login failed - test users may not be set up:',
-        error
+        "Teacher login failed - test users may not be set up:",
+        error,
       );
-      await expect(page.url()).toContain('/login');
+      await expect(page.url()).toContain("/login");
     }
   });
 
-  test('should handle logout correctly', async ({ page }) => {
+  test("should handle logout correctly", async ({ page }) => {
     try {
       // Login first
       await authHelper.loginAsAdmin();
@@ -153,55 +153,55 @@ test.describe('Authentication System', () => {
       await expect(page.url()).toMatch(/(login|^\/$)/);
 
       // Verify we can't access protected pages
-      await page.goto('/admin');
-      await expect(page.url()).toContain('/login');
+      await page.goto("/admin");
+      await expect(page.url()).toContain("/login");
     } catch (error) {
-      console.warn('Logout test skipped - login required:', error);
+      console.warn("Logout test skipped - login required:", error);
     }
   });
 
-  test('should protect admin routes from unauthorized access', async ({
+  test("should protect admin routes from unauthorized access", async ({
     page,
   }) => {
     // Try to access admin route without login
-    await page.goto('/admin');
+    await page.goto("/admin");
 
     // Should redirect to login
-    await expect(page.url()).toContain('/login');
+    await expect(page.url()).toContain("/login");
   });
 
-  test('should protect teacher routes from unauthorized access', async ({
+  test("should protect teacher routes from unauthorized access", async ({
     page,
   }) => {
     // Try to access teacher route without login
-    await page.goto('/profesor');
+    await page.goto("/profesor");
 
     // Should redirect to login
-    await expect(page.url()).toContain('/login');
+    await expect(page.url()).toContain("/login");
   });
 
-  test('should allow access to public pages', async ({ page }) => {
+  test("should allow access to public pages", async ({ page }) => {
     // Test public pages are accessible
     const publicPages = [
-      '/',
-      '/proyecto-educativo',
-      '/equipo-multidisciplinario',
-      '/fotos-videos',
-      '/centro-consejo',
+      "/",
+      "/proyecto-educativo",
+      "/equipo-multidisciplinario",
+      "/fotos-videos",
+      "/centro-consejo",
     ];
 
     for (const pagePath of publicPages) {
       await page.goto(pagePath);
 
       // Should not redirect to login
-      await expect(page.url()).not.toContain('/login');
+      await expect(page.url()).not.toContain("/login");
 
       // Should load page content
-      await expect(page.locator('body')).not.toBeEmpty();
+      await expect(page.locator("body")).not.toBeEmpty();
     }
   });
 
-  test('should handle session expiration', async ({ page, context }) => {
+  test("should handle session expiration", async ({ page, context }) => {
     try {
       // Login first
       await authHelper.loginAsAdmin();
@@ -210,23 +210,23 @@ test.describe('Authentication System', () => {
       await context.clearCookies();
 
       // Try to access protected page
-      await page.goto('/admin');
+      await page.goto("/admin");
 
       // Should redirect to login
-      await expect(page.url()).toContain('/login');
+      await expect(page.url()).toContain("/login");
     } catch (error) {
-      console.warn('Session expiration test skipped - login required:', error);
+      console.warn("Session expiration test skipped - login required:", error);
     }
   });
 
   test('should remember user preference if "remember me" is checked', async ({
     page,
   }) => {
-    await page.goto('/login');
+    await page.goto("/login");
 
     // Check if remember me option exists
     const rememberMeCheckbox = page.locator(
-      'input[name="remember"], input[type="checkbox"]:has-text("Recordarme")'
+      'input[name="remember"], input[type="checkbox"]:has-text("Recordarme")',
     );
 
     if (await rememberMeCheckbox.isVisible()) {

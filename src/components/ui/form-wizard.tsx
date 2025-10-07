@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
   ChevronRight,
@@ -18,11 +18,11 @@ import {
   Eye,
   EyeOff,
   RotateCcw,
-} from 'lucide-react';
-import { useAdvancedForm, FormStep } from '@/hooks/useAdvancedForm';
-import { FormProgress } from './enhanced-form';
-import { ActionLoader } from '@/components/ui/dashboard-loader';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
+} from "lucide-react";
+import { useAdvancedForm, FormStep } from "@/hooks/useAdvancedForm";
+import { FormProgress } from "./enhanced-form";
+import { ActionLoader } from "@/components/ui/dashboard-loader";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 interface FormWizardProps<T = any> {
   steps: FormStep[];
@@ -55,11 +55,11 @@ export function FormWizard<
   submitButtonText,
   children,
 }: FormWizardProps<T>) {
-  const { t } = useDivineParsing(['common']);
+  const { t } = useDivineParsing(["common"]);
   const [previewMode, setPreviewMode] = useState(false);
 
   // Set default submit button text if not provided
-  const finalSubmitButtonText = submitButtonText || t('form.complete');
+  const finalSubmitButtonText = submitButtonText || t("form.complete");
 
   const {
     form,
@@ -116,18 +116,18 @@ export function FormWizard<
         await goToStep(stepIndex);
       }
     },
-    [allowStepJumping, currentStep, completedSteps, goToStep]
+    [allowStepJumping, currentStep, completedSteps, goToStep],
   );
 
   const getStepStatus = useCallback(
     (stepIndex: number) => {
-      if (completedSteps.includes(stepIndex)) return 'completed';
-      if (stepErrors[stepIndex]) return 'error';
-      if (stepIndex === currentStep) return 'current';
-      if (stepIndex < currentStep) return 'completed';
-      return 'pending';
+      if (completedSteps.includes(stepIndex)) return "completed";
+      if (stepErrors[stepIndex]) return "error";
+      if (stepIndex === currentStep) return "current";
+      if (stepIndex < currentStep) return "completed";
+      return "pending";
     },
-    [completedSteps, stepErrors, currentStep]
+    [completedSteps, stepErrors, currentStep],
   );
 
   const canJumpToStep = useCallback(
@@ -135,11 +135,11 @@ export function FormWizard<
       if (!allowStepJumping) return false;
       return stepIndex <= currentStep || completedSteps.includes(stepIndex - 1);
     },
-    [allowStepJumping, currentStep, completedSteps]
+    [allowStepJumping, currentStep, completedSteps],
   );
 
   return (
-    <div className={cn('max-w-4xl mx-auto space-y-6', className)}>
+    <div className={cn("max-w-4xl mx-auto space-y-6", className)}>
       {/* Header */}
       {(title || description) && (
         <div className="text-center space-y-2">
@@ -156,17 +156,17 @@ export function FormWizard<
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium">{t('form.progress')}</h3>
+                <h3 className="text-sm font-medium">{t("form.progress")}</h3>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <span>
-                    {t('form.step')} {currentStep + 1} {t('form.of')}{' '}
+                    {t("form.step")} {currentStep + 1} {t("form.of")}{" "}
                     {totalSteps}
                   </span>
                   {autoSave && lastAutoSave && (
                     <div className="flex items-center gap-1">
                       <Save className="h-3 w-3" />
                       <span>
-                        {t('form.saved')} {lastAutoSave.toLocaleTimeString()}
+                        {t("form.saved")} {lastAutoSave.toLocaleTimeString()}
                       </span>
                     </div>
                   )}
@@ -177,11 +177,11 @@ export function FormWizard<
 
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>
-                  {Math.round(completionPercentage)}% {t('form.completed')}
+                  {Math.round(completionPercentage)}% {t("form.completed")}
                 </span>
                 <span>
-                  {fieldCompletion.completed} {t('form.of')}{' '}
-                  {fieldCompletion.total} {t('form.fields')}
+                  {fieldCompletion.completed} {t("form.of")}{" "}
+                  {fieldCompletion.total} {t("form.fields")}
                 </span>
               </div>
             </div>
@@ -193,7 +193,7 @@ export function FormWizard<
       {showStepList && (
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base">{t('form.steps')}</CardTitle>
+            <CardTitle className="text-base">{t("form.steps")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -208,30 +208,31 @@ export function FormWizard<
                     disabled={!canJump}
                     onClick={() => handleStepClick(index)}
                     className={cn(
-                      'flex items-center gap-3 p-3 rounded-lg text-left transition-all',
-                      'border hover:shadow-sm disabled:cursor-not-allowed',
-                      status === 'current' && 'border-primary bg-primary/5',
-                      status === 'completed' && 'border-green-200 bg-green-50',
-                      status === 'error' && 'border-red-200 bg-red-50',
-                      status === 'pending' && 'border-border bg-muted/30',
-                      !canJump && 'opacity-60'
+                      "flex items-center gap-3 p-3 rounded-lg text-left transition-all",
+                      "border hover:shadow-sm disabled:cursor-not-allowed",
+                      status === "current" && "border-primary bg-primary/5",
+                      status === "completed" && "border-green-200 bg-green-50",
+                      status === "error" && "border-red-200 bg-red-50",
+                      status === "pending" && "border-border bg-muted/30",
+                      !canJump && "opacity-60",
                     )}
                     whileHover={canJump ? { scale: 1.02 } : {}}
                     whileTap={canJump ? { scale: 0.98 } : {}}
                   >
                     <div
                       className={cn(
-                        'flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium',
-                        status === 'current' &&
-                          'bg-primary text-primary-foreground',
-                        status === 'completed' && 'bg-green-500 text-white',
-                        status === 'error' && 'bg-red-500 text-white',
-                        status === 'pending' && 'bg-muted text-muted-foreground'
+                        "flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium",
+                        status === "current" &&
+                          "bg-primary text-primary-foreground",
+                        status === "completed" && "bg-green-500 text-white",
+                        status === "error" && "bg-red-500 text-white",
+                        status === "pending" &&
+                          "bg-muted text-muted-foreground",
                       )}
                     >
-                      {status === 'completed' ? (
+                      {status === "completed" ? (
                         <Check className="h-3 w-3" />
-                      ) : status === 'error' ? (
+                      ) : status === "error" ? (
                         <AlertCircle className="h-3 w-3" />
                       ) : (
                         index + 1
@@ -249,9 +250,9 @@ export function FormWizard<
                       )}
                     </div>
 
-                    {status === 'current' && (
+                    {status === "current" && (
                       <Badge variant="default" className="text-xs">
-                        {t('form.current')}
+                        {t("form.current")}
                       </Badge>
                     )}
                   </motion.button>
@@ -300,7 +301,7 @@ export function FormWizard<
                   <Eye className="h-4 w-4" />
                 )}
                 <span className="ml-1">
-                  {previewMode ? t('common.edit') : t('form.preview')}
+                  {previewMode ? t("common.edit") : t("form.preview")}
                 </span>
               </Button>
             </div>
@@ -321,17 +322,17 @@ export function FormWizard<
               >
                 {previewMode ? (
                   <div className="p-6 bg-muted/30 rounded-lg">
-                    <h4 className="font-medium mb-4">{t('form.preview')}</h4>
+                    <h4 className="font-medium mb-4">{t("form.preview")}</h4>
                     <div className="space-y-2 text-sm">
-                      {currentStepConfig?.fields.map(fieldName => {
+                      {currentStepConfig?.fields.map((fieldName) => {
                         const value = form.getValues(fieldName as any);
                         return (
                           <div key={fieldName} className="flex justify-between">
                             <span className="font-medium capitalize">
-                              {fieldName.replace(/([A-Z])/g, ' $1')}:
+                              {fieldName.replace(/([A-Z])/g, " $1")}:
                             </span>
                             <span className="text-muted-foreground">
-                              {value || 'No especificado'}
+                              {value || "No especificado"}
                             </span>
                           </div>
                         );
@@ -413,14 +414,14 @@ export function FormWizard<
       {isLastStep && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('form.summary')}</CardTitle>
+            <CardTitle className="text-base">{t("form.summary")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {steps.map((step, stepIndex) => {
-                const hasData = step.fields.some(field => {
+                const hasData = step.fields.some((field) => {
                   const value = form.getValues(field as any);
-                  return value !== undefined && value !== '' && value !== null;
+                  return value !== undefined && value !== "" && value !== null;
                 });
 
                 if (!hasData) return null;
@@ -435,11 +436,11 @@ export function FormWizard<
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-8">
-                      {step.fields.map(fieldName => {
+                      {step.fields.map((fieldName) => {
                         const value = form.getValues(fieldName as any);
                         if (
                           value === undefined ||
-                          value === '' ||
+                          value === "" ||
                           value === null
                         )
                           return null;
@@ -447,13 +448,13 @@ export function FormWizard<
                         return (
                           <div key={fieldName} className="space-y-1">
                             <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                              {fieldName.replace(/([A-Z])/g, ' $1')}
+                              {fieldName.replace(/([A-Z])/g, " $1")}
                             </label>
                             <div className="text-sm">
-                              {typeof value === 'boolean'
+                              {typeof value === "boolean"
                                 ? value
-                                  ? 'Sí'
-                                  : 'No'
+                                  ? "Sí"
+                                  : "No"
                                 : String(value)}
                             </div>
                           </div>

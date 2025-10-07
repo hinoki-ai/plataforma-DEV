@@ -118,7 +118,7 @@ export const getDocumentStats = query({
 
     return {
       total: docs.length,
-      recent: docs.filter(d => d.createdAt >= sevenDaysAgo).length,
+      recent: docs.filter((d) => d.createdAt >= sevenDaysAgo).length,
     };
   },
 });
@@ -133,6 +133,6 @@ export const getRecentDocumentsCount = query({
     const now = Date.now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
 
-    return docs.filter(d => d.updatedAt >= sevenDaysAgo).length;
+    return docs.filter((d) => d.updatedAt >= sevenDaysAgo).length;
   },
 });

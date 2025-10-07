@@ -1,13 +1,13 @@
-import type { PlanningDocument } from '@/lib/prisma-compat-types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { format } from 'date-fns';
-import { es, enUS } from 'date-fns/locale';
-import { memo } from 'react';
+import type { PlanningDocument } from "@/lib/prisma-compat-types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { es, enUS } from "date-fns/locale";
+import { memo } from "react";
 
 // i18n
-import { useLanguage } from '@/components/language/LanguageContext';
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface PlanningDocumentCardProps {
   document: PlanningDocument & {
@@ -30,8 +30,8 @@ export const PlanningDocumentCard = memo(function PlanningDocumentCard({
 }: PlanningDocumentCardProps) {
   const { t, language } = useLanguage();
 
-  const formattedDate = format(new Date(document.updatedAt), 'dd MMM yyyy', {
-    locale: language === 'es' ? es : enUS,
+  const formattedDate = format(new Date(document.updatedAt), "dd MMM yyyy", {
+    locale: language === "es" ? es : enUS,
   });
 
   return (
@@ -61,17 +61,22 @@ export const PlanningDocumentCard = memo(function PlanningDocumentCard({
           </div>
 
           <div className="text-xs text-muted-foreground">
-            <p>{t('planning.card.author', 'common')} {document.author.name || document.author.email}</p>
-            <p>{t('planning.card.updated', 'common')} {formattedDate}</p>
+            <p>
+              {t("planning.card.author", "common")}{" "}
+              {document.author.name || document.author.email}
+            </p>
+            <p>
+              {t("planning.card.updated", "common")} {formattedDate}
+            </p>
           </div>
 
           {document.attachments && (
             <div className="text-xs">
-              📎{' '}
+              📎{" "}
               {Array.isArray(document.attachments)
                 ? document.attachments.length
-                : 0}{' '}
-              {t('planning.card.files', 'common')}
+                : 0}{" "}
+              {t("planning.card.files", "common")}
             </div>
           )}
 
@@ -82,20 +87,20 @@ export const PlanningDocumentCard = memo(function PlanningDocumentCard({
                   variant="outline"
                   size="sm"
                   onClick={() => onEdit(document.id)}
-                  aria-label={`${t('planning.card.edit', 'common')} ${document.title}`}
+                  aria-label={`${t("planning.card.edit", "common")} ${document.title}`}
                 >
-                  {t('planning.card.edit', 'common')}
+                  {t("planning.card.edit", "common")}
                 </Button>
               )}
               {onDelete &&
-                (isAdmin || document.authorId === 'current-user-id') && (
+                (isAdmin || document.authorId === "current-user-id") && (
                   <Button
                     variant="destructive"
                     size="sm"
                     onClick={() => onDelete(document.id)}
-                    aria-label={`${t('planning.card.delete', 'common')} ${document.title}`}
+                    aria-label={`${t("planning.card.delete", "common")} ${document.title}`}
                   >
-                    {t('planning.card.delete', 'common')}
+                    {t("planning.card.delete", "common")}
                   </Button>
                 )}
             </div>
@@ -106,4 +111,4 @@ export const PlanningDocumentCard = memo(function PlanningDocumentCard({
   );
 });
 
-PlanningDocumentCard.displayName = 'PlanningDocumentCard';
+PlanningDocumentCard.displayName = "PlanningDocumentCard";

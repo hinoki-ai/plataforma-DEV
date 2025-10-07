@@ -43,8 +43,8 @@ export const getUsers = query({
         v.literal("ADMIN"),
         v.literal("PROFESOR"),
         v.literal("PARENT"),
-        v.literal("PUBLIC")
-      )
+        v.literal("PUBLIC"),
+      ),
     ),
     isActive: v.optional(v.boolean()),
   },
@@ -75,7 +75,7 @@ export const getUserCountByRole = query({
   args: {},
   handler: async (ctx) => {
     const users = await ctx.db.query("users").collect();
-    
+
     const counts = {
       MASTER: 0,
       ADMIN: 0,
@@ -111,7 +111,7 @@ export const createUser = mutation({
       v.literal("ADMIN"),
       v.literal("PROFESOR"),
       v.literal("PARENT"),
-      v.literal("PUBLIC")
+      v.literal("PUBLIC"),
     ),
     image: v.optional(v.string()),
     provider: v.optional(v.string()),
@@ -123,13 +123,13 @@ export const createUser = mutation({
         v.literal("PENDING"),
         v.literal("ACTIVE"),
         v.literal("INACTIVE"),
-        v.literal("SUSPENDED")
-      )
+        v.literal("SUSPENDED"),
+      ),
     ),
   },
   handler: async (ctx, args) => {
     const now = Date.now();
-    
+
     // Check if user already exists
     const existingUser = await ctx.db
       .query("users")
@@ -168,8 +168,8 @@ export const updateUser = mutation({
         v.literal("ADMIN"),
         v.literal("PROFESOR"),
         v.literal("PARENT"),
-        v.literal("PUBLIC")
-      )
+        v.literal("PUBLIC"),
+      ),
     ),
     image: v.optional(v.string()),
     isActive: v.optional(v.boolean()),
@@ -178,8 +178,8 @@ export const updateUser = mutation({
         v.literal("PENDING"),
         v.literal("ACTIVE"),
         v.literal("INACTIVE"),
-        v.literal("SUSPENDED")
-      )
+        v.literal("SUSPENDED"),
+      ),
     ),
     parentRole: v.optional(v.string()),
   },
@@ -281,11 +281,11 @@ export const getUserStats = query({
 
     return {
       total: users.length,
-      active: users.filter(u => u.isActive).length,
-      admins: users.filter(u => u.role === 'ADMIN').length,
-      profesores: users.filter(u => u.role === 'PROFESOR').length,
-      parents: users.filter(u => u.role === 'PARENT').length,
-      recent: users.filter(u => u.createdAt >= thirtyDaysAgo).length,
+      active: users.filter((u) => u.isActive).length,
+      admins: users.filter((u) => u.role === "ADMIN").length,
+      profesores: users.filter((u) => u.role === "PROFESOR").length,
+      parents: users.filter((u) => u.role === "PARENT").length,
+      recent: users.filter((u) => u.createdAt >= thirtyDaysAgo).length,
     };
   },
 });
@@ -298,7 +298,7 @@ export const getStaffUsers = query({
   handler: async (ctx) => {
     const users = await ctx.db.query("users").collect();
     return users
-      .filter(u => (u.role === 'ADMIN' || u.role === 'PROFESOR') && u.email)
-      .map(u => ({ email: u.email, name: u.name }));
+      .filter((u) => (u.role === "ADMIN" || u.role === "PROFESOR") && u.email)
+      .map((u) => ({ email: u.email, name: u.name }));
   },
 });

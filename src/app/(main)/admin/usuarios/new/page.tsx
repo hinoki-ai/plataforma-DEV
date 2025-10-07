@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function NewUserPage() {
   const router = useRouter();
 
   useEffect(() => {
     // Redirect to the main usuarios page with a query parameter to open the create dialog
-    router.replace('/admin/usuarios?create=true');
+    router.replace("/admin/usuarios?create=true");
   }, [router]);
 
   return (

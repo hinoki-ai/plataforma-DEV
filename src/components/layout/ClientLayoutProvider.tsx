@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import React, { Suspense } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { useSession } from 'next-auth/react';
-import { cn } from '@/lib/utils';
-import Header from '@/components/layout/Header';
-import { usePathname } from 'next/navigation';
-import { NavigationSkeleton } from '@/components/ui/loading-skeletons';
-import HydratedLayoutWrapper from './HydratedLayoutWrapper';
-import { UnifiedErrorBoundary } from '@/components/ui/unified-error-boundary';
-import { MobileSidebar } from './MobileSidebar';
-import { useHydrationSafe } from '@/components/ui/hydration-error-boundary';
-import { useSidebarState } from './hooks/useSidebarState';
-import { useSidebarGestures } from './hooks/useSidebarGestures';
-import { NavigationProvider } from './NavigationContext';
-import { NetworkErrorBoundary } from '@/components/ui/network-error-boundary';
+import React, { Suspense } from "react";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { useSession } from "next-auth/react";
+import { cn } from "@/lib/utils";
+import Header from "@/components/layout/Header";
+import { usePathname } from "next/navigation";
+import { NavigationSkeleton } from "@/components/ui/loading-skeletons";
+import HydratedLayoutWrapper from "./HydratedLayoutWrapper";
+import { UnifiedErrorBoundary } from "@/components/ui/unified-error-boundary";
+import { MobileSidebar } from "./MobileSidebar";
+import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
+import { useSidebarState } from "./hooks/useSidebarState";
+import { useSidebarGestures } from "./hooks/useSidebarGestures";
+import { NavigationProvider } from "./NavigationContext";
+import { NetworkErrorBoundary } from "@/components/ui/network-error-boundary";
 
 interface ClientLayoutProviderProps {
   children: React.ReactNode;
@@ -28,7 +28,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
   // Sidebar state management
   const { isSidebarCollapsed, setIsSidebarCollapsed } = useSidebarState(
     isHydrated,
-    pathname
+    pathname,
   );
 
   // Mobile gesture handling
@@ -41,11 +41,11 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
 
   // Pages that use FixedBackgroundLayout and need full-screen rendering
   const isFullScreenPage =
-    pathname?.startsWith('/public/equipo-multidisciplinario') ||
-    pathname === '/proyecto-educativo' ||
-    pathname === '/equipo-multidisciplinario' ||
-    pathname === '/centro-consejo' ||
-    pathname?.startsWith('/fotos-videos');
+    pathname?.startsWith("/public/equipo-multidisciplinario") ||
+    pathname === "/proyecto-educativo" ||
+    pathname === "/equipo-multidisciplinario" ||
+    pathname === "/centro-consejo" ||
+    pathname?.startsWith("/fotos-videos");
 
   // Special layout for full-screen pages (no sidebar, no container constraints)
   if (isFullScreenPage) {
@@ -68,7 +68,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
   // This prevents dual loaders
 
   // Layout for non-authenticated users (no sidebar)
-  if (!session && status === 'unauthenticated') {
+  if (!session && status === "unauthenticated") {
     return (
       <div className="min-h-screen">
         <Suspense fallback={<NavigationSkeleton />}>
@@ -112,9 +112,9 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
         <div className="flex-1 flex flex-col min-w-0">
           <main
             className={cn(
-              'flex-1 w-full transition-all duration-300',
-              'p-4 md:p-6 lg:p-8',
-              'max-w-full overflow-x-auto'
+              "flex-1 w-full transition-all duration-300",
+              "p-4 md:p-6 lg:p-8",
+              "max-w-full overflow-x-auto",
             )}
           >
             {children}
@@ -135,7 +135,7 @@ export default function ClientLayoutProvider({
         variant="minimal"
         enableRetry={true}
         enableHome={true}
-        showDetails={process.env.NODE_ENV === 'development'}
+        showDetails={process.env.NODE_ENV === "development"}
       >
         <HydratedLayoutWrapper>
           <NavigationProvider>

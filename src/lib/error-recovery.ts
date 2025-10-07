@@ -12,8 +12,8 @@ import {
   NetworkError,
   ServiceError,
   formatErrorForContext,
-} from './error-types';
-import { apiRequest, ApiResponse } from './api-client';
+} from "./error-types";
+import { apiRequest, ApiResponse } from "./api-client";
 
 export interface RecoveryOptions {
   maxRetries?: number;
@@ -22,7 +22,7 @@ export interface RecoveryOptions {
   fallbackData?: any;
   onRetry?: (attempt: number, error: AppError) => void;
   onFailure?: (error: AppError) => void;
-  context?: 'public' | 'auth' | 'admin';
+  context?: "public" | "auth" | "admin";
 }
 
 export interface RecoveryResult<T> {
@@ -39,7 +39,7 @@ export interface RecoveryResult<T> {
  */
 export async function withRetry<T>(
   operation: () => Promise<T>,
-  options: RecoveryOptions = {}
+  options: RecoveryOptions = {},
 ): Promise<RecoveryResult<T>> {
   const {
     maxRetries = 3,
@@ -83,7 +83,7 @@ export async function withRetry<T>(
 
       // Wait before retry with exponential backoff
       const delay = retryDelay * Math.pow(backoffMultiplier, attempt - 1);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
@@ -117,7 +117,7 @@ export async function withRetry<T>(
 export async function apiWithRecovery<T>(
   url: string,
   options: any = {},
-  recoveryOptions: RecoveryOptions = {}
+  recoveryOptions: RecoveryOptions = {},
 ): Promise<RecoveryResult<T>> {
   const result = await withRetry(() => apiRequest<T>(url, options), {
     ...recoveryOptions,
@@ -146,7 +146,7 @@ export class GracefulDegradation {
     key: string,
     fetcher: () => Promise<T>,
     fallback?: T,
-    options: RecoveryOptions = {}
+    options: RecoveryOptions = {},
   ): Promise<{ data: T | undefined; error?: AppError; degraded: boolean }> {
     const result = await withRetry(fetcher, {
       ...options,
@@ -217,22 +217,22 @@ export const gracefulDegradation = new GracefulDegradation();
 export class CircuitBreaker {
   private failures = 0;
   private lastFailureTime = 0;
-  private state: 'closed' | 'open' | 'half-open' = 'closed';
+  private state: "closed" | "open" | "half-open" = "closed";
 
   constructor(
     private failureThreshold: number = 5,
     private recoveryTimeout: number = 60000, // 1 minute
-    private successThreshold: number = 3
+    private successThreshold: number = 3,
   ) {}
 
   async execute<T>(operation: () => Promise<T>): Promise<T> {
-    if (this.state === 'open') {
+    if (this.state === "open") {
       if (Date.now() - this.lastFailureTime > this.recoveryTimeout) {
-        this.state = 'half-open';
+        this.state = "half-open";
       } else {
         throw new ServiceError(
-          'Circuit breaker is open - service temporarily unavailable',
-          'CIRCUIT_OPEN'
+          "Circuit breaker is open - service temporarily unavailable",
+          "CIRCUIT_OPEN",
         );
       }
     }
@@ -240,9 +240,9 @@ export class CircuitBreaker {
     try {
       const result = await operation();
 
-      if (this.state === 'half-open') {
+      if (this.state === "half-open") {
         this.failures = 0;
-        this.state = 'closed';
+        this.state = "closed";
       }
 
       return result;
@@ -257,18 +257,18 @@ export class CircuitBreaker {
     this.lastFailureTime = Date.now();
 
     if (this.failures >= this.failureThreshold) {
-      this.state = 'open';
+      this.state = "open";
     }
   }
 
-  getState(): 'closed' | 'open' | 'half-open' {
+  getState(): "closed" | "open" | "half-open" {
     return this.state;
   }
 
   reset(): void {
     this.failures = 0;
     this.lastFailureTime = 0;
-    this.state = 'closed';
+    this.state = "closed";
   }
 }
 
@@ -288,13 +288,13 @@ export const circuitBreakers = {
 export interface ErrorNotification {
   id: string;
   error: AppError;
-  context: 'public' | 'auth' | 'admin';
+  context: "public" | "auth" | "admin";
   dismissed: boolean;
   timestamp: Date;
   actions?: Array<{
     label: string;
     action: () => void;
-    variant?: 'default' | 'destructive' | 'outline';
+    variant?: "default" | "destructive" | "outline";
   }>;
 }
 
@@ -307,8 +307,8 @@ class ErrorNotificationManager {
    */
   notify(
     error: AppError,
-    context: 'public' | 'auth' | 'admin' = 'public',
-    actions?: ErrorNotification['actions']
+    context: "public" | "auth" | "admin" = "public",
+    actions?: ErrorNotification["actions"],
   ): string {
     const notification: ErrorNotification = {
       id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -329,7 +329,7 @@ class ErrorNotificationManager {
     this.notifyListeners();
 
     // Auto-dismiss low severity errors after 5 seconds
-    if (error.severity === 'low') {
+    if (error.severity === "low") {
       setTimeout(() => this.dismiss(notification.id), 5000);
     }
 
@@ -340,7 +340,7 @@ class ErrorNotificationManager {
    * Dismiss notification
    */
   dismiss(id: string): void {
-    const notification = this.notifications.find(n => n.id === id);
+    const notification = this.notifications.find((n) => n.id === id);
     if (notification) {
       notification.dismissed = true;
       this.notifyListeners();
@@ -350,9 +350,9 @@ class ErrorNotificationManager {
   /**
    * Get active notifications
    */
-  getNotifications(context?: 'public' | 'auth' | 'admin'): ErrorNotification[] {
+  getNotifications(context?: "public" | "auth" | "admin"): ErrorNotification[] {
     return this.notifications.filter(
-      n => !n.dismissed && (!context || n.context === context)
+      (n) => !n.dismissed && (!context || n.context === context),
     );
   }
 
@@ -360,7 +360,7 @@ class ErrorNotificationManager {
    * Subscribe to notification changes
    */
   subscribe(
-    listener: (notifications: ErrorNotification[]) => void
+    listener: (notifications: ErrorNotification[]) => void,
   ): () => void {
     this.listeners.push(listener);
     return () => {
@@ -372,7 +372,7 @@ class ErrorNotificationManager {
   }
 
   private notifyListeners(): void {
-    this.listeners.forEach(listener => listener(this.getNotifications()));
+    this.listeners.forEach((listener) => listener(this.getNotifications()));
   }
 
   /**
@@ -391,25 +391,25 @@ export const errorNotificationManager = new ErrorNotificationManager();
  */
 export function setupGlobalErrorHandling(): void {
   // Handle unhandled promise rejections
-  if (typeof window !== 'undefined') {
-    window.addEventListener('unhandledrejection', event => {
+  if (typeof window !== "undefined") {
+    window.addEventListener("unhandledrejection", (event) => {
       const error = classifyError(event.reason);
-      console.error('Unhandled promise rejection:', error);
+      console.error("Unhandled promise rejection:", error);
 
       if (isCriticalError(error)) {
-        errorNotificationManager.notify(error, 'public');
+        errorNotificationManager.notify(error, "public");
       }
 
       event.preventDefault();
     });
 
     // Handle runtime JavaScript errors
-    window.addEventListener('error', event => {
+    window.addEventListener("error", (event) => {
       const error = classifyError(event.error || new Error(event.message));
-      console.error('Runtime error:', error);
+      console.error("Runtime error:", error);
 
       if (isCriticalError(error)) {
-        errorNotificationManager.notify(error, 'public');
+        errorNotificationManager.notify(error, "public");
       }
     });
   }
@@ -419,7 +419,7 @@ export function setupGlobalErrorHandling(): void {
  * Context-aware error handling hook
  */
 export function useErrorRecovery(
-  context: 'public' | 'auth' | 'admin' = 'public'
+  context: "public" | "auth" | "admin" = "public",
 ) {
   return {
     /**
@@ -430,19 +430,19 @@ export function useErrorRecovery(
       const formatted = formatErrorForContext(appError, context);
 
       // Add retry action if error is retryable
-      const actions: ErrorNotification['actions'] = [];
+      const actions: ErrorNotification["actions"] = [];
       if (isRetryableError(appError) && options.onRetry) {
         actions.push({
-          label: 'Reintentar',
+          label: "Reintentar",
           action: () => options.onRetry?.(1, appError),
-          variant: 'default',
+          variant: "default",
         });
       }
 
       errorNotificationManager.notify(
         appError,
         context,
-        actions.length > 0 ? actions : undefined
+        actions.length > 0 ? actions : undefined,
       );
       return appError;
     },
@@ -453,7 +453,7 @@ export function useErrorRecovery(
     recoverWith: async <T>(
       operation: () => Promise<T>,
       fallback: T,
-      options: RecoveryOptions = {}
+      options: RecoveryOptions = {},
     ): Promise<T> => {
       const result = await withRetry(operation, {
         ...options,

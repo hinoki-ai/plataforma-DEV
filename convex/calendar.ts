@@ -16,13 +16,13 @@ const eventCategoryValidator = v.union(
   v.literal("VACATION"),
   v.literal("EVENT"),
   v.literal("DEADLINE"),
-  v.literal("OTHER")
+  v.literal("OTHER"),
 );
 
 const priorityValidator = v.union(
   v.literal("LOW"),
   v.literal("MEDIUM"),
-  v.literal("HIGH")
+  v.literal("HIGH"),
 );
 
 // ==================== QUERIES ====================
@@ -173,7 +173,7 @@ export const deleteCalendarEvent = mutation({
       .query("recurrenceRules")
       .withIndex("by_calendarEventId", (q) => q.eq("calendarEventId", id))
       .first();
-    
+
     if (rule) {
       await ctx.db.delete(rule._id);
     }

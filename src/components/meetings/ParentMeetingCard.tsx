@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Clock, MapPin, User, MessageSquare } from 'lucide-react';
-import { Meeting } from '@/lib/prisma-compat-types';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { StatusBadge } from '@/components/ui/status-badge';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar, Clock, MapPin, User, MessageSquare } from "lucide-react";
+import { Meeting } from "@/lib/prisma-compat-types";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 interface ParentMeetingCardProps {
   meeting: Meeting & { teacher?: { name: string; email: string } };
@@ -15,14 +15,14 @@ interface ParentMeetingCardProps {
 
 const meetingStatusMap: Record<
   string,
-  import('@/components/ui/status-badge').StatusType
+  import("@/components/ui/status-badge").StatusType
 > = {
-  SCHEDULED: 'PENDING',
-  CONFIRMED: 'CONFIRMED',
-  IN_PROGRESS: 'IN_PROGRESS',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED',
-  RESCHEDULED: 'PENDING',
+  SCHEDULED: "PENDING",
+  CONFIRMED: "CONFIRMED",
+  IN_PROGRESS: "IN_PROGRESS",
+  COMPLETED: "COMPLETED",
+  CANCELLED: "CANCELLED",
+  RESCHEDULED: "PENDING",
 };
 
 export function ParentMeetingCard({
@@ -54,7 +54,7 @@ export function ParentMeetingCard({
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4 text-gray-500" />
             <span>
-              {format(new Date(meeting.scheduledDate), 'dd MMM yyyy', {
+              {format(new Date(meeting.scheduledDate), "dd MMM yyyy", {
                 locale: es,
               })}
             </span>
@@ -72,7 +72,7 @@ export function ParentMeetingCard({
         {/* Teacher Info */}
         {meeting.teacher && (
           <div className="text-sm text-gray-600">
-            <span className="font-medium">Profesor:</span>{' '}
+            <span className="font-medium">Profesor:</span>{" "}
             {meeting.teacher.name}
           </div>
         )}
@@ -95,7 +95,7 @@ export function ParentMeetingCard({
         )}
 
         {/* Status-specific information */}
-        {meeting.status === 'COMPLETED' && meeting.outcome && (
+        {meeting.status === "COMPLETED" && meeting.outcome && (
           <div className="text-sm text-gray-600">
             <span className="font-medium">Resultado:</span> {meeting.outcome}
           </div>

@@ -32,7 +32,7 @@ export const createOrUpdateSchoolInfo = mutation({
       v.literal("PRESCHOOL"),
       v.literal("BASIC_SCHOOL"),
       v.literal("HIGH_SCHOOL"),
-      v.literal("COLLEGE")
+      v.literal("COLLEGE"),
     ),
     supportedLevels: v.optional(v.any()),
     customGrades: v.optional(v.any()),

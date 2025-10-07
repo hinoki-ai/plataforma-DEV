@@ -1,28 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/../convex/_generated/api';
-import { hasPermission, Permissions } from '@/lib/authorization';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/../convex/_generated/api";
+import { hasPermission, Permissions } from "@/lib/authorization";
 import {
   withApiErrorHandling,
   AuthenticationError,
   ValidationError,
   NotFoundError,
-} from '@/lib/error-handler';
+} from "@/lib/error-handler";
 
 export const PUT = withApiErrorHandling(
   async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ id: string }> },
   ) => {
     const session = await auth();
     if (!session?.user) {
-      throw new AuthenticationError('Authentication required');
+      throw new AuthenticationError("Authentication required");
     }
 
     // Check permissions for edit - only ADMIN can edit photos
-    if (session.user.role !== 'ADMIN') {
-      throw new AuthenticationError('Only administrators can edit photos');
+    if (session.user.role !== "ADMIN") {
+      throw new AuthenticationError("Only administrators can edit photos");
     }
 
     const { id } = await params;
@@ -30,14 +30,14 @@ export const PUT = withApiErrorHandling(
     const { title, description, url } = body;
 
     const client = getConvexClient();
-    
+
     // Check if photo exists
     const existingPhoto = await client.query(api.media.getPhotoById, {
       id: id as any,
     });
 
     if (!existingPhoto) {
-      throw new NotFoundError('Photo not found');
+      throw new NotFoundError("Photo not found");
     }
 
     // Note: Photo update mutation needs to be created in Convex
@@ -63,37 +63,37 @@ export const PUT = withApiErrorHandling(
     return NextResponse.json({
       success: true,
       photo: photoWithUser,
-      message: 'Photo updated successfully',
+      message: "Photo updated successfully",
     });
-  }
+  },
 );
 
 export const DELETE = withApiErrorHandling(
   async (
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ id: string }> },
   ) => {
     const session = await auth();
     if (!session?.user) {
-      throw new AuthenticationError('Authentication required');
+      throw new AuthenticationError("Authentication required");
     }
 
     // Check permissions for delete - only ADMIN can delete photos
-    if (session.user.role !== 'ADMIN') {
-      throw new AuthenticationError('Only administrators can delete photos');
+    if (session.user.role !== "ADMIN") {
+      throw new AuthenticationError("Only administrators can delete photos");
     }
 
     const { id } = await params;
 
     const client = getConvexClient();
-    
+
     // Check if photo exists
     const existingPhoto = await client.query(api.media.getPhotoById, {
       id: id as any,
     });
 
     if (!existingPhoto) {
-      throw new NotFoundError('Photo not found');
+      throw new NotFoundError("Photo not found");
     }
 
     await client.mutation(api.media.deletePhoto, {
@@ -102,7 +102,7 @@ export const DELETE = withApiErrorHandling(
 
     return NextResponse.json({
       success: true,
-      message: 'Photo deleted successfully',
+      message: "Photo deleted successfully",
     });
-  }
+  },
 );

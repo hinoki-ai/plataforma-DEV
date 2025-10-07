@@ -6,22 +6,22 @@ async function hashPasswordEdge(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const keyMaterial = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     encoder.encode(password),
-    { name: 'PBKDF2' },
+    { name: "PBKDF2" },
     false,
-    ['deriveBits']
+    ["deriveBits"],
   );
 
   const derivedBits = await crypto.subtle.deriveBits(
     {
-      name: 'PBKDF2',
+      name: "PBKDF2",
       salt: salt,
       iterations: 100000,
-      hash: 'SHA-256',
+      hash: "SHA-256",
     },
     keyMaterial,
-    256
+    256,
   );
 
   const hash = new Uint8Array(derivedBits);
@@ -35,13 +35,13 @@ async function hashPasswordEdge(password: string): Promise<string> {
 // Edge-compatible password verification
 async function verifyPasswordEdge(
   password: string,
-  hash: string
+  hash: string,
 ): Promise<boolean> {
   try {
     const combined = new Uint8Array(
       atob(hash)
-        .split('')
-        .map(char => char.charCodeAt(0))
+        .split("")
+        .map((char) => char.charCodeAt(0)),
     );
 
     const salt = combined.slice(0, 16);
@@ -49,22 +49,22 @@ async function verifyPasswordEdge(
 
     const encoder = new TextEncoder();
     const keyMaterial = await crypto.subtle.importKey(
-      'raw',
+      "raw",
       encoder.encode(password),
-      { name: 'PBKDF2' },
+      { name: "PBKDF2" },
       false,
-      ['deriveBits']
+      ["deriveBits"],
     );
 
     const derivedBits = await crypto.subtle.deriveBits(
       {
-        name: 'PBKDF2',
+        name: "PBKDF2",
         salt: salt,
         iterations: 100000,
-        hash: 'SHA-256',
+        hash: "SHA-256",
       },
       keyMaterial,
-      256
+      256,
     );
 
     const computedHash = new Uint8Array(derivedBits);
@@ -89,23 +89,23 @@ async function verifyPasswordEdge(
 async function hashPasswordNode(password: string): Promise<string> {
   const saltRounds = 10;
   // Dynamic import to avoid Edge Runtime issues
-  const bcrypt = await import('bcryptjs');
+  const bcrypt = await import("bcryptjs");
   return await bcrypt.default.hash(password, saltRounds);
 }
 
 // Node.js compatible password verification
 async function verifyPasswordNode(
   password: string,
-  hash: string
+  hash: string,
 ): Promise<boolean> {
   // Dynamic import to avoid Edge Runtime issues
-  const bcrypt = await import('bcryptjs');
+  const bcrypt = await import("bcryptjs");
   return await bcrypt.default.compare(password, hash);
 }
 
 // Export functions that work in both environments
 export async function hashPassword(password: string): Promise<string> {
-  if (typeof crypto !== 'undefined' && crypto.subtle) {
+  if (typeof crypto !== "undefined" && crypto.subtle) {
     // Edge Runtime or browser environment
     return await hashPasswordEdge(password);
   } else {
@@ -116,7 +116,7 @@ export async function hashPassword(password: string): Promise<string> {
 
 export async function verifyPassword(
   password: string,
-  hash: string
+  hash: string,
 ): Promise<boolean> {
   // Check if hash is bcrypt format (starts with $2a$, $2b$, $2x$ or $2y$)
   const isBcryptHash = /^\$2[abyxz]\$/.test(hash);
@@ -124,7 +124,7 @@ export async function verifyPassword(
   if (isBcryptHash) {
     // Always use Node.js bcryptjs for bcrypt hashes
     return await verifyPasswordNode(password, hash);
-  } else if (typeof crypto !== 'undefined' && crypto.subtle) {
+  } else if (typeof crypto !== "undefined" && crypto.subtle) {
     // Edge Runtime or browser environment for PBKDF2 hashes
     return await verifyPasswordEdge(password, hash);
   } else {
@@ -135,23 +135,23 @@ export async function verifyPassword(
 
 export function generateSecureToken(): string {
   // Generate a secure random token for email verification
-  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
     // Browser/Edge environment
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
-    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join(
-      ''
+    return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
+      "",
     );
   }
   // Node.js environment using Web Crypto API if available
   if (
-    typeof globalThis !== 'undefined' &&
+    typeof globalThis !== "undefined" &&
     (globalThis as unknown as { crypto?: Crypto }).crypto?.getRandomValues
   ) {
     const array = new Uint8Array(32);
     (globalThis as unknown as { crypto: Crypto }).crypto.getRandomValues(array);
-    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join(
-      ''
+    return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
+      "",
     );
   }
   // Fallback (very unlikely)
@@ -159,5 +159,7 @@ export function generateSecureToken(): string {
   for (let i = 0; i < array.length; i++) {
     array[i] = Math.floor(Math.random() * 256);
   }
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
+    "",
+  );
 }

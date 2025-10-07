@@ -1,44 +1,47 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { toast } from "sonner";
 
 // UI Components
 import {
   AdaptiveCard,
   AdaptiveCardContent,
-} from '@/components/ui/adaptive-card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+} from "@/components/ui/adaptive-card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Icons
-import { Edit, Trash2, Eye, Phone, Mail } from 'lucide-react';
+import { Edit, Trash2, Eye, Phone, Mail } from "lucide-react";
 
 // Services
 import {
   toggleTeamMemberStatus,
   deleteTeamMember,
-} from '@/services/actions/team-members';
+} from "@/services/actions/team-members";
 
 // Types
-import type { TeamMember as PrismaTeamMember } from '@/lib/prisma-compat-types';
+import type {
+  TeamMember as PrismaTeamMember,
+  TeamMemberRole,
+} from "@/lib/prisma-compat-types";
 
 // i18n
-import { useLanguage } from '@/components/language/LanguageContext';
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // Extended type for team member with optional contact info
-export interface TeamMember extends PrismaTeamMember {
+export interface TeamMember extends Omit<PrismaTeamMember, "role"> {
   email?: string;
   phone?: string;
-  role?: string;
+  role?: TeamMemberRole | string;
 }
 
-export type TeamMemberCardVariant = 'public' | 'admin' | 'auto';
+export type TeamMemberCardVariant = "public" | "admin" | "auto";
 
 export interface TeamMemberCardProps {
   /**
@@ -110,7 +113,7 @@ export interface TeamMemberCardProps {
  */
 export function TeamMemberCard({
   member,
-  variant = 'auto',
+  variant = "auto",
   showActions,
   showContact = false,
   className,
@@ -131,16 +134,16 @@ export function TeamMemberCard({
    * - If user is authenticated and on admin/professor routes, use 'admin' variant
    * - Otherwise, use 'public' variant for anonymous/public access
    */
-  const detectedVariant: Exclude<TeamMemberCardVariant, 'auto'> =
-    variant !== 'auto'
+  const detectedVariant: Exclude<TeamMemberCardVariant, "auto"> =
+    variant !== "auto"
       ? variant
       : session &&
-          (pathname?.startsWith('/admin') || pathname?.startsWith('/profesor'))
-        ? 'admin'
-        : 'public';
+          (pathname?.startsWith("/admin") || pathname?.startsWith("/profesor"))
+        ? "admin"
+        : "public";
 
   // Auto-determine if actions should be shown
-  const shouldShowActions = showActions ?? detectedVariant === 'admin';
+  const shouldShowActions = showActions ?? detectedVariant === "admin";
 
   /**
    * Process member data for consistent display
@@ -150,7 +153,7 @@ export function TeamMemberCard({
    */
   const memberWithRole = {
     ...member,
-    role: member.role || 'Miembro del Equipo',
+    role: member.role || "Miembro del Equipo",
   };
 
   /**
@@ -162,7 +165,7 @@ export function TeamMemberCard({
   const formattedMember = {
     ...memberWithRole,
     specialties:
-      typeof member.specialties === 'string'
+      typeof member.specialties === "string"
         ? JSON.parse(member.specialties)
         : member.specialties,
   };
@@ -179,11 +182,15 @@ export function TeamMemberCard({
   const handleToggleStatus = async (id: string, isActive: boolean) => {
     try {
       await toggleTeamMemberStatus(id, isActive);
-      toast.success(isActive ? t('team.activate.success', 'common') : t('team.deactivate.success', 'common'));
+      toast.success(
+        isActive
+          ? t("team.activate.success", "common")
+          : t("team.deactivate.success", "common"),
+      );
       onUpdate?.();
       router.refresh();
     } catch {
-      toast.error(t('team.status.error', 'common'));
+      toast.error(t("team.status.error", "common"));
     }
   };
 
@@ -198,19 +205,19 @@ export function TeamMemberCard({
    */
   const handleDelete = async (id: string) => {
     if (
-      typeof window === 'undefined' ||
-      !window.confirm(t('team.delete.confirm', 'common'))
+      typeof window === "undefined" ||
+      !window.confirm(t("team.delete.confirm", "common"))
     )
       return;
 
     setIsDeleting(true);
     try {
       await deleteTeamMember(id);
-      toast.success(t('team.delete.success', 'common'));
+      toast.success(t("team.delete.success", "common"));
       onUpdate?.();
       router.refresh();
     } catch {
-      toast.error(t('team.delete.error', 'common'));
+      toast.error(t("team.delete.error", "common"));
     } finally {
       setIsDeleting(false);
     }
@@ -227,21 +234,21 @@ export function TeamMemberCard({
    */
   const getInitials = (name: string) => {
     return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase();
   };
 
   // Render public variant
-  if (detectedVariant === 'public') {
+  if (detectedVariant === "public") {
     return (
       <AdaptiveCard variant="public" hover className={className}>
         <AdaptiveCardContent className="p-6">
           {/* Header with avatar and basic info - perfectly centered */}
           <div className="flex items-center gap-4 mb-6">
             <Avatar className="h-16 w-16 flex-shrink-0">
-              <AvatarImage src={member.imageUrl || ''} alt={member.name} />
+              <AvatarImage src={member.imageUrl || ""} alt={member.name} />
               <AvatarFallback className="text-lg font-semibold">
                 {getInitials(member.name)}
               </AvatarFallback>
@@ -277,8 +284,8 @@ export function TeamMemberCard({
                       variant="secondary"
                       className="text-xs bg-white/10 text-white border-white/20 px-2 py-1"
                     >
-                      •{' '}
-                      {typeof specialty === 'string'
+                      •{" "}
+                      {typeof specialty === "string"
                         ? specialty
                         : String(specialty)}
                     </Badge>
@@ -326,7 +333,7 @@ export function TeamMemberCard({
   // Render admin variant
   return (
     <AdaptiveCard
-      variant={detectedVariant === 'admin' ? 'auth' : detectedVariant}
+      variant={detectedVariant === "admin" ? "auth" : detectedVariant}
       hover
       className={className}
     >
@@ -334,7 +341,7 @@ export function TeamMemberCard({
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 flex-shrink-0">
             <AvatarImage
-              src={formattedMember.imageUrl || ''}
+              src={formattedMember.imageUrl || ""}
               alt={formattedMember.name}
             />
             <AvatarFallback className="text-lg font-semibold">
@@ -355,10 +362,10 @@ export function TeamMemberCard({
 
               <div className="flex items-center gap-2 flex-shrink-0 ml-2">
                 <Badge
-                  variant={formattedMember.isActive ? 'default' : 'secondary'}
-                  className={formattedMember.isActive ? 'bg-green-500' : ''}
+                  variant={formattedMember.isActive ? "default" : "secondary"}
+                  className={formattedMember.isActive ? "bg-green-500" : ""}
                 >
-                  {formattedMember.isActive ? 'Activo' : 'Inactivo'}
+                  {formattedMember.isActive ? "Activo" : "Inactivo"}
                 </Badge>
               </div>
             </div>
@@ -374,7 +381,7 @@ export function TeamMemberCard({
                         variant="secondary"
                         className="text-xs"
                       >
-                        {typeof specialty === 'string'
+                        {typeof specialty === "string"
                           ? specialty
                           : String(specialty)}
                       </Badge>
@@ -424,7 +431,7 @@ export function TeamMemberCard({
                 <div className="flex items-center gap-2">
                   <Switch
                     checked={member.isActive}
-                    onCheckedChange={checked =>
+                    onCheckedChange={(checked) =>
                       handleToggleStatus(member.id, checked)
                     }
                   />
@@ -518,7 +525,7 @@ export interface TeamMemberListProps {
   /**
    * Grid configuration
    */
-  gridColumns?: 'auto' | 1 | 2 | 3 | 4;
+  gridColumns?: "auto" | 1 | 2 | 3 | 4;
 
   /**
    * Additional CSS classes
@@ -538,10 +545,10 @@ export interface TeamMemberListProps {
 
 export function TeamMemberList({
   members,
-  variant = 'auto',
+  variant = "auto",
   showActions,
   showContact = false,
-  gridColumns = 'auto',
+  gridColumns = "auto",
   className,
   emptyMessage,
   onUpdate,
@@ -550,13 +557,13 @@ export function TeamMemberList({
   const { data: session } = useSession();
 
   // Auto-detect variant
-  const detectedVariant: Exclude<TeamMemberCardVariant, 'auto'> =
-    variant !== 'auto'
+  const detectedVariant: Exclude<TeamMemberCardVariant, "auto"> =
+    variant !== "auto"
       ? variant
       : session &&
-          (pathname?.startsWith('/admin') || pathname?.startsWith('/profesor'))
-        ? 'admin'
-        : 'public';
+          (pathname?.startsWith("/admin") || pathname?.startsWith("/profesor"))
+        ? "admin"
+        : "public";
 
   /**
    * Generate responsive grid CSS classes based on configuration
@@ -567,17 +574,17 @@ export function TeamMemberList({
    * @returns Tailwind CSS grid classes string
    */
   const getGridClasses = () => {
-    if (gridColumns === 'auto') {
-      return detectedVariant === 'public'
-        ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-        : 'grid gap-4';
+    if (gridColumns === "auto") {
+      return detectedVariant === "public"
+        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        : "grid gap-4";
     }
 
     const gridMap = {
-      1: 'grid grid-cols-1 gap-4',
-      2: 'grid grid-cols-1 md:grid-cols-2 gap-4',
-      3: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
-      4: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6',
+      1: "grid grid-cols-1 gap-4",
+      2: "grid grid-cols-1 md:grid-cols-2 gap-4",
+      3: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+      4: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6",
     };
 
     return gridMap[gridColumns];
@@ -591,21 +598,21 @@ export function TeamMemberList({
    */
   if (members.length === 0) {
     const defaultMessage =
-      detectedVariant === 'public'
-        ? 'Pronto actualizaremos la información de nuestro equipo multidisciplinario.'
-        : 'No hay miembros del equipo registrados';
+      detectedVariant === "public"
+        ? "Pronto actualizaremos la información de nuestro equipo multidisciplinario."
+        : "No hay miembros del equipo registrados";
 
     return (
       <AdaptiveCard
-        variant={detectedVariant === 'admin' ? 'auth' : detectedVariant}
+        variant={detectedVariant === "admin" ? "auth" : detectedVariant}
       >
         <AdaptiveCardContent className="pt-6">
           <div className="text-center py-8">
             <p
               className={
-                detectedVariant === 'public'
-                  ? 'text-gray-300'
-                  : 'text-muted-foreground'
+                detectedVariant === "public"
+                  ? "text-gray-300"
+                  : "text-muted-foreground"
               }
             >
               {emptyMessage || defaultMessage}
@@ -617,8 +624,8 @@ export function TeamMemberList({
   }
 
   return (
-    <div className={`${getGridClasses()} ${className || ''}`}>
-      {members.map(member => (
+    <div className={`${getGridClasses()} ${className || ""}`}>
+      {members.map((member) => (
         <TeamMemberCard
           key={member.id}
           member={member}

@@ -7,21 +7,21 @@ export class BrowserSupport {
 
   static checkModernFeatures(): boolean {
     const features = [
-      'fetch' in window,
-      'Promise' in window,
-      'Map' in window,
-      'Set' in window,
-      'localStorage' in window,
-      'sessionStorage' in window,
-      'EventSource' in window,
-      'IntersectionObserver' in window,
-      'ResizeObserver' in window,
-      'performance' in window,
-      'requestAnimationFrame' in window,
-      'cancelAnimationFrame' in window,
+      "fetch" in window,
+      "Promise" in window,
+      "Map" in window,
+      "Set" in window,
+      "localStorage" in window,
+      "sessionStorage" in window,
+      "EventSource" in window,
+      "IntersectionObserver" in window,
+      "ResizeObserver" in window,
+      "performance" in window,
+      "requestAnimationFrame" in window,
+      "cancelAnimationFrame" in window,
     ];
 
-    return features.every(feature => feature);
+    return features.every((feature) => feature);
   }
 
   static getBrowserInfo(): {
@@ -31,32 +31,33 @@ export class BrowserSupport {
     isSupported: boolean;
   } {
     const ua = navigator.userAgent;
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
 
     // Detect browser
-    let name = 'Unknown';
-    let version = 'Unknown';
+    let name = "Unknown";
+    let version = "Unknown";
 
-    if (ua.includes('Chrome') && !ua.includes('Edg')) {
-      name = 'Chrome';
+    if (ua.includes("Chrome") && !ua.includes("Edg")) {
+      name = "Chrome";
       const match = ua.match(/Chrome\/(\d+)/);
-      version = match ? match[1] : 'Unknown';
-    } else if (ua.includes('Firefox')) {
-      name = 'Firefox';
+      version = match ? match[1] : "Unknown";
+    } else if (ua.includes("Firefox")) {
+      name = "Firefox";
       const match = ua.match(/Firefox\/(\d+)/);
-      version = match ? match[1] : 'Unknown';
-    } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
-      name = 'Safari';
+      version = match ? match[1] : "Unknown";
+    } else if (ua.includes("Safari") && !ua.includes("Chrome")) {
+      name = "Safari";
       const match = ua.match(/Version\/(\d+)/);
-      version = match ? match[1] : 'Unknown';
-    } else if (ua.includes('Edg')) {
-      name = 'Edge';
+      version = match ? match[1] : "Unknown";
+    } else if (ua.includes("Edg")) {
+      name = "Edge";
       const match = ua.match(/Edg\/(\d+)/);
-      version = match ? match[1] : 'Unknown';
-    } else if (ua.includes('Opera') || ua.includes('OPR')) {
-      name = 'Opera';
+      version = match ? match[1] : "Unknown";
+    } else if (ua.includes("Opera") || ua.includes("OPR")) {
+      name = "Opera";
       const match = ua.match(/(?:Opera|OPR)\/(\d+)/);
-      version = match ? match[1] : 'Unknown';
+      version = match ? match[1] : "Unknown";
     }
 
     return {
@@ -71,7 +72,7 @@ export class BrowserSupport {
     const browser = this.getBrowserInfo();
 
     if (!browser.isSupported) {
-      const warning = document.createElement('div');
+      const warning = document.createElement("div");
       warning.innerHTML = `
         <div style="
           position: fixed;
@@ -106,7 +107,7 @@ export class BrowserSupport {
 export function applyPolyfills(): void {
   // Polyfill for Element.closest (IE 11)
   if (!Element.prototype.closest) {
-    Element.prototype.closest = function(selector: string) {
+    Element.prototype.closest = function (selector: string) {
       let element = this as Element;
       while (element && element.nodeType === 1) {
         if (element.matches(selector)) {
@@ -123,7 +124,7 @@ export function applyPolyfills(): void {
     Element.prototype.matches =
       (Element.prototype as any).msMatchesSelector ||
       Element.prototype.webkitMatchesSelector ||
-      function(this: Element, selector: string) {
+      function (this: Element, selector: string) {
         const elements = document.querySelectorAll(selector);
         let index = 0;
         while (index < elements.length) {
@@ -138,7 +139,10 @@ export function applyPolyfills(): void {
 
   // Polyfill for Array.includes (IE 11)
   if (!Array.prototype.includes) {
-    Array.prototype.includes = function(searchElement: any, fromIndex?: number) {
+    Array.prototype.includes = function (
+      searchElement: any,
+      fromIndex?: number,
+    ) {
       const array = Object(this);
       const len = array.length >>> 0;
       const start = fromIndex || 0;
@@ -155,10 +159,10 @@ export function applyPolyfills(): void {
   }
 
   // Polyfill for Object.assign (IE 11)
-  if (typeof Object.assign !== 'function') {
-    Object.assign = function(target: any, ...sources: any[]) {
+  if (typeof Object.assign !== "function") {
+    Object.assign = function (target: any, ...sources: any[]) {
       if (target === null || target === undefined) {
-        throw new TypeError('Cannot convert undefined or null to object');
+        throw new TypeError("Cannot convert undefined or null to object");
       }
 
       const to = Object(target);
@@ -178,10 +182,12 @@ export function applyPolyfills(): void {
   }
 
   // Polyfill for Promise (very basic, for older browsers)
-  if (typeof Promise === 'undefined') {
+  if (typeof Promise === "undefined") {
     // This is a very basic Promise polyfill
     // In production, you might want to use a more complete one
-    console.warn('Promise is not supported. Some features may not work correctly.');
+    console.warn(
+      "Promise is not supported. Some features may not work correctly.",
+    );
   }
 }
 
@@ -189,9 +195,8 @@ export function applyPolyfills(): void {
 export class FeatureDetector {
   static hasWebGL(): boolean {
     try {
-      const canvas = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext &&
-        canvas.getContext('webgl'));
+      const canvas = document.createElement("canvas");
+      return !!(window.WebGLRenderingContext && canvas.getContext("webgl"));
     } catch (e) {
       return false;
     }
@@ -200,13 +205,13 @@ export class FeatureDetector {
   static hasWebRTC(): boolean {
     return !!(
       navigator.mediaDevices &&
-      'getUserMedia' in navigator.mediaDevices &&
+      "getUserMedia" in navigator.mediaDevices &&
       window.RTCPeerConnection
     );
   }
 
   static hasServiceWorkers(): boolean {
-    return 'serviceWorker' in navigator;
+    return "serviceWorker" in navigator;
   }
 
   static hasIndexedDB(): boolean {
@@ -219,19 +224,19 @@ export class FeatureDetector {
   }
 
   static hasWebSockets(): boolean {
-    return 'WebSocket' in window && window.WebSocket.CLOSING === 2;
+    return "WebSocket" in window && window.WebSocket.CLOSING === 2;
   }
 
   static hasIntersectionObserver(): boolean {
-    return 'IntersectionObserver' in window;
+    return "IntersectionObserver" in window;
   }
 
   static hasResizeObserver(): boolean {
-    return 'ResizeObserver' in window;
+    return "ResizeObserver" in window;
   }
 
   static hasPerformanceObserver(): boolean {
-    return 'PerformanceObserver' in window;
+    return "PerformanceObserver" in window;
   }
 
   static getSupportedFeatures(): Record<string, boolean> {
@@ -255,34 +260,43 @@ export class BrowserOptimizer {
 
     // Disable heavy animations on low-performance devices/browsers
     if (!features.webgl || !features.performanceObserver) {
-      document.documentElement.classList.add('reduced-motion');
+      document.documentElement.classList.add("reduced-motion");
     }
 
     // Use IntersectionObserver for lazy loading if available
     if (!features.intersectionObserver) {
-      console.warn('IntersectionObserver not supported. Some lazy loading features may not work.');
+      console.warn(
+        "IntersectionObserver not supported. Some lazy loading features may not work.",
+      );
     }
 
     // Fallback for older browsers without Service Workers
     if (!features.serviceWorkers) {
-      console.info('Service Workers not supported. Offline features will not be available.');
+      console.info(
+        "Service Workers not supported. Offline features will not be available.",
+      );
     }
   }
 
   static detectSlowDevice(): boolean {
     // Simple heuristic for slow devices
-    const connection = (navigator as any).connection ||
-                      (navigator as any).mozConnection ||
-                      (navigator as any).webkitConnection;
+    const connection =
+      (navigator as any).connection ||
+      (navigator as any).mozConnection ||
+      (navigator as any).webkitConnection;
 
     if (connection) {
-      return connection.effectiveType === 'slow-2g' ||
-             connection.effectiveType === '2g' ||
-             connection.saveData === true;
+      return (
+        connection.effectiveType === "slow-2g" ||
+        connection.effectiveType === "2g" ||
+        connection.saveData === true
+      );
     }
 
     // Fallback: check hardware concurrency
-    return !!(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
+    return !!(
+      navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2
+    );
   }
 
   static applyPerformanceOptimizations(): void {
@@ -290,10 +304,15 @@ export class BrowserOptimizer {
 
     if (isSlowDevice) {
       // Reduce animation complexity
-      document.documentElement.style.setProperty('--animation-duration', '0.2s');
+      document.documentElement.style.setProperty(
+        "--animation-duration",
+        "0.2s",
+      );
 
       // Disable non-essential features
-      console.info('Slow device detected. Some animations and effects have been disabled for better performance.');
+      console.info(
+        "Slow device detected. Some animations and effects have been disabled for better performance.",
+      );
     }
   }
 }
@@ -304,7 +323,7 @@ export class CrossBrowserEvents {
     element: Element | Window | Document,
     event: string,
     handler: EventListener,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void {
     if (element.addEventListener) {
       element.addEventListener(event, handler, options);
@@ -318,7 +337,7 @@ export class CrossBrowserEvents {
     element: Element | Window | Document,
     event: string,
     handler: EventListener,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void {
     if (element.removeEventListener) {
       element.removeEventListener(event, handler, options);
@@ -330,7 +349,7 @@ export class CrossBrowserEvents {
 }
 
 // Initialize browser compatibility on load
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   // Apply polyfills
   applyPolyfills();
 

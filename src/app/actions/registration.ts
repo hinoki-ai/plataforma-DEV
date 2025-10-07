@@ -1,11 +1,11 @@
-'use server';
+"use server";
 
-import { z } from 'zod';
+import { z } from "zod";
 
 const registrationSchema = z.object({
   email: z.string().email(),
   name: z.string().min(2),
-  role: z.enum(['CENTRO_CONSEJO']),
+  role: z.enum(["CENTRO_CONSEJO"]),
 });
 
 export type RegistrationInput = z.infer<typeof registrationSchema>;

@@ -5,26 +5,35 @@
  * It implements the NextAuth Adapter interface using Convex queries and mutations.
  */
 
-import type { Adapter, AdapterUser, AdapterAccount, AdapterSession } from 'next-auth/adapters';
-import { ConvexHttpClient } from 'convex/browser';
-import { api } from '../../convex/_generated/api';
+import type {
+  Adapter,
+  AdapterUser,
+  AdapterAccount,
+  AdapterSession,
+} from "next-auth/adapters";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../../convex/_generated/api";
 
 export function ConvexAdapter(client: ConvexHttpClient): Adapter {
   return {
     async createUser(user) {
       const userId = await client.mutation(api.authAdapter.createUser, {
         email: user.email,
-        name: user.name,
-        image: user.image,
-        emailVerified: user.emailVerified ? user.emailVerified.getTime() : undefined,
+        name: user.name ?? undefined,
+        image: user.image ?? undefined,
+        emailVerified: user.emailVerified
+          ? user.emailVerified.getTime()
+          : undefined,
       });
 
       return {
         id: userId,
         email: user.email,
-        name: user.name,
-        image: user.image,
+        name: user.name ?? undefined,
+        image: user.image ?? undefined,
         emailVerified: user.emailVerified,
+        role: "PUBLIC",
+        isActive: true,
       } as AdapterUser;
     },
 
@@ -35,26 +44,28 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
       return {
         id: user.id,
         email: user.email,
-        name: user.name,
-        image: user.image,
+        name: user.name ?? undefined,
+        image: user.image ?? undefined,
         emailVerified: user.emailVerified,
-        role: user.role,
-        isActive: user.isActive,
+        role: user.role || "PUBLIC",
+        isActive: user.isActive ?? true,
       } as AdapterUser;
     },
 
     async getUserByEmail(email) {
-      const user = await client.query(api.authAdapter.getUserByEmail, { email });
+      const user = await client.query(api.authAdapter.getUserByEmail, {
+        email,
+      });
       if (!user) return null;
 
       return {
         id: user.id,
         email: user.email,
-        name: user.name,
-        image: user.image,
+        name: user.name ?? undefined,
+        image: user.image ?? undefined,
         emailVerified: user.emailVerified,
-        role: user.role,
-        isActive: user.isActive,
+        role: user.role || "PUBLIC",
+        isActive: user.isActive ?? true,
       } as AdapterUser;
     },
 
@@ -66,17 +77,19 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
 
       if (!account) return null;
 
-      const user = await client.query(api.authAdapter.getUserById, { id: account.userId });
+      const user = await client.query(api.authAdapter.getUserById, {
+        id: account.userId,
+      });
       if (!user) return null;
 
       return {
         id: user.id,
         email: user.email,
-        name: user.name,
-        image: user.image,
+        name: user.name ?? undefined,
+        image: user.image ?? undefined,
         emailVerified: user.emailVerified,
-        role: user.role,
-        isActive: user.isActive,
+        role: user.role || "PUBLIC",
+        isActive: user.isActive ?? true,
       } as AdapterUser;
     },
 
@@ -84,17 +97,26 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
       const userId = await client.mutation(api.authAdapter.updateUser, {
         id: user.id,
         email: user.email,
-        name: user.name,
-        image: user.image,
-        emailVerified: user.emailVerified ? user.emailVerified.getTime() : undefined,
+        name: user.name ?? undefined,
+        image: user.image ?? undefined,
+        emailVerified: user.emailVerified
+          ? user.emailVerified.getTime()
+          : undefined,
+      });
+
+      // Get updated user to return full data including role
+      const updatedUser = await client.query(api.authAdapter.getUserById, {
+        id: userId,
       });
 
       return {
         id: userId,
-        email: user.email,
-        name: user.name,
-        image: user.image,
+        email: user.email || updatedUser?.email,
+        name: user.name ?? undefined,
+        image: user.image ?? undefined,
         emailVerified: user.emailVerified,
+        role: updatedUser?.role || "PUBLIC",
+        isActive: true,
       } as AdapterUser;
     },
 
@@ -108,13 +130,13 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
         type: account.type,
         provider: account.provider,
         providerAccountId: account.providerAccountId,
-        refresh_token: account.refresh_token,
-        access_token: account.access_token,
-        expires_at: account.expires_at,
-        token_type: account.token_type,
-        scope: account.scope,
-        id_token: account.id_token,
-        session_state: account.session_state,
+        refresh_token: account.refresh_token ?? undefined,
+        access_token: account.access_token ?? undefined,
+        expires_at: account.expires_at ?? undefined,
+        token_type: account.token_type ?? undefined,
+        scope: account.scope ?? undefined,
+        id_token: account.id_token ?? undefined,
+        session_state: typeof account.session_state === 'string' ? account.session_state : undefined,
       });
     },
 
@@ -140,7 +162,9 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
     },
 
     async getSessionAndUser(sessionToken) {
-      const result = await client.query(api.authAdapter.getSessionAndUser, { sessionToken });
+      const result = await client.query(api.authAdapter.getSessionAndUser, {
+        sessionToken,
+      });
       if (!result) return null;
 
       return {
@@ -167,7 +191,9 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
         expires: expires ? expires.getTime() : undefined,
       });
 
-      const result = await client.query(api.authAdapter.getSessionAndUser, { sessionToken });
+      const result = await client.query(api.authAdapter.getSessionAndUser, {
+        sessionToken,
+      });
       if (!result) return null;
 
       return {
@@ -196,10 +222,13 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
     },
 
     async useVerificationToken({ identifier, token }) {
-      const verificationToken = await client.query(api.authAdapter.useVerificationToken, {
-        identifier,
-        token,
-      });
+      const verificationToken = await client.query(
+        api.authAdapter.useVerificationToken,
+        {
+          identifier,
+          token,
+        },
+      );
 
       if (!verificationToken) return null;
 

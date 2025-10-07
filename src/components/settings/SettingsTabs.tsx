@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect, useRef } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { AppearanceSettings } from './AppearanceSettings';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Lock, CheckCircle, AlertCircle } from 'lucide-react';
-import { useLanguage } from '@/components/language/LanguageContext';
-import { useSession } from 'next-auth/react';
+} from "@/components/ui/card";
+import { AppearanceSettings } from "./AppearanceSettings";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Eye, EyeOff, Lock, CheckCircle, AlertCircle } from "lucide-react";
+import { useLanguage } from "@/components/language/LanguageContext";
+import { useSession } from "next-auth/react";
 
 interface SettingsTabsProps {
   children?: React.ReactNode;
@@ -27,30 +27,56 @@ export function SettingsTabs({ children }: SettingsTabsProps) {
   return (
     <Tabs defaultValue="profile" className="w-full">
       <TabsList className="grid w-full grid-cols-5">
-        <TabsTrigger value="profile">{t('settings.tabs.profile', 'common')}</TabsTrigger>
-        <TabsTrigger value="account">{t('settings.tabs.account', 'common')}</TabsTrigger>
-        <TabsTrigger value="notifications">{t('settings.tabs.notifications', 'common')}</TabsTrigger>
-        <TabsTrigger value="appearance">{t('settings.tabs.appearance', 'common')}</TabsTrigger>
-        <TabsTrigger value="privacy">{t('settings.tabs.privacy', 'common')}</TabsTrigger>
+        <TabsTrigger value="profile">
+          {t("settings.tabs.profile", "common")}
+        </TabsTrigger>
+        <TabsTrigger value="account">
+          {t("settings.tabs.account", "common")}
+        </TabsTrigger>
+        <TabsTrigger value="notifications">
+          {t("settings.tabs.notifications", "common")}
+        </TabsTrigger>
+        <TabsTrigger value="appearance">
+          {t("settings.tabs.appearance", "common")}
+        </TabsTrigger>
+        <TabsTrigger value="privacy">
+          {t("settings.tabs.privacy", "common")}
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="profile">
         <Card>
           <CardHeader>
-            <CardTitle>{t('settings.profile.title', 'common')}</CardTitle>
+            <CardTitle>{t("settings.profile.title", "common")}</CardTitle>
             <CardDescription>
-              {t('settings.profile.description', 'common')}
+              {t("settings.profile.description", "common")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="displayName">{t('settings.profile.display_name', 'common')}</Label>
-                <Input id="displayName" placeholder={t('settings.profile.display_name_placeholder', 'common')} />
+                <Label htmlFor="displayName">
+                  {t("settings.profile.display_name", "common")}
+                </Label>
+                <Input
+                  id="displayName"
+                  placeholder={t(
+                    "settings.profile.display_name_placeholder",
+                    "common",
+                  )}
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">{t('settings.profile.phone', 'common')}</Label>
-                <Input id="phone" placeholder={t('settings.profile.phone_placeholder', 'common')} />
+                <Label htmlFor="phone">
+                  {t("settings.profile.phone", "common")}
+                </Label>
+                <Input
+                  id="phone"
+                  placeholder={t(
+                    "settings.profile.phone_placeholder",
+                    "common",
+                  )}
+                />
               </div>
             </div>
           </CardContent>
@@ -64,30 +90,48 @@ export function SettingsTabs({ children }: SettingsTabsProps) {
       <TabsContent value="notifications">
         <Card>
           <CardHeader>
-            <CardTitle>{t('settings.notifications.title', 'common')}</CardTitle>
+            <CardTitle>{t("settings.notifications.title", "common")}</CardTitle>
             <CardDescription>
-              {t('settings.notifications.description', 'common')}
+              {t("settings.notifications.description", "common")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
               <div className="flex items-center justify-between border rounded-md p-3">
                 <div>
-                  <p className="font-medium">{t('settings.notifications.event_reminders', 'common')}</p>
+                  <p className="font-medium">
+                    {t("settings.notifications.event_reminders", "common")}
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    {t('settings.notifications.event_reminders_desc', 'common')}
+                    {t("settings.notifications.event_reminders_desc", "common")}
                   </p>
                 </div>
-                <Switch defaultChecked aria-label={t('settings.notifications.enable_reminders', 'common')} />
+                <Switch
+                  defaultChecked
+                  aria-label={t(
+                    "settings.notifications.enable_reminders",
+                    "common",
+                  )}
+                />
               </div>
               <div className="flex items-center justify-between border rounded-md p-3">
                 <div>
-                  <p className="font-medium">{t('settings.notifications.monthly_newsletter', 'common')}</p>
+                  <p className="font-medium">
+                    {t("settings.notifications.monthly_newsletter", "common")}
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    {t('settings.notifications.monthly_newsletter_desc', 'common')}
+                    {t(
+                      "settings.notifications.monthly_newsletter_desc",
+                      "common",
+                    )}
                   </p>
                 </div>
-                <Switch aria-label={t('settings.notifications.subscribe_newsletter', 'common')} />
+                <Switch
+                  aria-label={t(
+                    "settings.notifications.subscribe_newsletter",
+                    "common",
+                  )}
+                />
               </div>
             </div>
           </CardContent>
@@ -101,30 +145,45 @@ export function SettingsTabs({ children }: SettingsTabsProps) {
       <TabsContent value="privacy">
         <Card>
           <CardHeader>
-            <CardTitle>{t('settings.privacy.title', 'common')}</CardTitle>
+            <CardTitle>{t("settings.privacy.title", "common")}</CardTitle>
             <CardDescription>
-              {t('settings.privacy.description', 'common')}
+              {t("settings.privacy.description", "common")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
               <div className="flex items-center justify-between border rounded-md p-3">
                 <div>
-                  <p className="font-medium">{t('settings.privacy.profile_visible', 'common')}</p>
+                  <p className="font-medium">
+                    {t("settings.privacy.profile_visible", "common")}
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    {t('settings.privacy.profile_visible_desc', 'common')}
+                    {t("settings.privacy.profile_visible_desc", "common")}
                   </p>
                 </div>
-                <Switch defaultChecked aria-label={t('settings.privacy.profile_visibility', 'common')} />
+                <Switch
+                  defaultChecked
+                  aria-label={t(
+                    "settings.privacy.profile_visibility",
+                    "common",
+                  )}
+                />
               </div>
               <div className="flex items-center justify-between border rounded-md p-3">
                 <div>
-                  <p className="font-medium">{t('settings.privacy.share_activity', 'common')}</p>
+                  <p className="font-medium">
+                    {t("settings.privacy.share_activity", "common")}
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    {t('settings.privacy.share_activity_desc', 'common')}
+                    {t("settings.privacy.share_activity_desc", "common")}
                   </p>
                 </div>
-                <Switch aria-label={t('settings.privacy.share_activity_aria', 'common')} />
+                <Switch
+                  aria-label={t(
+                    "settings.privacy.share_activity_aria",
+                    "common",
+                  )}
+                />
               </div>
             </div>
           </CardContent>
@@ -141,9 +200,9 @@ function PasswordChangeForm() {
   const { t } = useLanguage();
   const { data: session, update } = useSession();
   const [formData, setFormData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   const [showPasswords, setShowPasswords] = useState({
     current: false,
@@ -152,7 +211,7 @@ function PasswordChangeForm() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState<{
-    type: 'success' | 'error';
+    type: "success" | "error";
     message: string;
   } | null>(null);
   const [passwordStrength, setPasswordStrength] = useState(0);
@@ -169,19 +228,19 @@ function PasswordChangeForm() {
     return Math.min(strength, 100);
   };
 
-  const handlePasswordChange = (field: keyof typeof formData) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handlePasswordChange =
+    (field: keyof typeof formData) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setFormData((prev) => ({ ...prev, [field]: value }));
 
-    if (field === 'newPassword') {
-      setPasswordStrength(calculatePasswordStrength(value));
-    }
+      if (field === "newPassword") {
+        setPasswordStrength(calculatePasswordStrength(value));
+      }
 
-    // Clear any previous alerts when user starts typing
-    if (alert) setAlert(null);
-  };
+      // Clear any previous alerts when user starts typing
+      if (alert) setAlert(null);
+    };
 
   // Update password strength bar width dynamically
   useEffect(() => {
@@ -190,28 +249,29 @@ function PasswordChangeForm() {
     }
   }, [passwordStrength]);
 
-  const togglePasswordVisibility = (field: keyof typeof showPasswords) => () => {
-    setShowPasswords(prev => ({ ...prev, [field]: !prev[field] }));
-  };
+  const togglePasswordVisibility =
+    (field: keyof typeof showPasswords) => () => {
+      setShowPasswords((prev) => ({ ...prev, [field]: !prev[field] }));
+    };
 
   const validateForm = (): string | null => {
     if (!formData.currentPassword) {
-      return 'Current password is required';
+      return "Current password is required";
     }
     if (!formData.newPassword) {
-      return 'New password is required';
+      return "New password is required";
     }
     if (formData.newPassword.length < 8) {
-      return 'New password must be at least 8 characters long';
+      return "New password must be at least 8 characters long";
     }
     if (formData.newPassword !== formData.confirmPassword) {
-      return 'Passwords do not match';
+      return "Passwords do not match";
     }
     if (formData.currentPassword === formData.newPassword) {
-      return 'New password must be different from current password';
+      return "New password must be different from current password";
     }
     if (passwordStrength < 60) {
-      return 'Password is too weak. Please choose a stronger password';
+      return "Password is too weak. Please choose a stronger password";
     }
     return null;
   };
@@ -221,7 +281,7 @@ function PasswordChangeForm() {
 
     const validationError = validateForm();
     if (validationError) {
-      setAlert({ type: 'error', message: validationError });
+      setAlert({ type: "error", message: validationError });
       return;
     }
 
@@ -229,10 +289,10 @@ function PasswordChangeForm() {
     setAlert(null);
 
     try {
-      const response = await fetch('/api/auth/change-password', {
-        method: 'POST',
+      const response = await fetch("/api/auth/change-password", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           currentPassword: formData.currentPassword,
@@ -245,31 +305,31 @@ function PasswordChangeForm() {
 
       if (response.ok) {
         setAlert({
-          type: 'success',
-          message: 'Password changed successfully! You may need to log in again on other devices.'
+          type: "success",
+          message:
+            "Password changed successfully! You may need to log in again on other devices.",
         });
 
         // Clear form
         setFormData({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: '',
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
         });
         setPasswordStrength(0);
 
         // Update session to reflect changes
         await update();
-
       } else {
         setAlert({
-          type: 'error',
-          message: data.error || 'Failed to change password'
+          type: "error",
+          message: data.error || "Failed to change password",
         });
       }
     } catch (error) {
       setAlert({
-        type: 'error',
-        message: 'Network error. Please try again.'
+        type: "error",
+        message: "Network error. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -277,15 +337,15 @@ function PasswordChangeForm() {
   };
 
   const getPasswordStrengthColor = (strength: number): string => {
-    if (strength < 40) return 'bg-red-500';
-    if (strength < 70) return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (strength < 40) return "bg-red-500";
+    if (strength < 70) return "bg-yellow-500";
+    return "bg-green-500";
   };
 
   const getPasswordStrengthText = (strength: number): string => {
-    if (strength < 40) return 'Weak';
-    if (strength < 70) return 'Medium';
-    return 'Strong';
+    if (strength < 40) return "Weak";
+    if (strength < 70) return "Medium";
+    return "Strong";
   };
 
   return (
@@ -293,21 +353,30 @@ function PasswordChangeForm() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Lock className="w-5 h-5" />
-          {t('settings.account.title', 'Change Password')}
+          {t("settings.account.title", "Change Password")}
         </CardTitle>
         <CardDescription>
-          {t('settings.account.description', 'Update your account password to keep your account secure')}
+          {t(
+            "settings.account.description",
+            "Update your account password to keep your account secure",
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent>
         {alert && (
-          <Alert className={`mb-4 ${alert.type === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-            {alert.type === 'success' ? (
+          <Alert
+            className={`mb-4 ${alert.type === "success" ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}
+          >
+            {alert.type === "success" ? (
               <CheckCircle className="h-4 w-4 text-green-600" />
             ) : (
               <AlertCircle className="h-4 w-4 text-red-600" />
             )}
-            <AlertDescription className={alert.type === 'success' ? 'text-green-800' : 'text-red-800'}>
+            <AlertDescription
+              className={
+                alert.type === "success" ? "text-green-800" : "text-red-800"
+              }
+            >
               {alert.message}
             </AlertDescription>
           </Alert>
@@ -320,9 +389,9 @@ function PasswordChangeForm() {
             <div className="relative">
               <Input
                 id="currentPassword"
-                type={showPasswords.current ? 'text' : 'password'}
+                type={showPasswords.current ? "text" : "password"}
                 value={formData.currentPassword}
-                onChange={handlePasswordChange('currentPassword')}
+                onChange={handlePasswordChange("currentPassword")}
                 placeholder="Enter your current password"
                 className="pr-10"
                 disabled={isLoading}
@@ -332,7 +401,7 @@ function PasswordChangeForm() {
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={togglePasswordVisibility('current')}
+                onClick={togglePasswordVisibility("current")}
                 disabled={isLoading}
               >
                 {showPasswords.current ? (
@@ -350,9 +419,9 @@ function PasswordChangeForm() {
             <div className="relative">
               <Input
                 id="newPassword"
-                type={showPasswords.new ? 'text' : 'password'}
+                type={showPasswords.new ? "text" : "password"}
                 value={formData.newPassword}
-                onChange={handlePasswordChange('newPassword')}
+                onChange={handlePasswordChange("newPassword")}
                 placeholder="Enter your new password"
                 className="pr-10"
                 disabled={isLoading}
@@ -362,7 +431,7 @@ function PasswordChangeForm() {
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={togglePasswordVisibility('new')}
+                onClick={togglePasswordVisibility("new")}
                 disabled={isLoading}
               >
                 {showPasswords.new ? (
@@ -378,10 +447,15 @@ function PasswordChangeForm() {
               <div className="space-y-1">
                 <div className="flex justify-between text-sm">
                   <span>Password Strength</span>
-                  <span className={`font-medium ${
-                    passwordStrength < 40 ? 'text-red-600' :
-                    passwordStrength < 70 ? 'text-yellow-600' : 'text-green-600'
-                  }`}>
+                  <span
+                    className={`font-medium ${
+                      passwordStrength < 40
+                        ? "text-red-600"
+                        : passwordStrength < 70
+                          ? "text-yellow-600"
+                          : "text-green-600"
+                    }`}
+                  >
                     {getPasswordStrengthText(passwordStrength)}
                   </span>
                 </div>
@@ -393,19 +467,27 @@ function PasswordChangeForm() {
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
                   <div className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${formData.newPassword.length >= 8 ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${formData.newPassword.length >= 8 ? "bg-green-500" : "bg-gray-300"}`}
+                    />
                     At least 8 characters
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${/[a-z]/.test(formData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${/[a-z]/.test(formData.newPassword) ? "bg-green-500" : "bg-gray-300"}`}
+                    />
                     Lowercase letter
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${/[A-Z]/.test(formData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${/[A-Z]/.test(formData.newPassword) ? "bg-green-500" : "bg-gray-300"}`}
+                    />
                     Uppercase letter
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className={`w-2 h-2 rounded-full ${/\d/.test(formData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${/\d/.test(formData.newPassword) ? "bg-green-500" : "bg-gray-300"}`}
+                    />
                     Number
                   </div>
                 </div>
@@ -419,9 +501,9 @@ function PasswordChangeForm() {
             <div className="relative">
               <Input
                 id="confirmPassword"
-                type={showPasswords.confirm ? 'text' : 'password'}
+                type={showPasswords.confirm ? "text" : "password"}
                 value={formData.confirmPassword}
-                onChange={handlePasswordChange('confirmPassword')}
+                onChange={handlePasswordChange("confirmPassword")}
                 placeholder="Confirm your new password"
                 className="pr-10"
                 disabled={isLoading}
@@ -431,7 +513,7 @@ function PasswordChangeForm() {
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={togglePasswordVisibility('confirm')}
+                onClick={togglePasswordVisibility("confirm")}
                 disabled={isLoading}
               >
                 {showPasswords.confirm ? (
@@ -444,18 +526,16 @@ function PasswordChangeForm() {
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Changing Password...' : 'Change Password'}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Changing Password..." : "Change Password"}
           </Button>
         </form>
 
         {/* Password Policy Info */}
         <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h4 className="font-medium text-blue-900 mb-2">Password Requirements</h4>
+          <h4 className="font-medium text-blue-900 mb-2">
+            Password Requirements
+          </h4>
           <ul className="text-sm text-blue-800 space-y-1">
             <li>• Minimum 8 characters</li>
             <li>• At least one uppercase letter</li>

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function MinEducFooter() {
   return (
@@ -93,9 +93,7 @@ export default function MinEducFooter() {
         {/* White horizontal line */}
         <hr className="border-t-2 border-white mt-[21px] mb-4" />
         {/* Bottom row: GOBIERNO DE CHILE | CHILE AVANZA CONTIGO */}
-        <div
-          className="flex items-center justify-between flex-grow min-h-12 h-12"
-        >
+        <div className="flex items-center justify-between flex-grow min-h-12 h-12">
           <a
             href="https://www.gob.cl/"
             target="_blank"

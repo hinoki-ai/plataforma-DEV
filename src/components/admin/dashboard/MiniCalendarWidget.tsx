@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { formatDate } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { formatDate } from "@/lib/utils";
 
 interface CalendarEvent {
   id: string;
@@ -19,15 +19,15 @@ interface MiniCalendarWidgetProps {
 
 const getEventTypeColor = (type: string) => {
   switch (type.toLowerCase()) {
-    case 'academic':
-    case 'holiday':
-      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-    case 'meeting':
-      return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-    case 'special':
-      return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+    case "academic":
+    case "holiday":
+      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+    case "meeting":
+      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+    case "special":
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
   }
 };
 

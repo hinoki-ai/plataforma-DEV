@@ -1,4 +1,4 @@
-import { CalendarQuery, UnifiedCalendarEvent } from './types';
+import { CalendarQuery, UnifiedCalendarEvent } from "./types";
 
 /**
  * Client-side calendar service for making API calls
@@ -27,19 +27,19 @@ export class CalendarClientService {
       const params = new URLSearchParams();
 
       if (query.startDate) {
-        params.append('startDate', query.startDate.toISOString());
+        params.append("startDate", query.startDate.toISOString());
       }
       if (query.endDate) {
-        params.append('endDate', query.endDate.toISOString());
+        params.append("endDate", query.endDate.toISOString());
       }
       if (query.categories) {
-        params.append('categories', query.categories.join(','));
+        params.append("categories", query.categories.join(","));
       }
       if (query.priority) {
-        params.append('priority', query.priority);
+        params.append("priority", String(query.priority));
       }
       if (query.search) {
-        params.append('search', query.search);
+        params.append("search", query.search);
       }
 
       const response = await fetch(`/api/calendar/events?${params.toString()}`);
@@ -51,10 +51,10 @@ export class CalendarClientService {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('Error fetching calendar events:', error);
+      console.error("Error fetching calendar events:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Error desconocido',
+        error: error instanceof Error ? error.message : "Error desconocido",
       };
     }
   }
@@ -64,30 +64,30 @@ export class CalendarClientService {
    */
   async getStatistics(query: CalendarQuery = {}): Promise<{
     success: boolean;
-    data?: any;
+    data?: Record<string, unknown>;
     error?: string;
   }> {
     try {
       const params = new URLSearchParams();
 
       if (query.startDate) {
-        params.append('startDate', query.startDate.toISOString());
+        params.append("startDate", query.startDate.toISOString());
       }
       if (query.endDate) {
-        params.append('endDate', query.endDate.toISOString());
+        params.append("endDate", query.endDate.toISOString());
       }
       if (query.categories) {
-        params.append('categories', query.categories.join(','));
+        params.append("categories", query.categories.join(","));
       }
       if (query.priority) {
-        params.append('priority', query.priority);
+        params.append("priority", String(query.priority));
       }
       if (query.search) {
-        params.append('search', query.search);
+        params.append("search", query.search);
       }
 
       const response = await fetch(
-        `/api/calendar/statistics?${params.toString()}`
+        `/api/calendar/statistics?${params.toString()}`,
       );
 
       if (!response.ok) {
@@ -97,10 +97,10 @@ export class CalendarClientService {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('Error fetching calendar statistics:', error);
+      console.error("Error fetching calendar statistics:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Error desconocido',
+        error: error instanceof Error ? error.message : "Error desconocido",
       };
     }
   }
@@ -155,28 +155,28 @@ export class CalendarClientService {
       return {
         success: false,
         data: undefined,
-        error: result.error || 'No se pudieron cargar los eventos',
+        error: result.error || "No se pudieron cargar los eventos",
       };
     }
 
     const grouped: Record<string, UnifiedCalendarEvent[]> = {};
 
-    result.data.forEach(event => {
+    result.data.forEach((event) => {
       // Ensure startDate is a Date object
       const startDate = new Date(event.startDate);
-      const dateKey = startDate.toISOString().split('T')[0];
+      const dateKey = startDate.toISOString().split("T")[0];
 
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
       }
 
       // Ensure all date fields are Date objects for consistency
-      const processedEvent = {
+      const processedEvent: UnifiedCalendarEvent = {
         ...event,
         startDate: new Date(event.startDate),
         endDate: new Date(event.endDate),
-        createdAt: event.createdAt ? new Date(event.createdAt) : undefined,
-        updatedAt: event.updatedAt ? new Date(event.updatedAt) : undefined,
+        createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
+        updatedAt: event.updatedAt ? new Date(event.updatedAt) : new Date(),
       };
 
       grouped[dateKey].push(processedEvent);

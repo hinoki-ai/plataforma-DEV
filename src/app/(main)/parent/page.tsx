@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { RoleAwareDashboard } from '@/components/dashboard/RoleAwareDashboard';
+import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { RoleAwareDashboard } from "@/components/dashboard/RoleAwareDashboard";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function ParentDashboardPage() {
   // 🚨 EMERGENCY: Handle database failures gracefully
@@ -16,9 +16,9 @@ export default function ParentDashboardPage() {
     // Dashboard will show empty state but remain functional
   } catch (error) {
     dbLogger.error(
-      'Database unavailable in parent dashboard, showing empty state',
+      "Database unavailable in parent dashboard, showing empty state",
       error,
-      { context: 'ParentDashboardPage', emergencyMode: true }
+      { context: "ParentDashboardPage", emergencyMode: true },
     );
     // Dashboard will show empty state but remain functional
   }
@@ -27,7 +27,7 @@ export default function ParentDashboardPage() {
     <AdvancedErrorBoundary
       context="Parent Dashboard Page"
       enableRetry={true}
-      showDetails={process.env.NODE_ENV === 'development'}
+      showDetails={process.env.NODE_ENV === "development"}
     >
       <Suspense
         fallback={

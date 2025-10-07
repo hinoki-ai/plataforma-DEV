@@ -1,5 +1,5 @@
 // Performance optimization utilities for the dashboard
-import React from 'react';
+import React from "react";
 
 export interface PerformanceMetrics {
   loadTime: number;
@@ -38,7 +38,10 @@ export class PerformanceMonitor {
   }
 
   // Async function execution time measurement
-  async measureAsyncExecutionTime<T>(name: string, fn: () => Promise<T>): Promise<T> {
+  async measureAsyncExecutionTime<T>(
+    name: string,
+    fn: () => Promise<T>,
+  ): Promise<T> {
     const start = performance.now();
     try {
       const result = await fn();
@@ -61,52 +64,58 @@ export class PerformanceMonitor {
     this.metrics.set(`api_${url}_response_time`, responseTime);
 
     // Track average response time
-    const existingTimes = this.metrics.get('api_response_times') || [];
+    const existingTimes = this.metrics.get("api_response_times") || [];
     existingTimes.push(responseTime);
     if (existingTimes.length > 100) {
       existingTimes.shift(); // Keep only last 100 measurements
     }
-    this.metrics.set('api_response_times', existingTimes);
+    this.metrics.set("api_response_times", existingTimes);
   }
 
   // Memory usage tracking
   trackMemoryUsage(): void {
-    if (typeof window !== 'undefined' && 'memory' in performance) {
+    if (typeof window !== "undefined" && "memory" in performance) {
       const memory = (performance as any).memory;
-      this.metrics.set('memory_used', memory.usedJSHeapSize);
-      this.metrics.set('memory_total', memory.totalJSHeapSize);
-      this.metrics.set('memory_limit', memory.jsHeapSizeLimit);
+      this.metrics.set("memory_used", memory.usedJSHeapSize);
+      this.metrics.set("memory_total", memory.totalJSHeapSize);
+      this.metrics.set("memory_limit", memory.jsHeapSizeLimit);
     }
   }
 
   // Cache performance tracking
   trackCacheHit(hit: boolean): void {
-    const cacheStats = this.metrics.get('cache_stats') || { hits: 0, misses: 0 };
+    const cacheStats = this.metrics.get("cache_stats") || {
+      hits: 0,
+      misses: 0,
+    };
     if (hit) {
       cacheStats.hits++;
     } else {
       cacheStats.misses++;
     }
-    this.metrics.set('cache_stats', cacheStats);
+    this.metrics.set("cache_stats", cacheStats);
   }
 
   // Get cache hit rate
   getCacheHitRate(): number {
-    const cacheStats = this.metrics.get('cache_stats') || { hits: 0, misses: 0 };
+    const cacheStats = this.metrics.get("cache_stats") || {
+      hits: 0,
+      misses: 0,
+    };
     const total = cacheStats.hits + cacheStats.misses;
     return total > 0 ? (cacheStats.hits / total) * 100 : 0;
   }
 
   // Error rate tracking
   trackError(): void {
-    const errorCount = this.metrics.get('error_count') || 0;
-    this.metrics.set('error_count', errorCount + 1);
+    const errorCount = this.metrics.get("error_count") || 0;
+    this.metrics.set("error_count", errorCount + 1);
   }
 
   // Get error rate (errors per 100 requests)
   getErrorRate(): number {
-    const errorCount = this.metrics.get('error_count') || 0;
-    const apiTimes = this.metrics.get('api_response_times') || [];
+    const errorCount = this.metrics.get("error_count") || 0;
+    const apiTimes = this.metrics.get("api_response_times") || [];
     const totalRequests = apiTimes.length;
     return totalRequests > 0 ? (errorCount / totalRequests) * 100 : 0;
   }
@@ -129,7 +138,7 @@ export class PerformanceMonitor {
 
   // Get average API response time
   getAverageApiResponseTime(): number {
-    const apiTimes = this.metrics.get('api_response_times') || [];
+    const apiTimes = this.metrics.get("api_response_times") || [];
     if (apiTimes.length === 0) return 0;
 
     const sum = apiTimes.reduce((acc: number, time: number) => acc + time, 0);
@@ -144,31 +153,38 @@ export class PerformanceMonitor {
   // Performance observer for automatic tracking
   startObserving(): void {
     // Observe navigation timing
-    if ('PerformanceObserver' in window) {
+    if ("PerformanceObserver" in window) {
       const navObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.entryType === 'navigation') {
+          if (entry.entryType === "navigation") {
             const navEntry = entry as PerformanceNavigationTiming;
-            this.metrics.set('navigation_load_time', navEntry.loadEventEnd - navEntry.fetchStart);
-            this.metrics.set('navigation_dom_time', navEntry.domContentLoadedEventEnd - navEntry.domContentLoadedEventStart);
+            this.metrics.set(
+              "navigation_load_time",
+              navEntry.loadEventEnd - navEntry.fetchStart,
+            );
+            this.metrics.set(
+              "navigation_dom_time",
+              navEntry.domContentLoadedEventEnd -
+                navEntry.domContentLoadedEventStart,
+            );
           }
         }
       });
 
-      navObserver.observe({ entryTypes: ['navigation'] });
-      this.observers.set('navigation', navObserver);
+      navObserver.observe({ entryTypes: ["navigation"] });
+      this.observers.set("navigation", navObserver);
 
       // Observe resource timing
       const resourceObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.entryType === 'resource' && entry.name.includes('/api/')) {
+          if (entry.entryType === "resource" && entry.name.includes("/api/")) {
             this.measureApiCall(entry.name);
           }
         }
       });
 
-      resourceObserver.observe({ entryTypes: ['resource'] });
-      this.observers.set('resource', resourceObserver);
+      resourceObserver.observe({ entryTypes: ["resource"] });
+      this.observers.set("resource", resourceObserver);
     }
   }
 
@@ -210,7 +226,7 @@ export function usePerformanceMonitor() {
 // Utility functions for optimization
 export const debounce = <T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): ((...args: Parameters<T>) => void) => {
   let timeout: NodeJS.Timeout;
 
@@ -222,7 +238,7 @@ export const debounce = <T extends (...args: any[]) => any>(
 
 export const throttle = <T extends (...args: any[]) => any>(
   func: T,
-  limit: number
+  limit: number,
 ): ((...args: Parameters<T>) => void) => {
   let inThrottle: boolean;
 
@@ -230,7 +246,7 @@ export const throttle = <T extends (...args: any[]) => any>(
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 };
@@ -247,22 +263,23 @@ export const lazyLoadImage = (src: string): Promise<string> => {
 
 // Bundle splitting utility
 export const loadComponentDynamically = <T>(
-  importFn: () => Promise<{ default: T }>
+  importFn: () => Promise<{ default: T }>,
 ): Promise<T> => {
-  return importFn().then(module => module.default);
+  return importFn().then((module) => module.default);
 };
 
 // Error fallback component
-const ErrorFallback = () => React.createElement('div', null, 'Error loading component');
+const ErrorFallback = () =>
+  React.createElement("div", null, "Error loading component");
 
 // React lazy with error boundary
 export const lazyWithErrorBoundary = <T extends React.ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>
+  importFn: () => Promise<{ default: T }>,
 ) => {
   return React.lazy(() =>
-    importFn().catch(error => {
-      console.error('Error loading component:', error);
+    importFn().catch((error) => {
+      console.error("Error loading component:", error);
       return { default: ErrorFallback as any };
-    })
+    }),
   );
 };

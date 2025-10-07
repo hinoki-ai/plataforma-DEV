@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { UserRole } from '@/lib/prisma-compat-types';
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@/lib/prisma-compat-types";
 
 interface DashboardStats {
   users?: {
@@ -103,20 +103,20 @@ export function useDashboardData() {
         setLoading(true);
         setError(null);
 
-        let endpoint = '';
+        let endpoint = "";
 
         switch (session.user.role) {
-          case 'MASTER':
-            endpoint = '/api/master/dashboard';
+          case "MASTER":
+            endpoint = "/api/master/dashboard";
             break;
-          case 'ADMIN':
-            endpoint = '/api/admin/dashboard';
+          case "ADMIN":
+            endpoint = "/api/admin/dashboard";
             break;
-          case 'PROFESOR':
-            endpoint = '/api/profesor/dashboard';
+          case "PROFESOR":
+            endpoint = "/api/profesor/dashboard";
             break;
-          case 'PARENT':
-            endpoint = '/api/parent/dashboard/overview';
+          case "PARENT":
+            endpoint = "/api/parent/dashboard/overview";
             break;
           default:
             // For public users or other roles, use mock data
@@ -126,24 +126,29 @@ export function useDashboardData() {
         }
 
         const response = await fetch(endpoint, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
 
         if (!response.ok) {
           // Handle authentication errors differently from server errors
           if (response.status === 401) {
-            console.warn('User not authenticated for dashboard access');
-            setError('Usuario no autenticado');
+            console.warn("User not authenticated for dashboard access");
+            setError("Usuario no autenticado");
             setStats(getMockData(session?.user?.role));
             setLoading(false);
             return;
           }
           // Gracefully handle server errors by falling back to mock data
-          console.warn('Dashboard endpoint returned non-OK status:', response.status);
-          setError(`Error del servidor (${response.status}). Mostrando datos simulados.`);
+          console.warn(
+            "Dashboard endpoint returned non-OK status:",
+            response.status,
+          );
+          setError(
+            `Error del servidor (${response.status}). Mostrando datos simulados.`,
+          );
           setStats(getMockData(session?.user?.role));
           setLoading(false);
           return;
@@ -152,8 +157,10 @@ export function useDashboardData() {
         const data = await response.json();
         setStats(data);
       } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-        setError(err instanceof Error ? err.message : 'Error fetching dashboard data');
+        console.error("Error fetching dashboard data:", err);
+        setError(
+          err instanceof Error ? err.message : "Error fetching dashboard data",
+        );
 
         // Fallback to mock data on error
         setStats(getMockData(session?.user?.role));
@@ -170,30 +177,30 @@ export function useDashboardData() {
 
 function getMockData(role: UserRole | undefined): DashboardStats {
   switch (role) {
-    case 'MASTER':
+    case "MASTER":
       return {
         users: { total: 1247, active: 892, newToday: 5 },
-        system: { health: 98.5, uptime: '99.98%' },
+        system: { health: 98.5, uptime: "99.98%" },
         security: { threats: 3, blocked: 47 },
         performance: { responseTime: 45, throughput: 15420 },
-        database: { connections: 23, size: '2.4GB' },
+        database: { connections: 23, size: "2.4GB" },
         api: { requests: 45280, errors: 12 },
       };
-    case 'ADMIN':
+    case "ADMIN":
       return {
         users: { total: 145, active: 140 },
         meetings: { total: 20, upcoming: 6 },
         documents: { total: 100, recent: 12 },
         votings: { total: 8, active: 3 },
       };
-    case 'PROFESOR':
+    case "PROFESOR":
       return {
         plannings: { total: 45, completed: 38 },
         meetings: { total: 15, upcoming: 4 },
         students: { total: 25, active: 24 },
         resources: { total: 30, shared: 12 },
       };
-    case 'PARENT':
+    case "PARENT":
       return {
         children: { total: 2, enrolled: 2 },
         meetings: { total: 6, upcoming: 2 },

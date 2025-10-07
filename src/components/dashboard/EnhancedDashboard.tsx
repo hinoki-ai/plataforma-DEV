@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { motion, Reorder, AnimatePresence } from 'motion/react';
+import React, { useState, useCallback, useMemo } from "react";
+import { motion, Reorder, AnimatePresence } from "motion/react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Settings,
   GripVertical,
@@ -41,8 +41,8 @@ import {
   Bell,
   TrendingUp,
   Clock,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Widget types and interfaces
 export interface Widget {
@@ -50,18 +50,18 @@ export interface Widget {
   type: string;
   title: string;
   visible: boolean;
-  size: 'small' | 'medium' | 'large';
+  size: "small" | "medium" | "large";
   position: number;
   config?: Record<string, any>;
 }
 
 interface NotificationItem {
   id: string;
-  type: 'info' | 'warning' | 'success' | 'error';
+  type: "info" | "warning" | "success" | "error";
   title: string;
   message: string;
   timestamp: Date;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
   read: boolean;
   category: string;
 }
@@ -77,34 +77,34 @@ interface WidgetProps {
 function SmartNotificationsWidget({ widget }: WidgetProps) {
   const [notifications] = useState<NotificationItem[]>([
     {
-      id: '1',
-      type: 'info',
-      title: 'Nueva reunión programada',
-      message: 'Reunión con profesor de matemáticas el 15 de enero',
+      id: "1",
+      type: "info",
+      title: "Nueva reunión programada",
+      message: "Reunión con profesor de matemáticas el 15 de enero",
       timestamp: new Date(),
-      priority: 'medium',
+      priority: "medium",
       read: false,
-      category: 'meetings',
+      category: "meetings",
     },
     {
-      id: '2',
-      type: 'success',
-      title: 'Calificación actualizada',
-      message: 'Tu hijo/a ha mejorado en ciencias naturales',
+      id: "2",
+      type: "success",
+      title: "Calificación actualizada",
+      message: "Tu hijo/a ha mejorado en ciencias naturales",
       timestamp: new Date(Date.now() - 3600000),
-      priority: 'low',
+      priority: "low",
       read: true,
-      category: 'grades',
+      category: "grades",
     },
     {
-      id: '3',
-      type: 'warning',
-      title: 'Documento pendiente',
-      message: 'Autorización para salida pedagógica requerida',
+      id: "3",
+      type: "warning",
+      title: "Documento pendiente",
+      message: "Autorización para salida pedagógica requerida",
       timestamp: new Date(Date.now() - 7200000),
-      priority: 'high',
+      priority: "high",
       read: false,
-      category: 'documents',
+      category: "documents",
     },
   ]);
 
@@ -116,7 +116,7 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
         acc[key].push(notification);
         return acc;
       },
-      {} as Record<string, NotificationItem[]>
+      {} as Record<string, NotificationItem[]>,
     );
 
     return groups;
@@ -124,10 +124,10 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
 
   const getNotificationColor = (type: string) => {
     const colors = {
-      info: 'bg-blue-50 border-blue-200 text-blue-800',
-      success: 'bg-green-50 border-green-200 text-green-800',
-      warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      error: 'bg-red-50 border-red-200 text-red-800',
+      info: "bg-blue-50 border-blue-200 text-blue-800",
+      success: "bg-green-50 border-green-200 text-green-800",
+      warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
+      error: "bg-red-50 border-red-200 text-red-800",
     };
     return colors[type as keyof typeof colors] || colors.info;
   };
@@ -140,7 +140,7 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
             Notificaciones Inteligentes
           </CardTitle>
           <Badge variant="secondary" className="text-xs">
-            {notifications.filter(n => !n.read).length} nuevas
+            {notifications.filter((n) => !n.read).length} nuevas
           </Badge>
         </div>
       </CardHeader>
@@ -148,7 +148,7 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
         <AnimatePresence>
           {Object.entries(groupedNotifications).map(([priority, items]) => (
             <div key={priority} className="space-y-2">
-              {priority === 'high' && (
+              {priority === "high" && (
                 <div className="text-xs font-medium text-red-600 uppercase tracking-wide">
                   Alta prioridad
                 </div>
@@ -161,9 +161,9 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
                   exit={{ opacity: 0, x: -100 }}
                   transition={{ delay: index * 0.1 }}
                   className={cn(
-                    'p-3 rounded-lg border text-sm',
+                    "p-3 rounded-lg border text-sm",
                     getNotificationColor(notification.type),
-                    !notification.read && 'ring-1 ring-blue-200'
+                    !notification.read && "ring-1 ring-blue-200",
                   )}
                 >
                   <div className="flex items-start justify-between">
@@ -175,7 +175,7 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
                       <div className="flex items-center gap-2 mt-2 text-xs opacity-60">
                         <Clock className="h-3 w-3" />
                         <span>
-                          {new Intl.RelativeTimeFormat('es').format(-1, 'hour')}
+                          {new Intl.RelativeTimeFormat("es").format(-1, "hour")}
                         </span>
                       </div>
                     </div>
@@ -196,10 +196,10 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
 // Progress Trending Widget
 function ProgressTrendingWidget({ widget }: WidgetProps) {
   const trendData = [
-    { subject: 'Matemáticas', current: 85, previous: 78, trend: 'up' },
-    { subject: 'Lenguaje', current: 92, previous: 89, trend: 'up' },
-    { subject: 'Ciencias', current: 76, previous: 82, trend: 'down' },
-    { subject: 'Historia', current: 88, previous: 85, trend: 'up' },
+    { subject: "Matemáticas", current: 85, previous: 78, trend: "up" },
+    { subject: "Lenguaje", current: 92, previous: 89, trend: "up" },
+    { subject: "Ciencias", current: 76, previous: 82, trend: "down" },
+    { subject: "Historia", current: 88, previous: 85, trend: "up" },
   ];
 
   return (
@@ -226,12 +226,12 @@ function ProgressTrendingWidget({ widget }: WidgetProps) {
               <div className="flex items-center gap-1">
                 <TrendingUp
                   className={cn(
-                    'h-3 w-3',
-                    subject.trend === 'up' ? 'text-green-500' : 'text-red-500'
+                    "h-3 w-3",
+                    subject.trend === "up" ? "text-green-500" : "text-red-500",
                   )}
                   style={{
                     transform:
-                      subject.trend === 'down' ? 'rotate(180deg)' : 'none',
+                      subject.trend === "down" ? "rotate(180deg)" : "none",
                   }}
                 />
                 <span className="text-xs text-muted-foreground">
@@ -249,7 +249,7 @@ function ProgressTrendingWidget({ widget }: WidgetProps) {
               />
             </div>
             <div className="text-xs text-muted-foreground">
-              {subject.trend === 'up' ? '+' : ''}
+              {subject.trend === "up" ? "+" : ""}
               {subject.current - subject.previous} desde el mes pasado
             </div>
           </motion.div>
@@ -263,28 +263,28 @@ function ProgressTrendingWidget({ widget }: WidgetProps) {
 function QuickActionsWidget({ widget }: WidgetProps) {
   const actions = [
     {
-      id: 'meeting',
-      label: 'Solicitar Reunión',
+      id: "meeting",
+      label: "Solicitar Reunión",
       icon: Calendar,
-      color: 'bg-blue-500',
+      color: "bg-blue-500",
     },
     {
-      id: 'message',
-      label: 'Enviar Mensaje',
+      id: "message",
+      label: "Enviar Mensaje",
       icon: MessageSquare,
-      color: 'bg-green-500',
+      color: "bg-green-500",
     },
     {
-      id: 'documents',
-      label: 'Ver Documentos',
+      id: "documents",
+      label: "Ver Documentos",
       icon: BookOpen,
-      color: 'bg-purple-500',
+      color: "bg-purple-500",
     },
     {
-      id: 'calendar',
-      label: 'Calendario',
+      id: "calendar",
+      label: "Calendario",
       icon: Calendar,
-      color: 'bg-orange-500',
+      color: "bg-orange-500",
     },
   ];
 
@@ -311,8 +311,8 @@ function QuickActionsWidget({ widget }: WidgetProps) {
               >
                 <div
                   className={cn(
-                    'p-2 rounded-full text-white mb-2',
-                    action.color
+                    "p-2 rounded-full text-white mb-2",
+                    action.color,
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -334,8 +334,8 @@ function MultiChildWidget({ widget }: WidgetProps) {
   const [selectedChild, setSelectedChild] = useState(0);
 
   const children = [
-    { id: '1', name: 'María González', grade: '5° Básico', avatar: 'MG' },
-    { id: '2', name: 'Carlos González', grade: '8° Básico', avatar: 'CG' },
+    { id: "1", name: "María González", grade: "5° Básico", avatar: "MG" },
+    { id: "2", name: "Carlos González", grade: "8° Básico", avatar: "CG" },
   ];
 
   return (
@@ -350,13 +350,13 @@ function MultiChildWidget({ widget }: WidgetProps) {
               key={child.id}
               onClick={() => setSelectedChild(index)}
               className={cn(
-                'flex-1 px-2 py-1 text-xs rounded-sm transition-all duration-200',
+                "flex-1 px-2 py-1 text-xs rounded-sm transition-all duration-200",
                 selectedChild === index
-                  ? 'bg-background text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {child.name.split(' ')[0]}
+              {child.name.split(" ")[0]}
             </button>
           ))}
         </div>
@@ -425,7 +425,9 @@ function WidgetConfigModal({
         </DialogHeader>
         <div className="space-y-4">
           <div>
-            <label htmlFor="widget-size-select" className="text-sm font-medium">Tamaño del widget</label>
+            <label htmlFor="widget-size-select" className="text-sm font-medium">
+              Tamaño del widget
+            </label>
             <select
               id="widget-size-select"
               className="w-full mt-1 p-2 border rounded"
@@ -452,7 +454,7 @@ function WidgetConfigModal({
 
 // Main Enhanced Dashboard Component
 interface EnhancedDashboardProps {
-  userRole: 'admin' | 'profesor' | 'parent';
+  userRole: "admin" | "profesor" | "parent";
   initialWidgets?: Widget[];
   onWidgetsChange?: (widgets: Widget[]) => void;
 }
@@ -464,52 +466,52 @@ export function EnhancedDashboard({
 }: EnhancedDashboardProps) {
   const defaultWidgets: Widget[] = [
     {
-      id: '1',
-      type: 'notifications',
-      title: 'Notificaciones',
+      id: "1",
+      type: "notifications",
+      title: "Notificaciones",
       visible: true,
-      size: 'medium',
+      size: "medium",
       position: 0,
     },
     {
-      id: '2',
-      type: 'progress',
-      title: 'Progreso',
+      id: "2",
+      type: "progress",
+      title: "Progreso",
       visible: true,
-      size: 'medium',
+      size: "medium",
       position: 1,
     },
     {
-      id: '3',
-      type: 'quick-actions',
-      title: 'Acciones',
+      id: "3",
+      type: "quick-actions",
+      title: "Acciones",
       visible: true,
-      size: 'small',
+      size: "small",
       position: 2,
     },
     {
-      id: '4',
-      type: 'multi-child',
-      title: 'Hijos',
-      visible: userRole === 'parent',
-      size: 'medium',
+      id: "4",
+      type: "multi-child",
+      title: "Hijos",
+      visible: userRole === "parent",
+      size: "medium",
       position: 3,
     },
   ];
 
   const [widgets, setWidgets] = useState<Widget[]>(
-    initialWidgets.length > 0 ? initialWidgets : defaultWidgets
+    initialWidgets.length > 0 ? initialWidgets : defaultWidgets,
   );
   const [configWidget, setConfigWidget] = useState<Widget | null>(null);
 
   const handleToggleVisibility = useCallback((id: string) => {
-    setWidgets(prev =>
-      prev.map(w => (w.id === id ? { ...w, visible: !w.visible } : w))
+    setWidgets((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, visible: !w.visible } : w)),
     );
   }, []);
 
   const handleRemoveWidget = useCallback((id: string) => {
-    setWidgets(prev => prev.filter(w => w.id !== id));
+    setWidgets((prev) => prev.filter((w) => w.id !== id));
   }, []);
 
   const handleReorderWidgets = useCallback(
@@ -521,11 +523,11 @@ export function EnhancedDashboard({
       setWidgets(reorderedWidgets);
       onWidgetsChange?.(reorderedWidgets);
     },
-    [onWidgetsChange]
+    [onWidgetsChange],
   );
 
   const visibleWidgets = widgets
-    .filter(w => w.visible)
+    .filter((w) => w.visible)
     .sort((a, b) => a.position - b.position);
 
   const renderWidget = (widget: Widget) => {
@@ -534,18 +536,20 @@ export function EnhancedDashboard({
       onToggleVisibility: handleToggleVisibility,
       onRemove: handleRemoveWidget,
       onConfigChange: (id: string, config: Record<string, any>) => {
-        setWidgets(prev => prev.map(w => (w.id === id ? { ...w, config } : w)));
+        setWidgets((prev) =>
+          prev.map((w) => (w.id === id ? { ...w, config } : w)),
+        );
       },
     };
 
     switch (widget.type) {
-      case 'notifications':
+      case "notifications":
         return <SmartNotificationsWidget key={widget.id} {...commonProps} />;
-      case 'progress':
+      case "progress":
         return <ProgressTrendingWidget key={widget.id} {...commonProps} />;
-      case 'quick-actions':
+      case "quick-actions":
         return <QuickActionsWidget key={widget.id} {...commonProps} />;
-      case 'multi-child':
+      case "multi-child":
         return <MultiChildWidget key={widget.id} {...commonProps} />;
       default:
         return null;
@@ -581,15 +585,15 @@ export function EnhancedDashboard({
         onReorder={handleReorderWidgets}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
       >
-        {visibleWidgets.map(widget => (
+        {visibleWidgets.map((widget) => (
           <Reorder.Item
             key={widget.id}
             value={widget}
             className={cn(
-              'relative group',
-              widget.size === 'large' && 'md:col-span-2 lg:col-span-3',
-              widget.size === 'medium' && 'md:col-span-1 lg:col-span-1',
-              widget.size === 'small' && 'md:col-span-1 lg:col-span-1'
+              "relative group",
+              widget.size === "large" && "md:col-span-2 lg:col-span-3",
+              widget.size === "medium" && "md:col-span-1 lg:col-span-1",
+              widget.size === "small" && "md:col-span-1 lg:col-span-1",
             )}
           >
             <div className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -635,7 +639,7 @@ export function EnhancedDashboard({
           widget={configWidget}
           isOpen={!!configWidget}
           onClose={() => setConfigWidget(null)}
-          onSave={config => {
+          onSave={(config) => {
             // Handle widget configuration save
             setConfigWidget(null);
           }}

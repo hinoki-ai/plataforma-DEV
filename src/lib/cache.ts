@@ -18,7 +18,7 @@ export class CacheManager {
   static async invalidateAllPlanningDocuments(): Promise<void> {
     const instance = CacheManager.getInstance();
     for (const key of instance.cache.keys()) {
-      if (key.startsWith('planning:')) {
+      if (key.startsWith("planning:")) {
         instance.cache.delete(key);
       }
     }

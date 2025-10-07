@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, AlertCircle, Upload } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { CheckCircle, XCircle, AlertCircle, Upload } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface UploadProgressProps {
   files: File[];
@@ -32,11 +32,11 @@ export function UploadProgress({
   useEffect(() => {
     if (files.length > 0) {
       setUploadState(
-        files.map(file => ({
+        files.map((file) => ({
           file,
           success: false,
           progress: 0,
-        }))
+        })),
       );
     }
   }, [files]);
@@ -45,14 +45,14 @@ export function UploadProgress({
     if (uploadState.length > 0) {
       const totalProgress = uploadState.reduce(
         (sum, state) => sum + state.progress,
-        0
+        0,
       );
       const averageProgress = totalProgress / uploadState.length;
       setOverallProgress(averageProgress);
       onProgress?.(averageProgress);
 
       // Check if all uploads are complete
-      const allComplete = uploadState.every(state => state.progress === 100);
+      const allComplete = uploadState.every((state) => state.progress === 100);
       if (allComplete) {
         onComplete?.(uploadState);
         setIsUploading(false);
@@ -61,40 +61,40 @@ export function UploadProgress({
   }, [uploadState, onProgress, onComplete]);
 
   const updateProgress = (fileName: string, progress: number) => {
-    setUploadState(prev =>
-      prev.map(state =>
-        state.file.name === fileName ? { ...state, progress } : state
-      )
+    setUploadState((prev) =>
+      prev.map((state) =>
+        state.file.name === fileName ? { ...state, progress } : state,
+      ),
     );
   };
 
   const updateSuccess = (fileName: string, url: string) => {
-    setUploadState(prev =>
-      prev.map(state =>
+    setUploadState((prev) =>
+      prev.map((state) =>
         state.file.name === fileName
           ? { ...state, success: true, url, progress: 100 }
-          : state
-      )
+          : state,
+      ),
     );
   };
 
   const updateError = (fileName: string, error: string) => {
-    setUploadState(prev =>
-      prev.map(state =>
+    setUploadState((prev) =>
+      prev.map((state) =>
         state.file.name === fileName
           ? { ...state, success: false, error, progress: 100 }
-          : state
-      )
+          : state,
+      ),
     );
     onError?.(error);
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const getStatusIcon = (state: UploadResult) => {
@@ -110,8 +110,8 @@ export function UploadProgress({
 
   const getStatusText = (state: UploadResult) => {
     if (state.error) return state.error;
-    if (state.progress === 100 && state.success) return 'Subido exitosamente';
-    if (state.progress === 100 && !state.success) return 'Error al subir';
+    if (state.progress === 100 && state.success) return "Subido exitosamente";
+    if (state.progress === 100 && !state.success) return "Error al subir";
     return `${Math.round(state.progress)}%`;
   };
 
@@ -143,10 +143,10 @@ export function UploadProgress({
           <div
             key={index}
             className={cn(
-              'flex items-center justify-between p-3 rounded-lg border',
+              "flex items-center justify-between p-3 rounded-lg border",
               state.error
-                ? 'border-red-200 bg-red-50'
-                : 'border-border bg-background'
+                ? "border-red-200 bg-red-50"
+                : "border-border bg-background",
             )}
           >
             <div className="flex items-center space-x-3 flex-1">
@@ -186,8 +186,8 @@ export function UploadProgress({
         <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
           <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
           <p className="text-sm font-medium text-green-700">
-            {uploadState.filter(s => s.success).length} de {uploadState.length}{' '}
-            archivos subidos exitosamente
+            {uploadState.filter((s) => s.success).length} de{" "}
+            {uploadState.length} archivos subidos exitosamente
           </p>
         </div>
       )}
@@ -202,40 +202,40 @@ export function useUploadProgress() {
 
   const startUpload = (files: File[]) => {
     setUploadState(
-      files.map(file => ({
+      files.map((file) => ({
         file,
         success: false,
         progress: 0,
-      }))
+      })),
     );
     setIsUploading(true);
   };
 
   const updateFileProgress = (fileName: string, progress: number) => {
-    setUploadState(prev =>
-      prev.map(state =>
-        state.file.name === fileName ? { ...state, progress } : state
-      )
+    setUploadState((prev) =>
+      prev.map((state) =>
+        state.file.name === fileName ? { ...state, progress } : state,
+      ),
     );
   };
 
   const completeFileUpload = (fileName: string, url: string) => {
-    setUploadState(prev =>
-      prev.map(state =>
+    setUploadState((prev) =>
+      prev.map((state) =>
         state.file.name === fileName
           ? { ...state, success: true, url, progress: 100 }
-          : state
-      )
+          : state,
+      ),
     );
   };
 
   const failFileUpload = (fileName: string, error: string) => {
-    setUploadState(prev =>
-      prev.map(state =>
+    setUploadState((prev) =>
+      prev.map((state) =>
         state.file.name === fileName
           ? { ...state, success: false, error, progress: 100 }
-          : state
-      )
+          : state,
+      ),
     );
   };
 

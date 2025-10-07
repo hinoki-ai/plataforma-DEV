@@ -1,14 +1,23 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Menu, X, Bell, Home, Users, Calendar, FileText, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { useResponsive } from '@/components/ui/responsive-container';
-import { NotificationBell } from '@/components/notifications/NotificationBell';
-import { useSession } from 'next-auth/react';
-import { getRoleDisplayName } from '@/lib/role-utils';
+import React, { useState } from "react";
+import {
+  Menu,
+  X,
+  Bell,
+  Home,
+  Users,
+  Calendar,
+  FileText,
+  Settings,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { useResponsive } from "@/components/ui/responsive-container";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { useSession } from "next-auth/react";
+import { getRoleDisplayName } from "@/lib/role-utils";
 
 interface MobileDashboardLayoutProps {
   children: React.ReactNode;
@@ -26,51 +35,55 @@ interface NavItem {
 
 const navigationItems: NavItem[] = [
   {
-    id: 'dashboard',
-    label: 'Dashboard',
+    id: "dashboard",
+    label: "Dashboard",
     icon: Home,
-    href: '/',
-    roles: ['MASTER', 'ADMIN', 'PROFESOR', 'PARENT'],
+    href: "/",
+    roles: ["MASTER", "ADMIN", "PROFESOR", "PARENT"],
   },
   {
-    id: 'users',
-    label: 'Usuarios',
+    id: "users",
+    label: "Usuarios",
     icon: Users,
-    href: '/admin/usuarios',
-    roles: ['MASTER', 'ADMIN'],
+    href: "/admin/usuarios",
+    roles: ["MASTER", "ADMIN"],
   },
   {
-    id: 'meetings',
-    label: 'Reuniones',
+    id: "meetings",
+    label: "Reuniones",
     icon: Calendar,
-    href: '/admin/reuniones',
-    roles: ['MASTER', 'ADMIN'],
+    href: "/admin/reuniones",
+    roles: ["MASTER", "ADMIN"],
   },
   {
-    id: 'documents',
-    label: 'Documentos',
+    id: "documents",
+    label: "Documentos",
     icon: FileText,
-    href: '/admin/documentos',
-    roles: ['MASTER', 'ADMIN'],
+    href: "/admin/documentos",
+    roles: ["MASTER", "ADMIN"],
   },
   {
-    id: 'settings',
-    label: 'Configuración',
+    id: "settings",
+    label: "Configuración",
     icon: Settings,
-    href: '/settings',
-    roles: ['MASTER', 'ADMIN', 'PROFESOR', 'PARENT'],
+    href: "/settings",
+    roles: ["MASTER", "ADMIN", "PROFESOR", "PARENT"],
   },
 ];
 
-export function MobileDashboardLayout({ children, title, subtitle }: MobileDashboardLayoutProps) {
+export function MobileDashboardLayout({
+  children,
+  title,
+  subtitle,
+}: MobileDashboardLayoutProps) {
   const { isMobile } = useResponsive();
   const { data: session } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState('dashboard');
+  const [activeItem, setActiveItem] = useState("dashboard");
 
   const userRole = session?.user?.role;
   const filteredNavItems = navigationItems.filter(
-    item => !item.roles || item.roles.includes(userRole || '')
+    (item) => !item.roles || item.roles.includes(userRole || ""),
   );
 
   if (!isMobile) {
@@ -94,7 +107,9 @@ export function MobileDashboardLayout({ children, title, subtitle }: MobileDashb
           <div className="flex-1">
             <h1 className="text-lg font-semibold truncate">{title}</h1>
             {subtitle && (
-              <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
+              <p className="text-xs text-muted-foreground truncate">
+                {subtitle}
+              </p>
             )}
           </div>
 
@@ -140,7 +155,7 @@ export function MobileDashboardLayout({ children, title, subtitle }: MobileDashb
                         variant={isActive ? "secondary" : "ghost"}
                         className={cn(
                           "w-full justify-start h-12 px-3",
-                          isActive && "bg-secondary"
+                          isActive && "bg-secondary",
                         )}
                         onClick={() => {
                           setActiveItem(item.id);
@@ -164,12 +179,14 @@ export function MobileDashboardLayout({ children, title, subtitle }: MobileDashb
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                     <span className="text-primary-foreground text-sm font-medium">
-                      {session.user.name?.charAt(0) || session.user.email?.charAt(0) || 'U'}
+                      {session.user.name?.charAt(0) ||
+                        session.user.email?.charAt(0) ||
+                        "U"}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
-                      {session.user.name || 'Usuario'}
+                      {session.user.name || "Usuario"}
                     </p>
                     <p className="text-xs text-muted-foreground truncate">
                       {session.user.email}
@@ -183,9 +200,7 @@ export function MobileDashboardLayout({ children, title, subtitle }: MobileDashb
       )}
 
       {/* Main Content */}
-      <main className="pb-20">
-        {children}
-      </main>
+      <main className="pb-20">{children}</main>
 
       {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t">
@@ -201,7 +216,7 @@ export function MobileDashboardLayout({ children, title, subtitle }: MobileDashb
                 size="sm"
                 className={cn(
                   "flex-1 h-full flex flex-col items-center justify-center space-y-1",
-                  isActive && "text-primary"
+                  isActive && "text-primary",
                 )}
                 onClick={() => {
                   setActiveItem(item.id);

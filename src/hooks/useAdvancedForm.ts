@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   useForm,
   UseFormReturn,
   FieldValues,
   FieldPath,
-} from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+} from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 export interface FormStep {
   id: string;
@@ -69,7 +69,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
     // Cast to satisfy resolver generic expectations with dynamic schemas
     resolver: schema ? (zodResolver(schema as any) as any) : undefined,
     defaultValues: defaultValues as any,
-    mode: 'onChange',
+    mode: "onChange",
   });
 
   // Multi-step state
@@ -98,7 +98,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
     if (!autoSave.enabled) return;
 
     const data = form.getValues();
-    const storageKey = autoSave.storageKey || 'advanced-form-autosave';
+    const storageKey = autoSave.storageKey || "advanced-form-autosave";
 
     try {
       const saveData = {
@@ -111,19 +111,19 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
 
       let serializedData = JSON.stringify(saveData);
 
-      if (autoSave.compress && typeof window !== 'undefined') {
+      if (autoSave.compress && typeof window !== "undefined") {
         // Simple compression using built-in compression if available
         try {
           serializedData = btoa(serializedData);
         } catch (e) {
-          console.warn('Compression failed, saving uncompressed');
+          console.warn("Compression failed, saving uncompressed");
         }
       }
 
       localStorage.setItem(storageKey, serializedData);
       setLastAutoSave(new Date());
     } catch (error) {
-      console.error('Auto-save failed:', error);
+      console.error("Auto-save failed:", error);
     }
   }, [autoSave, form, currentStep, completedSteps, analytics, formAnalytics]);
 
@@ -131,7 +131,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
   const loadSavedData = useCallback(() => {
     if (!autoSave.enabled) return false;
 
-    const storageKey = autoSave.storageKey || 'advanced-form-autosave';
+    const storageKey = autoSave.storageKey || "advanced-form-autosave";
 
     try {
       let savedData = localStorage.getItem(storageKey);
@@ -171,7 +171,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
 
       return true;
     } catch (error) {
-      console.error('Failed to load saved data:', error);
+      console.error("Failed to load saved data:", error);
       return false;
     }
   }, [autoSave, form, analytics]);
@@ -210,9 +210,11 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
         const fieldName = Array.isArray(name) ? name[0] : name;
         if (fieldName && fieldFocusStartRef.current[fieldName]) {
           delete fieldFocusStartRef.current[fieldName];
-          setFormAnalytics(prev => ({
+          setFormAnalytics((prev) => ({
             ...prev,
-            abandonedFields: prev.abandonedFields.filter(f => f !== fieldName),
+            abandonedFields: prev.abandonedFields.filter(
+              (f) => f !== fieldName,
+            ),
           }));
         }
       }
@@ -238,7 +240,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
 
     // Validate required fields for this step
     const stepData: any = {};
-    currentStepConfig.fields.forEach(field => {
+    currentStepConfig.fields.forEach((field) => {
       stepData[field] = form.getValues(field as FieldPath<T>);
     });
 
@@ -247,7 +249,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       try {
         currentStepConfig.validation.parse(stepData);
       } catch (error) {
-        setStepErrors(prev => ({ ...prev, [currentStep]: true }));
+        setStepErrors((prev) => ({ ...prev, [currentStep]: true }));
         return false;
       }
     }
@@ -256,12 +258,12 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
     if (currentStepConfig.onValidate) {
       const isValid = await currentStepConfig.onValidate(stepData);
       if (!isValid) {
-        setStepErrors(prev => ({ ...prev, [currentStep]: true }));
+        setStepErrors((prev) => ({ ...prev, [currentStep]: true }));
         return false;
       }
     }
 
-    setStepErrors(prev => ({ ...prev, [currentStep]: false }));
+    setStepErrors((prev) => ({ ...prev, [currentStep]: false }));
     return true;
   }, [currentStep, steps, form]);
 
@@ -277,10 +279,10 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       stepConfig.onExit(form.getValues());
     }
 
-    setCompletedSteps(prev => new Set(prev).add(currentStep));
+    setCompletedSteps((prev) => new Set(prev).add(currentStep));
 
     if (analytics) {
-      setFormAnalytics(prev => ({
+      setFormAnalytics((prev) => ({
         ...prev,
         stepTimes: {
           ...prev.stepTimes,
@@ -290,7 +292,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       }));
     }
 
-    setCurrentStep(prev => {
+    setCurrentStep((prev) => {
       const next = prev + 1;
       onStepChange?.(next, steps.length);
 
@@ -300,7 +302,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       }
 
       if (analytics) {
-        setFormAnalytics(prevAnalytics => ({
+        setFormAnalytics((prevAnalytics) => ({
           ...prevAnalytics,
           stepTimes: {
             ...prevAnalytics.stepTimes,
@@ -323,7 +325,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       stepConfig.onExit(form.getValues());
     }
 
-    setCurrentStep(prev => {
+    setCurrentStep((prev) => {
       const next = prev - 1;
       onStepChange?.(next, steps.length);
 
@@ -349,7 +351,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
           setCurrentStep(i);
           const isValid = await validateCurrentStep();
           if (!isValid) return false;
-          setCompletedSteps(prev => new Set(prev).add(i));
+          setCompletedSteps((prev) => new Set(prev).add(i));
         }
       }
 
@@ -363,7 +365,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
 
       return true;
     },
-    [currentStep, steps, validateCurrentStep, onStepChange]
+    [currentStep, steps, validateCurrentStep, onStepChange],
   );
 
   // Field interaction handlers
@@ -374,7 +376,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       }
       onFieldFocus?.(fieldName);
     },
-    [analytics, onFieldFocus]
+    [analytics, onFieldFocus],
   );
 
   const handleFieldBlur = useCallback(
@@ -382,7 +384,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       if (analytics && fieldFocusStartRef.current[fieldName]) {
         const focusTime =
           Date.now() - fieldFocusStartRef.current[fieldName].getTime();
-        setFormAnalytics(prev => ({
+        setFormAnalytics((prev) => ({
           ...prev,
           fieldFocusTimes: {
             ...prev.fieldFocusTimes,
@@ -393,7 +395,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       }
       onFieldBlur?.(fieldName, value);
     },
-    [analytics, onFieldBlur]
+    [analytics, onFieldBlur],
   );
 
   // Enhanced submit handler
@@ -409,7 +411,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       }
 
       if (analytics) {
-        setFormAnalytics(prev => ({
+        setFormAnalytics((prev) => ({
           ...prev,
           completionTime: Date.now() - prev.startTime.getTime(),
         }));
@@ -420,7 +422,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
 
         // Clear auto-saved data on successful submission
         if (autoSave.enabled) {
-          const storageKey = autoSave.storageKey || 'advanced-form-autosave';
+          const storageKey = autoSave.storageKey || "advanced-form-autosave";
           localStorage.removeItem(storageKey);
         }
       } catch (error) {
@@ -436,7 +438,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
       onSubmit,
       autoSave,
       onError,
-    ]
+    ],
   );
 
   // Initialize saved data on mount
@@ -453,12 +455,12 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
 
   // Get field completion status
   const getFieldCompletionStatus = useCallback(() => {
-    const allFields = steps.flatMap(step => step.fields);
+    const allFields = steps.flatMap((step) => step.fields);
     const formValues = form.getValues();
 
-    const completedFields = allFields.filter(field => {
+    const completedFields = allFields.filter((field) => {
       const value = formValues[field as keyof T];
-      return value !== undefined && value !== '' && value !== null;
+      return value !== undefined && value !== "" && value !== null;
     });
 
     return {
@@ -502,7 +504,7 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
     loadSavedData,
     clearSavedData: () => {
       if (autoSave.enabled) {
-        const storageKey = autoSave.storageKey || 'advanced-form-autosave';
+        const storageKey = autoSave.storageKey || "advanced-form-autosave";
         localStorage.removeItem(storageKey);
         setLastAutoSave(null);
       }
@@ -565,7 +567,7 @@ export function useFormAutoComplete(options: {
       } = options;
 
       if (query.length < minCharacters) {
-        setSuggestions(prev => ({ ...prev, [fieldName]: [] }));
+        setSuggestions((prev) => ({ ...prev, [fieldName]: [] }));
         return;
       }
 
@@ -573,29 +575,29 @@ export function useFormAutoComplete(options: {
 
       // Check cache first
       if (cacheResults && cacheRef.current[cacheKey]) {
-        setSuggestions(prev => ({
+        setSuggestions((prev) => ({
           ...prev,
           [fieldName]: cacheRef.current[cacheKey],
         }));
         return;
       }
 
-      setLoading(prev => ({ ...prev, [fieldName]: true }));
+      setLoading((prev) => ({ ...prev, [fieldName]: true }));
 
       try {
         let results: string[] = [];
 
         // Use local suggestions if available
         if (localSuggestions?.[fieldName]) {
-          results = localSuggestions[fieldName].filter(suggestion =>
-            suggestion.toLowerCase().includes(query.toLowerCase())
+          results = localSuggestions[fieldName].filter((suggestion) =>
+            suggestion.toLowerCase().includes(query.toLowerCase()),
           );
         }
 
         // Fetch from API if endpoint provided
         if (apiEndpoint) {
           const response = await fetch(
-            `${apiEndpoint}?field=${fieldName}&q=${encodeURIComponent(query)}`
+            `${apiEndpoint}?field=${fieldName}&q=${encodeURIComponent(query)}`,
           );
           if (response.ok) {
             const apiResults = await response.json();
@@ -610,15 +612,15 @@ export function useFormAutoComplete(options: {
           cacheRef.current[cacheKey] = results;
         }
 
-        setSuggestions(prev => ({ ...prev, [fieldName]: results }));
+        setSuggestions((prev) => ({ ...prev, [fieldName]: results }));
       } catch (error) {
-        console.error('Error fetching suggestions:', error);
-        setSuggestions(prev => ({ ...prev, [fieldName]: [] }));
+        console.error("Error fetching suggestions:", error);
+        setSuggestions((prev) => ({ ...prev, [fieldName]: [] }));
       } finally {
-        setLoading(prev => ({ ...prev, [fieldName]: false }));
+        setLoading((prev) => ({ ...prev, [fieldName]: false }));
       }
     },
-    [options]
+    [options],
   );
 
   return {
@@ -627,7 +629,7 @@ export function useFormAutoComplete(options: {
     getSuggestions,
     clearSuggestions: (fieldName?: string) => {
       if (fieldName) {
-        setSuggestions(prev => ({ ...prev, [fieldName]: [] }));
+        setSuggestions((prev) => ({ ...prev, [fieldName]: [] }));
       } else {
         setSuggestions({});
       }

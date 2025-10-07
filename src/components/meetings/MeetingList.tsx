@@ -1,27 +1,30 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { MeetingCard } from './MeetingCard';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import type { Meeting } from '@/lib/prisma-compat-types';
-import { useSession } from 'next-auth/react';
+import React, { useState, useEffect } from "react";
+import { MeetingCard } from "./MeetingCard";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import type { Meeting } from "@/lib/prisma-compat-types";
+import { useSession } from "next-auth/react";
 import {
   getMeetingsAction,
   getMeetingsByTeacherAction,
-} from '@/services/actions/meetings';
-import { updateMeetingStatus } from '@/services/actions/meetings';
-import { MeetingStatus } from '@/lib/prisma-compat-types';
-import { useResponsiveMode } from '@/lib/hooks/useDesktopToggle';
-import { layout, typography } from '@/lib/responsive-utils';
-import { ActionLoader } from '@/components/ui/dashboard-loader';
+} from "@/services/actions/meetings";
+import { updateMeetingStatus } from "@/services/actions/meetings";
+import { MeetingStatus } from "@/lib/prisma-compat-types";
+import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
+import { layout, typography } from "@/lib/responsive-utils";
+import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 interface MeetingListProps {
   isAdmin?: boolean;
   onCreateMeeting?: () => void;
 }
 
-export function MeetingList({ isAdmin = false, onCreateMeeting }: MeetingListProps) {
+export function MeetingList({
+  isAdmin = false,
+  onCreateMeeting,
+}: MeetingListProps) {
   const { data: session } = useSession();
   const { isDesktopForced } = useResponsiveMode();
   const [meetings, setMeetings] = useState<Meeting[]>([]);
@@ -47,19 +50,57 @@ export function MeetingList({ isAdmin = false, onCreateMeeting }: MeetingListPro
       }
 
       if (response.success && response.data) {
-        setMeetings(response.data);
+        // Handle both array and paginated response from Convex
+        const meetingsData: any =
+          "meetings" in response.data ? response.data.meetings : response.data;
+        const convertedMeetings: Meeting[] = (
+          Array.isArray(meetingsData) ? meetingsData : []
+        ).map(
+          (m: any) =>
+            ({
+              id: m._id,
+              title: m.title,
+              meetingType: m.type,
+              studentName: m.studentName,
+              studentGrade: m.studentGrade,
+              guardianName: m.guardianName,
+              guardianEmail: m.guardianEmail,
+              guardianPhone: m.guardianPhone,
+              scheduledDate: new Date(m.scheduledDate),
+              scheduledTime: m.scheduledTime,
+              status: m.status,
+              assignedTo: m.assignedTo,
+              duration: m.duration,
+              location: m.location,
+              description: m.description,
+              reason: m.reason,
+              notes: m.notes,
+              parentRequested: m.parentRequested,
+              createdAt: new Date(m.createdAt),
+              updatedAt: new Date(m.updatedAt),
+            }) as Meeting,
+        );
+        setMeetings(convertedMeetings);
       } else {
-        setError('Error al cargar las reuniones');
+        setError("Error al cargar las reuniones");
       }
     } catch (err) {
-      setError('Error al cargar las reuniones');
+      setError("Error al cargar las reuniones");
     } finally {
       setLoading(false);
     }
   };
 
   const handleStatusChange = async (id: string, status: MeetingStatus) => {
-    const result = await updateMeetingStatus(id, status);
+    // Convert MeetingStatus enum to string literal type expected by API
+    const statusStr = MeetingStatus[status] as
+      | "SCHEDULED"
+      | "CONFIRMED"
+      | "IN_PROGRESS"
+      | "COMPLETED"
+      | "CANCELLED"
+      | "RESCHEDULED";
+    const result = await updateMeetingStatus(id, statusStr);
     if (result.success) {
       await loadMeetings();
     }
@@ -103,8 +144,8 @@ export function MeetingList({ isAdmin = false, onCreateMeeting }: MeetingListPro
         </h3>
         <p className="mt-1 text-sm text-gray-500">
           {isAdmin
-            ? 'Comienza creando una nueva reunión.'
-            : 'Tu coordinador te asignará reuniones pronto.'}
+            ? "Comienza creando una nueva reunión."
+            : "Tu coordinador te asignará reuniones pronto."}
         </p>
         {isAdmin && (
           <div className="mt-6">
@@ -124,7 +165,7 @@ export function MeetingList({ isAdmin = false, onCreateMeeting }: MeetingListPro
         <h2
           className={`${typography.heading(isDesktopForced)} font-bold text-foreground`}
         >
-          {isAdmin ? 'Todas las Reuniones' : 'Mis Reuniones'}
+          {isAdmin ? "Todas las Reuniones" : "Mis Reuniones"}
         </h2>
         {isAdmin && (
           <Button onClick={onCreateMeeting}>
@@ -135,7 +176,7 @@ export function MeetingList({ isAdmin = false, onCreateMeeting }: MeetingListPro
       </div>
 
       <div className={layout.grid.cards(isDesktopForced)}>
-        {meetings.map(meeting => (
+        {meetings.map((meeting) => (
           <MeetingCard
             key={meeting.id}
             meeting={meeting}

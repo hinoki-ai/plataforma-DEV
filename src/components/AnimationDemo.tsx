@@ -1,63 +1,72 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import styles from './AnimationDemo.module.css';
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import styles from "./AnimationDemo.module.css";
 
 export default function AnimationDemo() {
-  const [activeDemo, setActiveDemo] = useState('basics');
-  const [bounceHeight, setBounceHeight] = useState('20px');
-  const [slideFrom, setSlideFrom] = useState('-100%');
-  const [slideTo, setSlideTo] = useState('0%');
-  const [scaleFrom, setScaleFrom] = useState('0.8');
-  const [scaleTo, setScaleTo] = useState('1');
-  const [rotateFrom, setRotateFrom] = useState('0deg');
-  const [rotateTo, setRotateTo] = useState('360deg');
+  const [activeDemo, setActiveDemo] = useState("basics");
+  const [bounceHeight, setBounceHeight] = useState("20px");
+  const [slideFrom, setSlideFrom] = useState("-100%");
+  const [slideTo, setSlideTo] = useState("0%");
+  const [scaleFrom, setScaleFrom] = useState("0.8");
+  const [scaleTo, setScaleTo] = useState("1");
+  const [rotateFrom, setRotateFrom] = useState("0deg");
+  const [rotateTo, setRotateTo] = useState("360deg");
 
   // Set CSS custom properties for dynamic animations
   useEffect(() => {
-    const bounceElement = document.getElementById('animate-bounce-dynamic');
+    const bounceElement = document.getElementById("animate-bounce-dynamic");
     if (bounceElement) {
-      setCustomProperties(bounceElement, { 'bounce-offset': bounceHeight });
+      setCustomProperties(bounceElement, { "bounce-offset": bounceHeight });
     }
   }, [bounceHeight]);
 
   useEffect(() => {
-    const slideElement = document.getElementById('animate-slide-dynamic');
+    const slideElement = document.getElementById("animate-slide-dynamic");
     if (slideElement) {
       setCustomProperties(slideElement, {
-        'slide-from': slideFrom,
-        'slide-to': slideTo
+        "slide-from": slideFrom,
+        "slide-to": slideTo,
       });
     }
   }, [slideFrom, slideTo]);
 
   useEffect(() => {
-    const scaleElement = document.getElementById('animate-scale-dynamic');
+    const scaleElement = document.getElementById("animate-scale-dynamic");
     if (scaleElement) {
       setCustomProperties(scaleElement, {
-        'scale-from': scaleFrom,
-        'scale-to': scaleTo
+        "scale-from": scaleFrom,
+        "scale-to": scaleTo,
       });
     }
   }, [scaleFrom, scaleTo]);
 
   useEffect(() => {
-    const rotateElement = document.getElementById('animate-rotate-dynamic');
+    const rotateElement = document.getElementById("animate-rotate-dynamic");
     if (rotateElement) {
       setCustomProperties(rotateElement, {
-        'rotate-from': rotateFrom,
-        'rotate-to': rotateTo
+        "rotate-from": rotateFrom,
+        "rotate-to": rotateTo,
       });
     }
   }, [rotateFrom, rotateTo]);
 
-  const setCustomProperties = (element: HTMLElement, properties: Record<string, string>) => {
+  const setCustomProperties = (
+    element: HTMLElement,
+    properties: Record<string, string>,
+  ) => {
     Object.entries(properties).forEach(([key, value]) => {
       element.style.setProperty(`--${key}`, value);
     });
@@ -67,7 +76,7 @@ export default function AnimationDemo() {
     const element = document.getElementById(elementId);
     if (element) {
       // Remove and re-add the class to restart animation
-      element.className = element.className.replace(/animate-[^\s]+/g, '');
+      element.className = element.className.replace(/animate-[^\s]+/g, "");
       setTimeout(() => {
         element.className += ` ${elementId}`;
       }, 10);
@@ -82,11 +91,16 @@ export default function AnimationDemo() {
             CSS Keyframe Animations Demo
           </h1>
           <p className="text-lg text-gray-600">
-            Interactive showcase of advanced animation techniques from Josh Comeau&apos;s guide
+            Interactive showcase of advanced animation techniques from Josh
+            Comeau&apos;s guide
           </p>
         </div>
 
-        <Tabs value={activeDemo} onValueChange={setActiveDemo} className="w-full">
+        <Tabs
+          value={activeDemo}
+          onValueChange={setActiveDemo}
+          className="w-full"
+        >
           <TabsList className="grid w-full grid-cols-4 mb-8">
             <TabsTrigger value="basics">Basic Syntax</TabsTrigger>
             <TabsTrigger value="timing">Timing Functions</TabsTrigger>
@@ -111,7 +125,7 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-blue-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-in')}
+                      onClick={() => triggerAnimation("animate-slide-in")}
                       size="sm"
                     >
                       Slide In Left
@@ -124,7 +138,7 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-green-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-in-right')}
+                      onClick={() => triggerAnimation("animate-slide-in-right")}
                       size="sm"
                     >
                       Slide In Right
@@ -137,7 +151,7 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-purple-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-in-up')}
+                      onClick={() => triggerAnimation("animate-slide-in-up")}
                       size="sm"
                     >
                       Slide In Up
@@ -150,7 +164,7 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-pink-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-in-down')}
+                      onClick={() => triggerAnimation("animate-slide-in-down")}
                       size="sm"
                     >
                       Slide In Down
@@ -163,7 +177,9 @@ export default function AnimationDemo() {
             <Card>
               <CardHeader>
                 <CardTitle>Looped Animations</CardTitle>
-                <CardDescription>Infinite animations for loading states</CardDescription>
+                <CardDescription>
+                  Infinite animations for loading states
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -203,7 +219,7 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-blue-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-in-ease')}
+                      onClick={() => triggerAnimation("animate-slide-in-ease")}
                       size="sm"
                       className="mb-2"
                     >
@@ -218,7 +234,9 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-green-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-in-ease-in-out')}
+                      onClick={() =>
+                        triggerAnimation("animate-slide-in-ease-in-out")
+                      }
                       size="sm"
                       className="mb-2"
                     >
@@ -233,7 +251,9 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-purple-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-in-cubic-bezier')}
+                      onClick={() =>
+                        triggerAnimation("animate-slide-in-cubic-bezier")
+                      }
                       size="sm"
                       className="mb-2"
                     >
@@ -268,7 +288,9 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-entrance-multi-step')}
+                      onClick={() =>
+                        triggerAnimation("animate-entrance-multi-step")
+                      }
                       size="sm"
                       className="mb-2"
                     >
@@ -295,19 +317,25 @@ export default function AnimationDemo() {
                   <div className="text-center">
                     <div className="w-20 h-20 bg-blue-500 rounded-full animate-breathe mx-auto mb-2"></div>
                     <Badge variant="outline">Breathe</Badge>
-                    <p className="text-sm text-gray-600 mt-2">Scale 1 → 1.1 → 1</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Scale 1 → 1.1 → 1
+                    </p>
                   </div>
 
                   <div className="text-center">
                     <div className="w-20 h-20 bg-green-500 rounded-lg animate-grow-and-shrink mx-auto mb-2"></div>
                     <Badge variant="outline">Grow & Shrink</Badge>
-                    <p className="text-sm text-gray-600 mt-2">Scale 1 → 1.5 → 1</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Scale 1 → 1.5 → 1
+                    </p>
                   </div>
 
                   <div className="text-center">
                     <div className="w-20 h-20 bg-purple-500 rounded-lg animate-bounce mx-auto mb-2"></div>
                     <Badge variant="outline">Bounce</Badge>
-                    <p className="text-sm text-gray-600 mt-2">Translate Y bounce</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Translate Y bounce
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -328,7 +356,7 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-red-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-fade-out')}
+                      onClick={() => triggerAnimation("animate-fade-out")}
                       size="sm"
                       className="mb-2"
                     >
@@ -343,7 +371,9 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-yellow-500 rounded-lg mx-auto mb-2 opacity-0"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-delayed-entrance')}
+                      onClick={() =>
+                        triggerAnimation("animate-delayed-entrance")
+                      }
                       size="sm"
                       className="mb-2"
                     >
@@ -372,7 +402,7 @@ export default function AnimationDemo() {
                       15
                     </div>
                     <Button
-                      onClick={() => triggerAnimation('animate-calendar-day')}
+                      onClick={() => triggerAnimation("animate-calendar-day")}
                       size="sm"
                       className="mb-2"
                     >
@@ -388,7 +418,7 @@ export default function AnimationDemo() {
                       🔔
                     </div>
                     <Button
-                      onClick={() => triggerAnimation('animate-bell-ring')}
+                      onClick={() => triggerAnimation("animate-bell-ring")}
                       size="sm"
                       className="mb-2"
                     >
@@ -402,7 +432,7 @@ export default function AnimationDemo() {
                       className="w-16 h-20 bg-gradient-to-r from-yellow-200 to-yellow-100 rounded-r-lg shadow-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-page-turn')}
+                      onClick={() => triggerAnimation("animate-page-turn")}
                       size="sm"
                       className="mb-2"
                     >
@@ -467,7 +497,7 @@ export default function AnimationDemo() {
                       className={`w-16 h-16 bg-green-500 rounded-lg mx-auto ${styles.animateSlideDynamic}`}
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-slide-dynamic')}
+                      onClick={() => triggerAnimation("animate-slide-dynamic")}
                       size="sm"
                       className="w-full"
                     >
@@ -502,7 +532,7 @@ export default function AnimationDemo() {
                       className={`w-16 h-16 bg-purple-500 rounded-lg mx-auto ${styles.animateScaleDynamic}`}
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-scale-dynamic')}
+                      onClick={() => triggerAnimation("animate-scale-dynamic")}
                       size="sm"
                       className="w-full"
                     >
@@ -556,14 +586,15 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-complex')}
+                      onClick={() => triggerAnimation("animate-complex")}
                       size="sm"
                       className="mb-2"
                     >
                       Complex Shorthand
                     </Button>
                     <p className="text-sm text-gray-600">
-                      slide-in 1000ms cubic-bezier(...) 2s infinite alternate both
+                      slide-in 1000ms cubic-bezier(...) 2s infinite alternate
+                      both
                     </p>
                   </div>
 
@@ -573,7 +604,9 @@ export default function AnimationDemo() {
                       className="w-20 h-20 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg mx-auto mb-2"
                     ></div>
                     <Button
-                      onClick={() => triggerAnimation('animate-delayed-complex')}
+                      onClick={() =>
+                        triggerAnimation("animate-delayed-complex")
+                      }
                       size="sm"
                       className="mb-2"
                     >
@@ -594,8 +627,10 @@ export default function AnimationDemo() {
             <CardContent className="pt-6">
               <h3 className="text-lg font-semibold mb-2">About This Demo</h3>
               <p className="text-gray-600 mb-4">
-                This interactive demo showcases all the keyframe animation concepts from Josh Comeau&apos;s comprehensive guide.
-                Each animation demonstrates a specific technique that can be applied to your school website.
+                This interactive demo showcases all the keyframe animation
+                concepts from Josh Comeau&apos;s comprehensive guide. Each
+                animation demonstrates a specific technique that can be applied
+                to your school website.
               </p>
               <div className="flex flex-wrap justify-center gap-2">
                 <Badge variant="outline">CSS Keyframes</Badge>

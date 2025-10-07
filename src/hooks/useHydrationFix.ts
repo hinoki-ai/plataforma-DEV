@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * Hook to detect and handle hydration state
@@ -22,12 +22,16 @@ export function useHydrationFix() {
  */
 export function useClientOnly<T>(
   clientValue: T | (() => T),
-  serverValue: T
+  serverValue: T,
 ): T {
   const [value, setValue] = useState<T>(serverValue);
 
   useEffect(() => {
-    setValue(typeof clientValue === 'function' ? (clientValue as () => T)() : clientValue);
+    setValue(
+      typeof clientValue === "function"
+        ? (clientValue as () => T)()
+        : clientValue,
+    );
   }, [clientValue]);
 
   return value;
@@ -39,7 +43,7 @@ export function useClientOnly<T>(
  */
 export function useBrowserAPI<T>(
   getter: () => T,
-  defaultValue: T | null = null
+  defaultValue: T | null = null,
 ): T | null {
   const [value, setValue] = useState<T | null>(defaultValue);
 
@@ -47,7 +51,7 @@ export function useBrowserAPI<T>(
     try {
       setValue(getter());
     } catch (error) {
-      console.error('Browser API access error:', error);
+      console.error("Browser API access error:", error);
       setValue(defaultValue);
     }
   }, []);
@@ -60,15 +64,15 @@ export function useBrowserAPI<T>(
  */
 export function useDynamicImport<T>(
   importFn: () => Promise<T>,
-  fallback: T | null = null
+  fallback: T | null = null,
 ): T | null {
   const [module, setModule] = useState<T | null>(fallback);
 
   useEffect(() => {
     importFn()
       .then(setModule)
-      .catch(error => {
-        console.error('Dynamic import failed:', error);
+      .catch((error) => {
+        console.error("Dynamic import failed:", error);
         setModule(fallback);
       });
   }, []);
@@ -81,7 +85,7 @@ export function useDynamicImport<T>(
  */
 export function useConditionalRender(
   condition: boolean | (() => boolean),
-  waitForHydration: boolean = true
+  waitForHydration: boolean = true,
 ): boolean {
   const isHydrated = useHydrationFix();
   const [shouldRender, setShouldRender] = useState(false);
@@ -89,7 +93,7 @@ export function useConditionalRender(
   useEffect(() => {
     if (!waitForHydration || isHydrated) {
       setShouldRender(
-        typeof condition === 'function' ? condition() : condition
+        typeof condition === "function" ? condition() : condition,
       );
     }
   }, [condition, isHydrated, waitForHydration]);
@@ -118,20 +122,21 @@ export function useDelayedHydration(delayMs: number = 100): boolean {
 /**
  * Hook to track hydration errors
  */
-export function useHydrationError(
-  onError?: (error: Error) => void
-): { hasError: boolean; error: Error | null } {
+export function useHydrationError(onError?: (error: Error) => void): {
+  hasError: boolean;
+  error: Error | null;
+} {
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const handleError = (event: ErrorEvent) => {
-      const errorMessage = event.error?.message || event.message || '';
-      
+      const errorMessage = event.error?.message || event.message || "";
+
       if (
-        errorMessage.toLowerCase().includes('hydration') ||
-        errorMessage.includes('Text content does not match') ||
-        errorMessage.includes('expected server HTML')
+        errorMessage.toLowerCase().includes("hydration") ||
+        errorMessage.includes("Text content does not match") ||
+        errorMessage.includes("expected server HTML")
       ) {
         const hydrationError = new Error(`Hydration error: ${errorMessage}`);
         setHasError(true);
@@ -140,8 +145,8 @@ export function useHydrationError(
       }
     };
 
-    window.addEventListener('error', handleError);
-    return () => window.removeEventListener('error', handleError);
+    window.addEventListener("error", handleError);
+    return () => window.removeEventListener("error", handleError);
   }, [onError]);
 
   return { hasError, error };
@@ -150,19 +155,16 @@ export function useHydrationError(
 /**
  * Hook to sync server and client state
  */
-export function useStateSync<T>(
-  serverValue: T,
-  clientValue: T | (() => T)
-): T {
+export function useStateSync<T>(serverValue: T, clientValue: T | (() => T)): T {
   const [value, setValue] = useState(serverValue);
   const isHydrated = useHydrationFix();
 
   useEffect(() => {
     if (isHydrated) {
       setValue(
-        typeof clientValue === 'function' 
-          ? (clientValue as () => T)() 
-          : clientValue
+        typeof clientValue === "function"
+          ? (clientValue as () => T)()
+          : clientValue,
       );
     }
   }, [isHydrated, clientValue]);

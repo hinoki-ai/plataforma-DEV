@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { MasterPageTemplate } from '@/components/master/MasterPageTemplate';
+import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const systemOverviewFallback = (
   <div className="space-y-8">

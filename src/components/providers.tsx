@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { SessionProvider } from 'next-auth/react';
-import { ThemeProvider } from './theme-provider';
-import { DesktopToggleProvider } from '@/lib/hooks/useDesktopToggle';
+import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "./theme-provider";
+import { DesktopToggleProvider } from "@/lib/hooks/useDesktopToggle";
 // 🕊️ DIVINE PARSING ORACLE - Now using chunked i18n system
-import { LanguageProvider } from '@/components/language/LanguageContext';
-import { ContextProvider } from './providers/ContextProvider';
-import { WebVitalsProvider } from './providers/WebVitalsProvider';
-import { usePathname } from 'next/navigation';
-import { ConvexProvider, ConvexReactClient } from 'convex/react';
+import { LanguageProvider } from "@/components/language/LanguageContext";
+import { ContextProvider } from "./providers/ContextProvider";
+import { WebVitalsProvider } from "./providers/WebVitalsProvider";
+import { usePathname } from "next/navigation";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
 
-const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || '';
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "";
 const convex = new ConvexReactClient(convexUrl);
 
 function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
@@ -18,7 +18,7 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
 
   // Only refetch on window focus for auth-related routes
   const shouldRefetchOnFocus =
-    pathname === '/login' || pathname === '/auth-success';
+    pathname === "/login" || pathname === "/auth-success";
 
   return (
     <SessionProvider

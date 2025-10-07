@@ -3,27 +3,27 @@
  * Provides functionality to export calendar events in various formats
  */
 
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import {
   chileanCalendarEvents,
   CalendarEvent,
   EventCategory,
-} from '@/data/calendario/chilean-calendar-2025';
+} from "@/data/calendario/chilean-calendar-2025";
 
 // iCalendar format constants
-const ICAL_DATE_FORMAT = 'yyyyMMdd';
-const ICAL_DATETIME_FORMAT = 'yyyyMMddTHHmmss';
+const ICAL_DATE_FORMAT = "yyyyMMdd";
+const ICAL_DATETIME_FORMAT = "yyyyMMddTHHmmss";
 
 /**
  * Escape special characters for iCalendar format
  */
 function escapeICalText(text: string): string {
   return text
-    .replace(/\\/g, '\\\\')
-    .replace(/;/g, '\\;')
-    .replace(/,/g, '\\,')
-    .replace(/\n/g, '\\n')
-    .replace(/\r/g, '');
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "");
 }
 
 /**
@@ -34,7 +34,7 @@ function generateICalEvent(event: CalendarEvent): string {
   const startDate = format(eventDate, ICAL_DATE_FORMAT);
   const endDate = format(
     new Date(eventDate.getTime() + 24 * 60 * 60 * 1000),
-    ICAL_DATE_FORMAT
+    ICAL_DATE_FORMAT,
   ); // Next day for all-day events
 
   // Generate unique UID
@@ -42,18 +42,18 @@ function generateICalEvent(event: CalendarEvent): string {
 
   // Create timestamp
   const now = new Date();
-  const timestamp = format(now, ICAL_DATETIME_FORMAT) + 'Z';
+  const timestamp = format(now, ICAL_DATETIME_FORMAT) + "Z";
 
   // Category mapping for iCalendar CATEGORIES
   const categoryMap: Record<EventCategory, string> = {
-    academic: 'EDUCATION,ACADEMIC',
-    holiday: 'HOLIDAY,PERSONAL',
-    special: 'CELEBRATION,EDUCATION',
-    parent: 'MEETING,EDUCATION',
+    academic: "EDUCATION,ACADEMIC",
+    holiday: "HOLIDAY,PERSONAL",
+    special: "CELEBRATION,EDUCATION",
+    parent: "MEETING,EDUCATION",
   };
 
   const lines = [
-    'BEGIN:VEVENT',
+    "BEGIN:VEVENT",
     `UID:${uid}`,
     `DTSTAMP:${timestamp}`,
     `DTSTART;VALUE=DATE:${startDate}`,
@@ -64,15 +64,15 @@ function generateICalEvent(event: CalendarEvent): string {
       : []),
     `CATEGORIES:${categoryMap[event.category]}`,
     ...(event.level ? [`X-EDUCATION-LEVEL:${event.level}`] : []),
-    'TRANSP:TRANSPARENT', // All-day events are typically transparent
-    'STATUS:CONFIRMED',
-    'CLASS:PUBLIC',
-    'LOCATION:Escuela Especial de Lenguaje Manitos Pintadas\\, Chile',
-    'ORGANIZER;CN=Manitos Pintadas:mailto:contacto@manitospintadas.cl',
-    'END:VEVENT',
+    "TRANSP:TRANSPARENT", // All-day events are typically transparent
+    "STATUS:CONFIRMED",
+    "CLASS:PUBLIC",
+    "LOCATION:Escuela Especial de Lenguaje Manitos Pintadas\\, Chile",
+    "ORGANIZER;CN=Manitos Pintadas:mailto:contacto@manitospintadas.cl",
+    "END:VEVENT",
   ];
 
-  return lines.join('\r\n');
+  return lines.join("\r\n");
 }
 
 /**
@@ -80,50 +80,50 @@ function generateICalEvent(event: CalendarEvent): string {
  */
 export function generateICalendar(
   events: CalendarEvent[] = chileanCalendarEvents,
-  selectedCategories?: EventCategory[]
+  selectedCategories?: EventCategory[],
 ): string {
   // Filter events by selected categories if provided
   const filteredEvents = selectedCategories
-    ? events.filter(event => selectedCategories.includes(event.category))
+    ? events.filter((event) => selectedCategories.includes(event.category))
     : events;
 
-  const calendarName = 'Calendario Escolar 2025 - Manitos Pintadas';
+  const calendarName = "Calendario Escolar 2025 - Manitos Pintadas";
   const calendarDescription =
-    'Calendario oficial de la Escuela Especial de Lenguaje Manitos Pintadas para el año escolar 2025. Incluye fechas académicas, feriados, eventos especiales y actividades para padres.';
+    "Calendario oficial de la Escuela Especial de Lenguaje Manitos Pintadas para el año escolar 2025. Incluye fechas académicas, feriados, eventos especiales y actividades para padres.";
 
   const header = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Manitos Pintadas//Calendario Escolar 2025//ES',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Manitos Pintadas//Calendario Escolar 2025//ES",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
     `X-WR-CALNAME:${escapeICalText(calendarName)}`,
     `X-WR-CALDESC:${escapeICalText(calendarDescription)}`,
-    'X-WR-TIMEZONE:America/Santiago',
-    'BEGIN:VTIMEZONE',
-    'TZID:America/Santiago',
-    'BEGIN:STANDARD',
-    'DTSTART:20250406T030000',
-    'RRULE:FREQ=YEARLY;BYMONTH=4;BYDAY=1SU',
-    'TZNAME:CLST',
-    'TZOFFSETFROM:-0300',
-    'TZOFFSETTO:-0400',
-    'END:STANDARD',
-    'BEGIN:DAYLIGHT',
-    'DTSTART:20250907T040000',
-    'RRULE:FREQ=YEARLY;BYMONTH=9;BYDAY=1SU',
-    'TZNAME:CLT',
-    'TZOFFSETFROM:-0400',
-    'TZOFFSETTO:-0300',
-    'END:DAYLIGHT',
-    'END:VTIMEZONE',
+    "X-WR-TIMEZONE:America/Santiago",
+    "BEGIN:VTIMEZONE",
+    "TZID:America/Santiago",
+    "BEGIN:STANDARD",
+    "DTSTART:20250406T030000",
+    "RRULE:FREQ=YEARLY;BYMONTH=4;BYDAY=1SU",
+    "TZNAME:CLST",
+    "TZOFFSETFROM:-0300",
+    "TZOFFSETTO:-0400",
+    "END:STANDARD",
+    "BEGIN:DAYLIGHT",
+    "DTSTART:20250907T040000",
+    "RRULE:FREQ=YEARLY;BYMONTH=9;BYDAY=1SU",
+    "TZNAME:CLT",
+    "TZOFFSETFROM:-0400",
+    "TZOFFSETTO:-0300",
+    "END:DAYLIGHT",
+    "END:VTIMEZONE",
   ];
 
-  const footer = ['END:VCALENDAR'];
+  const footer = ["END:VCALENDAR"];
 
   const eventStrings = filteredEvents.map(generateICalEvent);
 
-  return [...header, ...eventStrings, ...footer].join('\r\n');
+  return [...header, ...eventStrings, ...footer].join("\r\n");
 }
 
 /**
@@ -131,27 +131,27 @@ export function generateICalendar(
  */
 export function downloadICalendar(
   selectedCategories?: EventCategory[],
-  filename: string = 'calendario-escolar-2025-manitos-pintadas.ics'
+  filename: string = "calendario-escolar-2025-manitos-pintadas.ics",
 ): void {
   // Ensure this only runs on the client
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
+  if (typeof window === "undefined" || typeof document === "undefined") {
     return;
   }
 
   const icalContent = generateICalendar(
     chileanCalendarEvents,
-    selectedCategories
+    selectedCategories,
   );
 
   const blob = new Blob([icalContent], {
-    type: 'text/calendar;charset=utf-8',
+    type: "text/calendar;charset=utf-8",
   });
 
   const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
   link.download = filename;
-  link.style.display = 'none';
+  link.style.display = "none";
 
   document.body.appendChild(link);
   link.click();
@@ -165,7 +165,7 @@ export function downloadICalendar(
  */
 export function generateCalendarStats(
   events: CalendarEvent[] = chileanCalendarEvents,
-  selectedCategories?: EventCategory[]
+  selectedCategories?: EventCategory[],
 ): {
   totalEvents: number;
   categoryCounts: Record<EventCategory, number>;
@@ -173,7 +173,7 @@ export function generateCalendarStats(
   levelCounts: Record<string, number>;
 } {
   const filteredEvents = selectedCategories
-    ? events.filter(event => selectedCategories.includes(event.category))
+    ? events.filter((event) => selectedCategories.includes(event.category))
     : events;
 
   const categoryCounts: Record<EventCategory, number> = {
@@ -191,17 +191,17 @@ export function generateCalendarStats(
     general: 0,
   };
 
-  filteredEvents.forEach(event => {
+  filteredEvents.forEach((event) => {
     // Count by category
     categoryCounts[event.category]++;
 
     // Count by month
     const eventDate = new Date(event.date);
-    const monthKey = format(eventDate, 'MMMM yyyy');
+    const monthKey = format(eventDate, "MMMM yyyy");
     monthCounts[monthKey] = (monthCounts[monthKey] || 0) + 1;
 
     // Count by level
-    const level = event.level || 'general';
+    const level = event.level || "general";
     levelCounts[level]++;
   });
 
@@ -217,18 +217,18 @@ export function generateCalendarStats(
  * Generate human-readable calendar summary
  */
 export function generateCalendarSummary(
-  selectedCategories?: EventCategory[]
+  selectedCategories?: EventCategory[],
 ): string {
   const stats = generateCalendarStats(
     chileanCalendarEvents,
-    selectedCategories
+    selectedCategories,
   );
 
   const categoryLabels: Record<EventCategory, string> = {
-    academic: 'eventos académicos',
-    holiday: 'feriados',
-    special: 'eventos especiales',
-    parent: 'actividades para padres',
+    academic: "eventos académicos",
+    holiday: "feriados",
+    special: "eventos especiales",
+    parent: "actividades para padres",
   };
 
   const summary = [
@@ -241,7 +241,7 @@ export function generateCalendarSummary(
       .filter(([, count]) => count > 0)
       .map(
         ([category, count]) =>
-          `• ${categoryLabels[category as EventCategory]}: ${count}`
+          `• ${categoryLabels[category as EventCategory]}: ${count}`,
       ),
     ``,
     `Niveles educativos:`,
@@ -258,5 +258,5 @@ export function generateCalendarSummary(
     `Contacto: contacto@manitospintadas.cl`,
   ];
 
-  return summary.join('\n');
+  return summary.join("\n");
 }

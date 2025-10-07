@@ -2,42 +2,48 @@
  * Team Member Actions (Mutations) - Convex Implementation
  */
 
-import { getConvexClient } from '@/lib/convex';
-import { api } from '../../../convex/_generated/api';
-import type { Id } from '../../../convex/_generated/dataModel';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 export async function createTeamMember(data: {
   name: string;
   title: string;
   description: string;
-  specialties: any;
+  specialties: string[];
   imageUrl?: string;
   order?: number;
 }) {
   try {
     const client = getConvexClient();
-    
-    const memberId = await client.mutation(api.teamMembers.createTeamMember, data);
+
+    const memberId = await client.mutation(
+      api.teamMembers.createTeamMember,
+      data,
+    );
 
     return { success: true, data: { id: memberId } };
   } catch (error) {
-    console.error('Failed to create team member:', error);
-    return { success: false, error: 'No se pudo crear el miembro del equipo' };
+    console.error("Failed to create team member:", error);
+    return { success: false, error: "No se pudo crear el miembro del equipo" };
   }
 }
 
-export async function updateTeamMember(id: string, data: {
-  name?: string;
-  title?: string;
-  description?: string;
-  specialties?: any;
-  imageUrl?: string;
-  order?: number;
-  isActive?: boolean;
-}) {
+export async function updateTeamMember(
+  id: string,
+  data: {
+    name?: string;
+    title?: string;
+    description?: string;
+    specialties?: string[];
+    imageUrl?: string;
+    order?: number;
+    isActive?: boolean;
+  },
+) {
   try {
     const client = getConvexClient();
-    
+
     await client.mutation(api.teamMembers.updateTeamMember, {
       id: id as Id<"teamMembers">,
       ...data,
@@ -45,8 +51,11 @@ export async function updateTeamMember(id: string, data: {
 
     return { success: true };
   } catch (error) {
-    console.error('Failed to update team member:', error);
-    return { success: false, error: 'No se pudo actualizar el miembro del equipo' };
+    console.error("Failed to update team member:", error);
+    return {
+      success: false,
+      error: "No se pudo actualizar el miembro del equipo",
+    };
   }
 }
 
@@ -58,8 +67,11 @@ export async function deleteTeamMember(id: string) {
     });
     return { success: true };
   } catch (error) {
-    console.error('Failed to delete team member:', error);
-    return { success: false, error: 'No se pudo eliminar el miembro del equipo' };
+    console.error("Failed to delete team member:", error);
+    return {
+      success: false,
+      error: "No se pudo eliminar el miembro del equipo",
+    };
   }
 }
 
@@ -72,7 +84,10 @@ export async function toggleTeamMemberStatus(id: string, isActive: boolean) {
     });
     return { success: true };
   } catch (error) {
-    console.error('Failed to toggle team member status:', error);
-    return { success: false, error: 'No se pudo cambiar el estado del miembro del equipo' };
+    console.error("Failed to toggle team member status:", error);
+    return {
+      success: false,
+      error: "No se pudo cambiar el estado del miembro del equipo",
+    };
   }
 }

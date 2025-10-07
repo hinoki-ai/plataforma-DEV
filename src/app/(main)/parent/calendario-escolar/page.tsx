@@ -1,25 +1,25 @@
-import { Metadata } from 'next';
-import UnifiedCalendarView from '@/components/calendar/UnifiedCalendarView';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Metadata } from "next";
+import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { PageTransition } from '@/components/ui/page-transition';
-import { requireAuth } from '@/lib/server-auth';
-import { getRoleAccess } from '@/lib/role-utils';
-import { redirect } from 'next/navigation';
+import { PageTransition } from "@/components/ui/page-transition";
+import { requireAuth } from "@/lib/server-auth";
+import { getRoleAccess } from "@/lib/role-utils";
+import { redirect } from "next/navigation";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: 'Calendario Escolar | Manitos Pintadas',
+  title: "Calendario Escolar | Manitos Pintadas",
   description:
-    'Calendario escolar oficial para Escuela Especial de Lenguaje Manitos Pintadas. Fechas importantes, eventos académicos y actividades preescolares.',
+    "Calendario escolar oficial para Escuela Especial de Lenguaje Manitos Pintadas. Fechas importantes, eventos académicos y actividades preescolares.",
   keywords:
-    'calendario escolar, educación preescolar, Chile, NT1, NT2, Manitos Pintadas',
+    "calendario escolar, educación preescolar, Chile, NT1, NT2, Manitos Pintadas",
   openGraph: {
-    title: 'Calendario Escolar | Manitos Pintadas',
+    title: "Calendario Escolar | Manitos Pintadas",
     description:
-      'Descubre las fechas importantes del año escolar para nuestra escuela especial de lenguaje.',
-    type: 'website',
+      "Descubre las fechas importantes del año escolar para nuestra escuela especial de lenguaje.",
+    type: "website",
   },
 };
 
@@ -30,21 +30,17 @@ export default async function CalendarioEscolarPage() {
   // Ensure user has access to parent dashboard
   if (
     !roleAccess.canAccessParent &&
-    session.user.role !== 'PROFESOR' &&
-    session.user.role !== 'ADMIN'
+    session.user.role !== "PROFESOR" &&
+    session.user.role !== "ADMIN"
   ) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   return (
     <PageTransition skeletonType="page" duration={700}>
-      <div
-        className="min-h-screen bg-home-page"
-        aria-hidden="true"
-      >
+      <div className="min-h-screen bg-home-page" aria-hidden="true">
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent" />
         <div className="relative z-20">
-
           {/* Calendar Section */}
           <section className="py-2">
             <div className="container mx-auto px-4 py-8">
@@ -53,11 +49,11 @@ export default async function CalendarioEscolarPage() {
                 showAdminControls={false}
                 showExport={true}
                 initialCategories={[
-                  'ACADEMIC',
-                  'HOLIDAY',
-                  'SPECIAL',
-                  'PARENT',
-                  'MEETING',
+                  "ACADEMIC",
+                  "HOLIDAY",
+                  "SPECIAL",
+                  "PARENT",
+                  "MEETING",
                 ]}
                 userRole="PARENT"
               />

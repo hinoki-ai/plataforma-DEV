@@ -1,4 +1,4 @@
-import Header from '@/components/layout/Header';
+import Header from "@/components/layout/Header";
 
 export default function AuthLayout({
   children,
@@ -9,9 +9,7 @@ export default function AuthLayout({
     <div className="h-screen bg-background overflow-hidden md:overflow-hidden">
       <Header />
       <div className="flex items-center justify-center p-4 h-screen overflow-y-auto md:overflow-hidden bg-[url('/logbg.png')] bg-cover bg-center">
-        <div
-          className="w-full max-w-sm relative px-4 sm:px-6 flex flex-col items-center -top-5"
-        >
+        <div className="w-full max-w-sm relative px-4 sm:px-6 flex flex-col items-center -top-5">
           <div className="text-center mb-8 relative w-full -top-[45px]">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-2xl transition-all duration-700 ease-out leading-tight break-words flex flex-col items-center">
               <div className="animate-fade-in-up block mb-1 whitespace-nowrap text-center">

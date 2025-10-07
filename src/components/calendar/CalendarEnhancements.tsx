@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Calendar,
   Clock,
@@ -17,12 +17,12 @@ import {
   Cloud,
   CloudRain,
   Sun,
-} from 'lucide-react';
-import { CalendarEvent } from '@/data/calendario/chilean-calendar-2025';
+} from "lucide-react";
+import { CalendarEvent } from "@/data/calendario/chilean-calendar-2025";
 
 interface CalendarViewModeProps {
-  viewMode: 'month' | 'week' | 'agenda';
-  onViewModeChange: (mode: 'month' | 'week' | 'agenda') => void;
+  viewMode: "month" | "week" | "agenda";
+  onViewModeChange: (mode: "month" | "week" | "agenda") => void;
 }
 
 export function CalendarViewMode({
@@ -31,7 +31,7 @@ export function CalendarViewMode({
 }: CalendarViewModeProps) {
   return (
     <div className="flex bg-muted rounded-lg p-1">
-      {(['month', 'week', 'agenda'] as const).map(mode => (
+      {(["month", "week", "agenda"] as const).map((mode) => (
         <button
           key={mode}
           onClick={() => onViewModeChange(mode)}
@@ -39,14 +39,14 @@ export function CalendarViewMode({
             px-3 py-1 text-sm font-medium rounded-md transition-all duration-200
             ${
               viewMode === mode
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
             }
           `}
         >
-          {mode === 'month' && 'Mes'}
-          {mode === 'week' && 'Semana'}
-          {mode === 'agenda' && 'Agenda'}
+          {mode === "month" && "Mes"}
+          {mode === "week" && "Semana"}
+          {mode === "agenda" && "Agenda"}
         </button>
       ))}
     </div>
@@ -72,7 +72,7 @@ export function EventConflictIndicator({
     >
       <AlertTriangle className="h-3 w-3" />
       <span>
-        {conflicts.length} conflicto{conflicts.length > 1 ? 's' : ''}
+        {conflicts.length} conflicto{conflicts.length > 1 ? "s" : ""}
       </span>
     </motion.div>
   );
@@ -80,10 +80,10 @@ export function EventConflictIndicator({
 
 interface RSVPControlsProps {
   eventId: string;
-  currentStatus?: 'attending' | 'not-attending' | 'maybe';
+  currentStatus?: "attending" | "not-attending" | "maybe";
   onRSVP: (
     eventId: string,
-    status: 'attending' | 'not-attending' | 'maybe'
+    status: "attending" | "not-attending" | "maybe",
   ) => void;
 }
 
@@ -94,22 +94,22 @@ export function RSVPControls({
 }: RSVPControlsProps) {
   const statuses = [
     {
-      value: 'attending' as const,
-      label: 'Asistiré',
+      value: "attending" as const,
+      label: "Asistiré",
       icon: Check,
-      color: 'text-green-600',
+      color: "text-green-600",
     },
     {
-      value: 'maybe' as const,
-      label: 'Quizás',
+      value: "maybe" as const,
+      label: "Quizás",
       icon: Clock,
-      color: 'text-yellow-600',
+      color: "text-yellow-600",
     },
     {
-      value: 'not-attending' as const,
-      label: 'No asistiré',
+      value: "not-attending" as const,
+      label: "No asistiré",
       icon: X,
-      color: 'text-red-600',
+      color: "text-red-600",
     },
   ];
 
@@ -118,10 +118,10 @@ export function RSVPControls({
       {statuses.map(({ value, label, icon: Icon, color }) => (
         <Button
           key={value}
-          variant={currentStatus === value ? 'default' : 'outline'}
+          variant={currentStatus === value ? "default" : "outline"}
           size="sm"
           onClick={() => onRSVP(eventId, value)}
-          className={`h-8 px-2 ${currentStatus === value ? '' : color}`}
+          className={`h-8 px-2 ${currentStatus === value ? "" : color}`}
         >
           <Icon className="h-3 w-3 mr-1" />
           <span className="sr-only">{label}</span>
@@ -140,15 +140,15 @@ export function WeatherIntegration({ date, event }: WeatherIntegrationProps) {
   // Mock weather data - in real implementation, this would fetch from weather API
   const mockWeather = {
     temp: 18,
-    condition: 'partly-cloudy',
-    warning: event.category === 'special' && Math.random() > 0.7,
+    condition: "partly-cloudy",
+    warning: event.category === "special" && Math.random() > 0.7,
   };
 
   const getWeatherIcon = () => {
     switch (mockWeather.condition) {
-      case 'sunny':
+      case "sunny":
         return <Sun className="h-4 w-4 text-yellow-500" />;
-      case 'rainy':
+      case "rainy":
         return <CloudRain className="h-4 w-4 text-blue-500" />;
       default:
         return <Cloud className="h-4 w-4 text-gray-500" />;
@@ -177,14 +177,14 @@ interface AgendaViewProps {
 export function AgendaView({ events, selectedDate }: AgendaViewProps) {
   const groupedEvents = events.reduce(
     (groups, event) => {
-      const dateKey = format(new Date(event.date), 'yyyy-MM-dd');
+      const dateKey = format(new Date(event.date), "yyyy-MM-dd");
       if (!groups[dateKey]) {
         groups[dateKey] = [];
       }
       groups[dateKey].push(event);
       return groups;
     },
-    {} as Record<string, CalendarEvent[]>
+    {} as Record<string, CalendarEvent[]>,
   );
 
   return (
@@ -220,7 +220,7 @@ export function AgendaView({ events, selectedDate }: AgendaViewProps) {
                         <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            <span>{event.time || 'Todo el día'}</span>
+                            <span>{event.time || "Todo el día"}</span>
                           </div>
                           {event.location && (
                             <div className="flex items-center gap-1">
@@ -267,7 +267,10 @@ export function CalendarPrintView({
       <div className="p-8 bg-white text-black">
         <header className="text-center mb-8">
           <h1 className="text-2xl font-bold">
-            Calendario Escolar - {format(month, 'MMMM yyyy', { locale: es }).replace(/\b\w/g, l => l.toUpperCase())}
+            Calendario Escolar -{" "}
+            {format(month, "MMMM yyyy", { locale: es }).replace(/\b\w/g, (l) =>
+              l.toUpperCase(),
+            )}
           </h1>
           <p className="text-sm text-gray-600 mt-2">
             Manitos Pintadas - Sistema de Gestión Escolar
@@ -299,12 +302,12 @@ export function CalendarPrintView({
 
         <footer className="mt-8 pt-4 border-t text-center text-xs text-gray-500">
           <p>
-            Generado el{' '}
+            Generado el{" "}
             {format(new Date(), "d 'de' MMMM, yyyy 'a las' HH:mm", {
               locale: es,
             })}
           </p>
-          <p className="mt-1">Categorías incluidas: {categories.join(', ')}</p>
+          <p className="mt-1">Categorías incluidas: {categories.join(", ")}</p>
         </footer>
       </div>
     </div>
@@ -314,7 +317,7 @@ export function CalendarPrintView({
 // Export utility functions
 export const calendarUtils = {
   formatEventTime: (event: CalendarEvent) => {
-    if (!event.time) return 'Todo el día';
+    if (!event.time) return "Todo el día";
     return event.time;
   },
 
@@ -325,14 +328,14 @@ export const calendarUtils = {
 
   getEventColor: (category: string) => {
     const colors = {
-      academic: 'bg-blue-100 text-blue-800 border-blue-200',
-      holiday: 'bg-green-100 text-green-800 border-green-200',
-      special: 'bg-purple-100 text-purple-800 border-purple-200',
-      parent: 'bg-orange-100 text-orange-800 border-orange-200',
+      academic: "bg-blue-100 text-blue-800 border-blue-200",
+      holiday: "bg-green-100 text-green-800 border-green-200",
+      special: "bg-purple-100 text-purple-800 border-purple-200",
+      parent: "bg-orange-100 text-orange-800 border-orange-200",
     };
     return (
       colors[category as keyof typeof colors] ||
-      'bg-gray-100 text-gray-800 border-gray-200'
+      "bg-gray-100 text-gray-800 border-gray-200"
     );
   },
 };

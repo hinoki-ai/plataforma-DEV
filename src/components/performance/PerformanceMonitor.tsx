@@ -1,11 +1,20 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Activity, Zap, Database, Wifi, AlertTriangle, CheckCircle, Clock, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import {
+  Activity,
+  Zap,
+  Database,
+  Wifi,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  TrendingUp,
+} from "lucide-react";
 
 interface PerformanceMetrics {
   loadTime: number;
@@ -21,7 +30,10 @@ interface PerformanceMonitorProps {
   showDetails?: boolean;
 }
 
-export function PerformanceMonitor({ className, showDetails = false }: PerformanceMonitorProps) {
+export function PerformanceMonitor({
+  className,
+  showDetails = false,
+}: PerformanceMonitorProps) {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     loadTime: 0,
     apiResponseTime: 0,
@@ -37,10 +49,12 @@ export function PerformanceMonitor({ className, showDetails = false }: Performan
 
   useEffect(() => {
     // Track initial load time
-    if (typeof window !== 'undefined' && window.performance) {
-      const navigation = window.performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    if (typeof window !== "undefined" && window.performance) {
+      const navigation = window.performance.getEntriesByType(
+        "navigation",
+      )[0] as PerformanceNavigationTiming;
       if (navigation) {
-        setMetrics(prev => ({
+        setMetrics((prev) => ({
           ...prev,
           loadTime: navigation.loadEventEnd - navigation.fetchStart,
         }));
@@ -48,11 +62,11 @@ export function PerformanceMonitor({ className, showDetails = false }: Performan
     }
 
     // Track memory usage if available
-    if (typeof window !== 'undefined' && 'memory' in performance) {
+    if (typeof window !== "undefined" && "memory" in performance) {
       const memory = (performance as any).memory;
-      setMetrics(prev => ({
+      setMetrics((prev) => ({
         ...prev,
-        memoryUsage: memory.usedJSHeapSize / memory.totalJSHeapSize * 100,
+        memoryUsage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100,
       }));
     }
 
@@ -67,21 +81,43 @@ export function PerformanceMonitor({ className, showDetails = false }: Performan
   const stopMonitoring = () => {
     setIsMonitoring(false);
     const endTime = Date.now();
-    setMetrics(prev => ({
+    setMetrics((prev) => ({
       ...prev,
       renderTime: endTime - startTimeRef.current,
     }));
   };
 
-  const getPerformanceGrade = (metric: number, thresholds: { good: number; warning: number }) => {
-    if (metric <= thresholds.good) return { grade: 'good', color: 'text-green-600', bgColor: 'bg-green-100' };
-    if (metric <= thresholds.warning) return { grade: 'warning', color: 'text-yellow-600', bgColor: 'bg-yellow-100' };
-    return { grade: 'poor', color: 'text-red-600', bgColor: 'bg-red-100' };
+  const getPerformanceGrade = (
+    metric: number,
+    thresholds: { good: number; warning: number },
+  ) => {
+    if (metric <= thresholds.good)
+      return {
+        grade: "good",
+        color: "text-green-600",
+        bgColor: "bg-green-100",
+      };
+    if (metric <= thresholds.warning)
+      return {
+        grade: "warning",
+        color: "text-yellow-600",
+        bgColor: "bg-yellow-100",
+      };
+    return { grade: "poor", color: "text-red-600", bgColor: "bg-red-100" };
   };
 
-  const loadTimeGrade = getPerformanceGrade(metrics.loadTime, { good: 2000, warning: 5000 });
-  const apiTimeGrade = getPerformanceGrade(metrics.apiResponseTime, { good: 500, warning: 2000 });
-  const memoryGrade = getPerformanceGrade(metrics.memoryUsage, { good: 70, warning: 85 });
+  const loadTimeGrade = getPerformanceGrade(metrics.loadTime, {
+    good: 2000,
+    warning: 5000,
+  });
+  const apiTimeGrade = getPerformanceGrade(metrics.apiResponseTime, {
+    good: 500,
+    warning: 2000,
+  });
+  const memoryGrade = getPerformanceGrade(metrics.memoryUsage, {
+    good: 70,
+    warning: 85,
+  });
 
   return (
     <Card className={className}>
@@ -111,23 +147,27 @@ export function PerformanceMonitor({ className, showDetails = false }: Performan
               variant="secondary"
               className={`mt-1 text-xs ${loadTimeGrade.bgColor} ${loadTimeGrade.color}`}
             >
-              {loadTimeGrade.grade === 'good' ? 'Excelente' :
-               loadTimeGrade.grade === 'warning' ? 'Bueno' : 'Lento'}
+              {loadTimeGrade.grade === "good"
+                ? "Excelente"
+                : loadTimeGrade.grade === "warning"
+                  ? "Bueno"
+                  : "Lento"}
             </Badge>
           </div>
 
           <div className="text-center p-3 rounded-lg border">
             <Zap className="h-6 w-6 mx-auto mb-2 text-green-600" />
-            <div className="text-lg font-bold">
-              {metrics.apiResponseTime}ms
-            </div>
+            <div className="text-lg font-bold">{metrics.apiResponseTime}ms</div>
             <div className="text-xs text-muted-foreground">Respuesta API</div>
             <Badge
               variant="secondary"
               className={`mt-1 text-xs ${apiTimeGrade.bgColor} ${apiTimeGrade.color}`}
             >
-              {apiTimeGrade.grade === 'good' ? 'Rápido' :
-               apiTimeGrade.grade === 'warning' ? 'Normal' : 'Lento'}
+              {apiTimeGrade.grade === "good"
+                ? "Rápido"
+                : apiTimeGrade.grade === "warning"
+                  ? "Normal"
+                  : "Lento"}
             </Badge>
           </div>
 
@@ -141,8 +181,11 @@ export function PerformanceMonitor({ className, showDetails = false }: Performan
               variant="secondary"
               className={`mt-1 text-xs ${memoryGrade.bgColor} ${memoryGrade.color}`}
             >
-              {memoryGrade.grade === 'good' ? 'Óptimo' :
-               memoryGrade.grade === 'warning' ? 'Alto' : 'Crítico'}
+              {memoryGrade.grade === "good"
+                ? "Óptimo"
+                : memoryGrade.grade === "warning"
+                  ? "Alto"
+                  : "Crítico"}
             </Badge>
           </div>
         </div>
@@ -153,21 +196,30 @@ export function PerformanceMonitor({ className, showDetails = false }: Performan
               <span className="text-sm">Tasa de aciertos de caché</span>
               <div className="flex items-center gap-2">
                 <Progress value={metrics.cacheHitRate} className="w-20 h-2" />
-                <span className="text-sm font-medium">{metrics.cacheHitRate.toFixed(1)}%</span>
+                <span className="text-sm font-medium">
+                  {metrics.cacheHitRate.toFixed(1)}%
+                </span>
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <span className="text-sm">Tasa de errores</span>
               <div className="flex items-center gap-2">
-                <Progress value={Math.min(metrics.errorRate, 100)} className="w-20 h-2" />
-                <span className="text-sm font-medium">{metrics.errorRate.toFixed(2)}%</span>
+                <Progress
+                  value={Math.min(metrics.errorRate, 100)}
+                  className="w-20 h-2"
+                />
+                <span className="text-sm font-medium">
+                  {metrics.errorRate.toFixed(2)}%
+                </span>
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <span className="text-sm">Renders del componente</span>
-              <span className="text-sm font-medium">{renderCountRef.current}</span>
+              <span className="text-sm font-medium">
+                {renderCountRef.current}
+              </span>
             </div>
           </div>
         )}

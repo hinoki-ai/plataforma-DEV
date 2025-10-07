@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MapPin, Phone, Mail, User } from 'lucide-react';
-import { Meeting, MeetingStatus } from '../../lib/prisma-compat-types';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { StatusBadge } from '@/components/ui/status-badge';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Calendar, Clock, MapPin, Phone, Mail, User } from "lucide-react";
+import { Meeting, MeetingStatus } from "../../lib/prisma-compat-types";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 interface MeetingCardProps {
   meeting: Meeting & { teacher?: { name: string; email: string } };
@@ -18,15 +18,16 @@ interface MeetingCardProps {
 }
 
 const meetingStatusMap: Record<
-  MeetingStatus,
-  import('@/components/ui/status-badge').StatusType
+  string,
+  import("@/components/ui/status-badge").StatusType
 > = {
-  [MeetingStatus.SCHEDULED]: 'PENDING',
-  [MeetingStatus.CONFIRMED]: 'CONFIRMED',
-  [MeetingStatus.IN_PROGRESS]: 'IN_PROGRESS',
-  [MeetingStatus.COMPLETED]: 'COMPLETED',
-  [MeetingStatus.CANCELLED]: 'CANCELLED',
-  [MeetingStatus.RESCHEDULED]: 'PENDING',
+  PENDING: "PENDING",
+  SCHEDULED: "PENDING",
+  CONFIRMED: "CONFIRMED",
+  IN_PROGRESS: "IN_PROGRESS",
+  COMPLETED: "COMPLETED",
+  CANCELLED: "CANCELLED",
+  RESCHEDULED: "PENDING",
 };
 
 export function MeetingCard({
@@ -79,7 +80,7 @@ export function MeetingCard({
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4 text-gray-500" />
             <span>
-              {format(new Date(meeting.scheduledDate), 'dd MMM yyyy', {
+              {format(new Date(meeting.scheduledDate), "dd MMM yyyy", {
                 locale: es,
               })}
             </span>
@@ -97,7 +98,7 @@ export function MeetingCard({
         {/* Teacher Info (for admin view) */}
         {isAdmin && meeting.teacher && (
           <div className="text-sm text-gray-600">
-            <span className="font-medium">Profesor asignado:</span>{' '}
+            <span className="font-medium">Profesor asignado:</span>{" "}
             {meeting.teacher.name}
           </div>
         )}
@@ -120,22 +121,23 @@ export function MeetingCard({
             Ver Detalles
           </Button>
 
-          {meeting.status === MeetingStatus.SCHEDULED && onStatusChange && (
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => handleStatusChange(MeetingStatus.CONFIRMED)}
-              className="flex-1"
-            >
-              Confirmar
-            </Button>
-          )}
+          {(meeting.status === "SCHEDULED" || meeting.status === "PENDING") &&
+            onStatusChange && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => handleStatusChange("CONFIRMED" as MeetingStatus)}
+                className="flex-1"
+              >
+                Confirmar
+              </Button>
+            )}
 
-          {meeting.status === MeetingStatus.CONFIRMED && onStatusChange && (
+          {meeting.status === "CONFIRMED" && onStatusChange && (
             <Button
               variant="default"
               size="sm"
-              onClick={() => handleStatusChange(MeetingStatus.COMPLETED)}
+              onClick={() => handleStatusChange("COMPLETED" as MeetingStatus)}
               className="flex-1"
             >
               Completar

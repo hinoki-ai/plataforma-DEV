@@ -1,15 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ParentCreationForm } from '@/components/users/ParentCreationForm';
-import { PageTransition } from '@/components/ui/page-transition';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, UserPlus, CheckCircle } from 'lucide-react';
-import Link from 'next/link';
-import { toast } from 'sonner';
-import { AdaptiveErrorBoundary } from '@/components/ui/adaptive-error-boundary';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ParentCreationForm } from "@/components/users/ParentCreationForm";
+import { PageTransition } from "@/components/ui/page-transition";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, UserPlus, CheckCircle } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { AdaptiveErrorBoundary } from "@/components/ui/adaptive-error-boundary";
 
 type ParentFormData = {
   name: string;
@@ -40,9 +46,9 @@ function ParentRegistrationContent() {
   const handleRegister = async (data: ParentFormData) => {
     setIsRegistering(true);
     try {
-      const response = await fetch('/api/auth/register-parent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/auth/register-parent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -50,22 +56,21 @@ function ParentRegistrationContent() {
         const result = await response.json();
         setRegistrationData(result);
         setRegistrationComplete(true);
-        toast.success(
-          '✅ Registro exitoso',
-          {
-            description: 'Tu cuenta será verificada por el personal de la escuela',
-          }
-        );
+        toast.success("✅ Registro exitoso", {
+          description:
+            "Tu cuenta será verificada por el personal de la escuela",
+        });
       } else {
         const error = await response.json();
-        toast.error('❌ Error en el registro', {
-          description: error.error || 'Por favor verifica los datos e intenta nuevamente',
+        toast.error("❌ Error en el registro", {
+          description:
+            error.error || "Por favor verifica los datos e intenta nuevamente",
         });
       }
     } catch (error) {
-      console.error('Error registering parent:', error);
-      toast.error('❌ Error en el registro', {
-        description: 'Por favor intenta nuevamente',
+      console.error("Error registering parent:", error);
+      toast.error("❌ Error en el registro", {
+        description: "Por favor intenta nuevamente",
       });
     } finally {
       setIsRegistering(false);
@@ -73,7 +78,7 @@ function ParentRegistrationContent() {
   };
 
   const handleCancel = () => {
-    router.push('/');
+    router.push("/");
   };
 
   if (registrationComplete && registrationData) {
@@ -95,40 +100,56 @@ function ParentRegistrationContent() {
 
             <CardContent className="space-y-6">
               <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                <h3 className="font-semibold text-green-800 mb-2">¿Qué sucede ahora?</h3>
+                <h3 className="font-semibold text-green-800 mb-2">
+                  ¿Qué sucede ahora?
+                </h3>
                 <ul className="text-sm text-green-700 space-y-1">
                   <li>• El personal de la escuela verificará tu información</li>
                   <li>• Recibirás un email cuando tu cuenta sea activada</li>
-                  <li>• Una vez activada, podrás acceder con tu email y contraseña</li>
+                  <li>
+                    • Una vez activada, podrás acceder con tu email y contraseña
+                  </li>
                 </ul>
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h3 className="font-semibold text-blue-800 mb-2">Información Registrada</h3>
+                <h3 className="font-semibold text-blue-800 mb-2">
+                  Información Registrada
+                </h3>
                 <div className="text-sm text-blue-700 space-y-1">
-                  <p><strong>Nombre:</strong> {registrationData.name}</p>
-                  <p><strong>Email:</strong> {registrationData.email}</p>
-                  <p><strong>Estudiante:</strong> {registrationData.studentInfo.studentName}</p>
-                  <p><strong>Grado:</strong> {registrationData.studentInfo.studentGrade}</p>
-                  <p><strong>Relación:</strong> {registrationData.studentInfo.relationship}</p>
+                  <p>
+                    <strong>Nombre:</strong> {registrationData.name}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {registrationData.email}
+                  </p>
+                  <p>
+                    <strong>Estudiante:</strong>{" "}
+                    {registrationData.studentInfo.studentName}
+                  </p>
+                  <p>
+                    <strong>Grado:</strong>{" "}
+                    {registrationData.studentInfo.studentGrade}
+                  </p>
+                  <p>
+                    <strong>Relación:</strong>{" "}
+                    {registrationData.studentInfo.relationship}
+                  </p>
                 </div>
               </div>
 
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground">
-                  ¿Tienes alguna pregunta? Contacta con la secretaría de la escuela.
+                  ¿Tienes alguna pregunta? Contacta con la secretaría de la
+                  escuela.
                 </p>
 
                 <div className="flex gap-3 justify-center">
                   <Button asChild variant="outline">
-                    <Link href="/">
-                      Ir al Inicio
-                    </Link>
+                    <Link href="/">Ir al Inicio</Link>
                   </Button>
                   <Button asChild>
-                    <Link href="/auth/login">
-                      Ir a Iniciar Sesión
-                    </Link>
+                    <Link href="/auth/login">Ir a Iniciar Sesión</Link>
                   </Button>
                 </div>
               </div>
@@ -146,7 +167,7 @@ function ParentRegistrationContent() {
           <div className="mb-8">
             <Button
               variant="ghost"
-              onClick={() => router.push('/')}
+              onClick={() => router.push("/")}
               className="mb-4"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -160,7 +181,8 @@ function ParentRegistrationContent() {
               <h1 className="text-3xl font-bold mb-2">Registro de Padres</h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Regístrate como padre o tutor para acceder al sistema escolar.
-                Tu cuenta será verificada por el personal de la escuela antes de ser activada.
+                Tu cuenta será verificada por el personal de la escuela antes de
+                ser activada.
               </p>
             </div>
           </div>
@@ -205,11 +227,13 @@ function ParentRegistrationContent() {
               </div>
 
               <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mt-6">
-                <h4 className="font-semibold text-yellow-800 mb-2">⚠️ Importante</h4>
+                <h4 className="font-semibold text-yellow-800 mb-2">
+                  ⚠️ Importante
+                </h4>
                 <p className="text-sm text-yellow-700">
-                  Solo puedes registrarte si eres padre, madre o tutor legal de un estudiante
-                  matriculado en la escuela. La información proporcionada será verificada
-                  por el personal administrativo.
+                  Solo puedes registrarte si eres padre, madre o tutor legal de
+                  un estudiante matriculado en la escuela. La información
+                  proporcionada será verificada por el personal administrativo.
                 </p>
               </div>
             </CardContent>

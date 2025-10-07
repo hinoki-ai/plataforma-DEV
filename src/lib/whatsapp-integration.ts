@@ -14,11 +14,11 @@ interface WhatsAppMessage {
  */
 export function generateWhatsAppUrl(message: string, phone?: string): string {
   const encodedMessage = encodeURIComponent(message);
-  const baseUrl = 'https://wa.me/';
+  const baseUrl = "https://wa.me/";
 
   if (phone) {
     // Remove all non-numeric characters
-    const cleanPhone = phone.replace(/\D/g, '');
+    const cleanPhone = phone.replace(/\D/g, "");
     return `${baseUrl}${cleanPhone}?text=${encodedMessage}`;
   }
 
@@ -35,7 +35,7 @@ export function getReservationMessage(reservation: {
   preferredDate: string | Date;
   preferredTime: string;
 }): WhatsAppMessage {
-  const date = new Date(reservation.preferredDate).toLocaleDateString('es-CL');
+  const date = new Date(reservation.preferredDate).toLocaleDateString("es-CL");
   const time = reservation.preferredTime;
 
   return {
@@ -54,12 +54,12 @@ export function getMeetingReminder(meeting: {
   location?: string;
   title: string;
 }): WhatsAppMessage {
-  const date = new Date(meeting.date).toLocaleDateString('es-CL');
+  const date = new Date(meeting.date).toLocaleDateString("es-CL");
   const time = meeting.time;
 
   return {
     phone: meeting.phone,
-    message: `⏰ *Recordatorio de Reunión*\n\n📅 *Fecha:* ${date}\n⏰ *Hora:* ${time}\n📍 *Lugar:* ${meeting.location || 'Escuela Manitos Pintadas'}\n\n*Título:* ${meeting.title}\n\n¡No olvides asistir!`,
+    message: `⏰ *Recordatorio de Reunión*\n\n📅 *Fecha:* ${date}\n⏰ *Hora:* ${time}\n📍 *Lugar:* ${meeting.location || "Escuela Manitos Pintadas"}\n\n*Título:* ${meeting.title}\n\n¡No olvides asistir!`,
   };
 }
 
@@ -67,10 +67,10 @@ export function getMeetingReminder(meeting: {
  * General notification message
  */
 type NotificationType =
-  | 'reservation-confirmed'
-  | 'meeting-reminder'
-  | 'meeting-cancelled'
-  | 'event-reminder';
+  | "reservation-confirmed"
+  | "meeting-reminder"
+  | "meeting-cancelled"
+  | "event-reminder";
 
 export function getNotificationMessage(
   type: NotificationType,
@@ -86,34 +86,34 @@ export function getNotificationMessage(
     location?: string;
     title: string;
     description?: string;
-  }
+  },
 ): WhatsAppMessage {
   const messages: Record<NotificationType, WhatsAppMessage> = {
-    'reservation-confirmed': getReservationMessage({
-      guardianName: data.guardianName || '',
-      guardianPhone: data.guardianPhone || '',
-      studentName: data.studentName || '',
+    "reservation-confirmed": getReservationMessage({
+      guardianName: data.guardianName || "",
+      guardianPhone: data.guardianPhone || "",
+      studentName: data.studentName || "",
       preferredDate: data.preferredDate || new Date(),
-      preferredTime: data.preferredTime || '',
+      preferredTime: data.preferredTime || "",
     }),
-    'meeting-reminder': getMeetingReminder({
+    "meeting-reminder": getMeetingReminder({
       phone: data.phone,
       date: data.date,
       time: data.time,
       location: data.location,
       title: data.title,
     }),
-    'meeting-cancelled': {
+    "meeting-cancelled": {
       phone: data.phone,
-      message: `❌ *Reunión Cancelada*\n\nLo sentimos, tu reunión del ${new Date(data.date).toLocaleDateString('es-CL')} a las ${data.time} ha sido cancelada.\n\nTe contactaremos para reprogramar.`,
+      message: `❌ *Reunión Cancelada*\n\nLo sentimos, tu reunión del ${new Date(data.date).toLocaleDateString("es-CL")} a las ${data.time} ha sido cancelada.\n\nTe contactaremos para reprogramar.`,
     },
-    'event-reminder': {
+    "event-reminder": {
       phone: data.phone,
-      message: `📅 *Recordatorio de Evento*\n\n*${data.title}*\n\n📅 *Fecha:* ${new Date(data.date).toLocaleDateString('es-CL')}\n⏰ *Hora:* ${data.time}\n📍 *Lugar:* ${data.location}\n\n${data.description}`,
+      message: `📅 *Recordatorio de Evento*\n\n*${data.title}*\n\n📅 *Fecha:* ${new Date(data.date).toLocaleDateString("es-CL")}\n⏰ *Hora:* ${data.time}\n📍 *Lugar:* ${data.location}\n\n${data.description}`,
     },
   };
 
-  return messages[type] || messages['event-reminder'];
+  return messages[type] || messages["event-reminder"];
 }
 
 /**
@@ -128,17 +128,17 @@ export const whatsAppButtons = {
     preferredTime: string;
   }) => [
     {
-      label: 'Enviar por WhatsApp',
+      label: "Enviar por WhatsApp",
       url: generateWhatsAppUrl(
         getReservationMessage(reservation).message,
-        reservation.guardianPhone
+        reservation.guardianPhone,
       ),
-      icon: '💬',
+      icon: "💬",
     },
     {
-      label: 'Compartir Link',
+      label: "Compartir Link",
       url: generateWhatsAppUrl(getReservationMessage(reservation).message),
-      icon: '🔗',
+      icon: "🔗",
     },
   ],
 
@@ -150,20 +150,20 @@ export const whatsAppButtons = {
     title: string;
   }) => [
     {
-      label: 'Recordatorio WhatsApp',
+      label: "Recordatorio WhatsApp",
       url: generateWhatsAppUrl(
         getMeetingReminder(meeting).message,
-        meeting.phone
+        meeting.phone,
       ),
-      icon: '💬',
+      icon: "💬",
     },
   ],
 
   share: (message: string) => [
     {
-      label: 'Compartir por WhatsApp',
+      label: "Compartir por WhatsApp",
       url: generateWhatsAppUrl(message),
-      icon: '💬',
+      icon: "💬",
     },
   ],
 };
@@ -173,7 +173,7 @@ export const whatsAppButtons = {
  */
 export function shareViaWhatsApp(content: string, phone?: string) {
   const url = generateWhatsAppUrl(content, phone);
-  window.open(url, '_blank', 'noopener,noreferrer');
+  window.open(url, "_blank", "noopener,noreferrer");
 }
 
 /**
@@ -181,7 +181,7 @@ export function shareViaWhatsApp(content: string, phone?: string) {
  */
 export function formatPhoneForWhatsApp(phone: string): string {
   // Remove spaces, dashes, and parentheses
-  return phone.replace(/\s+/g, '').replace(/[-()]/g, '');
+  return phone.replace(/\s+/g, "").replace(/[-()]/g, "");
 }
 
 /**
@@ -189,7 +189,7 @@ export function formatPhoneForWhatsApp(phone: string): string {
  */
 export function isWhatsAppAvailable(): boolean {
   return (
-    typeof window !== 'undefined' && navigator.userAgent.includes('Mobile')
+    typeof window !== "undefined" && navigator.userAgent.includes("Mobile")
   );
 }
 

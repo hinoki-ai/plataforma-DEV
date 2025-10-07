@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   createContext,
@@ -6,7 +6,7 @@ import {
   useState,
   useEffect,
   ReactNode,
-} from 'react';
+} from "react";
 
 interface DesktopToggleContextType {
   isDesktopForced: boolean;
@@ -30,12 +30,12 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
 
     // Check if device is actually mobile
     const checkMobile = () => {
-      if (typeof window === 'undefined') return;
+      if (typeof window === "undefined") return;
 
       const isMobile =
         window.innerWidth < 768 ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
+          navigator.userAgent,
         );
       setIsActualMobile(isMobile);
     };
@@ -44,16 +44,16 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
 
     // Load saved preference - only after hydration
     try {
-      const saved = localStorage.getItem('desktopToggle');
-      if (saved === 'true') {
+      const saved = localStorage.getItem("desktopToggle");
+      if (saved === "true") {
         setIsDesktopForced(true);
       }
     } catch (error) {
       // Handle cases where localStorage is not available
     }
 
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const toggleDesktopMode = () => {
@@ -62,8 +62,8 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
 
     // Safely handle localStorage
     try {
-      if (typeof window !== 'undefined' && isHydrated) {
-        localStorage.setItem('desktopToggle', newValue.toString());
+      if (typeof window !== "undefined" && isHydrated) {
+        localStorage.setItem("desktopToggle", newValue.toString());
       }
     } catch (error) {}
   };
@@ -86,7 +86,7 @@ export function useDesktopToggle() {
   const context = useContext(DesktopToggleContext);
   if (context === undefined) {
     throw new Error(
-      'useDesktopToggle must be used within a DesktopToggleProvider'
+      "useDesktopToggle must be used within a DesktopToggleProvider",
     );
   }
   return context;

@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { MasterDashboard } from '@/components/master/MasterDashboard';
-import { InstitutionMasterCard } from '@/components/master/InstitutionMasterCard';
+import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { MasterDashboard } from "@/components/master/MasterDashboard";
+import { InstitutionMasterCard } from "@/components/master/InstitutionMasterCard";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function MasterDashboardPage() {
   // Master authority: Handle critical failures gracefully
@@ -17,9 +17,9 @@ export default function MasterDashboardPage() {
     // Master dashboard will show enhanced state but remain functional
   } catch (error) {
     dbLogger.error(
-      'MASTER DASHBOARD FAILURE - SUPREME CONTROL COMPROMISED',
+      "MASTER DASHBOARD FAILURE - SUPREME CONTROL COMPROMISED",
       error,
-      { context: 'MasterPage', masterDashboard: true, supremeAuthority: true }
+      { context: "MasterPage", masterDashboard: true, supremeAuthority: true },
     );
     // Dashboard will show enhanced error state but remain functional
   }
@@ -28,14 +28,17 @@ export default function MasterDashboardPage() {
     <AdvancedErrorBoundary
       context="🏛️ Master Dashboard"
       enableRetry={true}
-      showDetails={process.env.NODE_ENV === 'development'}
+      showDetails={process.env.NODE_ENV === "development"}
     >
       <Suspense
         fallback={
           <div className="space-y-8 p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {Array.from({ length: 4 }).map((_, i) => (
-                <Card key={i} className="animate-pulse border-blue-200 dark:border-blue-800">
+                <Card
+                  key={i}
+                  className="animate-pulse border-blue-200 dark:border-blue-800"
+                >
                   <div className="p-6">
                     <Skeleton className="h-4 w-24 mb-2" />
                     <Skeleton className="h-8 w-16 mb-2" />
@@ -89,7 +92,7 @@ export default function MasterDashboardPage() {
         <div className="space-y-8">
           {/* Institution Master Control - Supreme Priority */}
           <InstitutionMasterCard currentType="PRESCHOOL" />
-          
+
           {/* Standard Master Dashboard */}
           <MasterDashboard />
         </div>

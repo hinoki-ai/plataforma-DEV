@@ -1,17 +1,24 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { MasterPageTemplate } from '@/components/master/MasterPageTemplate';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Shield, AlertTriangle, Lock, Eye, CheckCircle, XCircle } from 'lucide-react';
+import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Shield,
+  AlertTriangle,
+  Lock,
+  Eye,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const securityCenterFallback = (
   <div className="space-y-8">
@@ -41,7 +48,9 @@ export default function SecurityCenterPage() {
               <Shield className="h-8 w-8 text-green-600" />
               <div>
                 <div className="text-2xl font-bold">98.5%</div>
-                <div className="text-sm text-muted-foreground">Security Score</div>
+                <div className="text-sm text-muted-foreground">
+                  Security Score
+                </div>
               </div>
             </div>
           </div>
@@ -53,7 +62,9 @@ export default function SecurityCenterPage() {
               <AlertTriangle className="h-8 w-8 text-red-600" />
               <div>
                 <div className="text-2xl font-bold">12</div>
-                <div className="text-sm text-muted-foreground">Active Threats</div>
+                <div className="text-sm text-muted-foreground">
+                  Active Threats
+                </div>
               </div>
             </div>
           </div>
@@ -65,7 +76,9 @@ export default function SecurityCenterPage() {
               <Lock className="h-8 w-8 text-blue-600" />
               <div>
                 <div className="text-2xl font-bold">1,247</div>
-                <div className="text-sm text-muted-foreground">Blocked Attempts</div>
+                <div className="text-sm text-muted-foreground">
+                  Blocked Attempts
+                </div>
               </div>
             </div>
           </div>
@@ -99,7 +112,9 @@ export default function SecurityCenterPage() {
                 <p className="text-sm text-muted-foreground mt-1">
                   Multiple failed login attempts from IP 192.168.1.100
                 </p>
-                <p className="text-xs text-muted-foreground mt-2">2 minutes ago</p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  2 minutes ago
+                </p>
               </div>
             </div>
 
@@ -113,7 +128,9 @@ export default function SecurityCenterPage() {
                 <p className="text-sm text-muted-foreground mt-1">
                   Unusual data access pattern detected
                 </p>
-                <p className="text-xs text-muted-foreground mt-2">15 minutes ago</p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  15 minutes ago
+                </p>
               </div>
             </div>
 

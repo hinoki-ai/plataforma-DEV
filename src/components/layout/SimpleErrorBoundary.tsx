@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
+import React, { Component, ReactNode, ErrorInfo } from "react";
 
 interface SimpleErrorBoundaryProps {
   children: ReactNode;
@@ -26,8 +26,8 @@ export class SimpleErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Use enhanced error logging
-    import('@/lib/logger').then(({ logger }) =>
-      logger.logErrorBoundary(error, errorInfo, 'SimpleErrorBoundary')
+    import("@/lib/logger").then(({ logger }) =>
+      logger.logErrorBoundary(error, errorInfo, "SimpleErrorBoundary"),
     );
   }
 

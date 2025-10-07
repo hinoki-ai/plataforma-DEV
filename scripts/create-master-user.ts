@@ -4,17 +4,17 @@
  * Creates a master user for testing the master login functionality
  */
 
-import { PrismaClient } from '@prisma/client';
-import { hashPassword } from '../src/lib/crypto';
+import { PrismaClient } from "@prisma/client";
+import { hashPassword } from "../src/lib/crypto";
 
 const prisma = new PrismaClient();
 
 async function createMasterUser() {
-  console.log('🔑 Creating master user...');
+  console.log("🔑 Creating master user...");
 
   try {
-    const masterEmail = 'master@manitospintadas.cl';
-    const masterPassword = 'master123';
+    const masterEmail = "master@manitospintadas.cl";
+    const masterPassword = "master123";
 
     // Hash the password
     const masterPasswordHash = await hashPassword(masterPassword);
@@ -25,33 +25,33 @@ async function createMasterUser() {
       update: {
         password: masterPasswordHash,
         isActive: true,
-        name: 'Master Administrator',
+        name: "Master Administrator",
       },
       create: {
         email: masterEmail,
-        name: 'Master Administrator',
+        name: "Master Administrator",
         password: masterPasswordHash,
-        role: 'MASTER',
+        role: "MASTER",
         isActive: true,
       },
     });
 
-    console.log('✅ Master user created/updated:');
+    console.log("✅ Master user created/updated:");
     console.log(`📧 Email: ${masterEmail}`);
     console.log(`🔑 Password: ${masterPassword}`);
     console.log(`👤 Role: ${master.role}`);
-    console.log('🔒 Password is securely hashed in database');
+    console.log("🔒 Password is securely hashed in database");
 
     return master;
   } catch (error) {
-    console.error('❌ Failed to create master user:', error);
+    console.error("❌ Failed to create master user:", error);
     throw error;
   }
 }
 
 createMasterUser()
-  .catch(error => {
-    console.error('Fatal error during master user creation:', error);
+  .catch((error) => {
+    console.error("Fatal error during master user creation:", error);
     process.exit(1);
   })
   .finally(async () => {

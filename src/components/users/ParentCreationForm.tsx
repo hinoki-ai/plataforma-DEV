@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -21,32 +21,46 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, UserPlus } from 'lucide-react';
-import { useLanguage } from '@/components/language/LanguageContext';
+} from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Eye, EyeOff, UserPlus } from "lucide-react";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // Password strength validation
-const passwordSchema = z.string()
-  .min(8, 'La contraseña debe tener al menos 8 caracteres')
-  .regex(/[a-z]/, 'La contraseña debe contener al menos una letra minúscula')
-  .regex(/[A-Z]/, 'La contraseña debe contener al menos una letra mayúscula')
-  .regex(/[0-9]/, 'La contraseña debe contener al menos un número')
-  .regex(/[^a-zA-Z0-9]/, 'La contraseña debe contener al menos un carácter especial');
+const passwordSchema = z
+  .string()
+  .min(8, "La contraseña debe tener al menos 8 caracteres")
+  .regex(/[a-z]/, "La contraseña debe contener al menos una letra minúscula")
+  .regex(/[A-Z]/, "La contraseña debe contener al menos una letra mayúscula")
+  .regex(/[0-9]/, "La contraseña debe contener al menos un número")
+  .regex(
+    /[^a-zA-Z0-9]/,
+    "La contraseña debe contener al menos un carácter especial",
+  );
 
 // Parent creation schema with student information
 const createParentSchema = z.object({
   // Parent information
-  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  email: z.string().email('Ingrese un email válido'),
+  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+  email: z.string().email("Ingrese un email válido"),
   password: passwordSchema,
   phone: z.string().optional(),
   // Student information
-  studentName: z.string().min(2, 'El nombre del estudiante es requerido'),
-  studentGrade: z.string().min(1, 'El grado del estudiante es requerido'),
-  studentEmail: z.string().email('El email del estudiante debe ser válido').optional().or(z.literal('')),
+  studentName: z.string().min(2, "El nombre del estudiante es requerido"),
+  studentGrade: z.string().min(1, "El grado del estudiante es requerido"),
+  studentEmail: z
+    .string()
+    .email("El email del estudiante debe ser válido")
+    .optional()
+    .or(z.literal("")),
   guardianPhone: z.string().optional(),
-  relationship: z.string().min(1, 'La relación familiar es requerida'),
+  relationship: z.string().min(1, "La relación familiar es requerida"),
 });
 
 type ParentFormData = z.infer<typeof createParentSchema>;
@@ -60,29 +74,29 @@ interface ParentCreationFormProps {
 }
 
 const gradeOptions = [
-  'Pre-Kinder',
-  'Kinder',
-  '1° Básico',
-  '2° Básico',
-  '3° Básico',
-  '4° Básico',
-  '5° Básico',
-  '6° Básico',
-  '7° Básico',
-  '8° Básico',
-  '1° Medio',
-  '2° Medio',
-  '3° Medio',
-  '4° Medio',
+  "Pre-Kinder",
+  "Kinder",
+  "1° Básico",
+  "2° Básico",
+  "3° Básico",
+  "4° Básico",
+  "5° Básico",
+  "6° Básico",
+  "7° Básico",
+  "8° Básico",
+  "1° Medio",
+  "2° Medio",
+  "3° Medio",
+  "4° Medio",
 ];
 
 const relationshipOptions = [
-  'Padre',
-  'Madre',
-  'Tutor Legal',
-  'Abuelo/a',
-  'Tío/a',
-  'Otro Familiar',
+  "Padre",
+  "Madre",
+  "Tutor Legal",
+  "Abuelo/a",
+  "Tío/a",
+  "Otro Familiar",
 ];
 
 export function ParentCreationForm({
@@ -90,7 +104,7 @@ export function ParentCreationForm({
   onCancel,
   isLoading = false,
   title = "Crear Usuario Padre",
-  description = "Registra un nuevo usuario padre con información del estudiante"
+  description = "Registra un nuevo usuario padre con información del estudiante",
 }: ParentCreationFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { t } = useLanguage();
@@ -98,15 +112,15 @@ export function ParentCreationForm({
   const form = useForm<ParentFormData>({
     resolver: zodResolver(createParentSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      phone: '',
-      studentName: '',
-      studentGrade: '',
-      studentEmail: '',
-      guardianPhone: '',
-      relationship: '',
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      studentName: "",
+      studentGrade: "",
+      studentEmail: "",
+      guardianPhone: "",
+      relationship: "",
     },
   });
 
@@ -128,17 +142,20 @@ export function ParentCreationForm({
           <UserPlus className="h-5 w-5" />
           {title}
         </CardTitle>
-        <CardDescription>
-          {description}
-        </CardDescription>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
 
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             {/* Parent Information Section */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-primary">Información del Padre/Tutor</h3>
+              <h3 className="text-lg font-semibold text-primary">
+                Información del Padre/Tutor
+              </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
@@ -148,10 +165,7 @@ export function ParentCreationForm({
                     <FormItem>
                       <FormLabel>Nombre Completo</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Ej: María González"
-                          {...field}
-                        />
+                        <Input placeholder="Ej: María González" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -185,10 +199,7 @@ export function ParentCreationForm({
                     <FormItem>
                       <FormLabel>Teléfono (Opcional)</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="+569 1234 5678"
-                          {...field}
-                        />
+                        <Input placeholder="+569 1234 5678" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -201,14 +212,17 @@ export function ParentCreationForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Relación Familiar</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Seleccione relación" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {relationshipOptions.map(option => (
+                          {relationshipOptions.map((option) => (
                             <SelectItem key={option} value={option}>
                               {option}
                             </SelectItem>
@@ -241,7 +255,11 @@ export function ParentCreationForm({
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                           onClick={() => setShowPassword(!showPassword)}
-                          aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                          aria-label={
+                            showPassword
+                              ? "Ocultar contraseña"
+                              : "Mostrar contraseña"
+                          }
                         >
                           {showPassword ? (
                             <EyeOff className="h-4 w-4" />
@@ -252,7 +270,8 @@ export function ParentCreationForm({
                       </div>
                     </FormControl>
                     <FormDescription>
-                      La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales
+                      La contraseña debe tener al menos 8 caracteres, incluyendo
+                      mayúsculas, minúsculas, números y caracteres especiales
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -262,7 +281,9 @@ export function ParentCreationForm({
 
             {/* Student Information Section */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-primary">Información del Estudiante</h3>
+              <h3 className="text-lg font-semibold text-primary">
+                Información del Estudiante
+              </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
@@ -272,10 +293,7 @@ export function ParentCreationForm({
                     <FormItem>
                       <FormLabel>Nombre del Estudiante</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Ej: Juan Pérez"
-                          {...field}
-                        />
+                        <Input placeholder="Ej: Juan Pérez" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -288,14 +306,17 @@ export function ParentCreationForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Grado/Curso</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Seleccione grado" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {gradeOptions.map(grade => (
+                          {gradeOptions.map((grade) => (
                             <SelectItem key={grade} value={grade}>
                               {grade}
                             </SelectItem>
@@ -332,12 +353,11 @@ export function ParentCreationForm({
                   name="guardianPhone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Teléfono de Contacto Adicional (Opcional)</FormLabel>
+                      <FormLabel>
+                        Teléfono de Contacto Adicional (Opcional)
+                      </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="+569 8765 4321"
-                          {...field}
-                        />
+                        <Input placeholder="+569 8765 4321" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -348,11 +368,16 @@ export function ParentCreationForm({
 
             {/* Form Actions */}
             <div className="flex justify-end space-x-2 pt-6 border-t">
-              <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onCancel}
+                disabled={isLoading}
+              >
                 Cancelar
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Creando...' : 'Crear Usuario Padre'}
+                {isLoading ? "Creando..." : "Crear Usuario Padre"}
               </Button>
             </div>
           </form>

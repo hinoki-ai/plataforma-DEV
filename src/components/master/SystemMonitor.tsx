@@ -1,10 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Activity,
   Cpu,
@@ -20,7 +26,7 @@ import {
   Clock,
   TrendingUp,
   Users,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SystemMetrics {
   cpu: number;
@@ -39,7 +45,7 @@ export function SystemMonitor() {
     memory: 67,
     disk: 45,
     network: 12,
-    uptime: '99.99%',
+    uptime: "99.99%",
     activeUsers: 1247,
     requestsPerSecond: 89,
     errorRate: 0.01,
@@ -50,12 +56,21 @@ export function SystemMonitor() {
   // Simulate real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setMetrics(prev => ({
+      setMetrics((prev) => ({
         ...prev,
         cpu: Math.max(5, Math.min(95, prev.cpu + (Math.random() - 0.5) * 10)),
-        memory: Math.max(20, Math.min(90, prev.memory + (Math.random() - 0.5) * 5)),
-        network: Math.max(5, Math.min(50, prev.network + (Math.random() - 0.5) * 8)),
-        requestsPerSecond: Math.max(50, Math.min(150, prev.requestsPerSecond + (Math.random() - 0.5) * 20)),
+        memory: Math.max(
+          20,
+          Math.min(90, prev.memory + (Math.random() - 0.5) * 5),
+        ),
+        network: Math.max(
+          5,
+          Math.min(50, prev.network + (Math.random() - 0.5) * 8),
+        ),
+        requestsPerSecond: Math.max(
+          50,
+          Math.min(150, prev.requestsPerSecond + (Math.random() - 0.5) * 20),
+        ),
       }));
       setLastUpdate(new Date());
     }, 5000);
@@ -63,16 +78,19 @@ export function SystemMonitor() {
     return () => clearInterval(interval);
   }, []);
 
-  const getStatusColor = (value: number, thresholds: { warning: number; critical: number }) => {
-    if (value >= thresholds.critical) return 'text-red-600';
-    if (value >= thresholds.warning) return 'text-yellow-600';
-    return 'text-green-600';
+  const getStatusColor = (
+    value: number,
+    thresholds: { warning: number; critical: number },
+  ) => {
+    if (value >= thresholds.critical) return "text-red-600";
+    if (value >= thresholds.warning) return "text-yellow-600";
+    return "text-green-600";
   };
 
   const getProgressColor = (value: number) => {
-    if (value >= 90) return 'bg-red-500';
-    if (value >= 70) return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (value >= 90) return "bg-red-500";
+    if (value >= 70) return "bg-yellow-500";
+    return "bg-green-500";
   };
 
   return (
@@ -109,9 +127,7 @@ export function SystemMonitor() {
           <CardContent>
             <div className="text-2xl font-bold">{metrics.cpu.toFixed(1)}%</div>
             <Progress value={metrics.cpu} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">
-              4 cores active
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">4 cores active</p>
           </CardContent>
         </Card>
 
@@ -122,7 +138,9 @@ export function SystemMonitor() {
             <Database className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{metrics.memory.toFixed(1)}%</div>
+            <div className="text-2xl font-bold">
+              {metrics.memory.toFixed(1)}%
+            </div>
             <Progress value={metrics.memory} className="mt-2" />
             <p className="text-xs text-muted-foreground mt-1">
               8GB / 12GB used
@@ -152,7 +170,9 @@ export function SystemMonitor() {
             <Wifi className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{metrics.network.toFixed(1)} MB/s</div>
+            <div className="text-2xl font-bold">
+              {metrics.network.toFixed(1)} MB/s
+            </div>
             <Progress value={(metrics.network / 50) * 100} className="mt-2" />
             <p className="text-xs text-muted-foreground mt-1">
               Bandwidth utilization
@@ -170,22 +190,30 @@ export function SystemMonitor() {
               <Zap className="h-5 w-5" />
               Request Performance
             </CardTitle>
-            <CardDescription>Real-time request handling metrics</CardDescription>
+            <CardDescription>
+              Real-time request handling metrics
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Requests/sec</span>
-              <span className="text-2xl font-bold">{metrics.requestsPerSecond}</span>
+              <span className="text-2xl font-bold">
+                {metrics.requestsPerSecond}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Error Rate</span>
-              <span className={`text-sm font-medium ${getStatusColor(metrics.errorRate * 100, { warning: 1, critical: 5 })}`}>
+              <span
+                className={`text-sm font-medium ${getStatusColor(metrics.errorRate * 100, { warning: 1, critical: 5 })}`}
+              >
                 {metrics.errorRate}%
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Active Users</span>
-              <span className="text-2xl font-bold">{metrics.activeUsers.toLocaleString()}</span>
+              <span className="text-2xl font-bold">
+                {metrics.activeUsers.toLocaleString()}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -204,7 +232,9 @@ export function SystemMonitor() {
               <CheckCircle className="h-5 w-5 text-green-600" />
               <div>
                 <div className="font-medium">Database</div>
-                <div className="text-sm text-muted-foreground">Online - 99.9% uptime</div>
+                <div className="text-sm text-muted-foreground">
+                  Online - 99.9% uptime
+                </div>
               </div>
             </div>
 
@@ -212,7 +242,9 @@ export function SystemMonitor() {
               <CheckCircle className="h-5 w-5 text-green-600" />
               <div>
                 <div className="font-medium">API Gateway</div>
-                <div className="text-sm text-muted-foreground">45ms response time</div>
+                <div className="text-sm text-muted-foreground">
+                  45ms response time
+                </div>
               </div>
             </div>
 
@@ -220,7 +252,9 @@ export function SystemMonitor() {
               <Clock className="h-5 w-5 text-yellow-600" />
               <div>
                 <div className="font-medium">Cache Layer</div>
-                <div className="text-sm text-muted-foreground">Next purge: 2h</div>
+                <div className="text-sm text-muted-foreground">
+                  Next purge: 2h
+                </div>
               </div>
             </div>
 
@@ -228,7 +262,9 @@ export function SystemMonitor() {
               <CheckCircle className="h-5 w-5 text-green-600" />
               <div>
                 <div className="font-medium">CDN Global</div>
-                <div className="text-sm text-muted-foreground">12 nodes active</div>
+                <div className="text-sm text-muted-foreground">
+                  12 nodes active
+                </div>
               </div>
             </div>
           </CardContent>

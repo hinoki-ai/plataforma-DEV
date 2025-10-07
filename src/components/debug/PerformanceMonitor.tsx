@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface PerformanceData {
   id: string;
@@ -22,13 +22,13 @@ export function PerformanceMonitor() {
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [averageResponseTime, setAverageResponseTime] = useState(0);
-  const [slowestEndpoint, setSlowestEndpoint] = useState<string>('');
+  const [slowestEndpoint, setSlowestEndpoint] = useState<string>("");
   const [totalRequests, setTotalRequests] = useState(0);
 
   const fetchPerformanceData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/debug-performance?limit=20');
+      const response = await fetch("/api/debug-performance?limit=20");
       if (response.ok) {
         const result = await response.json();
         setPerformanceData(result.data || []);
@@ -36,7 +36,7 @@ export function PerformanceMonitor() {
         // Calculate metrics
         if (result.data && result.data.length > 0) {
           const responseTimes = result.data.map(
-            (item: PerformanceData) => item.data.responseTime
+            (item: PerformanceData) => item.data.responseTime,
           );
           const avgTime =
             responseTimes.reduce((a: number, b: number) => a + b, 0) /
@@ -47,14 +47,14 @@ export function PerformanceMonitor() {
             (prev: PerformanceData, current: PerformanceData) =>
               prev.data.responseTime > current.data.responseTime
                 ? prev
-                : current
+                : current,
           );
           setSlowestEndpoint(slowest.data.endpoint);
           setTotalRequests(result.total);
         }
       }
     } catch (error) {
-      console.error('Failed to fetch performance data:', error);
+      console.error("Failed to fetch performance data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -70,10 +70,10 @@ export function PerformanceMonitor() {
   }, []);
 
   const getResponseTimeColor = (time: number) => {
-    if (time < 100) return 'text-green-600';
-    if (time < 300) return 'text-yellow-600';
-    if (time < 1000) return 'text-orange-600';
-    return 'text-red-600';
+    if (time < 100) return "text-green-600";
+    if (time < 300) return "text-yellow-600";
+    if (time < 1000) return "text-orange-600";
+    return "text-red-600";
   };
 
   const getResponseTimeProgress = (time: number) => {
@@ -81,11 +81,11 @@ export function PerformanceMonitor() {
   };
 
   const getStatusBadgeVariant = (status: number) => {
-    if (status >= 200 && status < 300) return 'default';
-    if (status >= 300 && status < 400) return 'secondary';
-    if (status >= 400 && status < 500) return 'destructive';
-    if (status >= 500) return 'destructive';
-    return 'outline';
+    if (status >= 200 && status < 300) return "default";
+    if (status >= 300 && status < 400) return "secondary";
+    if (status >= 400 && status < 500) return "destructive";
+    if (status >= 500) return "destructive";
+    return "outline";
   };
 
   return (
@@ -106,7 +106,7 @@ export function PerformanceMonitor() {
         </div>
         <div className="text-center">
           <div className="text-lg font-medium truncate" title={slowestEndpoint}>
-            {slowestEndpoint || 'N/A'}
+            {slowestEndpoint || "N/A"}
           </div>
           <div className="text-sm text-muted-foreground">Slowest Endpoint</div>
         </div>
@@ -121,7 +121,7 @@ export function PerformanceMonitor() {
           onClick={fetchPerformanceData}
           disabled={isLoading}
         >
-          {isLoading ? 'Loading...' : 'Refresh'}
+          {isLoading ? "Loading..." : "Refresh"}
         </Button>
       </div>
 
@@ -132,12 +132,12 @@ export function PerformanceMonitor() {
             {performanceData.length === 0 ? (
               <div className="p-8 text-center text-muted-foreground">
                 {isLoading
-                  ? 'Loading performance data...'
-                  : 'No performance data available'}
+                  ? "Loading performance data..."
+                  : "No performance data available"}
               </div>
             ) : (
               <div className="space-y-2 p-4">
-                {performanceData.map(item => (
+                {performanceData.map((item) => (
                   <div
                     key={item.id}
                     className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50"
@@ -147,7 +147,7 @@ export function PerformanceMonitor() {
                         {item.data.endpoint}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {new Date(item.timestamp).toLocaleTimeString()} •{' '}
+                        {new Date(item.timestamp).toLocaleTimeString()} •{" "}
                         {item.type}
                       </div>
                     </div>
@@ -163,7 +163,7 @@ export function PerformanceMonitor() {
                         </div>
                         <Progress
                           value={getResponseTimeProgress(
-                            item.data.responseTime
+                            item.data.responseTime,
                           )}
                           className="w-[60px] h-1 mt-1"
                         />

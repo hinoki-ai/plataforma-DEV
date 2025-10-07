@@ -2,9 +2,9 @@
  * Calendar Event Actions (Mutations) - Convex Implementation
  */
 
-import { getConvexClient } from '@/lib/convex';
-import { api } from '../../../convex/_generated/api';
-import type { Id } from '../../../convex/_generated/dataModel';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 export async function createCalendarEvent(data: {
   title: string;
@@ -12,7 +12,7 @@ export async function createCalendarEvent(data: {
   startDate: Date;
   endDate: Date;
   category: string;
-  priority?: 'LOW' | 'MEDIUM' | 'HIGH';
+  priority?: "LOW" | "MEDIUM" | "HIGH";
   level?: string;
   isRecurring?: boolean;
   isAllDay?: boolean;
@@ -23,44 +23,47 @@ export async function createCalendarEvent(data: {
 }) {
   try {
     const client = getConvexClient();
-    
+
     const eventId = await client.mutation(api.calendar.createCalendarEvent, {
       ...data,
       startDate: data.startDate.getTime(),
       endDate: data.endDate.getTime(),
-      category: data.category as any,
+      category: data.category as never,
       createdBy: data.createdBy as Id<"users">,
-      attendeeIds: data.attendeeIds?.map(id => id as Id<"users">),
+      attendeeIds: data.attendeeIds?.map((id) => id as Id<"users">),
     });
 
     return { success: true, data: { id: eventId } };
   } catch (error) {
-    console.error('Failed to create calendar event:', error);
-    return { success: false, error: 'No se pudo crear el evento' };
+    console.error("Failed to create calendar event:", error);
+    return { success: false, error: "No se pudo crear el evento" };
   }
 }
 
-export async function updateCalendarEvent(id: string, data: {
-  title?: string;
-  description?: string;
-  startDate?: Date;
-  endDate?: Date;
-  category?: string;
-  priority?: 'LOW' | 'MEDIUM' | 'HIGH';
-  level?: string;
-  isAllDay?: boolean;
-  color?: string;
-  location?: string;
-  isActive?: boolean;
-  updatedBy: string;
-}) {
+export async function updateCalendarEvent(
+  id: string,
+  data: {
+    title?: string;
+    description?: string;
+    startDate?: Date;
+    endDate?: Date;
+    category?: string;
+    priority?: "LOW" | "MEDIUM" | "HIGH";
+    level?: string;
+    isAllDay?: boolean;
+    color?: string;
+    location?: string;
+    isActive?: boolean;
+    updatedBy: string;
+  },
+) {
   try {
     const client = getConvexClient();
-    
-    const updates: any = { ...data };
+
+    const updates: Record<string, unknown> = { ...data };
     if (data.startDate) updates.startDate = data.startDate.getTime();
     if (data.endDate) updates.endDate = data.endDate.getTime();
-    
+
     await client.mutation(api.calendar.updateCalendarEvent, {
       id: id as Id<"calendarEvents">,
       ...updates,
@@ -69,8 +72,8 @@ export async function updateCalendarEvent(id: string, data: {
 
     return { success: true };
   } catch (error) {
-    console.error('Failed to update calendar event:', error);
-    return { success: false, error: 'No se pudo actualizar el evento' };
+    console.error("Failed to update calendar event:", error);
+    return { success: false, error: "No se pudo actualizar el evento" };
   }
 }
 
@@ -82,65 +85,116 @@ export async function deleteCalendarEvent(id: string) {
     });
     return { success: true };
   } catch (error) {
-    console.error('Failed to delete calendar event:', error);
-    return { success: false, error: 'No se pudo eliminar el evento' };
+    console.error("Failed to delete calendar event:", error);
+    return { success: false, error: "No se pudo eliminar el evento" };
   }
 }
 
-export async function exportCalendarEventsInFormat(format: 'json' | 'csv' | 'ics', dateRange?: { start: Date; end: Date }) {
+// Query functions
+export async function getCalendarEvents(filters?: {
+  startDate?: Date;
+  endDate?: Date;
+  category?: string;
+}) {
   try {
     const client = getConvexClient();
-
-    // Get events from Convex
     const events = await client.query(api.calendar.getCalendarEvents, {
-      startDate: dateRange?.start?.getTime(),
-      endDate: dateRange?.end?.getTime(),
+      startDate: filters?.startDate?.getTime(),
+      endDate: filters?.endDate?.getTime(),
+      category: filters?.category as never,
     });
 
-    if (!events || events.length === 0) {
-      return { success: false, error: 'No events found to export' };
+    return {
+      success: true,
+      data: events.map((event) => ({
+        ...event,
+        id: event._id,
+        startDate: new Date(event.startDate),
+        endDate: new Date(event.endDate),
+        createdAt: new Date(event.createdAt),
+        updatedAt: new Date(event.updatedAt),
+      })),
+    };
+  } catch (error) {
+    console.error("Failed to get calendar events:", error);
+    return { success: false, error: "No se pudieron obtener los eventos" };
+  }
+}
+
+export async function exportCalendarEventsInFormat(
+  format: "json" | "csv" | "ics",
+  dateRange?: { start: Date; end: Date },
+) {
+  try {
+    const result = await getCalendarEvents({
+      startDate: dateRange?.start,
+      endDate: dateRange?.end,
+    });
+
+    if (!result.success || !result.data || result.data.length === 0) {
+      return { success: false, error: "No events found to export" };
     }
+
+    const events = result.data;
 
     let exportedData: string;
 
     switch (format) {
-      case 'json':
+      case "json":
         exportedData = JSON.stringify(events, null, 2);
         break;
 
-      case 'csv':
+      case "csv":
         // CSV header
-        const csvHeaders = ['ID', 'Title', 'Description', 'Start Date', 'End Date', 'Category', 'Priority', 'Location', 'Is All Day'];
-        const csvRows = events.map(event => [
+        const csvHeaders = [
+          "ID",
+          "Title",
+          "Description",
+          "Start Date",
+          "End Date",
+          "Category",
+          "Priority",
+          "Location",
+          "Is All Day",
+        ];
+        const csvRows = events.map((event) => [
           event.id,
           event.title,
-          event.description || '',
+          event.description || "",
           new Date(event.startDate).toISOString(),
           new Date(event.endDate).toISOString(),
           event.category,
-          event.priority || '',
-          event.location || '',
-          event.isAllDay ? 'Yes' : 'No'
+          event.priority || "",
+          event.location || "",
+          event.isAllDay ? "Yes" : "No",
         ]);
-        exportedData = [csvHeaders, ...csvRows].map(row =>
-          row.map(field => `"${field}"`).join(',')
-        ).join('\n');
+        exportedData = [csvHeaders, ...csvRows]
+          .map((row) => row.map((field) => `"${field}"`).join(","))
+          .join("\n");
         break;
 
-      case 'ics':
+      case "ics":
         // Basic iCal format
-        const icsEvents = events.map(event => {
-          const startDate = new Date(event.startDate).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-          const endDate = new Date(event.endDate).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        const icsEvents = events.map((event) => {
+          const startDate =
+            new Date(event.startDate)
+              .toISOString()
+              .replace(/[-:]/g, "")
+              .split(".")[0] + "Z";
+          const endDate =
+            new Date(event.endDate)
+              .toISOString()
+              .replace(/[-:]/g, "")
+              .split(".")[0] + "Z";
 
           return `BEGIN:VEVENT
 UID:${event.id}@manitospintadas.cl
-DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z
 DTSTART:${startDate}
 DTEND:${endDate}
 SUMMARY:${event.title}
-DESCRIPTION:${event.description || ''}
-LOCATION:${event.location || ''}
+DESCRIPTION:${event.description || ""}
+LOCATION:${event.location || ""}
 CATEGORIES:${event.category}
 END:VEVENT`;
         });
@@ -148,12 +202,12 @@ END:VEVENT`;
         exportedData = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Manitos Pintadas//Calendar Export//ES
-${icsEvents.join('\n')}
+${icsEvents.join("\n")}
 END:VCALENDAR`;
         break;
 
       default:
-        return { success: false, error: 'Unsupported export format' };
+        return { success: false, error: "Unsupported export format" };
     }
 
     return {
@@ -162,14 +216,253 @@ END:VCALENDAR`;
         content: exportedData,
         format,
         filename: `calendar-events.${format}`,
-        mimeType: format === 'json' ? 'application/json' :
-                 format === 'csv' ? 'text/csv' :
-                 'text/calendar'
-      }
+        mimeType:
+          format === "json"
+            ? "application/json"
+            : format === "csv"
+              ? "text/csv"
+              : "text/calendar",
+      },
     };
-
   } catch (error) {
-    console.error('Failed to export calendar events:', error);
-    return { success: false, error: 'No se pudieron exportar los eventos' };
+    console.error("Failed to export calendar events:", error);
+    return { success: false, error: "No se pudieron exportar los eventos" };
+  }
+}
+
+// Convenience exports
+export async function exportCalendarEventsToCSV(dateRange?: {
+  start: Date;
+  end: Date;
+}) {
+  return exportCalendarEventsInFormat("csv", dateRange);
+}
+
+export async function exportCalendarEventsToICS(dateRange?: {
+  start: Date;
+  end: Date;
+}) {
+  return exportCalendarEventsInFormat("ics", dateRange);
+}
+
+// Bulk operations
+export async function bulkCreateCalendarEvents(
+  events: Array<{
+    title: string;
+    description?: string;
+    startDate: Date;
+    endDate: Date;
+    category: string;
+    priority?: "LOW" | "MEDIUM" | "HIGH";
+    level?: string;
+    isRecurring?: boolean;
+    isAllDay?: boolean;
+    color?: string;
+    location?: string;
+    createdBy: string;
+  }>,
+) {
+  try {
+    const results = await Promise.allSettled(
+      events.map((event) => createCalendarEvent(event)),
+    );
+
+    const successful = results.filter((r) => r.status === "fulfilled").length;
+    const failed = results.filter((r) => r.status === "rejected").length;
+
+    return {
+      success: true,
+      data: {
+        total: events.length,
+        successful,
+        failed,
+        message: `${successful} eventos creados, ${failed} fallaron`,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to bulk create events:", error);
+    return {
+      success: false,
+      error: "No se pudieron crear los eventos en lote",
+    };
+  }
+}
+
+export async function massUpdateCalendarEvents(
+  eventIds: string[],
+  updates: {
+    category?: string;
+    priority?: "LOW" | "MEDIUM" | "HIGH";
+    isActive?: boolean;
+    updatedBy: string;
+  },
+) {
+  try {
+    const results = await Promise.allSettled(
+      eventIds.map((id) => updateCalendarEvent(id, updates)),
+    );
+
+    const successful = results.filter((r) => r.status === "fulfilled").length;
+    const failed = results.filter((r) => r.status === "rejected").length;
+
+    return {
+      success: true,
+      data: {
+        total: eventIds.length,
+        successful,
+        failed,
+        message: `${successful} eventos actualizados, ${failed} fallaron`,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to mass update events:", error);
+    return {
+      success: false,
+      error: "No se pudieron actualizar los eventos en lote",
+    };
+  }
+}
+
+export async function massDeleteCalendarEvents(eventIds: string[]) {
+  try {
+    const results = await Promise.allSettled(
+      eventIds.map((id) => deleteCalendarEvent(id)),
+    );
+
+    const successful = results.filter((r) => r.status === "fulfilled").length;
+    const failed = results.filter((r) => r.status === "rejected").length;
+
+    return {
+      success: true,
+      data: {
+        total: eventIds.length,
+        successful,
+        failed,
+        message: `${successful} eventos eliminados, ${failed} fallaron`,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to mass delete events:", error);
+    return {
+      success: false,
+      error: "No se pudieron eliminar los eventos en lote",
+    };
+  }
+}
+
+export async function importCalendarEventsFromCSV(
+  csvContent: string,
+  createdBy: string,
+) {
+  try {
+    // Parse CSV - simple implementation
+    const lines = csvContent.trim().split("\n");
+    if (lines.length < 2) {
+      return { success: false, error: "CSV file is empty or invalid" };
+    }
+
+    const headers = lines[0].split(",").map((h) => h.trim().replace(/"/g, ""));
+    const events: Array<{
+      title: string;
+      description?: string;
+      startDate: Date;
+      endDate: Date;
+      category: string;
+      priority?: "LOW" | "MEDIUM" | "HIGH";
+      level?: string;
+      isRecurring?: boolean;
+      isAllDay?: boolean;
+      color?: string;
+      location?: string;
+      createdBy: string;
+    }> = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(",").map((v) => v.trim().replace(/"/g, ""));
+      const event: {
+        title?: string;
+        description?: string;
+        startDate?: Date;
+        endDate?: Date;
+        category?: string;
+        priority?: "LOW" | "MEDIUM" | "HIGH";
+        level?: string;
+        isRecurring?: boolean;
+        isAllDay?: boolean;
+        color?: string;
+        location?: string;
+        createdBy: string;
+      } = { createdBy };
+
+      headers.forEach((header, index) => {
+        if (values[index]) {
+          switch (header.toLowerCase()) {
+            case "title":
+              event.title = values[index];
+              break;
+            case "description":
+              event.description = values[index];
+              break;
+            case "start date":
+            case "startdate":
+              event.startDate = new Date(values[index]);
+              break;
+            case "end date":
+            case "enddate":
+              event.endDate = new Date(values[index]);
+              break;
+            case "category":
+              event.category = values[index];
+              break;
+            case "priority":
+              const priorityValue = values[index].toUpperCase();
+              if (priorityValue === "LOW" || priorityValue === "MEDIUM" || priorityValue === "HIGH") {
+                event.priority = priorityValue;
+              }
+              break;
+            case "location":
+              event.location = values[index];
+              break;
+            case "level":
+              event.level = values[index];
+              break;
+            case "is all day":
+            case "isallday":
+              event.isAllDay =
+                values[index].toLowerCase() === "yes" || values[index] === "1";
+              break;
+          }
+        }
+      });
+
+      if (event.title && event.startDate && event.endDate && event.category) {
+        events.push({
+          title: event.title,
+          description: event.description,
+          startDate: event.startDate,
+          endDate: event.endDate,
+          category: event.category,
+          priority: event.priority,
+          level: event.level,
+          isRecurring: event.isRecurring,
+          isAllDay: event.isAllDay,
+          color: event.color,
+          location: event.location,
+          createdBy: event.createdBy,
+        });
+      }
+    }
+
+    if (events.length === 0) {
+      return { success: false, error: "No valid events found in CSV" };
+    }
+
+    return bulkCreateCalendarEvents(events);
+  } catch (error) {
+    console.error("Failed to import CSV:", error);
+    return {
+      success: false,
+      error: "No se pudieron importar los eventos desde CSV",
+    };
   }
 }

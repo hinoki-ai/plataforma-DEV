@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { Component, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
-import { Button } from './button';
-import { Card, CardContent, CardHeader, CardTitle } from './card';
+import React, { Component, ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { Button } from "./button";
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
 
 interface LoadingErrorBoundaryState {
   hasError: boolean;
@@ -44,7 +44,7 @@ export class LoadingErrorBoundary extends Component<
   }
 
   static getDerivedStateFromError(
-    error: Error
+    error: Error,
   ): Partial<LoadingErrorBoundaryState> {
     return {
       hasError: true,
@@ -54,7 +54,7 @@ export class LoadingErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log error for monitoring
-    console.error('LoadingErrorBoundary caught an error:', error, errorInfo);
+    console.error("LoadingErrorBoundary caught an error:", error, errorInfo);
 
     // Call error handler if provided
     this.props.onError?.(error, errorInfo);
@@ -76,7 +76,7 @@ export class LoadingErrorBoundary extends Component<
     const { maxRetries = 3 } = this.props;
 
     if (this.state.retryCount < maxRetries) {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         retryCount: prevState.retryCount + 1,
         hasError: false,
         error: null,
@@ -111,8 +111,8 @@ export class LoadingErrorBoundary extends Component<
       children,
       maxRetries = 3,
       showHomeButton = true,
-      title = 'Error de carga',
-      description = 'Ocurrió un error al cargar el contenido. Por favor, inténtelo de nuevo.',
+      title = "Error de carga",
+      description = "Ocurrió un error al cargar el contenido. Por favor, inténtelo de nuevo.",
     } = this.props;
 
     if (this.state.hasError) {
@@ -141,7 +141,7 @@ export class LoadingErrorBoundary extends Component<
                 disabled={!!this.retryTimeoutId}
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
-                {this.retryTimeoutId ? 'Reintentando...' : 'Reintentar'}
+                {this.retryTimeoutId ? "Reintentando..." : "Reintentar"}
               </Button>
             )}
 
@@ -162,7 +162,7 @@ export class LoadingErrorBoundary extends Component<
 
             {showHomeButton && (
               <Button
-                onClick={() => (window.location.href = '/')}
+                onClick={() => (window.location.href = "/")}
                 variant="ghost"
                 className="w-full"
               >
@@ -171,7 +171,7 @@ export class LoadingErrorBoundary extends Component<
               </Button>
             )}
 
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env.NODE_ENV === "development" && this.state.error && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-sm font-medium text-muted-foreground">
                   Detalles técnicos (desarrollo)
@@ -206,7 +206,7 @@ export function useAsyncErrorBoundary() {
  */
 export function withLoadingErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<LoadingErrorBoundaryProps, 'children'>
+  errorBoundaryProps?: Omit<LoadingErrorBoundaryProps, "children">,
 ) {
   const WrappedComponent = (props: P) => (
     <LoadingErrorBoundary {...errorBoundaryProps}>

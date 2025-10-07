@@ -1,13 +1,13 @@
-import React from 'react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useLanguage } from '@/components/language/LanguageContext';
+import React from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface EnhancedToastProps {
   title?: string;
   description?: string;
-  type?: 'success' | 'error' | 'warning' | 'info';
+  type?: "success" | "error" | "warning" | "info";
   action?: {
     label: string;
     onClick: () => void;
@@ -20,7 +20,7 @@ interface EnhancedToastProps {
 export function EnhancedToast({
   title,
   description,
-  type = 'info',
+  type = "info",
   action,
   onClose,
   className,
@@ -28,15 +28,15 @@ export function EnhancedToast({
   const { t } = useLanguage();
 
   const typeStyles = {
-    success: 'border-green-500/50 bg-green-50 text-green-900',
-    error: 'border-red-500/50 bg-red-50 text-red-900',
-    warning: 'border-yellow-500/50 bg-yellow-50 text-yellow-900',
-    info: 'border-blue-500/50 bg-blue-50 text-blue-900',
+    success: "border-green-500/50 bg-green-50 text-green-900",
+    error: "border-red-500/50 bg-red-50 text-red-900",
+    warning: "border-yellow-500/50 bg-yellow-50 text-yellow-900",
+    info: "border-blue-500/50 bg-blue-50 text-blue-900",
   };
 
   return (
-    <div className={cn('fixed top-4 right-4 z-50 max-w-sm', className)}>
-      <Alert className={cn(typeStyles[type], 'shadow-lg')}>
+    <div className={cn("fixed top-4 right-4 z-50 max-w-sm", className)}>
+      <Alert className={cn(typeStyles[type], "shadow-lg")}>
         {title && <AlertTitle>{title}</AlertTitle>}
         {description && <AlertDescription>{description}</AlertDescription>}
 
@@ -59,7 +59,7 @@ export function EnhancedToast({
                 onClick={onClose}
                 className="text-xs"
               >
-                {t('toast.close')}
+                {t("toast.close")}
               </Button>
             )}
           </div>

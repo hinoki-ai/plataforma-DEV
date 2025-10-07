@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import * as React from "react";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   AdaptiveCard,
   AdaptiveCardContent,
-} from '@/components/ui/adaptive-card';
-import { AdaptiveH1, AdaptiveP } from '@/components/ui/adaptive-typography';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/adaptive-card";
+import { AdaptiveH1, AdaptiveP } from "@/components/ui/adaptive-typography";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   Sun,
   Moon,
@@ -21,14 +21,14 @@ import {
   Users,
   Target,
   Sparkles,
-} from 'lucide-react';
+} from "lucide-react";
 
 export type DashboardWelcomeVariant =
-  | 'admin'
-  | 'profesor'
-  | 'parent'
-  | 'public'
-  | 'auto';
+  | "admin"
+  | "profesor"
+  | "parent"
+  | "public"
+  | "auto";
 
 export interface DashboardWelcomeProps {
   /**
@@ -61,7 +61,7 @@ export interface DashboardWelcomeProps {
  * Personalized welcome messages component
  */
 export function DashboardWelcome({
-  variant = 'auto',
+  variant = "auto",
   userName,
   customMessage,
   className,
@@ -71,21 +71,21 @@ export function DashboardWelcome({
   const { data: session } = useSession();
 
   // Auto-detect variant based on route and session
-  const detectedVariant: Exclude<DashboardWelcomeVariant, 'auto'> =
-    variant !== 'auto'
+  const detectedVariant: Exclude<DashboardWelcomeVariant, "auto"> =
+    variant !== "auto"
       ? variant
-      : pathname?.startsWith('/admin')
-        ? 'admin'
-        : pathname?.startsWith('/profesor')
-          ? 'profesor'
-          : pathname?.startsWith('/parent')
-            ? 'parent'
-            : 'public';
+      : pathname?.startsWith("/admin")
+        ? "admin"
+        : pathname?.startsWith("/profesor")
+          ? "profesor"
+          : pathname?.startsWith("/parent")
+            ? "parent"
+            : "public";
 
-  const context = detectedVariant === 'public' ? 'public' : 'auth';
+  const context = detectedVariant === "public" ? "public" : "auth";
 
   // Get user information
-  const displayName = userName || session?.user?.name || 'Usuario';
+  const displayName = userName || session?.user?.name || "Usuario";
   const userRole = session?.user?.role;
 
   // Time-based greeting
@@ -94,18 +94,18 @@ export function DashboardWelcome({
 
     if (hour < 6) {
       return {
-        greeting: 'Buenas madrugadas',
+        greeting: "Buenas madrugadas",
         icon: Moon,
-        time: 'early-morning',
+        time: "early-morning",
       };
     } else if (hour < 12) {
-      return { greeting: 'Buenos días', icon: Sunrise, time: 'morning' };
+      return { greeting: "Buenos días", icon: Sunrise, time: "morning" };
     } else if (hour < 18) {
-      return { greeting: 'Buenas tardes', icon: Sun, time: 'afternoon' };
+      return { greeting: "Buenas tardes", icon: Sun, time: "afternoon" };
     } else if (hour < 22) {
-      return { greeting: 'Buenas noches', icon: Sunset, time: 'evening' };
+      return { greeting: "Buenas noches", icon: Sunset, time: "evening" };
     } else {
-      return { greeting: 'Buenas noches', icon: Star, time: 'night' };
+      return { greeting: "Buenas noches", icon: Star, time: "night" };
     }
   };
 
@@ -114,83 +114,83 @@ export function DashboardWelcome({
   // Role-specific messages and styling
   const getRoleConfig = () => {
     switch (detectedVariant) {
-      case 'admin':
+      case "admin":
         return {
           title: `${greeting}, ${displayName}`,
           message:
             customMessage ||
-            'Bienvenido/a al panel de administración. Desde aquí puedes gestionar todo el sistema educativo y supervisar el funcionamiento de la escuela.',
+            "Bienvenido/a al panel de administración. Desde aquí puedes gestionar todo el sistema educativo y supervisar el funcionamiento de la escuela.",
           icon: Target,
-          roleLabel: 'Administrador',
+          roleLabel: "Administrador",
           roleColor:
-            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+            "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
           accentColor:
-            context === 'public'
-              ? 'text-red-300'
-              : 'text-red-600 dark:text-red-400',
+            context === "public"
+              ? "text-red-300"
+              : "text-red-600 dark:text-red-400",
         };
 
-      case 'profesor':
+      case "profesor":
         return {
           title: `${greeting}, Profesor/a ${displayName}`,
           message:
             customMessage ||
-            'Tu espacio para crear, planificar y gestionar el aprendizaje. Aquí encontrarás todas las herramientas que necesitas para acompañar a tus estudiantes.',
+            "Tu espacio para crear, planificar y gestionar el aprendizaje. Aquí encontrarás todas las herramientas que necesitas para acompañar a tus estudiantes.",
           icon: BookOpen,
-          roleLabel: 'Profesor',
+          roleLabel: "Profesor",
           roleColor:
-            'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+            "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
           accentColor:
-            context === 'public'
-              ? 'text-blue-300'
-              : 'text-blue-600 dark:text-blue-400',
+            context === "public"
+              ? "text-blue-300"
+              : "text-blue-600 dark:text-blue-400",
         };
 
-      case 'parent':
+      case "parent":
         return {
           title: `${greeting}, ${displayName}`,
           message:
             customMessage ||
-            'Mantente conectado/a con la educación de tu hijo/a. Aquí puedes ver eventos, actividades y comunicarte con nuestro equipo educativo.',
+            "Mantente conectado/a con la educación de tu hijo/a. Aquí puedes ver eventos, actividades y comunicarte con nuestro equipo educativo.",
           icon: Heart,
-          roleLabel: 'Padre/Apoderado',
+          roleLabel: "Padre/Apoderado",
           roleColor:
-            'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+            "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
           accentColor:
-            context === 'public'
-              ? 'text-green-300'
-              : 'text-green-600 dark:text-green-400',
+            context === "public"
+              ? "text-green-300"
+              : "text-green-600 dark:text-green-400",
         };
 
-      case 'public':
+      case "public":
         return {
           title: `${greeting}, bienvenido/a`,
           message:
             customMessage ||
-            'Explora nuestra comunidad educativa. Conoce nuestros eventos, equipo multidisciplinario y todo lo que ofrecemos para el crecimiento integral de nuestros estudiantes.',
+            "Explora nuestra comunidad educativa. Conoce nuestros eventos, equipo multidisciplinario y todo lo que ofrecemos para el crecimiento integral de nuestros estudiantes.",
           icon: Sparkles,
-          roleLabel: 'Visitante',
+          roleLabel: "Visitante",
           roleColor:
-            'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
+            "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
           accentColor:
-            context === 'public'
-              ? 'text-purple-300'
-              : 'text-purple-600 dark:text-purple-400',
+            context === "public"
+              ? "text-purple-300"
+              : "text-purple-600 dark:text-purple-400",
         };
 
       default:
         return {
           title: `${greeting}`,
           message:
-            customMessage || 'Bienvenido/a a nuestra plataforma educativa.',
+            customMessage || "Bienvenido/a a nuestra plataforma educativa.",
           icon: Users,
-          roleLabel: 'Usuario',
+          roleLabel: "Usuario",
           roleColor:
-            'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300',
+            "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
           accentColor:
-            context === 'public'
-              ? 'text-gray-300'
-              : 'text-gray-600 dark:text-gray-400',
+            context === "public"
+              ? "text-gray-300"
+              : "text-gray-600 dark:text-gray-400",
         };
     }
   };
@@ -200,22 +200,22 @@ export function DashboardWelcome({
 
   // Background gradient based on time and context
   const getBackgroundGradient = () => {
-    if (context === 'public') {
+    if (context === "public") {
       switch (time) {
-        case 'morning':
-          return 'bg-gradient-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20';
-        case 'afternoon':
-          return 'bg-gradient-to-br from-orange-900/20 via-yellow-900/20 to-red-900/20';
-        case 'evening':
-          return 'bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-indigo-900/20';
-        case 'night':
-        case 'early-morning':
-          return 'bg-gradient-to-br from-gray-900/30 via-blue-900/20 to-indigo-900/20';
+        case "morning":
+          return "bg-gradient-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20";
+        case "afternoon":
+          return "bg-gradient-to-br from-orange-900/20 via-yellow-900/20 to-red-900/20";
+        case "evening":
+          return "bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-indigo-900/20";
+        case "night":
+        case "early-morning":
+          return "bg-gradient-to-br from-gray-900/30 via-blue-900/20 to-indigo-900/20";
         default:
-          return 'bg-gradient-to-br from-gray-900/20 to-gray-800/20';
+          return "bg-gradient-to-br from-gray-900/20 to-gray-800/20";
       }
     } else {
-      return 'bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20';
+      return "bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20";
     }
   };
 
@@ -223,9 +223,9 @@ export function DashboardWelcome({
     <AdaptiveCard
       variant={context}
       className={cn(
-        'relative overflow-hidden',
+        "relative overflow-hidden",
         getBackgroundGradient(),
-        className
+        className,
       )}
     >
       <AdaptiveCardContent className="p-6 sm:p-8">
@@ -235,16 +235,18 @@ export function DashboardWelcome({
             <div className="flex items-center gap-3 mb-4">
               <div
                 className={cn(
-                  'p-2 rounded-lg',
-                  context === 'public'
-                    ? 'bg-white/10 backdrop-blur-sm'
-                    : 'bg-background/80 border border-border'
+                  "p-2 rounded-lg",
+                  context === "public"
+                    ? "bg-white/10 backdrop-blur-sm"
+                    : "bg-background/80 border border-border",
                 )}
               >
                 <TimeIcon
                   className={cn(
-                    'w-5 h-5',
-                    context === 'public' ? 'text-yellow-300' : 'text-yellow-500'
+                    "w-5 h-5",
+                    context === "public"
+                      ? "text-yellow-300"
+                      : "text-yellow-500",
                   )}
                 />
               </div>
@@ -253,10 +255,10 @@ export function DashboardWelcome({
                 <Badge
                   variant="secondary"
                   className={cn(
-                    'text-xs font-medium',
-                    context === 'public'
-                      ? 'bg-white/10 text-white border-white/20 backdrop-blur-sm'
-                      : roleConfig.roleColor
+                    "text-xs font-medium",
+                    context === "public"
+                      ? "bg-white/10 text-white border-white/20 backdrop-blur-sm"
+                      : roleConfig.roleColor,
                   )}
                 >
                   {roleConfig.roleLabel}
@@ -279,18 +281,18 @@ export function DashboardWelcome({
           {/* Decorative icon */}
           <div
             className={cn(
-              'p-4 rounded-xl',
-              context === 'public'
-                ? 'bg-white/5 backdrop-blur-sm'
-                : 'bg-background/60 border border-border'
+              "p-4 rounded-xl",
+              context === "public"
+                ? "bg-white/5 backdrop-blur-sm"
+                : "bg-background/60 border border-border",
             )}
           >
-            <WelcomeIcon className={cn('w-8 h-8', roleConfig.accentColor)} />
+            <WelcomeIcon className={cn("w-8 h-8", roleConfig.accentColor)} />
           </div>
         </div>
 
         {/* Decorative elements for public context */}
-        {context === 'public' && (
+        {context === "public" && (
           <>
             <div className="absolute top-4 right-16 w-2 h-2 bg-white/20 rounded-full animate-pulse" />
             <div className="absolute top-8 right-8 w-1 h-1 bg-white/30 rounded-full animate-pulse delay-500" />

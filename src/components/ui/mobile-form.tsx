@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { ActionLoader } from '@/components/ui/dashboard-loader';
+import { cn } from "@/lib/utils";
+import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 interface MobileFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   children: React.ReactNode;
@@ -21,8 +21,8 @@ export function MobileForm({
     <div className="w-full max-w-full sm:max-w-2xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
       <div
         className={cn(
-          'bg-card rounded-lg shadow-sm border p-4 sm:p-6 md:p-8',
-          className
+          "bg-card rounded-lg shadow-sm border p-4 sm:p-6 md:p-8",
+          className,
         )}
       >
         {title && (
@@ -82,13 +82,13 @@ interface FormGridProps {
 
 export function FormGrid({ children, cols = 1, className }: FormGridProps) {
   const gridClass = {
-    1: 'grid-cols-1',
-    2: 'grid-cols-1 sm:grid-cols-2',
-    3: 'grid-cols-1 sm:grid-cols-3',
+    1: "grid-cols-1",
+    2: "grid-cols-1 sm:grid-cols-2",
+    3: "grid-cols-1 sm:grid-cols-3",
   }[cols];
 
   return (
-    <div className={cn('grid gap-4 sm:gap-6', gridClass, className)}>
+    <div className={cn("grid gap-4 sm:gap-6", gridClass, className)}>
       {children}
     </div>
   );
@@ -96,14 +96,14 @@ export function FormGrid({ children, cols = 1, className }: FormGridProps) {
 
 interface MobileButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: "primary" | "secondary" | "outline";
   loading?: boolean;
   loadingText?: string;
   children: React.ReactNode;
 }
 
 export function MobileButton({
-  variant = 'primary',
+  variant = "primary",
   loading,
   loadingText,
   children,
@@ -112,15 +112,15 @@ export function MobileButton({
   ...props
 }: MobileButtonProps) {
   const baseClasses =
-    'w-full sm:w-auto py-3 px-4 sm:py-2 sm:px-6 text-base font-medium rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 transition-transform';
+    "w-full sm:w-auto py-3 px-4 sm:py-2 sm:px-6 text-base font-medium rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 transition-transform";
 
   const variantClasses = {
     primary:
-      'bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary-500',
+      "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary-500",
     secondary:
-      'bg-secondary text-secondary-foreground hover:bg-secondary/90 focus:ring-secondary-500',
+      "bg-secondary text-secondary-foreground hover:bg-secondary/90 focus:ring-secondary-500",
     outline:
-      'border border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-ring',
+      "border border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-ring",
   };
 
   return (
@@ -128,8 +128,8 @@ export function MobileButton({
       className={cn(
         baseClasses,
         variantClasses[variant],
-        (loading || disabled) && 'opacity-50 cursor-not-allowed',
-        className
+        (loading || disabled) && "opacity-50 cursor-not-allowed",
+        className,
       )}
       disabled={loading || disabled}
       {...props}
@@ -137,7 +137,7 @@ export function MobileButton({
       {loading ? (
         <span className="flex items-center justify-center">
           <ActionLoader size="sm" className="mr-2" />
-          {loadingText || 'Cargando...'}
+          {loadingText || "Cargando..."}
         </span>
       ) : (
         children
@@ -155,11 +155,11 @@ export function MobileInput({
     <div>
       <input
         className={cn(
-          'w-full py-3 px-3 text-base rounded-lg border transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
-          'transition-colors',
-          error ? 'border-red-500' : 'border-border',
-          'min-h-12 touch-manipulation'
+          "w-full py-3 px-3 text-base rounded-lg border transition-colors",
+          "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
+          "transition-colors",
+          error ? "border-red-500" : "border-border",
+          "min-h-12 touch-manipulation",
         )}
         {...props}
       />
@@ -176,11 +176,11 @@ export function MobileSelect({
     <div>
       <select
         className={cn(
-          'w-full py-3 px-3 text-base rounded-lg border transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
-          'transition-colors',
-          error ? 'border-red-500' : 'border-border',
-          'min-h-12 touch-manipulation'
+          "w-full py-3 px-3 text-base rounded-lg border transition-colors",
+          "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
+          "transition-colors",
+          error ? "border-red-500" : "border-border",
+          "min-h-12 touch-manipulation",
         )}
         {...props}
       />
@@ -197,11 +197,11 @@ export function MobileTextarea({
     <div>
       <textarea
         className={cn(
-          'w-full py-3 px-3 text-base rounded-lg border transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
-          'transition-colors',
-          error ? 'border-red-500' : 'border-border',
-          'min-h-24 touch-manipulation resize-none'
+          "w-full py-3 px-3 text-base rounded-lg border transition-colors",
+          "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
+          "transition-colors",
+          error ? "border-red-500" : "border-border",
+          "min-h-24 touch-manipulation resize-none",
         )}
         {...props}
       />
@@ -217,7 +217,7 @@ export function MobileSafeArea({
   children: React.ReactNode;
   className?: string;
 }) {
-  return <div className={cn('pt-safe pb-safe', className)}>{children}</div>;
+  return <div className={cn("pt-safe pb-safe", className)}>{children}</div>;
 }
 
 // Floating action button for mobile
@@ -234,11 +234,11 @@ export function FloatingActionButton({
     <button
       onClick={onClick}
       className={cn(
-        'fixed bottom-6 right-6 z-50 p-4 bg-primary text-primary-foreground rounded-full shadow-lg',
-        'hover:bg-primary/90 transition-all duration-200',
-        'min-h-14 min-w-14 flex items-center justify-center',
-        'touch-manipulation',
-        className
+        "fixed bottom-6 right-6 z-50 p-4 bg-primary text-primary-foreground rounded-full shadow-lg",
+        "hover:bg-primary/90 transition-all duration-200",
+        "min-h-14 min-w-14 flex items-center justify-center",
+        "touch-manipulation",
+        className,
       )}
     >
       {children}

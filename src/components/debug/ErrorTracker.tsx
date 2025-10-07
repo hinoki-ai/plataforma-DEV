@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { AlertCircle, RefreshCw, Trash2 } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, RefreshCw, Trash2 } from "lucide-react";
 
 interface ErrorLog {
   id: string;
@@ -13,7 +13,7 @@ interface ErrorLog {
   stack?: string;
   userAgent?: string;
   url?: string;
-  severity: 'error' | 'warning' | 'info';
+  severity: "error" | "warning" | "info";
 }
 
 export function ErrorTracker() {
@@ -31,16 +31,16 @@ export function ErrorTracker() {
       // For now, we'll show a placeholder
       setErrors([
         {
-          id: '1',
+          id: "1",
           timestamp: new Date().toISOString(),
-          message: 'Sample error for demonstration',
-          severity: 'error',
+          message: "Sample error for demonstration",
+          severity: "error",
           url: window.location.href,
           userAgent: navigator.userAgent,
         },
       ]);
     } catch (error) {
-      console.error('Failed to load errors:', error);
+      console.error("Failed to load errors:", error);
     } finally {
       setIsLoading(false);
     }
@@ -52,12 +52,12 @@ export function ErrorTracker() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'error':
-        return 'destructive';
-      case 'warning':
-        return 'secondary';
+      case "error":
+        return "destructive";
+      case "warning":
+        return "secondary";
       default:
-        return 'outline';
+        return "outline";
     }
   };
 
@@ -77,7 +77,7 @@ export function ErrorTracker() {
             disabled={isLoading}
           >
             <RefreshCw
-              className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+              className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
             />
           </Button>
           <Button
@@ -102,7 +102,7 @@ export function ErrorTracker() {
             </CardContent>
           </Card>
         ) : (
-          errors.map(error => (
+          errors.map((error) => (
             <Card key={error.id} className="border-l-4 border-l-destructive">
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">

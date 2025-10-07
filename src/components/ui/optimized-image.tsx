@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { Skeleton } from '@/components/ui/skeleton';
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface OptimizedImageProps {
   src: string;
@@ -13,8 +13,8 @@ interface OptimizedImageProps {
   quality?: number;
   sizes?: string;
   fill?: boolean;
-  loading?: 'lazy' | 'eager';
-  placeholder?: 'blur' | 'empty';
+  loading?: "lazy" | "eager";
+  placeholder?: "blur" | "empty";
 }
 
 export function OptimizedImage({
@@ -27,8 +27,8 @@ export function OptimizedImage({
   quality = 75,
   sizes,
   fill = false,
-  loading = 'lazy',
-  placeholder = 'empty',
+  loading = "lazy",
+  placeholder = "empty",
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(!priority);
   const [error, setError] = useState(false);
@@ -53,9 +53,9 @@ export function OptimizedImage({
     return (
       <div
         className={cn(
-          'flex items-center justify-center bg-muted rounded-lg',
+          "flex items-center justify-center bg-muted rounded-lg",
           className,
-          !fill && width && height && `w-[${width}px] h-[${height}px]`
+          !fill && width && height && `w-[${width}px] h-[${height}px]`,
         )}
       >
         <div className="text-center p-4">
@@ -67,19 +67,19 @@ export function OptimizedImage({
     );
   }
 
-  const imageSrc = src?.startsWith('/') ? src : `/${src || ''}`;
+  const imageSrc = src?.startsWith("/") ? src : `/${src || ""}`;
 
   return (
-    <div className={cn('relative', className)}>
+    <div className={cn("relative", className)}>
       {isLoading && (
         <Skeleton
           className={cn(
-            'absolute inset-0',
+            "absolute inset-0",
             fill
-              ? 'w-full h-full'
+              ? "w-full h-full"
               : width && height
                 ? `w-[${width}px] h-[${height}px]`
-                : 'w-full h-full'
+                : "w-full h-full",
           )}
         />
       )}
@@ -98,9 +98,9 @@ export function OptimizedImage({
         onLoadingComplete={handleLoad}
         onError={handleError}
         className={cn(
-          'transition-opacity duration-300 object-cover',
-          isLoading ? 'opacity-0' : 'opacity-100',
-          fill && 'absolute inset-0 w-full h-full'
+          "transition-opacity duration-300 object-cover",
+          isLoading ? "opacity-0" : "opacity-100",
+          fill && "absolute inset-0 w-full h-full",
         )}
       />
     </div>
@@ -130,7 +130,7 @@ export function HeroImage({
   src,
   alt,
   className,
-}: Pick<OptimizedImageProps, 'src' | 'alt' | 'className'>) {
+}: Pick<OptimizedImageProps, "src" | "alt" | "className">) {
   return (
     <OptimizedImage
       src={src}

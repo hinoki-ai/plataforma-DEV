@@ -13,30 +13,37 @@ import { query, mutation } from "./_generated/server";
  */
 export const getMeetings = query({
   args: {
-    filter: v.optional(v.object({
-      status: v.optional(v.string()),
-      type: v.optional(v.string()),
-    })),
+    filter: v.optional(
+      v.object({
+        status: v.optional(v.string()),
+        type: v.optional(v.string()),
+      }),
+    ),
     page: v.optional(v.number()),
     limit: v.optional(v.number()),
     assignedTo: v.optional(v.id("users")),
     parentRequested: v.optional(v.boolean()),
   },
-  handler: async (ctx, { filter, page = 1, limit = 20, assignedTo, parentRequested }) => {
+  handler: async (
+    ctx,
+    { filter, page = 1, limit = 20, assignedTo, parentRequested },
+  ) => {
     let allMeetings = await ctx.db.query("meetings").collect();
 
     // Apply filters
     if (filter?.status) {
-      allMeetings = allMeetings.filter(m => m.status === filter.status);
+      allMeetings = allMeetings.filter((m) => m.status === filter.status);
     }
     if (filter?.type) {
-      allMeetings = allMeetings.filter(m => m.type === filter.type);
+      allMeetings = allMeetings.filter((m) => m.type === filter.type);
     }
     if (assignedTo) {
-      allMeetings = allMeetings.filter(m => m.assignedTo === assignedTo);
+      allMeetings = allMeetings.filter((m) => m.assignedTo === assignedTo);
     }
     if (parentRequested !== undefined) {
-      allMeetings = allMeetings.filter(m => m.parentRequested === parentRequested);
+      allMeetings = allMeetings.filter(
+        (m) => m.parentRequested === parentRequested,
+      );
     }
 
     // Sort by date descending
@@ -53,13 +60,15 @@ export const getMeetings = query({
         const teacher = await ctx.db.get(meeting.assignedTo);
         return {
           ...meeting,
-          teacher: teacher ? {
-            id: teacher._id,
-            name: teacher.name,
-            email: teacher.email,
-          } : null,
+          teacher: teacher
+            ? {
+                id: teacher._id,
+                name: teacher.name,
+                email: teacher.email,
+              }
+            : null,
         };
-      })
+      }),
     );
 
     return {
@@ -150,7 +159,7 @@ export const createMeeting = mutation({
       v.literal("FOLLOW_UP"),
       v.literal("EMERGENCY"),
       v.literal("IEP_REVIEW"),
-      v.literal("GRADE_CONFERENCE")
+      v.literal("GRADE_CONFERENCE"),
     ),
     assignedTo: v.id("users"),
     reason: v.optional(v.string()),
@@ -193,8 +202,8 @@ export const updateMeeting = mutation({
         v.literal("IN_PROGRESS"),
         v.literal("COMPLETED"),
         v.literal("CANCELLED"),
-        v.literal("RESCHEDULED")
-      )
+        v.literal("RESCHEDULED"),
+      ),
     ),
     notes: v.optional(v.string()),
     outcome: v.optional(v.string()),
@@ -250,7 +259,7 @@ export const getMeetingsByGuardian = query({
   handler: async (ctx, { guardianEmail }) => {
     const meetings = await ctx.db.query("meetings").collect();
     const filtered = meetings
-      .filter(m => m.guardianEmail === guardianEmail)
+      .filter((m) => m.guardianEmail === guardianEmail)
       .sort((a, b) => b.scheduledDate - a.scheduledDate);
 
     // Get teacher names
@@ -259,9 +268,9 @@ export const getMeetingsByGuardian = query({
         const teacher = await ctx.db.get(meeting.assignedTo);
         return {
           ...meeting,
-          teacherName: teacher?.name || 'Profesor asignado',
+          teacherName: teacher?.name || "Profesor asignado",
         };
-      })
+      }),
     );
 
     return withTeachers;
@@ -280,8 +289,119 @@ export const getMeetingStats = query({
 
     return {
       total: meetings.length,
-      upcoming: meetings.filter(m => m.scheduledDate >= now).length,
-      recent: meetings.filter(m => m.createdAt >= sevenDaysAgo).length,
+      upcoming: meetings.filter((m) => m.scheduledDate >= now).length,
+      recent: meetings.filter((m) => m.createdAt >= sevenDaysAgo).length,
+      completed: meetings.filter((m) => m.status === "COMPLETED").length,
+      pending: meetings.filter((m) => m.status === "SCHEDULED").length,
     };
+  },
+});
+
+/**
+ * Get meetings by parent user ID
+ */
+export const getMeetingsByParent = query({
+  args: { parentId: v.id("users") },
+  handler: async (ctx, { parentId }) => {
+    // Get parent user to find their email
+    const parent = await ctx.db.get(parentId);
+    if (!parent) return [];
+
+    // Find meetings by guardian email
+    const meetings = await ctx.db.query("meetings").collect();
+    return meetings.filter((m) => m.guardianEmail === parent.email);
+  },
+});
+
+/**
+ * Get parent-requested meeting requests (pending approval)
+ */
+export const getParentMeetingRequests = query({
+  args: {},
+  handler: async (ctx) => {
+    const meetings = await ctx.db.query("meetings").collect();
+    return meetings.filter(
+      (m) => m.parentRequested === true && m.status === "SCHEDULED",
+    );
+  },
+});
+
+/**
+ * Update meeting status
+ */
+export const updateMeetingStatus = mutation({
+  args: {
+    id: v.id("meetings"),
+    status: v.string(),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, { id, status, notes }) => {
+    const updates: any = {
+      status,
+      updatedAt: Date.now(),
+    };
+
+    if (notes) {
+      updates.notes = notes;
+    }
+
+    await ctx.db.patch(id, updates);
+    return await ctx.db.get(id);
+  },
+});
+
+/**
+ * Request a meeting (parent-initiated)
+ */
+export const requestMeeting = mutation({
+  args: {
+    studentName: v.string(),
+    studentGrade: v.string(),
+    guardianName: v.string(),
+    guardianEmail: v.string(),
+    guardianPhone: v.string(),
+    preferredDate: v.number(),
+    preferredTime: v.string(),
+    reason: v.string(),
+    type: v.union(
+      v.literal("PARENT_TEACHER"),
+      v.literal("FOLLOW_UP"),
+      v.literal("EMERGENCY"),
+      v.literal("IEP_REVIEW"),
+      v.literal("GRADE_CONFERENCE"),
+    ),
+  },
+  handler: async (ctx, args) => {
+    const now = Date.now();
+
+    // Find a default teacher to assign (or assign later by admin)
+    const teachers = await ctx.db.query("users").collect();
+    const teacher = teachers.find((u) => u.role === "PROFESOR");
+
+    if (!teacher) {
+      throw new Error("No teacher available to assign meeting");
+    }
+
+    return await ctx.db.insert("meetings", {
+      title: `Reunión solicitada: ${args.studentName}`,
+      studentName: args.studentName,
+      studentGrade: args.studentGrade,
+      guardianName: args.guardianName,
+      guardianEmail: args.guardianEmail,
+      guardianPhone: args.guardianPhone,
+      scheduledDate: args.preferredDate,
+      scheduledTime: args.preferredTime,
+      duration: 30,
+      location: "Por definir",
+      type: args.type,
+      status: "SCHEDULED",
+      reason: args.reason,
+      assignedTo: teacher._id,
+      parentRequested: true,
+      source: "PARENT_REQUESTED",
+      followUpRequired: false,
+      createdAt: now,
+      updatedAt: now,
+    });
   },
 });

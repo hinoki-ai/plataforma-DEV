@@ -3,12 +3,12 @@
  * Replaces auth-prisma.ts with Convex-based authentication
  */
 
-import bcryptjs from 'bcryptjs';
-import { getConvexClient } from './convex';
-import { api } from '../../convex/_generated/api';
-import type { Id } from '../../convex/_generated/dataModel';
+import bcryptjs from "bcryptjs";
+import { getConvexClient } from "./convex";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 
-export type UserRole = 'MASTER' | 'ADMIN' | 'PROFESOR' | 'PARENT' | 'PUBLIC';
+export type UserRole = "MASTER" | "ADMIN" | "PROFESOR" | "PARENT" | "PUBLIC";
 
 export interface User {
   _id: Id<"users">;
@@ -26,11 +26,11 @@ export interface User {
  */
 export async function authenticateUser(
   email: string,
-  password: string
+  password: string,
 ): Promise<User | null> {
   try {
     const client = getConvexClient();
-    
+
     // Get user by email
     const user = await client.query(api.users.getUserByEmail, { email });
 
@@ -40,7 +40,7 @@ export async function authenticateUser(
 
     // Verify password
     const isValidPassword = await bcryptjs.compare(password, user.password);
-    
+
     if (!isValidPassword || !user.isActive) {
       return null;
     }
@@ -56,7 +56,7 @@ export async function authenticateUser(
       isActive: user.isActive,
     };
   } catch (error) {
-    console.error('Authentication error:', error);
+    console.error("Authentication error:", error);
     return null;
   }
 }
@@ -83,7 +83,7 @@ export async function findUserByEmail(email: string): Promise<User | null> {
       isActive: user.isActive,
     };
   } catch (error) {
-    console.error('Find user error:', error);
+    console.error("Find user error:", error);
     return null;
   }
 }
@@ -91,10 +91,14 @@ export async function findUserByEmail(email: string): Promise<User | null> {
 /**
  * Find user by ID
  */
-export async function findUserById(id: string | Id<"users">): Promise<User | null> {
+export async function findUserById(
+  id: string | Id<"users">,
+): Promise<User | null> {
   try {
     const client = getConvexClient();
-    const user = await client.query(api.users.getUserById, { userId: id as Id<"users"> });
+    const user = await client.query(api.users.getUserById, {
+      userId: id as Id<"users">,
+    });
 
     if (!user) {
       return null;
@@ -110,7 +114,7 @@ export async function findUserById(id: string | Id<"users">): Promise<User | nul
       isActive: user.isActive,
     };
   } catch (error) {
-    console.error('Find user by ID error:', error);
+    console.error("Find user by ID error:", error);
     return null;
   }
 }
@@ -149,7 +153,7 @@ export async function createUser(data: {
   const user = await client.query(api.users.getUserById, { userId: userId });
 
   if (!user) {
-    throw new Error('Failed to create user');
+    throw new Error("Failed to create user");
   }
 
   return {

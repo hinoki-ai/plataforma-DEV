@@ -1,16 +1,35 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Database,
   Table2,
@@ -28,15 +47,19 @@ import {
   Shield,
   HardDrive,
   Activity,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface DatabaseTable {
   name: string;
   rows: number;
   size: string;
   lastModified: string;
-  status: 'active' | 'inactive' | 'maintenance';
+  status: "active" | "inactive" | "maintenance";
 }
 
 interface QueryResult {
@@ -44,54 +67,87 @@ interface QueryResult {
   query: string;
   executionTime: number;
   rowsAffected: number;
-  status: 'success' | 'error' | 'running';
+  status: "success" | "error" | "running";
   timestamp: string;
 }
 
 const sampleTables: DatabaseTable[] = [
-  { name: 'users', rows: 1247, size: '2.3 MB', lastModified: '2024-01-15 14:30:25', status: 'active' },
-  { name: 'meetings', rows: 892, size: '1.8 MB', lastModified: '2024-01-15 14:25:10', status: 'active' },
-  { name: 'planning_documents', rows: 456, size: '5.2 MB', lastModified: '2024-01-15 14:20:45', status: 'active' },
-  { name: 'audit_logs', rows: 15420, size: '12.7 MB', lastModified: '2024-01-15 14:15:30', status: 'active' },
-  { name: 'notifications', rows: 2341, size: '890 KB', lastModified: '2024-01-15 14:10:15', status: 'active' },
+  {
+    name: "users",
+    rows: 1247,
+    size: "2.3 MB",
+    lastModified: "2024-01-15 14:30:25",
+    status: "active",
+  },
+  {
+    name: "meetings",
+    rows: 892,
+    size: "1.8 MB",
+    lastModified: "2024-01-15 14:25:10",
+    status: "active",
+  },
+  {
+    name: "planning_documents",
+    rows: 456,
+    size: "5.2 MB",
+    lastModified: "2024-01-15 14:20:45",
+    status: "active",
+  },
+  {
+    name: "audit_logs",
+    rows: 15420,
+    size: "12.7 MB",
+    lastModified: "2024-01-15 14:15:30",
+    status: "active",
+  },
+  {
+    name: "notifications",
+    rows: 2341,
+    size: "890 KB",
+    lastModified: "2024-01-15 14:10:15",
+    status: "active",
+  },
 ];
 
 const sampleQueries: QueryResult[] = [
   {
-    id: '1',
-    query: 'SELECT COUNT(*) FROM users WHERE role = \'PROFESOR\'',
+    id: "1",
+    query: "SELECT COUNT(*) FROM users WHERE role = 'PROFESOR'",
     executionTime: 45,
     rowsAffected: 1,
-    status: 'success',
-    timestamp: '2024-01-15 14:30:25',
+    status: "success",
+    timestamp: "2024-01-15 14:30:25",
   },
   {
-    id: '2',
-    query: 'UPDATE meetings SET status = \'completed\' WHERE date < NOW()',
+    id: "2",
+    query: "UPDATE meetings SET status = 'completed' WHERE date < NOW()",
     executionTime: 123,
     rowsAffected: 23,
-    status: 'success',
-    timestamp: '2024-01-15 14:25:10',
+    status: "success",
+    timestamp: "2024-01-15 14:25:10",
   },
   {
-    id: '3',
-    query: 'SELECT * FROM audit_logs ORDER BY timestamp DESC LIMIT 100',
+    id: "3",
+    query: "SELECT * FROM audit_logs ORDER BY timestamp DESC LIMIT 100",
     executionTime: 89,
     rowsAffected: 100,
-    status: 'success',
-    timestamp: '2024-01-15 14:20:45',
+    status: "success",
+    timestamp: "2024-01-15 14:20:45",
   },
 ];
 
 function DatabaseOverviewCard() {
-  const stats = useMemo(() => ({
-    totalTables: 15,
-    totalSize: '45.2 MB',
-    activeConnections: 12,
-    queriesPerSecond: 89,
-    cacheHitRate: '94.5%',
-    backupStatus: 'Last backup: 2 hours ago',
-  }), []);
+  const stats = useMemo(
+    () => ({
+      totalTables: 15,
+      totalSize: "45.2 MB",
+      activeConnections: 12,
+      queriesPerSecond: 89,
+      cacheHitRate: "94.5%",
+      backupStatus: "Last backup: 2 hours ago",
+    }),
+    [],
+  );
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
@@ -100,7 +156,9 @@ function DatabaseOverviewCard() {
           <Database className="h-5 w-5 text-blue-600" />
           Vista General de Base de Datos
         </CardTitle>
-        <CardDescription>Estado y métricas del sistema de base de datos</CardDescription>
+        <CardDescription>
+          Estado y métricas del sistema de base de datos
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -125,7 +183,9 @@ function DatabaseOverviewCard() {
             <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
               {stats.activeConnections}
             </div>
-            <div className="text-sm text-muted-foreground">Conexiones Activas</div>
+            <div className="text-sm text-muted-foreground">
+              Conexiones Activas
+            </div>
           </div>
 
           <div className="text-center p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
@@ -158,11 +218,11 @@ function DatabaseOverviewCard() {
 }
 
 function TablesManagementCard() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredTables = useMemo(() => {
-    return sampleTables.filter(table =>
-      table.name.toLowerCase().includes(searchTerm.toLowerCase())
+    return sampleTables.filter((table) =>
+      table.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [searchTerm]);
 
@@ -173,7 +233,9 @@ function TablesManagementCard() {
           <Table2 className="h-5 w-5" />
           Gestión de Tablas
         </CardTitle>
-        <CardDescription>Administrar tablas de la base de datos</CardDescription>
+        <CardDescription>
+          Administrar tablas de la base de datos
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -211,12 +273,19 @@ function TablesManagementCard() {
                     <TableCell className="font-medium">{table.name}</TableCell>
                     <TableCell>{table.rows.toLocaleString()}</TableCell>
                     <TableCell>{table.size}</TableCell>
-                    <TableCell className="font-mono text-sm">{table.lastModified}</TableCell>
+                    <TableCell className="font-mono text-sm">
+                      {table.lastModified}
+                    </TableCell>
                     <TableCell>
-                      <Badge variant={
-                        table.status === 'active' ? 'default' :
-                        table.status === 'inactive' ? 'secondary' : 'destructive'
-                      }>
+                      <Badge
+                        variant={
+                          table.status === "active"
+                            ? "default"
+                            : table.status === "inactive"
+                              ? "secondary"
+                              : "destructive"
+                        }
+                      >
                         {table.status}
                       </Badge>
                     </TableCell>
@@ -242,7 +311,7 @@ function TablesManagementCard() {
 }
 
 function QueryExecutorCard() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isExecuting, setIsExecuting] = useState(false);
 
   const handleExecuteQuery = () => {
@@ -252,7 +321,7 @@ function QueryExecutorCard() {
     // Simulate query execution
     setTimeout(() => {
       setIsExecuting(false);
-      console.log('Query executed:', query);
+      console.log("Query executed:", query);
     }, 2000);
   };
 
@@ -263,7 +332,9 @@ function QueryExecutorCard() {
           <Play className="h-5 w-5" />
           Ejecutor de Queries
         </CardTitle>
-        <CardDescription>Ejecutar queries SQL directamente en la base de datos</CardDescription>
+        <CardDescription>
+          Ejecutar queries SQL directamente en la base de datos
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -273,8 +344,8 @@ function QueryExecutorCard() {
               ⚠️ Zona de Alto Riesgo
             </AlertTitle>
             <AlertDescription className="text-yellow-700 dark:text-yellow-300">
-              Las queries ejecutadas aquí pueden modificar datos permanentemente.
-              Asegúrate de tener backups antes de proceder.
+              Las queries ejecutadas aquí pueden modificar datos
+              permanentemente. Asegúrate de tener backups antes de proceder.
             </AlertDescription>
           </Alert>
 
@@ -325,7 +396,9 @@ function QueryHistoryCard() {
           <FileText className="h-5 w-5" />
           Historial de Queries
         </CardTitle>
-        <CardDescription>Historial de queries ejecutadas recientemente</CardDescription>
+        <CardDescription>
+          Historial de queries ejecutadas recientemente
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -333,17 +406,30 @@ function QueryHistoryCard() {
             <div key={queryResult.id} className="border rounded-lg p-4">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  {queryResult.status === 'success' && <CheckCircle className="h-4 w-4 text-green-600" />}
-                  {queryResult.status === 'error' && <AlertTriangle className="h-4 w-4 text-red-600" />}
-                  {queryResult.status === 'running' && <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />}
-                  <Badge variant={
-                    queryResult.status === 'success' ? 'default' :
-                    queryResult.status === 'error' ? 'destructive' : 'secondary'
-                  }>
+                  {queryResult.status === "success" && (
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                  )}
+                  {queryResult.status === "error" && (
+                    <AlertTriangle className="h-4 w-4 text-red-600" />
+                  )}
+                  {queryResult.status === "running" && (
+                    <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />
+                  )}
+                  <Badge
+                    variant={
+                      queryResult.status === "success"
+                        ? "default"
+                        : queryResult.status === "error"
+                          ? "destructive"
+                          : "secondary"
+                    }
+                  >
                     {queryResult.status}
                   </Badge>
                 </div>
-                <span className="text-sm text-muted-foreground">{queryResult.timestamp}</span>
+                <span className="text-sm text-muted-foreground">
+                  {queryResult.timestamp}
+                </span>
               </div>
 
               <div className="font-mono text-sm bg-muted p-2 rounded mb-2">
@@ -362,8 +448,6 @@ function QueryHistoryCard() {
   );
 }
 
-
-
 export function DatabaseToolsDashboard() {
   const { data: session } = useSession();
 
@@ -372,7 +456,7 @@ export function DatabaseToolsDashboard() {
       {/* Database Tools Header */}
       <RoleAwareHeader
         title="🗄️ DATABASE TOOLS - SUPREME DATABASE MANAGEMENT"
-        subtitle={`Herramientas avanzadas de base de datos - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Herramientas avanzadas de base de datos - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-blue-600 border-blue-600">
@@ -383,7 +467,6 @@ export function DatabaseToolsDashboard() {
           </div>
         }
       />
-
 
       {/* Database Overview */}
       <DatabaseOverviewCard />
@@ -406,11 +489,17 @@ export function DatabaseToolsDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
-              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+              <Button
+                asChild
+                variant="outline"
+                className="h-auto p-4 flex flex-col items-center gap-2"
+              >
                 <a href="/master/advanced-operations">
                   <Settings className="h-6 w-6 text-blue-600" />
                   <div>
-                    <div className="font-medium text-sm">Operaciones Avanzadas</div>
+                    <div className="font-medium text-sm">
+                      Operaciones Avanzadas
+                    </div>
                     <div className="text-xs text-muted-foreground mt-1">
                       Herramientas de mantenimiento
                     </div>
@@ -418,11 +507,17 @@ export function DatabaseToolsDashboard() {
                 </a>
               </Button>
 
-              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+              <Button
+                asChild
+                variant="outline"
+                className="h-auto p-4 flex flex-col items-center gap-2"
+              >
                 <a href="/master/advanced-operations">
                   <Shield className="h-6 w-6 text-green-600" />
                   <div>
-                    <div className="font-medium text-sm">Verificar Integridad</div>
+                    <div className="font-medium text-sm">
+                      Verificar Integridad
+                    </div>
                     <div className="text-xs text-muted-foreground mt-1">
                       Comprobar estado de tablas
                     </div>
@@ -430,7 +525,11 @@ export function DatabaseToolsDashboard() {
                 </a>
               </Button>
 
-              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+              <Button
+                asChild
+                variant="outline"
+                className="h-auto p-4 flex flex-col items-center gap-2"
+              >
                 <a href="/master/advanced-operations">
                   <Download className="h-6 w-6 text-purple-600" />
                   <div>
@@ -442,7 +541,11 @@ export function DatabaseToolsDashboard() {
                 </a>
               </Button>
 
-              <Button asChild variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
+              <Button
+                asChild
+                variant="outline"
+                className="h-auto p-4 flex flex-col items-center gap-2"
+              >
                 <a href="/master/advanced-operations">
                   <RefreshCw className="h-6 w-6 text-orange-600" />
                   <div>

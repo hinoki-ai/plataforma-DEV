@@ -19,6 +19,7 @@ This guide covers the deployment process for the Manitos Pintadas school managem
 Create the following environment files:
 
 #### `.env.local` (Development)
+
 ```env
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/manitos_dev"
@@ -47,6 +48,7 @@ NEXT_PUBLIC_API_URL="http://localhost:3000"
 ```
 
 #### `.env.production` (Production)
+
 ```env
 # Database
 DATABASE_URL="postgresql://username:password@host:5432/manitos_prod"
@@ -163,6 +165,7 @@ GOOGLE_CLIENT_SECRET=...
 #### 3. Database Connection
 
 For Vercel, use a cloud PostgreSQL service:
+
 - **Supabase**: Free tier available
 - **PlanetScale**: MySQL alternative
 - **Railway**: PostgreSQL hosting
@@ -216,7 +219,7 @@ CMD ["npm", "start"]
 #### 2. Create docker-compose.yml
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -597,6 +600,7 @@ curl -I https://your-domain.com
 ## Support
 
 For deployment support:
+
 - 📧 Email: deploy@manitospintadas.com
 - 📖 Documentation: https://docs.manitospintadas.com/deployment
 - 🐛 Issues: https://github.com/manitos-pintadas/dashboard/issues

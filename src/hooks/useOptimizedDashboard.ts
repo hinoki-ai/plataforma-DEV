@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { UserRole } from '@/lib/prisma-compat-types';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@/lib/prisma-compat-types";
 
 interface DashboardStats {
   users?: {
@@ -130,80 +130,83 @@ export function useOptimizedDashboard() {
   }, []);
 
   // Optimized fetch with caching and background refresh
-  const fetchDashboardData = useCallback(async (forceRefresh = false) => {
-    if (!session?.user?.role || !cacheKey) return;
+  const fetchDashboardData = useCallback(
+    async (forceRefresh = false) => {
+      if (!session?.user?.role || !cacheKey) return;
 
-    // Check cache first (unless force refresh)
-    if (!forceRefresh) {
-      const cachedData = getCachedData(cacheKey);
-      if (cachedData) {
-        setStats(cachedData);
-        setLoading(false);
-        return;
-      }
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      let endpoint = '';
-
-      switch (session.user.role) {
-        case 'MASTER':
-          endpoint = '/api/master/dashboard';
-          break;
-        case 'ADMIN':
-          endpoint = '/api/admin/dashboard';
-          break;
-        case 'PROFESOR':
-          endpoint = '/api/profesor/dashboard';
-          break;
-        case 'PARENT':
-          endpoint = '/api/parent/dashboard/overview';
-          break;
-        default:
-          setStats({});
+      // Check cache first (unless force refresh)
+      if (!forceRefresh) {
+        const cachedData = getCachedData(cacheKey);
+        if (cachedData) {
+          setStats(cachedData);
           setLoading(false);
           return;
+        }
       }
 
-      // Add cache-busting parameter for force refresh
-      const url = forceRefresh
-        ? `${endpoint}?t=${Date.now()}`
-        : endpoint;
+      try {
+        setLoading(true);
+        setError(null);
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Use cache for non-force-refresh requests
-        cache: forceRefresh ? 'no-cache' : 'default',
-      });
+        let endpoint = "";
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        switch (session.user.role) {
+          case "MASTER":
+            endpoint = "/api/master/dashboard";
+            break;
+          case "ADMIN":
+            endpoint = "/api/admin/dashboard";
+            break;
+          case "PROFESOR":
+            endpoint = "/api/profesor/dashboard";
+            break;
+          case "PARENT":
+            endpoint = "/api/parent/dashboard/overview";
+            break;
+          default:
+            setStats({});
+            setLoading(false);
+            return;
+        }
+
+        // Add cache-busting parameter for force refresh
+        const url = forceRefresh ? `${endpoint}?t=${Date.now()}` : endpoint;
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // Use cache for non-force-refresh requests
+          cache: forceRefresh ? "no-cache" : "default",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Cache the data
+        setCachedData(cacheKey, data);
+        setStats(data);
+        setLastFetchTime(Date.now());
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch dashboard data",
+        );
+
+        // Try to use cached data as fallback
+        const cachedData = getCachedData(cacheKey);
+        if (cachedData) {
+          setStats(cachedData);
+        }
+      } finally {
+        setLoading(false);
       }
-
-      const data = await response.json();
-
-      // Cache the data
-      setCachedData(cacheKey, data);
-      setStats(data);
-      setLastFetchTime(Date.now());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch dashboard data');
-
-      // Try to use cached data as fallback
-      const cachedData = getCachedData(cacheKey);
-      if (cachedData) {
-        setStats(cachedData);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [session?.user?.role, cacheKey, getCachedData, setCachedData]);
+    },
+    [session?.user?.role, cacheKey, getCachedData, setCachedData],
+  );
 
   // Background refresh for stale data
   useEffect(() => {
@@ -226,11 +229,14 @@ export function useOptimizedDashboard() {
     fetchDashboardData();
 
     // Set up periodic refresh (every 10 minutes)
-    const interval = setInterval(() => {
-      if (Date.now() - lastFetchTime > 10 * 60 * 1000) {
-        fetchDashboardData(true);
-      }
-    }, 10 * 60 * 1000);
+    const interval = setInterval(
+      () => {
+        if (Date.now() - lastFetchTime > 10 * 60 * 1000) {
+          fetchDashboardData(true);
+        }
+      },
+      10 * 60 * 1000,
+    );
 
     return () => clearInterval(interval);
   }, [fetchDashboardData, lastFetchTime]);
@@ -245,7 +251,10 @@ export function useOptimizedDashboard() {
     return {
       ...stats,
       // Add computed fields if needed
-      isStale: cacheKey ? Date.now() - (dashboardCache.get(cacheKey)?.timestamp || 0) > CACHE_TTL : false,
+      isStale: cacheKey
+        ? Date.now() - (dashboardCache.get(cacheKey)?.timestamp || 0) >
+          CACHE_TTL
+        : false,
       lastUpdated: lastFetchTime,
     };
   }, [stats, cacheKey, lastFetchTime]);

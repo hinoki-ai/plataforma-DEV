@@ -3,7 +3,12 @@
  * Created as part of Stage 1.2: Service Layer Standardization
  */
 
-import { User, PlanningDocument, Meeting, TeamMember } from '@/lib/prisma-compat-types';
+import {
+  User,
+  PlanningDocument,
+  Meeting,
+  TeamMember,
+} from "@/lib/prisma-compat-types";
 
 // Base service response types
 export interface ServiceResponse<T = any> {
@@ -23,26 +28,26 @@ export interface QueryResponse<T = any> extends ServiceResponse<T> {
 // Planning document responses
 export type PlanningDocumentResponse = ServiceResponse<
   PlanningDocument & {
-    author: Pick<User, 'id' | 'name' | 'email'>;
+    author: Pick<User, "id" | "name" | "email">;
   }
 >;
 
 export type PlanningDocumentsResponse = QueryResponse<
   (PlanningDocument & {
-    author: Pick<User, 'id' | 'name' | 'email'>;
+    author: Pick<User, "id" | "name" | "email">;
   })[]
 >;
 
 // Meeting responses
 export type MeetingResponse = ServiceResponse<
   Meeting & {
-    teacher?: Pick<User, 'id' | 'name' | 'email'>;
+    teacher?: Pick<User, "id" | "name" | "email">;
   }
 >;
 
 export type MeetingsResponse = ServiceResponse<
   (Meeting & {
-    teacher?: Pick<User, 'id' | 'name' | 'email'>;
+    teacher?: Pick<User, "id" | "name" | "email">;
   })[]
 >;
 

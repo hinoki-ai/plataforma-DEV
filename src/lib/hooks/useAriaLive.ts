@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
 /**
  * Custom hook for announcing content changes to screen readers
@@ -10,27 +10,27 @@ export function useAriaLive() {
   const announce = useCallback(
     (
       message: string,
-      type: 'polite' | 'assertive' | 'notification' = 'polite'
+      type: "polite" | "assertive" | "notification" = "polite",
     ) => {
-      if (typeof window === 'undefined') return;
+      if (typeof window === "undefined") return;
 
       let region: HTMLElement | null = null;
 
       switch (type) {
-        case 'assertive':
-          region = document.getElementById('alerts');
+        case "assertive":
+          region = document.getElementById("alerts");
           break;
-        case 'notification':
-          region = document.getElementById('notifications');
+        case "notification":
+          region = document.getElementById("notifications");
           break;
         default:
-          region = document.getElementById('announcements');
+          region = document.getElementById("announcements");
       }
 
       if (!region) return;
 
       // Clear previous content
-      region.textContent = '';
+      region.textContent = "";
 
       // Use setTimeout to ensure screen readers pick up the change
       setTimeout(() => {
@@ -39,10 +39,10 @@ export function useAriaLive() {
 
       // Clear after announcement
       setTimeout(() => {
-        region!.textContent = '';
+        region!.textContent = "";
       }, 1000);
     },
-    []
+    [],
   );
 
   return { announce };
@@ -56,19 +56,19 @@ export function announceFormSubmission(formName: string, success: boolean) {
     ? `${formName} guardado exitosamente`
     : `Error al guardar ${formName}`;
 
-  const type = success ? 'polite' : 'assertive';
+  const type = success ? "polite" : "assertive";
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     const region = document.getElementById(
-      success ? 'announcements' : 'alerts'
+      success ? "announcements" : "alerts",
     );
     if (region) {
-      region.textContent = '';
+      region.textContent = "";
       setTimeout(() => {
         region.textContent = message;
       }, 100);
       setTimeout(() => {
-        region.textContent = '';
+        region.textContent = "";
       }, 2000);
     }
   }
@@ -80,15 +80,15 @@ export function announceFormSubmission(formName: string, success: boolean) {
 export function announcePageChange(pageTitle: string) {
   const message = `Navegado a: ${pageTitle}`;
 
-  if (typeof window !== 'undefined') {
-    const region = document.getElementById('announcements');
+  if (typeof window !== "undefined") {
+    const region = document.getElementById("announcements");
     if (region) {
-      region.textContent = '';
+      region.textContent = "";
       setTimeout(() => {
         region.textContent = message;
       }, 100);
       setTimeout(() => {
-        region.textContent = '';
+        region.textContent = "";
       }, 1000);
     }
   }
@@ -100,15 +100,15 @@ export function announcePageChange(pageTitle: string) {
 export function announceDynamicUpdate(contentType: string, action: string) {
   const message = `${contentType} ${action}`;
 
-  if (typeof window !== 'undefined') {
-    const region = document.getElementById('notifications');
+  if (typeof window !== "undefined") {
+    const region = document.getElementById("notifications");
     if (region) {
-      region.textContent = '';
+      region.textContent = "";
       setTimeout(() => {
         region.textContent = message;
       }, 100);
       setTimeout(() => {
-        region.textContent = '';
+        region.textContent = "";
       }, 1500);
     }
   }

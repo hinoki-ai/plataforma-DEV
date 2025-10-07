@@ -5,14 +5,14 @@ export interface PMEGoal {
   description: string;
   category: string;
   status:
-    | 'PENDING'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'IN_PROGRESS'
-    | 'COMPLETED'
-    | 'PENDING_REVIEW'
-    | 'NEEDS_REVISION';
-  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    | "PENDING"
+    | "APPROVED"
+    | "REJECTED"
+    | "IN_PROGRESS"
+    | "COMPLETED"
+    | "PENDING_REVIEW"
+    | "NEEDS_REVISION";
+  priority: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   level?: string;
   startDate: Date;
   endDate?: Date;

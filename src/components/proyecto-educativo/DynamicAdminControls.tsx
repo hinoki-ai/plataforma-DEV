@@ -1,20 +1,20 @@
 // ⚡ Performance: Dynamic admin controls for PPR
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Edit, Trash2 } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Edit, Trash2 } from "lucide-react";
 
 // i18n
-import { useLanguage } from '@/components/language/LanguageContext';
+import { useLanguage } from "@/components/language/LanguageContext";
 
 type VideoCapsule = {
   id: string;
@@ -35,7 +35,7 @@ export function DynamicAdminControls({
 }: DynamicAdminControlsProps) {
   const { data: session } = useSession();
   const { t } = useLanguage();
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isAdmin = session?.user?.role === "ADMIN";
 
   // Edit modal state
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -51,10 +51,10 @@ export function DynamicAdminControls({
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const response = await fetch('/api/proyecto-educativo/video-capsule', {
-        method: 'PUT',
+      const response = await fetch("/api/proyecto-educativo/video-capsule", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(editingCapsule),
       });
@@ -65,30 +65,30 @@ export function DynamicAdminControls({
         setEditModalOpen(false);
       }
     } catch (error) {
-      console.error('Error saving video capsule:', error);
+      console.error("Error saving video capsule:", error);
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleDelete = async () => {
-    if (confirm(t('video.delete.confirm', 'common'))) {
+    if (confirm(t("video.delete.confirm", "common"))) {
       try {
-        const response = await fetch('/api/proyecto-educativo/video-capsule', {
-          method: 'DELETE',
+        const response = await fetch("/api/proyecto-educativo/video-capsule", {
+          method: "DELETE",
         });
 
         if (response.ok) {
           onUpdate({
-            id: 'default-capsule',
-            title: 'Cápsula de Video Educativo',
-            url: '',
-            description: 'Video sobre nuestro enfoque educativo',
+            id: "default-capsule",
+            title: "Cápsula de Video Educativo",
+            url: "",
+            description: "Video sobre nuestro enfoque educativo",
             isActive: false,
           });
         }
       } catch (error) {
-        console.error('Error deleting video capsule:', error);
+        console.error("Error deleting video capsule:", error);
       }
     }
   };
@@ -108,7 +108,7 @@ export function DynamicAdminControls({
           className="text-white border-white/20 hover:bg-white/10"
         >
           <Edit className="w-4 h-4 mr-2" />
-          {t('video.edit', 'common')}
+          {t("video.edit", "common")}
         </Button>
         <Button
           variant="outline"
@@ -117,7 +117,7 @@ export function DynamicAdminControls({
           className="text-red-400 border-red-400/20 hover:bg-red-400/10"
         >
           <Trash2 className="w-4 h-4 mr-2" />
-          {t('video.delete', 'common')}
+          {t("video.delete", "common")}
         </Button>
       </div>
 
@@ -125,57 +125,63 @@ export function DynamicAdminControls({
       <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('video.edit.title', 'common')}</DialogTitle>
+            <DialogTitle>{t("video.edit.title", "common")}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <label className="text-sm font-medium">{t('video.title.label', 'common')}</label>
+              <label className="text-sm font-medium">
+                {t("video.title.label", "common")}
+              </label>
               <Input
                 value={editingCapsule.title}
-                onChange={e =>
+                onChange={(e) =>
                   setEditingCapsule({
                     ...editingCapsule,
                     title: e.target.value,
                   })
                 }
                 className="col-span-3"
-                placeholder={t('video.title.placeholder', 'common')}
+                placeholder={t("video.title.placeholder", "common")}
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <label className="text-sm font-medium">{t('video.url.label', 'common')}</label>
+              <label className="text-sm font-medium">
+                {t("video.url.label", "common")}
+              </label>
               <Input
                 value={editingCapsule.url}
-                onChange={e =>
+                onChange={(e) =>
                   setEditingCapsule({ ...editingCapsule, url: e.target.value })
                 }
                 className="col-span-3"
-                placeholder={t('video.url.placeholder', 'common')}
+                placeholder={t("video.url.placeholder", "common")}
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <label className="text-sm font-medium">{t('video.description.label', 'common')}</label>
+              <label className="text-sm font-medium">
+                {t("video.description.label", "common")}
+              </label>
               <Input
-                value={editingCapsule.description || ''}
-                onChange={e =>
+                value={editingCapsule.description || ""}
+                onChange={(e) =>
                   setEditingCapsule({
                     ...editingCapsule,
                     description: e.target.value,
                   })
                 }
                 className="col-span-3"
-                placeholder={t('video.description.placeholder', 'common')}
+                placeholder={t("video.description.placeholder", "common")}
               />
             </div>
             <div className="flex items-center gap-4">
               <label className="text-sm font-medium" htmlFor="video-active">
-                {t('video.active.label', 'common')}
+                {t("video.active.label", "common")}
               </label>
               <input
                 id="video-active"
                 type="checkbox"
                 checked={editingCapsule.isActive}
-                onChange={e =>
+                onChange={(e) =>
                   setEditingCapsule({
                     ...editingCapsule,
                     isActive: e.target.checked,
@@ -186,10 +192,12 @@ export function DynamicAdminControls({
             </div>
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setEditModalOpen(false)}>
-                {t('common.cancel', 'common')}
+                {t("common.cancel", "common")}
               </Button>
               <Button onClick={handleSave} disabled={isSaving}>
-                {isSaving ? t('video.saving', 'common') : t('video.save', 'common')}
+                {isSaving
+                  ? t("video.saving", "common")
+                  : t("video.save", "common")}
               </Button>
             </div>
           </div>

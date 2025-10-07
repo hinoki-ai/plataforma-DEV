@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { DayPicker } from 'react-day-picker';
+import { useState, useEffect, useMemo } from "react";
+import { DayPicker } from "react-day-picker";
 import {
   format,
   isToday,
@@ -12,14 +12,14 @@ import {
   getDay,
   addMonths,
   subMonths,
-} from 'date-fns';
-import { es } from 'date-fns/locale';
+} from "date-fns";
+import { es } from "date-fns/locale";
 import {
   motion,
   AnimatePresence,
   useSpring,
   useMotionValue,
-} from 'motion/react';
+} from "motion/react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -30,34 +30,34 @@ import {
   MapPin,
   Users,
   TrendingUp,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   chileanCalendarEvents,
   EventCategory,
   CalendarEvent,
-} from '@/data/calendario/chilean-calendar-2025';
-import { downloadICalendar } from '@/lib/utils/calendar-export';
+} from "@/data/calendario/chilean-calendar-2025";
+import { downloadICalendar } from "@/lib/utils/calendar-export";
 
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
+    new Date(),
   );
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [selectedCategories, setSelectedCategories] = useState<EventCategory[]>(
-    ['academic', 'holiday', 'special', 'parent']
+    ["academic", "holiday", "special", "parent"],
   );
-  const [announceText, setAnnounceText] = useState<string>('');
+  const [announceText, setAnnounceText] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<'month' | 'week' | 'agenda'>(
-    'month'
+  const [viewMode, setViewMode] = useState<"month" | "week" | "agenda">(
+    "month",
   );
   const [eventDensity, setEventDensity] = useState<
-    'compact' | 'comfortable' | 'spacious'
-  >('comfortable');
+    "compact" | "comfortable" | "spacious"
+  >("comfortable");
   const [showConflicts, setShowConflicts] = useState<boolean>(true);
 
   // Animation variants
@@ -96,7 +96,7 @@ export default function CalendarView() {
 
   // Get events for the selected date
   const getEventsForDate = (date: Date): CalendarEvent[] => {
-    return chileanCalendarEvents.filter(event => {
+    return chileanCalendarEvents.filter((event) => {
       const eventDate = new Date(event.date);
       return (
         eventDate.getDate() === date.getDate() &&
@@ -109,7 +109,7 @@ export default function CalendarView() {
 
   // Get all events for current month
   const getEventsForMonth = (month: Date): CalendarEvent[] => {
-    return chileanCalendarEvents.filter(event => {
+    return chileanCalendarEvents.filter((event) => {
       const eventDate = new Date(event.date);
       return (
         isSameMonth(eventDate, month) &&
@@ -124,7 +124,7 @@ export default function CalendarView() {
     return dayEvents.filter((event, index) => {
       return dayEvents.some(
         (otherEvent, otherIndex) =>
-          index !== otherIndex && event.time === otherEvent.time
+          index !== otherIndex && event.time === otherEvent.time,
       );
     });
   };
@@ -142,8 +142,8 @@ export default function CalendarView() {
       const dateText = format(date, "d 'de' MMMM, yyyy", { locale: es });
       const eventText =
         events.length > 0
-          ? `${events.length} evento${events.length > 1 ? 's' : ''} programado${events.length > 1 ? 's' : ''}`
-          : 'Sin eventos programados';
+          ? `${events.length} evento${events.length > 1 ? "s" : ""} programado${events.length > 1 ? "s" : ""}`
+          : "Sin eventos programados";
       setAnnounceText(`Fecha seleccionada: ${dateText}. ${eventText}.`);
     }
   };
@@ -153,17 +153,17 @@ export default function CalendarView() {
     setIsLoading(true);
 
     // Simulate processing time for smooth animation
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 150));
 
     const newCategories = selectedCategories.includes(category)
-      ? selectedCategories.filter(c => c !== category)
+      ? selectedCategories.filter((c) => c !== category)
       : [...selectedCategories, category];
 
     setSelectedCategories(newCategories);
 
     const action = selectedCategories.includes(category)
-      ? 'desactivado'
-      : 'activado';
+      ? "desactivado"
+      : "activado";
     const categoryLabel = categorySystem[category].label;
     setAnnounceText(`Filtro ${categoryLabel} ${action}.`);
 
@@ -175,29 +175,29 @@ export default function CalendarView() {
     try {
       downloadICalendar(selectedCategories);
       setAnnounceText(
-        'Calendario exportado exitosamente. Archivo iCalendar descargado.'
+        "Calendario exportado exitosamente. Archivo iCalendar descargado.",
       );
     } catch (error) {
-      console.error('Error exporting calendar:', error);
+      console.error("Error exporting calendar:", error);
       setAnnounceText(
-        'Error al exportar el calendario. Por favor, intente nuevamente.'
+        "Error al exportar el calendario. Por favor, intente nuevamente.",
       );
     }
   };
 
   // Handle month navigation with smooth transitions
   const handlePreviousMonth = () => {
-    setCurrentMonth(prev => subMonths(prev, 1));
+    setCurrentMonth((prev) => subMonths(prev, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(prev => addMonths(prev, 1));
+    setCurrentMonth((prev) => addMonths(prev, 1));
   };
 
   // Generate RSVP tracking
   const handleRSVP = (
     eventId: string,
-    status: 'attending' | 'not-attending' | 'maybe'
+    status: "attending" | "not-attending" | "maybe",
   ) => {
     // This would integrate with a backend RSVP system
     setAnnounceText(`RSVP actualizado para el evento.`);
@@ -206,7 +206,7 @@ export default function CalendarView() {
   // Keyboard navigation for calendar
   const handleKeyDown = (e: React.KeyboardEvent, day: Date) => {
     const currentIndex = calendarDays.findIndex(
-      d => format(d, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
+      (d) => format(d, "yyyy-MM-dd") === format(day, "yyyy-MM-dd"),
     );
 
     let newIndex = currentIndex;
@@ -216,42 +216,42 @@ export default function CalendarView() {
     const isLastCol = currentIndex % 7 === 6;
 
     switch (e.key) {
-      case 'ArrowLeft':
+      case "ArrowLeft":
         e.preventDefault();
         newIndex = isFirstCol ? currentIndex + 6 : currentIndex - 1;
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         e.preventDefault();
         newIndex = isLastCol ? currentIndex - 6 : currentIndex + 1;
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
         newIndex = isFirstRow ? currentIndex + 35 : currentIndex - 7;
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
         newIndex = isLastRow ? currentIndex - 35 : currentIndex + 7;
         break;
-      case 'PageUp':
+      case "PageUp":
         e.preventDefault();
         setCurrentMonth(subMonths(currentMonth, 1));
-        setAnnounceText('Navegando al mes anterior');
+        setAnnounceText("Navegando al mes anterior");
         return;
-      case 'PageDown':
+      case "PageDown":
         e.preventDefault();
         setCurrentMonth(addMonths(currentMonth, 1));
-        setAnnounceText('Navegando al mes siguiente');
+        setAnnounceText("Navegando al mes siguiente");
         return;
-      case 'Home':
+      case "Home":
         e.preventDefault();
         handleDateSelect(startOfMonth(currentMonth));
         return;
-      case 'End':
+      case "End":
         e.preventDefault();
         handleDateSelect(endOfMonth(currentMonth));
         return;
-      case 'Enter':
-      case ' ':
+      case "Enter":
+      case " ":
         e.preventDefault();
         handleDateSelect(day);
         return;
@@ -266,7 +266,7 @@ export default function CalendarView() {
       // Focus the new day button
       setTimeout(() => {
         const dayButton = document.querySelector(
-          `[aria-label*="${format(newDay, 'd MMMM')}"]`
+          `[aria-label*="${format(newDay, "d MMMM")}"]`,
         );
         if (dayButton instanceof HTMLElement) {
           dayButton.focus();
@@ -318,58 +318,58 @@ export default function CalendarView() {
   // Enhanced category system with elite Chilean school colors
   const categorySystem = {
     academic: {
-      label: 'Académico',
-      color: 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300',
-      accent: 'bg-blue-500',
-      border: 'border-blue-200 dark:border-blue-800',
-      icon: '📚',
+      label: "Académico",
+      color: "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300",
+      accent: "bg-blue-500",
+      border: "border-blue-200 dark:border-blue-800",
+      icon: "📚",
     },
     holiday: {
-      label: 'Feriado',
-      color: 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300',
-      accent: 'bg-red-500',
-      border: 'border-red-200 dark:border-red-800',
-      icon: '🎉',
+      label: "Feriado",
+      color: "bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300",
+      accent: "bg-red-500",
+      border: "border-red-200 dark:border-red-800",
+      icon: "🎉",
     },
     special: {
-      label: 'Evento Especial',
+      label: "Evento Especial",
       color:
-        'bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300',
-      accent: 'bg-purple-500',
-      border: 'border-purple-200 dark:border-purple-800',
-      icon: '✨',
+        "bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300",
+      accent: "bg-purple-500",
+      border: "border-purple-200 dark:border-purple-800",
+      icon: "✨",
     },
     parent: {
-      label: 'Actividad Padres',
+      label: "Actividad Padres",
       color:
-        'bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300',
-      accent: 'bg-green-500',
-      border: 'border-green-200 dark:border-green-800',
-      icon: '👨‍👩‍👧‍👦',
+        "bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300",
+      accent: "bg-green-500",
+      border: "border-green-200 dark:border-green-800",
+      icon: "👨‍👩‍👧‍👦",
     },
   };
 
   const categoryLabels: Record<EventCategory, string> = {
-    academic: 'Académico',
-    holiday: 'Feriado',
-    special: 'Evento Especial',
-    parent: 'Actividad Padres',
+    academic: "Académico",
+    holiday: "Feriado",
+    special: "Evento Especial",
+    parent: "Actividad Padres",
   };
 
   const categoryColors: Record<EventCategory, string> = {
-    academic: 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300',
-    holiday: 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300',
+    academic: "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300",
+    holiday: "bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300",
     special:
-      'bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300',
+      "bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300",
     parent:
-      'bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300',
+      "bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300",
   };
 
   // Get modifiers for dates with events
   const modifiers = {
     hasEvents: chileanCalendarEvents
-      .filter(event => selectedCategories.includes(event.category))
-      .map(event => new Date(event.date)),
+      .filter((event) => selectedCategories.includes(event.category))
+      .map((event) => new Date(event.date)),
   };
 
   // Supreme grid calendar component with mobile-first design and accessibility
@@ -381,15 +381,15 @@ export default function CalendarView() {
 
     // Detect mobile view - hydration-safe
     useEffect(() => {
-      if (typeof window === 'undefined') return;
+      if (typeof window === "undefined") return;
 
       const checkMobile = () => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === "undefined") return;
         setIsMobileView(window.innerWidth < 768);
       };
       checkMobile();
-      window.addEventListener('resize', checkMobile);
-      return () => window.removeEventListener('resize', checkMobile);
+      window.addEventListener("resize", checkMobile);
+      return () => window.removeEventListener("resize", checkMobile);
     }, []);
 
     const monthStart = startOfMonth(currentMonth);
@@ -406,18 +406,18 @@ export default function CalendarView() {
 
     // Touch gesture handlers for mobile swipe navigation - hydration-safe
     const onTouchStart = (e: React.TouchEvent) => {
-      if (typeof window === 'undefined') return;
+      if (typeof window === "undefined") return;
       setTouchEnd(null);
       setTouchStart(e.targetTouches[0].clientX);
     };
 
     const onTouchMove = (e: React.TouchEvent) => {
-      if (typeof window === 'undefined') return;
+      if (typeof window === "undefined") return;
       setTouchEnd(e.targetTouches[0].clientX);
     };
 
     const onTouchEnd = () => {
-      if (typeof window === 'undefined' || !touchStart || !touchEnd) return;
+      if (typeof window === "undefined" || !touchStart || !touchEnd) return;
 
       const distance = touchStart - touchEnd;
       const isLeftSwipe = distance > 50;
@@ -425,17 +425,17 @@ export default function CalendarView() {
 
       if (isLeftSwipe) {
         setCurrentMonth(addMonths(currentMonth, 1));
-        setAnnounceText('Navegando al mes siguiente');
+        setAnnounceText("Navegando al mes siguiente");
       } else if (isRightSwipe) {
         setCurrentMonth(subMonths(currentMonth, 1));
-        setAnnounceText('Navegando al mes anterior');
+        setAnnounceText("Navegando al mes anterior");
       }
     };
 
     // Keyboard navigation for calendar
     const handleGridKeyDown = (e: React.KeyboardEvent, day: Date) => {
       const currentIndex = calendarDays.findIndex(
-        d => format(d, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
+        (d) => format(d, "yyyy-MM-dd") === format(day, "yyyy-MM-dd"),
       );
 
       let newIndex = currentIndex;
@@ -445,46 +445,46 @@ export default function CalendarView() {
       const isLastCol = currentIndex % 7 === 6;
 
       switch (e.key) {
-        case 'ArrowLeft':
+        case "ArrowLeft":
           e.preventDefault();
           newIndex = isFirstCol ? currentIndex + 6 : currentIndex - 1;
           break;
-        case 'ArrowRight':
+        case "ArrowRight":
           e.preventDefault();
           newIndex = isLastCol ? currentIndex - 6 : currentIndex + 1;
           break;
-        case 'ArrowUp':
+        case "ArrowUp":
           e.preventDefault();
           newIndex = isFirstRow ? currentIndex + 35 : currentIndex - 7;
           break;
-        case 'ArrowDown':
+        case "ArrowDown":
           e.preventDefault();
           newIndex = isLastRow ? currentIndex - 35 : currentIndex + 7;
           break;
-        case 'PageUp':
+        case "PageUp":
           e.preventDefault();
           setCurrentMonth(subMonths(currentMonth, 1));
-          setAnnounceText('Navegando al mes anterior');
+          setAnnounceText("Navegando al mes anterior");
           return;
-        case 'PageDown':
+        case "PageDown":
           e.preventDefault();
           setCurrentMonth(addMonths(currentMonth, 1));
-          setAnnounceText('Navegando al mes siguiente');
+          setAnnounceText("Navegando al mes siguiente");
           return;
-        case 'Home':
+        case "Home":
           e.preventDefault();
           handleDateSelect(startOfMonth(currentMonth));
           return;
-        case 'End':
+        case "End":
           e.preventDefault();
           handleDateSelect(endOfMonth(currentMonth));
           return;
-        case 'Enter':
-        case ' ':
+        case "Enter":
+        case " ":
           e.preventDefault();
           handleDateSelect(day);
           return;
-        case 'Escape':
+        case "Escape":
           setFocusedDay(null);
           return;
         default:
@@ -499,7 +499,7 @@ export default function CalendarView() {
         // Focus the new day button
         setTimeout(() => {
           const dayButton = document.querySelector(
-            `[data-date="${format(newDay, 'yyyy-MM-dd')}"]`
+            `[data-date="${format(newDay, "yyyy-MM-dd")}"]`,
           );
           if (dayButton instanceof HTMLElement) {
             dayButton.focus();
@@ -516,8 +516,8 @@ export default function CalendarView() {
         onTouchEnd={onTouchEnd}
         aria-label="Calendario escolar interactivo"
         tabIndex={0}
-        onKeyDown={e => {
-          if (e.key === 'Escape') {
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
             setFocusedDay(null);
           }
         }}
@@ -526,7 +526,7 @@ export default function CalendarView() {
         <div
           className={cn(
             "Bg-gradient-to-r Px-4 Sm:px-6 Py-3 Sm:py-4 Relative Overflow-hidden Transition-all Duration-700 Ease-in-out",
-            getMonthGradient(currentMonth)
+            getMonthGradient(currentMonth),
           )}
         >
           {/* Subtle overlay pattern for depth */}
@@ -546,7 +546,10 @@ export default function CalendarView() {
                 aria-live="polite"
                 aria-atomic="true"
               >
-                {format(currentMonth, 'MMMM yyyy', { locale: es }).replace(/\b\w/g, l => l.toUpperCase())}
+                {format(currentMonth, "MMMM yyyy", { locale: es }).replace(
+                  /\b\w/g,
+                  (l) => l.toUpperCase(),
+                )}
               </h3>
               <button
                 onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
@@ -577,13 +580,13 @@ export default function CalendarView() {
         {/* Weekday Headers - Responsive with ARIA */}
         <div className="grid grid-cols-7 bg-muted/50">
           {[
-            'Domingo',
-            'Lunes',
-            'Martes',
-            'Miércoles',
-            'Jueves',
-            'Viernes',
-            'Sábado',
+            "Domingo",
+            "Lunes",
+            "Martes",
+            "Miércoles",
+            "Jueves",
+            "Viernes",
+            "Sábado",
           ].map((day, index) => (
             <div
               key={day}
@@ -596,111 +599,107 @@ export default function CalendarView() {
         </div>
 
         {/* Calendar Grid - Responsive heights with keyboard navigation */}
-        <div 
-          className="grid grid-cols-7" 
-          aria-label="Días del calendario"
-        >
+        <div className="grid grid-cols-7" aria-label="Días del calendario">
           {calendarDays.map((day, index) => {
             const dayEvents = getEventsForDate(day);
             const isCurrentMonth = isSameMonth(day, currentMonth);
             const isCurrentDay = isToday(day);
             const isSelected =
               selectedDate &&
-              format(day, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
-            const dayId = `calendar-day-${format(day, 'yyyy-MM-dd')}`;
+              format(day, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
+            const dayId = `calendar-day-${format(day, "yyyy-MM-dd")}`;
 
             return (
               <motion.button
                 key={index}
                 className={cn(
-                  'relative border-r border-b border-border w-full h-full flex flex-col items-start text-left rounded-lg transition-all duration-200',
-                  'min-h-[60px] sm:min-h-[80px] p-1 sm:p-2',
-                  !isCurrentMonth && 'bg-muted/30',
-                  index % 7 === 6 && 'border-r-0',
-                  index >= 35 && 'border-b-0',
-                  isCurrentDay && 'bg-primary/20 ring-2 ring-primary',
+                  "relative border-r border-b border-border w-full h-full flex flex-col items-start text-left rounded-lg transition-all duration-200",
+                  "min-h-[60px] sm:min-h-[80px] p-1 sm:p-2",
+                  !isCurrentMonth && "bg-muted/30",
+                  index % 7 === 6 && "border-r-0",
+                  index >= 35 && "border-b-0",
+                  isCurrentDay && "bg-primary/20 ring-2 ring-primary",
                   isSelected &&
-                    'bg-blue-50 dark:bg-blue-950/30 ring-2 ring-blue-500',
-                  !isSelected && !isCurrentDay && 'hover:bg-muted/50',
-                  'touch-manipulation focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1'
+                    "bg-blue-50 dark:bg-blue-950/30 ring-2 ring-blue-500",
+                  !isSelected && !isCurrentDay && "hover:bg-muted/50",
+                  "touch-manipulation focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1",
                 )}
                 whileHover={{ scale: isMobileView ? 1 : 1.02 }}
                 transition={{ duration: 0.2 }}
-
                 onClick={() => handleDateSelect(day)}
-                onKeyDown={e => handleGridKeyDown(e, day)}
-                aria-selected={isSelected ? 'true' : 'false'}
+                onKeyDown={(e) => handleGridKeyDown(e, day)}
+                aria-selected={isSelected ? "true" : "false"}
                 aria-label={
                   `${format(day, "EEEE, d 'de' MMMM 'de' yyyy", { locale: es })} - ${
                     dayEvents.length
-                  } evento${dayEvents.length !== 1 ? 's' : ''}` +
-                  (isCurrentDay ? ' - Hoy' : '') +
-                  (isSelected ? ' - Seleccionado' : '') +
-                  (!isCurrentMonth ? ' - Fuera del mes actual' : '')
+                  } evento${dayEvents.length !== 1 ? "s" : ""}` +
+                  (isCurrentDay ? " - Hoy" : "") +
+                  (isSelected ? " - Seleccionado" : "") +
+                  (!isCurrentMonth ? " - Fuera del mes actual" : "")
                 }
-                data-date={format(day, 'yyyy-MM-dd')}
+                data-date={format(day, "yyyy-MM-dd")}
                 tabIndex={0}
               >
-                  <div
-                    className={cn(
-                      'text-xs sm:text-sm font-semibold',
-                      isCurrentDay && 'text-primary',
-                      !isCurrentMonth && 'text-muted-foreground/50'
-                    )}
-                    aria-hidden="true"
-                  >
-                    {format(day, 'd')}
-                  </div>
+                <div
+                  className={cn(
+                    "text-xs sm:text-sm font-semibold",
+                    isCurrentDay && "text-primary",
+                    !isCurrentMonth && "text-muted-foreground/50",
+                  )}
+                  aria-hidden="true"
+                >
+                  {format(day, "d")}
+                </div>
 
-                  {/* Mobile-optimized event indicators */}
-                  {dayEvents.length > 0 && (
-                    <div className="flex flex-col gap-0.5 sm:gap-1 mt-0.5 sm:mt-1 w-full">
-                      {dayEvents
-                        .slice(0, isMobileView ? 1 : 3)
-                        .map((event, idx) => (
-                          <div
-                            key={event.id}
-                            className={cn(
-                              'text-[10px] sm:text-xs px-0.5 sm:px-1 py-0.5 rounded truncate',
-                              categorySystem[event.category].color,
-                              categorySystem[event.category].border,
-                              'border',
-                              isMobileView && 'hidden'
-                            )}
-                            title={event.title}
-                            aria-hidden="true"
-                          >
-                            {!isMobileView && (
-                              <span className="mr-1" aria-hidden="true">
-                                {categorySystem[event.category].icon}
-                              </span>
-                            )}
-                            {event.title}
-                          </div>
-                        ))}
-                      {/* Mobile event count indicator */}
-                      {isMobileView && (
+                {/* Mobile-optimized event indicators */}
+                {dayEvents.length > 0 && (
+                  <div className="flex flex-col gap-0.5 sm:gap-1 mt-0.5 sm:mt-1 w-full">
+                    {dayEvents
+                      .slice(0, isMobileView ? 1 : 3)
+                      .map((event, idx) => (
                         <div
+                          key={event.id}
                           className={cn(
-                            'text-[10px] w-4 h-4 rounded-full flex items-center justify-center',
-                            categorySystem[dayEvents[0].category].accent,
-                            'text-white font-bold'
+                            "text-[10px] sm:text-xs px-0.5 sm:px-1 py-0.5 rounded truncate",
+                            categorySystem[event.category].color,
+                            categorySystem[event.category].border,
+                            "border",
+                            isMobileView && "hidden",
                           )}
-                          aria-label={`${dayEvents.length} evento${dayEvents.length !== 1 ? 's' : ''}`}
-                        >
-                          {dayEvents.length}
-                        </div>
-                      )}
-                      {!isMobileView && dayEvents.length > 3 && (
-                        <div
-                          className="text-xs text-muted-foreground text-center"
+                          title={event.title}
                           aria-hidden="true"
                         >
-                          +{dayEvents.length - 3} más
+                          {!isMobileView && (
+                            <span className="mr-1" aria-hidden="true">
+                              {categorySystem[event.category].icon}
+                            </span>
+                          )}
+                          {event.title}
                         </div>
-                      )}
-                    </div>
-                  )}
+                      ))}
+                    {/* Mobile event count indicator */}
+                    {isMobileView && (
+                      <div
+                        className={cn(
+                          "text-[10px] w-4 h-4 rounded-full flex items-center justify-center",
+                          categorySystem[dayEvents[0].category].accent,
+                          "text-white font-bold",
+                        )}
+                        aria-label={`${dayEvents.length} evento${dayEvents.length !== 1 ? "s" : ""}`}
+                      >
+                        {dayEvents.length}
+                      </div>
+                    )}
+                    {!isMobileView && dayEvents.length > 3 && (
+                      <div
+                        className="text-xs text-muted-foreground text-center"
+                        aria-hidden="true"
+                      >
+                        +{dayEvents.length - 3} más
+                      </div>
+                    )}
+                  </div>
+                )}
               </motion.button>
             );
           })}
@@ -730,7 +729,7 @@ export default function CalendarView() {
       {/* Enhanced Header with Stats */}
       <motion.div
         variants={cardVariants}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-0">
           <CardContent className="p-6">
@@ -792,7 +791,7 @@ export default function CalendarView() {
       {/* Filter Controls */}
       <motion.div
         variants={cardVariants}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <Card>
           <CardHeader className="pb-4">
@@ -827,39 +826,39 @@ export default function CalendarView() {
                     initial="inactive"
                     animate={
                       selectedCategories.includes(category)
-                        ? 'active'
-                        : 'inactive'
+                        ? "active"
+                        : "inactive"
                     }
                     whileHover="hover"
                     whileTap={{ scale: 0.95 }}
-                    style={{ display: 'inline-block' }}
+                    style={{ display: "inline-block" }}
                     transition={{
                       delay: index * 0.05,
                       duration: 0.2,
-                      ease: 'easeOut',
+                      ease: "easeOut",
                     }}
                   >
                     <Badge
                       variant={
                         selectedCategories.includes(category)
-                          ? 'default'
-                          : 'outline'
+                          ? "default"
+                          : "outline"
                       }
                       className={cn(
-                        'cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                        'min-h-[28px] px-3 py-1.5 select-none flex items-center space-x-1.5',
+                        "cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                        "min-h-[28px] px-3 py-1.5 select-none flex items-center space-x-1.5",
                         selectedCategories.includes(category) &&
                           categorySystem[category].color,
-                        isLoading && 'pointer-events-none opacity-75',
-                        'transition-all duration-200 hover:shadow-md'
+                        isLoading && "pointer-events-none opacity-75",
+                        "transition-all duration-200 hover:shadow-md",
                       )}
                       onClick={() =>
                         !isLoading && handleCategoryToggle(category)
                       }
-                      onKeyDown={e => {
+                      onKeyDown={(e) => {
                         if (
                           !isLoading &&
-                          (e.key === 'Enter' || e.key === ' ')
+                          (e.key === "Enter" || e.key === " ")
                         ) {
                           e.preventDefault();
                           handleCategoryToggle(category);
@@ -876,7 +875,7 @@ export default function CalendarView() {
                         (
                         {
                           chileanCalendarEvents.filter(
-                            e => e.category === category
+                            (e) => e.category === category,
                           ).length
                         }
                         )
@@ -888,7 +887,7 @@ export default function CalendarView() {
                           transition={{
                             duration: 1,
                             repeat: Infinity,
-                            ease: 'linear',
+                            ease: "linear",
                           }}
                         >
                           ⟳
@@ -896,7 +895,7 @@ export default function CalendarView() {
                       )}
                     </Badge>
                   </motion.div>
-                )
+                ),
               )}
             </div>
           </CardContent>
@@ -909,7 +908,7 @@ export default function CalendarView() {
         <motion.div
           variants={cardVariants}
           className="lg:col-span-2"
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
           <Card>
             <CardContent className="p-6">
@@ -928,7 +927,7 @@ export default function CalendarView() {
         <motion.div
           variants={cardVariants}
           className="space-y-4"
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
           {/* Selected Date Events */}
           <Card>
@@ -936,7 +935,7 @@ export default function CalendarView() {
               <CardTitle className="text-lg" id="selected-events-title">
                 {selectedDate
                   ? format(selectedDate, "d 'de' MMMM, yyyy", { locale: es })
-                  : 'Selecciona una fecha'}
+                  : "Selecciona una fecha"}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -960,7 +959,7 @@ export default function CalendarView() {
                         className="p-3 rounded-lg border bg-card focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
                         role="listitem"
                         tabIndex={0}
-                        aria-label={`Evento: ${event.title}. Categoría: ${categoryLabels[event.category]}. ${event.description || ''}`}
+                        aria-label={`Evento: ${event.title}. Categoría: ${categoryLabels[event.category]}. ${event.description || ""}`}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <h4
@@ -972,12 +971,12 @@ export default function CalendarView() {
                           <Badge
                             variant="secondary"
                             className={cn(
-                              'text-xs',
-                              categorySystem[event.category].color
+                              "text-xs",
+                              categorySystem[event.category].color,
                             )}
                             aria-label={`Categoría: ${categorySystem[event.category].label}`}
                           >
-                            {categorySystem[event.category].icon}{' '}
+                            {categorySystem[event.category].icon}{" "}
                             {categorySystem[event.category].label}
                           </Badge>
                         </div>
@@ -1013,7 +1012,11 @@ export default function CalendarView() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg" id="month-summary-title">
-                Resumen de {format(currentMonth, 'MMMM yyyy', { locale: es }).replace(/\b\w/g, l => l.toUpperCase())}
+                Resumen de{" "}
+                {format(currentMonth, "MMMM yyyy", { locale: es }).replace(
+                  /\b\w/g,
+                  (l) => l.toUpperCase(),
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -1023,12 +1026,12 @@ export default function CalendarView() {
                 aria-labelledby="month-summary-title"
               >
                 <div className="text-sm" aria-live="polite">
-                  <span className="font-medium">{monthEvents.length}</span>{' '}
+                  <span className="font-medium">{monthEvents.length}</span>{" "}
                   eventos este mes
                 </div>
                 {Object.entries(categorySystem).map(([category, system]) => {
                   const count = monthEvents.filter(
-                    e => e.category === (category as EventCategory)
+                    (e) => e.category === (category as EventCategory),
                   ).length;
                   if (count === 0) return null;
                   return (

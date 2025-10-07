@@ -1,14 +1,33 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import React, { useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Eye,
   Search,
@@ -26,8 +45,12 @@ import {
   Activity,
   Calendar,
   Users,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface AuditEntry {
   id: string;
@@ -36,7 +59,7 @@ interface AuditEntry {
   role: string;
   action: string;
   resource: string;
-  status: 'success' | 'warning' | 'error';
+  status: "success" | "warning" | "error";
   ipAddress: string;
   userAgent: string;
   details: string;
@@ -44,75 +67,78 @@ interface AuditEntry {
 
 const auditEntries: AuditEntry[] = [
   {
-    id: '1',
-    timestamp: '2024-01-15 14:30:25',
-    user: 'admin@school.com',
-    role: 'ADMIN',
-    action: 'USER_CREATED',
-    resource: 'users',
-    status: 'success',
-    ipAddress: '192.168.1.100',
-    userAgent: 'Chrome/120.0',
-    details: 'Created user account for profesor@example.com',
+    id: "1",
+    timestamp: "2024-01-15 14:30:25",
+    user: "admin@school.com",
+    role: "ADMIN",
+    action: "USER_CREATED",
+    resource: "users",
+    status: "success",
+    ipAddress: "192.168.1.100",
+    userAgent: "Chrome/120.0",
+    details: "Created user account for profesor@example.com",
   },
   {
-    id: '2',
-    timestamp: '2024-01-15 14:25:10',
-    user: 'master@system.com',
-    role: 'MASTER',
-    action: 'SYSTEM_CONFIG_UPDATE',
-    resource: 'system',
-    status: 'success',
-    ipAddress: '10.0.0.1',
-    userAgent: 'System/1.0',
-    details: 'Updated database connection pool size to 25',
+    id: "2",
+    timestamp: "2024-01-15 14:25:10",
+    user: "master@system.com",
+    role: "MASTER",
+    action: "SYSTEM_CONFIG_UPDATE",
+    resource: "system",
+    status: "success",
+    ipAddress: "10.0.0.1",
+    userAgent: "System/1.0",
+    details: "Updated database connection pool size to 25",
   },
   {
-    id: '3',
-    timestamp: '2024-01-15 14:20:45',
-    user: 'profesor@school.com',
-    role: 'PROFESOR',
-    action: 'PLANNING_CREATED',
-    resource: 'plannings',
-    status: 'success',
-    ipAddress: '192.168.1.105',
-    userAgent: 'Firefox/119.0',
-    details: 'Created new lesson plan for Mathematics 3A',
+    id: "3",
+    timestamp: "2024-01-15 14:20:45",
+    user: "profesor@school.com",
+    role: "PROFESOR",
+    action: "PLANNING_CREATED",
+    resource: "plannings",
+    status: "success",
+    ipAddress: "192.168.1.105",
+    userAgent: "Firefox/119.0",
+    details: "Created new lesson plan for Mathematics 3A",
   },
   {
-    id: '4',
-    timestamp: '2024-01-15 14:15:30',
-    user: 'parent@school.com',
-    role: 'PARENT',
-    action: 'MEETING_REQUESTED',
-    resource: 'meetings',
-    status: 'warning',
-    ipAddress: '192.168.1.110',
-    userAgent: 'Safari/17.0',
-    details: 'Requested parent-teacher meeting - pending approval',
+    id: "4",
+    timestamp: "2024-01-15 14:15:30",
+    user: "parent@school.com",
+    role: "PARENT",
+    action: "MEETING_REQUESTED",
+    resource: "meetings",
+    status: "warning",
+    ipAddress: "192.168.1.110",
+    userAgent: "Safari/17.0",
+    details: "Requested parent-teacher meeting - pending approval",
   },
   {
-    id: '5',
-    timestamp: '2024-01-15 14:10:15',
-    user: 'system@internal',
-    role: 'SYSTEM',
-    action: 'BACKUP_COMPLETED',
-    resource: 'system',
-    status: 'success',
-    ipAddress: '127.0.0.1',
-    userAgent: 'System/1.0',
-    details: 'Automated daily backup completed successfully',
+    id: "5",
+    timestamp: "2024-01-15 14:10:15",
+    user: "system@internal",
+    role: "SYSTEM",
+    action: "BACKUP_COMPLETED",
+    resource: "system",
+    status: "success",
+    ipAddress: "127.0.0.1",
+    userAgent: "System/1.0",
+    details: "Automated daily backup completed successfully",
   },
 ];
 
 function AuditStatsCard() {
-  const stats = useMemo(() => ({
-    totalEvents: 15420,
-    todayEvents: 247,
-    criticalEvents: 3,
-    failedLogins: 12,
-    successfulLogins: 89,
-  }), []);
+  const stats = useMemo(
+    () => ({
+      totalEvents: 15420,
+      todayEvents: 247,
+      criticalEvents: 3,
+      failedLogins: 12,
+      successfulLogins: 89,
+    }),
+    [],
+  );
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
@@ -171,10 +197,10 @@ function AuditStatsCard() {
 }
 
 function AuditFiltersCard() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [actionFilter, setActionFilter] = useState('all');
-  const [userFilter, setUserFilter] = useState('all');
-  const [dateFilter, setDateFilter] = useState('today');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [actionFilter, setActionFilter] = useState("all");
+  const [userFilter, setUserFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("today");
 
   return (
     <Card>
@@ -210,7 +236,9 @@ function AuditFiltersCard() {
                 <SelectItem value="all">Todas</SelectItem>
                 <SelectItem value="USER_CREATED">Usuario Creado</SelectItem>
                 <SelectItem value="LOGIN">Login</SelectItem>
-                <SelectItem value="SYSTEM_CONFIG_UPDATE">Configuración</SelectItem>
+                <SelectItem value="SYSTEM_CONFIG_UPDATE">
+                  Configuración
+                </SelectItem>
                 <SelectItem value="BACKUP_COMPLETED">Backup</SelectItem>
               </SelectContent>
             </Select>
@@ -257,9 +285,7 @@ function AuditFiltersCard() {
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </Button>
-            <Button size="sm">
-              Aplicar Filtros
-            </Button>
+            <Button size="sm">Aplicar Filtros</Button>
           </div>
         </div>
       </CardContent>
@@ -272,11 +298,11 @@ function AuditTableCard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success':
+      case "success":
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'warning':
+      case "warning":
         return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
-      case 'error':
+      case "error":
         return <XCircle className="h-4 w-4 text-red-600" />;
       default:
         return <Clock className="h-4 w-4 text-gray-600" />;
@@ -285,13 +311,13 @@ function AuditTableCard() {
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      success: 'default',
-      warning: 'secondary',
-      error: 'destructive',
+      success: "default",
+      warning: "secondary",
+      error: "destructive",
     } as const;
 
     return (
-      <Badge variant={variants[status as keyof typeof variants] || 'outline'}>
+      <Badge variant={variants[status as keyof typeof variants] || "outline"}>
         {status}
       </Badge>
     );
@@ -304,7 +330,9 @@ function AuditTableCard() {
           <FileText className="h-5 w-5" />
           Registros de Auditoría
         </CardTitle>
-        <CardDescription>Historial completo de actividad del sistema</CardDescription>
+        <CardDescription>
+          Historial completo de actividad del sistema
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
@@ -327,22 +355,16 @@ function AuditTableCard() {
                   <TableCell className="font-mono text-sm">
                     {entry.timestamp}
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {entry.user}
-                  </TableCell>
+                  <TableCell className="font-medium">{entry.user}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">
-                      {entry.role}
-                    </Badge>
+                    <Badge variant="outline">{entry.role}</Badge>
                   </TableCell>
                   <TableCell>
                     <code className="text-xs bg-muted px-2 py-1 rounded">
                       {entry.action}
                     </code>
                   </TableCell>
-                  <TableCell>
-                    {entry.resource}
-                  </TableCell>
+                  <TableCell>{entry.resource}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {getStatusIcon(entry.status)}
@@ -374,9 +396,15 @@ function AuditTableCard() {
             <AlertTitle>Detalles del Evento</AlertTitle>
             <AlertDescription>
               <div className="mt-2 space-y-1 text-sm">
-                <div><strong>ID:</strong> {selectedEntry.id}</div>
-                <div><strong>User Agent:</strong> {selectedEntry.userAgent}</div>
-                <div><strong>Detalles:</strong> {selectedEntry.details}</div>
+                <div>
+                  <strong>ID:</strong> {selectedEntry.id}
+                </div>
+                <div>
+                  <strong>User Agent:</strong> {selectedEntry.userAgent}
+                </div>
+                <div>
+                  <strong>Detalles:</strong> {selectedEntry.details}
+                </div>
               </div>
             </AlertDescription>
           </Alert>
@@ -387,29 +415,32 @@ function AuditTableCard() {
 }
 
 function SecurityAlertsCard() {
-  const alerts = useMemo(() => [
-    {
-      id: 1,
-      type: 'critical',
-      message: 'Intento de acceso no autorizado desde IP externa',
-      time: '2 min ago',
-      severity: 'high',
-    },
-    {
-      id: 2,
-      type: 'warning',
-      message: 'Múltiples intentos de login fallidos',
-      time: '15 min ago',
-      severity: 'medium',
-    },
-    {
-      id: 3,
-      type: 'info',
-      message: 'Cambio de configuración detectado',
-      time: '1 hour ago',
-      severity: 'low',
-    },
-  ], []);
+  const alerts = useMemo(
+    () => [
+      {
+        id: 1,
+        type: "critical",
+        message: "Intento de acceso no autorizado desde IP externa",
+        time: "2 min ago",
+        severity: "high",
+      },
+      {
+        id: 2,
+        type: "warning",
+        message: "Múltiples intentos de login fallidos",
+        time: "15 min ago",
+        severity: "medium",
+      },
+      {
+        id: 3,
+        type: "info",
+        message: "Cambio de configuración detectado",
+        time: "1 hour ago",
+        severity: "low",
+      },
+    ],
+    [],
+  );
 
   return (
     <Card className="border-orange-200 dark:border-orange-800">
@@ -423,20 +454,35 @@ function SecurityAlertsCard() {
       <CardContent>
         <div className="space-y-3">
           {alerts.map((alert) => (
-            <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-              <div className={`mt-0.5 h-2 w-2 rounded-full ${
-                alert.severity === 'high' ? 'bg-red-500' :
-                alert.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-              }`} />
+            <div
+              key={alert.id}
+              className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
+            >
+              <div
+                className={`mt-0.5 h-2 w-2 rounded-full ${
+                  alert.severity === "high"
+                    ? "bg-red-500"
+                    : alert.severity === "medium"
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
+                }`}
+              />
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <Badge variant={
-                    alert.severity === 'high' ? 'destructive' :
-                    alert.severity === 'medium' ? 'secondary' : 'outline'
-                  }>
+                  <Badge
+                    variant={
+                      alert.severity === "high"
+                        ? "destructive"
+                        : alert.severity === "medium"
+                          ? "secondary"
+                          : "outline"
+                    }
+                  >
                     {alert.severity.toUpperCase()}
                   </Badge>
-                  <span className="text-xs text-muted-foreground">{alert.time}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {alert.time}
+                  </span>
                 </div>
                 <p className="text-sm font-medium">{alert.message}</p>
               </div>
@@ -456,7 +502,7 @@ export function MasterAuditDashboard() {
       {/* Master Audit Header */}
       <RoleAwareHeader
         title="📋 MASTER AUDIT - SUPREME AUDIT LOGS"
-        subtitle={`Auditoría completa del sistema - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Auditoría completa del sistema - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-blue-600 border-blue-600">
@@ -467,7 +513,6 @@ export function MasterAuditDashboard() {
           </div>
         }
       />
-
 
       {/* Audit Stats */}
       <AuditStatsCard />

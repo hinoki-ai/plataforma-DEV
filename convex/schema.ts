@@ -8,7 +8,7 @@ import { v } from "convex/values";
 
 export default defineSchema({
   // ==================== AUTHENTICATION MODELS ====================
-  
+
   users: defineTable({
     name: v.optional(v.string()),
     email: v.string(),
@@ -21,7 +21,7 @@ export default defineSchema({
       v.literal("ADMIN"),
       v.literal("PROFESOR"),
       v.literal("PARENT"),
-      v.literal("PUBLIC")
+      v.literal("PUBLIC"),
     ),
     isActive: v.boolean(),
     parentRole: v.optional(v.string()),
@@ -30,8 +30,8 @@ export default defineSchema({
         v.literal("PENDING"),
         v.literal("ACTIVE"),
         v.literal("INACTIVE"),
-        v.literal("SUSPENDED")
-      )
+        v.literal("SUSPENDED"),
+      ),
     ),
     provider: v.optional(v.string()),
     isOAuthUser: v.boolean(),
@@ -107,7 +107,7 @@ export default defineSchema({
       v.literal("PRESCHOOL"),
       v.literal("BASIC_SCHOOL"),
       v.literal("HIGH_SCHOOL"),
-      v.literal("COLLEGE")
+      v.literal("COLLEGE"),
     ),
     supportedLevels: v.optional(v.any()), // JSON array
     customGrades: v.optional(v.any()), // JSON array
@@ -178,14 +178,14 @@ export default defineSchema({
       v.literal("IN_PROGRESS"),
       v.literal("COMPLETED"),
       v.literal("CANCELLED"),
-      v.literal("RESCHEDULED")
+      v.literal("RESCHEDULED"),
     ),
     type: v.union(
       v.literal("PARENT_TEACHER"),
       v.literal("FOLLOW_UP"),
       v.literal("EMERGENCY"),
       v.literal("IEP_REVIEW"),
-      v.literal("GRADE_CONFERENCE")
+      v.literal("GRADE_CONFERENCE"),
     ),
     assignedTo: v.id("users"),
     notes: v.optional(v.string()),
@@ -215,7 +215,7 @@ export default defineSchema({
       v.literal("FOLLOW_UP"),
       v.literal("EMERGENCY"),
       v.literal("IEP_REVIEW"),
-      v.literal("GRADE_CONFERENCE")
+      v.literal("GRADE_CONFERENCE"),
     ),
     createdAt: v.number(),
     updatedAt: v.number(),
@@ -239,7 +239,7 @@ export default defineSchema({
       v.literal("VACATION"),
       v.literal("EVENT"),
       v.literal("DEADLINE"),
-      v.literal("OTHER")
+      v.literal("OTHER"),
     ),
     priority: v.union(v.literal("LOW"), v.literal("MEDIUM"), v.literal("HIGH")),
     level: v.string(),
@@ -276,7 +276,7 @@ export default defineSchema({
       v.literal("WEEKLY"),
       v.literal("MONTHLY"),
       v.literal("YEARLY"),
-      v.literal("CUSTOM")
+      v.literal("CUSTOM"),
     ),
     interval: v.number(),
     daysOfWeek: v.string(),
@@ -302,7 +302,7 @@ export default defineSchema({
       v.literal("VACATION"),
       v.literal("EVENT"),
       v.literal("DEADLINE"),
-      v.literal("OTHER")
+      v.literal("OTHER"),
     ),
     level: v.string(),
     color: v.optional(v.string()),
@@ -369,7 +369,7 @@ export default defineSchema({
       v.literal("CURRICULUM"),
       v.literal("EVENTS"),
       v.literal("POLICIES"),
-      v.literal("OTHER")
+      v.literal("OTHER"),
     ),
     endDate: v.number(),
     isActive: v.boolean(),
@@ -430,7 +430,7 @@ export default defineSchema({
       v.literal("WORKSHOP"),
       v.literal("EXCURSION"),
       v.literal("MEETING"),
-      v.literal("OTHER")
+      v.literal("OTHER"),
     ),
     subject: v.string(),
     grade: v.string(),
@@ -462,7 +462,7 @@ export default defineSchema({
       v.literal("SUCCESS"),
       v.literal("WARNING"),
       v.literal("ERROR"),
-      v.literal("SYSTEM")
+      v.literal("SYSTEM"),
     ),
     category: v.optional(
       v.union(
@@ -471,8 +471,8 @@ export default defineSchema({
         v.literal("SYSTEM"),
         v.literal("ACADEMIC"),
         v.literal("ADMINISTRATIVE"),
-        v.literal("PERSONAL")
-      )
+        v.literal("PERSONAL"),
+      ),
     ),
     priority: v.union(v.literal("LOW"), v.literal("MEDIUM"), v.literal("HIGH")),
     read: v.boolean(),

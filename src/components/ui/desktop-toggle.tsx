@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
 import {
   useDesktopToggle,
   useResponsiveMode,
-} from '@/lib/hooks/useDesktopToggle';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { ThemeIcons } from '@/components/icons/hero-icons';
+} from "@/lib/hooks/useDesktopToggle";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { ThemeIcons } from "@/components/icons/hero-icons";
 
 export function DesktopToggle() {
   const { toggleDesktopMode } = useDesktopToggle();
@@ -40,17 +40,17 @@ export function DesktopToggle() {
 
           <div className="space-y-3">
             <div className="text-xs text-muted-foreground">
-              Dispositivo: {isActualMobile ? 'Móvil' : 'Escritorio'}
+              Dispositivo: {isActualMobile ? "Móvil" : "Escritorio"}
             </div>
 
             <div className="text-xs text-muted-foreground">
-              Vista actual:{' '}
-              {isDesktopForced ? 'Escritorio forzado' : 'Automática'}
+              Vista actual:{" "}
+              {isDesktopForced ? "Escritorio forzado" : "Automática"}
             </div>
 
             <Button
               onClick={toggleDesktopMode}
-              variant={isDesktopForced ? 'default' : 'ghost'}
+              variant={isDesktopForced ? "default" : "ghost"}
               size="sm"
               className="w-full text-sm font-medium transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >

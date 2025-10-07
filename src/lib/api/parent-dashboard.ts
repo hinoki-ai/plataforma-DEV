@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // API Response Schemas
 export const StudentProgressSchema = z.object({
@@ -12,8 +12,8 @@ export const StudentProgressSchema = z.object({
       previousGrade: z.number(),
       targetGrade: z.number(),
       improvement: z.number(),
-      trend: z.enum(['up', 'down', 'stable']),
-    })
+      trend: z.enum(["up", "down", "stable"]),
+    }),
   ),
   attendance: z.number(),
   behavior: z.number(),
@@ -24,18 +24,18 @@ export const CommunicationSchema = z.object({
   id: z.string(),
   title: z.string(),
   message: z.string(),
-  priority: z.enum(['high', 'medium', 'low']),
+  priority: z.enum(["high", "medium", "low"]),
   isNew: z.boolean(),
   date: z.string(),
   sender: z.string(),
-  type: z.enum(['announcement', 'message', 'event']),
+  type: z.enum(["announcement", "message", "event"]),
 });
 
 export const AcademicResourceSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
-  type: z.enum(['pdf', 'video', 'link']),
+  type: z.enum(["pdf", "video", "link"]),
   url: z.string(),
   subject: z.string(),
   grade: z.string(),
@@ -48,18 +48,18 @@ export const AnalyticsDataSchema = z.object({
       subject: z.string(),
       currentGrade: z.number(),
       previousGrade: z.number(),
-      trend: z.enum(['up', 'down', 'stable']),
+      trend: z.enum(["up", "down", "stable"]),
       improvement: z.number(),
       target: z.number(),
-    })
+    }),
   ),
   behaviorMetrics: z.array(
     z.object({
       category: z.string(),
       score: z.number(),
       maxScore: z.number(),
-      status: z.enum(['excellent', 'good', 'needs_improvement']),
-    })
+      status: z.enum(["excellent", "good", "needs_improvement"]),
+    }),
   ),
   attendanceData: z.array(
     z.object({
@@ -67,16 +67,16 @@ export const AnalyticsDataSchema = z.object({
       present: z.number(),
       absent: z.number(),
       late: z.number(),
-    })
+    }),
   ),
   recommendations: z.array(
     z.object({
       id: z.string(),
       title: z.string(),
       description: z.string(),
-      priority: z.enum(['high', 'medium', 'low']),
+      priority: z.enum(["high", "medium", "low"]),
       category: z.string(),
-    })
+    }),
   ),
 });
 
@@ -91,17 +91,17 @@ export class ParentDashboardAPI {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || '/api';
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "/api";
   }
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const response = await fetch(url, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
       ...options,
@@ -118,37 +118,37 @@ export class ParentDashboardAPI {
   async getStudentProgress(studentId?: string): Promise<StudentProgress[]> {
     const endpoint = studentId
       ? `/parent/students/${studentId}/progress`
-      : '/parent/students/progress';
+      : "/parent/students/progress";
 
     return this.request<StudentProgress[]>(endpoint);
   }
 
   async updateStudentProgress(
     studentId: string,
-    data: Partial<StudentProgress>
+    data: Partial<StudentProgress>,
   ): Promise<StudentProgress> {
     return this.request<StudentProgress>(
       `/parent/students/${studentId}/progress`,
       {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify(data),
-      }
+      },
     );
   }
 
   // Communications API
   async getCommunications(filters?: {
-    priority?: 'high' | 'medium' | 'low';
+    priority?: "high" | "medium" | "low";
     isNew?: boolean;
-    type?: 'announcement' | 'message' | 'event';
+    type?: "announcement" | "message" | "event";
   }): Promise<Communication[]> {
     const params = new URLSearchParams();
-    if (filters?.priority) params.append('priority', filters.priority);
+    if (filters?.priority) params.append("priority", filters.priority);
     if (filters?.isNew !== undefined)
-      params.append('isNew', filters.isNew.toString());
-    if (filters?.type) params.append('type', filters.type);
+      params.append("isNew", filters.isNew.toString());
+    if (filters?.type) params.append("type", filters.type);
 
-    const endpoint = `/parent/communications${params.toString() ? `?${params.toString()}` : ''}`;
+    const endpoint = `/parent/communications${params.toString() ? `?${params.toString()}` : ""}`;
     return this.request<Communication[]>(endpoint);
   }
 
@@ -156,21 +156,21 @@ export class ParentDashboardAPI {
     return this.request<void>(
       `/parent/communications/${communicationId}/read`,
       {
-        method: 'PUT',
-      }
+        method: "PUT",
+      },
     );
   }
 
   async sendReply(
     communicationId: string,
-    message: string
+    message: string,
   ): Promise<Communication> {
     return this.request<Communication>(
       `/parent/communications/${communicationId}/reply`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ message }),
-      }
+      },
     );
   }
 
@@ -178,14 +178,14 @@ export class ParentDashboardAPI {
   async getAcademicResources(filters?: {
     subject?: string;
     grade?: string;
-    type?: 'pdf' | 'video' | 'link';
+    type?: "pdf" | "video" | "link";
   }): Promise<AcademicResource[]> {
     const params = new URLSearchParams();
-    if (filters?.subject) params.append('subject', filters.subject);
-    if (filters?.grade) params.append('grade', filters.grade);
-    if (filters?.type) params.append('type', filters.type);
+    if (filters?.subject) params.append("subject", filters.subject);
+    if (filters?.grade) params.append("grade", filters.grade);
+    if (filters?.type) params.append("type", filters.type);
 
-    const endpoint = `/parent/resources${params.toString() ? `?${params.toString()}` : ''}`;
+    const endpoint = `/parent/resources${params.toString() ? `?${params.toString()}` : ""}`;
     return this.request<AcademicResource[]>(endpoint);
   }
 
@@ -193,18 +193,18 @@ export class ParentDashboardAPI {
     return this.request<{ downloadUrl: string }>(
       `/parent/resources/${resourceId}/download`,
       {
-        method: 'POST',
-      }
+        method: "POST",
+      },
     );
   }
 
   // Analytics API
   async getAnalyticsData(
     period: string,
-    studentId?: string
+    studentId?: string,
   ): Promise<AnalyticsData> {
     const params = new URLSearchParams({ period });
-    if (studentId) params.append('studentId', studentId);
+    if (studentId) params.append("studentId", studentId);
 
     const endpoint = `/parent/analytics?${params.toString()}`;
     return this.request<AnalyticsData>(endpoint);
@@ -221,7 +221,7 @@ export class ParentDashboardAPI {
   }> {
     const endpoint = studentId
       ? `/parent/analytics/attendance/${studentId}`
-      : '/parent/analytics/attendance';
+      : "/parent/analytics/attendance";
 
     return this.request(endpoint);
   }
@@ -237,7 +237,7 @@ export class ParentDashboardAPI {
   }> {
     const endpoint = studentId
       ? `/parent/analytics/behavior/${studentId}`
-      : '/parent/analytics/behavior';
+      : "/parent/analytics/behavior";
 
     return this.request(endpoint);
   }
@@ -261,17 +261,17 @@ export class ParentDashboardAPI {
       description: string;
     }>;
   }> {
-    return this.request('/parent/dashboard/overview');
+    return this.request("/parent/dashboard/overview");
   }
 
   // Real-time Updates
   async subscribeToUpdates(callback: (data: any) => void): Promise<() => void> {
     // WebSocket implementation for real-time updates
     const ws = new WebSocket(
-      `${this.baseURL.replace('http', 'ws')}/parent/updates`
+      `${this.baseURL.replace("http", "ws")}/parent/updates`,
     );
 
-    ws.onmessage = event => {
+    ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       callback(data);
     };

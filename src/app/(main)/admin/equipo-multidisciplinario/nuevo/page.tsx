@@ -1,7 +1,7 @@
-import { TeamMemberForm } from '@/components/admin/team-member-form';
-import { PageTransition } from '@/components/ui/page-transition';
+import { TeamMemberForm } from "@/components/admin/team-member-form";
+import { PageTransition } from "@/components/ui/page-transition";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function NewTeamMemberPage() {
   return (

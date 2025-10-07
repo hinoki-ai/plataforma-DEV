@@ -92,13 +92,13 @@ export function checkRateLimit(
   request: Request,
   limit: number,
   windowMs: number,
-  keyPrefix: string = 'api'
+  keyPrefix: string = "api",
 ): boolean {
   const clientIp =
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    request.headers.get('x-real-ip') ||
-    request.headers.get('cf-connecting-ip') ||
-    'unknown';
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    request.headers.get("cf-connecting-ip") ||
+    "unknown";
 
   const rateLimitKey = `${keyPrefix}:${clientIp}`;
 
@@ -117,20 +117,20 @@ export function getRateLimitHeaders(
   request: Request,
   limit: number,
   windowMs: number,
-  keyPrefix: string = 'api'
+  keyPrefix: string = "api",
 ): Record<string, string> {
   const clientIp =
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    request.headers.get('x-real-ip') ||
-    request.headers.get('cf-connecting-ip') ||
-    'unknown';
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    request.headers.get("cf-connecting-ip") ||
+    "unknown";
 
   const rateLimitKey = `${keyPrefix}:${clientIp}`;
   const remaining = rateLimiter.getRemaining(rateLimitKey, limit, windowMs);
 
   return {
-    'X-RateLimit-Limit': limit.toString(),
-    'X-RateLimit-Remaining': Math.max(0, remaining).toString(),
-    'X-RateLimit-Reset': (Date.now() + windowMs).toString(),
+    "X-RateLimit-Limit": limit.toString(),
+    "X-RateLimit-Remaining": Math.max(0, remaining).toString(),
+    "X-RateLimit-Reset": (Date.now() + windowMs).toString(),
   };
 }

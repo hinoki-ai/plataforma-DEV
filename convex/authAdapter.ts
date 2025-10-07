@@ -1,6 +1,6 @@
 /**
  * Convex Adapter for NextAuth.js (Auth.js v5)
- * 
+ *
  * This adapter integrates Convex as the database backend for NextAuth authentication.
  * Based on: https://stack.convex.dev/nextauth-adapter
  */
@@ -18,9 +18,9 @@ export const getUserByEmail = query({
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", email))
       .first();
-    
+
     if (!user) return null;
-    
+
     return {
       id: user._id,
       email: user.email,
@@ -37,9 +37,9 @@ export const getUserById = query({
   args: { id: v.string() },
   handler: async (ctx, { id }) => {
     const user = await ctx.db.get(id as Id<"users">);
-    
+
     if (!user) return null;
-    
+
     return {
       id: user._id,
       email: user.email,
@@ -61,7 +61,7 @@ export const createUser = mutation({
   },
   handler: async (ctx, args) => {
     const now = Date.now();
-    
+
     const userId = await ctx.db.insert("users", {
       email: args.email,
       name: args.name,
@@ -79,7 +79,7 @@ export const createUser = mutation({
       createdAt: now,
       updatedAt: now,
     });
-    
+
     return userId;
   },
 });
@@ -95,11 +95,11 @@ export const updateUser = mutation({
   handler: async (ctx, args) => {
     const userId = args.id as Id<"users">;
     const user = await ctx.db.get(userId);
-    
+
     if (!user) {
       throw new Error("User not found");
     }
-    
+
     await ctx.db.patch(userId, {
       email: args.email,
       name: args.name,
@@ -107,7 +107,7 @@ export const updateUser = mutation({
       emailVerified: args.emailVerified,
       updatedAt: Date.now(),
     });
-    
+
     return userId;
   },
 });
@@ -149,7 +149,7 @@ export const linkAccount = mutation({
       id_token: args.id_token,
       session_state: args.session_state,
     });
-    
+
     return accountId;
   },
 });
@@ -163,12 +163,12 @@ export const getAccountByProvider = query({
     const account = await ctx.db
       .query("accounts")
       .withIndex("by_provider_providerAccountId", (q) =>
-        q.eq("provider", provider).eq("providerAccountId", providerAccountId)
+        q.eq("provider", provider).eq("providerAccountId", providerAccountId),
       )
       .first();
-    
+
     if (!account) return null;
-    
+
     return {
       userId: account.userId,
       type: account.type,
@@ -194,10 +194,10 @@ export const deleteAccount = mutation({
     const account = await ctx.db
       .query("accounts")
       .withIndex("by_provider_providerAccountId", (q) =>
-        q.eq("provider", provider).eq("providerAccountId", providerAccountId)
+        q.eq("provider", provider).eq("providerAccountId", providerAccountId),
       )
       .first();
-    
+
     if (account) {
       await ctx.db.delete(account._id);
     }
@@ -218,7 +218,7 @@ export const createSession = mutation({
       userId: args.userId as Id<"users">,
       expires: args.expires,
     });
-    
+
     return sessionId;
   },
 });
@@ -230,18 +230,18 @@ export const getSessionAndUser = query({
       .query("sessions")
       .withIndex("by_sessionToken", (q) => q.eq("sessionToken", sessionToken))
       .first();
-    
+
     if (!session) return null;
-    
+
     // Check if session is expired
     if (session.expires < Date.now()) {
       return null;
     }
-    
+
     const user = await ctx.db.get(session.userId);
-    
+
     if (!user) return null;
-    
+
     return {
       session: {
         sessionToken: session.sessionToken,
@@ -271,15 +271,15 @@ export const updateSession = mutation({
       .query("sessions")
       .withIndex("by_sessionToken", (q) => q.eq("sessionToken", sessionToken))
       .first();
-    
+
     if (!session) {
       throw new Error("Session not found");
     }
-    
+
     if (expires) {
       await ctx.db.patch(session._id, { expires });
     }
-    
+
     return session._id;
   },
 });
@@ -291,7 +291,7 @@ export const deleteSession = mutation({
       .query("sessions")
       .withIndex("by_sessionToken", (q) => q.eq("sessionToken", sessionToken))
       .first();
-    
+
     if (session) {
       await ctx.db.delete(session._id);
     }
@@ -312,7 +312,7 @@ export const createVerificationToken = mutation({
       token: args.token,
       expires: args.expires,
     });
-    
+
     return tokenId;
   },
 });
@@ -326,17 +326,17 @@ export const useVerificationToken = query({
     const verificationToken = await ctx.db
       .query("verificationTokens")
       .withIndex("by_identifier_token", (q) =>
-        q.eq("identifier", identifier).eq("token", token)
+        q.eq("identifier", identifier).eq("token", token),
       )
       .first();
-    
+
     if (!verificationToken) return null;
-    
+
     // Check if token is expired
     if (verificationToken.expires < Date.now()) {
       return null;
     }
-    
+
     return {
       identifier: verificationToken.identifier,
       token: verificationToken.token,
@@ -354,10 +354,10 @@ export const deleteVerificationToken = mutation({
     const verificationToken = await ctx.db
       .query("verificationTokens")
       .withIndex("by_identifier_token", (q) =>
-        q.eq("identifier", identifier).eq("token", token)
+        q.eq("identifier", identifier).eq("token", token),
       )
       .first();
-    
+
     if (verificationToken) {
       await ctx.db.delete(verificationToken._id);
     }

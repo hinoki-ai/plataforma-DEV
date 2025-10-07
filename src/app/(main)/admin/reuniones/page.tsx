@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Plus,
   Search,
@@ -17,15 +17,15 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -33,24 +33,24 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { PageTransition } from '@/components/ui/page-transition';
-import { useLanguage } from '@/components/language/LanguageContext';
-import { MeetingForm } from '@/components/meetings/MeetingForm';
-import { LoadingState } from '@/components/ui/loading-states';
-import type { Meeting } from '@/lib/prisma-compat-types';
-import { ErrorBoundary } from '@/components/ui/error-boundary';
-import { toast } from 'sonner';
-import Link from 'next/link';
+} from "@/components/ui/select";
+import { PageTransition } from "@/components/ui/page-transition";
+import { useLanguage } from "@/components/language/LanguageContext";
+import { MeetingForm } from "@/components/meetings/MeetingForm";
+import { LoadingState } from "@/components/ui/loading-states";
+import type { Meeting } from "@/lib/prisma-compat-types";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { toast } from "sonner";
+import Link from "next/link";
 
 interface AdminMeeting {
   id: string;
@@ -76,36 +76,36 @@ interface AdminMeeting {
 }
 
 const statusLabels = {
-  SCHEDULED: 'Programada',
-  CONFIRMED: 'Confirmada',
-  IN_PROGRESS: 'En Progreso',
-  COMPLETED: 'Completada',
-  CANCELLED: 'Cancelada',
-  RESCHEDULED: 'Reprogramada',
+  SCHEDULED: "Programada",
+  CONFIRMED: "Confirmada",
+  IN_PROGRESS: "En Progreso",
+  COMPLETED: "Completada",
+  CANCELLED: "Cancelada",
+  RESCHEDULED: "Reprogramada",
 };
 
 const statusColors = {
-  SCHEDULED: 'bg-yellow-100 text-yellow-800',
-  CONFIRMED: 'bg-blue-100 text-blue-800',
-  IN_PROGRESS: 'bg-purple-100 text-purple-800',
-  COMPLETED: 'bg-green-100 text-green-800',
-  CANCELLED: 'bg-red-100 text-red-800',
-  RESCHEDULED: 'bg-orange-100 text-orange-800',
+  SCHEDULED: "bg-yellow-100 text-yellow-800",
+  CONFIRMED: "bg-blue-100 text-blue-800",
+  IN_PROGRESS: "bg-purple-100 text-purple-800",
+  COMPLETED: "bg-green-100 text-green-800",
+  CANCELLED: "bg-red-100 text-red-800",
+  RESCHEDULED: "bg-orange-100 text-orange-800",
 };
 
 const typeLabels = {
-  PARENT_TEACHER: 'Padre-Profesor',
-  FOLLOW_UP: 'Seguimiento',
-  EMERGENCY: 'Emergencia',
-  IEP_REVIEW: 'Revisión PEI',
-  GRADE_CONFERENCE: 'Conferencia de Calificaciones',
+  PARENT_TEACHER: "Padre-Profesor",
+  FOLLOW_UP: "Seguimiento",
+  EMERGENCY: "Emergencia",
+  IEP_REVIEW: "Revisión PEI",
+  GRADE_CONFERENCE: "Conferencia de Calificaciones",
 };
 
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  return new Date(dateString).toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 }
 
@@ -122,26 +122,28 @@ function ReunionesContent() {
   const [meetings, setMeetings] = useState<AdminMeeting[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [selectedMeeting, setSelectedMeeting] = useState<AdminMeeting | null>(null);
+  const [selectedMeeting, setSelectedMeeting] = useState<AdminMeeting | null>(
+    null,
+  );
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
-    if (session?.user?.role === 'ADMIN') {
+    if (session?.user?.role === "ADMIN") {
       fetchMeetings();
     }
   }, [session, statusFilter, typeFilter]);
 
   // Check for create query parameter
   useEffect(() => {
-    const create = searchParams.get('create');
-    if (create === 'true' && !loading) {
+    const create = searchParams.get("create");
+    if (create === "true" && !loading) {
       setShowCreateDialog(true);
-      router.replace('/admin/reuniones', { scroll: false });
+      router.replace("/admin/reuniones", { scroll: false });
     }
   }, [searchParams, loading, router]);
 
@@ -151,11 +153,11 @@ function ReunionesContent() {
       setError(null);
 
       const params = new URLSearchParams();
-      if (statusFilter !== 'all') {
-        params.append('status', statusFilter);
+      if (statusFilter !== "all") {
+        params.append("status", statusFilter);
       }
-      if (typeFilter !== 'all') {
-        params.append('type', typeFilter);
+      if (typeFilter !== "all") {
+        params.append("type", typeFilter);
       }
 
       const response = await fetch(`/api/admin/meetings?${params}`);
@@ -164,29 +166,30 @@ function ReunionesContent() {
       if (data.success) {
         setMeetings(data.data || []);
       } else {
-        setError(data.error || 'Error al cargar reuniones');
+        setError(data.error || "Error al cargar reuniones");
       }
     } catch (err) {
-      console.error('Error fetching meetings:', err);
-      setError('Error al cargar las reuniones');
+      console.error("Error fetching meetings:", err);
+      setError("Error al cargar las reuniones");
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredMeetings = meetings.filter(meeting =>
-    meeting.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    meeting.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    meeting.guardianName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    meeting.teacher.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMeetings = meetings.filter(
+    (meeting) =>
+      meeting.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      meeting.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      meeting.guardianName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      meeting.teacher.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleCreateMeeting = async (meetingData: any) => {
     setIsCreating(true);
     try {
-      const response = await fetch('/api/admin/meetings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/admin/meetings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(meetingData),
       });
 
@@ -194,14 +197,14 @@ function ReunionesContent() {
         const data = await response.json();
         setMeetings([data.data, ...meetings]);
         setShowCreateDialog(false);
-        toast.success('Reunión creada exitosamente');
+        toast.success("Reunión creada exitosamente");
       } else {
         const error = await response.json();
-        toast.error(error.error || 'Error al crear reunión');
+        toast.error(error.error || "Error al crear reunión");
       }
     } catch (err) {
-      console.error('Error creating meeting:', err);
-      toast.error('Error al crear reunión');
+      console.error("Error creating meeting:", err);
+      toast.error("Error al crear reunión");
     } finally {
       setIsCreating(false);
     }
@@ -211,47 +214,56 @@ function ReunionesContent() {
     if (!selectedMeeting) return;
 
     try {
-      const response = await fetch(`/api/admin/meetings/${selectedMeeting.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(meetingData),
-      });
+      const response = await fetch(
+        `/api/admin/meetings/${selectedMeeting.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(meetingData),
+        },
+      );
 
       if (response.ok) {
         const data = await response.json();
-        setMeetings(meetings.map(m => m.id === selectedMeeting.id ? data.data : m));
+        setMeetings(
+          meetings.map((m) => (m.id === selectedMeeting.id ? data.data : m)),
+        );
         setShowEditDialog(false);
         setSelectedMeeting(null);
-        toast.success('Reunión actualizada exitosamente');
+        toast.success("Reunión actualizada exitosamente");
       } else {
         const error = await response.json();
-        toast.error(error.error || 'Error al actualizar reunión');
+        toast.error(error.error || "Error al actualizar reunión");
       }
     } catch (err) {
-      console.error('Error updating meeting:', err);
-      toast.error('Error al actualizar reunión');
+      console.error("Error updating meeting:", err);
+      toast.error("Error al actualizar reunión");
     }
   };
 
   const handleDeleteMeeting = async (meetingId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta reunión? Esta acción no se puede deshacer.')) {
+    if (
+      !confirm(
+        "¿Estás seguro de que quieres eliminar esta reunión? Esta acción no se puede deshacer.",
+      )
+    ) {
       return;
     }
 
     try {
       const response = await fetch(`/api/admin/meetings/${meetingId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
-        setMeetings(meetings.filter(m => m.id !== meetingId));
-        toast.success('Reunión eliminada exitosamente');
+        setMeetings(meetings.filter((m) => m.id !== meetingId));
+        toast.success("Reunión eliminada exitosamente");
       } else {
-        toast.error('Error al eliminar reunión');
+        toast.error("Error al eliminar reunión");
       }
     } catch (err) {
-      console.error('Error deleting meeting:', err);
-      toast.error('Error al eliminar reunión');
+      console.error("Error deleting meeting:", err);
+      toast.error("Error al eliminar reunión");
     }
   };
 
@@ -276,8 +288,16 @@ function ReunionesContent() {
         </div>
         <div className="text-center py-16">
           <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -409,7 +429,9 @@ function ReunionesContent() {
                       </TableCell>
                       <TableCell>
                         <div>
-                          <div className="font-medium">{meeting.studentName}</div>
+                          <div className="font-medium">
+                            {meeting.studentName}
+                          </div>
                           <div className="text-sm text-muted-foreground">
                             {meeting.studentGrade} • {meeting.guardianName}
                           </div>
@@ -417,7 +439,9 @@ function ReunionesContent() {
                       </TableCell>
                       <TableCell>
                         <div>
-                          <div className="font-medium">{meeting.teacher.name}</div>
+                          <div className="font-medium">
+                            {meeting.teacher.name}
+                          </div>
                           <div className="text-sm text-muted-foreground">
                             {meeting.teacher.email}
                           </div>
@@ -436,13 +460,23 @@ function ReunionesContent() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge className={statusColors[meeting.status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'}>
-                          {statusLabels[meeting.status as keyof typeof statusLabels] || meeting.status}
+                        <Badge
+                          className={
+                            statusColors[
+                              meeting.status as keyof typeof statusColors
+                            ] || "bg-gray-100 text-gray-800"
+                          }
+                        >
+                          {statusLabels[
+                            meeting.status as keyof typeof statusLabels
+                          ] || meeting.status}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">
-                          {typeLabels[meeting.type as keyof typeof typeLabels] || meeting.type}
+                          {typeLabels[
+                            meeting.type as keyof typeof typeLabels
+                          ] || meeting.type}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">

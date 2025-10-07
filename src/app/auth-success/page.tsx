@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { PageLoader } from '@/components/ui/unified-loader';
-import { useLanguage } from '@/components/language/LanguageContext';
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { PageLoader } from "@/components/ui/unified-loader";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export default function AuthSuccessPage() {
   const { data: session, status, update } = useSession();
@@ -16,42 +16,55 @@ export default function AuthSuccessPage() {
     if (redirected) return;
 
     const checkAuthAndRedirect = () => {
-      console.log('AuthSuccess - Status:', status, 'Session:', session?.user ? 'exists' : 'null', 'Role:', session?.user?.role);
+      console.log(
+        "AuthSuccess - Status:",
+        status,
+        "Session:",
+        session?.user ? "exists" : "null",
+        "Role:",
+        session?.user?.role,
+      );
 
-      if (status === 'loading') return; // Wait for session
+      if (status === "loading") return; // Wait for session
 
-      if (status === 'unauthenticated') {
-        console.log('AuthSuccess - User is unauthenticated, redirecting to login');
+      if (status === "unauthenticated") {
+        console.log(
+          "AuthSuccess - User is unauthenticated, redirecting to login",
+        );
         setRedirected(true);
-        router.replace('/login');
+        router.replace("/login");
         return;
       }
 
-      if (status === 'authenticated' && session?.user) {
+      if (status === "authenticated" && session?.user) {
         setRedirected(true);
         const role = session.user.role;
-        console.log('AuthSuccess - User authenticated with role:', role, 'redirecting...');
+        console.log(
+          "AuthSuccess - User authenticated with role:",
+          role,
+          "redirecting...",
+        );
 
         switch (role) {
-          case 'MASTER':
-            console.log('AuthSuccess - Redirecting MASTER to /master');
-            router.replace('/master');
+          case "MASTER":
+            console.log("AuthSuccess - Redirecting MASTER to /master");
+            router.replace("/master");
             break;
-          case 'ADMIN':
-            router.replace('/admin');
+          case "ADMIN":
+            router.replace("/admin");
             break;
-          case 'PROFESOR':
-            router.replace('/profesor');
+          case "PROFESOR":
+            router.replace("/profesor");
             break;
-          case 'PARENT':
+          case "PARENT":
             if (session.user.needsRegistration) {
-              router.replace('/centro-consejo');
+              router.replace("/centro-consejo");
             } else {
-              router.replace('/parent');
+              router.replace("/parent");
             }
             break;
           default:
-            router.replace('/');
+            router.replace("/");
         }
       }
     };
@@ -64,12 +77,12 @@ export default function AuthSuccessPage() {
     const timeout = setTimeout(() => {
       if (!redirected) {
         setRedirected(true);
-        router.replace('/');
+        router.replace("/");
       }
     }, 5000);
 
     return () => clearTimeout(timeout);
   }, [redirected, router]);
 
-  return <PageLoader text={t('common.loading', 'common')} />;
+  return <PageLoader text={t("common.loading", "common")} />;
 }

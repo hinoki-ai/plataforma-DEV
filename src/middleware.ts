@@ -1,5 +1,9 @@
-import { getMiddlewareAuth, hasMiddlewareAccess, getRoleRedirectPath } from '@/lib/middleware-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import {
+  getMiddlewareAuth,
+  hasMiddlewareAccess,
+  getRoleRedirectPath,
+} from "@/lib/middleware-auth";
+import { NextRequest, NextResponse } from "next/server";
 
 // Role hierarchy for authorization (future use in role comparison)
 const _ROLE_HIERARCHY = {
@@ -14,22 +18,22 @@ type UserRole = keyof typeof _ROLE_HIERARCHY;
 
 // Route access control matrix
 const ROUTE_ACCESS: Record<string, UserRole[]> = {
-  '/master': ['MASTER'],
-  '/admin': ['MASTER', 'ADMIN'],
-  '/profesor': ['MASTER', 'ADMIN', 'PROFESOR'],
-  '/parent': ['MASTER', 'ADMIN', 'PARENT'],
-  '/api/master': ['MASTER'],
-  '/api/admin': ['MASTER', 'ADMIN'],
-  '/api/profesor': ['MASTER', 'ADMIN', 'PROFESOR'],
-  '/api/parent': ['MASTER', 'ADMIN', 'PARENT'],
+  "/master": ["MASTER"],
+  "/admin": ["MASTER", "ADMIN"],
+  "/profesor": ["MASTER", "ADMIN", "PROFESOR"],
+  "/parent": ["MASTER", "ADMIN", "PARENT"],
+  "/api/master": ["MASTER"],
+  "/api/admin": ["MASTER", "ADMIN"],
+  "/api/profesor": ["MASTER", "ADMIN", "PROFESOR"],
+  "/api/parent": ["MASTER", "ADMIN", "PARENT"],
 };
 
 // Security headers for all responses
 const SECURITY_HEADERS = {
-  'X-Frame-Options': 'DENY',
-  'X-Content-Type-Options': 'nosniff',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  "X-Frame-Options": "DENY",
+  "X-Content-Type-Options": "nosniff",
+  "X-XSS-Protection": "1; mode=block",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
 } as const;
 
 function addSecurityHeaders(response: NextResponse): NextResponse {
@@ -49,9 +53,9 @@ export default async function middleware(req: NextRequest) {
 
     // Skip middleware for static assets and system paths
     if (
-      pathname.includes('_next/static') ||
-      pathname.includes('_next/image') ||
-      pathname.includes('favicon') ||
+      pathname.includes("_next/static") ||
+      pathname.includes("_next/image") ||
+      pathname.includes("favicon") ||
       pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js)$/)
     ) {
       return NextResponse.next();
@@ -63,13 +67,16 @@ export default async function middleware(req: NextRequest) {
     const userRole = session?.user?.role as UserRole | undefined;
 
     // Log security events in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🔐 Route: ${pathname} | User: ${userRole || 'ANONYMOUS'} | Logged: ${isLoggedIn}`);
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `🔐 Route: ${pathname} | User: ${userRole || "ANONYMOUS"} | Logged: ${isLoggedIn}`,
+      );
     }
 
     // Handle auth pages
-    const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/registro');
-    
+    const isAuthPage =
+      pathname.startsWith("/login") || pathname.startsWith("/registro");
+
     if (isAuthPage && isLoggedIn && userRole) {
       const redirectPath = getRoleRedirectPath(userRole);
       const response = NextResponse.redirect(new URL(redirectPath, nextUrl));
@@ -77,11 +84,13 @@ export default async function middleware(req: NextRequest) {
     }
 
     // Check if route requires authentication
-    const requiresAuth = Object.keys(ROUTE_ACCESS).some(route => pathname.startsWith(route));
-    
+    const requiresAuth = Object.keys(ROUTE_ACCESS).some((route) =>
+      pathname.startsWith(route),
+    );
+
     if (requiresAuth && !isLoggedIn) {
-      const loginUrl = new URL('/login', nextUrl);
-      loginUrl.searchParams.set('callbackUrl', nextUrl.toString());
+      const loginUrl = new URL("/login", nextUrl);
+      loginUrl.searchParams.set("callbackUrl", nextUrl.toString());
       const response = NextResponse.redirect(loginUrl);
       return addSecurityHeaders(response);
     }
@@ -89,18 +98,24 @@ export default async function middleware(req: NextRequest) {
     // Check authorization for protected routes
     if (requiresAuth) {
       // Find matching route pattern for authorization
-      const matchingRoute = Object.keys(ROUTE_ACCESS).find(route =>
-        pathname.startsWith(route)
+      const matchingRoute = Object.keys(ROUTE_ACCESS).find((route) =>
+        pathname.startsWith(route),
       );
 
-      if (matchingRoute && !hasMiddlewareAccess(userRole, ROUTE_ACCESS[matchingRoute])) {
+      if (
+        matchingRoute &&
+        !hasMiddlewareAccess(userRole, ROUTE_ACCESS[matchingRoute])
+      ) {
         // Log unauthorized access attempt
-        console.warn(`🚨 Unauthorized access attempt: ${userRole} → ${pathname}`);
+        console.warn(
+          `🚨 Unauthorized access attempt: ${userRole} → ${pathname}`,
+        );
 
         // Redirect to appropriate dashboard or show unauthorized
-        const allowedPath = isLoggedIn && userRole
-          ? getRoleRedirectPath(userRole)
-          : '/unauthorized';
+        const allowedPath =
+          isLoggedIn && userRole
+            ? getRoleRedirectPath(userRole)
+            : "/unauthorized";
 
         const response = NextResponse.redirect(new URL(allowedPath, nextUrl));
         return addSecurityHeaders(response);
@@ -110,12 +125,11 @@ export default async function middleware(req: NextRequest) {
     // Add security headers to all responses
     const response = NextResponse.next();
     return addSecurityHeaders(response);
-
   } catch (error) {
-    console.error('🚨 Middleware error:', error);
-    
+    console.error("🚨 Middleware error:", error);
+
     // Fail secure - redirect to login on error
-    const response = NextResponse.redirect(new URL('/login', req.nextUrl));
+    const response = NextResponse.redirect(new URL("/login", req.nextUrl));
     return addSecurityHeaders(response);
   }
 }
@@ -123,6 +137,6 @@ export default async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     // Match all request paths except static files and system paths
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)$).*)",
   ],
 };

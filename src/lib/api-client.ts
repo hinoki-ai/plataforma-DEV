@@ -4,7 +4,7 @@
  * Part of Stage 3: Route & Logic Consolidation
  */
 
-import { UserRole } from '@/lib/prisma-compat-types';
+import { UserRole } from "@/lib/prisma-compat-types";
 
 export type ExtendedUserRole = UserRole;
 
@@ -16,7 +16,7 @@ export interface ApiResponse<T = any> {
 }
 
 export interface ApiRequestOptions {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   headers?: Record<string, string>;
   body?: any;
   userRole?: ExtendedUserRole;
@@ -27,10 +27,10 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     public statusText: string,
-    message?: string
+    message?: string,
   ) {
     super(message || `API Error: ${status} ${statusText}`);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
@@ -39,10 +39,10 @@ export class ApiError extends Error {
  */
 export async function apiRequest<T = any>(
   url: string,
-  options: ApiRequestOptions = {}
+  options: ApiRequestOptions = {},
 ): Promise<ApiResponse<T>> {
   const {
-    method = 'GET',
+    method = "GET",
     headers = {},
     body,
     userRole,
@@ -52,13 +52,13 @@ export async function apiRequest<T = any>(
   try {
     // Prepare headers with role information
     const requestHeaders: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...headers,
     };
 
     // Add role-aware headers
     if (userRole) {
-      requestHeaders['X-User-Role'] = userRole;
+      requestHeaders["X-User-Role"] = userRole;
     }
 
     // Prepare request
@@ -69,8 +69,8 @@ export async function apiRequest<T = any>(
     };
 
     // Add body for non-GET requests
-    if (body && method !== 'GET') {
-      requestInit.body = typeof body === 'string' ? body : JSON.stringify(body);
+    if (body && method !== "GET") {
+      requestInit.body = typeof body === "string" ? body : JSON.stringify(body);
     }
 
     // Make request
@@ -90,7 +90,7 @@ export async function apiRequest<T = any>(
       message: data.message,
     };
   } catch (error) {
-    console.error('API Request failed:', { url, method, error });
+    console.error("API Request failed:", { url, method, error });
 
     if (error instanceof ApiError) {
       return {
@@ -110,8 +110,8 @@ export async function apiRequest<T = any>(
 
     return {
       success: false,
-      error: 'Unknown Error',
-      message: 'An unexpected error occurred',
+      error: "Unknown Error",
+      message: "An unexpected error occurred",
     };
   }
 }
@@ -121,9 +121,9 @@ export async function apiRequest<T = any>(
  */
 export async function apiGet<T = any>(
   url: string,
-  options?: Omit<ApiRequestOptions, 'method' | 'body'>
+  options?: Omit<ApiRequestOptions, "method" | "body">,
 ): Promise<ApiResponse<T>> {
-  return apiRequest<T>(url, { ...options, method: 'GET' });
+  return apiRequest<T>(url, { ...options, method: "GET" });
 }
 
 /**
@@ -132,9 +132,9 @@ export async function apiGet<T = any>(
 export async function apiPost<T = any>(
   url: string,
   body?: any,
-  options?: Omit<ApiRequestOptions, 'method'>
+  options?: Omit<ApiRequestOptions, "method">,
 ): Promise<ApiResponse<T>> {
-  return apiRequest<T>(url, { ...options, method: 'POST', body });
+  return apiRequest<T>(url, { ...options, method: "POST", body });
 }
 
 /**
@@ -143,9 +143,9 @@ export async function apiPost<T = any>(
 export async function apiPut<T = any>(
   url: string,
   body?: any,
-  options?: Omit<ApiRequestOptions, 'method'>
+  options?: Omit<ApiRequestOptions, "method">,
 ): Promise<ApiResponse<T>> {
-  return apiRequest<T>(url, { ...options, method: 'PUT', body });
+  return apiRequest<T>(url, { ...options, method: "PUT", body });
 }
 
 /**
@@ -153,9 +153,9 @@ export async function apiPut<T = any>(
  */
 export async function apiDelete<T = any>(
   url: string,
-  options?: Omit<ApiRequestOptions, 'method' | 'body'>
+  options?: Omit<ApiRequestOptions, "method" | "body">,
 ): Promise<ApiResponse<T>> {
-  return apiRequest<T>(url, { ...options, method: 'DELETE' });
+  return apiRequest<T>(url, { ...options, method: "DELETE" });
 }
 
 /**
@@ -164,9 +164,9 @@ export async function apiDelete<T = any>(
 export async function apiPatch<T = any>(
   url: string,
   body?: any,
-  options?: Omit<ApiRequestOptions, 'method'>
+  options?: Omit<ApiRequestOptions, "method">,
 ): Promise<ApiResponse<T>> {
-  return apiRequest<T>(url, { ...options, method: 'PATCH', body });
+  return apiRequest<T>(url, { ...options, method: "PATCH", body });
 }
 
 /**
@@ -179,30 +179,30 @@ export async function apiUpload<T = any>(
     userRole?: ExtendedUserRole;
     onProgress?: (progress: number) => void;
     additionalData?: Record<string, any>;
-  }
+  },
 ): Promise<ApiResponse<T>> {
   const { userRole, onProgress, additionalData = {} } = options || {};
 
   try {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     // Add additional data
     Object.entries(additionalData).forEach(([key, value]) => {
       formData.append(
         key,
-        typeof value === 'string' ? value : JSON.stringify(value)
+        typeof value === "string" ? value : JSON.stringify(value),
       );
     });
 
     // Prepare headers (don't set Content-Type, let browser set it with boundary)
     const headers: Record<string, string> = {};
     if (userRole) {
-      headers['X-User-Role'] = userRole;
+      headers["X-User-Role"] = userRole;
     }
 
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers,
       body: formData,
     });
@@ -219,7 +219,7 @@ export async function apiUpload<T = any>(
       message: data.message,
     };
   } catch (error) {
-    console.error('Upload failed:', { url, file: file.name, error });
+    console.error("Upload failed:", { url, file: file.name, error });
 
     if (error instanceof ApiError) {
       return {
@@ -231,8 +231,8 @@ export async function apiUpload<T = any>(
 
     return {
       success: false,
-      error: 'Upload Failed',
-      message: error instanceof Error ? error.message : 'File upload failed',
+      error: "Upload Failed",
+      message: error instanceof Error ? error.message : "File upload failed",
     };
   }
 }
@@ -241,20 +241,20 @@ export async function apiUpload<T = any>(
  * Batch requests with proper error handling
  */
 export async function apiBatch<T = any>(
-  requests: Array<{ url: string; options?: ApiRequestOptions }>
+  requests: Array<{ url: string; options?: ApiRequestOptions }>,
 ): Promise<Array<ApiResponse<T>>> {
   const results = await Promise.allSettled(
-    requests.map(({ url, options }) => apiRequest<T>(url, options))
+    requests.map(({ url, options }) => apiRequest<T>(url, options)),
   );
 
-  return results.map(result =>
-    result.status === 'fulfilled'
+  return results.map((result) =>
+    result.status === "fulfilled"
       ? result.value
       : {
           success: false,
-          error: 'Request Failed',
-          message: result.reason?.message || 'Batch request failed',
-        }
+          error: "Request Failed",
+          message: result.reason?.message || "Batch request failed",
+        },
   );
 }
 
@@ -265,7 +265,7 @@ export async function apiWithRetry<T = any>(
   url: string,
   options: ApiRequestOptions = {},
   maxRetries: number = 3,
-  retryDelay: number = 1000
+  retryDelay: number = 1000,
 ): Promise<ApiResponse<T>> {
   let lastError: any;
 
@@ -280,7 +280,7 @@ export async function apiWithRetry<T = any>(
       lastError = result;
 
       // Don't retry on client errors (4xx)
-      if (result.error?.startsWith('4')) {
+      if (result.error?.startsWith("4")) {
         break;
       }
     } catch (error) {
@@ -289,8 +289,8 @@ export async function apiWithRetry<T = any>(
 
     // Wait before retry (exponential backoff)
     if (attempt < maxRetries) {
-      await new Promise(resolve =>
-        setTimeout(resolve, retryDelay * Math.pow(2, attempt))
+      await new Promise((resolve) =>
+        setTimeout(resolve, retryDelay * Math.pow(2, attempt)),
       );
     }
   }
@@ -298,8 +298,8 @@ export async function apiWithRetry<T = any>(
   return (
     lastError || {
       success: false,
-      error: 'Max Retries Exceeded',
-      message: 'Request failed after maximum retry attempts',
+      error: "Max Retries Exceeded",
+      message: "Request failed after maximum retry attempts",
     }
   );
 }
@@ -309,7 +309,7 @@ export async function apiWithRetry<T = any>(
  */
 export async function checkApiHealth(): Promise<boolean> {
   try {
-    const response = await apiGet('/api/health');
+    const response = await apiGet("/api/health");
     return response.success;
   } catch {
     return false;

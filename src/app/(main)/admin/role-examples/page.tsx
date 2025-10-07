@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AdvancedErrorBoundary } from '@/components/ui/advanced-error-boundary';
-import { dbLogger } from '@/lib/logger';
-import { RoleBasedExamples } from '@/components/examples/RoleBasedExamples';
-import { RoleGuard } from '@/components/auth/RoleGuard';
+import { Suspense } from "react";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
+import { dbLogger } from "@/lib/logger";
+import { RoleBasedExamples } from "@/components/examples/RoleBasedExamples";
+import { RoleGuard } from "@/components/auth/RoleGuard";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function RoleExamplesPage() {
   return (
-    <RoleGuard roles={['MASTER']} showUnauthorized={false}>
+    <RoleGuard roles={["MASTER"]} showUnauthorized={false}>
       <AdvancedErrorBoundary
         context="Role Examples Page"
         enableRetry={true}
-        showDetails={process.env.NODE_ENV === 'development'}
+        showDetails={process.env.NODE_ENV === "development"}
       >
         <Suspense
           fallback={

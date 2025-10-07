@@ -5,6 +5,7 @@
 ### ✅ Active Branches
 
 #### `main` (Client Production Branch)
+
 - **Purpose**: Real client production code
 - **Environment**: manitospintadas.cl (Client site)
 - **Deployment**: Automatic on push (HIGH RISK)
@@ -12,6 +13,7 @@
 - **Workflow**: Only thoroughly tested, client-approved code
 
 #### `prod` (Service/Demo Branch)
+
 - **Purpose**: Service and demo site
 - **Environment**: school.aramac.dev (Your service site)
 - **Deployment**: Automatic on push
@@ -19,6 +21,7 @@
 - **Workflow**: Marketing materials, demos, service features
 
 #### `dev.school.aramac.dev` (Development Branch)
+
 - **Purpose**: Primary development and testing
 - **Environment**: dev.school.aramac.dev (Sandbox)
 - **Deployment**: Automatic on push
@@ -28,6 +31,7 @@
 ## 🚫 Deprecated Branches
 
 ### Deleted Branches
+
 - `master` → Renamed to `main`
 - `dev` → Renamed to `prod`
 - `developer` → Deleted (redundant)
@@ -35,6 +39,7 @@
 - `manitospintadas.cl` → Renamed to `main`
 
 ### Why Three Branches?
+
 - **Multi-environment support**: Separate environments for client, service, and development
 - **Risk isolation**: Client production is protected from service/demo changes
 - **Marketing flexibility**: Service site can be updated independently
@@ -43,6 +48,7 @@
 ## 🔄 Workflow
 
 ### Development Process
+
 ```bash
 # 1. Always work on dev.school.aramac.dev
 git checkout dev.school.aramac.dev
@@ -64,6 +70,7 @@ git push origin dev.school.aramac.dev
 ```
 
 ### Service Deployment (school.aramac.dev)
+
 ```bash
 # Deploy to service/demo site
 git checkout prod
@@ -72,6 +79,7 @@ git push origin prod  # Auto-deploys to school.aramac.dev
 ```
 
 ### Client Production Deployment (manitospintadas.cl)
+
 ```bash
 # Only deploy thoroughly tested, client-approved code
 git checkout main
@@ -82,11 +90,13 @@ git push origin main  # Auto-deploys to manitospintadas.cl
 ## 🛡️ Branch Protection
 
 ### Automatic Checks
+
 - Run `npm run check-branches` before any major operations
 - Script will warn about deprecated branches
 - Prevents accidental merges from old branches
 
 ### Manual Reviews Required
+
 - All merges to `manitospintadas.cl` require review
 - Check for:
   - Test coverage
@@ -96,11 +106,11 @@ git push origin main  # Auto-deploys to manitospintadas.cl
 
 ## 📋 Environment Mapping
 
-| Branch | Environment | URL | Auto-deploy | Risk Level |
-|--------|-------------|-----|-------------|------------|
-| `dev.school.aramac.dev` | Development Sandbox | `dev.school.aramac.dev` | ✅ Yes | 🟢 Low |
-| `prod` | Service/Demo Site | `school.aramac.dev` | ✅ Yes | 🟡 Medium |
-| `main` | Client Production | `manitospintadas.cl` | ✅ Yes | 🔴 High |
+| Branch                  | Environment         | URL                     | Auto-deploy | Risk Level |
+| ----------------------- | ------------------- | ----------------------- | ----------- | ---------- |
+| `dev.school.aramac.dev` | Development Sandbox | `dev.school.aramac.dev` | ✅ Yes      | 🟢 Low     |
+| `prod`                  | Service/Demo Site   | `school.aramac.dev`     | ✅ Yes      | 🟡 Medium  |
+| `main`                  | Client Production   | `manitospintadas.cl`    | ✅ Yes      | 🔴 High    |
 
 ## ⚠️ Important Rules
 
@@ -113,6 +123,7 @@ git push origin main  # Auto-deploys to manitospintadas.cl
 7. **Keep all branches clean and deployable**
 
 ## 🔧 Scripts
+
 ```bash
 # Check for deprecated branches
 npm run check-branches
@@ -126,5 +137,6 @@ npm run check-branches
 ## 📞 Contact
 
 For questions about branch strategy:
+
 - Development: <agustinaramac@gmail.com>
 - Production: <inacorgan@gmail.com> (Adrina)

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { StatusBadge } from '@/components/ui/status-badge';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
   Server,
   Database,
@@ -10,27 +10,27 @@ import {
   Zap,
   AlertTriangle,
   CheckCircle,
-} from 'lucide-react';
-import { formatDate } from '@/lib/utils';
+} from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 interface SystemMetrics {
   database: {
-    status: 'healthy' | 'warning' | 'error';
+    status: "healthy" | "warning" | "error";
     responseTime: number;
     connections: number;
   };
   api: {
-    status: 'healthy' | 'warning' | 'error';
+    status: "healthy" | "warning" | "error";
     uptime: number;
     requests: number;
   };
   auth: {
-    status: 'healthy' | 'warning' | 'error';
+    status: "healthy" | "warning" | "error";
     activeSessions: number;
     failedAttempts: number;
   };
   storage: {
-    status: 'healthy' | 'warning' | 'error';
+    status: "healthy" | "warning" | "error";
     usedSpace: number;
     totalSpace: number;
   };
@@ -43,11 +43,11 @@ interface SystemStatusWidgetProps {
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case 'healthy':
+    case "healthy":
       return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case 'warning':
+    case "warning":
       return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
-    case 'error':
+    case "error":
       return <AlertTriangle className="w-4 h-4 text-red-600" />;
     default:
       return <Server className="w-4 h-4 text-gray-600" />;
@@ -56,24 +56,24 @@ const getStatusIcon = (status: string) => {
 
 const getStatusVariant = (status: string) => {
   switch (status) {
-    case 'healthy':
-      return 'CONFIRMED';
-    case 'warning':
-      return 'PENDING';
-    case 'error':
-      return 'CANCELLED';
+    case "healthy":
+      return "CONFIRMED";
+    case "warning":
+      return "PENDING";
+    case "error":
+      return "CANCELLED";
     default:
-      return 'CONFIRMED';
+      return "CONFIRMED";
   }
 };
 
 export function SystemStatusWidget({ metrics }: SystemStatusWidgetProps) {
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   const formatUptime = (seconds: number) => {
@@ -163,34 +163,34 @@ export function SystemStatusWidget({ metrics }: SystemStatusWidgetProps) {
             <Badge
               variant={
                 Object.values(metrics).every(
-                  m =>
-                    typeof m === 'object' &&
-                    'status' in m &&
-                    m.status === 'healthy'
+                  (m) =>
+                    typeof m === "object" &&
+                    "status" in m &&
+                    m.status === "healthy",
                 )
-                  ? 'default'
-                  : 'destructive'
+                  ? "default"
+                  : "destructive"
               }
               className="flex items-center gap-1"
             >
               {getStatusIcon(
                 Object.values(metrics).every(
-                  m =>
-                    typeof m === 'object' &&
-                    'status' in m &&
-                    m.status === 'healthy'
+                  (m) =>
+                    typeof m === "object" &&
+                    "status" in m &&
+                    m.status === "healthy",
                 )
-                  ? 'healthy'
-                  : 'warning'
+                  ? "healthy"
+                  : "warning",
               )}
               {Object.values(metrics).every(
-                m =>
-                  typeof m === 'object' &&
-                  'status' in m &&
-                  m.status === 'healthy'
+                (m) =>
+                  typeof m === "object" &&
+                  "status" in m &&
+                  m.status === "healthy",
               )
-                ? 'Todo funcionando'
-                : 'Requiere atención'}
+                ? "Todo funcionando"
+                : "Requiere atención"}
             </Badge>
           </div>
         </div>

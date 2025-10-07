@@ -3,16 +3,22 @@
  * Dashboard that adapts content based on educational institution type
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { 
-  School, 
-  GraduationCap, 
-  BookOpen, 
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  School,
+  GraduationCap,
+  BookOpen,
   Building2,
   Users,
   BarChart3,
@@ -22,17 +28,17 @@ import {
   Trophy,
   Heart,
   Lightbulb,
-  Target
-} from 'lucide-react';
-import { 
-  EducationalInstitutionType, 
+  Target,
+} from "lucide-react";
+import {
+  EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
-  shouldShowFeature
-} from '@/lib/educational-system';
+  shouldShowFeature,
+} from "@/lib/educational-system";
 
 interface LevelSpecificDashboardProps {
   currentType: EducationalInstitutionType;
-  userRole: 'ADMIN' | 'MASTER' | 'PROFESOR' | 'PARENT';
+  userRole: "ADMIN" | "MASTER" | "PROFESOR" | "PARENT";
 }
 
 interface DashboardCard {
@@ -48,187 +54,196 @@ interface DashboardCard {
   };
 }
 
-export function LevelSpecificDashboard({ currentType, userRole }: LevelSpecificDashboardProps) {
+export function LevelSpecificDashboard({
+  currentType,
+  userRole,
+}: LevelSpecificDashboardProps) {
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
   const getDashboardCards = (): DashboardCard[] => {
     const baseCards: DashboardCard[] = [
       {
-        title: 'Estudiantes Activos',
-        description: 'Total de estudiantes matriculados',
+        title: "Estudiantes Activos",
+        description: "Total de estudiantes matriculados",
         icon: Users,
-        value: '156',
-        change: '+12%',
-        color: 'text-blue-600',
-        action: { label: 'Ver Lista', href: '/admin/estudiantes' }
+        value: "156",
+        change: "+12%",
+        color: "text-blue-600",
+        action: { label: "Ver Lista", href: "/admin/estudiantes" },
       },
       {
-        title: 'Docentes',
-        description: 'Profesores y educadores',
+        title: "Docentes",
+        description: "Profesores y educadores",
         icon: GraduationCap,
-        value: '18',
-        change: '+2',
-        color: 'text-green-600',
-        action: { label: 'Gestionar', href: '/admin/docentes' }
-      }
+        value: "18",
+        change: "+2",
+        color: "text-green-600",
+        action: { label: "Gestionar", href: "/admin/docentes" },
+      },
     ];
 
     // Educational level specific cards
     switch (currentType) {
-      case 'PRESCHOOL':
+      case "PRESCHOOL":
         baseCards.push(
           {
-            title: 'Niños NT1',
-            description: 'Pre-Kinder (4-5 años)',
+            title: "Niños NT1",
+            description: "Pre-Kinder (4-5 años)",
             icon: Heart,
-            value: '32',
-            color: 'text-pink-600',
-            action: { label: 'Ver Grupo', href: '/admin/nt1' }
+            value: "32",
+            color: "text-pink-600",
+            action: { label: "Ver Grupo", href: "/admin/nt1" },
           },
           {
-            title: 'Niños NT2',
-            description: 'Kinder (5-6 años)',
+            title: "Niños NT2",
+            description: "Kinder (5-6 años)",
             icon: School,
-            value: '28',
-            color: 'text-purple-600',
-            action: { label: 'Ver Grupo', href: '/admin/nt2' }
+            value: "28",
+            color: "text-purple-600",
+            action: { label: "Ver Grupo", href: "/admin/nt2" },
           },
           {
-            title: 'Actividades Lúdicas',
-            description: 'Juegos y aprendizaje',
+            title: "Actividades Lúdicas",
+            description: "Juegos y aprendizaje",
             icon: Lightbulb,
-            value: '45',
-            change: '+8',
-            color: 'text-orange-600',
-            action: { label: 'Crear Nueva', href: '/admin/actividades' }
+            value: "45",
+            change: "+8",
+            color: "text-orange-600",
+            action: { label: "Crear Nueva", href: "/admin/actividades" },
           },
           {
-            title: 'Desarrollo Integral',
-            description: 'Evaluaciones de desarrollo',
+            title: "Desarrollo Integral",
+            description: "Evaluaciones de desarrollo",
             icon: Target,
-            value: '92%',
-            change: '+5%',
-            color: 'text-emerald-600',
-            action: { label: 'Ver Reportes', href: '/admin/desarrollo' }
-          }
+            value: "92%",
+            change: "+5%",
+            color: "text-emerald-600",
+            action: { label: "Ver Reportes", href: "/admin/desarrollo" },
+          },
         );
         break;
 
-      case 'BASIC_SCHOOL':
+      case "BASIC_SCHOOL":
         baseCards.push(
           {
-            title: 'Promedio General',
-            description: 'Rendimiento académico',
+            title: "Promedio General",
+            description: "Rendimiento académico",
             icon: BarChart3,
-            value: '6.2',
-            change: '+0.3',
-            color: 'text-blue-600',
-            action: { label: 'Ver Notas', href: '/admin/notas' }
+            value: "6.2",
+            change: "+0.3",
+            color: "text-blue-600",
+            action: { label: "Ver Notas", href: "/admin/notas" },
           },
           {
-            title: 'Asignaturas',
-            description: 'Materias impartidas',
+            title: "Asignaturas",
+            description: "Materias impartidas",
             icon: BookOpen,
-            value: '10',
-            color: 'text-indigo-600',
-            action: { label: 'Planificaciones', href: '/admin/planificaciones' }
+            value: "10",
+            color: "text-indigo-600",
+            action: {
+              label: "Planificaciones",
+              href: "/admin/planificaciones",
+            },
           },
           {
-            title: 'Reuniones Pendientes',
-            description: 'Con apoderados',
+            title: "Reuniones Pendientes",
+            description: "Con apoderados",
             icon: Calendar,
-            value: '8',
-            color: 'text-amber-600',
-            action: { label: 'Programar', href: '/admin/reuniones' }
+            value: "8",
+            color: "text-amber-600",
+            action: { label: "Programar", href: "/admin/reuniones" },
           },
           {
-            title: 'Proyectos Activos',
-            description: 'Investigación escolar',
+            title: "Proyectos Activos",
+            description: "Investigación escolar",
             icon: FileText,
-            value: '12',
-            change: '+3',
-            color: 'text-teal-600',
-            action: { label: 'Gestionar', href: '/admin/proyectos' }
-          }
+            value: "12",
+            change: "+3",
+            color: "text-teal-600",
+            action: { label: "Gestionar", href: "/admin/proyectos" },
+          },
         );
         break;
 
-      case 'HIGH_SCHOOL':
+      case "HIGH_SCHOOL":
         baseCards.push(
           {
-            title: 'Estudiantes 4° Medio',
-            description: 'Próximos a egresar',
+            title: "Estudiantes 4° Medio",
+            description: "Próximos a egresar",
             icon: GraduationCap,
-            value: '42',
-            color: 'text-purple-600',
-            action: { label: 'Seguimiento', href: '/admin/egreso' }
+            value: "42",
+            color: "text-purple-600",
+            action: { label: "Seguimiento", href: "/admin/egreso" },
           },
           {
-            title: 'Orientación Vocacional',
-            description: 'Sesiones realizadas',
+            title: "Orientación Vocacional",
+            description: "Sesiones realizadas",
             icon: Target,
-            value: '28',
-            change: '+12',
-            color: 'text-green-600',
-            action: { label: 'Programar', href: '/admin/orientacion' }
+            value: "28",
+            change: "+12",
+            color: "text-green-600",
+            action: { label: "Programar", href: "/admin/orientacion" },
           },
           {
-            title: 'Preparación PSU/PAES',
-            description: 'Estudiantes en programa',
+            title: "Preparación PSU/PAES",
+            description: "Estudiantes en programa",
             icon: Trophy,
-            value: '89%',
-            change: '+15%',
-            color: 'text-amber-600',
-            action: { label: 'Resultados', href: '/admin/psu-paes' }
+            value: "89%",
+            change: "+15%",
+            color: "text-amber-600",
+            action: { label: "Resultados", href: "/admin/psu-paes" },
           },
           {
-            title: 'Formación Técnica',
-            description: 'Especialidades TP',
+            title: "Formación Técnica",
+            description: "Especialidades TP",
             icon: Building2,
-            value: '4',
-            color: 'text-cyan-600',
-            action: { label: 'Ver Especialidades', href: '/admin/tecnico-profesional' }
-          }
+            value: "4",
+            color: "text-cyan-600",
+            action: {
+              label: "Ver Especialidades",
+              href: "/admin/tecnico-profesional",
+            },
+          },
         );
         break;
 
-      case 'COLLEGE':
+      case "COLLEGE":
         baseCards.push(
           {
-            title: 'Carreras Activas',
-            description: 'Programas académicos',
+            title: "Carreras Activas",
+            description: "Programas académicos",
             icon: BookOpen,
-            value: '12',
-            color: 'text-blue-600',
-            action: { label: 'Gestionar', href: '/admin/carreras' }
+            value: "12",
+            color: "text-blue-600",
+            action: { label: "Gestionar", href: "/admin/carreras" },
           },
           {
-            title: 'Investigaciones',
-            description: 'Proyectos en curso',
+            title: "Investigaciones",
+            description: "Proyectos en curso",
             icon: Lightbulb,
-            value: '34',
-            change: '+8',
-            color: 'text-purple-600',
-            action: { label: 'Ver Proyectos', href: '/admin/investigacion' }
+            value: "34",
+            change: "+8",
+            color: "text-purple-600",
+            action: { label: "Ver Proyectos", href: "/admin/investigacion" },
           },
           {
-            title: 'Tesis Defendidas',
-            description: 'Este semestre',
+            title: "Tesis Defendidas",
+            description: "Este semestre",
             icon: Trophy,
-            value: '18',
-            change: '+6',
-            color: 'text-green-600',
-            action: { label: 'Calendario', href: '/admin/tesis' }
+            value: "18",
+            change: "+6",
+            color: "text-green-600",
+            action: { label: "Calendario", href: "/admin/tesis" },
           },
           {
-            title: 'Publicaciones',
-            description: 'Artículos académicos',
+            title: "Publicaciones",
+            description: "Artículos académicos",
             icon: FileText,
-            value: '25',
-            change: '+12',
-            color: 'text-amber-600',
-            action: { label: 'Biblioteca', href: '/admin/publicaciones' }
-          }
+            value: "25",
+            change: "+12",
+            color: "text-amber-600",
+            action: { label: "Biblioteca", href: "/admin/publicaciones" },
+          },
         );
         break;
     }
@@ -285,11 +300,11 @@ export function LevelSpecificDashboard({ currentType, userRole }: LevelSpecificD
                 )}
               </div>
               {card.action && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="w-full mt-3"
-                  onClick={() => window.location.href = card.action!.href}
+                  onClick={() => (window.location.href = card.action!.href)}
                 >
                   {card.action.label}
                 </Button>
@@ -310,22 +325,29 @@ export function LevelSpecificDashboard({ currentType, userRole }: LevelSpecificD
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {Object.entries({
-              'parent_meetings': 'Reuniones con Apoderados',
-              'academic_planning': 'Planificación Académica',
-              'grading_system': 'Sistema de Calificaciones',
-              'daycare_features': 'Características de Jardín',
-              'university_features': 'Funciones Universitarias',
-              'technical_training': 'Formación Técnica',
-              'thesis_management': 'Gestión de Tesis',
-              'play_based_learning': 'Aprendizaje Lúdico',
-              'career_guidance': 'Orientación Vocacional',
-              'research_projects': 'Proyectos de Investigación'
+              parent_meetings: "Reuniones con Apoderados",
+              academic_planning: "Planificación Académica",
+              grading_system: "Sistema de Calificaciones",
+              daycare_features: "Características de Jardín",
+              university_features: "Funciones Universitarias",
+              technical_training: "Formación Técnica",
+              thesis_management: "Gestión de Tesis",
+              play_based_learning: "Aprendizaje Lúdico",
+              career_guidance: "Orientación Vocacional",
+              research_projects: "Proyectos de Investigación",
             }).map(([feature, label]) => {
               const isEnabled = shouldShowFeature(feature, currentType);
               return (
-                <div key={feature} className={`flex items-center gap-2 p-2 rounded ${isEnabled ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`w-2 h-2 rounded-full ${isEnabled ? 'bg-green-500' : 'bg-gray-400'}`} />
-                  <span className={`text-sm ${isEnabled ? 'text-green-800' : 'text-gray-600'}`}>
+                <div
+                  key={feature}
+                  className={`flex items-center gap-2 p-2 rounded ${isEnabled ? "bg-green-50" : "bg-gray-50"}`}
+                >
+                  <div
+                    className={`w-2 h-2 rounded-full ${isEnabled ? "bg-green-500" : "bg-gray-400"}`}
+                  />
+                  <span
+                    className={`text-sm ${isEnabled ? "text-green-800" : "text-gray-600"}`}
+                  >
                     {label}
                   </span>
                 </div>

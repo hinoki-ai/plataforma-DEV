@@ -1,29 +1,35 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { useSession, signOut } from 'next-auth/react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+} from "@/components/ui/collapsible";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import {
   NavigationIcons,
   SolidIcons,
   ThemeIcons,
-} from '@/components/icons/hero-icons';
-import { SHARED_NAVIGATION_ITEMS, STANDARD_SECTION_ORDER, ROLE_SPECIFIC_SECTIONS, getKeyboardShortcuts, getNavigationGroupsForRole } from './navigation';
+} from "@/components/icons/hero-icons";
+import {
+  SHARED_NAVIGATION_ITEMS,
+  STANDARD_SECTION_ORDER,
+  ROLE_SPECIFIC_SECTIONS,
+  getKeyboardShortcuts,
+  getNavigationGroupsForRole,
+} from "./navigation";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean;
@@ -52,11 +58,11 @@ const handleNavigationItemClick = (
   item: NavigationItem,
   pathname: string,
   onToggle?: () => void,
-  handleLogout?: () => void
+  handleLogout?: () => void,
 ) => {
   return (e: React.MouseEvent) => {
     // Handle action items (like logout)
-    if (item.action === 'logout') {
+    if (item.action === "logout") {
       e.preventDefault();
       handleLogout?.();
       return;
@@ -70,7 +76,7 @@ const handleNavigationItemClick = (
         return;
       }
       // Close mobile sidebar on navigation - hydration-safe
-      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      if (typeof window !== "undefined" && window.innerWidth < 768) {
         onToggle?.();
       }
     }
@@ -84,19 +90,24 @@ const renderNavigationItem = (
   isCollapsed: boolean,
   pathname: string,
   onToggle?: () => void,
-  handleLogout?: () => void
+  handleLogout?: () => void,
 ) => {
-  const handleClick = handleNavigationItemClick(item, pathname, onToggle, handleLogout);
+  const handleClick = handleNavigationItemClick(
+    item,
+    pathname,
+    onToggle,
+    handleLogout,
+  );
 
-  if (item.action === 'logout') {
+  if (item.action === "logout") {
     // Render as button for actions
     return (
       <button
         className={cn(
-          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2 w-full text-left',
-          'text-muted-foreground hover:text-foreground'
+          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2 w-full text-left",
+          "text-muted-foreground hover:text-foreground",
         )}
-        aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ''}`}
+        aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
         onClick={handleClick}
       >
         <item.icon className="h-4 w-4 flex-shrink-0" />
@@ -113,16 +124,16 @@ const renderNavigationItem = (
   // Render as link for navigation items
   return (
     <Link
-      href={item.href || '#'}
+      href={item.href || "#"}
       prefetch={false}
       className={cn(
-        'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2',
+        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2",
         isActive
-          ? 'bg-accent text-accent-foreground shadow-sm'
-          : 'text-muted-foreground hover:text-foreground'
+          ? "bg-accent text-accent-foreground shadow-sm"
+          : "text-muted-foreground hover:text-foreground",
       )}
-      aria-current={isActive ? 'page' : undefined}
-      aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ''}`}
+      aria-current={isActive ? "page" : undefined}
+      aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
       onClick={handleClick}
     >
       <item.icon className="h-4 w-4 flex-shrink-0" />
@@ -156,7 +167,7 @@ export function Sidebar({
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setPulseCount(prev => (prev + 1) % 3);
+      setPulseCount((prev) => (prev + 1) % 3);
     }, 2000);
 
     return () => clearInterval(interval);
@@ -165,7 +176,7 @@ export function Sidebar({
   // ⚡ Performance: Memoize keyboard shortcuts to prevent recreation
   const keyboardShortcuts = React.useMemo(
     () => getKeyboardShortcuts(session?.user?.role, pathname),
-    [session?.user?.role, pathname]
+    [session?.user?.role, pathname],
   );
 
   // ⚡ Performance: Memoize logout handler
@@ -173,13 +184,13 @@ export function Sidebar({
     try {
       // Use NextAuth signOut with proper callback
       await signOut({
-        callbackUrl: '/',
+        callbackUrl: "/",
         redirect: true,
       });
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
       // Fallback navigation
-      router.push('/');
+      router.push("/");
     }
   }, [router]);
 
@@ -188,13 +199,13 @@ export function Sidebar({
     (event: KeyboardEvent) => {
       if (!session) return;
 
-      const shortcut = Object.keys(keyboardShortcuts).find(key => {
-        const [modifier, char] = key.split('+');
-        if (modifier === 'Alt') {
+      const shortcut = Object.keys(keyboardShortcuts).find((key) => {
+        const [modifier, char] = key.split("+");
+        if (modifier === "Alt") {
           return event.altKey && event.key.toLowerCase() === char.toLowerCase();
         }
-        if (modifier === 'Escape') {
-          return event.key === 'Escape';
+        if (modifier === "Escape") {
+          return event.key === "Escape";
         }
         return false;
       });
@@ -204,14 +215,14 @@ export function Sidebar({
         const action =
           keyboardShortcuts[shortcut as keyof typeof keyboardShortcuts];
 
-        if (action === 'close-sidebar') {
+        if (action === "close-sidebar") {
           onToggle?.();
         } else if (action) {
           router.push(action);
         }
       }
     },
-    [session, keyboardShortcuts, onToggle, router]
+    [session, keyboardShortcuts, onToggle, router],
   );
 
   // Simplified keyboard navigation with debounce
@@ -224,11 +235,11 @@ export function Sidebar({
       timeoutId = setTimeout(() => handleKeyDown(event), 100);
     };
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('keydown', debouncedHandler);
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", debouncedHandler);
       return () => {
         clearTimeout(timeoutId);
-        window.removeEventListener('keydown', debouncedHandler);
+        window.removeEventListener("keydown", debouncedHandler);
       };
     }
   }, [handleKeyDown]);
@@ -236,21 +247,21 @@ export function Sidebar({
   // ⚡ Performance: Memoize navigation groups calculation
   const navigationGroups = React.useMemo(
     () => getNavigationGroupsForRole(session?.user?.role, pathname),
-    [session?.user?.role, pathname]
+    [session?.user?.role, pathname],
   );
   const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>(
     () => {
       // Initialize groups with their defaultOpen state
       const initialState: Record<string, boolean> = {};
-      navigationGroups.forEach(group => {
+      navigationGroups.forEach((group) => {
         initialState[group.title] = group.defaultOpen ?? false;
       });
       return initialState;
-    }
+    },
   );
 
   const toggleGroup = (groupTitle: string) => {
-    setOpenGroups(prev => ({
+    setOpenGroups((prev) => ({
       ...prev,
       [groupTitle]: !prev[groupTitle],
     }));
@@ -259,13 +270,13 @@ export function Sidebar({
   return (
     <TooltipProvider
       delayDuration={0}
-      key={isCollapsed ? 'collapsed' : 'expanded'}
+      key={isCollapsed ? "collapsed" : "expanded"}
     >
       <aside
         className={cn(
-          'relative flex flex-col bg-background border-r border-border transition-all duration-300',
-          isCollapsed ? 'w-16' : 'w-64',
-          className
+          "relative flex flex-col bg-background border-r border-border transition-all duration-300",
+          isCollapsed ? "w-16" : "w-64",
+          className,
         )}
         aria-label="Navegación principal"
         role="navigation"
@@ -293,18 +304,18 @@ export function Sidebar({
             className="h-8 w-8"
             onClick={onToggle}
             aria-label={
-              isCollapsed ? 'Expandir barra lateral' : 'Contraer barra lateral'
+              isCollapsed ? "Expandir barra lateral" : "Contraer barra lateral"
             }
             title={
               isCollapsed
-                ? 'Expandir barra lateral (Escape)'
-                : 'Contraer barra lateral (Escape)'
+                ? "Expandir barra lateral (Escape)"
+                : "Contraer barra lateral (Escape)"
             }
           >
             <NavigationIcons.ChevronRight
               className={cn(
-                'h-4 w-4 transition-transform',
-                isCollapsed && 'rotate-180'
+                "h-4 w-4 transition-transform",
+                isCollapsed && "rotate-180",
               )}
               aria-hidden="true"
             />
@@ -337,13 +348,13 @@ export function Sidebar({
                         aria-expanded={openGroups[group.title]}
                         aria-controls={`group-content-${group.title}`}
                         id={`group-${group.title}`}
-                        aria-label={`${openGroups[group.title] ? 'Contraer' : 'Expandir'} grupo ${group.title}`}
+                        aria-label={`${openGroups[group.title] ? "Contraer" : "Expandir"} grupo ${group.title}`}
                       >
                         <span>{group.title}</span>
                         <NavigationIcons.ChevronDown
                           className={cn(
-                            'h-3 w-3 transition-transform',
-                            openGroups[group.title] && 'rotate-180'
+                            "h-3 w-3 transition-transform",
+                            openGroups[group.title] && "rotate-180",
                           )}
                           aria-hidden="true"
                         />
@@ -353,15 +364,23 @@ export function Sidebar({
                       className="space-y-1"
                       id={`group-content-${group.title}`}
                     >
-                      {group.items.map(item => {
+                      {group.items.map((item) => {
                         const isActive = item.href
-                          ? pathname === item.href || pathname.startsWith(item.href + '/')
+                          ? pathname === item.href ||
+                            pathname.startsWith(item.href + "/")
                           : false;
 
                         return (
                           <Tooltip key={item.href || item.title}>
                             <TooltipTrigger asChild>
-                              {renderNavigationItem(item, isActive, isCollapsed, pathname, onToggle, handleLogout)}
+                              {renderNavigationItem(
+                                item,
+                                isActive,
+                                isCollapsed,
+                                pathname,
+                                onToggle,
+                                handleLogout,
+                              )}
                             </TooltipTrigger>
                             {!isCollapsed && (
                               <TooltipContent side="right">
@@ -384,35 +403,46 @@ export function Sidebar({
 
                 {/* Collapsed Mode - Show All Items Directly */}
                 {isCollapsed &&
-                  group.items.map(item => {
+                  group.items.map((item) => {
                     const isActive = item.href
-                      ? pathname === item.href || pathname.startsWith(item.href + '/')
+                      ? pathname === item.href ||
+                        pathname.startsWith(item.href + "/")
                       : false;
 
                     return (
                       <Tooltip key={item.href || item.title}>
                         <TooltipTrigger asChild>
-                          {(item as any).action === 'logout' ? (
+                          {(item as any).action === "logout" ? (
                             <button
                               className="flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
-                              aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ''}`}
-                              onClick={handleNavigationItemClick(item, pathname, onToggle, handleLogout)}
+                              aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+                              onClick={handleNavigationItemClick(
+                                item,
+                                pathname,
+                                onToggle,
+                                handleLogout,
+                              )}
                             >
                               <item.icon className="h-4 w-4 flex-shrink-0" />
                             </button>
                           ) : (
                             <Link
-                              href={item.href || '#'}
+                              href={item.href || "#"}
                               prefetch={false}
                               className={cn(
-                                'flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                                "flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                                 isActive
-                                  ? 'bg-accent text-accent-foreground'
-                                  : 'text-muted-foreground'
+                                  ? "bg-accent text-accent-foreground"
+                                  : "text-muted-foreground",
                               )}
-                              aria-current={isActive ? 'page' : undefined}
-                              aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ''}`}
-                              onClick={handleNavigationItemClick(item, pathname, onToggle, handleLogout)}
+                              aria-current={isActive ? "page" : undefined}
+                              aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+                              onClick={handleNavigationItemClick(
+                                item,
+                                pathname,
+                                onToggle,
+                                handleLogout,
+                              )}
                             >
                               <item.icon className="h-4 w-4 flex-shrink-0" />
                             </Link>
@@ -449,8 +479,8 @@ export function Sidebar({
           <div className="flex items-center justify-between">
             <div
               className={cn(
-                'flex items-center gap-3',
-                isCollapsed && 'justify-center'
+                "flex items-center gap-3",
+                isCollapsed && "justify-center",
               )}
               aria-label={`Usuario: ${session?.user?.name}`}
             >
@@ -466,11 +496,11 @@ export function Sidebar({
                     {session?.user?.name}
                   </p>
                   <p className="text-xs text-muted-foreground" id="user-role">
-                    {session?.user?.role === 'ADMIN'
-                      ? 'Administrador'
-                      : session?.user?.role === 'PROFESOR'
-                        ? 'Profesor'
-                        : 'Padre/Apoderado'}
+                    {session?.user?.role === "ADMIN"
+                      ? "Administrador"
+                      : session?.user?.role === "PROFESOR"
+                        ? "Profesor"
+                        : "Padre/Apoderado"}
                   </p>
                 </div>
               )}

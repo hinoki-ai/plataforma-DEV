@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,19 +14,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 import {
   Accessibility,
   Eye,
@@ -51,14 +51,14 @@ import {
   Palette,
   Globe,
   Coffee,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useTheme } from 'next-themes';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 interface AccessibilitySettings {
   fontSize: number;
-  contrast: 'normal' | 'high' | 'higher';
-  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
+  contrast: "normal" | "high" | "higher";
+  colorBlindMode: "none" | "protanopia" | "deuteranopia" | "tritanopia";
   reducedMotion: boolean;
   screenReader: boolean;
   keyboardNavigation: boolean;
@@ -68,7 +68,7 @@ interface AccessibilitySettings {
   soundEnabled: boolean;
   voiceCommands: boolean;
   magnification: number;
-  cursorSize: 'normal' | 'large' | 'extra-large';
+  cursorSize: "normal" | "large" | "extra-large";
   dyslexiaFont: boolean;
   readingGuide: boolean;
   pauseAnimations: boolean;
@@ -76,8 +76,8 @@ interface AccessibilitySettings {
 
 const DEFAULT_SETTINGS: AccessibilitySettings = {
   fontSize: 16,
-  contrast: 'normal',
-  colorBlindMode: 'none',
+  contrast: "normal",
+  colorBlindMode: "none",
   reducedMotion: false,
   screenReader: false,
   keyboardNavigation: true,
@@ -87,7 +87,7 @@ const DEFAULT_SETTINGS: AccessibilitySettings = {
   soundEnabled: false,
   voiceCommands: false,
   magnification: 1,
-  cursorSize: 'normal',
+  cursorSize: "normal",
   dyslexiaFont: false,
   readingGuide: false,
   pauseAnimations: false,
@@ -101,14 +101,14 @@ export function useAccessibilitySettings() {
   // Load settings from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('accessibility-settings');
+      const saved = localStorage.getItem("accessibility-settings");
       if (saved) {
         const parsed = JSON.parse(saved);
         setSettings({ ...DEFAULT_SETTINGS, ...parsed });
       }
       setIsLoaded(true);
     } catch (error) {
-      console.error('Failed to load accessibility settings:', error);
+      console.error("Failed to load accessibility settings:", error);
       setIsLoaded(true);
     }
   }, []);
@@ -121,14 +121,14 @@ export function useAccessibilitySettings() {
 
       try {
         localStorage.setItem(
-          'accessibility-settings',
-          JSON.stringify(updatedSettings)
+          "accessibility-settings",
+          JSON.stringify(updatedSettings),
         );
       } catch (error) {
-        console.error('Failed to save accessibility settings:', error);
+        console.error("Failed to save accessibility settings:", error);
       }
     },
-    [settings]
+    [settings],
   );
 
   // Apply settings to document
@@ -139,65 +139,65 @@ export function useAccessibilitySettings() {
     const body = document.body;
 
     // Font size
-    root.style.setProperty('--base-font-size', `${settings.fontSize}px`);
+    root.style.setProperty("--base-font-size", `${settings.fontSize}px`);
 
     // Contrast
-    body.classList.remove('high-contrast', 'higher-contrast');
-    if (settings.contrast === 'high') {
-      body.classList.add('high-contrast');
-    } else if (settings.contrast === 'higher') {
-      body.classList.add('higher-contrast');
+    body.classList.remove("high-contrast", "higher-contrast");
+    if (settings.contrast === "high") {
+      body.classList.add("high-contrast");
+    } else if (settings.contrast === "higher") {
+      body.classList.add("higher-contrast");
     }
 
     // Color blind mode
-    body.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
-    if (settings.colorBlindMode !== 'none') {
+    body.classList.remove("protanopia", "deuteranopia", "tritanopia");
+    if (settings.colorBlindMode !== "none") {
       body.classList.add(settings.colorBlindMode);
     }
 
     // Reduced motion
     if (settings.reducedMotion) {
-      body.classList.add('reduce-motion');
+      body.classList.add("reduce-motion");
     } else {
-      body.classList.remove('reduce-motion');
+      body.classList.remove("reduce-motion");
     }
 
     // Focus indicators
     if (settings.focusIndicators) {
-      body.classList.add('enhanced-focus');
+      body.classList.add("enhanced-focus");
     } else {
-      body.classList.remove('enhanced-focus');
+      body.classList.remove("enhanced-focus");
     }
 
     // Magnification
-    root.style.setProperty('--magnification', `${settings.magnification}`);
+    root.style.setProperty("--magnification", `${settings.magnification}`);
 
     // Cursor size
-    body.classList.remove('large-cursor', 'extra-large-cursor');
-    if (settings.cursorSize === 'large') {
-      body.classList.add('large-cursor');
-    } else if (settings.cursorSize === 'extra-large') {
-      body.classList.add('extra-large-cursor');
+    body.classList.remove("large-cursor", "extra-large-cursor");
+    if (settings.cursorSize === "large") {
+      body.classList.add("large-cursor");
+    } else if (settings.cursorSize === "extra-large") {
+      body.classList.add("extra-large-cursor");
     }
 
     // Dyslexia font
     if (settings.dyslexiaFont) {
-      body.classList.add('dyslexia-font');
+      body.classList.add("dyslexia-font");
     } else {
-      body.classList.remove('dyslexia-font');
+      body.classList.remove("dyslexia-font");
     }
 
     // Pause animations
     if (settings.pauseAnimations) {
-      body.classList.add('pause-animations');
+      body.classList.add("pause-animations");
     } else {
-      body.classList.remove('pause-animations');
+      body.classList.remove("pause-animations");
     }
   }, [settings, isLoaded]);
 
   const resetSettings = useCallback(() => {
     setSettings(DEFAULT_SETTINGS);
-    localStorage.removeItem('accessibility-settings');
+    localStorage.removeItem("accessibility-settings");
   }, []);
 
   return {
@@ -218,37 +218,37 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const contrastOptions = [
-    { value: 'normal', label: 'Normal', description: 'Contraste estándar' },
-    { value: 'high', label: 'Alto', description: 'Contraste mejorado' },
-    { value: 'higher', label: 'Muy Alto', description: 'Máximo contraste' },
+    { value: "normal", label: "Normal", description: "Contraste estándar" },
+    { value: "high", label: "Alto", description: "Contraste mejorado" },
+    { value: "higher", label: "Muy Alto", description: "Máximo contraste" },
   ] as const;
 
   const colorBlindOptions = [
-    { value: 'none', label: 'Ninguno', description: 'Colores normales' },
+    { value: "none", label: "Ninguno", description: "Colores normales" },
     {
-      value: 'protanopia',
-      label: 'Protanopía',
-      description: 'Dificultad con rojos',
+      value: "protanopia",
+      label: "Protanopía",
+      description: "Dificultad con rojos",
     },
     {
-      value: 'deuteranopia',
-      label: 'Deuteranopía',
-      description: 'Dificultad con verdes',
+      value: "deuteranopia",
+      label: "Deuteranopía",
+      description: "Dificultad con verdes",
     },
     {
-      value: 'tritanopia',
-      label: 'Tritanopía',
-      description: 'Dificultad con azules',
+      value: "tritanopia",
+      label: "Tritanopía",
+      description: "Dificultad con azules",
     },
   ] as const;
 
   const cursorOptions = [
-    { value: 'normal', label: 'Normal', description: 'Tamaño estándar' },
-    { value: 'large', label: 'Grande', description: 'Cursor más visible' },
+    { value: "normal", label: "Normal", description: "Tamaño estándar" },
+    { value: "large", label: "Grande", description: "Cursor más visible" },
     {
-      value: 'extra-large',
-      label: 'Extra Grande',
-      description: 'Máxima visibilidad',
+      value: "extra-large",
+      label: "Extra Grande",
+      description: "Máxima visibilidad",
     },
   ] as const;
 
@@ -258,18 +258,19 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
         <Button
           variant="outline"
           size="icon"
-          className={cn('relative', className)}
+          className={cn("relative", className)}
           aria-label="Abrir panel de accesibilidad"
         >
           <Accessibility className="h-4 w-4" />
           {Object.values(settings).some(
-            value =>
+            (value) =>
               value !==
               DEFAULT_SETTINGS[
                 Object.keys(settings).find(
-                  key => settings[key as keyof AccessibilitySettings] === value
+                  (key) =>
+                    settings[key as keyof AccessibilitySettings] === value,
                 ) as keyof AccessibilitySettings
-              ]
+              ],
           ) && (
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full" />
           )}
@@ -349,14 +350,15 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                       className="w-full justify-between"
                     >
                       {
-                        contrastOptions.find(o => o.value === settings.contrast)
-                          ?.label
+                        contrastOptions.find(
+                          (o) => o.value === settings.contrast,
+                        )?.label
                       }
                       <Contrast className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    {contrastOptions.map(option => (
+                    {contrastOptions.map((option) => (
                       <DropdownMenuItem
                         key={option.value}
                         onClick={() => saveSettings({ contrast: option.value })}
@@ -384,14 +386,14 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                     >
                       {
                         colorBlindOptions.find(
-                          o => o.value === settings.colorBlindMode
+                          (o) => o.value === settings.colorBlindMode,
                         )?.label
                       }
                       <Palette className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    {colorBlindOptions.map(option => (
+                    {colorBlindOptions.map((option) => (
                       <DropdownMenuItem
                         key={option.value}
                         onClick={() =>
@@ -430,14 +432,15 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                       className="w-full justify-between"
                     >
                       {
-                        cursorOptions.find(o => o.value === settings.cursorSize)
-                          ?.label
+                        cursorOptions.find(
+                          (o) => o.value === settings.cursorSize,
+                        )?.label
                       }
                       <MousePointer className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    {cursorOptions.map(option => (
+                    {cursorOptions.map((option) => (
                       <DropdownMenuItem
                         key={option.value}
                         onClick={() =>
@@ -466,7 +469,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.keyboardNavigation}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ keyboardNavigation: checked })
                   }
                 />
@@ -482,7 +485,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.focusIndicators}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ focusIndicators: checked })
                   }
                 />
@@ -508,7 +511,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.dyslexiaFont}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ dyslexiaFont: checked })
                   }
                 />
@@ -522,7 +525,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.readingGuide}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ readingGuide: checked })
                   }
                 />
@@ -538,7 +541,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.reducedMotion}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ reducedMotion: checked })
                   }
                 />
@@ -554,7 +557,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.pauseAnimations}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ pauseAnimations: checked })
                   }
                 />
@@ -570,7 +573,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.tooltips}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ tooltips: checked })
                   }
                 />
@@ -596,7 +599,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.soundEnabled}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ soundEnabled: checked })
                   }
                 />
@@ -612,7 +615,7 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
                 </div>
                 <Switch
                   checked={settings.screenReader}
-                  onCheckedChange={checked =>
+                  onCheckedChange={(checked) =>
                     saveSettings({ screenReader: checked })
                   }
                 />
@@ -662,18 +665,18 @@ export function LiveAnnouncer() {
   useEffect(() => {
     const handleAnnouncement = (event: CustomEvent) => {
       const message = event.detail.message;
-      setAnnouncements(prev => [...prev, message].slice(-5)); // Keep last 5
+      setAnnouncements((prev) => [...prev, message].slice(-5)); // Keep last 5
 
       // Remove after a delay
       setTimeout(() => {
-        setAnnouncements(prev => prev.slice(1));
+        setAnnouncements((prev) => prev.slice(1));
       }, 5000);
     };
 
-    document.addEventListener('announce' as any, handleAnnouncement);
+    document.addEventListener("announce" as any, handleAnnouncement);
 
     return () => {
-      document.removeEventListener('announce' as any, handleAnnouncement);
+      document.removeEventListener("announce" as any, handleAnnouncement);
     };
   }, []);
 
@@ -693,7 +696,7 @@ export function LiveAnnouncer() {
 
 // Function to announce messages to screen readers
 export function announceToScreenReader(message: string) {
-  const event = new CustomEvent('announce', {
+  const event = new CustomEvent("announce", {
     detail: { message },
   });
   document.dispatchEvent(event);

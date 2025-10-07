@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { useSession, signOut } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { usePathname, useRouter } from 'next/navigation';
-import { ModeToggle } from '@/components/ui/mode-toggle';
-import { LanguageToggle } from '@/components/language/LanguageToggle';
-import { DesktopToggle } from '@/components/ui/desktop-toggle';
-import { useResponsiveMode } from '@/lib/hooks/useDesktopToggle';
-import { navigation, layout } from '@/lib/responsive-utils';
-import { useTheme } from 'next-themes';
-import { OptimizedImage } from '@/components/ui/optimized-image';
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
+import { ModeToggle } from "@/components/ui/mode-toggle";
+import { LanguageToggle } from "@/components/language/LanguageToggle";
+import { DesktopToggle } from "@/components/ui/desktop-toggle";
+import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
+import { navigation, layout } from "@/lib/responsive-utils";
+import { useTheme } from "next-themes";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 // 🕊️ DIVINE PARSING ORACLE - Enhanced navigation with route-based loading
-import { useLanguage } from '@/components/language/LanguageContext';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
+import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,12 +34,12 @@ export default function Navigation() {
     const loadRouteNamespaces = () => {
       const namespacesToLoad: string[] = [];
 
-      if (pathname.startsWith('/admin')) {
-        namespacesToLoad.push('admin', 'dashboard');
-      } else if (pathname.startsWith('/profesor')) {
-        namespacesToLoad.push('profesor', 'dashboard');
-      } else if (pathname.startsWith('/parent')) {
-        namespacesToLoad.push('parent', 'dashboard');
+      if (pathname.startsWith("/admin")) {
+        namespacesToLoad.push("admin", "dashboard");
+      } else if (pathname.startsWith("/profesor")) {
+        namespacesToLoad.push("profesor", "dashboard");
+      } else if (pathname.startsWith("/parent")) {
+        namespacesToLoad.push("parent", "dashboard");
       }
 
       if (namespacesToLoad.length > 0) {
@@ -59,29 +59,29 @@ export default function Navigation() {
       sessionStorage.clear();
 
       // Clear form autofill data
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         // Clear any stored credentials in forms
-        const forms = document.querySelectorAll('form');
-        forms.forEach(form => {
+        const forms = document.querySelectorAll("form");
+        forms.forEach((form) => {
           const inputs = form.querySelectorAll(
-            'input[type="email"], input[type="password"]'
+            'input[type="email"], input[type="password"]',
           );
-          inputs.forEach(input => {
-            (input as HTMLInputElement).value = '';
-            (input as HTMLInputElement).defaultValue = '';
+          inputs.forEach((input) => {
+            (input as HTMLInputElement).value = "";
+            (input as HTMLInputElement).defaultValue = "";
           });
         });
       }
 
       // Use client-side signOut which is more reliable
-      await signOut({ callbackUrl: '/' });
+      await signOut({ callbackUrl: "/" });
 
       // Use Next.js router for navigation
-      router.push('/');
+      router.push("/");
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
       // Fallback to router push
-      router.push('/');
+      router.push("/");
     } finally {
       setIsLoggingOut(false);
     }
@@ -89,7 +89,7 @@ export default function Navigation() {
 
   // 🕊️ DIVINE PARSING ORACLE - Performance monitoring (dev mode only)
   const translationStats =
-    process.env.NODE_ENV === 'development'
+    process.env.NODE_ENV === "development"
       ? divineOracle.getTranslationStats()
       : null;
 
@@ -99,9 +99,9 @@ export default function Navigation() {
         <div className="flex justify-between items-center py-4">
           {/* MAIN PAGE ONLY: Left side - Corner to Center */}
           {!(
-            pathname.startsWith('/admin') ||
-            pathname.startsWith('/profesor') ||
-            pathname.startsWith('/parent')
+            pathname.startsWith("/admin") ||
+            pathname.startsWith("/profesor") ||
+            pathname.startsWith("/parent")
           ) ? (
             <>
               {/* CENTER CONTENT: Title only */}
@@ -148,9 +148,7 @@ export default function Navigation() {
           ) : (
             /* ADMIN/PROFESOR ROUTES: Keep original simple layout */
             <>
-              <div className="flex items-center">
-                {/* Logo removed */}
-              </div>
+              <div className="flex items-center">{/* Logo removed */}</div>
 
               {/* Mobile menu button */}
               <div className={navigation.menu.mobile(isDesktopForced)}>
@@ -159,7 +157,7 @@ export default function Navigation() {
                   size="sm"
                   onClick={() => setIsOpen(!isOpen)}
                   className="text-sm font-medium transition-all duration-200 hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  aria-label={t('nav.toggle.menu')}
+                  aria-label={t("nav.toggle.menu")}
                 >
                   <svg
                     className="h-4 w-4"
@@ -191,9 +189,9 @@ export default function Navigation() {
 
           {/* FAVICONS ABSOLUTELY POSITIONED IN LEFT CORNER - MAIN PAGE ONLY */}
           {!(
-            pathname.startsWith('/admin') ||
-            pathname.startsWith('/profesor') ||
-            pathname.startsWith('/parent')
+            pathname.startsWith("/admin") ||
+            pathname.startsWith("/profesor") ||
+            pathname.startsWith("/parent")
           ) && (
             <div className="absolute left-4 top-1/2 -translate-y-1/2 z-50 pointer-events-auto">
               <div className="flex items-center space-x-1">
@@ -215,9 +213,9 @@ export default function Navigation() {
 
           {/* BUTTON BUNDLE ABSOLUTELY POSITIONED IN RIGHT CORNER - MAIN PAGE ONLY */}
           {!(
-            pathname.startsWith('/admin') ||
-            pathname.startsWith('/profesor') ||
-            pathname.startsWith('/parent')
+            pathname.startsWith("/admin") ||
+            pathname.startsWith("/profesor") ||
+            pathname.startsWith("/parent")
           ) && (
             <div className="absolute right-4 top-1/2 -translate-y-1/2 z-50 pointer-events-auto">
               <div className={navigation.menu.desktop(isDesktopForced)}>
@@ -227,7 +225,7 @@ export default function Navigation() {
                     href="/centro-consejo"
                     className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                   >
-                    {t('nav.center.council')}
+                    {t("nav.center.council")}
                   </Link>
 
                   {/* Position 6: Proyecto Educativo */}
@@ -235,7 +233,7 @@ export default function Navigation() {
                     href="/proyecto-educativo"
                     className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                   >
-                    {t('nav.educational.project')}
+                    {t("nav.educational.project")}
                   </Link>
 
                   {/* Position 5: Fotos y Videos */}
@@ -243,7 +241,7 @@ export default function Navigation() {
                     href="/fotos-videos"
                     className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                   >
-                    {t('nav.photos.videos')}
+                    {t("nav.photos.videos")}
                   </Link>
 
                   {/* Position 3: Equipo Multidisciplinario */}
@@ -251,7 +249,7 @@ export default function Navigation() {
                     href="/public/equipo-multidisciplinario"
                     className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                   >
-                    {t('nav.multidisciplinary.team')}
+                    {t("nav.multidisciplinary.team")}
                   </Link>
 
                   {/* Position 2: Portal Escolar/Cerrar Sesión */}
@@ -261,7 +259,7 @@ export default function Navigation() {
                       className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                       prefetch={false}
                     >
-                      {t('nav.school.portal')}
+                      {t("nav.school.portal")}
                     </Link>
                   ) : (
                     <form onSubmit={handleLogout}>
@@ -272,7 +270,7 @@ export default function Navigation() {
                         disabled={isLoggingOut}
                         className="text-sm font-medium transition-all duration-200 hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
                       >
-                        {isLoggingOut ? '...' : t('nav.logout')}
+                        {isLoggingOut ? "..." : t("nav.logout")}
                       </Button>
                     </form>
                   )}
@@ -294,34 +292,34 @@ export default function Navigation() {
             <div className="flex flex-col space-y-2 px-4">
               {/* Only show these buttons if NOT on admin or profesor routes */}
               {!(
-                pathname.startsWith('/admin') ||
-                pathname.startsWith('/profesor') ||
-                pathname.startsWith('/parent')
+                pathname.startsWith("/admin") ||
+                pathname.startsWith("/profesor") ||
+                pathname.startsWith("/parent")
               ) ? (
                 <>
                   <Link
                     href="/centro-consejo"
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
-                    {t('nav.center.council')}
+                    {t("nav.center.council")}
                   </Link>
                   <Link
                     href="/proyecto-educativo"
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
-                    {t('nav.educational.project')}
+                    {t("nav.educational.project")}
                   </Link>
                   <Link
                     href="/fotos-videos"
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
-                    {t('nav.photos.videos')}
+                    {t("nav.photos.videos")}
                   </Link>
                   <Link
                     href="/public/equipo-multidisciplinario"
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
-                    {t('nav.multidisciplinary.team')}
+                    {t("nav.multidisciplinary.team")}
                   </Link>
                 </>
               ) : null}
@@ -343,7 +341,7 @@ export default function Navigation() {
                       disabled={isLoggingOut}
                       className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start disabled:opacity-50"
                     >
-                      {isLoggingOut ? 'Cerrando...' : 'Cerrar Sesión'}
+                      {isLoggingOut ? "Cerrando..." : "Cerrar Sesión"}
                     </Button>
                   </form>
                 </div>
@@ -354,14 +352,14 @@ export default function Navigation() {
       </div>
 
       {/* Add Desktop Toggle for authenticated routes */}
-      {pathname.startsWith('/admin') ||
-      pathname.startsWith('/profesor') ||
-      pathname.startsWith('/parent') ? (
+      {pathname.startsWith("/admin") ||
+      pathname.startsWith("/profesor") ||
+      pathname.startsWith("/parent") ? (
         <DesktopToggle />
       ) : null}
 
       {/* 🕊️ DIVINE PARSING ORACLE - Development debug info */}
-      {process.env.NODE_ENV === 'development' && translationStats && (
+      {process.env.NODE_ENV === "development" && translationStats && (
         <div className="fixed bottom-4 left-4 bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 text-xs font-mono shadow-lg z-50 max-w-xs">
           <div className="text-primary font-bold mb-2">🕊️ Divine Oracle</div>
           <div>Total Keys: {translationStats.totalKeys}</div>
@@ -369,7 +367,7 @@ export default function Navigation() {
           <div>Cache Hit: {translationStats.cacheHitRate.toFixed(1)}%</div>
           <div>Avg Load: {translationStats.loadTime.toFixed(1)}ms</div>
           <div className="mt-2 text-muted-foreground">
-            Loaded: {divineOracle.getLoadedNamespaces().join(', ')}
+            Loaded: {divineOracle.getLoadedNamespaces().join(", ")}
           </div>
         </div>
       )}

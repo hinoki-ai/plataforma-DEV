@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useLanguage } from './LanguageContext';
+import { useLanguage } from "./LanguageContext";
 
 export function LanguageHtmlUpdater() {
   const { language } = useLanguage();

@@ -3,43 +3,53 @@
  * Master admin card for educational institution settings
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Settings, 
-  School, 
-  GraduationCap, 
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Settings,
+  School,
+  GraduationCap,
   BookOpen,
   Building2,
   ChevronRight,
-  Cog
-} from 'lucide-react';
-import { 
-  EducationalInstitutionType, 
-  INSTITUTION_TYPE_INFO
-} from '@/lib/educational-system';
+  Cog,
+} from "lucide-react";
+import {
+  EducationalInstitutionType,
+  INSTITUTION_TYPE_INFO,
+} from "@/lib/educational-system";
 
 interface InstitutionConfigCardProps {
   currentType: EducationalInstitutionType;
   onConfigureClick: () => void;
 }
 
-export function InstitutionConfigCard({ 
-  currentType, 
-  onConfigureClick 
+export function InstitutionConfigCard({
+  currentType,
+  onConfigureClick,
 }: InstitutionConfigCardProps) {
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
   const getInstitutionIcon = (type: EducationalInstitutionType) => {
     switch (type) {
-      case 'PRESCHOOL': return <School className="h-8 w-8" />;
-      case 'BASIC_SCHOOL': return <BookOpen className="h-8 w-8" />;
-      case 'HIGH_SCHOOL': return <GraduationCap className="h-8 w-8" />;
-      case 'COLLEGE': return <Building2 className="h-8 w-8" />;
+      case "PRESCHOOL":
+        return <School className="h-8 w-8" />;
+      case "BASIC_SCHOOL":
+        return <BookOpen className="h-8 w-8" />;
+      case "HIGH_SCHOOL":
+        return <GraduationCap className="h-8 w-8" />;
+      case "COLLEGE":
+        return <Building2 className="h-8 w-8" />;
     }
   };
 
@@ -60,7 +70,7 @@ export function InstitutionConfigCard({
               </CardDescription>
             </div>
           </div>
-          <Button 
+          <Button
             onClick={onConfigureClick}
             className="gap-2"
             variant="outline"
@@ -71,11 +81,13 @@ export function InstitutionConfigCard({
           </Button>
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Tipo de Institución</h4>
+            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+              Tipo de Institución
+            </h4>
             <Badge className={currentInfo.color} variant="secondary">
               {currentInfo.name}
             </Badge>
@@ -85,7 +97,9 @@ export function InstitutionConfigCard({
           </div>
 
           <div>
-            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Niveles Disponibles</h4>
+            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+              Niveles Disponibles
+            </h4>
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {currentInfo.levels.length}
             </div>
@@ -95,9 +109,12 @@ export function InstitutionConfigCard({
           </div>
 
           <div>
-            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Rango de Edades</h4>
+            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+              Rango de Edades
+            </h4>
             <div className="text-sm text-gray-900 dark:text-gray-100">
-              {currentInfo.levels[0]?.ages} - {currentInfo.levels[currentInfo.levels.length - 1]?.ages}
+              {currentInfo.levels[0]?.ages} -{" "}
+              {currentInfo.levels[currentInfo.levels.length - 1]?.ages}
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Cobertura educativa completa

@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
-import { createSuccessResponse, handleApiError } from '@/lib/api-error';
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
+import { createSuccessResponse, handleApiError } from "@/lib/api-error";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 // GET /api/admin/dashboard - Get dashboard metrics for admin
 export async function GET() {
@@ -12,8 +12,11 @@ export async function GET() {
     const client = getConvexClient();
     const session = await auth();
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return handleApiError(new Error('Unauthorized access'), 'GET /api/admin/dashboard');
+    if (!session || session.user.role !== "ADMIN") {
+      return handleApiError(
+        new Error("Unauthorized access"),
+        "GET /api/admin/dashboard",
+      );
     }
 
     // Get user statistics
@@ -26,7 +29,10 @@ export async function GET() {
     const documentStats = await client.query(api.planning.getDocumentStats, {});
 
     // Get team member statistics
-    const teamStats = await client.query(api.teamMembers.getTeamMemberStats, {});
+    const teamStats = await client.query(
+      api.teamMembers.getTeamMemberStats,
+      {},
+    );
 
     // Get recent calendar events
     const upcomingEvents = await client.query(api.calendar.getUpcomingEvents, {
@@ -34,7 +40,10 @@ export async function GET() {
     });
 
     // Get recent planning documents
-    const recentPlannings = await client.query(api.planning.getRecentDocumentsCount, {});
+    const recentPlannings = await client.query(
+      api.planning.getRecentDocumentsCount,
+      {},
+    );
 
     const dashboardData = {
       users: userStats,
@@ -48,13 +57,13 @@ export async function GET() {
         recent: recentPlannings,
       },
       system: {
-        status: 'healthy',
+        status: "healthy",
         lastUpdated: new Date().toISOString(),
       },
     };
 
     return createSuccessResponse(dashboardData);
   } catch (error) {
-    return handleApiError(error, 'GET /api/admin/dashboard');
+    return handleApiError(error, "GET /api/admin/dashboard");
   }
 }

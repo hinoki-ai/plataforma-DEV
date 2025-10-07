@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { X, Download, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { X, Download, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface PDFViewerProps {
   src: string;
@@ -20,8 +20,8 @@ export function PDFViewer({
   const [scale, setScale] = useState(1);
   const [rotation, setRotation] = useState(0);
 
-  const handleZoomIn = () => setScale(prev => Math.min(prev + 0.25, 3));
-  const handleZoomOut = () => setScale(prev => Math.max(prev - 0.25, 0.5));
+  const handleZoomIn = () => setScale((prev) => Math.min(prev + 0.25, 3));
+  const handleZoomOut = () => setScale((prev) => Math.max(prev - 0.25, 0.5));
   const handleReset = () => {
     setScale(1);
     setRotation(0);
@@ -32,7 +32,7 @@ export function PDFViewer({
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm border-b border-white/10">
         <h2 className="text-white font-semibold text-lg">
-          {title || 'PDF Viewer'}
+          {title || "PDF Viewer"}
         </h2>
         <div className="flex items-center gap-2">
           <Button
@@ -66,7 +66,7 @@ export function PDFViewer({
             variant="ghost"
             size="icon"
             className="text-white hover:bg-white/10"
-            onClick={() => window.open(src, '_blank')}
+            onClick={() => window.open(src, "_blank")}
           >
             <Download className="w-4 h-4" />
           </Button>
@@ -90,16 +90,16 @@ export function PDFViewer({
             src={`${src}#toolbar=0&navpanes=0&scrollbar=0`}
             className="bg-white rounded shadow-2xl"
             style={{
-              width: '100%',
-              height: '100%',
-              minWidth: '600px',
-              minHeight: '800px',
+              width: "100%",
+              height: "100%",
+              minWidth: "600px",
+              minHeight: "800px",
               transform: `scale(${scale}) rotate(${rotation}deg)`,
-              transformOrigin: 'center',
-              maxWidth: '100%',
-              maxHeight: '100%',
+              transformOrigin: "center",
+              maxWidth: "100%",
+              maxHeight: "100%",
             }}
-            title={title || 'PDF Document'}
+            title={title || "PDF Document"}
           />
         </div>
       </div>

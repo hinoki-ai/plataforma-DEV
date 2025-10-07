@@ -5,12 +5,14 @@ Portable, pretty Vercel deploys with a calm, readable terminal UI.
 ## Install & Run (pick one)
 
 - One-off (no install):
+
   ```bash
   npx vercel-deployer@latest
   bunx vercel-deployer@latest
   ```
 
 - Global install (adds `vv`):
+
   ```bash
   yarn global add vercel-deployer  # or
   npm i -g vercel-deployer         # or

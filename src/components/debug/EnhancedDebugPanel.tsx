@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { debugMonitor } from '@/lib/debug-monitor';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { debugMonitor } from "@/lib/debug-monitor";
 
 interface DebugLog {
   id: string;
-  type: 'info' | 'warn' | 'error' | 'success';
+  type: "info" | "warn" | "error" | "success";
   message: string;
   timestamp: string;
   details?: any;
@@ -39,10 +39,10 @@ export function EnhancedDebugPanel() {
   const [logs, setLogs] = useState<DebugLog[]>([]);
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [metrics, setMetrics] = useState<SystemMetrics | null>(null);
-  const [activeTab, setActiveTab] = useState('console');
+  const [activeTab, setActiveTab] = useState("console");
 
   const addLog = useCallback(
-    (type: DebugLog['type'], message: string, details?: any) => {
+    (type: DebugLog["type"], message: string, details?: any) => {
       const newLog: DebugLog = {
         id: Date.now().toString(),
         type,
@@ -51,9 +51,9 @@ export function EnhancedDebugPanel() {
         details,
       };
 
-      setLogs(prev => [newLog, ...prev.slice(0, 99)]); // Keep last 100 logs
+      setLogs((prev) => [newLog, ...prev.slice(0, 99)]); // Keep last 100 logs
     },
-    []
+    [],
   );
 
   const clearLogs = useCallback(() => {
@@ -63,7 +63,7 @@ export function EnhancedDebugPanel() {
   const startMonitoring = useCallback(() => {
     setIsMonitoring(true);
     debugMonitor.init();
-    addLog('success', 'Debug monitoring started');
+    addLog("success", "Debug monitoring started");
 
     // Get initial metrics
     const performanceMetrics = debugMonitor.getPerformanceMetrics();
@@ -76,7 +76,7 @@ export function EnhancedDebugPanel() {
               percentage: Math.round(
                 (performanceMetrics.memoryUsage.usedJSHeapSize /
                   performanceMetrics.memoryUsage.totalJSHeapSize) *
-                  100
+                  100,
               ),
             }
           : { used: 0, total: 0, percentage: 0 },
@@ -87,9 +87,9 @@ export function EnhancedDebugPanel() {
           firstContentfulPaint: performanceMetrics.firstContentfulPaint,
         },
         network: {
-          connection: (navigator as any).connection?.type || 'unknown',
+          connection: (navigator as any).connection?.type || "unknown",
           effectiveType:
-            (navigator as any).connection?.effectiveType || 'unknown',
+            (navigator as any).connection?.effectiveType || "unknown",
           downlink: (navigator as any).connection?.downlink || 0,
         },
       });
@@ -99,36 +99,36 @@ export function EnhancedDebugPanel() {
   const stopMonitoring = useCallback(() => {
     setIsMonitoring(false);
     debugMonitor.destroy();
-    addLog('info', 'Debug monitoring stopped');
+    addLog("info", "Debug monitoring stopped");
   }, [addLog]);
 
   const testError = useCallback(() => {
-    debugMonitor.trackError('Test error from debug panel', 'medium', {
+    debugMonitor.trackError("Test error from debug panel", "medium", {
       testData: true,
       timestamp: Date.now(),
     });
-    addLog('error', 'Test error logged to monitoring system');
+    addLog("error", "Test error logged to monitoring system");
   }, [addLog]);
 
   const testApiCall = useCallback(() => {
     const start = Date.now();
-    fetch('/api/health')
+    fetch("/api/health")
       .then(() => {
         const duration = Date.now() - start;
-        debugMonitor.trackApiCall('/api/health', duration, true);
-        addLog('success', `API test completed in ${duration}ms`);
+        debugMonitor.trackApiCall("/api/health", duration, true);
+        addLog("success", `API test completed in ${duration}ms`);
       })
       .catch(() => {
         const duration = Date.now() - start;
-        debugMonitor.trackApiCall('/api/health', duration, false);
-        addLog('error', `API test failed after ${duration}ms`);
+        debugMonitor.trackApiCall("/api/health", duration, false);
+        addLog("error", `API test failed after ${duration}ms`);
       });
   }, [addLog]);
 
   const refreshMetrics = useCallback(() => {
     const performanceMetrics = debugMonitor.getPerformanceMetrics();
     if (performanceMetrics) {
-      setMetrics(prev => ({
+      setMetrics((prev) => ({
         memory: performanceMetrics.memoryUsage
           ? {
               used: performanceMetrics.memoryUsage.usedJSHeapSize,
@@ -136,7 +136,7 @@ export function EnhancedDebugPanel() {
               percentage: Math.round(
                 (performanceMetrics.memoryUsage.usedJSHeapSize /
                   performanceMetrics.memoryUsage.totalJSHeapSize) *
-                  100
+                  100,
               ),
             }
           : prev?.memory || { used: 0, total: 0, percentage: 0 },
@@ -147,13 +147,13 @@ export function EnhancedDebugPanel() {
           firstContentfulPaint: performanceMetrics.firstContentfulPaint,
         },
         network: prev?.network || {
-          connection: (navigator as any).connection?.type || 'unknown',
+          connection: (navigator as any).connection?.type || "unknown",
           effectiveType:
-            (navigator as any).connection?.effectiveType || 'unknown',
+            (navigator as any).connection?.effectiveType || "unknown",
           downlink: (navigator as any).connection?.downlink || 0,
         },
       }));
-      addLog('info', 'Metrics refreshed');
+      addLog("info", "Metrics refreshed");
     }
   }, [addLog]);
 
@@ -166,25 +166,25 @@ export function EnhancedDebugPanel() {
     };
   }, [startMonitoring]);
 
-  const getBadgeVariant = (type: DebugLog['type']) => {
+  const getBadgeVariant = (type: DebugLog["type"]) => {
     switch (type) {
-      case 'error':
-        return 'destructive';
-      case 'warn':
-        return 'secondary';
-      case 'success':
-        return 'default';
+      case "error":
+        return "destructive";
+      case "warn":
+        return "secondary";
+      case "success":
+        return "default";
       default:
-        return 'outline';
+        return "outline";
     }
   };
 
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -193,11 +193,11 @@ export function EnhancedDebugPanel() {
       <div className="flex flex-wrap gap-2 items-center justify-between">
         <div className="flex gap-2">
           <Button
-            variant={isMonitoring ? 'destructive' : 'default'}
+            variant={isMonitoring ? "destructive" : "default"}
             size="sm"
             onClick={isMonitoring ? stopMonitoring : startMonitoring}
           >
-            {isMonitoring ? 'Stop Monitoring' : 'Start Monitoring'}
+            {isMonitoring ? "Stop Monitoring" : "Start Monitoring"}
           </Button>
           <Button variant="outline" size="sm" onClick={refreshMetrics}>
             Refresh Metrics
@@ -210,8 +210,8 @@ export function EnhancedDebugPanel() {
           </Button>
         </div>
         <div className="flex gap-2">
-          <Badge variant={isMonitoring ? 'default' : 'secondary'}>
-            {isMonitoring ? 'Monitoring Active' : 'Monitoring Inactive'}
+          <Badge variant={isMonitoring ? "default" : "secondary"}>
+            {isMonitoring ? "Monitoring Active" : "Monitoring Inactive"}
           </Badge>
           <Button variant="ghost" size="sm" onClick={clearLogs}>
             Clear Logs
@@ -231,7 +231,7 @@ export function EnhancedDebugPanel() {
                 {metrics.memory.percentage}%
               </div>
               <div className="text-xs text-muted-foreground">
-                {formatBytes(metrics.memory.used)} /{' '}
+                {formatBytes(metrics.memory.used)} /{" "}
                 {formatBytes(metrics.memory.total)}
               </div>
             </CardContent>
@@ -289,7 +289,7 @@ export function EnhancedDebugPanel() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {logs.map(log => (
+                    {logs.map((log) => (
                       <div
                         key={log.id}
                         className="flex items-start gap-2 p-2 rounded border-l-2 border-l-muted"
@@ -346,15 +346,15 @@ export function EnhancedDebugPanel() {
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div>Load Time: {metrics.performance.loadTime}ms</div>
                       <div>
-                        DOM Content Loaded:{' '}
+                        DOM Content Loaded:{" "}
                         {metrics.performance.domContentLoaded}ms
                       </div>
                       <div>
-                        First Paint:{' '}
+                        First Paint:{" "}
                         {Math.round(metrics.performance.firstPaint)}ms
                       </div>
                       <div>
-                        First Contentful Paint:{' '}
+                        First Contentful Paint:{" "}
                         {Math.round(metrics.performance.firstContentfulPaint)}ms
                       </div>
                     </div>
@@ -377,22 +377,22 @@ export function EnhancedDebugPanel() {
             <CardContent>
               <div className="space-y-2 text-sm">
                 <div>
-                  LocalStorage items:{' '}
-                  {typeof window !== 'undefined' && window.localStorage
+                  LocalStorage items:{" "}
+                  {typeof window !== "undefined" && window.localStorage
                     ? Object.keys(window.localStorage).length
-                    : 'N/A'}
+                    : "N/A"}
                 </div>
                 <div>
-                  SessionStorage items:{' '}
-                  {typeof window !== 'undefined' && window.sessionStorage
+                  SessionStorage items:{" "}
+                  {typeof window !== "undefined" && window.sessionStorage
                     ? Object.keys(window.sessionStorage).length
-                    : 'N/A'}
+                    : "N/A"}
                 </div>
                 <div>
-                  Cookies:{' '}
-                  {typeof document !== 'undefined'
-                    ? document.cookie.split(';').length
-                    : 'N/A'}
+                  Cookies:{" "}
+                  {typeof document !== "undefined"
+                    ? document.cookie.split(";").length
+                    : "N/A"}
                 </div>
               </div>
             </CardContent>

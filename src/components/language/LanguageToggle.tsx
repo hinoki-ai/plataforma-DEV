@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { useLanguage } from './LanguageContext';
-import { Globe, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { useLanguage } from "./LanguageContext";
+import { Globe, Check } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface LanguageOption {
-  code: 'es' | 'en';
+  code: "es" | "en";
   name: string;
   nativeName: string;
   flag: string;
@@ -16,18 +16,18 @@ interface LanguageOption {
 
 const languageOptions: LanguageOption[] = [
   {
-    code: 'es',
-    name: 'Spanish',
-    nativeName: 'Español',
-    flag: '🇪🇸',
-    ariaLabel: 'Switch to Spanish',
+    code: "es",
+    name: "Spanish",
+    nativeName: "Español",
+    flag: "🇪🇸",
+    ariaLabel: "Switch to Spanish",
   },
   {
-    code: 'en',
-    name: 'English',
-    nativeName: 'English',
-    flag: '🇺🇸',
-    ariaLabel: 'Switch to English',
+    code: "en",
+    name: "English",
+    nativeName: "English",
+    flag: "🇺🇸",
+    ariaLabel: "Switch to English",
   },
 ];
 
@@ -39,7 +39,9 @@ export function LanguageToggle() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
 
-  const currentLanguage = languageOptions.find(lang => lang.code === language);
+  const currentLanguage = languageOptions.find(
+    (lang) => lang.code === language,
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,78 +53,78 @@ export function LanguageToggle() {
         setFocusedIndex(-1);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLanguageChange = useCallback(
-    (newLanguage: 'es' | 'en') => {
+    (newLanguage: "es" | "en") => {
       if (newLanguage === language) return;
       setLanguage(newLanguage);
       setIsOpen(false);
       setFocusedIndex(-1);
-      const announcement = `Language changed to ${languageOptions.find(lang => lang.code === newLanguage)?.nativeName}`;
-      const liveRegion = document.getElementById('sr-announcement');
+      const announcement = `Language changed to ${languageOptions.find((lang) => lang.code === newLanguage)?.nativeName}`;
+      const liveRegion = document.getElementById("sr-announcement");
       if (liveRegion) liveRegion.textContent = announcement;
     },
-    [language, setLanguage]
+    [language, setLanguage],
   );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (!isOpen) return;
       switch (event.key) {
-        case 'Escape':
+        case "Escape":
           event.preventDefault();
           setIsOpen(false);
           setFocusedIndex(-1);
           buttonRef.current?.focus();
           break;
-        case 'ArrowDown':
+        case "ArrowDown":
           event.preventDefault();
-          setFocusedIndex(prev =>
-            prev < languageOptions.length - 1 ? prev + 1 : 0
+          setFocusedIndex((prev) =>
+            prev < languageOptions.length - 1 ? prev + 1 : 0,
           );
           break;
-        case 'ArrowUp':
+        case "ArrowUp":
           event.preventDefault();
-          setFocusedIndex(prev =>
-            prev > 0 ? prev - 1 : languageOptions.length - 1
+          setFocusedIndex((prev) =>
+            prev > 0 ? prev - 1 : languageOptions.length - 1,
           );
           break;
-        case 'Home':
+        case "Home":
           event.preventDefault();
           setFocusedIndex(0);
           break;
-        case 'End':
+        case "End":
           event.preventDefault();
           setFocusedIndex(languageOptions.length - 1);
           break;
-        case 'Enter':
-        case ' ':
+        case "Enter":
+        case " ":
           event.preventDefault();
           if (focusedIndex >= 0) {
             handleLanguageChange(languageOptions[focusedIndex].code);
           }
           break;
-        case 'Tab':
+        case "Tab":
           setIsOpen(false);
           setFocusedIndex(-1);
           break;
       }
     },
-    [isOpen, focusedIndex, handleLanguageChange]
+    [isOpen, focusedIndex, handleLanguageChange],
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   useEffect(() => {
     if (isOpen && listboxRef.current) {
       const firstOption = listboxRef.current.querySelector(
-        '[role="option"]'
+        '[role="option"]',
       ) as HTMLElement;
       if (firstOption) {
         firstOption.focus();
@@ -132,7 +134,7 @@ export function LanguageToggle() {
   }, [isOpen]);
 
   const handleToggle = useCallback(() => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
     setFocusedIndex(-1);
   }, []);
 
@@ -140,17 +142,17 @@ export function LanguageToggle() {
     (option: LanguageOption) => {
       handleLanguageChange(option.code);
     },
-    [handleLanguageChange]
+    [handleLanguageChange],
   );
 
   const handleOptionKeyDown = useCallback(
     (event: React.KeyboardEvent, option: LanguageOption) => {
-      if (event.key === 'Enter' || event.key === ' ') {
+      if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         handleLanguageChange(option.code);
       }
     },
-    [handleLanguageChange]
+    [handleLanguageChange],
   );
 
   return (
@@ -168,7 +170,7 @@ export function LanguageToggle() {
           variant="outline"
           size="sm"
           onClick={handleToggle}
-          aria-label={t('language.toggle')}
+          aria-label={t("language.toggle")}
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-controls="language-listbox"
@@ -215,7 +217,7 @@ export function LanguageToggle() {
               initial={{ opacity: 0, scale: 0.95, y: -5 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -5 }}
-              transition={{ duration: 0.15, ease: 'easeOut' }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute top-full mt-1 right-0 w-44 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden"
             >
               <div
@@ -225,21 +227,21 @@ export function LanguageToggle() {
                 ref={listboxRef}
                 className="max-h-60 overflow-auto"
               >
-              {languageOptions.map((option, index) => {
-                const isSelected = language === option.code;
-                return (
-                  <button
-                    key={option.code}
-                    onClick={() => handleOptionClick(option)}
-                    onKeyDown={e => handleOptionKeyDown(e, option)}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-left transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset ${
-                      isSelected ? 'bg-primary/10 text-primary' : ''
-                    } ${focusedIndex === index ? 'bg-accent' : ''}`}
-                    role="option"
-                    aria-label={option.ariaLabel}
-                    tabIndex={focusedIndex === index ? 0 : -1}
-                  >
-                    <div className="flex items-center gap-2">
+                {languageOptions.map((option, index) => {
+                  const isSelected = language === option.code;
+                  return (
+                    <button
+                      key={option.code}
+                      onClick={() => handleOptionClick(option)}
+                      onKeyDown={(e) => handleOptionKeyDown(e, option)}
+                      className={`w-full flex items-center justify-between px-3 py-2 text-left transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset ${
+                        isSelected ? "bg-primary/10 text-primary" : ""
+                      } ${focusedIndex === index ? "bg-accent" : ""}`}
+                      role="option"
+                      aria-label={option.ariaLabel}
+                      tabIndex={focusedIndex === index ? 0 : -1}
+                    >
+                      <div className="flex items-center gap-2">
                         <span className="text-base" aria-hidden="true">
                           {option.flag}
                         </span>
@@ -251,13 +253,13 @@ export function LanguageToggle() {
                             {option.name}
                           </span>
                         </div>
-                    </div>
-                    {isSelected && (
-                      <Check className="w-4 h-4" aria-hidden="true" />
-                    )}
-                  </button>
-                );
-              })}
+                      </div>
+                      {isSelected && (
+                        <Check className="w-4 h-4" aria-hidden="true" />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </motion.div>
           )}

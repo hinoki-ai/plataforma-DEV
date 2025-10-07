@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
+import { NextResponse } from "next/server";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
 
 // Simple test to verify Convex connection
 export async function GET() {
@@ -11,11 +11,11 @@ export async function GET() {
     if (!convexUrl) {
       return NextResponse.json(
         {
-          error: 'NEXT_PUBLIC_CONVEX_URL not properly configured',
+          error: "NEXT_PUBLIC_CONVEX_URL not properly configured",
           convexUrl: convexUrl,
-          suggestion: 'Check environment variables and run: npx convex dev',
+          suggestion: "Check environment variables and run: npx convex dev",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -24,8 +24,8 @@ export async function GET() {
     const users = await client.query(api.users.getUsers, {});
 
     return NextResponse.json({
-      status: 'success',
-      message: 'Convex connection working',
+      status: "success",
+      message: "Convex connection working",
       convexUrl: convexUrl,
       userCount: users.length,
       timestamp: new Date().toISOString(),
@@ -33,11 +33,11 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json(
       {
-        status: 'error',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        status: "error",
+        error: error instanceof Error ? error.message : "Unknown error",
         timestamp: new Date().toISOString(),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

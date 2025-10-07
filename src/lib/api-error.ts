@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export interface ApiError {
   message: string;
@@ -12,9 +12,14 @@ export class ApiErrorResponse extends Error {
   public code: string;
   public details?: any;
 
-  constructor(message: string, statusCode: number = 500, code: string = 'INTERNAL_ERROR', details?: any) {
+  constructor(
+    message: string,
+    statusCode: number = 500,
+    code: string = "INTERNAL_ERROR",
+    details?: any,
+  ) {
     super(message);
-    this.name = 'ApiErrorResponse';
+    this.name = "ApiErrorResponse";
     this.statusCode = statusCode;
     this.code = code;
     this.details = details;
@@ -27,8 +32,8 @@ export class ApiErrorResponse extends Error {
 export function createErrorResponse(
   message: string,
   statusCode: number = 500,
-  code: string = 'INTERNAL_ERROR',
-  details?: any
+  code: string = "INTERNAL_ERROR",
+  details?: any,
 ) {
   const error = {
     success: false,
@@ -47,11 +52,14 @@ export function createErrorResponse(
  * Success response utility for API routes
  */
 export function createSuccessResponse(data: any, statusCode: number = 200) {
-  return NextResponse.json({
-    success: true,
-    data,
-    timestamp: new Date().toISOString(),
-  }, { status: statusCode });
+  return NextResponse.json(
+    {
+      success: true,
+      data,
+      timestamp: new Date().toISOString(),
+    },
+    { status: statusCode },
+  );
 }
 
 /**
@@ -59,7 +67,7 @@ export function createSuccessResponse(data: any, statusCode: number = 200) {
  */
 export function handleApiError(error: any, context?: string): NextResponse {
   // Use structured logging
-  import('@/lib/logger').then(({ apiLogger }) => {
+  import("@/lib/logger").then(({ apiLogger }) => {
     if (error instanceof ApiErrorResponse) {
       apiLogger.error(`API Error: ${error.message}`, undefined, {
         context,
@@ -68,56 +76,97 @@ export function handleApiError(error: any, context?: string): NextResponse {
         details: error.details,
       });
     } else {
-      apiLogger.error(`API Error${context ? ` in ${context}` : ''}`, error instanceof Error ? error : new Error(String(error)), {
-        context,
-      });
+      apiLogger.error(
+        `API Error${context ? ` in ${context}` : ""}`,
+        error instanceof Error ? error : new Error(String(error)),
+        {
+          context,
+        },
+      );
     }
   });
 
   // If it's already our custom error
   if (error instanceof ApiErrorResponse) {
-    return createErrorResponse(error.message, error.statusCode, error.code, error.details);
+    return createErrorResponse(
+      error.message,
+      error.statusCode,
+      error.code,
+      error.details,
+    );
   }
 
   // Handle Prisma errors
-  if (error?.code?.startsWith('P')) {
-    const prismaErrors: Record<string, { message: string; statusCode: number }> = {
-      P2002: { message: 'Ya existe un registro con estos datos', statusCode: 409 },
-      P2025: { message: 'El registro solicitado no fue encontrado', statusCode: 404 },
-      P1001: { message: 'Error de conexión a la base de datos', statusCode: 503 },
-      P1017: { message: 'La conexión a la base de datos fue cerrada', statusCode: 503 },
+  if (error?.code?.startsWith("P")) {
+    const prismaErrors: Record<
+      string,
+      { message: string; statusCode: number }
+    > = {
+      P2002: {
+        message: "Ya existe un registro con estos datos",
+        statusCode: 409,
+      },
+      P2025: {
+        message: "El registro solicitado no fue encontrado",
+        statusCode: 404,
+      },
+      P1001: {
+        message: "Error de conexión a la base de datos",
+        statusCode: 503,
+      },
+      P1017: {
+        message: "La conexión a la base de datos fue cerrada",
+        statusCode: 503,
+      },
     };
 
     const prismaError = prismaErrors[error.code];
     if (prismaError) {
-      return createErrorResponse(prismaError.message, prismaError.statusCode, error.code, {
-        originalError: error.message,
-      });
+      return createErrorResponse(
+        prismaError.message,
+        prismaError.statusCode,
+        error.code,
+        {
+          originalError: error.message,
+        },
+      );
     }
   }
 
   // Handle validation errors
-  if (error?.name === 'ValidationError') {
-    return createErrorResponse('Datos de entrada inválidos', 400, 'VALIDATION_ERROR', {
-      validationErrors: error.errors,
-    });
+  if (error?.name === "ValidationError") {
+    return createErrorResponse(
+      "Datos de entrada inválidos",
+      400,
+      "VALIDATION_ERROR",
+      {
+        validationErrors: error.errors,
+      },
+    );
   }
 
   // Handle authentication errors
-  if (error?.name === 'UnauthorizedError' || error?.message?.includes('unauthorized')) {
-    return createErrorResponse('Acceso no autorizado', 401, 'UNAUTHORIZED');
+  if (
+    error?.name === "UnauthorizedError" ||
+    error?.message?.includes("unauthorized")
+  ) {
+    return createErrorResponse("Acceso no autorizado", 401, "UNAUTHORIZED");
   }
 
   // Handle rate limiting
-  if (error?.message?.includes('rate limit') || error?.statusCode === 429) {
-    return createErrorResponse('Demasiadas solicitudes. Intente más tarde.', 429, 'RATE_LIMITED');
+  if (error?.message?.includes("rate limit") || error?.statusCode === 429) {
+    return createErrorResponse(
+      "Demasiadas solicitudes. Intente más tarde.",
+      429,
+      "RATE_LIMITED",
+    );
   }
 
   // Default error response
-  const message = error?.message || 'Ha ocurrido un error interno del servidor';
+  const message = error?.message || "Ha ocurrido un error interno del servidor";
   const statusCode = error?.statusCode || 500;
 
-  return createErrorResponse(message, statusCode, 'INTERNAL_ERROR', {
+  return createErrorResponse(message, statusCode, "INTERNAL_ERROR", {
     originalError: error?.message,
     context,
   });

@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback, useState } from "react";
 
 export interface GestureEvent {
   deltaX: number;
   deltaY: number;
   velocity: number;
-  direction: 'left' | 'right' | 'up' | 'down';
+  direction: "left" | "right" | "up" | "down";
   distance: number;
   startTime: number;
   endTime: number;
@@ -40,7 +40,7 @@ export interface PanGestureOptions {
   onPanMove?: (event: GestureEvent) => void;
   onPanEnd?: (event: GestureEvent) => void;
   threshold?: number;
-  axis?: 'x' | 'y' | 'both';
+  axis?: "x" | "y" | "both";
   enabled?: boolean;
 }
 
@@ -49,7 +49,7 @@ export interface PanGestureOptions {
  */
 export function useSwipeGesture(
   elementRef: React.RefObject<HTMLElement | null>,
-  options: SwipeGestureOptions = {}
+  options: SwipeGestureOptions = {},
 ) {
   const {
     onSwipeLeft,
@@ -64,7 +64,7 @@ export function useSwipeGesture(
   } = options;
 
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(
-    null
+    null,
   );
   const [isGestureActive, setIsGestureActive] = useState(false);
 
@@ -84,7 +84,7 @@ export function useSwipeGesture(
         e.preventDefault();
       }
     },
-    [enabled, preventDefault]
+    [enabled, preventDefault],
   );
 
   const handleTouchMove = useCallback(
@@ -95,7 +95,7 @@ export function useSwipeGesture(
         e.preventDefault();
       }
     },
-    [enabled, preventDefault]
+    [enabled, preventDefault],
   );
 
   const handleTouchEnd = useCallback(
@@ -125,12 +125,12 @@ export function useSwipeGesture(
       // Determine direction
       const absX = Math.abs(deltaX);
       const absY = Math.abs(deltaY);
-      let direction: 'left' | 'right' | 'up' | 'down';
+      let direction: "left" | "right" | "up" | "down";
 
       if (absX > absY) {
-        direction = deltaX > 0 ? 'right' : 'left';
+        direction = deltaX > 0 ? "right" : "left";
       } else {
-        direction = deltaY > 0 ? 'down' : 'up';
+        direction = deltaY > 0 ? "down" : "up";
       }
 
       const gestureEvent: GestureEvent = {
@@ -147,16 +147,16 @@ export function useSwipeGesture(
 
       // Call appropriate callback
       switch (direction) {
-        case 'left':
+        case "left":
           onSwipeLeft?.(gestureEvent);
           break;
-        case 'right':
+        case "right":
           onSwipeRight?.(gestureEvent);
           break;
-        case 'up':
+        case "up":
           onSwipeUp?.(gestureEvent);
           break;
-        case 'down':
+        case "down":
           onSwipeDown?.(gestureEvent);
           break;
       }
@@ -177,7 +177,7 @@ export function useSwipeGesture(
       onSwipeRight,
       onSwipeUp,
       onSwipeDown,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -187,14 +187,14 @@ export function useSwipeGesture(
     // Add passive false to allow preventDefault
     const options = { passive: !preventDefault };
 
-    element.addEventListener('touchstart', handleTouchStart, options);
-    element.addEventListener('touchmove', handleTouchMove, options);
-    element.addEventListener('touchend', handleTouchEnd, options);
+    element.addEventListener("touchstart", handleTouchStart, options);
+    element.addEventListener("touchmove", handleTouchMove, options);
+    element.addEventListener("touchend", handleTouchEnd, options);
 
     return () => {
-      element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
+      element.removeEventListener("touchstart", handleTouchStart);
+      element.removeEventListener("touchmove", handleTouchMove);
+      element.removeEventListener("touchend", handleTouchEnd);
     };
   }, [
     elementRef,
@@ -219,7 +219,7 @@ export function useSwipeGesture(
  */
 export function usePinchGesture(
   elementRef: React.RefObject<HTMLElement | null>,
-  options: PinchGestureOptions = {}
+  options: PinchGestureOptions = {},
 ) {
   const {
     onPinchStart,
@@ -239,7 +239,7 @@ export function usePinchGesture(
     const touch2 = touches[1];
     return Math.sqrt(
       Math.pow(touch2.clientX - touch1.clientX, 2) +
-        Math.pow(touch2.clientY - touch1.clientY, 2)
+        Math.pow(touch2.clientY - touch1.clientY, 2),
     );
   }, []);
 
@@ -251,7 +251,7 @@ export function usePinchGesture(
       setIsPinching(true);
       onPinchStart?.(currentScaleRef.current);
     },
-    [enabled, getDistance, onPinchStart]
+    [enabled, getDistance, onPinchStart],
   );
 
   const handleTouchMove = useCallback(
@@ -266,8 +266,8 @@ export function usePinchGesture(
         Math.min(
           maxScale,
           (currentDistance / initialDistanceRef.current) *
-            currentScaleRef.current
-        )
+            currentScaleRef.current,
+        ),
       );
 
       const delta = scale - currentScaleRef.current;
@@ -275,7 +275,7 @@ export function usePinchGesture(
 
       onPinchMove?.(scale, delta);
     },
-    [enabled, isPinching, getDistance, minScale, maxScale, onPinchMove]
+    [enabled, isPinching, getDistance, minScale, maxScale, onPinchMove],
   );
 
   const handleTouchEnd = useCallback(
@@ -285,23 +285,23 @@ export function usePinchGesture(
       setIsPinching(false);
       onPinchEnd?.(currentScaleRef.current);
     },
-    [enabled, isPinching, onPinchEnd]
+    [enabled, isPinching, onPinchEnd],
   );
 
   useEffect(() => {
     const element = elementRef.current;
     if (!element || !enabled) return;
 
-    element.addEventListener('touchstart', handleTouchStart, {
+    element.addEventListener("touchstart", handleTouchStart, {
       passive: false,
     });
-    element.addEventListener('touchmove', handleTouchMove, { passive: false });
-    element.addEventListener('touchend', handleTouchEnd);
+    element.addEventListener("touchmove", handleTouchMove, { passive: false });
+    element.addEventListener("touchend", handleTouchEnd);
 
     return () => {
-      element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
+      element.removeEventListener("touchstart", handleTouchStart);
+      element.removeEventListener("touchmove", handleTouchMove);
+      element.removeEventListener("touchend", handleTouchEnd);
     };
   }, [elementRef, enabled, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
@@ -319,14 +319,14 @@ export function usePinchGesture(
  */
 export function usePanGesture(
   elementRef: React.RefObject<HTMLElement | null>,
-  options: PanGestureOptions = {}
+  options: PanGestureOptions = {},
 ) {
   const {
     onPanStart,
     onPanMove,
     onPanEnd,
     threshold = 10,
-    axis = 'both',
+    axis = "both",
     enabled = true,
   } = options;
 
@@ -343,7 +343,7 @@ export function usePanGesture(
         y: touch.clientY,
       };
     },
-    [enabled]
+    [enabled],
   );
 
   const handleTouchMove = useCallback(
@@ -363,9 +363,9 @@ export function usePanGesture(
       let filteredDeltaX = deltaX;
       let filteredDeltaY = deltaY;
 
-      if (axis === 'x') {
+      if (axis === "x") {
         filteredDeltaY = 0;
-      } else if (axis === 'y') {
+      } else if (axis === "y") {
         filteredDeltaX = 0;
       }
 
@@ -376,11 +376,11 @@ export function usePanGesture(
         direction:
           Math.abs(deltaX) > Math.abs(deltaY)
             ? deltaX > 0
-              ? 'right'
-              : 'left'
+              ? "right"
+              : "left"
             : deltaY > 0
-              ? 'down'
-              : 'up',
+              ? "down"
+              : "up",
         distance,
         startTime: 0,
         endTime: Date.now(),
@@ -395,7 +395,7 @@ export function usePanGesture(
         onPanMove?.(gestureEvent);
       }
     },
-    [enabled, threshold, axis, isPanning, onPanStart, onPanMove]
+    [enabled, threshold, axis, isPanning, onPanStart, onPanMove],
   );
 
   const handleTouchEnd = useCallback(
@@ -414,11 +414,11 @@ export function usePanGesture(
           direction:
             Math.abs(deltaX) > Math.abs(deltaY)
               ? deltaX > 0
-                ? 'right'
-                : 'left'
+                ? "right"
+                : "left"
               : deltaY > 0
-                ? 'down'
-                : 'up',
+                ? "down"
+                : "up",
           distance: Math.sqrt(deltaX * deltaX + deltaY * deltaY),
           startTime: 0,
           endTime: Date.now(),
@@ -432,21 +432,21 @@ export function usePanGesture(
       setIsPanning(false);
       startPositionRef.current = null;
     },
-    [enabled, isPanning, onPanEnd]
+    [enabled, isPanning, onPanEnd],
   );
 
   useEffect(() => {
     const element = elementRef.current;
     if (!element || !enabled) return;
 
-    element.addEventListener('touchstart', handleTouchStart);
-    element.addEventListener('touchmove', handleTouchMove);
-    element.addEventListener('touchend', handleTouchEnd);
+    element.addEventListener("touchstart", handleTouchStart);
+    element.addEventListener("touchmove", handleTouchMove);
+    element.addEventListener("touchend", handleTouchEnd);
 
     return () => {
-      element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
+      element.removeEventListener("touchstart", handleTouchStart);
+      element.removeEventListener("touchmove", handleTouchMove);
+      element.removeEventListener("touchend", handleTouchEnd);
     };
   }, [elementRef, enabled, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
@@ -469,7 +469,7 @@ export function useMultiGesture(
     pinch?: PinchGestureOptions;
     pan?: PanGestureOptions;
     enabled?: boolean;
-  } = {}
+  } = {},
 ) {
   const { swipe, pinch, pan, enabled = true } = options;
 
@@ -515,7 +515,7 @@ export function useNavigationGestures(
     onSwipeToCloseMenu?: () => void;
     onPinchToZoom?: (scale: number) => void;
     enabled?: boolean;
-  } = {}
+  } = {},
 ) {
   const {
     onSwipeToGoBack,
@@ -567,7 +567,7 @@ export function useNavigationGestures(
  */
 export function useHapticFeedback() {
   const vibrate = useCallback((pattern: number | number[] = 10) => {
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate(pattern);
     }
   }, []);
@@ -577,7 +577,7 @@ export function useHapticFeedback() {
   const errorFeedback = useCallback(() => vibrate([100, 50, 100]), [vibrate]);
   const successFeedback = useCallback(
     () => vibrate([20, 10, 20, 10, 20]),
-    [vibrate]
+    [vibrate],
   );
 
   return {
@@ -586,6 +586,6 @@ export function useHapticFeedback() {
     longPressFeedback,
     errorFeedback,
     successFeedback,
-    isSupported: 'vibrate' in navigator,
+    isSupported: "vibrate" in navigator,
   };
 }

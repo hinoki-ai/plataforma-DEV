@@ -28,4 +28,3 @@
 
 - API routes return JSON with status codes
 - UI uses skeletons and fallbacks for loading/error states
-

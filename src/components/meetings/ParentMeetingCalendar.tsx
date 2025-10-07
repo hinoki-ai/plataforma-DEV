@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getMeetingsByParentAction } from '@/services/actions/meetings';
-import type { Meeting } from '@/lib/prisma-compat-types';
-import type { MeetingsResponse } from '@/lib/types/service-responses';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { ActionLoader } from '@/components/ui/dashboard-loader';
+import React, { useState, useEffect } from "react";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getMeetingsByParentAction } from "@/services/actions/meetings";
+import type { Meeting, User } from "@/lib/prisma-compat-types";
+import type { MeetingsResponse } from "@/lib/types/service-responses";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 interface ParentMeetingCalendarProps {
   userId: string;
@@ -16,9 +16,9 @@ interface ParentMeetingCalendarProps {
 
 export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [meetings, setMeetings] = useState<MeetingsResponse['data']>([]);
+  const [meetings, setMeetings] = useState<MeetingsResponse["data"]>([]);
   const [selectedDateMeetings, setSelectedDateMeetings] = useState<
-    MeetingsResponse['data']
+    MeetingsResponse["data"]
   >([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,19 +30,43 @@ export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
     try {
       const response = await getMeetingsByParentAction(userId);
       if (response.success && response.data) {
-        setMeetings(response.data);
+        // Convert Convex meetings to Meeting type with all required fields
+        const convertedMeetings: (Meeting & { teacher?: Pick<User, 'id' | 'name' | 'email'> })[] = response.data.map((m: any) => ({
+          id: m._id,
+          title: m.title,
+          meetingType: m.type,
+          studentName: m.studentName,
+          studentGrade: m.studentGrade || '',
+          guardianName: m.guardianName,
+          guardianEmail: m.guardianEmail,
+          guardianPhone: m.guardianPhone || '',
+          scheduledDate: new Date(m.scheduledDate),
+          scheduledTime: m.scheduledTime,
+          status: m.status,
+          assignedTo: m.assignedTo,
+          duration: m.duration || 30,
+          location: m.location,
+          description: m.description,
+          reason: m.reason,
+          notes: m.notes,
+          parentRequested: m.parentRequested,
+          createdAt: new Date(m.createdAt || m._creationTime),
+          updatedAt: new Date(m.updatedAt || m._creationTime),
+          teacher: m.teacher,
+        }));
+        setMeetings(convertedMeetings);
       } else {
-        console.error('Error loading meetings:', response.error);
+        console.error("Error loading meetings:", response.error);
       }
     } catch (error) {
-      console.error('Error loading meetings:', error);
+      console.error("Error loading meetings:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const getMeetingsForDate = (date: Date) => {
-    return (meetings || []).filter(meeting => {
+    return (meetings || []).filter((meeting) => {
       const meetingDate = new Date(meeting.scheduledDate);
       return (
         meetingDate.getDate() === date.getDate() &&
@@ -60,7 +84,7 @@ export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
   };
 
   const getDateMeetings = (date: Date) => {
-    return (meetings || []).filter(meeting => {
+    return (meetings || []).filter((meeting) => {
       const meetingDate = new Date(meeting.scheduledDate);
       return (
         meetingDate.getDate() === date.getDate() &&
@@ -75,7 +99,7 @@ export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
   };
 
   const modifiersClassNames = {
-    hasMeetings: 'bg-blue-100 text-blue-900 font-semibold border-blue-300',
+    hasMeetings: "bg-blue-100 text-blue-900 font-semibold border-blue-300",
   };
 
   if (loading) {
@@ -112,11 +136,11 @@ export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">
-                Reuniones del {format(date, 'dd MMM yyyy', { locale: es })}
+                Reuniones del {format(date, "dd MMM yyyy", { locale: es })}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {getDateMeetings(date)?.map(meeting => (
+              {getDateMeetings(date)?.map((meeting) => (
                 <div
                   key={meeting.id}
                   className="p-3 border rounded-lg bg-muted/50"
@@ -150,16 +174,16 @@ export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
             <CardTitle className="text-lg">Próximas Reuniones</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {(meetings || []).slice(0, 5).map(meeting => (
+            {(meetings || []).slice(0, 5).map((meeting) => (
               <div
                 key={meeting.id}
                 className="p-3 border rounded-lg hover:bg-muted/50 transition-colors"
               >
                 <div className="font-medium">{meeting.title}</div>
                 <div className="text-sm text-muted-foreground">
-                  {format(new Date(meeting.scheduledDate), 'dd MMM yyyy', {
+                  {format(new Date(meeting.scheduledDate), "dd MMM yyyy", {
                     locale: es,
-                  })}{' '}
+                  })}{" "}
                   - {meeting.scheduledTime}
                 </div>
                 {meeting.teacher && (

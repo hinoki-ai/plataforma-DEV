@@ -1,4 +1,5 @@
 # Authentication System Documentation
+
 **Last Updated**: September 1, 2025  
 **Status**: Fully Operational ✅  
 **Site**: https://school.aramac.dev
@@ -6,12 +7,15 @@
 ## 🏗️ SYSTEM ARCHITECTURE
 
 ### Overview
+
 The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid approach:
+
 - **Credentials Provider**: For staff (ADMIN, PROFESOR) - database authentication
 - **OAuth Providers**: For parents (PARENT) - Google/Facebook login
 - **Role-Based Access**: Middleware-enforced route protection
 
 ### Authentication Flow
+
 ```
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │ User Login  │───▶│ NextAuth.js │───▶│ Prisma DB   │───▶│ JWT Session │
@@ -27,6 +31,7 @@ The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid
 ## 🔧 CORE COMPONENTS
 
 ### 1. NextAuth Configuration (`src/lib/auth.ts`)
+
 ```typescript
 // Key Features:
 - trustHost: true // Required for Vercel deployment
@@ -36,11 +41,13 @@ The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid
 ```
 
 **Critical Environment Variables**:
+
 - `NEXTAUTH_URL`: Must match exact production domain
 - `NEXTAUTH_SECRET`: 32+ character secret key
 - `DATABASE_URL`: PostgreSQL connection string
 
 ### 2. Database Authentication (`src/lib/auth-prisma.ts`)
+
 ```typescript
 // Authentication Methods:
 - authenticateUser(email, password) // Credentials login
@@ -53,6 +60,7 @@ The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid
 ```
 
 ### 3. Route Protection (`src/middleware.ts`)
+
 ```typescript
 // Protected Routes:
 - /admin/** → ADMIN only
@@ -66,24 +74,28 @@ The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid
 ## 👥 USER ROLES & ACCESS
 
 ### ADMIN Role
+
 - **Access**: Full system administration
 - **Routes**: `/admin/**`
 - **Authentication**: Credentials only (database)
 - **Capabilities**: User management, system settings, all data access
 
 ### PROFESOR Role
+
 - **Access**: Teaching and planning features
 - **Routes**: `/profesor/**`
 - **Authentication**: Credentials only (database)
 - **Capabilities**: Planning documents, meetings, student data
 
 ### PARENT Role
+
 - **Access**: Parent-specific features
 - **Routes**: `/parent/**`
 - **Authentication**: OAuth (Google/Facebook) or credentials
 - **Capabilities**: Meeting requests, student progress, communications
 
 ### PUBLIC Role
+
 - **Access**: Public information only
 - **Routes**: Public routes only
 - **Authentication**: None required
@@ -92,6 +104,7 @@ The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid
 ## 🔐 SECURITY IMPLEMENTATION
 
 ### Password Security
+
 ```typescript
 // Hashing: bcryptjs with salt rounds 12
 const hashedPassword = await bcrypt.hash(password, 12);
@@ -101,6 +114,7 @@ const isValid = await verifyPassword(plaintext, hashed);
 ```
 
 ### Session Management
+
 ```typescript
 // JWT Configuration:
 - Algorithm: HS256 (default)
@@ -110,11 +124,13 @@ const isValid = await verifyPassword(plaintext, hashed);
 ```
 
 ### CSRF Protection
+
 - Built-in NextAuth CSRF protection
 - Session token validation
 - Origin verification
 
 ### OAuth Security
+
 ```typescript
 // Provider Configuration:
 - Google OAuth: Restricted to parent registration
@@ -125,6 +141,7 @@ const isValid = await verifyPassword(plaintext, hashed);
 ## 🌐 ENVIRONMENT CONFIGURATION
 
 ### Production Environment (Vercel)
+
 ```bash
 # Core Authentication
 NEXTAUTH_URL="https://school.aramac.dev"
@@ -140,6 +157,7 @@ CLOUDINARY_URL="cloudinary://api-key:secret@cloud-name"
 ```
 
 ### Development Environment
+
 ```bash
 # Local Development
 NEXTAUTH_URL="http://localhost:3000"
@@ -148,6 +166,7 @@ DATABASE_URL="postgresql://localhost:5432/school_dev"
 ```
 
 ### Environment File Hierarchy
+
 1. `.env.local` - Local development overrides
 2. `.env.production` - Production-specific values
 3. `.env` - Default/shared values
@@ -156,6 +175,7 @@ DATABASE_URL="postgresql://localhost:5432/school_dev"
 ## 🚀 DEPLOYMENT PROCESS
 
 ### Vercel Deployment Commands
+
 ```bash
 # Check current environment variables
 npx vercel env ls
@@ -173,6 +193,7 @@ curl -I https://school.aramac.dev
 ```
 
 ### Deployment Checklist
+
 - [ ] Verify NEXTAUTH_URL matches production domain
 - [ ] Confirm DATABASE_URL points to production database
 - [ ] Test OAuth provider redirects work
@@ -182,6 +203,7 @@ curl -I https://school.aramac.dev
 ## 🔍 TESTING & VALIDATION
 
 ### Test Users (Development)
+
 ```bash
 # Create test users
 npm run create-all-test-users
@@ -193,6 +215,7 @@ PARENT: parent@manitospintadas.cl / parent123
 ```
 
 ### Authentication Tests
+
 ```bash
 # Run authentication test suite
 npm run test:e2e:auth
@@ -204,6 +227,7 @@ POST /api/auth/signout    # Logout endpoint
 ```
 
 ### Health Checks
+
 ```bash
 # Database connection
 npm run verify-supabase
@@ -219,12 +243,14 @@ curl -I https://school.aramac.dev/admin
 ## 🚨 EMERGENCY PROCEDURES
 
 ### Emergency Admin Access
+
 If authentication system fails completely:
 
 1. **Locate Emergency Bypass** in `src/lib/auth-prisma.ts`:
+
    ```typescript
    // Lines 27-40 and 82-94
-   if (email === 'admin@manitospintadas.cl' && password === 'admin123') {
+   if (email === "admin@manitospintadas.cl" && password === "admin123") {
      return emergency_admin_user;
    }
    ```
@@ -240,6 +266,7 @@ If authentication system fails completely:
    - Logs emergency usage for security audit
 
 ### Database Recovery
+
 ```bash
 # Reset database connection
 npx prisma generate
@@ -255,6 +282,7 @@ npm run verify-users
 ## 📊 MONITORING & LOGGING
 
 ### Authentication Logging
+
 ```typescript
 // Logger configuration in src/lib/auth.ts
 const logger = Logger.getInstance('Authentication');
@@ -266,6 +294,7 @@ const logger = Logger.getInstance('Authentication');
 ```
 
 ### Key Metrics to Monitor
+
 - Authentication success/failure rates
 - Emergency bypass usage
 - Database connection health
@@ -273,6 +302,7 @@ const logger = Logger.getInstance('Authentication');
 - OAuth provider response times
 
 ### Error Patterns
+
 ```bash
 # Common error indicators:
 "Invalid NEXTAUTH_URL" → Environment variable mismatch
@@ -284,24 +314,28 @@ const logger = Logger.getInstance('Authentication');
 ## 🔄 MAINTENANCE PROCEDURES
 
 ### Regular Maintenance
+
 1. **Weekly**: Review authentication logs for anomalies
 2. **Monthly**: Update dependencies (NextAuth, Prisma)
 3. **Quarterly**: Rotate NEXTAUTH_SECRET
 4. **Annually**: Review and update OAuth provider settings
 
 ### Security Updates
+
 1. **NextAuth.js**: Monitor for security updates
 2. **Dependencies**: Regular `npm audit` checks
 3. **Database**: Keep PostgreSQL updated
 4. **Environment Variables**: Rotate secrets periodically
 
 ### Backup Procedures
+
 1. **User Data**: Regular database backups via Supabase
 2. **Configuration**: Version control all config files
 3. **Environment Variables**: Secure backup of production values
 4. **Emergency Access**: Maintain emergency bypass documentation
 
 ---
+
 **Documentation Maintained By**: Development Team  
 **Last Incident**: September 1, 2025 - NEXTAUTH_URL Mismatch (RESOLVED)  
 **Next Review**: December 1, 2025

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * MasterStatusIndicator has been deprecated.

@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 interface CacheEntry<T> {
   data: T;
@@ -42,7 +42,7 @@ interface UseAdvancedDataResult<T> {
   };
 }
 
-const CACHE_VERSION = '1.0.0';
+const CACHE_VERSION = "1.0.0";
 const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes
 const DEFAULT_RETRY_COUNT = 3;
 const DEFAULT_RETRY_DELAY = 1000;
@@ -84,7 +84,7 @@ class AdvancedCache {
     return Boolean(
       entry &&
         Date.now() - entry.timestamp <= entry.ttl &&
-        entry.version === CACHE_VERSION
+        entry.version === CACHE_VERSION,
     );
   }
 
@@ -109,10 +109,10 @@ class AdvancedCache {
     const promise = fetch(url, {
       ...options,
       headers: {
-        'Cache-Control': 'no-cache',
+        "Cache-Control": "no-cache",
         ...options?.headers,
       },
-    }).then(res => {
+    }).then((res) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
     });
@@ -145,7 +145,7 @@ const globalCache = new AdvancedCache();
 
 export function useAdvancedData<T = any>(
   url: string,
-  options: UseAdvancedDataOptions<T> = {}
+  options: UseAdvancedDataOptions<T> = {},
 ): UseAdvancedDataResult<T> {
   const {
     cacheKey = url,
@@ -180,7 +180,7 @@ export function useAdvancedData<T = any>(
     (attempt: number): number => {
       return Math.min(baseRetryDelay * Math.pow(2, attempt), 30000); // Max 30 seconds
     },
-    [baseRetryDelay]
+    [baseRetryDelay],
   );
 
   // Check if data is stale
@@ -202,7 +202,10 @@ export function useAdvancedData<T = any>(
 
       try {
         // Cancel previous request
-        if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+        if (
+          abortControllerRef.current &&
+          !abortControllerRef.current.signal.aborted
+        ) {
           abortControllerRef.current.abort();
         }
 
@@ -228,8 +231,8 @@ export function useAdvancedData<T = any>(
         const response = await fetch(url, {
           signal: abortControllerRef.current.signal,
           headers: {
-            'Cache-Control': 'no-cache',
-            'X-Requested-With': 'XMLHttpRequest',
+            "Cache-Control": "no-cache",
+            "X-Requested-With": "XMLHttpRequest",
           },
         });
 
@@ -257,10 +260,10 @@ export function useAdvancedData<T = any>(
 
         onSuccess?.(rawData);
       } catch (err) {
-        const error = err instanceof Error ? err : new Error('Unknown error');
+        const error = err instanceof Error ? err : new Error("Unknown error");
 
         // Don't retry on certain errors
-        if (error.name === 'AbortError' || error.message.includes('HTTP 4')) {
+        if (error.name === "AbortError" || error.message.includes("HTTP 4")) {
           setError(error);
           setLoading(false);
           onError?.(error);
@@ -269,7 +272,7 @@ export function useAdvancedData<T = any>(
 
         // Retry logic
         if (!isRetry && retryCount < maxRetries) {
-          setRetryCount(prev => prev + 1);
+          setRetryCount((prev) => prev + 1);
           const delay = getRetryDelay(retryCount);
 
           setTimeout(() => {
@@ -294,7 +297,7 @@ export function useAdvancedData<T = any>(
       onSuccess,
       onError,
       checkStale,
-    ]
+    ],
   );
 
   // Prefetch function
@@ -302,7 +305,7 @@ export function useAdvancedData<T = any>(
     try {
       await globalCache.prefetch(prefetchUrl);
     } catch (error) {
-      console.warn('Prefetch failed:', error);
+      console.warn("Prefetch failed:", error);
     }
   }, []);
 
@@ -318,7 +321,7 @@ export function useAdvancedData<T = any>(
       globalCache.set(cacheKey, newData, ttl);
       setData(newData);
     },
-    [cacheKey, ttl]
+    [cacheKey, ttl],
   );
 
   // Invalidate cache
@@ -333,13 +336,13 @@ export function useAdvancedData<T = any>(
     (updater: (prev: T | null) => T): void => {
       if (!enableOptimisticUpdates) return;
 
-      setData(prev => {
+      setData((prev) => {
         const newData = updater(prev);
         globalCache.set(cacheKey, newData, ttl);
         return newData;
       });
     },
-    [cacheKey, ttl, enableOptimisticUpdates]
+    [cacheKey, ttl, enableOptimisticUpdates],
   );
 
   // Retry function
@@ -356,7 +359,7 @@ export function useAdvancedData<T = any>(
   // Prefetch related data
   useEffect(() => {
     if (enablePrefetch && prefetchUrls.length > 0) {
-      prefetchUrls.forEach(prefetchUrl => {
+      prefetchUrls.forEach((prefetchUrl) => {
         prefetch(prefetchUrl);
       });
     }
@@ -380,7 +383,10 @@ export function useAdvancedData<T = any>(
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+      if (
+        abortControllerRef.current &&
+        !abortControllerRef.current.signal.aborted
+      ) {
         abortControllerRef.current.abort();
       }
       if (backgroundRefreshRef.current) {
@@ -397,7 +403,7 @@ export function useAdvancedData<T = any>(
       retryCount,
       lastFetch,
     }),
-    [retryCount, lastFetch]
+    [retryCount, lastFetch],
   );
 
   return {
@@ -422,7 +428,7 @@ export function useRealTimeData<T>(
     enableWebSocket?: boolean;
     webSocketUrl?: string;
     reconnectInterval?: number;
-  } = {}
+  } = {},
 ) {
   const {
     enableWebSocket = false,
@@ -445,36 +451,36 @@ export function useRealTimeData<T>(
 
       wsRef.current.onopen = () => {
         setIsConnected(true);
-        console.log('WebSocket connected for real-time data');
+        console.log("WebSocket connected for real-time data");
       };
 
-      wsRef.current.onmessage = event => {
+      wsRef.current.onmessage = (event) => {
         try {
           const update = JSON.parse(event.data);
-          if (update.type === 'data_update' && update.payload) {
+          if (update.type === "data_update" && update.payload) {
             baseResult.updateCache(update.payload);
             setLastUpdate(new Date());
           }
         } catch (error) {
-          console.error('Failed to parse WebSocket message:', error);
+          console.error("Failed to parse WebSocket message:", error);
         }
       };
 
       wsRef.current.onclose = () => {
         setIsConnected(false);
-        console.log('WebSocket disconnected, attempting to reconnect...');
+        console.log("WebSocket disconnected, attempting to reconnect...");
 
         reconnectTimeoutRef.current = setTimeout(() => {
           connectWebSocket();
         }, reconnectInterval);
       };
 
-      wsRef.current.onerror = error => {
-        console.error('WebSocket error:', error);
+      wsRef.current.onerror = (error) => {
+        console.error("WebSocket error:", error);
         setIsConnected(false);
       };
     } catch (error) {
-      console.error('Failed to connect WebSocket:', error);
+      console.error("Failed to connect WebSocket:", error);
     }
   }, [enableWebSocket, webSocketUrl, reconnectInterval, baseResult]);
 
@@ -497,7 +503,7 @@ export function useRealTimeData<T>(
     ...baseResult,
     isConnected,
     lastUpdate,
-    webSocketStatus: isConnected ? 'connected' : 'disconnected',
+    webSocketStatus: isConnected ? "connected" : "disconnected",
   };
 }
 
@@ -511,7 +517,7 @@ export function usePerformanceMonitor() {
   });
 
   const updateMetric = useCallback((key: string, value: any) => {
-    setMetrics(prev => ({
+    setMetrics((prev) => ({
       ...prev,
       [key]: value,
     }));

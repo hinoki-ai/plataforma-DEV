@@ -1,6 +1,4 @@
-# 🧪 Testing Guide - Quick Reference
-
-> **📋 Full Documentation**: See [TESTING.md](../TESTING.md) for comprehensive testing strategy and validation results.
+# 🧪 Testing Guide - Lean & Focused
 
 ## 🎯 Quick Start
 
@@ -9,19 +7,29 @@
 npm run test:all
 
 # Individual test types
-npm run test:unit           # Unit tests (296 tests)
-npm run test:e2e           # E2E tests (140 tests)
-npm run test:a11y          # Accessibility tests (98 tests)
+npm run test:unit           # Unit tests
+npm run test:e2e           # E2E workflow tests
 ```
 
-## 📁 Test Structure
+## 📁 Test Structure (Lean Approach)
 
 ```
 tests/
-├── unit/          # Vitest unit tests
-├── e2e/           # Playwright E2E tests
-├── integration/   # Integration tests
-└── __mocks__/     # Mock implementations
+├── unit/              # Core functionality tests
+│   ├── api/          # API endpoint tests
+│   ├── auth.test.ts  # Authentication tests
+│   ├── calendar.test.ts
+│   ├── planning.test.ts
+│   ├── role-access.test.ts
+│   ├── security.test.ts
+│   └── dashboard/    # Dashboard feature tests
+├── e2e/              # Critical workflow tests
+│   ├── auth/         # Auth flow tests
+│   ├── admin-workflow.spec.ts
+│   ├── parent-workflow.spec.ts
+│   └── teacher-workflow.spec.ts
+├── integration/      # API integration tests
+└── __mocks__/        # Mock implementations
 ```
 
 ## 🔧 Essential Commands
@@ -29,7 +37,6 @@ tests/
 ### Setup
 
 ```bash
-npm run test:setup          # Setup test environment
 npx playwright install      # Install browsers
 npm run create-all-test-users # Create test users
 ```
@@ -42,22 +49,16 @@ npm run test:e2e:ui        # E2E UI mode
 npm run test:e2e:debug     # Debug mode
 ```
 
-## ✅ Current Status
+## 🎯 Test Philosophy
 
-- **Unit Tests**: 296/296 passing (100%)
-- **E2E Tests**: 140/140 passing (100%)
-- **Accessibility**: 98/98 passing (100%)
-- **Performance**: 25/25 passing (100%)
-- **Security**: 35/35 passing (100%)
-
-## 🎯 Test Categories
-
-- **Authentication**: Multi-role system (Admin/Teacher/Parent)
-- **Calendar**: Event management & scheduling
-- **Planning**: Document management with attachments
-- **Meetings**: Parent-teacher coordination
-- **Media**: Photo/video galleries
-- **Voting**: Centro Consejo participation
+We follow a **lean testing approach** focused on:
+- ✅ Core business logic (auth, calendar, planning)
+- ✅ Critical user workflows (admin, teacher, parent)
+- ✅ API endpoints and integrations
+- ✅ Security and role-based access
+- ❌ No UI component testing (trust the framework)
+- ❌ No performance/visual regression (manual when needed)
+- ❌ No accessibility tests (use browser tools)
 
 ## 📊 Coverage
 
@@ -66,6 +67,9 @@ npm run test:unit:coverage  # Generate coverage report
 open coverage/index.html    # View detailed report
 ```
 
-## 🚀 Production Ready
+## 🚀 Best Practices
 
-**Mission Accomplished**: 99.2% test success rate across 495 comprehensive tests with zero critical issues.
+- Focus tests on business logic, not implementation details
+- Keep tests simple and maintainable
+- Test user workflows, not individual components
+- Use manual testing for UI/UX validation

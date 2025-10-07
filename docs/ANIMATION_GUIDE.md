@@ -33,10 +33,9 @@ This guide implements the comprehensive keyframe animation concepts from [Josh C
 ```
 
 **Usage in React:**
+
 ```tsx
-<div className="animate-slide-in">
-  Content that slides in from the left
-</div>
+<div className="animate-slide-in">Content that slides in from the left</div>
 ```
 
 ## Timing Functions
@@ -50,6 +49,7 @@ This guide implements the comprehensive keyframe animation concepts from [Josh C
 ```
 
 ### Custom Cubic Bezier
+
 ```css
 .animate-slide-in-cubic-bezier {
   animation: slide-in-cubic-bezier 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -67,6 +67,7 @@ This guide implements the comprehensive keyframe animation concepts from [Josh C
 ```
 
 **Perfect for:**
+
 - Loading spinners
 - Progress indicators
 - Breathing effects
@@ -81,6 +82,7 @@ This guide implements the comprehensive keyframe animation concepts from [Josh C
 ```
 
 **Example - Multi-step entrance:**
+
 ```css
 @keyframes entrance-multi-step {
   0% {
@@ -127,6 +129,7 @@ This guide implements the comprehensive keyframe animation concepts from [Josh C
 ```
 
 **Fill mode values:**
+
 - `forwards` - Persists final keyframe state
 - `backwards` - Applies initial keyframe state before animation starts
 - `both` - Combines forwards and backwards
@@ -147,16 +150,18 @@ This guide implements the comprehensive keyframe animation concepts from [Josh C
 ```
 
 **Available dynamic animations:**
+
 - `animate-bounce-dynamic` - Customizable bounce height
 - `animate-slide-dynamic` - Customizable slide distance
 - `animate-scale-dynamic` - Customizable scale range
 - `animate-rotate-dynamic` - Customizable rotation range
 
 **React usage with inline styles:**
+
 ```tsx
 <div
   className="animate-bounce-dynamic"
-  style={{ '--bounce-offset': '30px' } as React.CSSProperties}
+  style={{ "--bounce-offset": "30px" } as React.CSSProperties}
 >
   Custom bounce height
 </div>
@@ -175,9 +180,11 @@ This guide implements the comprehensive keyframe animation concepts from [Josh C
 ```
 
 **Mascot bounce example:**
+
 ```css
 @keyframes mascot-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) scale(1);
   }
   25% {
@@ -234,9 +241,15 @@ All animations automatically respect `prefers-reduced-motion`:
 ### Staggered Animations
 
 ```css
-.grid-staggered > :nth-child(1) { animation-delay: 0ms; }
-.grid-staggered > :nth-child(2) { animation-delay: 100ms; }
-.grid-staggered > :nth-child(3) { animation-delay: 200ms; }
+.grid-staggered > :nth-child(1) {
+  animation-delay: 0ms;
+}
+.grid-staggered > :nth-child(2) {
+  animation-delay: 100ms;
+}
+.grid-staggered > :nth-child(3) {
+  animation-delay: 200ms;
+}
 /* ... and so on */
 ```
 
@@ -277,12 +290,12 @@ import { AnimatedCard, StudentCard, AchievementCard } from '@/components/ui/Anim
 
 ```tsx
 function CustomAnimationComponent() {
-  const [bounceHeight, setBounceHeight] = useState('20px');
+  const [bounceHeight, setBounceHeight] = useState("20px");
 
   return (
     <div
       className="animate-bounce-dynamic"
-      style={{ '--bounce-offset': bounceHeight } as React.CSSProperties}
+      style={{ "--bounce-offset": bounceHeight } as React.CSSProperties}
     >
       <input
         type="range"
@@ -302,17 +315,26 @@ function CustomAnimationComponent() {
 function DashboardPage() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 grid-staggered">
-      <AnimatedCard animationType="grid-entrance" className="animate-grid-entrance">
+      <AnimatedCard
+        animationType="grid-entrance"
+        className="animate-grid-entrance"
+      >
         <h3>Students</h3>
         <p>Manage student information</p>
       </AnimatedCard>
 
-      <AnimatedCard animationType="grid-entrance" className="animate-grid-entrance">
+      <AnimatedCard
+        animationType="grid-entrance"
+        className="animate-grid-entrance"
+      >
         <h3>Teachers</h3>
         <p>Teacher management</p>
       </AnimatedCard>
 
-      <AnimatedCard animationType="grid-entrance" className="animate-grid-entrance">
+      <AnimatedCard
+        animationType="grid-entrance"
+        className="animate-grid-entrance"
+      >
         <h3>Calendar</h3>
         <p>School events and schedules</p>
       </AnimatedCard>
@@ -326,7 +348,8 @@ function DashboardPage() {
 ```css
 /* Complex animation in one line */
 .animate-complex {
-  animation: slide-in 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s infinite alternate both;
+  animation: slide-in 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s infinite
+    alternate both;
 }
 
 /* Separate delay for better control */

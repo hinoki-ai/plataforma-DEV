@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import { useEffect, useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import {
   Activity,
   Cpu,
@@ -16,7 +16,7 @@ import {
   AlertTriangle,
   CheckCircle,
   RefreshCw,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface PerformanceMetrics {
   timestamp: number;
@@ -48,7 +48,7 @@ interface PerformanceMetrics {
 
 interface PerformanceAlert {
   id: string;
-  type: 'warning' | 'error' | 'info';
+  type: "warning" | "error" | "info";
   title: string;
   description: string;
   timestamp: Date;
@@ -96,9 +96,9 @@ export function PerformanceMonitor() {
 
     if (metrics.memory.percentage > 80) {
       alerts.push({
-        id: 'memory-high',
-        type: 'warning',
-        title: 'High Memory Usage',
+        id: "memory-high",
+        type: "warning",
+        title: "High Memory Usage",
         description: `Memory usage is at ${metrics.memory.percentage}%. Consider optimizing memory usage.`,
         timestamp: new Date(),
       });
@@ -106,9 +106,9 @@ export function PerformanceMonitor() {
 
     if (metrics.cpu.usage > 70) {
       alerts.push({
-        id: 'cpu-high',
-        type: 'warning',
-        title: 'High CPU Usage',
+        id: "cpu-high",
+        type: "warning",
+        title: "High CPU Usage",
         description: `CPU usage is at ${metrics.cpu.usage}%. System may be under heavy load.`,
         timestamp: new Date(),
       });
@@ -116,9 +116,9 @@ export function PerformanceMonitor() {
 
     if (metrics.network.latency > 100) {
       alerts.push({
-        id: 'latency-high',
-        type: 'error',
-        title: 'High Network Latency',
+        id: "latency-high",
+        type: "error",
+        title: "High Network Latency",
         description: `Network latency is ${metrics.network.latency}ms. Check network connectivity.`,
         timestamp: new Date(),
       });
@@ -126,9 +126,9 @@ export function PerformanceMonitor() {
 
     if (metrics.database.slowQueries > 3) {
       alerts.push({
-        id: 'slow-queries',
-        type: 'warning',
-        title: 'Slow Database Queries',
+        id: "slow-queries",
+        type: "warning",
+        title: "Slow Database Queries",
         description: `${metrics.database.slowQueries} slow queries detected. Consider query optimization.`,
         timestamp: new Date(),
       });
@@ -136,9 +136,9 @@ export function PerformanceMonitor() {
 
     if (metrics.cache.hitRate < 70) {
       alerts.push({
-        id: 'cache-efficiency',
-        type: 'info',
-        title: 'Low Cache Hit Rate',
+        id: "cache-efficiency",
+        type: "info",
+        title: "Low Cache Hit Rate",
         description: `Cache hit rate is ${metrics.cache.hitRate}%. Consider cache optimization.`,
         timestamp: new Date(),
       });
@@ -163,14 +163,14 @@ export function PerformanceMonitor() {
       setAlerts(mockAlerts);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error('Failed to fetch performance data:', error);
+      console.error("Failed to fetch performance data:", error);
       setAlerts([
         {
-          id: 'fetch-error',
-          type: 'error',
-          title: 'Monitoring Error',
+          id: "fetch-error",
+          type: "error",
+          title: "Monitoring Error",
           description:
-            'Failed to fetch performance data. Please check monitoring service.',
+            "Failed to fetch performance data. Please check monitoring service.",
           timestamp: new Date(),
         },
       ]);
@@ -190,7 +190,7 @@ export function PerformanceMonitor() {
 
   // Calculate performance scores
   const performanceScore = useMemo(() => {
-    if (!metrics) return { score: 0, grade: 'N/A', status: 'unknown' };
+    if (!metrics) return { score: 0, grade: "N/A", status: "unknown" };
 
     const weights = {
       memory: 0.2,
@@ -214,20 +214,20 @@ export function PerformanceMonitor() {
       databaseScore * weights.database;
 
     let grade: string;
-    let status: 'excellent' | 'good' | 'warning' | 'critical';
+    let status: "excellent" | "good" | "warning" | "critical";
 
     if (totalScore >= 90) {
-      grade = 'A';
-      status = 'excellent';
+      grade = "A";
+      status = "excellent";
     } else if (totalScore >= 80) {
-      grade = 'B';
-      status = 'good';
+      grade = "B";
+      status = "good";
     } else if (totalScore >= 70) {
-      grade = 'C';
-      status = 'warning';
+      grade = "C";
+      status = "warning";
     } else {
-      grade = 'F';
-      status = 'critical';
+      grade = "F";
+      status = "critical";
     }
 
     return { score: Math.round(totalScore), grade, status };
@@ -235,26 +235,26 @@ export function PerformanceMonitor() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent':
-        return 'text-green-600 bg-green-100';
-      case 'good':
-        return 'text-blue-600 bg-blue-100';
-      case 'warning':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'critical':
-        return 'text-red-600 bg-red-100';
+      case "excellent":
+        return "text-green-600 bg-green-100";
+      case "good":
+        return "text-blue-600 bg-blue-100";
+      case "warning":
+        return "text-yellow-600 bg-yellow-100";
+      case "critical":
+        return "text-red-600 bg-red-100";
       default:
-        return 'text-gray-600 bg-gray-100';
+        return "text-gray-600 bg-gray-100";
     }
   };
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'error':
+      case "error":
         return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case 'warning':
+      case "warning":
         return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case 'info':
+      case "info":
         return <CheckCircle className="w-4 h-4 text-blue-500" />;
       default:
         return <Activity className="w-4 h-4" />;
@@ -310,7 +310,7 @@ export function PerformanceMonitor() {
                 disabled={isLoading}
               >
                 <RefreshCw
-                  className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
+                  className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
                 />
                 Actualizar
               </Button>
@@ -441,15 +441,15 @@ export function PerformanceMonitor() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {alerts.map(alert => (
+              {alerts.map((alert) => (
                 <div
                   key={alert.id}
                   className={`flex items-start gap-3 p-3 rounded-lg border ${
-                    alert.type === 'error'
-                      ? 'bg-red-50 border-red-200'
-                      : alert.type === 'warning'
-                        ? 'bg-yellow-50 border-yellow-200'
-                        : 'bg-blue-50 border-blue-200'
+                    alert.type === "error"
+                      ? "bg-red-50 border-red-200"
+                      : alert.type === "warning"
+                        ? "bg-yellow-50 border-yellow-200"
+                        : "bg-blue-50 border-blue-200"
                   }`}
                 >
                   {getAlertIcon(alert.type)}

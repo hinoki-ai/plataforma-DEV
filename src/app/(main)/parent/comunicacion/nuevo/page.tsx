@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { useDivineParsing } from '@/components/language/useDivineLanguage';
-import { getRoleAccess } from '@/lib/role-utils';
-import { redirect } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { getRoleAccess } from "@/lib/role-utils";
+import { redirect } from "next/navigation";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { ArrowLeft, Send, Mail } from 'lucide-react';
-import Link from 'next/link';
-import { FixedBackgroundLayout } from '@/components/layout/FixedBackgroundLayout';
+} from "@/components/ui/select";
+import { ArrowLeft, Send, Mail } from "lucide-react";
+import Link from "next/link";
+import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
 
 interface Contact {
   id: string;
@@ -37,14 +37,14 @@ interface Contact {
 
 export default function NuevoMensajePage() {
   const { data: session, status } = useSession();
-  const { t } = useDivineParsing(['common', 'parent']);
+  const { t } = useDivineParsing(["common", "parent"]);
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    to: '',
-    subject: '',
-    message: '',
-    priority: 'normal',
+    to: "",
+    subject: "",
+    message: "",
+    priority: "normal",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,18 +52,38 @@ export default function NuevoMensajePage() {
 
   // Mock contacts for demonstration
   const contacts: Contact[] = [
-    { id: '1', name: 'Dirección', email: 'direccion@manitospintadas.cl', role: 'Admin' },
-    { id: '2', name: 'Profesor Jefe', email: 'profesor@manitospintadas.cl', role: 'Teacher' },
-    { id: '3', name: 'Coordinación PIE', email: 'pie@manitospintadas.cl', role: 'Specialist' },
-    { id: '4', name: 'Psicopedagoga', email: 'psicopedagoga@manitospintadas.cl', role: 'Specialist' },
+    {
+      id: "1",
+      name: "Dirección",
+      email: "direccion@manitospintadas.cl",
+      role: "Admin",
+    },
+    {
+      id: "2",
+      name: "Profesor Jefe",
+      email: "profesor@manitospintadas.cl",
+      role: "Teacher",
+    },
+    {
+      id: "3",
+      name: "Coordinación PIE",
+      email: "pie@manitospintadas.cl",
+      role: "Specialist",
+    },
+    {
+      id: "4",
+      name: "Psicopedagoga",
+      email: "psicopedagoga@manitospintadas.cl",
+      role: "Specialist",
+    },
   ];
 
   // Handle loading state
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <FixedBackgroundLayout backgroundImage="/images/backgrounds/communication-bg.jpg">
         <div className="flex items-center justify-center min-h-screen">
-          <div>{t('parent.students.loading')}</div>
+          <div>{t("parent.students.loading")}</div>
         </div>
       </FixedBackgroundLayout>
     );
@@ -71,19 +91,19 @@ export default function NuevoMensajePage() {
 
   // Ensure user has access to parent section
   if (!session || !session.user) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect('/unauthorized');
+    redirect("/unauthorized");
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.to || !formData.subject || !formData.message) {
-      setError('Todos los campos son obligatorios');
+      setError("Todos los campos son obligatorios");
       return;
     }
 
@@ -91,10 +111,10 @@ export default function NuevoMensajePage() {
     setError(null);
 
     try {
-      const response = await fetch('/api/parent/communications', {
-        method: 'POST',
+      const response = await fetch("/api/parent/communications", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           to: formData.to,
@@ -107,22 +127,22 @@ export default function NuevoMensajePage() {
       if (response.ok) {
         setSuccess(true);
         setTimeout(() => {
-          router.push('/parent/comunicacion');
+          router.push("/parent/comunicacion");
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(errorData.error || 'Error al enviar el mensaje');
+        setError(errorData.error || "Error al enviar el mensaje");
       }
     } catch (error) {
-      console.error('Error sending message:', error);
-      setError('Error de conexión. Inténtalo de nuevo.');
+      console.error("Error sending message:", error);
+      setError("Error de conexión. Inténtalo de nuevo.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (error) setError(null);
   };
 
@@ -143,7 +163,7 @@ export default function NuevoMensajePage() {
                   <p className="text-gray-500 mb-4">
                     Tu mensaje ha sido enviado y será respondido pronto.
                   </p>
-                  <Button onClick={() => router.push('/parent/comunicacion')}>
+                  <Button onClick={() => router.push("/parent/comunicacion")}>
                     Volver a Comunicación
                   </Button>
                 </div>
@@ -161,11 +181,7 @@ export default function NuevoMensajePage() {
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="mb-6">
-            <Button
-              variant="ghost"
-              asChild
-              className="mb-4"
-            >
+            <Button variant="ghost" asChild className="mb-4">
               <Link href="/parent/comunicacion">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Volver
@@ -203,7 +219,7 @@ export default function NuevoMensajePage() {
                   <Label htmlFor="to">Destinatario</Label>
                   <Select
                     value={formData.to}
-                    onValueChange={(value) => handleInputChange('to', value)}
+                    onValueChange={(value) => handleInputChange("to", value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecciona un destinatario" />
@@ -223,7 +239,9 @@ export default function NuevoMensajePage() {
                   <Label htmlFor="priority">Prioridad</Label>
                   <Select
                     value={formData.priority}
-                    onValueChange={(value) => handleInputChange('priority', value)}
+                    onValueChange={(value) =>
+                      handleInputChange("priority", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -244,7 +262,9 @@ export default function NuevoMensajePage() {
                     type="text"
                     placeholder="Escribe el asunto del mensaje"
                     value={formData.subject}
-                    onChange={(e) => handleInputChange('subject', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("subject", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -257,20 +277,18 @@ export default function NuevoMensajePage() {
                     placeholder="Escribe tu mensaje aquí..."
                     rows={8}
                     value={formData.message}
-                    onChange={(e) => handleInputChange('message', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("message", e.target.value)
+                    }
                     required
                   />
                 </div>
 
                 {/* Actions */}
                 <div className="flex gap-4 pt-4">
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="flex-1"
-                  >
+                  <Button type="submit" disabled={loading} className="flex-1">
                     {loading ? (
-                      'Enviando...'
+                      "Enviando..."
                     ) : (
                       <>
                         <Send className="h-4 w-4 mr-2" />
@@ -281,7 +299,7 @@ export default function NuevoMensajePage() {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => router.push('/parent/comunicacion')}
+                    onClick={() => router.push("/parent/comunicacion")}
                   >
                     Cancelar
                   </Button>

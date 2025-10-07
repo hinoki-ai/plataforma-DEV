@@ -14,9 +14,27 @@ export type UserStatus = "PENDING" | "ACTIVE" | "INACTIVE" | "SUSPENDED";
 
 // ==================== MEETING TYPES ====================
 
-export type MeetingStatus = "PENDING" | "CONFIRMED" | "RESCHEDULED" | "CANCELLED" | "COMPLETED";
+export enum MeetingStatus {
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  SCHEDULED = "SCHEDULED",
+  RESCHEDULED = "RESCHEDULED",
+  CANCELLED = "CANCELLED",
+  COMPLETED = "COMPLETED",
+  IN_PROGRESS = "IN_PROGRESS",
+}
 
-export type MeetingType = "PARENT_TEACHER" | "FOLLOW_UP" | "EMERGENCY" | "IEP_REVIEW" | "GRADE_CONFERENCE";
+export enum MeetingType {
+  PARENT_TEACHER = "PARENT_TEACHER",
+  FOLLOW_UP = "FOLLOW_UP",
+  EMERGENCY = "EMERGENCY",
+  IEP_REVIEW = "IEP_REVIEW",
+  GRADE_CONFERENCE = "GRADE_CONFERENCE",
+}
+
+// Type aliases for backward compatibility
+export type MeetingStatusType = MeetingStatus;
+export type MeetingTypeType = MeetingType;
 
 export type MeetingLocationType = "IN_PERSON" | "VIRTUAL" | "PHONE" | "HYBRID";
 
@@ -26,16 +44,20 @@ export type EventCategory =
   | "ADMIN"
   | "PROFESOR"
   | "PARENT"
+  | "ACADEMIC"
+  | "HOLIDAY"
   | "SPECIAL"
   | "EVENT"
-  | "HOLIDAY"
   | "MEETING"
   | "ACTIVITY"
-  | "ACADEMIC"
   | "CULTURAL"
   | "SPORTS"
   | "VACATION"
-  | "PLANNING";
+  | "PLANNING"
+  | "EXAM"
+  | "ADMINISTRATIVE"
+  | "DEADLINE"
+  | "OTHER";
 
 export type EventPriority = "LOW" | "MEDIUM" | "HIGH";
 
@@ -52,7 +74,11 @@ export type ActivityType =
   | "CULTURAL"
   | "OTHER";
 
-export type ActivityStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+export type ActivityStatus =
+  | "PENDING"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "CANCELLED";
 
 // ==================== NOTIFICATION TYPES ====================
 
@@ -135,24 +161,25 @@ export interface Meeting {
   title: string;
   description?: string;
   scheduledDate: Date;
-  scheduledTime?: string;
+  scheduledTime: string;
   duration: number;
   location?: string;
+  type?: MeetingType; // Backward compatibility
   meetingType: MeetingType;
   status: MeetingStatus;
   parentRequested: boolean;
   reason?: string;
   outcome?: string;
   notes?: string;
-  followUpRequired: boolean;
+  followUpRequired?: boolean;
   followUpNotes?: string;
-  assignedTo?: string;
+  assignedTo: string;
   studentId?: string;
-  studentName?: string;
-  studentGrade?: string;
-  guardianName?: string;
-  guardianEmail?: string;
-  guardianPhone?: string;
+  studentName: string;
+  studentGrade: string;
+  guardianName: string;
+  guardianEmail: string;
+  guardianPhone: string;
   attachments?: any;
   createdAt: Date;
   updatedAt: Date;
@@ -252,7 +279,7 @@ export interface Vote {
 export class PrismaClient {
   constructor() {
     throw new Error(
-      "PrismaClient is no longer used. Please use Convex client instead. Import from '@/lib/convex'"
+      "PrismaClient is no longer used. Please use Convex client instead. Import from '@/lib/convex'",
     );
   }
 }

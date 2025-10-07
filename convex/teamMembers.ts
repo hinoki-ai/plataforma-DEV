@@ -42,7 +42,7 @@ export const createTeamMember = mutation({
   },
   handler: async (ctx, args) => {
     const now = Date.now();
-    
+
     // Get the max order to append at the end
     const members = await ctx.db.query("teamMembers").collect();
     const maxOrder = members.reduce((max, m) => Math.max(max, m.order), -1);
@@ -94,7 +94,24 @@ export const getTeamMemberStats = query({
 
     return {
       total: members.length,
-      active: members.filter(m => m.isActive).length,
+      active: members.filter((m) => m.isActive).length,
     };
+  },
+});
+
+/**
+ * Toggle team member active status
+ */
+export const toggleTeamMemberStatus = mutation({
+  args: {
+    id: v.id("teamMembers"),
+    isActive: v.boolean(),
+  },
+  handler: async (ctx, { id, isActive }) => {
+    await ctx.db.patch(id, {
+      isActive,
+      updatedAt: Date.now(),
+    });
+    return await ctx.db.get(id);
   },
 });

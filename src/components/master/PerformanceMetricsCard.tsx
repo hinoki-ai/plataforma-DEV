@@ -1,56 +1,62 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Activity } from 'lucide-react';
-import { MasterMetricsCard } from './MasterMetricsCard';
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Activity } from "lucide-react";
+import { MasterMetricsCard } from "./MasterMetricsCard";
 
 export function PerformanceMetricsCard() {
   const metrics = [
     {
-      id: 'cpu-usage',
-      label: 'CPU Usage',
-      value: '23%',
+      id: "cpu-usage",
+      label: "CPU Usage",
+      value: "23%",
       progress: 23,
-      status: 'good' as const,
-      unit: '%',
+      status: "good" as const,
+      unit: "%",
     },
     {
-      id: 'memory-usage',
-      label: 'Memory Usage',
-      value: '67%',
+      id: "memory-usage",
+      label: "Memory Usage",
+      value: "67%",
       progress: 67,
-      status: 'warning' as const,
-      unit: '%',
+      status: "warning" as const,
+      unit: "%",
     },
     {
-      id: 'network-io',
-      label: 'Network I/O',
-      value: '12 MB/s',
+      id: "network-io",
+      label: "Network I/O",
+      value: "12 MB/s",
       progress: 45,
-      status: 'good' as const,
+      status: "good" as const,
     },
   ];
 
   const summaryStats = [
     {
-      id: 'active-connections',
-      label: 'Conexiones Activas',
-      value: '1,247',
-      status: 'good' as const,
+      id: "active-connections",
+      label: "Conexiones Activas",
+      value: "1,247",
+      status: "good" as const,
     },
     {
-      id: 'response-time',
-      label: 'Tiempo de Respuesta',
-      value: '45ms',
-      status: 'good' as const,
+      id: "response-time",
+      label: "Tiempo de Respuesta",
+      value: "45ms",
+      status: "good" as const,
     },
     {
-      id: 'uptime',
-      label: 'Disponibilidad',
-      value: '99.97%',
-      status: 'good' as const,
+      id: "uptime",
+      label: "Disponibilidad",
+      value: "99.97%",
+      status: "good" as const,
     },
   ];
 
@@ -62,7 +68,8 @@ export function PerformanceMetricsCard() {
           Métricas de Rendimiento en Tiempo Real
         </CardTitle>
         <CardDescription className="text-green-600 dark:text-green-400">
-          Monitoreo continuo del sistema - Actualización automática cada 30 segundos
+          Monitoreo continuo del sistema - Actualización automática cada 30
+          segundos
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -78,7 +85,10 @@ export function PerformanceMetricsCard() {
           {/* Summary Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {summaryStats.map((stat) => (
-              <div key={stat.id} className="text-center p-4 bg-green-100 dark:bg-green-900/20 rounded-lg">
+              <div
+                key={stat.id}
+                className="text-center p-4 bg-green-100 dark:bg-green-900/20 rounded-lg"
+              >
                 <div className="text-2xl font-bold text-green-700 dark:text-green-300 mb-1">
                   {stat.value}
                 </div>

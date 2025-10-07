@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { SessionProvider } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { SessionProvider } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface EnhancedAuthProviderProps {
   children: React.ReactNode;

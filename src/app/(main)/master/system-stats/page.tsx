@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { MasterPageTemplate } from '@/components/master/MasterPageTemplate';
-import { MasterStatsCard } from '@/components/master/MasterStatsCard';
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
+import { MasterStatsCard } from "@/components/master/MasterStatsCard";
 
 // Force dynamic rendering for Vercel compatibility
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const systemStatsFallback = (
   <div className="space-y-8">

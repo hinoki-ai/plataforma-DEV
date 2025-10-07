@@ -1,7 +1,11 @@
-import { STANDARD_SECTION_ORDER, ROLE_SPECIFIC_SECTIONS, SHARED_NAVIGATION_ITEMS } from './navigation-constants';
+import {
+  STANDARD_SECTION_ORDER,
+  ROLE_SPECIFIC_SECTIONS,
+  SHARED_NAVIGATION_ITEMS,
+} from "./navigation-constants";
 
 // Import actual icon components
-import { NavigationIcons } from '@/components/icons/hero-icons';
+import { NavigationIcons } from "@/components/icons/hero-icons";
 
 // ADMIN Navigation Configuration
 export const ADMIN_NAVIGATION = [
@@ -10,10 +14,10 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Panel Administrativo',
-        href: '/admin',
+        title: "Panel Administrativo",
+        href: "/admin",
         icon: NavigationIcons.Analytics,
-        shortcut: 'Alt+H',
+        shortcut: "Alt+H",
       },
     ],
   },
@@ -22,10 +26,10 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Usuarios',
-        href: '/admin/usuarios',
+        title: "Usuarios",
+        href: "/admin/usuarios",
         icon: NavigationIcons.Profile,
-        shortcut: 'Alt+U',
+        shortcut: "Alt+U",
       },
     ],
   },
@@ -34,20 +38,20 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Planificaciones',
-        href: '/profesor/planificaciones',
+        title: "Planificaciones",
+        href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
-        shortcut: 'Alt+P',
+        shortcut: "Alt+P",
       },
       {
-        title: 'Calendario Escolar',
-        href: '/admin/calendario-escolar',
+        title: "Calendario Escolar",
+        href: "/admin/calendario-escolar",
         icon: NavigationIcons.Calendar,
-        shortcut: 'Alt+C',
+        shortcut: "Alt+C",
       },
       {
-        title: 'PME Mejoramiento',
-        href: '/admin/pme',
+        title: "PME Mejoramiento",
+        href: "/admin/pme",
         icon: NavigationIcons.Analytics,
       },
     ],
@@ -57,22 +61,22 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Equipo Multidisciplinario',
-        href: '/admin/equipo-multidisciplinario',
+        title: "Equipo Multidisciplinario",
+        href: "/admin/equipo-multidisciplinario",
         icon: NavigationIcons.Team,
-        shortcut: 'Alt+E',
+        shortcut: "Alt+E",
       },
       {
-        title: 'Reuniones',
-        href: '/admin/reuniones',
+        title: "Reuniones",
+        href: "/admin/reuniones",
         icon: NavigationIcons.Meeting,
-        shortcut: 'Alt+R',
+        shortcut: "Alt+R",
       },
       {
-        title: 'Votaciones',
-        href: '/admin/votaciones',
+        title: "Votaciones",
+        href: "/admin/votaciones",
         icon: NavigationIcons.Vote,
-        shortcut: 'Alt+V',
+        shortcut: "Alt+V",
       },
     ],
   },
@@ -81,14 +85,14 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Documentos',
-        href: '/admin/documentos',
+        title: "Documentos",
+        href: "/admin/documentos",
         icon: NavigationIcons.Documents,
-        shortcut: 'Alt+D',
+        shortcut: "Alt+D",
       },
       {
-        title: 'Horarios',
-        href: '/admin/horarios',
+        title: "Horarios",
+        href: "/admin/horarios",
         icon: NavigationIcons.Calendar,
       },
     ],
@@ -103,10 +107,10 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Enhanced Debug Panel',
-        href: '/admin/debug-navigation',
+        title: "Enhanced Debug Panel",
+        href: "/admin/debug-navigation",
         icon: NavigationIcons.Analytics,
-        shortcut: 'Alt+B',
+        shortcut: "Alt+B",
       },
     ],
   },
@@ -119,10 +123,10 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Inicio',
-        href: '/profesor',
+        title: "Inicio",
+        href: "/profesor",
         icon: NavigationIcons.Home,
-        shortcut: 'Alt+H',
+        shortcut: "Alt+H",
       },
     ],
   },
@@ -131,22 +135,22 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Planificaciones',
-        href: '/profesor/planificaciones',
+        title: "Planificaciones",
+        href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
-        shortcut: 'Alt+P',
+        shortcut: "Alt+P",
       },
       {
-        title: 'Calendario Escolar',
-        href: '/profesor/calendario-escolar',
+        title: "Calendario Escolar",
+        href: "/profesor/calendario-escolar",
         icon: NavigationIcons.Calendar,
-        shortcut: 'Alt+C',
+        shortcut: "Alt+C",
       },
       {
-        title: 'PME Mejoramiento',
-        href: '/profesor/pme',
+        title: "PME Mejoramiento",
+        href: "/profesor/pme",
         icon: NavigationIcons.Analytics,
-        shortcut: 'Alt+M',
+        shortcut: "Alt+M",
       },
     ],
   },
@@ -155,10 +159,10 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Reuniones Apoderados',
-        href: '/profesor/reuniones',
+        title: "Reuniones Apoderados",
+        href: "/profesor/reuniones",
         icon: NavigationIcons.Team,
-        shortcut: 'Alt+R',
+        shortcut: "Alt+R",
       },
     ],
   },
@@ -167,10 +171,10 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Horarios',
-        href: '/profesor/horarios',
+        title: "Horarios",
+        href: "/profesor/horarios",
         icon: NavigationIcons.Calendar,
-        shortcut: 'Alt+T',
+        shortcut: "Alt+T",
       },
     ],
   },
@@ -179,10 +183,10 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Perfil',
-        href: '/profesor/perfil',
+        title: "Perfil",
+        href: "/profesor/perfil",
         icon: NavigationIcons.Profile,
-        shortcut: 'Alt+F',
+        shortcut: "Alt+F",
       },
       SHARED_NAVIGATION_ITEMS.SETTINGS,
     ],
@@ -196,10 +200,10 @@ export const PARENT_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Inicio',
-        href: '/parent',
+        title: "Inicio",
+        href: "/parent",
         icon: NavigationIcons.Home,
-        shortcut: 'Alt+H',
+        shortcut: "Alt+H",
       },
     ],
   },
@@ -208,16 +212,16 @@ export const PARENT_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Información de Estudiantes',
-        href: '/parent/estudiantes',
+        title: "Información de Estudiantes",
+        href: "/parent/estudiantes",
         icon: NavigationIcons.Profile,
-        shortcut: 'Alt+E',
+        shortcut: "Alt+E",
       },
       {
-        title: 'Calendario Escolar',
-        href: '/parent/calendario-escolar',
+        title: "Calendario Escolar",
+        href: "/parent/calendario-escolar",
         icon: NavigationIcons.Calendar,
-        shortcut: 'Alt+C',
+        shortcut: "Alt+C",
       },
     ],
   },
@@ -226,16 +230,16 @@ export const PARENT_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Mensajes',
-        href: '/parent/comunicacion',
+        title: "Mensajes",
+        href: "/parent/comunicacion",
         icon: NavigationIcons.Notifications,
-        shortcut: 'Alt+M',
+        shortcut: "Alt+M",
       },
       {
-        title: 'Reuniones',
-        href: '/parent/reuniones',
+        title: "Reuniones",
+        href: "/parent/reuniones",
         icon: NavigationIcons.Meeting,
-        shortcut: 'Alt+R',
+        shortcut: "Alt+R",
       },
     ],
   },
@@ -245,9 +249,9 @@ export const PARENT_NAVIGATION = [
     items: [
       {
         title: ROLE_SPECIFIC_SECTIONS.PARENT.resources,
-        href: '/parent/recursos',
+        href: "/parent/recursos",
         icon: NavigationIcons.Documents,
-        shortcut: 'Alt+D',
+        shortcut: "Alt+D",
       },
     ],
   },
@@ -265,10 +269,10 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Master Dashboard',
-        href: '/master',
+        title: "Master Dashboard",
+        href: "/master",
         icon: NavigationIcons.Analytics,
-        shortcut: 'Alt+M',
+        shortcut: "Alt+M",
       },
     ],
   },
@@ -277,34 +281,34 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'God Mode',
-        href: '/master/god-mode',
+        title: "God Mode",
+        href: "/master/god-mode",
         icon: NavigationIcons.ServerStack,
-        shortcut: 'Alt+G',
+        shortcut: "Alt+G",
       },
       {
-        title: 'Global Oversight',
-        href: '/master/global-oversight',
+        title: "Global Oversight",
+        href: "/master/global-oversight",
         icon: NavigationIcons.Analytics,
-        shortcut: 'Alt+O',
+        shortcut: "Alt+O",
       },
       {
-        title: 'System Config',
-        href: '/master/system-config',
+        title: "System Config",
+        href: "/master/system-config",
         icon: NavigationIcons.Settings,
-        shortcut: 'Alt+C',
+        shortcut: "Alt+C",
       },
       {
-        title: 'System Monitor',
-        href: '/master/system-monitor',
+        title: "System Monitor",
+        href: "/master/system-monitor",
         icon: NavigationIcons.ServerStack,
-        shortcut: 'Alt+S',
+        shortcut: "Alt+S",
       },
       {
-        title: 'Audit Master',
-        href: '/master/audit-master',
+        title: "Audit Master",
+        href: "/master/audit-master",
         icon: NavigationIcons.Documents,
-        shortcut: 'Alt+A',
+        shortcut: "Alt+A",
       },
     ],
   },
@@ -313,10 +317,10 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: 'Usuarios',
-        href: '/admin/usuarios',
+        title: "Usuarios",
+        href: "/admin/usuarios",
         icon: NavigationIcons.Profile,
-        shortcut: 'Alt+U',
+        shortcut: "Alt+U",
       },
     ],
   },
@@ -325,20 +329,20 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Planificaciones',
-        href: '/profesor/planificaciones',
+        title: "Planificaciones",
+        href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
-        shortcut: 'Alt+P',
+        shortcut: "Alt+P",
       },
       {
-        title: 'Calendario Escolar',
-        href: '/admin/calendario-escolar',
+        title: "Calendario Escolar",
+        href: "/admin/calendario-escolar",
         icon: NavigationIcons.Calendar,
-        shortcut: 'Alt+E',
+        shortcut: "Alt+E",
       },
       {
-        title: 'PME Mejoramiento',
-        href: '/admin/pme',
+        title: "PME Mejoramiento",
+        href: "/admin/pme",
         icon: NavigationIcons.Analytics,
       },
     ],
@@ -348,22 +352,22 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Equipo Multidisciplinario',
-        href: '/admin/equipo-multidisciplinario',
+        title: "Equipo Multidisciplinario",
+        href: "/admin/equipo-multidisciplinario",
         icon: NavigationIcons.Team,
-        shortcut: 'Alt+T',
+        shortcut: "Alt+T",
       },
       {
-        title: 'Reuniones',
-        href: '/admin/reuniones',
+        title: "Reuniones",
+        href: "/admin/reuniones",
         icon: NavigationIcons.Meeting,
-        shortcut: 'Alt+R',
+        shortcut: "Alt+R",
       },
       {
-        title: 'Votaciones',
-        href: '/admin/votaciones',
+        title: "Votaciones",
+        href: "/admin/votaciones",
         icon: NavigationIcons.Vote,
-        shortcut: 'Alt+V',
+        shortcut: "Alt+V",
       },
     ],
   },
@@ -372,14 +376,14 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Documentos',
-        href: '/admin/documentos',
+        title: "Documentos",
+        href: "/admin/documentos",
         icon: NavigationIcons.Documents,
-        shortcut: 'Alt+D',
+        shortcut: "Alt+D",
       },
       {
-        title: 'Horarios',
-        href: '/admin/horarios',
+        title: "Horarios",
+        href: "/admin/horarios",
         icon: NavigationIcons.Calendar,
       },
     ],
@@ -394,10 +398,10 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: 'Enhanced Debug Panel',
-        href: '/admin/debug-navigation',
+        title: "Enhanced Debug Panel",
+        href: "/admin/debug-navigation",
         icon: NavigationIcons.Analytics,
-        shortcut: 'Alt+B',
+        shortcut: "Alt+B",
       },
     ],
   },

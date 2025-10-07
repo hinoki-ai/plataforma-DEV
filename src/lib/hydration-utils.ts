@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { format as dateFnsFormat } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { format as dateFnsFormat } from "date-fns";
+import { es } from "date-fns/locale";
 
 /**
  * Hydration-safe utilities to prevent SSR/Client mismatches
@@ -13,25 +13,26 @@ import { es } from 'date-fns/locale';
  */
 export function formatDateSafe(
   date: Date | string | number,
-  formatStr: string = 'dd MMM yyyy',
-  options: { locale?: any; placeholder?: string } = {}
+  formatStr: string = "dd MMM yyyy",
+  options: { locale?: any; placeholder?: string } = {},
 ) {
   // During SSR, return a placeholder to avoid timezone differences
-  if (typeof window === 'undefined') {
-    return options.placeholder || '...';
+  if (typeof window === "undefined") {
+    return options.placeholder || "...";
   }
 
   try {
-    const dateObj = typeof date === 'string' || typeof date === 'number' 
-      ? new Date(date) 
-      : date;
-    
+    const dateObj =
+      typeof date === "string" || typeof date === "number"
+        ? new Date(date)
+        : date;
+
     return dateFnsFormat(dateObj, formatStr, {
-      locale: options.locale || es
+      locale: options.locale || es,
     });
   } catch (error) {
-    console.error('Date formatting error:', error);
-    return options.placeholder || 'Invalid date';
+    console.error("Date formatting error:", error);
+    return options.placeholder || "Invalid date";
   }
 }
 
@@ -40,9 +41,9 @@ export function formatDateSafe(
  */
 export function formatTimeSafe(
   date: Date | string | number,
-  options: { placeholder?: string } = {}
+  options: { placeholder?: string } = {},
 ) {
-  return formatDateSafe(date, 'HH:mm', { ...options, locale: es });
+  return formatDateSafe(date, "HH:mm", { ...options, locale: es });
 }
 
 /**
@@ -50,9 +51,9 @@ export function formatTimeSafe(
  */
 export function formatDateTimeSafe(
   date: Date | string | number,
-  options: { placeholder?: string } = {}
+  options: { placeholder?: string } = {},
 ) {
-  return formatDateSafe(date, 'dd MMM yyyy HH:mm', { ...options, locale: es });
+  return formatDateSafe(date, "dd MMM yyyy HH:mm", { ...options, locale: es });
 }
 
 /**
@@ -60,40 +61,43 @@ export function formatDateTimeSafe(
  */
 export function getRelativeTimeSafe(
   date: Date | string | number,
-  options: { placeholder?: string } = {}
+  options: { placeholder?: string } = {},
 ): string {
-  if (typeof window === 'undefined') {
-    return options.placeholder || '...';
+  if (typeof window === "undefined") {
+    return options.placeholder || "...";
   }
 
   try {
-    const dateObj = typeof date === 'string' || typeof date === 'number' 
-      ? new Date(date) 
-      : date;
-    
+    const dateObj =
+      typeof date === "string" || typeof date === "number"
+        ? new Date(date)
+        : date;
+
     const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return 'hace un momento';
-    if (diffInSeconds < 3600) return `hace ${Math.floor(diffInSeconds / 60)} minutos`;
-    if (diffInSeconds < 86400) return `hace ${Math.floor(diffInSeconds / 3600)} horas`;
-    if (diffInSeconds < 604800) return `hace ${Math.floor(diffInSeconds / 86400)} días`;
-    
+    const diffInSeconds = Math.floor(
+      (now.getTime() - dateObj.getTime()) / 1000,
+    );
+
+    if (diffInSeconds < 60) return "hace un momento";
+    if (diffInSeconds < 3600)
+      return `hace ${Math.floor(diffInSeconds / 60)} minutos`;
+    if (diffInSeconds < 86400)
+      return `hace ${Math.floor(diffInSeconds / 3600)} horas`;
+    if (diffInSeconds < 604800)
+      return `hace ${Math.floor(diffInSeconds / 86400)} días`;
+
     return formatDateSafe(dateObj);
   } catch (error) {
-    console.error('Relative time error:', error);
-    return options.placeholder || 'Invalid date';
+    console.error("Relative time error:", error);
+    return options.placeholder || "Invalid date";
   }
 }
 
 /**
  * Safe localStorage access
  */
-export function getLocalStorageSafe<T>(
-  key: string,
-  defaultValue: T
-): T {
-  if (typeof window === 'undefined') {
+export function getLocalStorageSafe<T>(key: string, defaultValue: T): T {
+  if (typeof window === "undefined") {
     return defaultValue;
   }
 
@@ -101,7 +105,7 @@ export function getLocalStorageSafe<T>(
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
   } catch (error) {
-    console.error('localStorage read error:', error);
+    console.error("localStorage read error:", error);
     return defaultValue;
   }
 }
@@ -109,11 +113,8 @@ export function getLocalStorageSafe<T>(
 /**
  * Safe localStorage setter
  */
-export function setLocalStorageSafe<T>(
-  key: string,
-  value: T
-): boolean {
-  if (typeof window === 'undefined') {
+export function setLocalStorageSafe<T>(key: string, value: T): boolean {
+  if (typeof window === "undefined") {
     return false;
   }
 
@@ -121,7 +122,7 @@ export function setLocalStorageSafe<T>(
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (error) {
-    console.error('localStorage write error:', error);
+    console.error("localStorage write error:", error);
     return false;
   }
 }
@@ -129,11 +130,8 @@ export function setLocalStorageSafe<T>(
 /**
  * Safe sessionStorage access
  */
-export function getSessionStorageSafe<T>(
-  key: string,
-  defaultValue: T
-): T {
-  if (typeof window === 'undefined') {
+export function getSessionStorageSafe<T>(key: string, defaultValue: T): T {
+  if (typeof window === "undefined") {
     return defaultValue;
   }
 
@@ -141,7 +139,7 @@ export function getSessionStorageSafe<T>(
     const item = sessionStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
   } catch (error) {
-    console.error('sessionStorage read error:', error);
+    console.error("sessionStorage read error:", error);
     return defaultValue;
   }
 }
@@ -149,11 +147,8 @@ export function getSessionStorageSafe<T>(
 /**
  * Safe sessionStorage setter
  */
-export function setSessionStorageSafe<T>(
-  key: string,
-  value: T
-): boolean {
-  if (typeof window === 'undefined') {
+export function setSessionStorageSafe<T>(key: string, value: T): boolean {
+  if (typeof window === "undefined") {
     return false;
   }
 
@@ -161,7 +156,7 @@ export function setSessionStorageSafe<T>(
     sessionStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (error) {
-    console.error('sessionStorage write error:', error);
+    console.error("sessionStorage write error:", error);
     return false;
   }
 }
@@ -170,13 +165,13 @@ export function setSessionStorageSafe<T>(
  * Safe window dimensions getter
  */
 export function getWindowDimensionsSafe() {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return { width: 1024, height: 768 }; // Default desktop dimensions
   }
-  
+
   return {
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   };
 }
 
@@ -184,35 +179,37 @@ export function getWindowDimensionsSafe() {
  * Safe user agent checker
  */
 export function getUserAgentSafe() {
-  if (typeof navigator === 'undefined') {
-    return '';
+  if (typeof navigator === "undefined") {
+    return "";
   }
-  
-  return navigator.userAgent || '';
+
+  return navigator.userAgent || "";
 }
 
 /**
  * Check if running on mobile device
  */
 export function isMobileSafe() {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return false; // Default to desktop during SSR
   }
-  
-  return window.innerWidth < 768 || 
+
+  return (
+    window.innerWidth < 768 ||
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
+      navigator.userAgent,
+    )
+  );
 }
 
 /**
  * Safe document title setter
  */
 export function setDocumentTitleSafe(title: string) {
-  if (typeof document === 'undefined') {
+  if (typeof document === "undefined") {
     return;
   }
-  
+
   document.title = title;
 }
 
@@ -220,17 +217,17 @@ export function setDocumentTitleSafe(title: string) {
  * Safe cookie getter
  */
 export function getCookieSafe(name: string): string | null {
-  if (typeof document === 'undefined') {
+  if (typeof document === "undefined") {
     return null;
   }
-  
+
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  
+
   if (parts.length === 2) {
-    return parts.pop()?.split(';').shift() || null;
+    return parts.pop()?.split(";").shift() || null;
   }
-  
+
   return null;
 }
 
@@ -246,10 +243,10 @@ export function generateStableId(prefix: string, index: number): string {
  */
 export function getRandomSafe(seed?: number): number {
   // During SSR, return a predictable value
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return seed || 0.5;
   }
-  
+
   // On client, use actual random
   return Math.random();
 }

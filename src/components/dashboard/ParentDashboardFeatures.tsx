@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo, useCallback } from 'react';
-import Link from 'next/link';
+import React, { useState, useMemo, useCallback } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   BookOpen,
   MessageSquare,
@@ -28,7 +28,7 @@ import {
   AlertCircle,
   Star,
   Settings,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface StudentProgress {
   id: string;
@@ -46,18 +46,18 @@ interface StudentProgress {
 
 interface Communication {
   id: string;
-  type: 'message' | 'announcement' | 'event';
+  type: "message" | "announcement" | "event";
   title: string;
   content: string;
   date: string;
   read: boolean;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
 }
 
 interface AcademicResource {
   id: string;
   title: string;
-  type: 'document' | 'video' | 'link';
+  type: "document" | "video" | "link";
   subject: string;
   grade: string;
   url: string;
@@ -66,11 +66,11 @@ interface AcademicResource {
 
 // ⚡ Performance: Move static configurations outside component to prevent recreation
 const PRIORITY_COLORS = {
-  high: 'bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive',
+  high: "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive",
   medium:
-    'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
-  low: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-  default: 'bg-muted text-muted-foreground',
+    "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+  low: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+  default: "bg-muted text-muted-foreground",
 } as const;
 
 const TYPE_ICONS = {
@@ -109,104 +109,104 @@ const getResourceIcon = (type: string) => {
 // ⚡ Performance: Move mock data outside component to prevent recreation
 const MOCK_STUDENT_PROGRESS: StudentProgress[] = [
   {
-    id: '1',
-    name: 'María González',
-    grade: '3° Básico',
+    id: "1",
+    name: "María González",
+    grade: "3° Básico",
     subjects: [
       {
-        name: 'Matemáticas',
+        name: "Matemáticas",
         progress: 85,
-        grade: '6.8',
-        lastUpdated: '2024-01-15',
+        grade: "6.8",
+        lastUpdated: "2024-01-15",
       },
       {
-        name: 'Lenguaje',
+        name: "Lenguaje",
         progress: 92,
-        grade: '7.2',
-        lastUpdated: '2024-01-14',
+        grade: "7.2",
+        lastUpdated: "2024-01-14",
       },
       {
-        name: 'Ciencias',
+        name: "Ciencias",
         progress: 78,
-        grade: '6.5',
-        lastUpdated: '2024-01-13',
+        grade: "6.5",
+        lastUpdated: "2024-01-13",
       },
       {
-        name: 'Historia',
+        name: "Historia",
         progress: 88,
-        grade: '7.0',
-        lastUpdated: '2024-01-12',
+        grade: "7.0",
+        lastUpdated: "2024-01-12",
       },
     ],
     attendance: 95,
-    behavior: 'Excelente',
+    behavior: "Excelente",
   },
 ];
 
 const MOCK_COMMUNICATIONS: Communication[] = [
   {
-    id: '1',
-    type: 'announcement',
-    title: 'Reunión de Apoderados',
+    id: "1",
+    type: "announcement",
+    title: "Reunión de Apoderados",
     content:
-      'Se realizará una reunión de apoderados el próximo viernes a las 18:00 hrs.',
-    date: '2024-01-20',
+      "Se realizará una reunión de apoderados el próximo viernes a las 18:00 hrs.",
+    date: "2024-01-20",
     read: false,
-    priority: 'high',
+    priority: "high",
   },
   {
-    id: '2',
-    type: 'message',
-    title: 'Mensaje del Profesor',
+    id: "2",
+    type: "message",
+    title: "Mensaje del Profesor",
     content:
-      'Su hijo/a ha mostrado excelente progreso en matemáticas este mes.',
-    date: '2024-01-18',
+      "Su hijo/a ha mostrado excelente progreso en matemáticas este mes.",
+    date: "2024-01-18",
     read: true,
-    priority: 'medium',
+    priority: "medium",
   },
   {
-    id: '3',
-    type: 'event',
-    title: 'Actividad Extraprogramática',
-    content: 'Invitación a participar en el taller de arte los sábados.',
-    date: '2024-01-16',
+    id: "3",
+    type: "event",
+    title: "Actividad Extraprogramática",
+    content: "Invitación a participar en el taller de arte los sábados.",
+    date: "2024-01-16",
     read: false,
-    priority: 'low',
+    priority: "low",
   },
 ];
 
 const MOCK_ACADEMIC_RESOURCES: AcademicResource[] = [
   {
-    id: '1',
-    title: 'Guía de Matemáticas 3° Básico',
-    type: 'document',
-    subject: 'Matemáticas',
-    grade: '3° Básico',
-    url: '/resources/math-guide.pdf',
-    description: 'Material de apoyo para reforzar conceptos matemáticos',
+    id: "1",
+    title: "Guía de Matemáticas 3° Básico",
+    type: "document",
+    subject: "Matemáticas",
+    grade: "3° Básico",
+    url: "/resources/math-guide.pdf",
+    description: "Material de apoyo para reforzar conceptos matemáticos",
   },
   {
-    id: '2',
-    title: 'Video: Comprensión Lectora',
-    type: 'video',
-    subject: 'Lenguaje',
-    grade: '3° Básico',
-    url: '/resources/reading-comprehension.mp4',
-    description: 'Técnicas para mejorar la comprensión lectora',
+    id: "2",
+    title: "Video: Comprensión Lectora",
+    type: "video",
+    subject: "Lenguaje",
+    grade: "3° Básico",
+    url: "/resources/reading-comprehension.mp4",
+    description: "Técnicas para mejorar la comprensión lectora",
   },
   {
-    id: '3',
-    title: 'Portal Educativo',
-    type: 'link',
-    subject: 'General',
-    grade: '3° Básico',
-    url: 'https://www.mineduc.cl',
-    description: 'Recursos oficiales del Ministerio de Educación',
+    id: "3",
+    title: "Portal Educativo",
+    type: "link",
+    subject: "General",
+    grade: "3° Básico",
+    url: "https://www.mineduc.cl",
+    description: "Recursos oficiales del Ministerio de Educación",
   },
 ];
 
 export default function ParentDashboardFeatures() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   // ⚡ Performance: Memoize data references to prevent unnecessary re-renders
   const studentProgress = useMemo(() => MOCK_STUDENT_PROGRESS, []);
@@ -312,13 +312,13 @@ export default function ParentDashboardFeatures() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {communications.slice(0, 3).map(comm => (
+                {communications.slice(0, 3).map((comm) => (
                   <div key={comm.id} className="flex items-start space-x-3">
                     <div
                       className={`p-2 rounded-full ${getPriorityColor(comm.priority)}`}
                     >
                       {React.createElement(getTypeIcon(comm.type), {
-                        className: 'h-4 w-4',
+                        className: "h-4 w-4",
                       })}
                     </div>
                     <div className="flex-1">
@@ -341,7 +341,7 @@ export default function ParentDashboardFeatures() {
         </TabsContent>
 
         <TabsContent value="progress" className="space-y-6">
-          {studentProgress.map(student => (
+          {studentProgress.map((student) => (
             <Card key={student.id}>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -366,7 +366,7 @@ export default function ParentDashboardFeatures() {
 
                 {/* Subjects Grid */}
                 <div className="grid gap-4 md:grid-cols-2">
-                  {student.subjects.map(subject => (
+                  {student.subjects.map((subject) => (
                     <Card key={subject.name} className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium">{subject.name}</h4>
@@ -416,10 +416,10 @@ export default function ParentDashboardFeatures() {
           </div>
 
           <div className="space-y-4">
-            {communications.map(comm => (
+            {communications.map((comm) => (
               <Card
                 key={comm.id}
-                className={!comm.read ? 'border-primary/20 bg-primary/5' : ''}
+                className={!comm.read ? "border-primary/20 bg-primary/5" : ""}
               >
                 <CardContent className="p-4">
                   <div className="flex items-start space-x-3">
@@ -427,7 +427,7 @@ export default function ParentDashboardFeatures() {
                       className={`p-2 rounded-full ${getPriorityColor(comm.priority)}`}
                     >
                       {React.createElement(getTypeIcon(comm.type), {
-                        className: 'h-4 w-4',
+                        className: "h-4 w-4",
                       })}
                     </div>
                     <div className="flex-1">
@@ -476,7 +476,7 @@ export default function ParentDashboardFeatures() {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {academicResources.map(resource => (
+            {academicResources.map((resource) => (
               <Card
                 key={resource.id}
                 className="hover:shadow-md transition-shadow"
@@ -484,7 +484,7 @@ export default function ParentDashboardFeatures() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center space-x-2">
                     {React.createElement(getResourceIcon(resource.type), {
-                      className: 'h-4 w-4 text-muted-foreground',
+                      className: "h-4 w-4 text-muted-foreground",
                     })}
                     <CardTitle className="text-sm">{resource.title}</CardTitle>
                   </div>

@@ -1,52 +1,52 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { cn } from '@/lib/utils';
-import { Loader2, MoreHorizontal, Circle as Pulse } from 'lucide-react';
+import React from "react";
+import { cn } from "@/lib/utils";
+import { Loader2, MoreHorizontal, Circle as Pulse } from "lucide-react";
 
 // =====================================================
 // 🎯 UNIFIED LOADING SYSTEM - REPLACES 15+ LOADERS
 // =====================================================
 // Only 3 loaders needed for entire application:
 // 1. SkeletonLoader - Content areas (most common)
-// 2. ActionLoader - Buttons/forms (micro-interactions)  
+// 2. ActionLoader - Buttons/forms (micro-interactions)
 // 3. PageLoader - Full-page transitions (minimal)
 
 // ===== 1. SKELETON LOADER (Content Areas) =====
 interface SkeletonLoaderProps {
   lines?: number;
-  variant?: 'default' | 'card' | 'list' | 'table';
+  variant?: "default" | "card" | "list" | "table";
   className?: string;
   showAvatar?: boolean;
 }
 
-export function SkeletonLoader({ 
-  lines = 3, 
-  variant = 'default',
+export function SkeletonLoader({
+  lines = 3,
+  variant = "default",
   className,
-  showAvatar = false 
+  showAvatar = false,
 }: SkeletonLoaderProps) {
   const renderSkeleton = () => {
     switch (variant) {
-      case 'card':
+      case "card":
         return (
           <div className="space-y-4">
             <div className="h-4 bg-muted rounded w-3/4 animate-pulse" />
             <div className="space-y-2">
               {Array.from({ length: lines }).map((_, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className={cn(
                     "h-3 bg-muted rounded animate-pulse",
-                    i === lines - 1 ? "w-1/2" : "w-full"
-                  )} 
+                    i === lines - 1 ? "w-1/2" : "w-full",
+                  )}
                 />
               ))}
             </div>
           </div>
         );
-        
-      case 'list':
+
+      case "list":
         return (
           <div className="space-y-3">
             {Array.from({ length: lines }).map((_, i) => (
@@ -62,8 +62,8 @@ export function SkeletonLoader({
             ))}
           </div>
         );
-        
-      case 'table':
+
+      case "table":
         return (
           <div className="space-y-2">
             {Array.from({ length: lines }).map((_, i) => (
@@ -75,17 +75,17 @@ export function SkeletonLoader({
             ))}
           </div>
         );
-        
+
       default:
         return (
           <div className="space-y-2">
             {Array.from({ length: lines }).map((_, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className={cn(
                   "h-4 bg-muted rounded animate-pulse",
-                  i === 0 ? "w-3/4" : i === lines - 1 ? "w-1/2" : "w-full"
-                )} 
+                  i === 0 ? "w-3/4" : i === lines - 1 ? "w-1/2" : "w-full",
+                )}
               />
             ))}
           </div>
@@ -94,41 +94,39 @@ export function SkeletonLoader({
   };
 
   return (
-    <div className={cn("animate-pulse", className)}>
-      {renderSkeleton()}
-    </div>
+    <div className={cn("animate-pulse", className)}>{renderSkeleton()}</div>
   );
 }
 
 // ===== 2. ACTION LOADER (Buttons/Forms) =====
 interface ActionLoaderProps {
-  variant?: 'spinner' | 'dots' | 'pulse';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "spinner" | "dots" | "pulse";
+  size?: "sm" | "md" | "lg";
   className?: string;
-  color?: 'default' | 'primary' | 'white';
+  color?: "default" | "primary" | "white";
 }
 
-export function ActionLoader({ 
-  variant = 'spinner',
-  size = 'md',
+export function ActionLoader({
+  variant = "spinner",
+  size = "md",
   className,
-  color = 'default' 
+  color = "default",
 }: ActionLoaderProps) {
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5', 
-    lg: 'w-6 h-6',
+    sm: "w-4 h-4",
+    md: "w-5 h-5",
+    lg: "w-6 h-6",
   };
 
   const colorClasses = {
-    default: 'text-muted-foreground',
-    primary: 'text-primary',
-    white: 'text-white',
+    default: "text-muted-foreground",
+    primary: "text-primary",
+    white: "text-white",
   };
 
   const renderLoader = () => {
     switch (variant) {
-      case 'dots':
+      case "dots":
         return (
           <div className="flex items-center space-x-1">
             {[0, 1, 2].map((i) => (
@@ -136,33 +134,37 @@ export function ActionLoader({
                 key={i}
                 className={cn(
                   "rounded-full bg-current animate-pulse",
-                  size === 'sm' ? 'w-1 h-1' : size === 'lg' ? 'w-1.5 h-1.5' : 'w-1 h-1'
+                  size === "sm"
+                    ? "w-1 h-1"
+                    : size === "lg"
+                      ? "w-1.5 h-1.5"
+                      : "w-1 h-1",
                 )}
                 data-delay={i}
               />
             ))}
           </div>
         );
-        
-      case 'pulse':
+
+      case "pulse":
         return (
-          <Pulse 
+          <Pulse
             className={cn(
-              sizeClasses[size], 
+              sizeClasses[size],
               colorClasses[color],
-              "animate-pulse"
-            )} 
+              "animate-pulse",
+            )}
           />
         );
-        
+
       default:
         return (
-          <Loader2 
+          <Loader2
             className={cn(
-              sizeClasses[size], 
+              sizeClasses[size],
               colorClasses[color],
-              "animate-spin"
-            )} 
+              "animate-spin",
+            )}
           />
         );
     }
@@ -178,14 +180,14 @@ export function ActionLoader({
 // ===== 3. PAGE LOADER (Full-page transitions) =====
 interface PageLoaderProps {
   text?: string;
-  variant?: 'minimal' | 'centered' | 'fullscreen';
+  variant?: "minimal" | "centered" | "fullscreen";
   className?: string;
 }
 
-export function PageLoader({ 
+export function PageLoader({
   text = "Cargando...",
-  variant = 'minimal',
-  className 
+  variant = "minimal",
+  className,
 }: PageLoaderProps) {
   const variants = {
     minimal: "p-8",
@@ -194,15 +196,15 @@ export function PageLoader({
   };
 
   return (
-    <div className={cn(
-      "flex flex-col items-center justify-center text-center",
-      variants[variant],
-      className
-    )}>
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center text-center",
+        variants[variant],
+        className,
+      )}
+    >
       <ActionLoader size="lg" className="mb-4" />
-      <p className="text-sm text-muted-foreground font-medium">
-        {text}
-      </p>
+      <p className="text-sm text-muted-foreground font-medium">{text}</p>
     </div>
   );
 }
@@ -218,7 +220,7 @@ export const DashboardLoader = ({ className }: { className?: string }) => (
 );
 
 /**
- * @deprecated Use PageLoader instead  
+ * @deprecated Use PageLoader instead
  */
 export const DataTransferLoader = ({ text }: { text?: string }) => (
   <PageLoader text={text} variant="centered" />
@@ -227,14 +229,16 @@ export const DataTransferLoader = ({ text }: { text?: string }) => (
 /**
  * @deprecated Use ActionLoader instead
  */
-export const LoadingSpinner = ({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) => (
-  <ActionLoader variant="spinner" size={size} />
-);
+export const LoadingSpinner = ({
+  size = "md",
+}: {
+  size?: "sm" | "md" | "lg";
+}) => <ActionLoader variant="spinner" size={size} />;
 
 // Export all for easy imports
 export {
   SkeletonLoader as Skeleton,
-  ActionLoader as Action,  
+  ActionLoader as Action,
   PageLoader as Page,
 };
 

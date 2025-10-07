@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   HomeIcon,
@@ -66,7 +66,7 @@ import {
   // DocumentTextIcon as SolidDocumentTextIcon,
   // BellIcon as SolidBellIcon,
   // UserIcon as SolidUserIcon,
-} from '@heroicons/react/24/outline';
+} from "@heroicons/react/24/outline";
 
 import {
   HomeIcon as SolidHomeIconFilled,
@@ -83,7 +83,7 @@ import {
   QuestionMarkCircleIcon as SolidQuestionMarkCircleIconFilled,
   ExclamationTriangleIcon as SolidExclamationTriangleIconFilled,
   InformationCircleIcon as SolidInformationCircleIconFilled,
-} from '@heroicons/react/24/solid';
+} from "@heroicons/react/24/solid";
 
 // Navigation icons
 export const NavigationIcons = {

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from "react";
 
 /**
  * Enhanced loading state interface with race condition prevention
@@ -52,7 +52,7 @@ export interface UseLoadingStateReturn {
  * @returns Loading state management functions
  */
 export function useLoadingState(
-  options: UseLoadingStateOptions = {}
+  options: UseLoadingStateOptions = {},
 ): UseLoadingStateReturn {
   const {
     initialLoading = false,
@@ -99,11 +99,11 @@ export function useLoadingState(
       // Set up timeout for maximum loading time
       const timeoutId = setTimeout(() => {
         console.warn(
-          `Loading operation ${id} exceeded maximum time (${maxLoadingTime}ms)`
+          `Loading operation ${id} exceeded maximum time (${maxLoadingTime}ms)`,
         );
         stopLoading(
           id,
-          'La operación tardó demasiado tiempo. Inténtelo de nuevo.'
+          "La operación tardó demasiado tiempo. Inténtelo de nuevo.",
         );
       }, maxLoadingTime);
 
@@ -114,7 +114,7 @@ export function useLoadingState(
       });
 
       // Update loading state
-      setLoadingState(prev => ({
+      setLoadingState((prev) => ({
         ...prev,
         isLoading: true,
         error: null,
@@ -123,7 +123,7 @@ export function useLoadingState(
 
       return id;
     },
-    [maxLoadingTime]
+    [maxLoadingTime],
   );
 
   /**
@@ -162,7 +162,7 @@ export function useLoadingState(
         updateLoadingState(error);
       }
     },
-    [minLoadingTime]
+    [minLoadingTime],
   );
 
   /**
@@ -170,7 +170,7 @@ export function useLoadingState(
    */
   const stopAllLoading = useCallback((error?: string) => {
     // Clear all timeouts
-    activeOperations.current.forEach(operation => {
+    activeOperations.current.forEach((operation) => {
       if (operation.timeoutId) clearTimeout(operation.timeoutId);
       if (operation.minTimeTimeoutId) clearTimeout(operation.minTimeTimeoutId);
     });
@@ -186,7 +186,7 @@ export function useLoadingState(
    */
   const reset = useCallback(() => {
     // Clear all timeouts
-    activeOperations.current.forEach(operation => {
+    activeOperations.current.forEach((operation) => {
       if (operation.timeoutId) clearTimeout(operation.timeoutId);
       if (operation.minTimeTimeoutId) clearTimeout(operation.minTimeTimeoutId);
     });
@@ -213,7 +213,7 @@ export function useLoadingState(
     (error?: string) => {
       const hasActiveOperations = activeOperations.current.size > 0;
 
-      setLoadingState(prev => ({
+      setLoadingState((prev) => ({
         ...prev,
         isLoading: hasActiveOperations,
         error: error || null,
@@ -223,14 +223,14 @@ export function useLoadingState(
       // Auto-reset error after timeout if there's an error
       if (error && errorResetTime > 0) {
         errorTimeoutRef.current = setTimeout(() => {
-          setLoadingState(prev => ({
+          setLoadingState((prev) => ({
             ...prev,
             error: null,
           }));
         }, errorResetTime);
       }
     },
-    [errorResetTime]
+    [errorResetTime],
   );
 
   // Computed values
@@ -266,14 +266,14 @@ export function useSimpleLoading(initialLoading = false) {
         stopAllLoading(error);
       }
     },
-    [startLoading, stopAllLoading]
+    [startLoading, stopAllLoading],
   );
 
   const setError = useCallback(
     (error: string) => {
       stopAllLoading(error);
     },
-    [stopAllLoading]
+    [stopAllLoading],
   );
 
   return {
@@ -305,16 +305,16 @@ export function useConcurrentLoading() {
       const id = startLoading(operationId);
 
       return operation()
-        .then(result => {
+        .then((result) => {
           stopLoading(id);
           return result;
         })
-        .catch(error => {
-          stopLoading(id, error.message || 'Error desconocido');
+        .catch((error) => {
+          stopLoading(id, error.message || "Error desconocido");
           throw error;
         });
     },
-    [startLoading, stopLoading]
+    [startLoading, stopLoading],
   );
 
   return {

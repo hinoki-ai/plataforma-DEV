@@ -1,12 +1,25 @@
-'use client';
+"use client";
 
-import React, { useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import React, { useMemo } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   BarChart3,
   Users,
@@ -21,8 +34,12 @@ import {
   Smartphone,
   Monitor,
   Download,
-} from 'lucide-react';
-import { RoleIndicator, RoleAwareBreadcrumb, RoleAwareHeader } from '@/components/layout/RoleAwareNavigation';
+} from "lucide-react";
+import {
+  RoleIndicator,
+  RoleAwareBreadcrumb,
+  RoleAwareHeader,
+} from "@/components/layout/RoleAwareNavigation";
 
 interface UserStats {
   totalUsers: number;
@@ -39,7 +56,7 @@ interface UserActivity {
   lastActivity: string;
   sessionTime: string;
   actions: number;
-  status: 'online' | 'offline' | 'away';
+  status: "online" | "offline" | "away";
 }
 
 const userStats: UserStats = {
@@ -47,15 +64,43 @@ const userStats: UserStats = {
   activeUsers: 89,
   newUsersToday: 12,
   userRetention: 87.5,
-  averageSessionTime: '24m 32s',
-  topRole: 'PROFESOR',
+  averageSessionTime: "24m 32s",
+  topRole: "PROFESOR",
 };
 
 const userActivities: UserActivity[] = [
-  { user: 'admin@school.com', role: 'ADMIN', lastActivity: '2 min ago', sessionTime: '1h 23m', actions: 45, status: 'online' },
-  { user: 'profesor@school.com', role: 'PROFESOR', lastActivity: '5 min ago', sessionTime: '45m 12s', actions: 23, status: 'online' },
-  { user: 'parent@school.com', role: 'PARENT', lastActivity: '1 hour ago', sessionTime: '12m 34s', actions: 8, status: 'away' },
-  { user: 'student@school.com', role: 'STUDENT', lastActivity: '2 hours ago', sessionTime: '8m 45s', actions: 5, status: 'offline' },
+  {
+    user: "admin@school.com",
+    role: "ADMIN",
+    lastActivity: "2 min ago",
+    sessionTime: "1h 23m",
+    actions: 45,
+    status: "online",
+  },
+  {
+    user: "profesor@school.com",
+    role: "PROFESOR",
+    lastActivity: "5 min ago",
+    sessionTime: "45m 12s",
+    actions: 23,
+    status: "online",
+  },
+  {
+    user: "parent@school.com",
+    role: "PARENT",
+    lastActivity: "1 hour ago",
+    sessionTime: "12m 34s",
+    actions: 8,
+    status: "away",
+  },
+  {
+    user: "student@school.com",
+    role: "STUDENT",
+    lastActivity: "2 hours ago",
+    sessionTime: "8m 45s",
+    actions: 5,
+    status: "offline",
+  },
 ];
 
 function UserOverviewCard() {
@@ -66,7 +111,9 @@ function UserOverviewCard() {
           <BarChart3 className="h-5 w-5 text-purple-600" />
           Resumen de Usuarios
         </CardTitle>
-        <CardDescription>Métricas generales de usuarios del sistema</CardDescription>
+        <CardDescription>
+          Métricas generales de usuarios del sistema
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -75,7 +122,9 @@ function UserOverviewCard() {
             <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
               {userStats.totalUsers.toLocaleString()}
             </div>
-            <div className="text-sm text-muted-foreground">Usuarios Totales</div>
+            <div className="text-sm text-muted-foreground">
+              Usuarios Totales
+            </div>
           </div>
 
           <div className="text-center p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
@@ -83,7 +132,9 @@ function UserOverviewCard() {
             <div className="text-2xl font-bold text-green-700 dark:text-green-300">
               {userStats.activeUsers}
             </div>
-            <div className="text-sm text-muted-foreground">Usuarios Activos</div>
+            <div className="text-sm text-muted-foreground">
+              Usuarios Activos
+            </div>
           </div>
 
           <div className="text-center p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
@@ -126,13 +177,13 @@ function UserOverviewCard() {
 function UserActivityTable() {
   const getStatusBadge = (status: string) => {
     const variants = {
-      online: 'default',
-      away: 'secondary',
-      offline: 'outline',
+      online: "default",
+      away: "secondary",
+      offline: "outline",
     } as const;
 
     return (
-      <Badge variant={variants[status as keyof typeof variants] || 'outline'}>
+      <Badge variant={variants[status as keyof typeof variants] || "outline"}>
         {status}
       </Badge>
     );
@@ -145,7 +196,9 @@ function UserActivityTable() {
           <Activity className="h-5 w-5" />
           Actividad de Usuarios
         </CardTitle>
-        <CardDescription>Usuarios activos y su actividad reciente</CardDescription>
+        <CardDescription>
+          Usuarios activos y su actividad reciente
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
@@ -168,8 +221,12 @@ function UserActivityTable() {
                     <Badge variant="outline">{activity.role}</Badge>
                   </TableCell>
                   <TableCell>{getStatusBadge(activity.status)}</TableCell>
-                  <TableCell className="text-sm">{activity.lastActivity}</TableCell>
-                  <TableCell className="text-sm">{activity.sessionTime}</TableCell>
+                  <TableCell className="text-sm">
+                    {activity.lastActivity}
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {activity.sessionTime}
+                  </TableCell>
                   <TableCell className="text-sm">{activity.actions}</TableCell>
                 </TableRow>
               ))}
@@ -182,13 +239,16 @@ function UserActivityTable() {
 }
 
 function UserDemographicsCard() {
-  const demographics = useMemo(() => [
-    { role: 'PROFESOR', count: 45, percentage: 42 },
-    { role: 'PARENT', count: 38, percentage: 35 },
-    { role: 'ADMIN', count: 12, percentage: 11 },
-    { role: 'STUDENT', count: 11, percentage: 10 },
-    { role: 'MASTER', count: 2, percentage: 2 },
-  ], []);
+  const demographics = useMemo(
+    () => [
+      { role: "PROFESOR", count: 45, percentage: 42 },
+      { role: "PARENT", count: 38, percentage: 35 },
+      { role: "ADMIN", count: 12, percentage: 11 },
+      { role: "STUDENT", count: 11, percentage: 10 },
+      { role: "MASTER", count: 2, percentage: 2 },
+    ],
+    [],
+  );
 
   return (
     <Card>
@@ -219,11 +279,14 @@ function UserDemographicsCard() {
 }
 
 function DeviceAnalyticsCard() {
-  const devices = useMemo(() => [
-    { type: 'Desktop', icon: Monitor, count: 567, percentage: 65 },
-    { type: 'Mobile', icon: Smartphone, count: 234, percentage: 27 },
-    { type: 'Tablet', icon: Globe, count: 78, percentage: 8 },
-  ], []);
+  const devices = useMemo(
+    () => [
+      { type: "Desktop", icon: Monitor, count: 567, percentage: 65 },
+      { type: "Mobile", icon: Smartphone, count: 234, percentage: 27 },
+      { type: "Tablet", icon: Globe, count: 78, percentage: 8 },
+    ],
+    [],
+  );
 
   return (
     <Card>
@@ -232,18 +295,27 @@ function DeviceAnalyticsCard() {
           <Monitor className="h-5 w-5" />
           Análisis de Dispositivos
         </CardTitle>
-        <CardDescription>Uso del sistema por tipo de dispositivo</CardDescription>
+        <CardDescription>
+          Uso del sistema por tipo de dispositivo
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-3">
           {devices.map((device, index) => {
             const Icon = device.icon;
             return (
-              <div key={index} className="text-center p-4 bg-muted/50 rounded-lg">
+              <div
+                key={index}
+                className="text-center p-4 bg-muted/50 rounded-lg"
+              >
                 <Icon className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                 <div className="text-2xl font-bold">{device.count}</div>
-                <div className="text-sm text-muted-foreground">{device.type}</div>
-                <div className="text-xs text-muted-foreground mt-1">{device.percentage}%</div>
+                <div className="text-sm text-muted-foreground">
+                  {device.type}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {device.percentage}%
+                </div>
               </div>
             );
           })}
@@ -254,12 +326,35 @@ function DeviceAnalyticsCard() {
 }
 
 function UserEngagementCard() {
-  const engagement = useMemo(() => [
-    { metric: 'Páginas por Sesión', value: '8.4', trend: 'up', change: '+12%' },
-    { metric: 'Tiempo en Plataforma', value: '24m 32s', trend: 'up', change: '+8%' },
-    { metric: 'Frecuencia de Uso', value: '5.2/día', trend: 'stable', change: '+2%' },
-    { metric: 'Tasa de Conversión', value: '78%', trend: 'up', change: '+15%' },
-  ], []);
+  const engagement = useMemo(
+    () => [
+      {
+        metric: "Páginas por Sesión",
+        value: "8.4",
+        trend: "up",
+        change: "+12%",
+      },
+      {
+        metric: "Tiempo en Plataforma",
+        value: "24m 32s",
+        trend: "up",
+        change: "+8%",
+      },
+      {
+        metric: "Frecuencia de Uso",
+        value: "5.2/día",
+        trend: "stable",
+        change: "+2%",
+      },
+      {
+        metric: "Tasa de Conversión",
+        value: "78%",
+        trend: "up",
+        change: "+15%",
+      },
+    ],
+    [],
+  );
 
   return (
     <Card>
@@ -268,7 +363,9 @@ function UserEngagementCard() {
           <TrendingUp className="h-5 w-5" />
           Métricas de Engagement
         </CardTitle>
-        <CardDescription>Comportamiento y engagement de usuarios</CardDescription>
+        <CardDescription>
+          Comportamiento y engagement de usuarios
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2">
@@ -276,8 +373,10 @@ function UserEngagementCard() {
             <div key={index} className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-medium text-sm">{metric.metric}</span>
-                <Badge variant={metric.trend === 'up' ? 'default' : 'secondary'}>
-                  {metric.trend === 'up' ? '↗️' : '→'} {metric.change}
+                <Badge
+                  variant={metric.trend === "up" ? "default" : "secondary"}
+                >
+                  {metric.trend === "up" ? "↗️" : "→"} {metric.change}
                 </Badge>
               </div>
               <div className="text-2xl font-bold">{metric.value}</div>
@@ -297,10 +396,13 @@ export function UserAnalyticsDashboard() {
       {/* User Analytics Header */}
       <RoleAwareHeader
         title="📊 USER ANALYTICS - SUPREME USER ANALYSIS"
-        subtitle={`Análisis completo de usuarios - Arquitecto ${session?.user?.name || 'Master Developer'}`}
+        subtitle={`Análisis completo de usuarios - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-purple-600 border-purple-600">
+            <Badge
+              variant="outline"
+              className="text-purple-600 border-purple-600"
+            >
               <BarChart3 className="h-3 w-3 mr-1" />
               USER ANALYTICS
             </Badge>
@@ -312,7 +414,6 @@ export function UserAnalyticsDashboard() {
           </div>
         }
       />
-
 
       {/* User Overview */}
       <UserOverviewCard />

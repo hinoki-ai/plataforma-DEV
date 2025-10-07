@@ -1,11 +1,11 @@
-import { getTeamMembers } from '@/services/queries/team-members';
-import { TeamMemberList } from '@/components/admin/team-member-list';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { PlusCircle } from 'lucide-react';
-import { PageTransition } from '@/components/ui/page-transition';
+import { getTeamMembers } from "@/services/queries/team-members";
+import { TeamMemberList } from "@/components/admin/team-member-list";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { PlusCircle } from "lucide-react";
+import { PageTransition } from "@/components/ui/page-transition";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function EquipoMultidisciplinarioAdminPage() {
   const teamMembers = await getTeamMembers();

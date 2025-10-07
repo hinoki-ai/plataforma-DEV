@@ -1,18 +1,18 @@
 // Middleware-compatible authentication helper
 // This runs in Edge Runtime and doesn't use Prisma
 
-import { NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
+import { NextRequest } from "next/server";
+import { jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || 'fallback-secret-change-in-production'
+  process.env.NEXTAUTH_SECRET || "fallback-secret-change-in-production",
 );
 
 export interface MiddlewareUser {
   id: string;
   email: string;
   name?: string | null;
-  role: 'MASTER' | 'ADMIN' | 'PROFESOR' | 'PARENT' | 'PUBLIC';
+  role: "MASTER" | "ADMIN" | "PROFESOR" | "PARENT" | "PUBLIC";
   needsRegistration?: boolean;
   isOAuthUser?: boolean;
 }
@@ -26,11 +26,14 @@ export interface MiddlewareSession {
  * Extract and validate JWT token from request cookies
  * Compatible with NextAuth JWT structure
  */
-export async function getMiddlewareAuth(request: NextRequest): Promise<MiddlewareSession | null> {
+export async function getMiddlewareAuth(
+  request: NextRequest,
+): Promise<MiddlewareSession | null> {
   try {
     // Get the session token from cookies (NextAuth uses 'next-auth.session-token')
-    const token = request.cookies.get('next-auth.session-token')?.value ||
-                  request.cookies.get('__Secure-next-auth.session-token')?.value;
+    const token =
+      request.cookies.get("next-auth.session-token")?.value ||
+      request.cookies.get("__Secure-next-auth.session-token")?.value;
 
     if (!token) {
       return null;
@@ -44,18 +47,25 @@ export async function getMiddlewareAuth(request: NextRequest): Promise<Middlewar
       id: payload.id as string,
       email: payload.email as string,
       name: payload.name as string | null,
-      role: payload.role as 'MASTER' | 'ADMIN' | 'PROFESOR' | 'PARENT' | 'PUBLIC',
+      role: payload.role as
+        | "MASTER"
+        | "ADMIN"
+        | "PROFESOR"
+        | "PARENT"
+        | "PUBLIC",
       needsRegistration: payload.needsRegistration as boolean,
       isOAuthUser: payload.isOAuthUser as boolean,
     };
 
     return {
       user,
-      expires: payload.exp ? new Date(payload.exp * 1000).toISOString() : new Date().toISOString(),
+      expires: payload.exp
+        ? new Date(payload.exp * 1000).toISOString()
+        : new Date().toISOString(),
     };
   } catch (error) {
     // Token is invalid or expired
-    console.warn('Middleware auth error:', error);
+    console.warn("Middleware auth error:", error);
     return null;
   }
 }
@@ -65,7 +75,7 @@ export async function getMiddlewareAuth(request: NextRequest): Promise<Middlewar
  */
 export function hasMiddlewareAccess(
   userRole: string | undefined,
-  requiredRoles: string[]
+  requiredRoles: string[],
 ): boolean {
   if (!userRole) return false;
   return requiredRoles.includes(userRole);
@@ -76,15 +86,15 @@ export function hasMiddlewareAccess(
  */
 export function getRoleRedirectPath(userRole: string | undefined): string {
   switch (userRole) {
-    case 'MASTER':
-      return '/master';
-    case 'ADMIN':
-      return '/admin';
-    case 'PROFESOR':
-      return '/profesor';
-    case 'PARENT':
-      return '/parent';
+    case "MASTER":
+      return "/master";
+    case "ADMIN":
+      return "/admin";
+    case "PROFESOR":
+      return "/profesor";
+    case "PARENT":
+      return "/parent";
     default:
-      return '/';
+      return "/";
   }
 }

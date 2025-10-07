@@ -186,21 +186,51 @@
 }
 
 /* Fallback for browsers that don't support attr() */
-.transition-delay-custom[data-delay="0"] { transition-delay: 0ms; }
-.transition-delay-custom[data-delay="50"] { transition-delay: 50ms; }
-.transition-delay-custom[data-delay="100"] { transition-delay: 100ms; }
-.transition-delay-custom[data-delay="150"] { transition-delay: 150ms; }
-.transition-delay-custom[data-delay="200"] { transition-delay: 200ms; }
-.transition-delay-custom[data-delay="250"] { transition-delay: 250ms; }
-.transition-delay-custom[data-delay="300"] { transition-delay: 300ms; }
-.transition-delay-custom[data-delay="350"] { transition-delay: 350ms; }
-.transition-delay-custom[data-delay="400"] { transition-delay: 400ms; }
-.transition-delay-custom[data-delay="450"] { transition-delay: 450ms; }
-.transition-delay-custom[data-delay="500"] { transition-delay: 500ms; }
-.transition-delay-custom[data-delay="600"] { transition-delay: 600ms; }
-.transition-delay-custom[data-delay="750"] { transition-delay: 750ms; }
-.transition-delay-custom[data-delay="900"] { transition-delay: 900ms; }
-.transition-delay-custom[data-delay="1000"] { transition-delay: 1000ms; }
+.transition-delay-custom[data-delay="0"] {
+  transition-delay: 0ms;
+}
+.transition-delay-custom[data-delay="50"] {
+  transition-delay: 50ms;
+}
+.transition-delay-custom[data-delay="100"] {
+  transition-delay: 100ms;
+}
+.transition-delay-custom[data-delay="150"] {
+  transition-delay: 150ms;
+}
+.transition-delay-custom[data-delay="200"] {
+  transition-delay: 200ms;
+}
+.transition-delay-custom[data-delay="250"] {
+  transition-delay: 250ms;
+}
+.transition-delay-custom[data-delay="300"] {
+  transition-delay: 300ms;
+}
+.transition-delay-custom[data-delay="350"] {
+  transition-delay: 350ms;
+}
+.transition-delay-custom[data-delay="400"] {
+  transition-delay: 400ms;
+}
+.transition-delay-custom[data-delay="450"] {
+  transition-delay: 450ms;
+}
+.transition-delay-custom[data-delay="500"] {
+  transition-delay: 500ms;
+}
+.transition-delay-custom[data-delay="600"] {
+  transition-delay: 600ms;
+}
+.transition-delay-custom[data-delay="750"] {
+  transition-delay: 750ms;
+}
+.transition-delay-custom[data-delay="900"] {
+  transition-delay: 900ms;
+}
+.transition-delay-custom[data-delay="1000"] {
+  transition-delay: 1000ms;
+}
 
 /* Theme transition */
 * {
@@ -304,7 +334,8 @@
 
 /* Pulse animation for loading states */
 @keyframes pulse-infinite {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -458,13 +489,21 @@
 
 /* Notification bell ring */
 @keyframes bell-ring {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: rotate(10deg);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: rotate(-10deg);
   }
 }
@@ -606,7 +645,8 @@
 /* ===== SHORTHAND ANIMATION EXAMPLES ===== */
 /* Shorthand with multiple properties */
 .animate-complex {
-  animation: slide-in 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s infinite alternate both;
+  animation: slide-in 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s infinite
+    alternate both;
 }
 
 /* Delayed animation shorthand */
@@ -683,14 +723,30 @@
 }
 
 /* Staggered grid animations using nth-child */
-.grid-staggered > :nth-child(1) { animation-delay: 0ms; }
-.grid-staggered > :nth-child(2) { animation-delay: 100ms; }
-.grid-staggered > :nth-child(3) { animation-delay: 200ms; }
-.grid-staggered > :nth-child(4) { animation-delay: 300ms; }
-.grid-staggered > :nth-child(5) { animation-delay: 400ms; }
-.grid-staggered > :nth-child(6) { animation-delay: 500ms; }
-.grid-staggered > :nth-child(7) { animation-delay: 600ms; }
-.grid-staggered > :nth-child(8) { animation-delay: 700ms; }
+.grid-staggered > :nth-child(1) {
+  animation-delay: 0ms;
+}
+.grid-staggered > :nth-child(2) {
+  animation-delay: 100ms;
+}
+.grid-staggered > :nth-child(3) {
+  animation-delay: 200ms;
+}
+.grid-staggered > :nth-child(4) {
+  animation-delay: 300ms;
+}
+.grid-staggered > :nth-child(5) {
+  animation-delay: 400ms;
+}
+.grid-staggered > :nth-child(6) {
+  animation-delay: 500ms;
+}
+.grid-staggered > :nth-child(7) {
+  animation-delay: 600ms;
+}
+.grid-staggered > :nth-child(8) {
+  animation-delay: 700ms;
+}
 
 /* ===== COMPONENT-SPECIFIC ANIMATIONS ===== */
 /* Button animations */

@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ParentMeetingCard } from './ParentMeetingCard';
-import { getMeetingsByParentAction } from '@/services/actions/meetings';
-import type { Meeting } from '@/lib/prisma-compat-types';
-import { ActionLoader } from '@/components/ui/dashboard-loader';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ParentMeetingCard } from "./ParentMeetingCard";
+import { getMeetingsByParentAction } from "@/services/actions/meetings";
+import type { Meeting, User } from "@/lib/prisma-compat-types";
+import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 interface ParentMeetingListProps {
   userId: string;
@@ -27,12 +27,35 @@ export function ParentMeetingList({ userId }: ParentMeetingListProps) {
       const response = await getMeetingsByParentAction(userId);
 
       if (response.success && response.data) {
-        setMeetings(response.data);
+        // Convert Convex meetings to Meeting type with all required fields
+        const convertedMeetings: Meeting[] = response.data.map((m: any) => ({
+          id: m._id,
+          title: m.title,
+          meetingType: m.type,
+          studentName: m.studentName,
+          studentGrade: m.studentGrade || '',
+          guardianName: m.guardianName,
+          guardianEmail: m.guardianEmail,
+          guardianPhone: m.guardianPhone || '',
+          scheduledDate: new Date(m.scheduledDate),
+          scheduledTime: m.scheduledTime,
+          status: m.status,
+          assignedTo: m.assignedTo,
+          duration: m.duration || 30,
+          location: m.location,
+          description: m.description,
+          reason: m.reason,
+          notes: m.notes,
+          parentRequested: m.parentRequested,
+          createdAt: new Date(m.createdAt || m._creationTime),
+          updatedAt: new Date(m.updatedAt || m._creationTime),
+        }));
+        setMeetings(convertedMeetings);
       } else {
-        setError('Error al cargar las reuniones');
+        setError("Error al cargar las reuniones");
       }
     } catch (err) {
-      setError('Error al cargar las reuniones');
+      setError("Error al cargar las reuniones");
     } finally {
       setLoading(false);
     }
@@ -105,7 +128,7 @@ export function ParentMeetingList({ userId }: ParentMeetingListProps) {
       </div>
 
       <div className="grid gap-4">
-        {meetings.map(meeting => (
+        {meetings.map((meeting) => (
           <ParentMeetingCard
             key={meeting.id}
             meeting={meeting}

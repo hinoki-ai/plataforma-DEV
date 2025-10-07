@@ -1,26 +1,26 @@
-import { Metadata } from 'next';
-import { Suspense } from 'react';
+import { Metadata } from "next";
+import { Suspense } from "react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/ui/card';
-import { EnhancedDebugPanel } from '@/components/debug/EnhancedDebugPanel';
-import { SystemHealthMonitor } from '@/components/debug/SystemHealthMonitor';
-import { PerformanceMonitor } from '@/components/debug/PerformanceMonitor';
-import { ErrorTracker } from '@/components/debug/ErrorTracker';
-import { SessionAnalytics } from '@/components/debug/SessionAnalytics';
-import { DebugPanel } from '@/components/admin/dashboard/DebugPanel';
+} from "@/components/ui/card";
+import { EnhancedDebugPanel } from "@/components/debug/EnhancedDebugPanel";
+import { SystemHealthMonitor } from "@/components/debug/SystemHealthMonitor";
+import { PerformanceMonitor } from "@/components/debug/PerformanceMonitor";
+import { ErrorTracker } from "@/components/debug/ErrorTracker";
+import { SessionAnalytics } from "@/components/debug/SessionAnalytics";
+import { DebugPanel } from "@/components/admin/dashboard/DebugPanel";
 
 export const metadata: Metadata = {
-  title: 'Enhanced Debug Panel - Manitos Pintadas',
+  title: "Enhanced Debug Panel - Manitos Pintadas",
   description:
-    'Advanced debugging and monitoring dashboard for system administrators.',
+    "Advanced debugging and monitoring dashboard for system administrators.",
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function AdminDebugNavigationPage() {
   return (

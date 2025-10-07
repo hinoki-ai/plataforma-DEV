@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
-import { hasPermission, Permissions } from '@/lib/authorization';
-import { withApiErrorHandling } from '@/lib/error-handler';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
+import { hasPermission, Permissions } from "@/lib/authorization";
+import { withApiErrorHandling } from "@/lib/error-handler";
 
 // GET: Public access to school information
 export const GET = withApiErrorHandling(async () => {
@@ -12,8 +12,8 @@ export const GET = withApiErrorHandling(async () => {
 
   if (!schoolInfo) {
     return NextResponse.json(
-      { success: false, error: 'Información de la escuela no encontrada' },
-      { status: 404 }
+      { success: false, error: "Información de la escuela no encontrada" },
+      { status: 404 },
     );
   }
 
@@ -29,8 +29,8 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
 
   if (!session?.user) {
     return NextResponse.json(
-      { success: false, error: 'No autorizado' },
-      { status: 401 }
+      { success: false, error: "No autorizado" },
+      { status: 401 },
     );
   }
 
@@ -38,9 +38,9 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
     return NextResponse.json(
       {
         success: false,
-        error: 'No tienes permisos para editar la información de la escuela',
+        error: "No tienes permisos para editar la información de la escuela",
       },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -52,9 +52,9 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
     return NextResponse.json(
       {
         success: false,
-        error: 'Todos los campos requeridos deben ser proporcionados',
+        error: "Todos los campos requeridos deben ser proporcionados",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -68,10 +68,10 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
       address,
       phone,
       email,
-      website: website || '',
+      website: website || "",
       logoUrl,
-      institutionType: 'PRESCHOOL' as const,
-    }
+      institutionType: "PRESCHOOL" as const,
+    },
   );
 
   const schoolInfo = await client.query(api.schoolInfo.getSchoolInfo, {});
@@ -88,8 +88,8 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
 
   if (!session?.user) {
     return NextResponse.json(
-      { success: false, error: 'No autorizado' },
-      { status: 401 }
+      { success: false, error: "No autorizado" },
+      { status: 401 },
     );
   }
 
@@ -97,9 +97,9 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
     return NextResponse.json(
       {
         success: false,
-        error: 'No tienes permisos para editar la información de la escuela',
+        error: "No tienes permisos para editar la información de la escuela",
       },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -108,15 +108,15 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
 
   if (!id) {
     return NextResponse.json(
-      { success: false, error: 'ID requerido' },
-      { status: 400 }
+      { success: false, error: "ID requerido" },
+      { status: 400 },
     );
   }
 
   const client = getConvexClient();
   await client.mutation(api.schoolInfo.createOrUpdateSchoolInfo, {
     ...updateData,
-    institutionType: updateData.institutionType || 'PRESCHOOL',
+    institutionType: updateData.institutionType || "PRESCHOOL",
   });
 
   const schoolInfo = await client.query(api.schoolInfo.getSchoolInfo, {});
@@ -133,8 +133,8 @@ export const DELETE = withApiErrorHandling(async (request: NextRequest) => {
 
   if (!session?.user) {
     return NextResponse.json(
-      { success: false, error: 'No autorizado' },
-      { status: 401 }
+      { success: false, error: "No autorizado" },
+      { status: 401 },
     );
   }
 
@@ -142,19 +142,19 @@ export const DELETE = withApiErrorHandling(async (request: NextRequest) => {
     return NextResponse.json(
       {
         success: false,
-        error: 'No tienes permisos para eliminar la información de la escuela',
+        error: "No tienes permisos para eliminar la información de la escuela",
       },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
   const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
+  const id = searchParams.get("id");
 
   if (!id) {
     return NextResponse.json(
-      { success: false, error: 'ID requerido' },
-      { status: 400 }
+      { success: false, error: "ID requerido" },
+      { status: 400 },
     );
   }
 
@@ -163,6 +163,6 @@ export const DELETE = withApiErrorHandling(async (request: NextRequest) => {
 
   return NextResponse.json({
     success: true,
-    message: 'Información de la escuela eliminada exitosamente',
+    message: "Información de la escuela eliminada exitosamente",
   });
 });
