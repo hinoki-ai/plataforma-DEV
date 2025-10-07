@@ -17,7 +17,7 @@ import { SUBJECTS, GRADES } from '@/lib/constants';
 import { useLanguage } from '@/components/language/LanguageContext';
 
 interface PlanningDocumentFormProps {
-  action: (formData: FormData) => void;
+  action: ((data: any) => Promise<{ success: boolean; error?: string }>) | ((formData: FormData) => void | Promise<void>);
   initialData?: {
     title: string;
     content: string;
@@ -112,9 +112,23 @@ export function PlanningDocumentForm({
   };
 
   const handleSubmit = async (formData: FormData) => {
-    // Add attachments data to form
+    // Add attachments to formData
     formData.append('attachments', JSON.stringify(uploadedFiles));
-    action(formData);
+    
+    try {
+      // Check if action is a server action (takes FormData) or a regular action (takes object)
+      const actionResult = action(formData);
+      
+      // If it returns a promise with success/error, handle it
+      if (actionResult && typeof actionResult === 'object' && 'then' in actionResult) {
+        const result = await actionResult;
+        if (result && 'success' in result && !result.success && result.error) {
+          console.error('Form submission error:', result.error);
+        }
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+    }
   };
 
   return (

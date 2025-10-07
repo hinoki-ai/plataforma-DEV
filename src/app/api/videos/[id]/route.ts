@@ -48,7 +48,7 @@ export const PUT = withApiErrorHandling(
 
     const uploader = existingVideo.uploadedBy
       ? await client.query(api.users.getUserById, {
-          id: existingVideo.uploadedBy,
+          userId: existingVideo.uploadedBy,
         })
       : null;
 

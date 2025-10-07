@@ -8,7 +8,7 @@ import { Id } from '@/convex/_generated/dataModel';
 // GET /api/profesor/dashboard - Teacher dashboard metrics
 export const GET = createApiRoute(
   async (request, validated) => {
-    const teacherId = validated.session.user.id as Id<"users">;
+    const teacherId = (validated.session?.user?.id || '') as unknown as Id<"users">;
     const client = getConvexClient();
 
     // Optimized parallel queries for teacher data

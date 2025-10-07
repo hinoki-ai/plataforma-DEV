@@ -35,3 +35,10 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Convex
+convex/_generated/
+
+# Build artifacts
+dist/
+.turbo/

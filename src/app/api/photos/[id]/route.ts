@@ -51,7 +51,7 @@ export const PUT = withApiErrorHandling(
 
     const user = existingPhoto.uploadedBy
       ? await client.query(api.users.getUserById, {
-          id: existingPhoto.uploadedBy,
+          userId: existingPhoto.uploadedBy,
         })
       : null;
 

@@ -47,6 +47,7 @@ import { PageTransition } from '@/components/ui/page-transition';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { MeetingForm } from '@/components/meetings/MeetingForm';
 import { LoadingState } from '@/components/ui/loading-states';
+import type { Meeting } from '@/lib/prisma-compat-types';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { toast } from 'sonner';
 import Link from 'next/link';

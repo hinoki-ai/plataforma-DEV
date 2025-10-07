@@ -62,7 +62,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
   const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [specialties, setSpecialties] = useState<string[]>(
-    teamMember ? (teamMember.specialties as string[]) : []
+    teamMember && Array.isArray(teamMember.specialties) ? teamMember.specialties : []
   );
   const [currentSpecialty, setCurrentSpecialty] = useState('');
   const [fileImage, setFileImage] = useState<File | null>(null);
@@ -85,8 +85,8 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
       description: teamMember?.description || '',
       imageUrl: teamMember?.imageUrl || '',
       order: teamMember?.order || 0,
-      isActive: true,
-      specialties: teamMember ? (teamMember.specialties as string[]) : [],
+      isActive: teamMember?.isActive ?? true,
+      specialties: teamMember && Array.isArray(teamMember.specialties) ? teamMember.specialties : [],
     },
   });
 

@@ -144,10 +144,17 @@ export async function PUT(
       ...updateData,
     });
 
+    if (!activity) {
+      return NextResponse.json(
+        { success: false, error: 'No se pudo actualizar la actividad' },
+        { status: 500 }
+      );
+    }
+
     // Get teacher info
-    const teacher = await client.query(api.users.getUserById, {
+    const teacher = activity.teacherId ? await client.query(api.users.getUserById, {
       userId: activity.teacherId,
-    });
+    }) : null;
 
     return NextResponse.json({
       success: true,

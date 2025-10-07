@@ -161,16 +161,21 @@ export interface Meeting {
 export interface TeamMember {
   id: string;
   name: string;
-  role: TeamMemberRole;
-  specialization?: string;
-  email: string;
-  phone?: string;
-  bio?: string;
+  title: string;
+  description: string;
+  specialties: any; // JSON array
   imageUrl?: string;
+  order: number;
   isActive: boolean;
-  availableHours?: string;
   createdAt: Date;
   updatedAt: Date;
+  // Legacy fields for backward compatibility
+  role?: TeamMemberRole;
+  specialization?: string;
+  email?: string;
+  phone?: string;
+  bio?: string;
+  availableHours?: string;
 }
 
 export interface CalendarEvent {

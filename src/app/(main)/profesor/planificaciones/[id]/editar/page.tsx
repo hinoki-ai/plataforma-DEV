@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPlanningDocumentById } from '@/services/queries/planning';
-import { updatePlanningDocument } from '@/services/actions/planning';
+import { updatePlanningDocumentAction } from '@/app/actions/planning';
 import { PlanningDocumentForm } from '@/components/planning/PlanningDocumentForm';
 import { Button } from '@/components/ui/button';
 import { PageTransition } from '@/components/ui/page-transition';
@@ -23,7 +23,7 @@ export default async function EditarPlanificacionPage({ params }: Props) {
 
   const doc = document.data;
 
-  const updateAction = updatePlanningDocument.bind(null, doc._id);
+  const updateAction = updatePlanningDocumentAction.bind(null, doc._id);
 
   return (
     <PageTransition

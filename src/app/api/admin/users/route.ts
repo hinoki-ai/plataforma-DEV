@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
       createdByAdmin: session.user.id, // Track which admin created this user
     });
     
-    const user = await client.query(api.users.getUserById, { id: userId });
+    const user = await client.query(api.users.getUserById, { userId: userId });
 
     // Map to expected structure
     const userData = {

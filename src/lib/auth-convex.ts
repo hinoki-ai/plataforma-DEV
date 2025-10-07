@@ -146,7 +146,7 @@ export async function createUser(data: {
     isOAuthUser: data.isOAuthUser ?? false,
   });
 
-  const user = await client.query(api.users.getUserById, { id: userId });
+  const user = await client.query(api.users.getUserById, { userId: userId });
 
   if (!user) {
     throw new Error('Failed to create user');

@@ -19,7 +19,16 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     // Sanitize form data before processing
     const sanitizedData = sanitizeFormData(formData, SANITIZATION_SCHEMAS.USER_PROFILE);
-    const result = await registerParent(formData); // Keep original formData for file handling
+    
+    // Convert FormData to object for registerParent
+    const data = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      name: formData.get('name') as string,
+      phone: formData.get('phone') as string | undefined,
+    };
+    
+    const result = await registerParent(data);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     return NextResponse.json(

@@ -109,24 +109,22 @@ export async function POST(request: NextRequest) {
       scheduledTime: '10:00',
       duration: 30,
       location: 'Sala de Reuniones',
-      status: 'SCHEDULED',
       type: 'PARENT_TEACHER',
       assignedTo: teacherId,
-      notes: `Solicitud de reunión: ${message}`,
-      source: 'PARENT_REQUESTED',
+      reason: `Solicitud de reunión: ${message}`,
       parentRequested: true,
     });
 
     return NextResponse.json({
       message: 'Solicitud de reunión enviada correctamente',
       data: {
-        id: meetingRequest._id,
+        id: meetingRequest,
         teacherId,
         subject,
         message,
         preferredDate,
         status: 'scheduled',
-        createdAt: new Date(meetingRequest._creationTime).toISOString(),
+        createdAt: new Date().toISOString(),
       },
     });
   } catch (error) {

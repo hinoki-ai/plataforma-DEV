@@ -62,7 +62,7 @@ export const GET = createApiRoute(
 
     const totalEvents = Array.isArray(allEvents) ? allEvents.length : (allEvents as any).events?.length || 0;
     const totalDocuments = allDocuments.length;
-    const totalMeetings = (allMeetings as any).meetings?.length || allMeetings.length;
+    const totalMeetings = (allMeetings as any).meetings?.length || 0;
     const totalPhotos = allPhotos.length;
     const totalVideos = allVideos.length;
 

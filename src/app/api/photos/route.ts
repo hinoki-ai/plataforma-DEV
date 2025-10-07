@@ -22,7 +22,7 @@ export const GET = withApiErrorHandling(async (request: NextRequest) => {
   const photosWithUploaders = await Promise.all(
     photos.map(async (photo) => {
       const user = photo.uploadedBy
-        ? await client.query(api.users.getUserById, { id: photo.uploadedBy })
+        ? await client.query(api.users.getUserById, { userId: photo.uploadedBy })
         : null;
       return {
         ...photo,
@@ -65,7 +65,7 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
 
   const photo = await client.query(api.media.getPhotoById, { id: photoId });
   const user = await client.query(api.users.getUserById, {
-    id: session.user.id as any,
+    userId: session.user.id as any,
   });
 
   return NextResponse.json({

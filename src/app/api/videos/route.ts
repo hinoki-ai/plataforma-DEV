@@ -22,7 +22,7 @@ export const GET = withApiErrorHandling(async (request: NextRequest) => {
   const videosWithUploaders = await Promise.all(
     videos.map(async (video) => {
       const uploader = video.uploadedBy
-        ? await client.query(api.users.getUserById, { id: video.uploadedBy })
+        ? await client.query(api.users.getUserById, { userId: video.uploadedBy })
         : null;
       return {
         ...video,
@@ -87,7 +87,7 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
 
   const video = await client.query(api.media.getVideoById, { id: videoId });
   const uploader = await client.query(api.users.getUserById, {
-    id: session.user.id as any,
+    userId: session.user.id as any,
   });
 
   console.log('Video created successfully:', video);

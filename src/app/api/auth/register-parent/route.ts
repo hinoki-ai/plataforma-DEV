@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       status: 'PENDING', // Parent accounts start as pending until verified
     });
     
-    const user = await client.query(api.users.getUserById, { id: userId });
+    const user = await client.query(api.users.getUserById, { userId: userId });
 
     // Get default admin/teacher for assignment
     const admins = await client.query(api.users.getUsers, { role: 'ADMIN' });

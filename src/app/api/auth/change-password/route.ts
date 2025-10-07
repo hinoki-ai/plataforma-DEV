@@ -177,13 +177,20 @@ export async function POST(request: NextRequest) {
 
     // Update password and log the change
     await client.mutation(api.users.updateUser, {
-      userId: userId as any,
+      id: userId as any,
       password: hashedNewPassword,
     });
 
     const updatedUser = await client.query(api.users.getUserById, {
       userId: userId as any,
     });
+
+    if (!updatedUser) {
+      return NextResponse.json(
+        { error: 'User not found after update' },
+        { status: 404 }
+      );
+    }
 
     // Clear rate limit on successful change
     rateLimitStore.delete(userId);

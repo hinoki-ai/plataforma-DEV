@@ -15,21 +15,12 @@ import { PlanningDocumentSearch } from './PlanningDocumentSearch';
 import { useResponsiveMode } from '@/lib/hooks/useDesktopToggle';
 import { layout, typography } from '@/lib/responsive-utils';
 import { useLanguage } from '@/components/language/LanguageContext';
+import type { PlanningDocumentsResponse } from '@/lib/types/service-responses';
 
-interface PlanningDocument {
-  id: string;
-  title: string;
-  content: string;
-  subject: string;
-  grade: string;
-  updatedAt: Date;
-  author: {
-    name: string | null;
-  };
-}
+type PlanningDocumentWithAuthor = PlanningDocumentsResponse['data'][0];
 
 interface PlanningDashboardProps {
-  documents: PlanningDocument[];
+  documents: PlanningDocumentWithAuthor[];
   searchParams?: Promise<{
     q?: string;
     subject?: string;
