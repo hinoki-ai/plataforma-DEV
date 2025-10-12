@@ -348,3 +348,125 @@ export const getStaffUsers = query({
       .map((u) => ({ email: u.email, name: u.name }));
   },
 });
+
+/**
+ * Register parent with complete profile and student information
+ * This creates: User account + Parent Profile + Student record
+ */
+export const registerParentComplete = mutation({
+  args: {
+    // User fields
+    fullName: v.string(),
+    email: v.string(),
+    password: v.string(),
+    phone: v.string(),
+    
+    // Parent profile fields
+    rut: v.string(),
+    address: v.string(),
+    region: v.string(),
+    comuna: v.string(),
+    relationship: v.string(),
+    emergencyContact: v.string(),
+    emergencyPhone: v.string(),
+    
+    // Student fields
+    childName: v.string(),
+    childGrade: v.string(),
+    
+    // Optional OAuth fields
+    provider: v.optional(v.string()),
+    isOAuthUser: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const now = Date.now();
+
+    // Check if user already exists
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .first();
+
+    if (existingUser) {
+      throw new Error("User with this email already exists");
+    }
+
+    // 1. Create user account
+    const userId = await ctx.db.insert("users", {
+      name: args.fullName,
+      email: args.email,
+      password: args.password,
+      phone: args.phone,
+      role: "PARENT",
+      parentRole: args.relationship,
+      isActive: true,
+      isOAuthUser: args.isOAuthUser ?? false,
+      provider: args.provider,
+      status: "ACTIVE",
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    // 2. Create parent profile
+    await ctx.db.insert("parentProfiles", {
+      userId,
+      rut: args.rut,
+      address: args.address,
+      region: args.region,
+      comuna: args.comuna,
+      relationship: args.relationship,
+      emergencyContact: args.emergencyContact,
+      emergencyPhone: args.emergencyPhone,
+      registrationComplete: true,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    // 3. Create student record
+    // Parse child name into firstName and lastName
+    const nameParts = args.childName.trim().split(" ");
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(" ") || firstName;
+
+    // Get first available teacher (or use a default admin user)
+    const teachers = await ctx.db
+      .query("users")
+      .withIndex("by_role", (q) => q.eq("role", "PROFESOR"))
+      .first();
+
+    // If no teacher exists, use first admin
+    let teacherId = teachers?._id;
+    if (!teacherId) {
+      const admin = await ctx.db
+        .query("users")
+        .withIndex("by_role", (q) => q.eq("role", "ADMIN"))
+        .first();
+      teacherId = admin?._id;
+    }
+
+    if (!teacherId) {
+      throw new Error("No teacher or admin found to assign student");
+    }
+
+    const studentId = await ctx.db.insert("students", {
+      firstName,
+      lastName,
+      birthDate: now, // Will be updated later with actual birthdate
+      grade: args.childGrade,
+      enrollmentDate: now,
+      emergencyContact: args.emergencyContact,
+      emergencyPhone: args.emergencyPhone,
+      teacherId,
+      parentId: userId,
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    return {
+      userId,
+      studentId,
+      success: true,
+    };
+  },
+});

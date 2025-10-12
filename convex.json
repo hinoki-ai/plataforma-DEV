@@ -1,5 +1,7 @@
 {
   "node": {
-    "externalPackages": ["bcryptjs"]
+    "externalPackages": [
+      "bcryptjs"
+    ]
   }
 }
