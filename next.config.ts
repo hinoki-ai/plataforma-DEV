@@ -19,7 +19,8 @@ const nextConfig: NextConfig = {
   },
 
   // Output configuration - use standalone for server deployment
-  output: "standalone",
+  // Temporarily disabled to troubleshoot build issues
+  // output: "standalone",
 
   // Performance optimizations
   productionBrowserSourceMaps: false,
