@@ -41,7 +41,15 @@ function ParentRegistrationContent() {
   const router = useRouter();
   const [isRegistering, setIsRegistering] = useState(false);
   const [registrationComplete, setRegistrationComplete] = useState(false);
-  const [registrationData, setRegistrationData] = useState<any>(null);
+  const [registrationData, setRegistrationData] = useState<{
+    name: string;
+    email: string;
+    studentInfo: {
+      studentName: string;
+      studentGrade: string;
+      relationship: string;
+    };
+  } | null>(null);
 
   const handleRegister = async (data: ParentFormData) => {
     setIsRegistering(true);

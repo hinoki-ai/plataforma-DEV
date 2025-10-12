@@ -66,7 +66,7 @@ async function countUsers() {
         const status = user.isActive ? "✅" : "❌";
         const date = new Date(user.createdAt).toLocaleDateString("es-CL");
         console.log(
-          `  ${status} ${user.name || 'N/A'} (${user.email}) - ${user.role} [${date}]`,
+          `  ${status} ${user.name || "N/A"} (${user.email}) - ${user.role} [${date}]`,
         );
       });
 
@@ -85,8 +85,7 @@ async function countUsers() {
   }
 }
 
-countUsers()
-  .catch((error) => {
-    console.error("Fatal error during user count:", error);
-    process.exit(1);
-  });
+countUsers().catch((error) => {
+  console.error("Fatal error during user count:", error);
+  process.exit(1);
+});

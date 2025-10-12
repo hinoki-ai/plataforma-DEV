@@ -56,11 +56,11 @@ npm run dev
 
 ### Cuentas de Prueba
 
-| Rol          | Email                              | Contraseña  |
-| ------------ | ---------------------------------- | ----------- |
-| **Admin**    | <admin@plataforma-astral.com>      | admin123    |
-| **Teacher**  | <profesor@plataforma-astral.com>   | profesor123 |
-| **Parent**   | <parent@plataforma-astral.com>     | parent123   |
+| Rol         | Email                            | Contraseña  |
+| ----------- | -------------------------------- | ----------- |
+| **Admin**   | <admin@plataforma-astral.com>    | admin123    |
+| **Teacher** | <profesor@plataforma-astral.com> | profesor123 |
+| **Parent**  | <parent@plataforma-astral.com>   | parent123   |
 
 ## 🏗️ Arquitectura
 
@@ -198,9 +198,9 @@ This project uses a **proper 3-tier environment structure** for maximum clarity 
 
 ### Environment Matrix
 
-| Environment     | File               | Branch | URL                     | Purpose           | NODE_ENV    |
-| --------------- | ------------------ | ------ | ----------------------- | ----------------- | ----------- |
-| **Local**       | `.env.local`       | `main` | `localhost:3000`        | Local development | development |
+| Environment     | File               | Branch | URL                         | Purpose           | NODE_ENV    |
+| --------------- | ------------------ | ------ | --------------------------- | ----------------- | ----------- |
+| **Local**       | `.env.local`       | `main` | `localhost:3000`            | Local development | development |
 | **Development** | `.env.development` | `dev`  | `dev.plataforma-astral.com` | Staging/testing   | production  |
 | **Production**  | `.env.production`  | `prod` | `plataforma-astral.com`     | Live production   | production  |
 

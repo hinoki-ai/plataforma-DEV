@@ -5,6 +5,7 @@
 This document provides a comprehensive extraction of the login authentication system integrated with Convex database in the Plataforma Astral educational management system.
 
 **Tech Stack:**
+
 - **NextAuth.js v5 (Auth.js)** - Authentication framework
 - **Convex** - Serverless database backend
 - **Next.js 15** - Application framework with App Router
@@ -18,9 +19,11 @@ This document provides a comprehensive extraction of the login authentication sy
 ### 1. Core Authentication Files
 
 #### 📁 `/src/lib/auth.ts` - NextAuth Configuration
+
 **Purpose:** Main NextAuth.js configuration with providers and callbacks
 
 **Key Features:**
+
 - JWT session strategy (24-hour expiry, hourly updates)
 - Dual authentication providers:
   - **Credentials Provider**: Email/password authentication via Convex
@@ -30,6 +33,7 @@ This document provides a comprehensive extraction of the login authentication sy
 - Custom session/JWT handling with role propagation
 
 **Configuration:**
+
 ```typescript
 session: {
   strategy: "jwt",
@@ -39,12 +43,14 @@ session: {
 ```
 
 **Security Features:**
+
 - OAuth restriction: Only PARENT role can use OAuth (Google)
 - Admin/Teacher users must use credentials authentication
 - Automatic role injection into session
 - Password verification via Convex utilities
 
 #### 📁 `/src/lib/auth-convex.ts` - Convex Authentication Utilities
+
 **Purpose:** Bridge between NextAuth and Convex database operations
 
 **Core Functions:**
@@ -69,6 +75,7 @@ session: {
    - Supports OAuth and credential users
 
 **Type Definitions:**
+
 ```typescript
 export type UserRole = "MASTER" | "ADMIN" | "PROFESOR" | "PARENT" | "PUBLIC";
 
@@ -84,11 +91,12 @@ export interface User {
 ```
 
 #### 📁 `/src/lib/convex.ts` - Convex Client
+
 **Purpose:** Central Convex HTTP client configuration
 
 ```typescript
-export const convexHttpClient = CONVEX_URL 
-  ? new ConvexHttpClient(CONVEX_URL) 
+export const convexHttpClient = CONVEX_URL
+  ? new ConvexHttpClient(CONVEX_URL)
   : null;
 
 export function getConvexClient() {
@@ -100,6 +108,7 @@ export function getConvexClient() {
 ```
 
 **Environment Required:**
+
 - `NEXT_PUBLIC_CONVEX_URL` - Convex backend URL
 
 ---
@@ -107,9 +116,11 @@ export function getConvexClient() {
 ### 2. Convex Backend Layer
 
 #### 📁 `/convex/schema.ts` - Database Schema
+
 **Authentication Tables:**
 
 **`users` Table:**
+
 ```typescript
 users: defineTable({
   name: v.optional(v.string()),
@@ -140,6 +151,7 @@ users: defineTable({
 ```
 
 **`accounts` Table (OAuth):**
+
 ```typescript
 accounts: defineTable({
   userId: v.id("users"),
@@ -154,34 +166,36 @@ accounts: defineTable({
   id_token: v.optional(v.string()),
   session_state: v.optional(v.string()),
 })
-.index("by_userId", ["userId"])
-.index("by_provider_providerAccountId", ["provider", "providerAccountId"])
+  .index("by_userId", ["userId"])
+  .index("by_provider_providerAccountId", ["provider", "providerAccountId"]);
 ```
 
 **`sessions` Table:**
+
 ```typescript
 sessions: defineTable({
   sessionToken: v.string(),
   userId: v.id("users"),
   expires: v.number(),
 })
-.index("by_sessionToken", ["sessionToken"])
-.index("by_userId", ["userId"])
+  .index("by_sessionToken", ["sessionToken"])
+  .index("by_userId", ["userId"]);
 ```
 
 **`verificationTokens` Table:**
+
 ```typescript
 verificationTokens: defineTable({
   identifier: v.string(),
   token: v.string(),
   expires: v.number(),
-})
-.index("by_identifier_token", ["identifier", "token"])
+}).index("by_identifier_token", ["identifier", "token"]);
 ```
 
 #### 📁 `/convex/users.ts` - User Queries & Mutations
 
 **Queries:**
+
 - `getUserByEmail(email)` - Find user by email
 - `getUserById(userId)` - Find user by ID
 - `getUsers(role?, isActive?)` - Get users with filters
@@ -190,12 +204,14 @@ verificationTokens: defineTable({
 - `getStaffUsers()` - Get ADMIN + PROFESOR users
 
 **Mutations:**
+
 - `createUser(data)` - Create new user
 - `updateUser(id, updates)` - Update user fields
 - `deleteUser(id)` - Delete user
 - `updateLastLogin(userId)` - Track last login
 
 **Validation:**
+
 - Email uniqueness on creation/update
 - Required fields enforcement
 - Timestamp auto-management
@@ -203,12 +219,14 @@ verificationTokens: defineTable({
 #### 📁 `/convex/auth.ts` - Auth-specific Operations
 
 **Account Operations:**
+
 - `getAccountByProvider()` - Find OAuth account
 - `getAccountsByUserId()` - User's OAuth accounts
 - `createAccount()` - Link OAuth provider
 - `deleteAccount()` - Unlink provider
 
 **Session Operations:**
+
 - `getSessionByToken()` - Validate session token
 - `getSessionsByUserId()` - User's active sessions
 - `createSession()` - Create new session
@@ -217,14 +235,17 @@ verificationTokens: defineTable({
 - `deleteExpiredSessions()` - Cleanup cron job
 
 **Verification Tokens:**
+
 - `getVerificationToken()` - Find verification token
 - `createVerificationToken()` - Generate email verification
 - `deleteVerificationToken()` - Consume token
 
 #### 📁 `/convex/authAdapter.ts` - NextAuth Adapter
+
 **Purpose:** Implements NextAuth Adapter interface for Convex
 
 **Key Methods:**
+
 - `createUser()` - Create user via NextAuth (OAuth flow)
 - `getUser(id)` - Retrieve user for session
 - `getUserByEmail()` - OAuth email lookup
@@ -236,6 +257,7 @@ verificationTokens: defineTable({
 - `useVerificationToken()` - Email verification flow
 
 **Default Behavior:**
+
 - New OAuth users → `PARENT` role
 - Auto-set `isOAuthUser: true`
 - Status: `ACTIVE` on creation
@@ -245,17 +267,18 @@ verificationTokens: defineTable({
 ### 3. Adapter Layer
 
 #### 📁 `/src/lib/convex-adapter.ts` - NextAuth ↔ Convex Bridge
+
 **Purpose:** Converts NextAuth adapter calls to Convex API calls
 
 **Implementation Pattern:**
+
 ```typescript
 export function ConvexAdapter(client: ConvexHttpClient): Adapter {
   return {
     async createUser(user) {
-      const userId = await client.mutation(
-        api.authAdapter.createUser, 
-        { ...transformedData }
-      );
+      const userId = await client.mutation(api.authAdapter.createUser, {
+        ...transformedData,
+      });
       return { ...adapterUser };
     },
     // ... more adapter methods
@@ -264,6 +287,7 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
 ```
 
 **Handles:**
+
 - Date ↔ timestamp conversions
 - Adapter type conformance
 - Role injection from Convex
@@ -274,9 +298,11 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
 ### 4. Middleware & Route Protection
 
 #### 📁 `/src/middleware.ts` - Route Authorization
+
 **Purpose:** Edge runtime middleware for route-based access control
 
 **Route Access Matrix:**
+
 ```typescript
 const ROUTE_ACCESS: Record<string, UserRole[]> = {
   "/master": ["MASTER"],
@@ -290,6 +316,7 @@ const ROUTE_ACCESS: Record<string, UserRole[]> = {
 ```
 
 **Security Features:**
+
 - Pre-auth redirects for logged-in users
 - Role-based route authorization
 - Automatic role-appropriate redirects
@@ -300,6 +327,7 @@ const ROUTE_ACCESS: Record<string, UserRole[]> = {
   - Referrer-Policy: strict-origin-when-cross-origin
 
 **Flow:**
+
 1. Check if route requires authentication
 2. Validate user session via `getMiddlewareAuth()`
 3. Check role permissions via `hasMiddlewareAccess()`
@@ -307,7 +335,9 @@ const ROUTE_ACCESS: Record<string, UserRole[]> = {
 5. Add security headers
 
 #### 📁 `/src/lib/middleware-auth.ts` - Auth Helpers
+
 **Key Functions:**
+
 - `getMiddlewareAuth(req)` - Get session in Edge runtime
 - `hasMiddlewareAccess(role, allowedRoles)` - Check authorization
 - `getRoleRedirectPath(role)` - Default dashboard paths
@@ -317,6 +347,7 @@ const ROUTE_ACCESS: Record<string, UserRole[]> = {
 ### 5. Server Actions Layer
 
 #### 📁 `/src/services/actions/auth.ts` - Auth Server Actions
+
 **Purpose:** Server Actions for authentication operations
 
 **Functions:**
@@ -337,6 +368,7 @@ const ROUTE_ACCESS: Record<string, UserRole[]> = {
    - No automatic redirect
 
 **Error Handling:**
+
 ```typescript
 switch (error.type) {
   case "CredentialsSignin":
@@ -353,7 +385,9 @@ switch (error.type) {
 ### 6. Client Components
 
 #### 📁 `/src/app/(auth)/login/page.tsx` - Login Page
+
 **Features:**
+
 - `useActionState` hook integration
 - Real-time form validation
 - Email regex validation
@@ -364,12 +398,14 @@ switch (error.type) {
 - Accessibility (ARIA labels)
 
 **State Management:**
+
 ```typescript
 const [errorMessage, dispatch] = useActionState(authenticate, undefined);
 const { status, data: session } = useSession();
 ```
 
 **Validation:**
+
 - Email format check (regex)
 - Password minimum length (6 chars)
 - Touched state tracking
@@ -512,6 +548,7 @@ PUBLIC (Level 0)
 ```
 
 **OAuth Restriction Logic:**
+
 - `MASTER`, `ADMIN`, `PROFESOR` → **Credentials only** (email/password)
 - `PARENT`, `PUBLIC` → **OAuth allowed** (Google)
 
@@ -520,28 +557,33 @@ PUBLIC (Level 0)
 ## Security Features
 
 ### 1. Password Security
+
 - **Hashing:** bcryptjs with 10 salt rounds
 - **Storage:** Hashed passwords in Convex `users.password`
 - **Validation:** Server-side only, never exposed to client
 
 ### 2. Session Security
+
 - **Strategy:** JWT (stateless)
 - **Storage:** Secure HTTP-only cookies
 - **Expiry:** 24 hours with 1-hour refresh
 - **Validation:** Middleware on every protected route
 
 ### 3. OAuth Security
+
 - **Role Restriction:** Teachers/admins blocked from OAuth
 - **Provider Linking:** Convex `accounts` table
 - **Token Management:** Access/refresh tokens stored securely
 
 ### 4. Route Protection
+
 - **Middleware Enforcement:** Edge runtime validation
 - **Role-Based Access Control:** Fine-grained permissions
 - **Security Headers:** OWASP recommended headers
 - **Unauthorized Handling:** Graceful redirects
 
 ### 5. CSRF Protection
+
 - Built-in via NextAuth.js
 - CSRF token validation on mutations
 
@@ -550,6 +592,7 @@ PUBLIC (Level 0)
 ## Environment Variables
 
 ### Required
+
 ```bash
 # NextAuth
 NEXTAUTH_URL=https://plataforma-astral.com
@@ -560,6 +603,7 @@ NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
 ```
 
 ### Optional (OAuth)
+
 ```bash
 # Google OAuth
 GOOGLE_CLIENT_ID=<your-google-client-id>
@@ -567,6 +611,7 @@ GOOGLE_CLIENT_SECRET=<your-google-client-secret>
 ```
 
 ### Development
+
 ```bash
 NEXTAUTH_URL=http://localhost:3000
 ```
@@ -576,42 +621,44 @@ NEXTAUTH_URL=http://localhost:3000
 ## Key Convex Operations
 
 ### Query Operations (Read)
+
 ```typescript
 // Get user by email
-const user = await client.query(api.users.getUserByEmail, { 
-  email: "user@example.com" 
+const user = await client.query(api.users.getUserByEmail, {
+  email: "user@example.com",
 });
 
 // Get user statistics
 const stats = await client.query(api.users.getUserStats, {});
 
 // Validate session
-const session = await client.query(api.auth.getSessionByToken, { 
-  sessionToken: "..." 
+const session = await client.query(api.auth.getSessionByToken, {
+  sessionToken: "...",
 });
 ```
 
 ### Mutation Operations (Write)
+
 ```typescript
 // Create user
 const userId = await client.mutation(api.users.createUser, {
   email: "new@example.com",
   password: hashedPassword,
   role: "PARENT",
-  name: "John Doe"
+  name: "John Doe",
 });
 
 // Update user
 await client.mutation(api.users.updateUser, {
   id: userId,
-  isActive: false
+  isActive: false,
 });
 
 // Create session
 const sessionId = await client.mutation(api.auth.createSession, {
   sessionToken: "...",
   userId: userId,
-  expires: Date.now() + 86400000
+  expires: Date.now() + 86400000,
 });
 ```
 
@@ -620,6 +667,7 @@ const sessionId = await client.mutation(api.auth.createSession, {
 ## Testing Strategy
 
 ### Test Users (Development Seed)
+
 ```typescript
 {
   email: "admin@plataforma-astral.com",
@@ -639,6 +687,7 @@ const sessionId = await client.mutation(api.auth.createSession, {
 ```
 
 ### E2E Test Coverage
+
 - ✅ Credentials login flow
 - ✅ OAuth login flow (Google)
 - ✅ Role-based route access
@@ -653,6 +702,7 @@ const sessionId = await client.mutation(api.auth.createSession, {
 ## Migration Notes
 
 ### From Prisma to Convex
+
 - **Database:** PostgreSQL → Convex serverless
 - **ORM:** Prisma Client → Convex queries/mutations
 - **Auth:** Prisma adapter → Custom Convex adapter
@@ -660,6 +710,7 @@ const sessionId = await client.mutation(api.auth.createSession, {
 - **Type Generation:** `prisma generate` → `npx convex dev`
 
 ### Backward Compatibility
+
 - Services layer maintained for gradual migration
 - API routes use Convex client directly
 - Server Actions wrap Convex operations
@@ -669,18 +720,22 @@ const sessionId = await client.mutation(api.auth.createSession, {
 ## Common Issues & Solutions
 
 ### Issue 1: "Convex client not initialized"
+
 **Cause:** Missing `NEXT_PUBLIC_CONVEX_URL`
 **Solution:** Add to `.env.local` and restart dev server
 
 ### Issue 2: OAuth fails for admin users
+
 **Cause:** Role restriction in `signIn()` callback
 **Solution:** Admins must use credentials authentication
 
 ### Issue 3: Session expires too quickly
+
 **Cause:** Default session config
 **Solution:** Already configured to 24 hours with 1-hour refresh
 
 ### Issue 4: Middleware redirect loop
+
 **Cause:** Invalid role in session
 **Solution:** Check `jwt()` and `session()` callbacks are propagating role
 
@@ -713,6 +768,7 @@ npm run test:all
 ## API Endpoints
 
 ### NextAuth Routes (Auto-generated)
+
 - `GET /api/auth/signin` - Sign in page
 - `POST /api/auth/signin/:provider` - Provider sign in
 - `GET /api/auth/signout` - Sign out page
@@ -722,6 +778,7 @@ npm run test:all
 - `GET /api/auth/providers` - List providers
 
 ### Custom Auth Routes
+
 - `POST /api/auth/register` - User registration
 - `GET /api/auth/session` - Session validation
 
@@ -730,6 +787,7 @@ npm run test:all
 ## Conclusion
 
 This authentication system provides:
+
 - ✅ Secure credential-based authentication
 - ✅ OAuth integration (Google) with role restrictions
 - ✅ Role-based access control
@@ -739,6 +797,7 @@ This authentication system provides:
 - ✅ Production-ready security features
 
 **Next Steps:**
+
 1. Enable additional OAuth providers (Facebook, GitHub)
 2. Implement email verification flow
 3. Add 2FA support

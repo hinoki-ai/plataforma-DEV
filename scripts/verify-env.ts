@@ -23,7 +23,6 @@ interface EnvValidation {
 }
 
 const ENV_REQUIREMENTS: EnvValidation[] = [
-
   // Authentication Configuration
   {
     name: "NEXTAUTH_URL",
@@ -124,14 +123,12 @@ function validateEnvironmentVariable(env: EnvValidation): {
     return { valid: true, warning: `${env.name} is not set (optional)` };
   }
 
-
   if (env.pattern && !new RegExp(env.pattern).test(value!)) {
     return { valid: false, error: `${env.name} format is invalid` };
   }
 
   return { valid: true };
 }
-
 
 function validateEnvironment(): ValidationResult {
   const errors: string[] = [];
@@ -180,7 +177,9 @@ async function main() {
     console.log("   3. Set NEXT_PUBLIC_CONVEX_URL to your Convex project URL");
     console.log("   4. Generate secure NEXTAUTH_SECRET (32+ characters)");
     console.log("\n💡 Example production .env:");
-    console.log('   NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"');
+    console.log(
+      '   NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"',
+    );
     console.log('   NEXTAUTH_URL="https://your-domain.vercel.app"');
     console.log('   NEXTAUTH_SECRET="your-super-secure-key-here"');
 

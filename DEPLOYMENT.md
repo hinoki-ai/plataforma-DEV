@@ -26,11 +26,11 @@ graph TB
 
 ## 🌐 Environment Structure
 
-| Environment         | Branch | URL                          | Purpose                         | Auto-Deploy      | Backend            |
-| ------------------- | ------ | ---------------------------- | ------------------------------- | ---------------- | ------------------ |
-| **Main Production** | `main` | `plataforma-astral.com`      | Primary SaaS platform          | ❌ Protected     | Convex Production  |
-| **Development**     | `dev`  | `dev.plataforma-astral.com`   | Testing & Integration          | ✅ Frequent Auto | Convex Development |
-| **Production**      | `prod` | `plataforma-astral.com`      | Live SaaS Production           | ⚠️ Rare Manual   | Convex Production  |
+| Environment         | Branch | URL                         | Purpose               | Auto-Deploy      | Backend            |
+| ------------------- | ------ | --------------------------- | --------------------- | ---------------- | ------------------ |
+| **Main Production** | `main` | `plataforma-astral.com`     | Primary SaaS platform | ❌ Protected     | Convex Production  |
+| **Development**     | `dev`  | `dev.plataforma-astral.com` | Testing & Integration | ✅ Frequent Auto | Convex Development |
+| **Production**      | `prod` | `plataforma-astral.com`     | Live SaaS Production  | ⚠️ Rare Manual   | Convex Production  |
 
 ## 🚀 Deployment Workflows
 

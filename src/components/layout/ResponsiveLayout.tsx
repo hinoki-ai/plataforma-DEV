@@ -611,6 +611,20 @@ export function ResponsiveImage({
     high: 'loading="eager" decoding="sync"',
   };
 
+  // Ensure numeric width/height from props
+  const numWidth =
+    typeof props.width === "number"
+      ? props.width
+      : typeof props.width === "string"
+        ? parseInt(props.width, 10)
+        : 800;
+  const numHeight =
+    typeof props.height === "number"
+      ? props.height
+      : typeof props.height === "string"
+        ? parseInt(props.height, 10)
+        : 600;
+
   return (
     <Image
       src={imageSize}
@@ -620,9 +634,9 @@ export function ResponsiveImage({
       {...(quality === "medium" && { loading: "lazy" as const })}
       {...(quality === "high" && { loading: "eager" as const })}
       sizes={sizes}
-      width={props.width || 800}
-      height={props.height || 600}
       {...props}
+      width={numWidth}
+      height={numHeight}
     />
   );
 }

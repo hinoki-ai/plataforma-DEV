@@ -18,7 +18,7 @@ async function verifyCustomMasterUser() {
 
     const client = new ConvexHttpClient(deploymentUrl);
     const masterUser = await client.query(api.users.getUserByEmail, {
-      email: "agustinaramac@gmail.com"
+      email: "agustinaramac@gmail.com",
     });
 
     if (!masterUser) {
@@ -58,8 +58,7 @@ async function verifyCustomMasterUser() {
   }
 }
 
-verifyCustomMasterUser()
-  .catch((error) => {
-    console.error("Fatal error during custom master user verification:", error);
-    process.exit(1);
-  });
+verifyCustomMasterUser().catch((error) => {
+  console.error("Fatal error during custom master user verification:", error);
+  process.exit(1);
+});

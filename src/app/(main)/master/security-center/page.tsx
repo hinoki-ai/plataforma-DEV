@@ -7,13 +7,7 @@ import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Shield,
-  AlertTriangle,
-  Lock,
-  Eye,
-  CheckCircle,
-} from "lucide-react";
+import { Shield, AlertTriangle, Lock, Eye, CheckCircle } from "lucide-react";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";

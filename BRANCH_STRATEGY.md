@@ -106,11 +106,11 @@ git push origin main  # Auto-deploys to plataforma-astral.com
 
 ## 📋 Environment Mapping
 
-| Branch  | Environment         | URL                          | Auto-deploy | Risk Level |
-| ------- | ------------------- | ---------------------------- | ----------- | ---------- |
-| `dev`   | Development Sandbox | `dev.plataforma-astral.com` | ✅ Yes      | 🟢 Low     |
-| `prod`  | Staging Environment | `plataforma-astral.com`     | ✅ Yes      | 🟡 Medium  |
-| `main`  | Production Platform | `plataforma-astral.com`     | ✅ Yes      | 🔴 High    |
+| Branch | Environment         | URL                         | Auto-deploy | Risk Level |
+| ------ | ------------------- | --------------------------- | ----------- | ---------- |
+| `dev`  | Development Sandbox | `dev.plataforma-astral.com` | ✅ Yes      | 🟢 Low     |
+| `prod` | Staging Environment | `plataforma-astral.com`     | ✅ Yes      | 🟡 Medium  |
+| `main` | Production Platform | `plataforma-astral.com`     | ✅ Yes      | 🔴 High    |
 
 ## ⚠️ Important Rules
 

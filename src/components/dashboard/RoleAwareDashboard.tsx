@@ -468,7 +468,6 @@ export function RoleAwareDashboard() {
     );
   }
 
-
   return (
     <div className="space-y-6">
       {/* Header with role indicator */}

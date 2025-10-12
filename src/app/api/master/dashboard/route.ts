@@ -56,7 +56,7 @@ export const GET = createApiRoute(
 
     // Transform user metrics for easy consumption
     const usersByRole = allUsers.reduce(
-      (acc, user) => {
+      (acc: Record<string, number>, user: { role: string }) => {
         acc[user.role] = (acc[user.role] || 0) + 1;
         return acc;
       },
@@ -86,7 +86,10 @@ export const GET = createApiRoute(
       },
 
       users: {
-        total: Object.values(usersByRole).reduce((a, b) => a + b, 0),
+        total: Object.values(usersByRole).reduce(
+          (a: number, b: number) => a + b,
+          0,
+        ),
         breakdown: {
           master: usersByRole.MASTER || 0,
           admin: usersByRole.ADMIN || 0,

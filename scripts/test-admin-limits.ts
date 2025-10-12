@@ -29,9 +29,7 @@ async function testAdminLimits() {
       role: "ADMIN",
     });
 
-    console.log(
-      `✅ Created test admin: ${testAdminEmail} (ID: ${testAdmin})`,
-    );
+    console.log(`✅ Created test admin: ${testAdminEmail} (ID: ${testAdmin})`);
 
     // Test creating first secondary admin (should succeed)
     const secondaryAdmin1Email = `secondary-admin-1-${Date.now()}@example.com`;
@@ -49,7 +47,9 @@ async function testAdminLimits() {
     console.log("🔍 Testing admin count logic...");
 
     const allUsers = await client.query(api.users.getUsers, { role: "ADMIN" });
-    const adminCount = allUsers.filter(u => u.createdByAdmin === testAdmin).length;
+    const adminCount = allUsers.filter(
+      (u) => u.createdByAdmin === testAdmin,
+    ).length;
 
     console.log(`📊 Admins created by ${testAdminEmail}: ${adminCount}`);
     console.log(`📏 Max allowed: 1`);
@@ -68,14 +68,20 @@ async function testAdminLimits() {
     console.log("🧹 Cleaning up test data...");
 
     // Get user IDs by email and delete them
-    const testAdminUser = await client.query(api.users.getUserByEmail, { email: testAdminEmail });
-    const secondaryAdmin1User = await client.query(api.users.getUserByEmail, { email: secondaryAdmin1Email });
+    const testAdminUser = await client.query(api.users.getUserByEmail, {
+      email: testAdminEmail,
+    });
+    const secondaryAdmin1User = await client.query(api.users.getUserByEmail, {
+      email: secondaryAdmin1Email,
+    });
 
     if (testAdminUser) {
       await client.mutation(api.users.deleteUser, { id: testAdminUser._id });
     }
     if (secondaryAdmin1User) {
-      await client.mutation(api.users.deleteUser, { id: secondaryAdmin1User._id });
+      await client.mutation(api.users.deleteUser, {
+        id: secondaryAdmin1User._id,
+      });
     }
 
     console.log("✅ Test data cleaned up");
@@ -92,8 +98,7 @@ async function testAdminLimits() {
   }
 }
 
-testAdminLimits()
-  .catch((error) => {
-    console.error("Fatal error during testing:", error);
-    process.exit(1);
-  });
+testAdminLimits().catch((error) => {
+  console.error("Fatal error during testing:", error);
+  process.exit(1);
+});

@@ -185,7 +185,9 @@ export const createUserAction: any = action({
   },
   handler: async (ctx, args): Promise<Id<"users">> => {
     // Check if user already exists
-    const existingUser = await ctx.runQuery(api.users.getUserByEmail, { email: args.email });
+    const existingUser = await ctx.runQuery(api.users.getUserByEmail, {
+      email: args.email,
+    });
 
     if (existingUser) {
       throw new Error("User with this email already exists");

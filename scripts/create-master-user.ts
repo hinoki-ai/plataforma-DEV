@@ -47,7 +47,9 @@ async function createMasterUser() {
         console.log("⚠️  Master user already exists, updating password...");
 
         // Get the user first
-        const existingUser = await client.query(api.users.getUserByEmail, { email: masterEmail });
+        const existingUser = await client.query(api.users.getUserByEmail, {
+          email: masterEmail,
+        });
         if (existingUser) {
           // Update the user with new password
           const updatedUser = await client.mutation(api.users.updateUser, {
@@ -74,8 +76,7 @@ async function createMasterUser() {
   }
 }
 
-createMasterUser()
-  .catch((error) => {
-    console.error("Fatal error during master user creation:", error);
-    process.exit(1);
-  });
+createMasterUser().catch((error) => {
+  console.error("Fatal error during master user creation:", error);
+  process.exit(1);
+});

@@ -283,8 +283,8 @@ const isAdmin = session?.user?.role === "ADMIN";
 
 ### Test Users (seeded in development)
 
-| Role     | Email                                                             | Password    |
-| -------- | ----------------------------------------------------------------- | ----------- |
+| Role     | Email                                                                   | Password    |
+| -------- | ----------------------------------------------------------------------- | ----------- |
 | ADMIN    | [admin@plataforma-astral.com](mailto:admin@plataforma-astral.com)       | admin123    |
 | PROFESOR | [profesor@plataforma-astral.com](mailto:profesor@plataforma-astral.com) | profesor123 |
 | PARENT   | [parent@plataforma-astral.com](mailto:parent@plataforma-astral.com)     | parent123   |

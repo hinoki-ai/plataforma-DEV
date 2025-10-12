@@ -73,9 +73,14 @@ async function seedTeamMembers() {
     const client = new ConvexHttpClient(deploymentUrl);
 
     // Clear existing team members first
-    const existingMembers = await client.query(api.teamMembers.getTeamMembers, {});
+    const existingMembers = await client.query(
+      api.teamMembers.getTeamMembers,
+      {},
+    );
     for (const member of existingMembers) {
-      await client.mutation(api.teamMembers.deleteTeamMember, { id: member._id });
+      await client.mutation(api.teamMembers.deleteTeamMember, {
+        id: member._id,
+      });
     }
 
     // Create new team members

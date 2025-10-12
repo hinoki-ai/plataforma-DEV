@@ -315,6 +315,7 @@ STEP 5: DASHBOARD
 ## Database Schema Changes Overview
 
 ### Before (Single-Tenant)
+
 ```sql
 users
 ├─ id
@@ -332,6 +333,7 @@ meetings
 ```
 
 ### After (Multi-Tenant)
+
 ```sql
 tenants  ← NEW TABLE
 ├─ id
@@ -377,6 +379,7 @@ students
 ## Security: Tenant Isolation Examples
 
 ### ✅ SECURE: Proper Tenant Filtering
+
 ```typescript
 // Convex Query
 export const getMeetings = query({
@@ -384,9 +387,7 @@ export const getMeetings = query({
   handler: async (ctx, args) => {
     return await ctx.db
       .query("meetings")
-      .withIndex("by_tenantId", (q) => 
-        q.eq("tenantId", args.tenantId)
-      )
+      .withIndex("by_tenantId", (q) => q.eq("tenantId", args.tenantId))
       .collect();
   },
 });
@@ -401,6 +402,7 @@ export async function getMeetings() {
 ```
 
 ### ❌ INSECURE: Missing Tenant Filter
+
 ```typescript
 // 🚨 CRITICAL BUG: Exposes all tenants' data
 export const getMeetings = query({
@@ -411,6 +413,7 @@ export const getMeetings = query({
 ```
 
 ### ❌ INSECURE: Client-Provided Tenant ID
+
 ```typescript
 // 🚨 CRITICAL BUG: Client can fake tenantId
 export async function getMeetings(tenantId: string) {
@@ -425,6 +428,7 @@ export async function getMeetings(tenantId: string) {
 ```
 
 ### ✅ SECURE: Server-Side Validation
+
 ```typescript
 export const updateMeeting = mutation({
   args: {
@@ -435,12 +439,12 @@ export const updateMeeting = mutation({
   handler: async (ctx, args) => {
     // 1. Fetch meeting
     const meeting = await ctx.db.get(args.meetingId);
-    
+
     // 2. Validate tenant ownership
     if (meeting.tenantId !== args.tenantId) {
       throw new Error("Unauthorized: Tenant mismatch");
     }
-    
+
     // 3. Proceed with update
     await ctx.db.patch(args.meetingId, args.data);
   },
@@ -451,17 +455,17 @@ export const updateMeeting = mutation({
 
 ## Comparison: Single-Tenant vs Multi-Tenant
 
-| Aspect | Single-Tenant (Current) | Multi-Tenant (Proposed) |
-|--------|------------------------|-------------------------|
-| **Deployment** | 1 instance per school | 1 instance, infinite schools |
-| **Database** | Separate DB per school | Shared DB, isolated by tenantId |
-| **Scaling** | Linear growth (costly) | Economies of scale |
-| **Maintenance** | Update each school separately | One update = all schools updated |
-| **Customization** | Full code customization | Config-based customization |
-| **Security** | Physical isolation | Logical isolation (requires care) |
-| **Cost** | High (server per school) | Low (shared infrastructure) |
-| **Complexity** | Low | Medium-High |
-| **Revenue Model** | One-time or custom contracts | SaaS subscription ($50-200/mo) |
+| Aspect            | Single-Tenant (Current)       | Multi-Tenant (Proposed)           |
+| ----------------- | ----------------------------- | --------------------------------- |
+| **Deployment**    | 1 instance per school         | 1 instance, infinite schools      |
+| **Database**      | Separate DB per school        | Shared DB, isolated by tenantId   |
+| **Scaling**       | Linear growth (costly)        | Economies of scale                |
+| **Maintenance**   | Update each school separately | One update = all schools updated  |
+| **Customization** | Full code customization       | Config-based customization        |
+| **Security**      | Physical isolation            | Logical isolation (requires care) |
+| **Cost**          | High (server per school)      | Low (shared infrastructure)       |
+| **Complexity**    | Low                           | Medium-High                       |
+| **Revenue Model** | One-time or custom contracts  | SaaS subscription ($50-200/mo)    |
 
 ---
 
@@ -504,6 +508,7 @@ export const updateMeeting = mutation({
 ---
 
 **This architecture provides:**
+
 - ✅ Complete tenant isolation
 - ✅ Scalable to 1000+ schools
 - ✅ Single codebase maintenance

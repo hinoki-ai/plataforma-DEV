@@ -18,7 +18,7 @@ async function checkMasterUser() {
 
     const client = new ConvexHttpClient(deploymentUrl);
     const masterUser = await client.query(api.users.getUserByEmail, {
-      email: "master@manitospintadas.cl"
+      email: "master@manitospintadas.cl",
     });
 
     if (!masterUser) {
@@ -58,8 +58,7 @@ async function checkMasterUser() {
   }
 }
 
-checkMasterUser()
-  .catch((error) => {
-    console.error("Fatal error during master user check:", error);
-    process.exit(1);
-  });
+checkMasterUser().catch((error) => {
+  console.error("Fatal error during master user check:", error);
+  process.exit(1);
+});

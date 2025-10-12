@@ -267,7 +267,7 @@ export async function apiWithRetry<T = unknown>(
   maxRetries: number = 3,
   retryDelay: number = 1000,
 ): Promise<ApiResponse<T>> {
-  let lastError: Error;
+  let lastError: ApiResponse<T> | null = null;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
@@ -284,7 +284,11 @@ export async function apiWithRetry<T = unknown>(
         break;
       }
     } catch (error) {
-      lastError = error;
+      lastError = {
+        success: false,
+        error: "Request Error",
+        message: error instanceof Error ? error.message : String(error),
+      } as ApiResponse<T>;
     }
 
     // Wait before retry (exponential backoff)

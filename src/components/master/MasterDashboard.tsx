@@ -25,7 +25,6 @@ import {
 import { MasterPageTemplate } from "./MasterPageTemplate";
 import { MasterActionCard } from "./MasterActionCard";
 
-
 interface QuickAction {
   id: string;
   title: string;
@@ -283,7 +282,6 @@ function SecurityAlertsCard() {
   );
 }
 
-
 export function MasterDashboard() {
   const { data: session } = useSession();
   useDashboardData();
@@ -301,7 +299,6 @@ export function MasterDashboard() {
       | "secondary",
     href: action.href,
   }));
-
 
   return (
     <MasterPageTemplate

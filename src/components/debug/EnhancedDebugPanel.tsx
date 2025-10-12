@@ -51,7 +51,11 @@ export function EnhancedDebugPanel() {
   const [activeTab, setActiveTab] = useState("console");
 
   const addLog = useCallback(
-    (type: DebugLog["type"], message: string, details?: Record<string, unknown>) => {
+    (
+      type: DebugLog["type"],
+      message: string,
+      details?: Record<string, unknown>,
+    ) => {
       const newLog: DebugLog = {
         id: Date.now().toString(),
         type,
@@ -96,10 +100,14 @@ export function EnhancedDebugPanel() {
           firstContentfulPaint: performanceMetrics.firstContentfulPaint,
         },
         network: {
-          connection: (navigator as NavigatorWithConnection).connection?.type || "unknown",
+          connection:
+            (navigator as NavigatorWithConnection).connection?.type ||
+            "unknown",
           effectiveType:
-            (navigator as NavigatorWithConnection).connection?.effectiveType || "unknown",
-          downlink: (navigator as NavigatorWithConnection).connection?.downlink || 0,
+            (navigator as NavigatorWithConnection).connection?.effectiveType ||
+            "unknown",
+          downlink:
+            (navigator as NavigatorWithConnection).connection?.downlink || 0,
         },
       });
     }

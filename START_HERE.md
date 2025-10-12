@@ -111,12 +111,12 @@ plataforma-astral/
 
 ## 🔐 User Roles & Access
 
-| Role         | Access                  | Default Email                  | Password    |
-| ------------ | ----------------------- | ------------------------------ | ----------- |
+| Role         | Access                  | Default Email                    | Password    |
+| ------------ | ----------------------- | -------------------------------- | ----------- |
 | **ADMIN**    | Full system access      | <admin@plataforma-astral.com>    | admin123    |
 | **PROFESOR** | Teaching tools          | <profesor@plataforma-astral.com> | profesor123 |
 | **PARENT**   | Student info & meetings | <parent@plataforma-astral.com>   | parent123   |
-| **PUBLIC**   | Limited public access   | -                              | -           |
+| **PUBLIC**   | Limited public access   | -                                | -           |
 
 ---
 

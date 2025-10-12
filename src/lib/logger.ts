@@ -254,7 +254,9 @@ export class Logger {
     this.error(`Database Error: ${operation}`, error, {
       context,
       operation,
-      convex: process.env.NEXT_PUBLIC_CONVEX_URL ? "configured" : "not-configured",
+      convex: process.env.NEXT_PUBLIC_CONVEX_URL
+        ? "configured"
+        : "not-configured",
     });
   }
 
