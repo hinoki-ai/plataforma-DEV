@@ -97,7 +97,7 @@ class DeploymentVerifier {
       }
 
       // For production branches, ensure correct tracking
-      if (["prod", "main", "master"].includes(currentBranch)) {
+      if (["main", "master"].includes(currentBranch)) {
         const expectedUpstream = `origin/${currentBranch}`;
         if (upstream !== expectedUpstream) {
           this.errors.push(
@@ -149,7 +149,7 @@ class DeploymentVerifier {
         encoding: "utf8",
       }).trim();
 
-      if (["prod", "main", "master"].includes(currentBranch)) {
+      if (["main", "master"].includes(currentBranch)) {
         // Check production environment file
         const envProdPath = join(process.cwd(), ".env.production");
         if (!existsSync(envProdPath)) {
@@ -160,7 +160,7 @@ class DeploymentVerifier {
         }
 
         const envContent = readFileSync(envProdPath, "utf8");
-        if (!envContent.includes("NEXT_PUBLIC_DOMAIN=manitospintadas.cl")) {
+        if (!envContent.includes("NEXT_PUBLIC_DOMAIN=plataforma-astral.com")) {
           this.errors.push(
             "Production environment file does not have correct domain configuration",
           );

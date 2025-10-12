@@ -44,18 +44,18 @@ case "$APP_ENV" in
     "dev")
         echo "🔧 Validating DEVELOPMENT environment configuration..."
         validate_env_var "APP_ENV" "dev"
-        validate_env_var "NEXT_PUBLIC_DOMAIN" "school.aramac.dev"
+        validate_env_var "NEXT_PUBLIC_DOMAIN" "dev.plataforma-astral.com"
         validate_env_var "CONVEX_URL"
         validate_env_var "NEXTAUTH_SECRET"
-        echo "🎯 Target: school.aramac.dev (frequent deployments)"
+        echo "🎯 Target: dev.plataforma-astral.com (frequent deployments)"
         echo "✅ Development configuration validated"
         ;;
 
-    "prod")
+    "main")
         echo "🔧 Validating PRODUCTION environment configuration..."
         echo "⚠️  WARNING: This is a PRODUCTION deployment!"
-        validate_env_var "APP_ENV" "prod"
-        validate_env_var "NEXT_PUBLIC_DOMAIN" "manitospintadas.cl"
+        validate_env_var "APP_ENV" "main"
+        validate_env_var "NEXT_PUBLIC_DOMAIN" "plataforma-astral.com"
         validate_env_var "CONVEX_URL"
         validate_env_var "NEXTAUTH_SECRET"
 
@@ -65,13 +65,13 @@ case "$APP_ENV" in
             exit 1
         fi
 
-        echo "🎯 Target: manitospintadas.cl (rare deployments)"
+        echo "🎯 Target: plataforma-astral.com (protected deployments)"
         echo "✅ Production configuration validated"
         ;;
 
     *)
         echo "❌ ERROR: Unknown APP_ENV: $APP_ENV"
-        echo "Valid values: dev, prod"
+        echo "Valid values: dev, main"
         exit 1
         ;;
 esac
@@ -82,8 +82,8 @@ if [ "$CURRENT_BRANCH" = "dev" ] && [ "$APP_ENV" != "dev" ]; then
     exit 1
 fi
 
-if [ "$CURRENT_BRANCH" = "prod" ] && [ "$APP_ENV" != "prod" ]; then
-    echo "❌ ERROR: prod branch should use APP_ENV=prod"
+if [ "$CURRENT_BRANCH" = "main" ] && [ "$APP_ENV" != "main" ]; then
+    echo "❌ ERROR: main branch should use APP_ENV=main"
     exit 1
 fi
 

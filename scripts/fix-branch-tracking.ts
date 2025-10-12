@@ -74,7 +74,7 @@ class BranchTracker {
 
   private getExpectedUpstream(branch: string): string {
     // Production branches should track themselves
-    if (["prod", "main", "master"].includes(branch)) {
+    if (["main", "master"].includes(branch)) {
       return `origin/${branch}`;
     }
 

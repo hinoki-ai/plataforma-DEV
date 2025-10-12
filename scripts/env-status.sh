@@ -6,7 +6,7 @@
 # Shows the current environment configuration and branch status
 
 echo "==========================================="
-echo "🏗️  MANITOS PINTADAS - ENVIRONMENT STATUS"
+echo "🏗️  PLATAFORMA ASTRAL - ENVIRONMENT STATUS"
 echo "==========================================="
 
 # Check current git branch
@@ -16,16 +16,12 @@ echo "  Current Branch: $CURRENT_BRANCH"
 
 case $CURRENT_BRANCH in
     "main")
-        echo "  🎯 Target: manitospintadas.cl (main production)"
-        echo "  🔒 Protected branch - no direct deployment"
+        echo "  🎯 Target: plataforma-astral.com (production)"
+        echo "  🔒 Protected branch - requires approval for deployment"
         ;;
     "dev")
-        echo "  🎯 Target: school.aramac.dev (development/staging)"
+        echo "  🎯 Target: dev.plataforma-astral.com (development)"
         echo "  🚧 Development environment - testing & integration"
-        ;;
-    "prod")
-        echo "  🎯 Target: manitospintadas.cl (production)"
-        echo "  🏭 Production environment - stable releases"
         ;;
     *)
         echo "  ⚠️  Feature branch - no deployment target"
@@ -72,10 +68,10 @@ else
     echo "  ❌ vercel.dev.json (missing)"
 fi
 
-if [ -f "vercel.prod.json" ]; then
-    echo "  ✅ vercel.prod.json (production config)"
+if [ -f "vercel.main.json" ]; then
+    echo "  ✅ vercel.main.json (production config)"
 else
-    echo "  ❌ vercel.prod.json (missing)"
+    echo "  ❌ vercel.main.json (missing)"
 fi
 
 echo ""
@@ -90,19 +86,18 @@ echo ""
 echo "📋 Available Deployment Commands:"
 echo "  npm run deploy:local    # Start local development server"
 echo "  npm run deploy:dev      # Deploy to development (dev branch)"
-echo "  npm run deploy:prod     # Deploy to production (prod branch)"
+echo "  npm run deploy:prod     # Deploy to production (main branch)"
 
 echo ""
 echo "🌐 Deployment Targets:"
-echo "  Development: https://school.aramac.dev"
-echo "  Production:  https://manitospintadas.cl"
+echo "  Development: https://dev.plataforma-astral.com"
+echo "  Production:  https://plataforma-astral.com"
 echo "  Local Dev:   http://localhost:3000"
 
 echo ""
 echo "🚀 Branch Deployment Strategy:"
-echo "  main → manitospintadas.cl (protected, no direct deployment)"
-echo "  dev  → school.aramac.dev (development/staging environment)"
-echo "  prod → manitospintadas.cl (production environment)"
+echo "  main → plataforma-astral.com (protected, requires approval)"
+echo "  dev  → dev.plataforma-astral.com (development environment)"
 
 echo ""
 echo "==========================================="

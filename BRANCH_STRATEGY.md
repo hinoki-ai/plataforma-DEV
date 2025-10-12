@@ -1,90 +1,73 @@
 # 🏗️ Branch Strategy - Plataforma Astral SaaS Platform
 
-## Branch Structure
+## Single-Branch Strategy
 
-### ✅ Active Branches
+### ✅ Active Branch
 
 #### `main` (Production Branch)
 
 - **Purpose**: Production-ready SaaS platform code
-- **Environment**: plataforma-astral.com (Main SaaS platform)
-- **Deployment**: Automatic on push (HIGH RISK)
-- **Protection**: Maximum security protection
-- **Workflow**: Only thoroughly tested, production-ready code
+- **Environment**: plataforma.aramac.dev (Production)
+- **Deployment**: Automatic on push to GitHub → Vercel
+- **Backend**: Convex (https://industrious-manatee-7.convex.cloud)
+- **Workflow**: Develop locally, test thoroughly, push to production
 
-#### `prod` (Staging Branch)
+### 🚫 Deprecated Branches (Deleted)
 
-- **Purpose**: Pre-production testing and staging
-- **Environment**: plataforma-astral.com (Staging environment)
-- **Deployment**: Automatic on push
-- **Protection**: Standard protection
-- **Workflow**: Final testing before production deployment
+All other branches have been removed to simplify the workflow:
+- ❌ `dev` - Development is done locally only
+- ❌ `prod` - Merged into main
+- ❌ `master` - Renamed to main
+- ❌ `school.aramac.dev` - Deleted
+- ❌ All feature branches - Deleted
 
-#### `dev` (Development Branch)
+### Why Single Branch?
 
-- **Purpose**: Primary development and testing
-- **Environment**: dev.plataforma-astral.com (Development sandbox)
-- **Deployment**: Automatic on push
-- **Protection**: Light protection
-- **Workflow**: All new features, bug fixes, and experiments
-
-## 🚫 Deprecated Branches
-
-### Deleted Branches
-
-- `master` → Renamed to `main`
-- `dev` → Renamed to `prod`
-- `developer` → Deleted (redundant)
-- `school.aramac.dev` → Renamed to `prod`
-- `manitospintadas.cl` → Renamed to `main`
-
-### Why Three Branches?
-
-- **Multi-environment support**: Separate environments for client, service, and development
-- **Risk isolation**: Client production is protected from service/demo changes
-- **Marketing flexibility**: Service site can be updated independently
-- **Development safety**: Sandbox environment for testing without affecting live sites
+- **Simplicity**: One branch = one source of truth
+- **Less confusion**: No branch management overhead
+- **Faster iteration**: Develop locally → test → push to production
+- **Clean history**: Linear development timeline
 
 ## 🔄 Workflow
 
 ### Development Process
 
 ```bash
-# 1. Always work on dev branch
-git checkout dev
-git pull origin dev
+# 1. Pull latest changes
+git checkout main
+git pull origin main
 
-# 2. Create feature branches if needed (optional)
-git checkout -b feature/new-feature
+# 2. Develop locally
+npm run dev  # Test on localhost:3000
+npx convex dev  # Keep Convex dev server running
 
-# 3. Work and commit
+# 3. Test thoroughly locally
+npm run lint
+npm run type-check
+npm run test:unit
+
+# 4. Commit and deploy
 git add .
 git commit -m "feat: add new feature"
-
-# 4. Merge back to dev (if using feature branches)
-git checkout dev
-git merge feature/new-feature
-
-# 5. Push to deploy to dev environment
-git push origin dev
+git push origin main  # Triggers automatic deployment
 ```
 
-### Staging Deployment (plataforma-astral.com staging)
+### Deployment Flow
 
-```bash
-# Deploy to staging environment
-git checkout prod
-git merge dev  # After testing in dev
-git push origin prod  # Auto-deploys to plataforma-astral.com (staging)
 ```
-
-### Production Deployment (plataforma-astral.com)
-
-```bash
-# Only deploy thoroughly tested, production-ready code
-git checkout main
-git merge prod  # Only after thorough testing
-git push origin main  # Auto-deploys to plataforma-astral.com
+Local Development (localhost:3000)
+          ↓
+    Test Locally
+          ↓
+  Commit to main
+          ↓
+Push to GitHub (main branch)
+          ↓
+Convex Deploy (automatic)
+          ↓
+Vercel Deploy (automatic)
+          ↓
+Production (plataforma.aramac.dev)
 ```
 
 ## 🛡️ Branch Protection
@@ -106,32 +89,35 @@ git push origin main  # Auto-deploys to plataforma-astral.com
 
 ## 📋 Environment Mapping
 
-| Branch | Environment         | URL                         | Auto-deploy | Risk Level |
-| ------ | ------------------- | --------------------------- | ----------- | ---------- |
-| `dev`  | Development Sandbox | `dev.plataforma-astral.com` | ✅ Yes      | 🟢 Low     |
-| `prod` | Staging Environment | `plataforma-astral.com`     | ✅ Yes      | 🟡 Medium  |
-| `main` | Production Platform | `plataforma-astral.com`     | ✅ Yes      | 🔴 High    |
+| Environment       | Location            | URL                      | Backend                                                |
+| ----------------- | ------------------- | ------------------------ | ------------------------------------------------------ |
+| **Development**   | Local Machine       | `localhost:3000`         | Convex Dev (local)                                     |
+| **Production**    | Vercel              | `plataforma.aramac.dev`  | Convex Prod (industrious-manatee-7.convex.cloud)       |
 
 ## ⚠️ Important Rules
 
-1. **Never work directly on `main` or `prod` branches**
-2. **Always develop on `dev` branch first**
-3. **Test on dev before promoting to `prod`**
-4. **Only promote to `main` after thorough testing and approval**
-5. **Run branch checks regularly**: `npm run check-branches`
-6. **Use feature branches for complex changes** (optional)
-7. **Keep all branches clean and deployable**
+1. **All development happens locally** (localhost:3000)
+2. **Test thoroughly before pushing** (lint, type-check, tests)
+3. **Only push to main when ready for production**
+4. **Keep Convex dev server running** during local development
+5. **One branch = One source of truth**
 
-## 🔧 Scripts
+## 🔧 Deployment Commands
 
 ```bash
-# Check for deprecated branches
-npm run check-branches
+# Local development
+npm run dev              # Start Next.js dev server
+npx convex dev          # Start Convex dev server
 
-# Deploy commands (automatic on push to respective branches)
-# dev → dev.plataforma-astral.com
-# prod → plataforma-astral.com (staging)
-# main → plataforma-astral.com (production)
+# Pre-deployment checks
+npm run lint            # Check code quality
+npm run type-check      # Check TypeScript
+npm run test:unit       # Run tests
+
+# Deploy to production
+git add .
+git commit -m "your message"
+git push origin main    # Auto-deploys to plataforma.aramac.dev
 ```
 
 ## 📞 Contact

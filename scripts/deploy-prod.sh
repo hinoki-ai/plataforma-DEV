@@ -3,22 +3,22 @@
 # ===========================================
 # PRODUCTION DEPLOYMENT SCRIPT
 # ===========================================
-# Handles deployment to production environment (prod branch → manitospintadas.cl)
+# Handles deployment to production environment (main branch → plataforma-astral.com)
 
 set -e  # Exit on error
 
 echo "🚀 Starting production deployment..."
 
 # Check if we're in production environment
-if [ "$APP_ENV" = "prod" ] || [ "$NODE_ENV" = "production" ]; then
+if [ "$APP_ENV" = "main" ] || [ "$NODE_ENV" = "production" ]; then
     echo "🔧 Production environment detected"
-    echo "🎯 Target: manitospintadas.cl (RARE deployments)"
+    echo "🎯 Target: plataforma-astral.com (PROTECTED deployments)"
     echo "⚠️  WARNING: This will deploy to LIVE PRODUCTION SITE!"
-    echo "🔒 This should only happen weekly at most"
+    echo "🔒 This should only happen after thorough testing and approval"
 
     # Additional validation
-    if [ "$NEXT_PUBLIC_DOMAIN" != "manitospintadas.cl" ]; then
-        echo "❌ ERROR: Production deployment but NEXT_PUBLIC_DOMAIN is not manitospintadas.cl"
+    if [ "$NEXT_PUBLIC_DOMAIN" != "plataforma-astral.com" ]; then
+        echo "❌ ERROR: Production deployment but NEXT_PUBLIC_DOMAIN is not plataforma-astral.com"
         echo "Current NEXT_PUBLIC_DOMAIN: $NEXT_PUBLIC_DOMAIN"
         exit 1
     fi
