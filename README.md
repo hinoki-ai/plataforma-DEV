@@ -192,70 +192,30 @@ npm run build        # Construir para producción
 npm run start        # Servidor de producción
 ```
 
-## 🚀 Clean 3-Environment Structure
+## 🚀 Simple Deployment Strategy
 
-This project uses a **proper 3-tier environment structure** for maximum clarity and maintainability:
+This project uses **industry-standard single-branch deployment**:
 
 ### Environment Matrix
 
-| Environment     | File               | Branch | URL                         | Purpose           | NODE_ENV    |
-| --------------- | ------------------ | ------ | --------------------------- | ----------------- | ----------- |
-| **Local**       | `.env.local`       | `main` | `localhost:3000`            | Local development | development |
-| **Development** | `.env.development` | `dev`  | `dev.plataforma-astral.com` | Staging/testing   | production  |
-| **Production**  | `.env.production`  | `prod` | `plataforma-astral.com`     | Live production   | production  |
+| Environment     | Location      | URL                      | Purpose               |
+| --------------- | ------------- | ------------------------ | --------------------- |
+| **Development** | Local Machine | `localhost:3000`         | Local development     |
+| **Production**  | Vercel        | `plataforma.aramac.dev`  | Live production       |
 
-### Environment Files
-
-#### 📁 `.env.example` - Template (Committed)
-
-Complete template with all required variables and documentation.
-
-#### 📁 `.env.local` - Local Development (Ignored)
+### Quick Start
 
 ```bash
-# Used for localhost:3000
-NODE_ENV=development
-APP_ENV=dev
-NEXTAUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_CONVEX_URL="https://..."
-```
-
-#### 📁 `.env.development` - Development Deployment (Ignored)
-
-```bash
-# Used for dev.plataforma-astral.com
-NODE_ENV=production
-APP_ENV=dev
-NEXTAUTH_URL="https://dev.plataforma-astral.com"
-NEXT_PUBLIC_CONVEX_URL="https://..."
-```
-
-#### 📁 `.env.production` - Production Deployment (Ignored)
-
-```bash
-# Used for plataforma-astral.com
-NODE_ENV=production
-APP_ENV=prod
-NEXTAUTH_URL="https://plataforma-astral.com"
-NEXT_PUBLIC_CONVEX_URL="https://..."
-```
-
-### Quick Setup
-
-```bash
-# Local development
+# 1. Local development
 cp .env.example .env.local
-npm run dev
+npm run dev              # Next.js on localhost:3000
+npx convex dev          # Convex backend (separate terminal)
 
-# Development deployment
-cp .env.example .env.development
-git checkout dev
-git push origin dev
-
-# Production deployment
-cp .env.example .env.production
-git checkout prod
-git push origin prod
+# 2. Deploy to production
+npm run lint            # Check code quality
+npm run type-check      # Verify TypeScript
+npx convex deploy       # Deploy backend
+git push origin main    # Deploy frontend (auto-deploys to Vercel)
 ```
 
 ### Test Credentials
