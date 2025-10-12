@@ -12,7 +12,9 @@ import type { PlanningDocumentsResponse } from "@/lib/types/service-responses";
 export default function AdminPlanificacionesPage() {
   const { t } = useLanguage();
   const searchParams = useSearchParams();
-  const [documents, setDocuments] = useState<PlanningDocumentsResponse["data"]>([]);
+  const [documents, setDocuments] = useState<PlanningDocumentsResponse["data"]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

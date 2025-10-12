@@ -116,7 +116,10 @@ describe("Calendar System", () => {
   describe("Calendar Permissions", () => {
     it("should allow teacher to create events", () => {
       const userRole = "PROFESOR";
-      const canCreate = userRole === "PROFESOR" || userRole === "ADMIN" || userRole === "MASTER";
+      const canCreate =
+        userRole === "PROFESOR" ||
+        userRole === "ADMIN" ||
+        userRole === "MASTER";
 
       expect(canCreate).toBe(true);
     });
@@ -190,7 +193,10 @@ describe("Calendar System", () => {
     it("should handle database connection failures", async () => {
       mockQuery.mockRejectedValue(new Error("Database connection failed"));
 
-      const result = { success: false, error: "Failed to load calendar events" };
+      const result = {
+        success: false,
+        error: "Failed to load calendar events",
+      };
 
       expect(result.success).toBe(false);
       expect(result.error).toBe("Failed to load calendar events");

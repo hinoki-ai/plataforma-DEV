@@ -151,25 +151,9 @@ export class Logger {
   }
 
   private sendToSentry(logData: LogData) {
-    // Dynamic import to avoid bundle bloat if Sentry isn't used
-    try {
-      // Check if Sentry is available before importing
-      if (typeof window !== "undefined" && (window as any).Sentry) {
-        // Client-side Sentry is available
-        const Sentry = (window as any).Sentry;
-        this.sendToSentryInstance(Sentry, logData);
-      } else {
-        // Try dynamic import for server-side
-        import("@sentry/nextjs")
-          .then((Sentry) => {
-            this.sendToSentryInstance(Sentry.default || Sentry, logData);
-          })
-          .catch(() => {
-            // Sentry not available, silently ignore
-          });
-      }
-    } catch {
-      // Sentry not available, silently ignore
+    // Sentry integration disabled - not configured in this environment
+    if (process.env.NODE_ENV === "development") {
+      console.warn("Sentry integration is not available");
     }
   }
 

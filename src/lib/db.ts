@@ -8,7 +8,9 @@ import { api } from "../../convex/_generated/api";
 
 // Create a mock Prisma client that mimics the structure expected by tests
 const createMockPrismaClient = () => {
-  const convexClient = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+  const convexClient = new ConvexHttpClient(
+    process.env.NEXT_PUBLIC_CONVEX_URL!,
+  );
 
   return {
     $connect: async () => {},

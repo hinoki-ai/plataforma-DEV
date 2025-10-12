@@ -71,8 +71,8 @@ describe("Notifications API Tests", () => {
         { id: "3", read: false },
       ];
 
-      const unreadNotifications = allNotifications.filter(n => !n.read);
-      const readNotifications = allNotifications.filter(n => n.read);
+      const unreadNotifications = allNotifications.filter((n) => !n.read);
+      const readNotifications = allNotifications.filter((n) => n.read);
 
       expect(unreadNotifications).toHaveLength(2);
       expect(readNotifications).toHaveLength(1);
@@ -89,7 +89,10 @@ describe("Notifications API Tests", () => {
       const startIndex = (page - 1) * pageSize;
       const endIndex = startIndex + pageSize;
 
-      const paginatedNotifications = allNotifications.slice(startIndex, endIndex);
+      const paginatedNotifications = allNotifications.slice(
+        startIndex,
+        endIndex,
+      );
 
       expect(paginatedNotifications).toHaveLength(10);
       expect(paginatedNotifications[0].id).toBe("notif-0");
@@ -137,7 +140,9 @@ describe("Notifications API Tests", () => {
 
       expect(validNotification.title.length).toBeGreaterThan(0);
       expect(validNotification.message).toBeDefined();
-      expect(["info", "warning", "error", "success"]).toContain(validNotification.type);
+      expect(["info", "warning", "error", "success"]).toContain(
+        validNotification.type,
+      );
 
       expect(invalidNotification.title.length).toBe(0);
       expect(invalidNotification.message).toBeNull();
@@ -172,17 +177,25 @@ describe("Notifications API Tests", () => {
 
   describe("Notification Types", () => {
     it("should support different notification types", () => {
-      const notificationTypes = ["info", "warning", "error", "success", "reminder"];
+      const notificationTypes = [
+        "info",
+        "warning",
+        "error",
+        "success",
+        "reminder",
+      ];
 
-      notificationTypes.forEach(type => {
-        expect(["info", "warning", "error", "success", "reminder"]).toContain(type);
+      notificationTypes.forEach((type) => {
+        expect(["info", "warning", "error", "success", "reminder"]).toContain(
+          type,
+        );
       });
     });
 
     it("should handle notification priorities", () => {
       const priorities = ["low", "medium", "high", "urgent"];
 
-      priorities.forEach(priority => {
+      priorities.forEach((priority) => {
         expect(["low", "medium", "high", "urgent"]).toContain(priority);
       });
     });
@@ -229,7 +242,7 @@ describe("Notifications API Tests", () => {
         read: Math.random() > 0.5,
       }));
 
-      const unreadCount = largeNotificationSet.filter(n => !n.read).length;
+      const unreadCount = largeNotificationSet.filter((n) => !n.read).length;
 
       expect(largeNotificationSet.length).toBe(1000);
       expect(unreadCount).toBeGreaterThanOrEqual(0);

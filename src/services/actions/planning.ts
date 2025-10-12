@@ -207,6 +207,9 @@ export async function createPlanningDocumentFromTemplate(
     if (error instanceof Error && error.message === "Plantilla no válida") {
       throw error;
     }
-    return { success: false, error: "No se pudo crear el documento desde la plantilla" };
+    return {
+      success: false,
+      error: "No se pudo crear el documento desde la plantilla",
+    };
   }
 }

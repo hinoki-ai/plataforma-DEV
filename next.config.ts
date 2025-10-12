@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   compress: true,
   poweredByHeader: false,
-  
+
   // Skip trailing slash redirect for better compatibility
   skipTrailingSlashRedirect: true,
 

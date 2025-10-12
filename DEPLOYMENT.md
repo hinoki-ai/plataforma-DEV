@@ -10,11 +10,11 @@ localhost:3000 → test → commit → push main → plataforma.aramac.dev
 
 ## 🏗️ Architecture
 
-| Component      | Service                                   | URL/Endpoint                                           |
-| -------------- | ----------------------------------------- | ------------------------------------------------------ |
-| **Frontend**   | Vercel                                    | `plataforma.aramac.dev`                                |
-| **Backend**    | Convex                                    | `https://industrious-manatee-7.convex.cloud`           |
-| **Repository** | GitHub                                    | `github.com/hinoki-ai/plataforma-DEV`                  |
+| Component      | Service | URL/Endpoint                                 |
+| -------------- | ------- | -------------------------------------------- |
+| **Frontend**   | Vercel  | `plataforma.aramac.dev`                      |
+| **Backend**    | Convex  | `https://industrious-manatee-7.convex.cloud` |
+| **Repository** | GitHub  | `github.com/hinoki-ai/plataforma-DEV`        |
 
 ## 🚀 Quick Deployment
 

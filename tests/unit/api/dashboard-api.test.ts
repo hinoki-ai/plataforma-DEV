@@ -88,9 +88,9 @@ describe("Dashboard API Tests", () => {
       ];
 
       const totalUsers = users.length;
-      const activeUsers = users.filter(u => u.active).length;
-      const adminUsers = users.filter(u => u.role === "ADMIN").length;
-      const profesorUsers = users.filter(u => u.role === "PROFESOR").length;
+      const activeUsers = users.filter((u) => u.active).length;
+      const adminUsers = users.filter((u) => u.role === "ADMIN").length;
+      const profesorUsers = users.filter((u) => u.role === "PROFESOR").length;
 
       expect(totalUsers).toBe(4);
       expect(activeUsers).toBe(3);
@@ -107,8 +107,10 @@ describe("Dashboard API Tests", () => {
       ];
 
       const totalDocuments = documents.length;
-      const publishedDocuments = documents.filter(d => d.published).length;
-      const planningDocuments = documents.filter(d => d.type === "planning").length;
+      const publishedDocuments = documents.filter((d) => d.published).length;
+      const planningDocuments = documents.filter(
+        (d) => d.type === "planning",
+      ).length;
 
       expect(totalDocuments).toBe(4);
       expect(publishedDocuments).toBe(3);
@@ -133,7 +135,7 @@ describe("Dashboard API Tests", () => {
         active: Math.random() > 0.2, // 80% active
       }));
 
-      const activeCount = largeUserSet.filter(u => u.active).length;
+      const activeCount = largeUserSet.filter((u) => u.active).length;
       const inactiveCount = largeUserSet.length - activeCount;
 
       expect(largeUserSet.length).toBe(1000);
@@ -155,11 +157,11 @@ describe("Dashboard API Tests", () => {
       const validRoles = ["ADMIN", "MASTER"];
       const invalidRoles = ["PROFESOR", "PARENT", "PUBLIC"];
 
-      validRoles.forEach(role => {
+      validRoles.forEach((role) => {
         expect(["ADMIN", "MASTER"]).toContain(role);
       });
 
-      invalidRoles.forEach(role => {
+      invalidRoles.forEach((role) => {
         expect(["ADMIN", "MASTER"]).not.toContain(role);
       });
     });

@@ -15,6 +15,7 @@
 ### 🚫 Deprecated Branches (Deleted)
 
 All other branches have been removed to simplify the workflow:
+
 - ❌ `dev` - Development is done locally only
 - ❌ `prod` - Merged into main
 - ❌ `master` - Renamed to main
@@ -89,10 +90,10 @@ Production (plataforma.aramac.dev)
 
 ## 📋 Environment Mapping
 
-| Environment       | Location            | URL                      | Backend                                                |
-| ----------------- | ------------------- | ------------------------ | ------------------------------------------------------ |
-| **Development**   | Local Machine       | `localhost:3000`         | Convex Dev (local)                                     |
-| **Production**    | Vercel              | `plataforma.aramac.dev`  | Convex Prod (industrious-manatee-7.convex.cloud)       |
+| Environment     | Location      | URL                     | Backend                                          |
+| --------------- | ------------- | ----------------------- | ------------------------------------------------ |
+| **Development** | Local Machine | `localhost:3000`        | Convex Dev (local)                               |
+| **Production**  | Vercel        | `plataforma.aramac.dev` | Convex Prod (industrious-manatee-7.convex.cloud) |
 
 ## ⚠️ Important Rules
 

@@ -26,15 +26,21 @@ export async function GET() {
     });
 
     // Get upcoming meetings
-    const upcomingMeetings = await client.query(api.meetings.getMeetingsByParent, {
-      parentId: session.user.id as any, // Convex ID type
-    });
+    const upcomingMeetings = await client.query(
+      api.meetings.getMeetingsByParent,
+      {
+        parentId: session.user.id as any, // Convex ID type
+      },
+    );
 
     // Get recent notifications
-    const recentNotifications = await client.query(api.notifications.getNotifications, {
-      recipientId: session.user.id as any, // Convex ID type
-      limit: 5,
-    });
+    const recentNotifications = await client.query(
+      api.notifications.getNotifications,
+      {
+        recipientId: session.user.id as any, // Convex ID type
+        limit: 5,
+      },
+    );
 
     const data = {
       students,

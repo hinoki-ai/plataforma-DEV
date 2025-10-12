@@ -84,10 +84,14 @@ export function FileUpload({
     });
 
   const getFileIcon = (file: File) => {
-    if (file.type.startsWith("image/")) return <Image className="h-4 w-4" />;
-    if (file.type.includes("pdf")) return <FileText className="h-4 w-4" />;
-    if (file.type.startsWith("video/")) return <Video className="h-4 w-4" />;
-    return <File className="h-4 w-4" />;
+    if (file.type.startsWith("image/"))
+      // eslint-disable-next-line jsx-a11y/alt-text
+      return <Image className="h-4 w-4" aria-hidden="true" />;
+    if (file.type.includes("pdf"))
+      return <FileText className="h-4 w-4" aria-hidden="true" />;
+    if (file.type.startsWith("video/"))
+      return <Video className="h-4 w-4" aria-hidden="true" />;
+    return <File className="h-4 w-4" aria-hidden="true" />;
   };
 
   const formatFileSize = (bytes: number) => {

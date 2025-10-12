@@ -198,10 +198,10 @@ This project uses **industry-standard single-branch deployment**:
 
 ### Environment Matrix
 
-| Environment     | Location      | URL                      | Purpose               |
-| --------------- | ------------- | ------------------------ | --------------------- |
-| **Development** | Local Machine | `localhost:3000`         | Local development     |
-| **Production**  | Vercel        | `plataforma.aramac.dev`  | Live production       |
+| Environment     | Location      | URL                     | Purpose           |
+| --------------- | ------------- | ----------------------- | ----------------- |
+| **Development** | Local Machine | `localhost:3000`        | Local development |
+| **Production**  | Vercel        | `plataforma.aramac.dev` | Live production   |
 
 ### Quick Start
 
