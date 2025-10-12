@@ -1,5 +1,7 @@
 "use client";
 
+// Global error must include html and body tags per Next.js App Router requirements
+// This is the only place where html/body tags are allowed outside of layout.tsx
 export default function GlobalError({
   error,
   reset,
@@ -8,7 +10,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   return (
-    <html lang="es-CL">
+    <html lang="es-CL" suppressHydrationWarning>
       <body style={{
         margin: 0,
         minHeight: '100vh',

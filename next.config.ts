@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
-import bundleAnalyzer from "@next/bundle-analyzer";
+// Temporarily disabled bundle analyzer to troubleshoot build issues
+// import bundleAnalyzer from "@next/bundle-analyzer";
 
 // Bundle analyzer configuration
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
+// const withBundleAnalyzer = bundleAnalyzer({
+//   enabled: process.env.ANALYZE === "true",
+// });
 
 const nextConfig: NextConfig = {
   // ESLint configuration - disable during build to prevent deployment failures
@@ -12,10 +13,21 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  // TypeScript configuration - skip type checking during build (done separately)
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+
+  // Output configuration - use standalone for server deployment
+  output: "standalone",
+
   // Performance optimizations
   productionBrowserSourceMaps: false,
   compress: true,
   poweredByHeader: false,
+  
+  // Skip trailing slash redirect for better compatibility
+  skipTrailingSlashRedirect: true,
 
   // Turbopack-optimized build configuration with maximum performance
   turbopack: {
@@ -149,4 +161,6 @@ const nextConfig: NextConfig = {
   // },
 };
 
-export default withBundleAnalyzer(nextConfig);
+// Temporarily exporting config directly without bundle analyzer
+export default nextConfig;
+// export default withBundleAnalyzer(nextConfig);
