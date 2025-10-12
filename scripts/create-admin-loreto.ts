@@ -17,10 +17,18 @@ const client = new ConvexHttpClient(CONVEX_URL);
 
 const ADMIN_ACCOUNT = {
   email: "loreto@astral.cl",
-  password: "Emilia2021-",
+  password: process.env.ADMIN_PASSWORD || "",
   name: "Loreto",
   role: "ADMIN" as const,
 };
+
+if (!ADMIN_ACCOUNT.password) {
+  console.error("❌ ADMIN_PASSWORD environment variable is not set");
+  console.log(
+    "Usage: ADMIN_PASSWORD='your-password' npx tsx scripts/create-admin-loreto.ts",
+  );
+  process.exit(1);
+}
 
 async function createAdminAccount() {
   console.log("🔍 Checking for admin account...");

@@ -18,8 +18,16 @@ const client = new ConvexHttpClient(CONVEX_URL);
 
 const MASTER_CREDENTIALS = {
   email: "agustin@astral.cl",
-  password: "59163476a",
+  password: process.env.MASTER_PASSWORD || "",
 };
+
+if (!MASTER_CREDENTIALS.password) {
+  console.error("❌ MASTER_PASSWORD environment variable is not set");
+  console.log(
+    "Usage: MASTER_PASSWORD='your-password' npx tsx scripts/verify-master-login.ts",
+  );
+  process.exit(1);
+}
 
 async function verifyLogin() {
   console.log("🔐 Verifying master account login...\n");

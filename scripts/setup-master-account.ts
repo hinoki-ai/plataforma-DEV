@@ -18,10 +18,18 @@ const client = new ConvexHttpClient(CONVEX_URL);
 
 const MASTER_ACCOUNT = {
   email: "agustin@astral.cl",
-  password: "59163476a",
+  password: process.env.MASTER_PASSWORD || "",
   name: "Agustin - Master Admin",
   role: "MASTER" as const,
 };
+
+if (!MASTER_ACCOUNT.password) {
+  console.error("❌ MASTER_PASSWORD environment variable is not set");
+  console.log(
+    "Usage: MASTER_PASSWORD='your-password' npx tsx scripts/setup-master-account.ts",
+  );
+  process.exit(1);
+}
 
 async function setupMasterAccount() {
   console.log("🔍 Checking for master account...");
