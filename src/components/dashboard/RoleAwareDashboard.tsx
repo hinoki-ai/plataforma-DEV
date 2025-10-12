@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { useSession } from "next-auth/react";
 import {
   Card,
@@ -23,11 +23,9 @@ import {
   AlertCircle,
   Crown,
   Shield,
-  GraduationCap,
   User,
   Eye,
   Plus,
-  Settings,
   Bell,
   Activity,
   Database,
@@ -36,7 +34,6 @@ import {
   Vote,
   Mail,
 } from "lucide-react";
-import { SkeletonLoader, ActionLoader } from "@/components/ui/unified-loader";
 import Link from "next/link";
 import { UserRole } from "@/lib/prisma-compat-types";
 import { getRoleDisplayName } from "@/lib/role-utils";
@@ -430,7 +427,7 @@ function RoleStats({ role }: { role: UserRole }) {
 
 export function RoleAwareDashboard() {
   const { data: session } = useSession();
-  const { state, actions, user } = useNavigation();
+  const { user } = useNavigation();
   const pathname = usePathname();
 
   // Determine the contextual role based on current path for MASTER users
@@ -471,11 +468,6 @@ export function RoleAwareDashboard() {
     );
   }
 
-  const isDashboardPage =
-    pathname === "/admin" ||
-    pathname === "/profesor" ||
-    pathname === "/parent" ||
-    pathname === "/";
 
   return (
     <div className="space-y-6">

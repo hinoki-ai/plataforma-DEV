@@ -192,12 +192,12 @@ class DeploymentVerifier {
   private checkDatabaseConnection(): boolean {
     try {
       console.log("🗄️  Testing database connection...");
-      execSync("npm run db:studio --version", { stdio: "pipe" });
-      console.log("✅ Database connection test passed");
+      execSync("npx convex dev --version", { stdio: "pipe" });
+      console.log("✅ Convex connection test passed");
       return true;
     } catch (error) {
       this.warnings.push(
-        "Database connection test failed. Ensure DATABASE_URL is set correctly.",
+        "Convex connection test failed. Ensure CONVEX_URL is set correctly.",
       );
       return true; // Not critical
     }

@@ -1,27 +1,24 @@
 #!/usr/bin/env tsx
 /**
  * Verify Custom Master User Script
- * Verifies that the custom master user exists and has correct credentials
+ * Verifies that the custom master user exists and has correct credentials using Convex
  */
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../convex/_generated/api";
 
 async function verifyCustomMasterUser() {
   console.log("🔍 Verifying custom master user...");
 
   try {
-    const masterUser = await prisma.user.findUnique({
-      where: { email: "agustinaramac@gmail.com" },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        isActive: true,
-        password: true, // We'll just check if it exists
-      },
+    const deploymentUrl = process.env.CONVEX_URL;
+    if (!deploymentUrl) {
+      throw new Error("CONVEX_URL environment variable is not set");
+    }
+
+    const client = new ConvexHttpClient(deploymentUrl);
+    const masterUser = await client.query(api.users.getUserByEmail, {
+      email: "agustinaramac@gmail.com"
     });
 
     if (!masterUser) {
@@ -65,7 +62,4 @@ verifyCustomMasterUser()
   .catch((error) => {
     console.error("Fatal error during custom master user verification:", error);
     process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
   });

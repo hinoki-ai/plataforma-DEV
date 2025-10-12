@@ -579,7 +579,7 @@ The API includes several performance optimizations:
 ### Environment Variables
 
 ```env
-DATABASE_URL=postgresql://...
+CONVEX_URL=[Convex deployment URL]
 NEXTAUTH_SECRET=your-secret-key
 NEXTAUTH_URL=https://your-domain.com
 GOOGLE_CLIENT_ID=...
@@ -616,6 +616,6 @@ npm start
 
 For API support and questions:
 
-- Email: support@manitospintadas.com
-- Documentation: https://docs.manitospintadas.com
-- API Status: https://status.manitospintadas.com
+- Email: <support@manitospintadas.com>
+- Documentation: <https://docs.manitospintadas.com>
+- API Status: <https://status.manitospintadas.com>

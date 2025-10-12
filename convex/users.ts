@@ -4,8 +4,9 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { query, mutation, action } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
+import { api } from "./_generated/api";
 
 // ==================== QUERIES ====================
 
@@ -98,7 +99,7 @@ export const getUserCountByRole = query({
 // ==================== MUTATIONS ====================
 
 /**
- * Create a new user
+ * Create a new user (internal mutation)
  */
 export const createUser = mutation({
   args: {
@@ -149,6 +150,49 @@ export const createUser = mutation({
       createdAt: now,
       updatedAt: now,
     });
+  },
+});
+
+/**
+ * Create a new user (public action for admin/master user creation)
+ */
+export const createUserAction: any = action({
+  args: {
+    name: v.optional(v.string()),
+    email: v.string(),
+    password: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    role: v.union(
+      v.literal("MASTER"),
+      v.literal("ADMIN"),
+      v.literal("PROFESOR"),
+      v.literal("PARENT"),
+      v.literal("PUBLIC"),
+    ),
+    image: v.optional(v.string()),
+    provider: v.optional(v.string()),
+    isOAuthUser: v.optional(v.boolean()),
+    createdByAdmin: v.optional(v.string()),
+    parentRole: v.optional(v.string()),
+    status: v.optional(
+      v.union(
+        v.literal("PENDING"),
+        v.literal("ACTIVE"),
+        v.literal("INACTIVE"),
+        v.literal("SUSPENDED"),
+      ),
+    ),
+  },
+  handler: async (ctx, args): Promise<Id<"users">> => {
+    // Check if user already exists
+    const existingUser = await ctx.runQuery(api.users.getUserByEmail, { email: args.email });
+
+    if (existingUser) {
+      throw new Error("User with this email already exists");
+    }
+
+    // Use the internal mutation to create the user
+    return await ctx.runMutation(api.users.createUser, args);
   },
 });
 

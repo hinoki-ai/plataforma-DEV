@@ -17,14 +17,14 @@ if (!deploymentUrl) {
   process.exit(1);
 }
 
-async function createAdmin() {
+async function createMasterUser() {
   const client = new ConvexHttpClient(deploymentUrl);
 
-  console.log("🔍 Creating admin user...\n");
+  console.log("🔍 Creating master user...\n");
 
-  const email = "admin@astra.cl";
-  const password = "admin123";
-  const name = "Admin Astra";
+  const email = "agustinaramac@gmail.com";
+  const password = "59163476a";
+  const name = "Agostino";
 
   try {
     // Hash password
@@ -34,8 +34,8 @@ async function createAdmin() {
     // First check if user exists
     console.log(`📧 Checking if ${email} exists...`);
 
-    // Create the user using internal function (we'll use fetch to call Convex directly)
-    const createUserUrl = `${deploymentUrl}/api/mutation`;
+    // Create the user using action (public function)
+    const createUserUrl = `${deploymentUrl}/api/action`;
 
     const response = await fetch(createUserUrl, {
       method: "POST",
@@ -43,12 +43,12 @@ async function createAdmin() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        path: "users:createUser",
+        path: "users:createUserAction",
         args: {
           email: email,
           password: hashedPassword,
           name: name,
-          role: "ADMIN",
+          role: "MASTER",
           isOAuthUser: false,
         },
         format: "json",
@@ -58,11 +58,11 @@ async function createAdmin() {
     const result = await response.json();
 
     if (response.ok && result.status === "success") {
-      console.log("✅ Admin user created successfully!");
+      console.log("✅ Master user created successfully!");
       console.log(`\n🔑 Login Credentials:`);
       console.log(`   Email: ${email}`);
       console.log(`   Password: ${password}`);
-      console.log(`   Role: ADMIN`);
+      console.log(`   Role: MASTER`);
     } else {
       console.error("❌ Error creating user:", result);
       if (result.errorMessage?.includes("already exists")) {
@@ -79,4 +79,4 @@ async function createAdmin() {
   }
 }
 
-createAdmin();
+createMasterUser();

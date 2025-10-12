@@ -4,7 +4,7 @@
 
 This project uses a **proper 3-tier environment structure** for maximum clarity and maintainability:
 
-```
+```text
 .env.example       ✅ Template (committed to git)
 .env.local         ✅ Local development (ignored by git)
 .env.development   ✅ Development deployment (ignored by git)
@@ -32,7 +32,7 @@ Complete template with all required variables and documentation.
 NODE_ENV=development
 APP_ENV=dev
 NEXTAUTH_URL="http://localhost:3000"
-DATABASE_URL="postgresql://..."  # Supabase connection
+CONVEX_URL="[Convex dev deployment URL]"  # Convex connection
 ```
 
 ### 📁 `.env.development` - Development Deployment (Ignored)
@@ -42,7 +42,7 @@ DATABASE_URL="postgresql://..."  # Supabase connection
 NODE_ENV=production
 APP_ENV=dev
 NEXTAUTH_URL="https://dev.school.aramac.dev"
-DATABASE_URL="postgresql://..."  # Same as production
+CONVEX_URL="[Convex prod deployment URL]"  # Same as production
 ```
 
 ### 📁 `.env.production` - Production Deployment (Ignored)
@@ -52,20 +52,20 @@ DATABASE_URL="postgresql://..."  # Same as production
 NODE_ENV=production
 APP_ENV=prod
 NEXTAUTH_URL="https://school.aramac.dev"
-DATABASE_URL="postgresql://..."  # Supabase production
+CONVEX_URL="[Convex prod deployment URL]"  # Convex production
 ```
 
 ## 🚀 Quick Setup
 
-### Local Development:
+### Local Development
 
 ```bash
 cp .env.example .env.local
-# Edit .env.local if needed (DATABASE_URL is already configured)
+# Edit .env.local if needed (CONVEX_URL is already configured)
 npm run dev
 ```
 
-### Development Deployment:
+### Development Deployment
 
 ```bash
 cp .env.example .env.development
@@ -74,7 +74,7 @@ git checkout dev
 git push origin dev
 ```
 
-### Production Deployment:
+### Production Deployment
 
 ```bash
 cp .env.example .env.production
@@ -98,7 +98,7 @@ Once deployed, login with:
 
 ## 🐛 Troubleshooting
 
-### Database Issues:
+### Database Issues
 
 ```bash
 # Check database connection
@@ -108,7 +108,7 @@ curl https://[domain]/api/health
 npm run db:seed:emergency
 ```
 
-### Authentication Issues:
+### Authentication Issues
 
 ```bash
 # Check NextAuth configuration

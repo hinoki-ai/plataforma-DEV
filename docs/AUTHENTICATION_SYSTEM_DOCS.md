@@ -2,7 +2,7 @@
 
 **Last Updated**: September 1, 2025  
 **Status**: Fully Operational ✅  
-**Site**: https://school.aramac.dev
+**Site**: <https://school.aramac.dev>
 
 ## 🏗️ SYSTEM ARCHITECTURE
 
@@ -44,7 +44,7 @@ The Plataforma Astral authentication system uses **NextAuth.js v5** with a hybri
 
 - `NEXTAUTH_URL`: Must match exact production domain
 - `NEXTAUTH_SECRET`: 32+ character secret key
-- `DATABASE_URL`: PostgreSQL connection string
+- `CONVEX_URL`: Convex deployment URL
 
 ### 2. Database Authentication (`src/lib/auth-prisma.ts`)
 
@@ -146,7 +146,7 @@ const isValid = await verifyPassword(plaintext, hashed);
 # Core Authentication
 NEXTAUTH_URL="https://school.aramac.dev"
 NEXTAUTH_SECRET="production-secret-32-chars-minimum"
-DATABASE_URL="postgresql://user:pass@host:port/db"
+CONVEX_URL="[Convex deployment URL]"
 
 # OAuth Providers
 GOOGLE_CLIENT_ID="your-google-client-id"
@@ -162,7 +162,7 @@ CLOUDINARY_URL="cloudinary://api-key:secret@cloud-name"
 # Local Development
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="dev-secret-key-32-chars-minimum"
-DATABASE_URL="postgresql://localhost:5432/school_dev"
+CONVEX_URL="[Convex development deployment URL]"
 ```
 
 ### Environment File Hierarchy
@@ -195,7 +195,7 @@ curl -I https://school.aramac.dev
 ### Deployment Checklist
 
 - [ ] Verify NEXTAUTH_URL matches production domain
-- [ ] Confirm DATABASE_URL points to production database
+- [ ] Confirm CONVEX_URL points to production Convex deployment
 - [ ] Test OAuth provider redirects work
 - [ ] Validate all environment variables are set
 - [ ] Run post-deployment authentication test

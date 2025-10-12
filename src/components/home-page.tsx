@@ -26,7 +26,7 @@ import {
 export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
-  const { t, _language, _loadedNamespaces, _isLoading, _error } = useLanguage();
+  const { t } = useLanguage();
 
   // Component mounted successfully
 

@@ -93,9 +93,9 @@ NEXTAUTH_URL="https://school.aramac.dev"  # CURRENT DOMAIN
 
 ### Test Credentials (Post-Fix)
 
-- **ADMIN**: admin@manitospintadas.cl / admin123
-- **PROFESOR**: profesor@manitospintadas.cl / profesor123
-- **PARENT**: parent@manitospintadas.cl / parent123
+- **ADMIN**: `admin@manitospintadas.cl` / `admin123`
+- **PROFESOR**: `profesor@manitospintadas.cl` / `profesor123`
+- **PARENT**: `parent@manitospintadas.cl` / `parent123`
 
 ### System Status Checks
 
@@ -165,7 +165,7 @@ NEXTAUTH_URL="https://school.aramac.dev"  # CURRENT DOMAIN
 # Core Authentication
 NEXTAUTH_URL="https://school.aramac.dev"
 NEXTAUTH_SECRET="your-secret-key"
-DATABASE_URL="postgresql://..."
+CONVEX_URL="[Convex deployment URL]"
 
 # OAuth (Optional)
 GOOGLE_CLIENT_ID="..."
@@ -193,8 +193,8 @@ npx vercel ls
 
 If authentication fails, emergency admin access is available:
 
-- **Email**: admin@manitospintadas.cl
-- **Password**: admin123
+- **Email**: `admin@manitospintadas.cl`
+- **Password**: `admin123`
 - **Bypass Location**: `src/lib/auth-prisma.ts` lines 27-40 and 82-94
 
 ## 📋 POST-INCIDENT CHECKLIST

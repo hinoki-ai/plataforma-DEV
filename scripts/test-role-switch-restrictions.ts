@@ -3,7 +3,7 @@
  * This script tests that only MASTER users can switch roles
  */
 
-import { UserRole } from "@prisma/client";
+import { UserRole } from "../src/lib/prisma-compat-types";
 
 interface TestUser {
   id: string;

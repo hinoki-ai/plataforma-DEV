@@ -6,7 +6,7 @@ El Sistema de Votaciones es una plataforma integral para la gestión democrátic
 
 ## 🎯 Características Principales
 
-### Para Administradores
+### Características para Administradores
 
 - ✅ **Gestión Completa de Votaciones**: Crear, editar, eliminar y monitorear votaciones
 - ✅ **Categorización Avanzada**: 10 categorías predefinidas (Académico, Financiero, etc.)
@@ -15,7 +15,7 @@ El Sistema de Votaciones es una plataforma integral para la gestión democrátic
 - ✅ **Control de Acceso**: Gestión de permisos y autenticación
 - ✅ **Interfaz Intuitiva**: Dashboard moderno con filtros y búsqueda
 
-### Para Padres
+### Características para Padres
 
 - ✅ **Votación Segura**: Autenticación requerida, una votación por usuario
 - ✅ **Resultados Transparentes**: Visualización en tiempo real de resultados
@@ -147,7 +147,7 @@ npx tsx scripts/create-sample-votes.ts
 
 ## 📱 Uso del Sistema
 
-### Para Administradores
+### Guía para Administradores
 
 #### Crear Nueva Votación
 
@@ -168,7 +168,7 @@ npx tsx scripts/create-sample-votes.ts
 - **Filtrar**: Usar filtros por estado o búsqueda por texto
 - **Ver Resultados**: Los resultados se muestran en tiempo real
 
-### Para Padres
+### Guía para Padres
 
 #### Participar en Votaciones
 
@@ -191,7 +191,7 @@ npx tsx scripts/create-sample-votes.ts
 
 ```env
 # Base de datos
-DATABASE_URL="postgresql://..."
+CONVEX_URL="[Convex deployment URL]"
 
 # Autenticación
 NEXTAUTH_URL="http://localhost:3000"
@@ -300,7 +300,7 @@ npm run test
 
 ### Contacto
 
-- **Email**: soporte@manitospintadas.cl
+- **Email**: <soporte@manitospintadas.cl>
 - **Teléfono**: (45) 278 3486
 - **Horarios**: Lunes a Viernes 8:00 - 17:00
 
@@ -312,4 +312,4 @@ npm run test
 
 ---
 
-**Desarrollado con ❤️ para la Plataforma Educativa Astral**
+Desarrollado con ❤️ para la Plataforma Educativa Astral

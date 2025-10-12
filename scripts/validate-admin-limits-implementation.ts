@@ -44,7 +44,7 @@ class AdminLimitsValidator {
     if (passed === total) {
       console.log("🎉 ALL VALIDATIONS PASSED! Implementation is flawless.");
       console.log("\n🚀 Ready for deployment!");
-      console.log("   1. Set up DATABASE_URL environment variable");
+      console.log("   1. Set up CONVEX_URL environment variable");
       console.log("   2. Run: tsx scripts/apply-admin-tracking-migration.ts");
       console.log("   3. Test: tsx scripts/test-admin-limits.ts");
     } else {

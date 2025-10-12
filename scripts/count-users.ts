@@ -1,12 +1,11 @@
 #!/usr/bin/env tsx
 /**
  * User Count Script
- * Counts and displays all users in the database
+ * Counts and displays all users in the Convex database
  */
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../convex/_generated/api";
 
 async function countUsers() {
   const format = process.argv.includes("--json") ? "json" : "text";
@@ -14,76 +13,69 @@ async function countUsers() {
     process.argv.includes("--details") || process.env.DEBUG === "true";
 
   try {
-    // Get total count
-    const totalUsers = await prisma.user.count();
+    const deploymentUrl = process.env.CONVEX_URL;
+    if (!deploymentUrl) {
+      throw new Error("CONVEX_URL environment variable is not set");
+    }
 
-    // Get count by role
-    const usersByRole = await prisma.user.groupBy({
-      by: ["role"],
-      _count: {
-        role: true,
-      },
-    });
+    const client = new ConvexHttpClient(deploymentUrl);
+
+    // Get user count by role from Convex
+    const userCounts = await client.query(api.users.getUserCountByRole);
 
     if (format === "json") {
       console.log(
         JSON.stringify(
           {
-            total: totalUsers,
-            byRole: usersByRole.reduce(
-              (acc, group) => {
-                acc[group.role] = group._count.role;
-                return acc;
-              },
-              {} as Record<string, number>,
-            ),
+            total: userCounts.total,
+            byRole: {
+              MASTER: userCounts.MASTER,
+              ADMIN: userCounts.ADMIN,
+              PROFESOR: userCounts.PROFESOR,
+              PARENT: userCounts.PARENT,
+              PUBLIC: userCounts.PUBLIC,
+            },
             timestamp: new Date().toISOString(),
           },
           null,
           2,
         ),
       );
-      return { totalUsers, usersByRole };
+      return userCounts;
     }
 
     // Text format output
-    console.log(`👥 ${totalUsers} users in database`);
+    console.log(`👥 ${userCounts.total} users in Convex database`);
 
     if (showDetails) {
       console.log("\n📊 By Role:");
-      usersByRole.forEach((group) => {
-        console.log(`  ${group.role}: ${group._count.role}`);
-      });
+      console.log(`  MASTER: ${userCounts.MASTER}`);
+      console.log(`  ADMIN: ${userCounts.ADMIN}`);
+      console.log(`  PROFESOR: ${userCounts.PROFESOR}`);
+      console.log(`  PARENT: ${userCounts.PARENT}`);
+      console.log(`  PUBLIC: ${userCounts.PUBLIC}`);
 
       console.log("\n📋 Recent Users:");
-      const recentUsers = await prisma.user.findMany({
-        select: {
-          name: true,
-          email: true,
-          role: true,
-          isActive: true,
-          createdAt: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 10,
-      });
+      // Get all users and sort by createdAt desc to get recent ones
+      const allUsers = await client.query(api.users.getUsers, {});
+      const recentUsers = allUsers
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .slice(0, 10);
 
-      recentUsers.forEach((user, index) => {
+      recentUsers.forEach((user) => {
         const status = user.isActive ? "✅" : "❌";
-        const date = user.createdAt.toLocaleDateString("es-CL");
+        const date = new Date(user.createdAt).toLocaleDateString("es-CL");
         console.log(
-          `  ${status} ${user.name} (${user.email}) - ${user.role} [${date}]`,
+          `  ${status} ${user.name || 'N/A'} (${user.email}) - ${user.role} [${date}]`,
         );
       });
 
-      if (totalUsers > 10) {
-        console.log(`  ... and ${totalUsers - 10} more users`);
+      if (userCounts.total > 10) {
+        console.log(`  ... and ${userCounts.total - 10} more users`);
       }
     }
 
-    return { totalUsers, usersByRole };
+    return userCounts;
   } catch (error) {
     console.error(
       "❌ Failed to count users:",
@@ -97,7 +89,4 @@ countUsers()
   .catch((error) => {
     console.error("Fatal error during user count:", error);
     process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
   });

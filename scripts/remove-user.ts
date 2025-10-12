@@ -1,29 +1,26 @@
 #!/usr/bin/env tsx
 /**
  * User Removal Script
- * Removes a specific user by email
+ * Removes a specific user by email using Convex
  */
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../convex/_generated/api";
 
 async function removeUser(email: string) {
   console.log(`🗑️ Removing user: ${email}`);
   console.log("🌍 Environment:", process.env.NODE_ENV || "development");
 
   try {
+    const deploymentUrl = process.env.CONVEX_URL;
+    if (!deploymentUrl) {
+      throw new Error("CONVEX_URL environment variable is not set");
+    }
+
+    const client = new ConvexHttpClient(deploymentUrl);
+
     // Find the user first
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
-    });
+    const user = await client.query(api.users.getUserByEmail, { email });
 
     if (!user) {
       console.log(`❌ User not found: ${email}`);
@@ -33,9 +30,7 @@ async function removeUser(email: string) {
     console.log(`👤 Found user: ${user.name} (${user.role})`);
 
     // Delete the user
-    await prisma.user.delete({
-      where: { email },
-    });
+    await client.mutation(api.users.deleteUser, { id: user._id });
 
     console.log(`✅ Successfully removed: ${user.name} (${user.email})`);
     return user;
@@ -50,7 +45,4 @@ removeUser("parent@manitospintadas.cl")
   .catch((error) => {
     console.error("Fatal error during user removal:", error);
     process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
   });

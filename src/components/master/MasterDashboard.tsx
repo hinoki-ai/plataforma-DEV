@@ -9,55 +9,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { LucideIcon } from "lucide-react";
-
 import {
   Crown,
   Shield,
   Database,
   Activity,
   Users,
-  Server,
-  AlertTriangle,
-  CheckCircle,
-  Zap,
-  Settings,
-  Eye,
-  Code,
-  Terminal,
-  Monitor,
   BarChart3,
-  Globe,
-  Key,
-  Lock,
-  Cpu,
-  HardDrive,
-  Wifi,
-  Calendar,
-  FileText,
-  TrendingUp,
-  Clock,
+  Zap,
+  CheckCircle,
 } from "lucide-react";
-import { getRoleDisplayName } from "@/lib/role-utils";
-import {
-  RoleIndicator,
-  RoleAwareBreadcrumb,
-  RoleAwareHeader,
-} from "@/components/layout/RoleAwareNavigation";
-import { RoleSwitcher } from "@/components/auth/RoleSwitcher";
 import { MasterPageTemplate } from "./MasterPageTemplate";
 import { MasterActionCard } from "./MasterActionCard";
 
-interface SystemMetrics {
-  users: { total: number; active: number; newToday: number };
-  performance: { responseTime: number; uptime: string; throughput: number };
-  security: { threats: number; blocked: number; alerts: number };
-  database: { connections: number; queriesPerSec: number; size: string };
-}
 
 interface QuickAction {
   id: string;
@@ -247,7 +214,13 @@ function LocalMasterStatsCard() {
 
 function SecurityAlertsCard() {
   const alerts = useMemo(
-    () => [
+    (): Array<{
+      id: number;
+      type: string;
+      message: string;
+      time: string;
+      severity: "high" | "medium" | "low";
+    }> => [
       {
         id: 1,
         type: "warning",
@@ -310,39 +283,10 @@ function SecurityAlertsCard() {
   );
 }
 
-function QuickActionsGrid({ actions }: { actions: QuickAction[] }) {
-  return (
-    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {actions.map((action) => {
-        const Icon = action.icon;
-        return (
-          <Button
-            key={action.id}
-            variant={action.variant || "outline"}
-            className="h-auto p-6 flex flex-col items-center gap-3 text-center border-blue-200 hover:border-blue-300 dark:border-blue-800 transition-all duration-200 group"
-            asChild
-          >
-            <a href={action.href} className="w-full">
-              <Icon className="h-8 w-8 text-blue-600 group-hover:scale-110 transition-transform duration-200" />
-              <div className="space-y-1">
-                <div className="font-semibold text-sm leading-tight">
-                  {action.title}
-                </div>
-                <div className="text-xs text-muted-foreground leading-tight max-w-full">
-                  {action.description}
-                </div>
-              </div>
-            </a>
-          </Button>
-        );
-      })}
-    </div>
-  );
-}
 
 export function MasterDashboard() {
   const { data: session } = useSession();
-  const { stats: dashboardStats, loading: statsLoading } = useDashboardData();
+  useDashboardData();
 
   const quickActions = masterQuickActions.map((action) => ({
     id: action.id,
@@ -358,33 +302,6 @@ export function MasterDashboard() {
     href: action.href,
   }));
 
-  const stats = [
-    {
-      icon: BarChart3,
-      value: dashboardStats.users?.total || 0,
-      label: "Usuarios Totales",
-      color: "purple" as const,
-    },
-    {
-      icon: Activity,
-      value: dashboardStats.users?.active || 0,
-      label: "Usuarios Activos",
-      color: "blue" as const,
-    },
-    {
-      icon: Database,
-      value: dashboardStats.database?.connections || 0,
-      label: "Conexiones DB",
-      color: "green" as const,
-    },
-    {
-      icon: Zap,
-      value:
-        ((dashboardStats.performance?.throughput || 0) / 1000).toFixed(1) + "K",
-      label: "Requests/hora",
-      color: "orange" as const,
-    },
-  ];
 
   return (
     <MasterPageTemplate

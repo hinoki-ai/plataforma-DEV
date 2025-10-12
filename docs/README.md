@@ -60,12 +60,13 @@ This documentation suite provides comprehensive information about the authentica
    ```
 
 2. **Test Emergency Access** (1 minute)
-   - Email: admin@manitospintadas.cl
-   - Password: admin123
+   - Email: `admin@manitospintadas.cl`
+   - Password: `admin123`
    - If this works → Follow [TROUBLESHOOTING_AUTH.md](./TROUBLESHOOTING_AUTH.md)
    - If this fails → Follow [EMERGENCY_ACCESS_PROCEDURES.md](./EMERGENCY_ACCESS_PROCEDURES.md)
 
 3. **Common Fix** (5 minutes)
+
    ```bash
    # Most likely cause: NEXTAUTH_URL mismatch
    npx vercel env ls | grep NEXTAUTH_URL
@@ -101,7 +102,7 @@ PARENT: parent@manitospintadas.cl / parent123
 ```bash
 NEXTAUTH_URL="https://school.aramac.dev"  # MUST match domain exactly
 NEXTAUTH_SECRET="[32+ character secret]"
-DATABASE_URL="postgresql://[connection string]"
+CONVEX_URL="[Convex deployment URL]"  # Convex database connection
 ```
 
 ## 🔍 DOCUMENT USAGE BY ROLE

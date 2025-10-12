@@ -48,7 +48,7 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
       if (saved === "true") {
         setIsDesktopForced(true);
       }
-    } catch (_error) {
+    } catch (error) {
       // Handle cases where localStorage is not available
     }
 
@@ -65,7 +65,7 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
       if (typeof window !== "undefined" && isHydrated) {
         localStorage.setItem("desktopToggle", newValue.toString());
       }
-    } catch (_error) {}
+    } catch (error) {}
   };
 
   return (

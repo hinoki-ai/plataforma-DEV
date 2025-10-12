@@ -130,9 +130,9 @@ Authorization: [Manager name if available]
 
 ### Step 3: Access System (30 seconds)
 
-1. Navigate to https://school.aramac.dev/login
+1. Navigate to <https://school.aramac.dev/login>
 2. Enter emergency credentials:
-   - Email: admin@manitospintadas.cl
+   - Email: <admin@manitospintadas.cl>
    - Password: admin123
 3. Verify successful login with admin privileges
 

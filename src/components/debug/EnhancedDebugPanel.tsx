@@ -8,12 +8,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { debugMonitor } from "@/lib/debug-monitor";
 
+// Extended navigator interface for Network Information API
+interface NavigatorWithConnection extends Navigator {
+  connection?: {
+    type?: string;
+    effectiveType?: string;
+    downlink?: number;
+  };
+}
+
 interface DebugLog {
   id: string;
   type: "info" | "warn" | "error" | "success";
   message: string;
   timestamp: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 interface SystemMetrics {
@@ -42,7 +51,7 @@ export function EnhancedDebugPanel() {
   const [activeTab, setActiveTab] = useState("console");
 
   const addLog = useCallback(
-    (type: DebugLog["type"], message: string, details?: any) => {
+    (type: DebugLog["type"], message: string, details?: Record<string, unknown>) => {
       const newLog: DebugLog = {
         id: Date.now().toString(),
         type,
@@ -87,10 +96,10 @@ export function EnhancedDebugPanel() {
           firstContentfulPaint: performanceMetrics.firstContentfulPaint,
         },
         network: {
-          connection: (navigator as any).connection?.type || "unknown",
+          connection: (navigator as NavigatorWithConnection).connection?.type || "unknown",
           effectiveType:
-            (navigator as any).connection?.effectiveType || "unknown",
-          downlink: (navigator as any).connection?.downlink || 0,
+            (navigator as NavigatorWithConnection).connection?.effectiveType || "unknown",
+          downlink: (navigator as NavigatorWithConnection).connection?.downlink || 0,
         },
       });
     }

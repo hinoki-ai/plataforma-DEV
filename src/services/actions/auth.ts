@@ -70,7 +70,7 @@ export async function logoutAction() {
   try {
     await signOut({ redirect: false });
     return { success: true };
-  } catch (_error) {
+  } catch (error) {
     return { success: false, error: "Error al cerrar sesión" };
   }
 }

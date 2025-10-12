@@ -1,15 +1,14 @@
 #!/usr/bin/env tsx
 /**
  * Verify Test Users Script
- * Checks if test users exist in the database
+ * Checks if test users exist in the Convex database
  */
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../convex/_generated/api";
 
 async function verifyUsers() {
-  console.log("🔍 Verifying test users in database...");
+  console.log("🔍 Verifying test users in Convex database...");
 
   const testEmails = [
     "admin@manitospintadas.cl",
@@ -21,25 +20,21 @@ async function verifyUsers() {
   ];
 
   try {
+    const deploymentUrl = process.env.CONVEX_URL;
+    if (!deploymentUrl) {
+      throw new Error("CONVEX_URL environment variable is not set");
+    }
+
+    const client = new ConvexHttpClient(deploymentUrl);
+
     for (const email of testEmails) {
-      const user = await prisma.user.findUnique({
-        where: { email },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          role: true,
-          isActive: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
+      const user = await client.query(api.users.getUserByEmail, { email });
 
       if (user) {
         console.log(`✅ ${user.name} (${user.email})`);
         console.log(`   Role: ${user.role}`);
         console.log(`   Active: ${user.isActive}`);
-        console.log(`   Created: ${user.createdAt}`);
+        console.log(`   Created: ${new Date(user.createdAt).toISOString()}`);
         console.log("");
       } else {
         console.log(`❌ User not found: ${email}`);
@@ -48,12 +43,10 @@ async function verifyUsers() {
     }
 
     // Count total users
-    const totalUsers = await prisma.user.count();
-    console.log(`📊 Total users in database: ${totalUsers}`);
+    const userCounts = await client.query(api.users.getUserCountByRole);
+    console.log(`📊 Total users in Convex database: ${userCounts.total}`);
   } catch (error) {
     console.error("❌ Error verifying users:", error);
-  } finally {
-    await prisma.$disconnect();
   }
 }
 

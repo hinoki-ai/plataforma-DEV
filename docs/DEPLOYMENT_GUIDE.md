@@ -22,7 +22,7 @@ Create the following environment files:
 
 ```env
 # Database
-DATABASE_URL="postgresql://username:password@localhost:5432/manitos_dev"
+CONVEX_URL="[Convex development deployment URL]"
 
 # Authentication
 NEXTAUTH_SECRET="your-development-secret-key-here"
@@ -51,7 +51,7 @@ NEXT_PUBLIC_API_URL="http://localhost:3000"
 
 ```env
 # Database
-DATABASE_URL="postgresql://username:password@host:5432/manitos_prod"
+CONVEX_URL="[Convex production deployment URL]"
 
 # Authentication
 NEXTAUTH_SECRET="your-production-secret-key-here"
@@ -155,7 +155,7 @@ npm run start
 Add the following environment variables in Vercel dashboard:
 
 ```bash
-DATABASE_URL=postgresql://...
+CONVEX_URL=[Convex deployment URL]
 NEXTAUTH_SECRET=...
 NEXTAUTH_URL=https://your-project.vercel.app
 GOOGLE_CLIENT_ID=...
@@ -227,27 +227,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/manitos_prod
+      - CONVEX_URL=[Convex deployment URL]
       - NEXTAUTH_SECRET=your-secret
       - NEXTAUTH_URL=http://localhost:3000
-    depends_on:
-      - db
     volumes:
       - ./public/uploads:/app/public/uploads
-
-  db:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=manitos_prod
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
-volumes:
-  postgres_data:
 ```
 
 #### 3. Deploy with Docker
@@ -601,7 +585,7 @@ curl -I https://your-domain.com
 
 For deployment support:
 
-- 📧 Email: deploy@manitospintadas.com
+- 📧 Email: <deploy@manitospintadas.com>
 - 📖 Documentation: <https://docs.manitospintadas.com/deployment>
 - 🐛 Issues: <https://github.com/manitos-pintadas/dashboard/issues>
 - 💬 Community: <https://community.manitospintadas.com>

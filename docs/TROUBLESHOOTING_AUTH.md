@@ -2,7 +2,7 @@
 
 **Last Updated**: September 1, 2025  
 **For**: Manitos Pintadas School Management System  
-**Site**: https://school.aramac.dev
+**Site**: <https://school.aramac.dev>
 
 ## 🚨 QUICK DIAGNOSTIC CHECKLIST
 
@@ -24,7 +24,7 @@ curl -s https://school.aramac.dev/api/auth/session
 
 Try emergency admin credentials:
 
-- **Email**: admin@manitospintadas.cl
+- **Email**: <admin@manitospintadas.cl>
 - **Password**: admin123
 
 If this works → Issue is with regular authentication  
@@ -37,7 +37,7 @@ If this fails → System-wide authentication failure
 npx vercel env ls
 
 # Look for these critical variables:
-# NEXTAUTH_URL, NEXTAUTH_SECRET, DATABASE_URL
+# NEXTAUTH_URL, NEXTAUTH_SECRET, CONVEX_URL
 ```
 
 ## 🔍 COMMON ISSUES & SOLUTIONS
@@ -47,7 +47,7 @@ npx vercel env ls
 **Symptoms**: Correct credentials rejected, login fails
 **Most Likely Cause**: NEXTAUTH_URL mismatch
 
-#### Diagnostic Steps:
+#### Issue #1: Diagnostic Steps
 
 1. Check current NEXTAUTH_URL in production:
 
@@ -56,12 +56,13 @@ npx vercel env ls
    ```
 
 2. Verify it matches current domain:
+
    ```bash
    # Should be: https://school.aramac.dev
    # NOT: https://manitos-pintadas.vercel.app (old domain)
    ```
 
-#### Solution:
+#### Issue #1: Solution
 
 ```bash
 # Remove old URL
@@ -80,39 +81,37 @@ npx vercel --prod
 
 ### Issue #2: Database Connection Errors
 
-**Symptoms**: "Database connection failed", Prisma errors
-**Most Likely Cause**: DATABASE_URL issues or database downtime
+**Symptoms**: "Database connection failed", Convex connection errors
+**Most Likely Cause**: CONVEX_URL issues or Convex service downtime
 
-#### Diagnostic Steps:
+#### Issue #2: Diagnostic Steps
 
-1. Test database connection:
+1. Test Convex connection:
 
    ```bash
-   npm run verify-supabase
+   npx convex dev --once
    ```
 
-2. Check Prisma client:
+2. Check Convex deployment status:
+
    ```bash
-   npx prisma generate
-   npx prisma db push --dry-run
+   npx convex deploy --dry-run
    ```
 
-#### Solution:
+#### Issue #2: Solution
 
 ```bash
-# Regenerate Prisma client
-npx prisma generate
+# Check Convex deployment
+npx convex deploy
 
 # Test connection
 node -e "
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-prisma.\$queryRaw\`SELECT 1\`.then(() => {
-  console.log('✅ Database connected');
-  prisma.\$disconnect();
+import { ConvexHttpClient } from 'convex/browser';
+const client = new ConvexHttpClient(process.env.CONVEX_URL);
+client.query('users.getUserCountByRole', {}).then(() => {
+  console.log('✅ Convex connected');
 }).catch(err => {
-  console.log('❌ Database error:', err.message);
-  prisma.\$disconnect();
+  console.log('❌ Convex error:', err.message);
 });
 "
 ```
@@ -125,7 +124,7 @@ prisma.\$queryRaw\`SELECT 1\`.then(() => {
 **Symptoms**: Google/Facebook login fails, redirect errors
 **Most Likely Cause**: OAuth configuration mismatch
 
-#### Diagnostic Steps:
+#### Issue #3: Diagnostic Steps
 
 1. Check OAuth environment variables:
 
@@ -135,16 +134,17 @@ prisma.\$queryRaw\`SELECT 1\`.then(() => {
 
 2. Verify OAuth provider settings match current domain
 
-#### Solution:
+#### Issue #3: Solution
 
 1. Update OAuth provider redirect URIs to:
 
-   ```
+   ```text
    https://school.aramac.dev/api/auth/callback/google
    https://school.aramac.dev/api/auth/callback/facebook
    ```
 
 2. Verify client IDs and secrets are current:
+
    ```bash
    # Update if needed
    npx vercel env rm GOOGLE_CLIENT_ID production
@@ -159,7 +159,7 @@ prisma.\$queryRaw\`SELECT 1\`.then(() => {
 **Symptoms**: Infinite redirects, "Access denied" for valid users
 **Most Likely Cause**: Session detection issues
 
-#### Diagnostic Steps:
+#### Issue #4: Diagnostic Steps
 
 1. Check middleware logs:
 
@@ -168,11 +168,12 @@ prisma.\$queryRaw\`SELECT 1\`.then(() => {
    ```
 
 2. Test session endpoint:
+
    ```bash
    curl -s https://school.aramac.dev/api/auth/session
    ```
 
-#### Solution:
+#### Issue #4: Solution
 
 1. Clear browser cookies and cache
 2. Test with incognito/private browser
@@ -186,7 +187,7 @@ prisma.\$queryRaw\`SELECT 1\`.then(() => {
 **Symptoms**: Emergency admin credentials fail
 **Most Likely Cause**: Code changes or database complete failure
 
-#### Diagnostic Steps:
+#### Issue #5: Diagnostic Steps
 
 1. Verify emergency bypass code in `src/lib/auth-prisma.ts`:
 
@@ -197,7 +198,7 @@ prisma.\$queryRaw\`SELECT 1\`.then(() => {
 
 2. Check for syntax errors or modifications
 
-#### Solution:
+#### Issue #5: Solution
 
 1. If code is modified, restore from git:
 
@@ -206,6 +207,7 @@ prisma.\$queryRaw\`SELECT 1\`.then(() => {
    ```
 
 2. If code is correct, issue is deeper - check system logs:
+
    ```bash
    npx vercel logs --app school-aramac --limit 100
    ```
@@ -317,7 +319,7 @@ curl -vI https://school.aramac.dev 2>&1 | grep -E "(certificate|SSL|TLS)"
 
 ### Communication Template
 
-```
+```text
 🚨 AUTHENTICATION SYSTEM STATUS UPDATE
 
 Issue: [Brief description]
@@ -363,9 +365,9 @@ Updates will be provided every 30 minutes.
 
 ### External Support
 
-- **Vercel**: https://vercel.com/support
-- **Supabase**: https://supabase.com/support
-- **NextAuth.js**: https://github.com/nextauthjs/next-auth/discussions
+- **Vercel**: <https://vercel.com/support>
+- **Supabase**: <https://supabase.com/support>
+- **NextAuth.js**: <https://github.com/nextauthjs/next-auth/discussions>
 
 ---
 

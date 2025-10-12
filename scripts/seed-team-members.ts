@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../convex/_generated/api";
 
 const teamMembers = [
   {
@@ -15,7 +14,6 @@ const teamMembers = [
     ],
     imageUrl: "/icons/profesor-96x96.png",
     order: 1,
-    isActive: true,
   },
   {
     name: "Prof. Carlos Rodríguez",
@@ -25,7 +23,6 @@ const teamMembers = [
     specialties: ["Fonoaudiología", "Comunicación", "Lenguaje"],
     imageUrl: "/icons/profesor-96x96.png",
     order: 2,
-    isActive: true,
   },
   {
     name: "Lic. Ana Martínez",
@@ -39,7 +36,6 @@ const teamMembers = [
     ],
     imageUrl: "/icons/profesor-96x96.png",
     order: 3,
-    isActive: true,
   },
   {
     name: "Dr. Luis Fernández",
@@ -53,7 +49,6 @@ const teamMembers = [
     ],
     imageUrl: "/icons/profesor-96x96.png",
     order: 4,
-    isActive: true,
   },
   {
     name: "Sra. Patricia Silva",
@@ -63,7 +58,6 @@ const teamMembers = [
     specialties: ["Trabajo Social", "Apoyo Familiar", "Recursos Comunitarios"],
     imageUrl: "/icons/profesor-96x96.png",
     order: 5,
-    isActive: true,
   },
 ];
 
@@ -71,25 +65,28 @@ async function seedTeamMembers() {
   try {
     console.log("🌱 Seeding team members...");
 
-    // Clear existing team members
-    await prisma.teamMember.deleteMany();
+    const deploymentUrl = process.env.CONVEX_URL;
+    if (!deploymentUrl) {
+      throw new Error("CONVEX_URL environment variable is not set");
+    }
+
+    const client = new ConvexHttpClient(deploymentUrl);
+
+    // Clear existing team members first
+    const existingMembers = await client.query(api.teamMembers.getTeamMembers, {});
+    for (const member of existingMembers) {
+      await client.mutation(api.teamMembers.deleteTeamMember, { id: member._id });
+    }
 
     // Create new team members
     for (const member of teamMembers) {
-      await prisma.teamMember.create({
-        data: {
-          ...member,
-          specialties: JSON.stringify(member.specialties),
-        },
-      });
+      await client.mutation(api.teamMembers.createTeamMember, member);
     }
 
     console.log("✅ Team members seeded successfully!");
     console.log(`📊 Created ${teamMembers.length} team members`);
   } catch (error) {
     console.error("❌ Error seeding team members:", error);
-  } finally {
-    await prisma.$disconnect();
   }
 }
 

@@ -52,7 +52,7 @@ export class SimpleFileStorage {
         await lockCornerstone(filename, options.note);
       }
       return meta;
-    } catch (_error) {
+    } catch (error) {
       // Production: Silently handle errors with proper error messages
       throw new Error("Failed to upload file");
     }

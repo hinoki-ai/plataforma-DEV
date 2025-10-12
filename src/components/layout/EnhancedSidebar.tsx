@@ -14,7 +14,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { NavigationIcons, ThemeIcons } from "@/components/icons/hero-icons";
 import {
@@ -26,10 +25,8 @@ import {
 } from "./NavigationEnhancements";
 import {
   Search,
-  Command,
   HelpCircle,
   Zap,
-  Star,
   Crown,
   Globe,
   Settings,
@@ -330,7 +327,6 @@ export function EnhancedSidebar({
   const [quickSearchOpen, setQuickSearchOpen] = useState(false);
   const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
-  const [advancedOptionsExpanded, setAdvancedOptionsExpanded] = useState(false);
   const [usageData, setUsageData] = useState(() =>
     navigationUtils.getUsageData(),
   );

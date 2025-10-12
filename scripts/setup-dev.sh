@@ -7,13 +7,13 @@ set -e
 
 echo "🔧 Setting up development environment..."
 
-# Check if we're in development mode
-if [[ "$DATABASE_URL" == file:* ]]; then
-    echo "📁 Using SQLite database"
-    
-    # Generate Prisma client
-    echo "🔨 Generating Prisma client..."
-    npx prisma generate
+# Check if Convex is configured
+if [[ -n "$CONVEX_URL" ]]; then
+    echo "🔗 Convex database configured"
+
+    # Check Convex deployment status
+    echo "🔍 Checking Convex deployment..."
+    npx convex deploy --dry-run
     
     echo "✅ Development environment setup complete!"
     echo "📊 Database: SQLite"

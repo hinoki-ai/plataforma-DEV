@@ -6,7 +6,7 @@ Set these in Vercel (Production) and locally for development.
 
 - `NEXTAUTH_URL` – full site URL (e.g., `http://localhost:3000` or your Vercel domain)
 - `NEXTAUTH_SECRET` – 32+ char secret
-- `DATABASE_URL` – PostgreSQL connection string
+- `CONVEX_URL` – Convex deployment URL
 
 ## Optional (OAuth)
 
@@ -20,4 +20,4 @@ Set these in Vercel (Production) and locally for development.
 ## Notes
 
 - Middleware and NextAuth depend on `NEXTAUTH_URL` being correct per environment.
-- Ensure production `DATABASE_URL` is reachable from Vercel regions.
+- Ensure production `CONVEX_URL` is reachable from Vercel regions.

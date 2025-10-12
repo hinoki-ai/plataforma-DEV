@@ -45,7 +45,7 @@ case "$APP_ENV" in
         echo "🔧 Validating DEVELOPMENT environment configuration..."
         validate_env_var "APP_ENV" "dev"
         validate_env_var "NEXT_PUBLIC_DOMAIN" "school.aramac.dev"
-        validate_env_var "DATABASE_URL"
+        validate_env_var "CONVEX_URL"
         validate_env_var "NEXTAUTH_SECRET"
         echo "🎯 Target: school.aramac.dev (frequent deployments)"
         echo "✅ Development configuration validated"
@@ -56,7 +56,7 @@ case "$APP_ENV" in
         echo "⚠️  WARNING: This is a PRODUCTION deployment!"
         validate_env_var "APP_ENV" "prod"
         validate_env_var "NEXT_PUBLIC_DOMAIN" "manitospintadas.cl"
-        validate_env_var "DATABASE_URL"
+        validate_env_var "CONVEX_URL"
         validate_env_var "NEXTAUTH_SECRET"
 
         if [ -z "$PRODUCTION_DEPLOYMENT_CONFIRMED" ]; then

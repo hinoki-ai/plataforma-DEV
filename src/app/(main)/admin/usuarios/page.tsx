@@ -74,8 +74,8 @@ export default function UsersPage() {
         const data = await response.json();
         setUsers(data);
       }
-    } catch (_error) {
-      console.error("Error fetching users:", _error);
+    } catch (error) {
+      console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
@@ -112,8 +112,8 @@ export default function UsersPage() {
           description: `Email: ${newUser.email} | Rol: ${newUser.role}`,
         });
       }
-    } catch (_error) {
-      console.error("Error creating user:", _error);
+    } catch (error) {
+      console.error("Error creating user:", error);
       toast.error("❌ Error al crear el usuario", {
         description: "Por favor verifica los datos e intenta nuevamente",
       });
@@ -140,8 +140,8 @@ export default function UsersPage() {
           description: `Nombre: ${newUser.name} | Estudiante: ${parentData.studentName}`,
         });
       }
-    } catch (_error) {
-      console.error("Error creating parent user:", _error);
+    } catch (error) {
+      console.error("Error creating parent user:", error);
       toast.error("❌ Error al crear usuario padre", {
         description: "Por favor verifica los datos e intenta nuevamente",
       });
@@ -176,8 +176,8 @@ export default function UsersPage() {
         setIsEditDialogOpen(false);
         setSelectedUser(null);
       }
-    } catch (_error) {
-      console.error("Error updating user:", _error);
+    } catch (error) {
+      console.error("Error updating user:", error);
     }
   };
 
@@ -194,8 +194,8 @@ export default function UsersPage() {
       if (response.ok) {
         setUsers(users.filter((user) => user.id !== userId));
       }
-    } catch (_error) {
-      console.error("Error deleting user:", _error);
+    } catch (error) {
+      console.error("Error deleting user:", error);
     }
   };
 

@@ -23,8 +23,8 @@ if [ "$APP_ENV" = "dev" ] || [ "$NODE_ENV" = "production" ]; then
     fi
 
     # Validate required environment variables
-    if [ -z "$DATABASE_URL" ]; then
-        echo "❌ ERROR: DATABASE_URL not found in environment variables"
+    if [ -z "$CONVEX_URL" ]; then
+        echo "❌ ERROR: CONVEX_URL not found in environment variables"
         exit 1
     fi
 

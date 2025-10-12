@@ -35,6 +35,7 @@ export default defineSchema({
     ),
     provider: v.optional(v.string()),
     isOAuthUser: v.boolean(),
+    clerkId: v.optional(v.string()),
     createdByAdmin: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.number(),

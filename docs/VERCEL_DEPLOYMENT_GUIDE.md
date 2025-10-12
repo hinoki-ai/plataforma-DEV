@@ -174,7 +174,7 @@ npx vercel logs https://school-aramac-[hash].vercel.app
 - Environment variable issues during build
 - Database connection failures during build
 
-#### Solutions
+#### Build Failure Solutions
 
 ```bash
 # Fix TypeScript errors
@@ -203,7 +203,7 @@ npx vercel env ls | grep NEXTAUTH_URL
 # Should match production domain exactly
 ```
 
-#### Solution
+#### Authentication Fix
 
 ```bash
 # Update NEXTAUTH_URL if incorrect
@@ -229,7 +229,7 @@ npx vercel env ls | grep -E "NEXT_PUBLIC_CONVEX_URL"
 npx convex dashboard
 ```
 
-#### Solution
+#### Database Connection Fix
 
 ```bash
 # Regenerate Prisma client for production

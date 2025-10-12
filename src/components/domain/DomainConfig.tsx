@@ -1,8 +1,6 @@
 "use client";
 
-interface DomainConfigProps {}
-
-export function DomainConfig({}: DomainConfigProps) {
+export function DomainConfig() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
