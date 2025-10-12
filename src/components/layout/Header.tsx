@@ -33,10 +33,6 @@ export default function Header() {
   // Public navigation links
   const publicNavLinks = [
     { href: "/centro-consejo", label: t("nav.center_council", "common") },
-    {
-      href: "/proyecto-educativo",
-      label: t("nav.educational_project", "common"),
-    },
   ];
 
   return (

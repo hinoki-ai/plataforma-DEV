@@ -1,6 +1,10 @@
-import Link from "next/link";
+"use client";
+
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export default function MinEducFooter() {
+  const { t } = useLanguage();
+
   return (
     <div className="w-full bg-[#173277] text-white">
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-2">
@@ -11,7 +15,7 @@ export default function MinEducFooter() {
             href="https://www.mineduc.cl/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Ministerio de Educación"
+            aria-label={t("footer.mineduc", "common")}
             className="group focus:outline-none"
           >
             <div className="flex h-3 w-40 mb-2">
@@ -19,7 +23,7 @@ export default function MinEducFooter() {
               <div className="bg-[#E73C48] h-full w-3/5 group-hover:opacity-80 transition" />
             </div>
             <div className="text-2xl font-bold group-hover:underline">
-              Ministerio de Educación
+              {t("footer.mineduc", "common")}
             </div>
           </a>
           {/* Social icons */}
@@ -28,7 +32,7 @@ export default function MinEducFooter() {
               href="https://www.facebook.com/mineduc"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Facebook"
+              aria-label={t("footer.social_facebook", "common")}
               className="hover:text-blue-200"
             >
               <svg
@@ -44,7 +48,7 @@ export default function MinEducFooter() {
               href="https://twitter.com/mineduc"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="X"
+              aria-label={t("footer.social_twitter", "common")}
               className="hover:text-blue-200"
             >
               <svg
@@ -60,7 +64,7 @@ export default function MinEducFooter() {
               href="https://www.instagram.com/mineducchile/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Instagram"
+              aria-label={t("footer.social_instagram", "common")}
               className="hover:text-blue-200"
             >
               <svg
@@ -76,7 +80,7 @@ export default function MinEducFooter() {
               href="https://www.youtube.com/user/mineducchile"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="YouTube"
+              aria-label={t("footer.social_youtube", "common")}
               className="hover:text-blue-200"
             >
               <svg
@@ -99,20 +103,20 @@ export default function MinEducFooter() {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-lg font-bold hover:underline focus:outline-none"
-            aria-label="Gobierno de Chile"
+            aria-label={`${t("footer.government", "common")} ${t("footer.of", "common")} ${t("footer.chile", "common")}`}
           >
-            <span>GOBIERNO</span>
-            <span className="font-normal">DE</span>
-            <span>CHILE</span>
+            <span>{t("footer.government", "common")}</span>
+            <span className="font-normal">{t("footer.of", "common")}</span>
+            <span>{t("footer.chile", "common")}</span>
           </a>
           <a
             href="https://www.mineduc.cl/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-lg font-bold hover:underline focus:outline-none"
-            aria-label="Chile Avanza Contigo"
+            aria-label={t("footer.chile_advances", "common")}
           >
-            CHILE AVANZA CONTIGO
+            {t("footer.chile_advances", "common")}
           </a>
         </div>
       </div>

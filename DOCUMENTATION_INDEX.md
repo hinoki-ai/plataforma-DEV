@@ -16,13 +16,13 @@ Start here if you're new to the project:
 
 ---
 
-## 🔄 Migration & Current Status
+## 🔄 Migration Status (Completed)
 
-Information about the Prisma to Convex migration:
+Historical information about the completed Prisma to Convex migration:
 
-| Document                           | Purpose                                  | Read Time |
-| ---------------------------------- | ---------------------------------------- | --------- |
-| **[MIGRATION.md](./MIGRATION.md)** | Complete Convex migration guide & status | 15 min    |
+| Document                           | Purpose                                             | Read Time |
+| ---------------------------------- | --------------------------------------------------- | --------- |
+| **[MIGRATION.md](./MIGRATION.md)** | ✅ Completed migration guide (historical reference) | 15 min    |
 
 ---
 
@@ -30,10 +30,11 @@ Information about the Prisma to Convex migration:
 
 Essential documentation for working on the codebase:
 
-| Document                           | Purpose                                                                        | Audience      |
-| ---------------------------------- | ------------------------------------------------------------------------------ | ------------- |
-| **[CLAUDE.md](./CLAUDE.md)**       | **AI Assistant Guide** - Complete development patterns, architecture, commands | AI Assistants |
-| **[MIGRATION.md](./MIGRATION.md)** | Migration status, patterns, and remaining work                                 | Developers    |
+| Document                                             | Purpose                                                                        | Audience      |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------ | ------------- |
+| **[CLAUDE.md](./CLAUDE.md)**                         | **AI Assistant Guide** - Complete development patterns, architecture, commands | AI Assistants |
+| **[CONVEX_SETUP_GUIDE.md](./CONVEX_SETUP_GUIDE.md)** | Convex setup and configuration guide                                           | Developers    |
+| **[MIGRATION.md](./MIGRATION.md)**                   | Completed migration documentation (historical reference)                       | Developers    |
 
 ---
 
@@ -41,9 +42,12 @@ Essential documentation for working on the codebase:
 
 Guides for deploying and managing the application:
 
-| Document                             | Purpose                                        | Read Time |
-| ------------------------------------ | ---------------------------------------------- | --------- |
-| **[DEPLOYMENT.md](./DEPLOYMENT.md)** | Complete deployment guide (dev, staging, prod) | 20 min    |
+| Document                                                   | Purpose                                     | Read Time |
+| ---------------------------------------------------------- | ------------------------------------------- | --------- |
+| **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** | Complete deployment guide (Vercel + Convex) | 15 min    |
+| **[DEPLOYMENT.md](./DEPLOYMENT.md)**                       | Quick deployment reference                  | 5 min     |
+| **[OPERATIONAL_STATUS.md](./OPERATIONAL_STATUS.md)**       | Current operational status                  | 2 min     |
+| **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)**             | Git branching strategy                      | 3 min     |
 
 ---
 
@@ -60,7 +64,6 @@ Detailed technical documentation organized by topic:
 ### Authentication & Security
 
 - **[docs/AUTHENTICATION_SYSTEM_DOCS.md](./docs/AUTHENTICATION_SYSTEM_DOCS.md)** - Complete auth system documentation
-- **[docs/AUTH.md](./docs/AUTH.md)** - Authentication quick reference
 - **[docs/ROLE_SYSTEM.md](./docs/ROLE_SYSTEM.md)** - Role-based access control (RBAC)
 - **[docs/protected-paths.md](./docs/protected-paths.md)** - List of protected routes
 - **[docs/EMERGENCY_ACCESS_PROCEDURES.md](./docs/EMERGENCY_ACCESS_PROCEDURES.md)** - Emergency access protocols
@@ -72,10 +75,8 @@ Detailed technical documentation organized by topic:
 
 ### Deployment & Environment
 
-- **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** - Detailed deployment procedures
-- **[docs/VERCEL_DEPLOYMENT_GUIDE.md](./docs/VERCEL_DEPLOYMENT_GUIDE.md)** - Vercel-specific deployment guide
-- **[docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md)** - Environment variables reference
-- **[docs/ENVIRONMENT-SETUP.md](./docs/ENVIRONMENT-SETUP.md)** - Environment setup guide
+- **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** - Complete deployment guide (Vercel + Convex)
+- **[docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md)** - Environment configuration guide
 
 ### Features & Functionality
 
@@ -86,13 +87,16 @@ Detailed technical documentation organized by topic:
 
 ## 🧪 Testing & Quality Assurance
 
-Testing guides and strategies:
+Testing is configured in the project. See `package.json` scripts:
 
-- **[MASTER-TEST-GUIDE.md](./MASTER-TEST-GUIDE.md)** - Complete testing strategy
-- **[manual-test-guide.md](./manual-test-guide.md)** - Manual testing checklist
-- **[test-results-summary.md](./test-results-summary.md)** - Latest test results
-- **[ROLE_REDIRECTION_TEST_GUIDE.md](./ROLE_REDIRECTION_TEST_GUIDE.md)** - Role-based redirect testing
-- **[NAVIGATION_VERIFICATION.md](./NAVIGATION_VERIFICATION.md)** - Navigation testing guide
+```bash
+npm run test:unit        # Vitest unit tests
+npm run test:e2e         # Playwright E2E tests
+npm run test:a11y        # Accessibility tests
+npm run test:all         # Complete test suite
+```
+
+Refer to `CLAUDE.md` for testing guidelines.
 
 ---
 
@@ -114,7 +118,7 @@ Testing guides and strategies:
 | Run tests                             | MASTER-TEST-GUIDE.md                |
 | Understand API endpoints              | docs/API_DOCUMENTATION.md           |
 | Learn about role-based access         | docs/ROLE_SYSTEM.md                 |
-| Deploy to Vercel                      | docs/VERCEL_DEPLOYMENT_GUIDE.md     |
+| Deploy to production                  | docs/DEPLOYMENT_GUIDE.md            |
 | Emergency access                      | docs/EMERGENCY_ACCESS_PROCEDURES.md |
 
 ---
@@ -146,27 +150,29 @@ plataforma-astral/
 
 ---
 
-## ⚠️ Deprecated Documents
+## ⚠️ Removed/Deprecated Documents
 
-These files have been consolidated into the main documentation and are kept for historical reference only:
+The following documents have been removed or consolidated:
 
-- `START_HERE_CONVEX.md` → Merged into START_HERE.md
-- `MIGRATION_STATUS.md` → Merged into MIGRATION.md
-- `MIGRATION_COMPLETE_SUMMARY.md` → Merged into MIGRATION.md
-- `MIGRATION_FINAL_SUMMARY.md` → Merged into MIGRATION.md
-- `CONVEX_MIGRATION.md` → Merged into MIGRATION.md
-- `CONVEX_MIGRATION_SUMMARY.md` → Merged into MIGRATION.md
-- `CONVEX_MIGRATION_USER_ACTIONS.md` → Merged into MIGRATION.md
-- `QUICK_START_CONVEX.md` → Merged into START_HERE.md
-- `README_CONVEX.md` → Merged into README.md
-- `NEXT_STEPS.md` → Merged into MIGRATION.md
-- `COMPLETED_FILES.md` → Merged into MIGRATION.md
-- `README_DEPLOYMENT.md` → See DEPLOYMENT.md
-- `DEPLOYMENT_SAFEGUARDS.md` → Included in DEPLOYMENT.md
+### Removed (Outdated/Redundant)
 
-**Please use the consolidated versions listed above.**
+- `CONVEX_INTEGRATION_REPORT.md` - Report file (migration complete)
+- `AUTH_SYSTEM_EXTRACTION.md` - Redundant with AUTHENTICATION_SYSTEM_DOCS.md
+- `MULTI_TENANT_MIGRATION_PLAN.md` - Planning doc (not currently implemented)
+- `MULTI_TENANT_ARCHITECTURE_DIAGRAM.md` - Planning doc (not currently implemented)
+- `docs/AUTH.md` - Consolidated into AUTHENTICATION_SYSTEM_DOCS.md
+- `docs/VERCEL_DEPLOYMENT_GUIDE.md` - Merged into DEPLOYMENT_GUIDE.md
+- `docs/ENVIRONMENT-SETUP.md` - Merged into ENVIRONMENT.md
+
+### Use These Instead
+
+- For auth → `docs/AUTHENTICATION_SYSTEM_DOCS.md`
+- For deployment → `docs/DEPLOYMENT_GUIDE.md`
+- For environment → `docs/ENVIRONMENT.md`
+- For migration info → `MIGRATION.md` (historical reference)
 
 ---
 
-**Last Updated**: January 7, 2025  
+**Last Updated**: January 2025  
+**Status**: ✅ Documentation consolidated and up-to-date  
 **Questions?**: See START_HERE.md or CLAUDE.md

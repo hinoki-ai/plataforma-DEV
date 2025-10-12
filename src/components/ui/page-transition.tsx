@@ -12,7 +12,6 @@ import {
   TableSkeleton,
   FormSkeleton,
   DetailSkeleton,
-  ProyectoEducativoSkeleton,
   FotosVideosSkeleton,
   EquipoMultidisciplinarioSkeleton,
   ReservaSkeleton,
@@ -26,7 +25,6 @@ export type SkeletonType =
   | "table"
   | "form"
   | "detail"
-  | "proyecto-educativo"
   | "fotos-videos"
   | "equipo-multidisciplinario"
   | "reserva"
@@ -159,9 +157,6 @@ function SkeletonRenderer({
       return (
         <DetailSkeleton isDesktopForced={isDesktopForced} sections={sections} />
       );
-
-    case "proyecto-educativo":
-      return <ProyectoEducativoSkeleton isDesktopForced={isDesktopForced} />;
 
     case "fotos-videos":
       return <FotosVideosSkeleton isDesktopForced={isDesktopForced} />;

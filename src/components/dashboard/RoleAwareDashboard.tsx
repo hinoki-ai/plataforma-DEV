@@ -241,13 +241,6 @@ const quickActions: Record<UserRole, QuickAction[]> = {
       href: "/public/equipo-multidisciplinario",
     },
     {
-      id: "educational-project",
-      title: "Proyecto Educativo",
-      description: "Conocer el proyecto",
-      icon: FileText,
-      href: "/proyecto-educativo",
-    },
-    {
       id: "photos-videos",
       title: "Multimedia",
       description: "Fotos y videos",

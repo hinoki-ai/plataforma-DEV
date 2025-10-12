@@ -301,13 +301,6 @@ const baseNavigationItems: Record<UserRole, NavigationItem[]> = {
       description: "Sobre el centro",
     },
     {
-      id: "educational-project",
-      title: "Proyecto Educativo",
-      href: "/proyecto-educativo",
-      category: "academico",
-      description: "Proyecto educativo",
-    },
-    {
       id: "photos-videos",
       title: "Fotos y Videos",
       href: "/fotos-videos",

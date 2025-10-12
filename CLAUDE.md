@@ -6,33 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 15 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
 
-## 📚 Critical Documentation (NEW)
+## 📚 Critical Documentation
 
-**Authentication System Fixed**: September 1, 2025 ✅
-**Latest Updates**: Calendar component improvements, timeout type fixes, deployment verification tests
-
-### Quick Authentication Troubleshooting
-
-```bash
-# 1. Check system status (30 seconds)
-curl -I https://plataforma-astral.com
-curl -s https://plataforma-astral.com/api/auth/session
-
-# 2. Test emergency access if normal login fails
-# Email: admin@plataforma-astral.com | Password: admin123
-
-# 3. Most common fix - check NEXTAUTH_URL
-npx vercel env ls | grep NEXTAUTH_URL
-# Should show: https://plataforma-astral.com
-```
+**Status**: Production ready with full Convex integration ✅
+**Backend**: 100% migrated to Convex serverless
 
 ### Documentation Reference
 
-- `docs/TROUBLESHOOTING_AUTH.md` - **START HERE** for auth issues (95% success rate)
-- `docs/INCIDENT_REPORT_AUTH_FIX_2025-09-01.md` - Complete incident analysis
+- `docs/TROUBLESHOOTING_AUTH.md` - Authentication troubleshooting
 - `docs/AUTHENTICATION_SYSTEM_DOCS.md` - Full system architecture
-- `docs/VERCEL_DEPLOYMENT_GUIDE.md` - Deployment procedures
-- `docs/EMERGENCY_ACCESS_PROCEDURES.md` - Emergency protocols (CONFIDENTIAL)
+- `docs/DEPLOYMENT_GUIDE.md` - Deployment procedures
+- `START_HERE.md` - Quick start guide
+- `DOCUMENTATION_INDEX.md` - Complete documentation index
 
 ## Essential Commands
 
@@ -171,7 +156,7 @@ src/services/
 │   ├── team-members.ts   # Team queries
 │   └── school-info.ts    # School information
 └── calendar/    # Calendar service layer
-    ├── calendar-service.ts  # Being migrated to Convex
+    ├── calendar-service.ts  # Convex integration
     ├── calendar-client.ts
     └── types.ts
 ```
@@ -218,7 +203,7 @@ The app uses multiple nested providers (`src/components/providers.tsx`):
 
 ### Server Actions Pattern
 
-Always use the services layer for database operations:
+Always use the services layer or Convex client for database operations:
 
 ```typescript
 // ✅ Correct - use services
@@ -230,9 +215,6 @@ import { api } from "@/convex/_generated/api";
 
 const client = getConvexClient();
 const meetings = await client.query(api.meetings.getMeetings, {});
-
-// ❌ Wrong - old Prisma calls (removed)
-import { db } from "@/lib/db"; // This file no longer exists
 ```
 
 ### Role-Based Component Rendering
@@ -281,13 +263,19 @@ const isAdmin = session?.user?.role === "ADMIN";
 - **Total Test Files**: 38 test specifications
 - **Overall**: 495+ comprehensive tests with 99.2% success rate
 
-### Test Users (seeded in development)
+### Test Users
 
-| Role     | Email                                                                   | Password    |
-| -------- | ----------------------------------------------------------------------- | ----------- |
-| ADMIN    | [admin@plataforma-astral.com](mailto:admin@plataforma-astral.com)       | admin123    |
-| PROFESOR | [profesor@plataforma-astral.com](mailto:profesor@plataforma-astral.com) | profesor123 |
-| PARENT   | [parent@plataforma-astral.com](mailto:parent@plataforma-astral.com)     | parent123   |
+Create test users via Convex dashboard or use the seed script:
+
+```bash
+npx tsx scripts/seed-convex.ts
+```
+
+| Role     | Email                          | Password    |
+| -------- | ------------------------------ | ----------- |
+| ADMIN    | admin@plataforma-astral.com    | admin123    |
+| PROFESOR | profesor@plataforma-astral.com | profesor123 |
+| PARENT   | parent@plataforma-astral.com   | parent123   |
 
 ## Environment Configuration
 
@@ -328,8 +316,9 @@ GOOGLE_CLIENT_SECRET=...
 - **Convex** serverless database (real-time, type-safe)
 - No migrations needed - schema defined in `convex/schema.ts`
 - Automatic type generation from schema
-- Built-in dashboard for data inspection
+- Built-in dashboard for data inspection at `npx convex dashboard`
 - Real-time subscriptions out of the box
+- Edge-compatible with optimistic updates
 
 ## Common Pitfalls to Avoid
 
@@ -339,10 +328,10 @@ GOOGLE_CLIENT_SECRET=...
 4. **Respect the role hierarchy** - Don't create routes that bypass middleware protection
 5. **Follow the provider nesting order** - Changing provider order can break functionality
 6. **Always test role-based access** - E2E tests must verify route protection works
-7. **Check migration status** - See `MIGRATION.md` for which API routes are migrated
-8. **Don't ignore TypeScript errors** - Use `npm run type-check` and fix all issues
-9. **Follow the zero-warning policy** - ESLint must pass with `--max-warnings=0`
-10. **Keep Convex dev running** - Required for hot reload and type updates
+7. **Don't ignore TypeScript errors** - Use `npm run type-check` and fix all issues
+8. **Follow the zero-warning policy** - ESLint must pass with `--max-warnings=0`
+9. **Keep Convex dev running** - Required for hot reload and type updates
+10. **Always query with proper filters** - Use indexes for optimal Convex query performance
 
 ## Domain-Specific Features
 
@@ -374,12 +363,11 @@ GOOGLE_CLIENT_SECRET=...
 ```bash
 # Complete development setup from scratch
 npm install
-npm run db:generate && npm run db:push && npm run db:seed
-Use Convex dashboard for test user creation
-npm run dev
+npx convex dev              # Terminal 1: Start Convex dev server
+npm run dev                 # Terminal 2: Start Next.js dev server
 
-# Alternative automated setup
-./scripts/setup-dev.sh     # Complete automated development setup
+# Seed database (optional)
+npx tsx scripts/seed-convex.ts
 ```
 
 ### Pre-commit Quality Check
@@ -440,24 +428,14 @@ npm run test:performance:all # All performance tests
 The `scripts/` directory contains several utility scripts for development and deployment:
 
 ```bash
-# Development utilities
-./scripts/setup-dev.sh          # Automated development setup
-./scripts/clean.sh              # Clean build artifacts and cache
-./scripts/validate-deployment.sh # Validate deployment configuration
-
 # Database utilities
-npx convex dashboard           # Manage Convex data
-tsx scripts/seed-team-members.ts # Populate team member data
-tsx scripts/count-users.ts      # Count and display all users
-tsx scripts/verify-users.ts     # Verify test users in database
+npx convex dashboard            # Manage Convex data
+npx tsx scripts/seed-convex.ts  # Seed database with test data
+
+# Development utilities
+./scripts/clean.sh              # Clean build artifacts and cache
 
 # Deployment utilities
-./scripts/deploy-dev.sh         # Deploy to development environment
-./scripts/deploy-prod.sh        # Deploy to production environment
-
-# Security utilities
-./scripts/protect.sh            # Enable branch protection
-./scripts/unprotect.sh          # Disable branch protection
-./scripts/check-protected.sh    # Check protection status
-./scripts/ci-check-protected.sh # CI protection verification
+npx convex deploy               # Deploy Convex to production
+git push origin main            # Deploy Next.js via Vercel
 ```

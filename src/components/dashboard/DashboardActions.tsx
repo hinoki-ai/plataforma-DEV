@@ -208,12 +208,6 @@ export function DashboardActions({
             icon: Users,
             description: "Nuestro equipo multidisciplinario",
           },
-          {
-            label: "Proyecto Educativo",
-            href: "/proyecto-educativo",
-            icon: BookOpen,
-            description: "Conocer nuestros principios",
-          },
         ];
 
       default:

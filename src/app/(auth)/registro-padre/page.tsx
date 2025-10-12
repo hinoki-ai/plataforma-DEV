@@ -16,6 +16,7 @@ import { ArrowLeft, UserPlus, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { AdaptiveErrorBoundary } from "@/components/ui/adaptive-error-boundary";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 type ParentFormData = {
   name: string;
@@ -39,6 +40,7 @@ export default function ParentRegistrationPage() {
 
 function ParentRegistrationContent() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [isRegistering, setIsRegistering] = useState(false);
   const [registrationComplete, setRegistrationComplete] = useState(false);
   const [registrationData, setRegistrationData] = useState<{
@@ -64,21 +66,23 @@ function ParentRegistrationContent() {
         const result = await response.json();
         setRegistrationData(result);
         setRegistrationComplete(true);
-        toast.success("✅ Registro exitoso", {
-          description:
-            "Tu cuenta será verificada por el personal de la escuela",
-        });
+        toast.success(
+          `✅ ${t("parent_registration.success_toast", "common")}`,
+          {
+            description: t("parent_registration.success_toast_desc", "common"),
+          },
+        );
       } else {
         const error = await response.json();
-        toast.error("❌ Error en el registro", {
+        toast.error(`❌ ${t("parent_registration.error_toast", "common")}`, {
           description:
-            error.error || "Por favor verifica los datos e intenta nuevamente",
+            error.error || t("parent_registration.error_toast_desc", "common"),
         });
       }
     } catch (error) {
       console.error("Error registering parent:", error);
-      toast.error("❌ Error en el registro", {
-        description: "Por favor intenta nuevamente",
+      toast.error(`❌ ${t("parent_registration.error_toast", "common")}`, {
+        description: t("parent_registration.error_retry", "common"),
       });
     } finally {
       setIsRegistering(false);
@@ -99,48 +103,62 @@ function ParentRegistrationContent() {
                 <CheckCircle className="h-16 w-16 text-green-500" />
               </div>
               <CardTitle className="text-2xl text-green-700">
-                ¡Registro Completado!
+                {t("parent_registration.success_title", "common")}
               </CardTitle>
               <CardDescription className="text-lg">
-                Tu solicitud de registro ha sido enviada exitosamente
+                {t("parent_registration.success_description", "common")}
               </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-6">
               <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                 <h3 className="font-semibold text-green-800 mb-2">
-                  ¿Qué sucede ahora?
+                  {t("parent_registration.next_steps_title", "common")}
                 </h3>
                 <ul className="text-sm text-green-700 space-y-1">
-                  <li>• El personal de la escuela verificará tu información</li>
-                  <li>• Recibirás un email cuando tu cuenta sea activada</li>
-                  <li>
-                    • Una vez activada, podrás acceder con tu email y contraseña
-                  </li>
+                  <li>• {t("parent_registration.next_step_1", "common")}</li>
+                  <li>• {t("parent_registration.next_step_2", "common")}</li>
+                  <li>• {t("parent_registration.next_step_3", "common")}</li>
                 </ul>
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                 <h3 className="font-semibold text-blue-800 mb-2">
-                  Información Registrada
+                  {t("parent_registration.registered_info_title", "common")}
                 </h3>
                 <div className="text-sm text-blue-700 space-y-1">
                   <p>
-                    <strong>Nombre:</strong> {registrationData.name}
+                    <strong>
+                      {t("parent_registration.registered_name", "common")}:
+                    </strong>{" "}
+                    {registrationData.name}
                   </p>
                   <p>
-                    <strong>Email:</strong> {registrationData.email}
+                    <strong>
+                      {t("parent_registration.registered_email", "common")}:
+                    </strong>{" "}
+                    {registrationData.email}
                   </p>
                   <p>
-                    <strong>Estudiante:</strong>{" "}
+                    <strong>
+                      {t("parent_registration.registered_student", "common")}:
+                    </strong>{" "}
                     {registrationData.studentInfo.studentName}
                   </p>
                   <p>
-                    <strong>Grado:</strong>{" "}
+                    <strong>
+                      {t("parent_registration.registered_grade", "common")}:
+                    </strong>{" "}
                     {registrationData.studentInfo.studentGrade}
                   </p>
                   <p>
-                    <strong>Relación:</strong>{" "}
+                    <strong>
+                      {t(
+                        "parent_registration.registered_relationship",
+                        "common",
+                      )}
+                      :
+                    </strong>{" "}
                     {registrationData.studentInfo.relationship}
                   </p>
                 </div>
@@ -148,16 +166,19 @@ function ParentRegistrationContent() {
 
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground">
-                  ¿Tienes alguna pregunta? Contacta con la secretaría de la
-                  escuela.
+                  {t("parent_registration.contact_question", "common")}
                 </p>
 
                 <div className="flex gap-3 justify-center">
                   <Button asChild variant="outline">
-                    <Link href="/">Ir al Inicio</Link>
+                    <Link href="/">
+                      {t("parent_registration.go_home", "common")}
+                    </Link>
                   </Button>
                   <Button asChild>
-                    <Link href="/auth/login">Ir a Iniciar Sesión</Link>
+                    <Link href="/auth/login">
+                      {t("parent_registration.go_login", "common")}
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -179,18 +200,18 @@ function ParentRegistrationContent() {
               className="mb-4"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver al Inicio
+              {t("parent_registration.back_home", "common")}
             </Button>
 
             <div className="text-center">
               <div className="flex justify-center mb-4">
                 <UserPlus className="h-12 w-12 text-primary" />
               </div>
-              <h1 className="text-3xl font-bold mb-2">Registro de Padres</h1>
+              <h1 className="text-3xl font-bold mb-2">
+                {t("parent_registration.title", "common")}
+              </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Regístrate como padre o tutor para acceder al sistema escolar.
-                Tu cuenta será verificada por el personal de la escuela antes de
-                ser activada.
+                {t("parent_registration.subtitle", "common")}
               </p>
             </div>
           </div>
@@ -199,49 +220,69 @@ function ParentRegistrationContent() {
             onSubmit={handleRegister}
             onCancel={handleCancel}
             isLoading={isRegistering}
-            title="Registro de Padre/Tutor"
-            description="Completa tu información y la de tu estudiante para registrarte en el sistema"
+            title={t("parent_registration.form_title", "common")}
+            description={t("parent_registration.form_description", "common")}
           />
 
           {/* Additional Information */}
           <Card className="mt-8 max-w-4xl mx-auto">
             <CardHeader>
-              <CardTitle className="text-lg">Proceso de Verificación</CardTitle>
+              <CardTitle className="text-lg">
+                {t("parent_registration.verification_title", "common")}
+              </CardTitle>
               <CardDescription>
-                Información sobre cómo funciona el registro
+                {t("parent_registration.verification_subtitle", "common")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-primary">Registro</h4>
+                  <h4 className="font-semibold text-primary">
+                    {t("parent_registration.registration_section", "common")}
+                  </h4>
                   <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>• Completa toda la información requerida</li>
-                    <li>• Proporciona datos de contacto válidos</li>
-                    <li>• Incluye información completa del estudiante</li>
-                    <li>• Crea una contraseña segura</li>
+                    <li>
+                      • {t("parent_registration.registration_step_1", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.registration_step_2", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.registration_step_3", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.registration_step_4", "common")}
+                    </li>
                   </ul>
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-primary">Verificación</h4>
+                  <h4 className="font-semibold text-primary">
+                    {t("parent_registration.verification_section", "common")}
+                  </h4>
                   <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>• El personal verifica tu relación familiar</li>
-                    <li>• Se confirma la información del estudiante</li>
-                    <li>• Recibes confirmación por email</li>
-                    <li>• Tu cuenta es activada</li>
+                    <li>
+                      • {t("parent_registration.verification_step_1", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.verification_step_2", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.verification_step_3", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.verification_step_4", "common")}
+                    </li>
                   </ul>
                 </div>
               </div>
 
               <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mt-6">
                 <h4 className="font-semibold text-yellow-800 mb-2">
-                  ⚠️ Importante
+                  ⚠️ {t("parent_registration.important_title", "common")}
                 </h4>
                 <p className="text-sm text-yellow-700">
-                  Solo puedes registrarte si eres padre, madre o tutor legal de
-                  un estudiante matriculado en la escuela. La información
-                  proporcionada será verificada por el personal administrativo.
+                  {t("parent_registration.important_message", "common")}
                 </p>
               </div>
             </CardContent>

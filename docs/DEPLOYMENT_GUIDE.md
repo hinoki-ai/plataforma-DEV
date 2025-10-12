@@ -1,591 +1,489 @@
-# Plataforma Astral Dashboard - Deployment Guide
+# 🚀 Deployment Guide - Plataforma Astral
 
 ## Overview
 
-This guide covers the deployment process for the Plataforma Astral educational management dashboard. The application is built with Next.js 14, uses PostgreSQL as the database, and supports multiple deployment platforms.
+This guide covers deployment for Plataforma Astral, built with Next.js 15 and Convex serverless backend. The recommended deployment platform is Vercel for optimal performance and simplicity.
+
+## Architecture
+
+| Component      | Service | Production URL                      |
+| -------------- | ------- | ----------------------------------- |
+| **Frontend**   | Vercel  | `your-domain.com`                   |
+| **Backend**    | Convex  | `https://your-project.convex.cloud` |
+| **Repository** | GitHub  | Your repository                     |
 
 ## Prerequisites
 
-### System Requirements
-
 - **Node.js**: 18.17.0 or higher
-- **PostgreSQL**: 13.0 or higher
-- **Redis**: 6.0 or higher (optional, for session storage)
-- **Memory**: Minimum 512MB RAM, recommended 1GB+
-- **Storage**: Minimum 1GB free space
+- **Convex Account**: Free tier at [convex.dev](https://convex.dev)
+- **Vercel Account**: Free tier at [vercel.com](https://vercel.com)
+- **GitHub**: Repository connected
 
-### Environment Setup
+---
 
-Create the following environment files:
+## Quick Deployment (5 Minutes)
 
-#### `.env.local` (Development)
+### 1. Deploy Convex Backend
+
+```bash
+# Install dependencies
+npm install
+
+# Deploy Convex to production
+npx convex deploy
+
+# Save the deployment URL shown in terminal
+# Example: https://your-project.convex.cloud
+```
+
+### 2. Deploy to Vercel
+
+**Option A: Via Vercel Dashboard**
+
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Import your GitHub repository
+3. Add environment variables (see below)
+4. Click "Deploy"
+
+**Option B: Via CLI**
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+
+# Follow prompts to add environment variables
+```
+
+### 3. Configure Environment Variables
+
+Add these in Vercel dashboard (`Settings > Environment Variables`):
+
+```bash
+NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
+NEXTAUTH_SECRET=your-32-character-secret-minimum
+NEXTAUTH_URL=https://your-domain.vercel.app
+GOOGLE_CLIENT_ID=your-google-client-id       # Optional
+GOOGLE_CLIENT_SECRET=your-google-secret      # Optional
+CLOUDINARY_URL=cloudinary://key:secret@name  # Optional
+```
+
+### 4. Verify Deployment
+
+```bash
+# Check deployment status
+curl -I https://your-domain.vercel.app
+
+# Check health endpoint
+curl https://your-domain.vercel.app/api/health
+
+# Expected response: {"status":"healthy","backend":"convex",...}
+```
+
+**That's it!** Your application is live. 🎉
+
+---
+
+## Environment Configuration
+
+### Development (.env.local)
 
 ```env
-# Database
-CONVEX_URL="[Convex development deployment URL]"
+# Convex
+NEXT_PUBLIC_CONVEX_URL="https://dev-project.convex.cloud"
 
-# Authentication
-NEXTAUTH_SECRET="your-development-secret-key-here"
+# Auth
+NEXTAUTH_SECRET="development-secret-key-32-chars"
 NEXTAUTH_URL="http://localhost:3000"
 
 # OAuth (Optional)
 GOOGLE_CLIENT_ID=""
 GOOGLE_CLIENT_SECRET=""
 
-# Email (Optional)
-SMTP_HOST=""
-SMTP_PORT="587"
-SMTP_USER=""
-SMTP_PASS=""
-
-# File Upload
-UPLOAD_PATH="./public/uploads"
-MAX_FILE_SIZE="10485760" # 10MB
-
-# Performance
-NODE_ENV="development"
-NEXT_PUBLIC_API_URL="http://localhost:3000"
+# Media (Optional)
+CLOUDINARY_URL=""
 ```
 
-#### `.env.production` (Production)
+### Production (Vercel Environment Variables)
+
+Set these in Vercel dashboard:
 
 ```env
-# Database
-CONVEX_URL="[Convex production deployment URL]"
+# Convex
+NEXT_PUBLIC_CONVEX_URL="https://prod-project.convex.cloud"
 
-# Authentication
-NEXTAUTH_SECRET="your-production-secret-key-here"
-NEXTAUTH_URL="https://your-domain.com"
+# Auth
+NEXTAUTH_SECRET="production-secret-32-chars-minimum-secure"
+NEXTAUTH_URL="https://your-production-domain.com"
 
-# OAuth
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
+# OAuth (Optional)
+GOOGLE_CLIENT_ID="prod-google-client-id"
+GOOGLE_CLIENT_SECRET="prod-google-client-secret"
 
-# Email
-SMTP_HOST="smtp.gmail.com"
-SMTP_PORT="587"
-SMTP_USER="noreply@your-domain.com"
-SMTP_PASS="app-specific-password"
-
-# File Upload
-UPLOAD_PATH="./public/uploads"
-MAX_FILE_SIZE="10485760"
-
-# Performance
-NODE_ENV="production"
-NEXT_PUBLIC_API_URL="https://your-domain.com"
+# Media (Optional)
+CLOUDINARY_URL="cloudinary://prod-key:prod-secret@prod-cloud"
 ```
 
-## Database Setup
+---
 
-### 1. Create PostgreSQL Database
+## Convex Deployment Details
 
-```sql
--- Create production database
-CREATE DATABASE manitos_prod;
-CREATE USER manitos_user WITH ENCRYPTED PASSWORD 'secure_password_here';
-GRANT ALL PRIVILEGES ON DATABASE manitos_prod TO manitos_user;
-
--- Create development database (optional)
-CREATE DATABASE manitos_dev;
-GRANT ALL PRIVILEGES ON DATABASE manitos_dev TO manitos_user;
-```
-
-### 2. Run Database Migrations
+### Initial Setup
 
 ```bash
-# Install dependencies
-npm install
+# First time setup
+npx convex dev
 
-# Generate Prisma client
-npx prisma generate
-
-# Run migrations
-npx prisma migrate deploy
-
-# (Optional) Seed database with initial data
-npx prisma db seed
+# This will:
+# - Authenticate with Convex
+# - Create/select project
+# - Generate types
+# - Provide deployment URL
 ```
 
-### 3. Verify Database Connection
+### Production Deployment
 
 ```bash
-# Test database connection
-npx prisma db push --preview-feature
+# Deploy schema and functions to production
+npx convex deploy
+
+# Deploy with confirmation bypass
+npx convex deploy -y
+
+# Check deployment status
+npx convex dashboard
 ```
 
-## Build Process
+### Environment Management
 
-### Development Build
+Convex automatically manages:
 
-```bash
-# Install dependencies
-npm install
+- ✅ Database schema
+- ✅ Function deployments
+- ✅ Type generation
+- ✅ Data persistence
+- ✅ Backups
 
-# Start development server
-npm run dev
-```
+No migrations or manual database management needed!
 
-### Production Build
+---
 
-```bash
-# Install dependencies
-npm ci --production=false
+## Vercel Deployment Details
 
-# Build application
-npm run build
+### Automatic Deployments
 
-# Verify build
-npm run start
-```
+Vercel automatically deploys on:
 
-## Deployment Options
+- ✅ Push to `main` branch → Production
+- ✅ Push to other branches → Preview deployments
+- ✅ Pull requests → Preview deployments
 
-### Option 1: Vercel (Recommended)
+### Build Configuration
 
-#### 1. Connect Repository
+Vercel auto-detects Next.js. No configuration needed.
 
-1. Go to [vercel.com](https://vercel.com)
-2. Click "New Project"
-3. Import your GitHub repository
-4. Configure project settings
+**Vercel Settings** (optional customization):
 
-#### 2. Environment Variables
-
-Add the following environment variables in Vercel dashboard:
-
-```bash
-CONVEX_URL=[Convex deployment URL]
-NEXTAUTH_SECRET=...
-NEXTAUTH_URL=https://your-project.vercel.app
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-```
-
-#### 3. Database Connection
-
-For Vercel, use a cloud PostgreSQL service:
-
-- **Supabase**: Free tier available
-- **PlanetScale**: MySQL alternative
-- **Railway**: PostgreSQL hosting
-- **ElephantSQL**: PostgreSQL as a service
-
-#### 4. Deploy
-
-```bash
-# Push to main branch to trigger deployment
-git push origin main
-```
-
-### Option 2: Docker Deployment
-
-#### 1. Create Dockerfile
-
-```dockerfile
-# Use Node.js 18 Alpine
-FROM node:18-alpine
-
-# Set working directory
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-COPY prisma ./prisma/
-
-# Install dependencies
-RUN npm ci --production=false
-
-# Copy source code
-COPY . .
-
-# Generate Prisma client
-RUN npx prisma generate
-
-# Build application
-RUN npm run build
-
-# Expose port
-EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node healthcheck.js
-
-# Start application
-CMD ["npm", "start"]
-```
-
-#### 2. Create docker-compose.yml
-
-```yaml
-version: "3.8"
-
-services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - CONVEX_URL=[Convex deployment URL]
-      - NEXTAUTH_SECRET=your-secret
-      - NEXTAUTH_URL=http://localhost:3000
-    volumes:
-      - ./public/uploads:/app/public/uploads
-```
-
-#### 3. Deploy with Docker
-
-```bash
-# Build and start services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f app
-
-# Scale application
-docker-compose up -d --scale app=3
-```
-
-### Option 3: Traditional Server
-
-#### 1. Server Requirements
-
-- Ubuntu 20.04+ or CentOS 7+
-- 2GB RAM minimum, 4GB recommended
-- 20GB storage minimum
-- Node.js 18+
-
-#### 2. Server Setup
-
-```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
-
-# Install Node.js 18
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Install PostgreSQL
-sudo apt install postgresql postgresql-contrib -y
-
-# Install Nginx
-sudo apt install nginx -y
-
-# Install PM2 for process management
-sudo npm install -g pm2
-```
-
-#### 3. Configure PostgreSQL
-
-```bash
-# Switch to postgres user
-sudo -u postgres psql
-
-# Create database and user
-CREATE DATABASE manitos_prod;
-CREATE USER manitos_user WITH ENCRYPTED PASSWORD 'secure_password';
-GRANT ALL PRIVILEGES ON DATABASE manitos_prod TO manitos_user;
-\q
-```
-
-#### 4. Deploy Application
-
-```bash
-# Clone repository
-git clone https://github.com/your-org/manitos-pintadas.git
-cd manitos-pintadas
-
-# Install dependencies
-npm ci --production=false
-
-# Build application
-npm run build
-
-# Configure environment
-cp .env.example .env.production
-# Edit .env.production with your values
-
-# Run database migrations
-npx prisma migrate deploy
-npx prisma generate
-
-# Start application with PM2
-pm2 start npm --name "manitos-dashboard" -- run start
-pm2 save
-pm2 startup
-```
-
-#### 5. Configure Nginx
-
-```nginx
-# /etc/nginx/sites-available/manitos-dashboard
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    # Redirect HTTP to HTTPS
-    return 301 https://$server_name$request_uri;
+```json
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs"
 }
-
-server {
-    listen 443 ssl http2;
-    server_name your-domain.com;
-
-    # SSL configuration
-    ssl_certificate /path/to/ssl/cert.pem;
-    ssl_certificate_key /path/to/ssl/private.key;
-
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header Referrer-Policy "no-referrer-when-downgrade" always;
-    add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;
-
-    # Gzip compression
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;
-
-    # Handle Next.js
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-
-    # Cache static assets
-    location /_next/static {
-        proxy_pass http://localhost:3000;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-
-    # API rate limiting
-    location /api {
-        proxy_pass http://localhost:3000;
-        limit_req zone=api burst=20 nodelay;
-    }
-}
-
-# Rate limiting zones
-limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
-limit_req_zone $binary_remote_addr zone=auth:10m rate=5r/m;
 ```
 
-#### 6. SSL Certificate (Let's Encrypt)
+### Custom Domain
+
+1. Go to Vercel project → Settings → Domains
+2. Add your custom domain
+3. Update DNS records as shown
+4. Update `NEXTAUTH_URL` environment variable
+
+---
+
+## Deployment Workflow
+
+### Development → Production
 
 ```bash
-# Install Certbot
-sudo apt install certbot python3-certbot-nginx -y
+# 1. Local development
+npm run dev                    # Next.js on localhost:3000
+npx convex dev                 # Convex in dev mode
 
-# Get SSL certificate
-sudo certbot --nginx -d your-domain.com
+# 2. Test locally
+npm run lint                   # Check code quality
+npm run type-check             # Verify TypeScript
+npm run test:unit              # Run tests (optional)
 
-# Set up auto-renewal
-sudo crontab -e
-# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+# 3. Commit changes
+git add .
+git commit -m "feat: your feature"
+
+# 4. Deploy Convex backend
+npx convex deploy
+
+# 5. Deploy Next.js frontend
+git push origin main           # Vercel auto-deploys
+
+# 6. Verify
+curl https://your-domain.com/api/health
 ```
 
-## Monitoring and Maintenance
+---
 
-### Application Monitoring
+## Database Management
 
-#### 1. PM2 Monitoring
+### Seed Production Data
 
 ```bash
-# Monitor application
-pm2 monit
+# Connect to production Convex
+npx convex dashboard
 
-# View logs
-pm2 logs manitos-dashboard
-
-# Restart application
-pm2 restart manitos-dashboard
-
-# Update application
-pm2 reload manitos-dashboard
+# Or run seed script with production URL
+CONVEX_DEPLOYMENT=prod npx tsx scripts/seed-convex.ts
 ```
 
-#### 2. Nginx Monitoring
+### View Production Data
 
 ```bash
-# Check Nginx status
-sudo systemctl status nginx
+# Open Convex dashboard
+npx convex dashboard
 
-# View access logs
-sudo tail -f /var/log/nginx/access.log
-
-# View error logs
-sudo tail -f /var/log/nginx/error.log
-```
-
-#### 3. Database Monitoring
-
-```bash
-# Check PostgreSQL status
-sudo systemctl status postgresql
-
-# Monitor database connections
-psql -h localhost -U manitos_user -d manitos_prod -c "SELECT count(*) FROM pg_stat_activity;"
-
-# Database size
-psql -h localhost -U manitos_user -d manitos_prod -c "SELECT pg_size_pretty(pg_database_size('manitos_prod'));"
+# Navigate to "Data" tab to view/edit records
 ```
 
 ### Backup Strategy
 
-#### 1. Database Backup
+Convex provides automatic backups:
+
+- Point-in-time recovery
+- Automatic snapshots
+- Export functionality via dashboard
+
+---
+
+## Monitoring & Troubleshooting
+
+### Check Deployment Status
 
 ```bash
-# Create backup script
-#!/bin/bash
-BACKUP_DIR="/var/backups/manitos"
-DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="$BACKUP_DIR/manitos_backup_$DATE.sql"
+# Vercel deployments
+npx vercel ls
 
-# Create backup directory if it doesn't exist
-mkdir -p $BACKUP_DIR
+# Convex deployments
+npx convex dashboard
 
-# Create database backup
-pg_dump -h localhost -U manitos_user manitos_prod > $BACKUP_FILE
-
-# Compress backup
-gzip $BACKUP_FILE
-
-# Keep only last 7 days of backups
-find $BACKUP_DIR -name "*.sql.gz" -mtime +7 -delete
-
-echo "Backup completed: $BACKUP_FILE.gz"
+# View logs
+npx vercel logs
 ```
-
-#### 2. File Backup
-
-```bash
-# Backup uploaded files
-tar -czf /var/backups/manitos/uploads_$(date +%Y%m%d).tar.gz /path/to/uploads/
-```
-
-#### 3. Automated Backups
-
-```bash
-# Add to crontab for daily backups
-0 2 * * * /path/to/backup-script.sh
-```
-
-### Performance Optimization
-
-#### 1. Database Optimization
-
-```sql
--- Analyze database performance
-EXPLAIN ANALYZE SELECT * FROM users WHERE role = 'ADMIN';
-
--- Create indexes for common queries
-CREATE INDEX CONCURRENTLY idx_users_role_active ON users(role, is_active);
-CREATE INDEX CONCURRENTLY idx_meetings_scheduled_date ON meetings(scheduled_date);
-CREATE INDEX CONCURRENTLY idx_notifications_recipient_read ON notifications(recipient_id, read);
-
--- Vacuum and analyze
-VACUUM ANALYZE;
-```
-
-#### 2. Application Optimization
-
-```bash
-# Enable production optimizations
-NODE_ENV=production npm run build
-
-# Configure PM2 for optimal performance
-pm2 start npm --name "manitos-dashboard" -- run start --max-memory-restart 1G --instances max
-```
-
-## Troubleshooting
 
 ### Common Issues
 
-#### 1. Database Connection Issues
+#### 1. "Convex client not initialized"
+
+**Cause**: Missing `NEXT_PUBLIC_CONVEX_URL`
+
+**Fix**:
 
 ```bash
-# Check PostgreSQL logs
-sudo tail -f /var/log/postgresql/postgresql-*.log
+# Check Vercel environment variables
+npx vercel env ls
 
-# Test database connection
-psql -h localhost -U manitos_user -d manitos_prod -c "SELECT version();"
+# Add if missing
+npx vercel env add NEXT_PUBLIC_CONVEX_URL production
+
+# Redeploy
+git push origin main
 ```
 
-#### 2. Application Not Starting
+#### 2. Authentication loop
+
+**Cause**: Wrong `NEXTAUTH_URL`
+
+**Fix**:
 
 ```bash
-# Check application logs
-pm2 logs manitos-dashboard
+# Update NEXTAUTH_URL to match your domain
+npx vercel env rm NEXTAUTH_URL production
+npx vercel env add NEXTAUTH_URL production
+# Enter: https://your-actual-domain.com
 
-# Check environment variables
-pm2 show manitos-dashboard
-
-# Restart application
-pm2 restart manitos-dashboard
+# Redeploy
+git push origin main
 ```
 
-#### 3. Memory Issues
+#### 3. Build fails
+
+**Cause**: TypeScript errors or missing dependencies
+
+**Fix**:
 
 ```bash
-# Monitor memory usage
-pm2 monit
+# Test build locally
+npm run build
 
-# Check system memory
-free -h
-
-# Increase Node.js memory limit
-NODE_OPTIONS="--max-old-space-size=2048" pm2 restart manitos-dashboard
+# Fix errors, then commit and push
+git commit -am "fix: build errors"
+git push origin main
 ```
 
-#### 4. SSL Certificate Issues
+#### 4. 500 Server Errors
+
+**Check**:
+
+- Vercel function logs: `npx vercel logs`
+- Convex dashboard errors
+- Environment variables are set correctly
+
+---
+
+## Performance Optimization
+
+### Automatic Optimizations
+
+Vercel + Convex provide:
+
+- ✅ Global CDN (Edge Network)
+- ✅ Automatic code splitting
+- ✅ Image optimization
+- ✅ Serverless functions
+- ✅ Smart caching
+
+### Manual Optimizations
 
 ```bash
-# Check certificate status
-sudo certbot certificates
+# Analyze bundle size
+npm run analyze
 
-# Renew certificates
-sudo certbot renew
-
-# Test SSL configuration
-curl -I https://your-domain.com
+# Check Lighthouse scores
+npm run test:performance
 ```
 
-## Security Checklist
+---
 
-### Pre-deployment
+## Security Best Practices
 
-- [ ] Environment variables configured
-- [ ] Database credentials secured
-- [ ] SSL/TLS certificates installed
-- [ ] Firewall configured
-- [ ] File permissions set correctly
-- [ ] Backup strategy implemented
+### Before Deploying
 
-### Post-deployment
+- [ ] Never commit `.env` files
+- [ ] Use strong `NEXTAUTH_SECRET` (32+ characters)
+- [ ] Enable Vercel security headers
+- [ ] Review `git diff` for secrets before pushing
+- [ ] Use different secrets for dev/prod
 
-- [ ] Security headers configured
-- [ ] Rate limiting enabled
-- [ ] Monitoring tools set up
-- [ ] Backup verification
-- [ ] Performance testing completed
-- [ ] SSL certificate validation
+### Vercel Security Features
 
-## Support
+Enable in Vercel dashboard:
 
-For deployment support:
+- ✅ Automatic HTTPS
+- ✅ DDoS protection
+- ✅ Security headers
+- ✅ Environment variable encryption
 
-- 📧 Email: <deploy@manitospintadas.com>
-- 📖 Documentation: <https://docs.manitospintadas.com/deployment>
-- 🐛 Issues: <https://github.com/manitos-pintadas/dashboard/issues>
-- 💬 Community: <https://community.manitospintadas.com>
+---
+
+## Rollback Procedure
+
+### Vercel Rollback
+
+```bash
+# List recent deployments
+npx vercel ls
+
+# Rollback to previous deployment
+npx vercel rollback [deployment-url]
+
+# Or use Vercel dashboard → Deployments → Promote to Production
+```
+
+### Convex Rollback
+
+Convex doesn't support automatic rollback, but you can:
+
+1. Revert code changes in git
+2. Run `npx convex deploy` to deploy previous schema
+
+---
+
+## Cost Estimates
+
+### Free Tier Limits
+
+**Vercel Free**:
+
+- 100 GB bandwidth/month
+- Unlimited deployments
+- Automatic SSL
+- Preview deployments
+
+**Convex Free**:
+
+- 1 GB database storage
+- 1M function calls/month
+- Real-time subscriptions
+- Automatic backups
+
+### Production Estimates (100-500 users)
+
+- **Vercel Pro**: $20/month
+- **Convex**: Typically within free tier
+- **Total**: ~$20/month
+
+---
+
+## Support Resources
+
+### Documentation
+
+- [Vercel Docs](https://vercel.com/docs)
+- [Convex Docs](https://docs.convex.dev)
+- [Next.js Docs](https://nextjs.org/docs)
+
+### Dashboards
+
+- Vercel: [vercel.com](https://vercel.com)
+- Convex: `npx convex dashboard`
+
+### Project Docs
+
+- `START_HERE.md` - Quick start
+- `DOCUMENTATION_INDEX.md` - All docs
+- `docs/TROUBLESHOOTING_AUTH.md` - Auth issues
+
+---
+
+## Quick Reference
+
+```bash
+# Development
+npm run dev                     # Start Next.js dev server
+npx convex dev                  # Start Convex dev server
+
+# Quality checks
+npm run lint                    # ESLint check
+npm run type-check              # TypeScript check
+npm run test:unit               # Unit tests
+
+# Deployment
+npx convex deploy               # Deploy Convex backend
+git push origin main            # Deploy Next.js (Vercel auto-deploy)
+
+# Monitoring
+npx vercel logs                 # View Vercel logs
+npx convex dashboard            # View Convex dashboard
+curl https://domain.com/api/health  # Health check
+
+# Troubleshooting
+npx vercel env ls               # List environment variables
+npx vercel ls                   # List deployments
+npx vercel rollback             # Rollback deployment
+```
+
+---
+
+**Remember**: Deploy Convex first (`npx convex deploy`), then push to GitHub for Vercel deployment.
+
+Simple. Fast. Serverless. ✨

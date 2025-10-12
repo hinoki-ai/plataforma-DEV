@@ -228,14 +228,6 @@ export default function Navigation() {
                     {t("nav.center.council")}
                   </Link>
 
-                  {/* Position 6: Proyecto Educativo */}
-                  <Link
-                    href="/proyecto-educativo"
-                    className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
-                  >
-                    {t("nav.educational.project")}
-                  </Link>
-
                   {/* Position 2: Portal Escolar/Cerrar Sesión */}
                   {!session ? (
                     <Link
@@ -286,12 +278,6 @@ export default function Navigation() {
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
                     {t("nav.center.council")}
-                  </Link>
-                  <Link
-                    href="/proyecto-educativo"
-                    className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
-                  >
-                    {t("nav.educational.project")}
                   </Link>
                 </>
               ) : null}
