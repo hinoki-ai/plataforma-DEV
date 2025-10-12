@@ -39,8 +39,8 @@ const mockAllPMEGoals: PMEGoal[] = [
     priority: "HIGH",
     status: "IN_PROGRESS",
     level: "NT1",
-    startDate: "2025-03-01T00:00:00.000Z",
-    targetDate: "2025-06-30T00:00:00.000Z",
+    startDate: new Date("2025-03-01T00:00:00.000Z"),
+    targetDate: new Date("2025-06-30T00:00:00.000Z"),
     progress: 60,
     evidence: [
       {
@@ -48,12 +48,12 @@ const mockAllPMEGoals: PMEGoal[] = [
         type: "DOCUMENT",
         title: "Evaluación diagnóstica",
         url: "/uploads/evidence/evaluacion.pdf",
-        uploadDate: "2025-03-15T00:00:00.000Z",
+        uploadDate: new Date("2025-03-15T00:00:00.000Z"),
       },
     ],
     createdBy: "user-1",
-    createdAt: "2025-03-01T00:00:00.000Z",
-    updatedAt: "2025-03-15T00:00:00.000Z",
+    createdAt: new Date("2025-03-01T00:00:00.000Z"),
+    updatedAt: new Date("2025-03-15T00:00:00.000Z"),
   },
   // Teacher 2 Goals
   {
@@ -66,13 +66,13 @@ const mockAllPMEGoals: PMEGoal[] = [
     priority: "MEDIUM",
     status: "IN_PROGRESS",
     level: "NT2",
-    startDate: "2025-03-01T00:00:00.000Z",
-    targetDate: "2025-07-31T00:00:00.000Z",
+    startDate: new Date("2025-03-01T00:00:00.000Z"),
+    targetDate: new Date("2025-07-31T00:00:00.000Z"),
     progress: 40,
     evidence: [],
     createdBy: "user-1",
-    createdAt: "2025-03-01T00:00:00.000Z",
-    updatedAt: "2025-03-25T00:00:00.000Z",
+    createdAt: new Date("2025-03-01T00:00:00.000Z"),
+    updatedAt: new Date("2025-03-25T00:00:00.000Z"),
   },
   // Teacher 3 Goals
   {
@@ -85,8 +85,8 @@ const mockAllPMEGoals: PMEGoal[] = [
     priority: "HIGH",
     status: "PENDING_REVIEW",
     level: "BOTH",
-    startDate: "2025-04-01T00:00:00.000Z",
-    targetDate: "2025-08-31T00:00:00.000Z",
+    startDate: new Date("2025-04-01T00:00:00.000Z"),
+    targetDate: new Date("2025-08-31T00:00:00.000Z"),
     progress: 25,
     evidence: [
       {
@@ -94,12 +94,12 @@ const mockAllPMEGoals: PMEGoal[] = [
         type: "DOCUMENT",
         title: "Plan de adaptaciones curriculares",
         url: "/uploads/evidence/adaptaciones.pdf",
-        uploadDate: "2025-04-05T00:00:00.000Z",
+        uploadDate: new Date("2025-04-05T00:00:00.000Z"),
       },
     ],
     createdBy: "user-1",
-    createdAt: "2025-04-01T00:00:00.000Z",
-    updatedAt: "2025-04-05T00:00:00.000Z",
+    createdAt: new Date("2025-04-01T00:00:00.000Z"),
+    updatedAt: new Date("2025-04-05T00:00:00.000Z"),
   },
   // Teacher 4 Goals
   {
@@ -112,8 +112,8 @@ const mockAllPMEGoals: PMEGoal[] = [
     priority: "HIGH",
     status: "APPROVED",
     level: "ALL",
-    startDate: "2025-03-15T00:00:00.000Z",
-    targetDate: "2025-09-30T00:00:00.000Z",
+    startDate: new Date("2025-03-15T00:00:00.000Z"),
+    targetDate: new Date("2025-09-30T00:00:00.000Z"),
     progress: 80,
     evidence: [
       {
@@ -121,19 +121,19 @@ const mockAllPMEGoals: PMEGoal[] = [
         type: "PHOTO",
         title: "Taller padres",
         url: "/uploads/evidence/taller-padres.jpg",
-        uploadDate: "2025-04-10T00:00:00.000Z",
+        uploadDate: new Date("2025-04-10T00:00:00.000Z"),
       },
       {
         id: "ev-4",
         type: "DOCUMENT",
         title: "Encuesta satisfacción",
         url: "/uploads/evidence/encuesta.pdf",
-        uploadDate: "2025-04-15T00:00:00.000Z",
+        uploadDate: new Date("2025-04-15T00:00:00.000Z"),
       },
     ],
     createdBy: "teacher-4",
-    createdAt: "2025-03-15T00:00:00.000Z",
-    updatedAt: "2025-04-20T00:00:00.000Z",
+    createdAt: new Date("2025-03-15T00:00:00.000Z"),
+    updatedAt: new Date("2025-04-20T00:00:00.000Z"),
   },
   // Teacher 5 Goals
   {
@@ -146,8 +146,8 @@ const mockAllPMEGoals: PMEGoal[] = [
     priority: "MEDIUM",
     status: "COMPLETED",
     level: "BOTH",
-    startDate: "2025-02-01T00:00:00.000Z",
-    targetDate: "2025-05-31T00:00:00.000Z",
+    startDate: new Date("2025-02-01T00:00:00.000Z"),
+    targetDate: new Date("2025-05-31T00:00:00.000Z"),
     progress: 100,
     evidence: [
       {
@@ -155,19 +155,19 @@ const mockAllPMEGoals: PMEGoal[] = [
         type: "PHOTO",
         title: "Aula reorganizada",
         url: "/uploads/evidence/aula-nueva.jpg",
-        uploadDate: "2025-05-20T00:00:00.000Z",
+        uploadDate: new Date("2025-05-20T00:00:00.000Z"),
       },
       {
         id: "ev-6",
         type: "VIDEO",
         title: "Tour virtual aula",
         url: "/uploads/evidence/tour-aula.mp4",
-        uploadDate: "2025-05-25T00:00:00.000Z",
+        uploadDate: new Date("2025-05-25T00:00:00.000Z"),
       },
     ],
     createdBy: "teacher-5",
-    createdAt: "2025-02-01T00:00:00.000Z",
-    updatedAt: "2025-05-25T00:00:00.000Z",
+    createdAt: new Date("2025-02-01T00:00:00.000Z"),
+    updatedAt: new Date("2025-05-25T00:00:00.000Z"),
   },
 ];
 

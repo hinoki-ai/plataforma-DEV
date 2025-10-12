@@ -12,7 +12,7 @@ import type { PlanningDocumentsResponse } from "@/lib/types/service-responses";
 export default function AdminPlanificacionesPage() {
   const { t } = useLanguage();
   const searchParams = useSearchParams();
-  const [documents, setDocuments] = useState<PlanningDocumentsResponse["data"]>(null);
+  const [documents, setDocuments] = useState<PlanningDocumentsResponse["data"]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -94,7 +94,7 @@ export default function AdminPlanificacionesPage() {
           </p>
         </div>
         <PlanningDashboard
-          documents={documents}
+          documents={documents || []}
           searchParams={{
             q: searchParams.get("q") || undefined,
             subject: searchParams.get("subject") || undefined,
