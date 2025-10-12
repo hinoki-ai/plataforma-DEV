@@ -20,9 +20,9 @@ async function checkUsers() {
 
   try {
     const users = await client.query(api.users.getUsers, {});
-    
+
     console.log(`📊 Total users: ${users.length}\n`);
-    
+
     if (users.length === 0) {
       console.log("⚠️  No users found in database");
       return;
@@ -30,17 +30,18 @@ async function checkUsers() {
 
     console.log("👥 All users:");
     users.forEach((user) => {
-      console.log(`   • ${user.email} - ${user.role} - Active: ${user.isActive}`);
+      console.log(
+        `   • ${user.email} - ${user.role} - Active: ${user.isActive}`,
+      );
       if (user.name) console.log(`     Name: ${user.name}`);
     });
 
-    const admins = users.filter(u => u.role === "ADMIN");
+    const admins = users.filter((u) => u.role === "ADMIN");
     console.log(`\n🔑 Admin users: ${admins.length}`);
     admins.forEach((admin) => {
       console.log(`   • ${admin.email} - Active: ${admin.isActive}`);
     });
-
-  } catch (_error) { (error) {
+  } catch (error) {
     console.error("❌ Error checking users:", error);
     process.exit(1);
   }
