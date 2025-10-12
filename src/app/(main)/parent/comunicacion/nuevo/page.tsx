@@ -55,25 +55,25 @@ export default function NuevoMensajePage() {
     {
       id: "1",
       name: "Dirección",
-      email: "direccion@manitospintadas.cl",
+      email: "direccion@plataforma-astral.com",
       role: "Admin",
     },
     {
       id: "2",
       name: "Profesor Jefe",
-      email: "profesor@manitospintadas.cl",
+      email: "profesor@plataforma-astral.com",
       role: "Teacher",
     },
     {
       id: "3",
       name: "Coordinación PIE",
-      email: "pie@manitospintadas.cl",
+      email: "pie@plataforma-astral.com",
       role: "Specialist",
     },
     {
       id: "4",
       name: "Psicopedagoga",
-      email: "psicopedagoga@manitospintadas.cl",
+      email: "psicopedagoga@plataforma-astral.com",
       role: "Specialist",
     },
   ];

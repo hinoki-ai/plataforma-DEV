@@ -136,7 +136,10 @@ export function ConvexAdapter(client: ConvexHttpClient): Adapter {
         token_type: account.token_type ?? undefined,
         scope: account.scope ?? undefined,
         id_token: account.id_token ?? undefined,
-        session_state: typeof account.session_state === 'string' ? account.session_state : undefined,
+        session_state:
+          typeof account.session_state === "string"
+            ? account.session_state
+            : undefined,
       });
     },
 

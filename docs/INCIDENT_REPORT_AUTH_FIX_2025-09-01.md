@@ -2,12 +2,12 @@
 
 **Date**: September 1, 2025  
 **Status**: RESOLVED ✅  
-**Site**: https://school.aramac.dev  
+**Site**: <https://school.aramac.dev>  
 **Duration**: ~1 month of intermittent failures
 
 ## 🚨 EXECUTIVE SUMMARY
 
-The authentication system for Manitos Pintadas School Management System was experiencing "credenciales invalid" errors despite correct credentials. The root cause was an **incorrect NEXTAUTH_URL environment variable** in the Vercel production deployment.
+The authentication system for Plataforma Astral Educational Management System was experiencing "credenciales invalid" errors despite correct credentials. The root cause was an **incorrect NEXTAUTH_URL environment variable** in the Vercel production deployment.
 
 **Impact**: Complete authentication failure preventing access to all user roles (ADMIN, PROFESOR, PARENT)
 
@@ -32,7 +32,7 @@ The authentication system for Manitos Pintadas School Management System was expe
 
 ### Authentication Flow
 
-```
+```text
 User Login → NextAuth.js → NEXTAUTH_URL validation → JWT creation → Session
                    ↑
               FAILS HERE if URL mismatch
@@ -42,13 +42,13 @@ User Login → NextAuth.js → NEXTAUTH_URL validation → JWT creation → Sess
 
 **Before (BROKEN)**:
 
-```
+```bash
 NEXTAUTH_URL="https://manitos-pintadas.vercel.app"  # OLD DOMAIN
 ```
 
 **After (WORKING)**:
 
-```
+```bash
 NEXTAUTH_URL="https://school.aramac.dev"  # CURRENT DOMAIN
 ```
 
@@ -211,7 +211,7 @@ If authentication fails, emergency admin access is available:
 ## 🎉 RESOLUTION CONFIRMATION
 
 **Date Fixed**: September 1, 2025  
-**Fix Deployed**: https://school.aramac.dev  
+**Fix Deployed**: <https://school.aramac.dev>  
 **Status**: ✅ FULLY OPERATIONAL  
 **Next Steps**: Implement preventive measures and improve monitoring
 

@@ -37,6 +37,10 @@ const eslintConfig = [
           varsIgnorePattern: "^_",
         },
       ],
+      // Disable apple-touch-icon requirement since it's handled by Next.js metadata API
+      "@next/next/no-html-link-for-pages": "off",
+      // Allow apple-touch-icon to be handled by Next.js metadata API
+      "react/no-invalid-html-attribute": "off",
     },
   },
 ];

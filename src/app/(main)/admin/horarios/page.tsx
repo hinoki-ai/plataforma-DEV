@@ -5,12 +5,12 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { HorariosDashboardReal } from "@/components/horarios/HorariosDashboardReal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Crown, Shield, Calendar } from "lucide-react";
+import { Shield, Calendar } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default function AdminHorariosPage() {
-  const { data: session } = useSession();
+  const { data: _session } = useSession();
 
   return (
     <PageTransition skeletonType="page" duration={700}>

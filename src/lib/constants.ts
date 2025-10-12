@@ -1,7 +1,7 @@
 // Application-wide constants
-export const APP_NAME = "Manitos Pintadas";
+export const APP_NAME = "Plataforma Astral";
 export const APP_DESCRIPTION =
-  "Sistema de gestión y comunicación para Manitos Pintadas";
+  "Sistema de gestión y comunicación para Plataforma Astral";
 
 // User roles
 export const USER_ROLES = {
@@ -20,9 +20,7 @@ export const ROUTES = {
   LOGIN: "/login",
   ADMIN: "/admin",
   PROFESOR: "/profesor",
-  PUBLIC: {
-    EQUIPO_MULTIDISCIPLINARIO: "/public/equipo-multidisciplinario",
-  },
+  PUBLIC: {},
 } as const;
 
 // Educational subjects for planning documents - LEGACY
@@ -79,9 +77,9 @@ export const FILE_UPLOAD = {
 export const SCHOOL_CONFIG = {
   RBD: process.env.SCHOOL_RBD || "XXXXXXX",
   PHONE: process.env.SCHOOL_PHONE || "+569XXXXXXXX",
-  EMAIL: process.env.SCHOOL_EMAIL || "contacto@manitospintadas.cl",
+  EMAIL: process.env.SCHOOL_EMAIL || "contacto@plataforma-astral.com",
   ADDRESS: process.env.SCHOOL_ADDRESS || "Dirección de la escuela",
-  WEBSITE: process.env.SCHOOL_WEBSITE || "https://manitospintadas.cl",
+  WEBSITE: process.env.SCHOOL_WEBSITE || "https://plataforma-astral.com",
 } as const;
 
 export const UPLOAD_CONFIG = {

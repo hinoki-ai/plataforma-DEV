@@ -8,7 +8,7 @@ import { UserRole } from "@/lib/prisma-compat-types";
 
 export type ExtendedUserRole = UserRole;
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -18,7 +18,7 @@ export interface ApiResponse<T = any> {
 export interface ApiRequestOptions {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   userRole?: ExtendedUserRole;
   timeout?: number;
 }
@@ -37,7 +37,7 @@ export class ApiError extends Error {
 /**
  * Enhanced fetch with consistent error handling and role-aware headers
  */
-export async function apiRequest<T = any>(
+export async function apiRequest<T = unknown>(
   url: string,
   options: ApiRequestOptions = {},
 ): Promise<ApiResponse<T>> {
@@ -129,9 +129,9 @@ export async function apiGet<T = any>(
 /**
  * POST request wrapper
  */
-export async function apiPost<T = any>(
+export async function apiPost<T = unknown>(
   url: string,
-  body?: any,
+  body?: unknown,
   options?: Omit<ApiRequestOptions, "method">,
 ): Promise<ApiResponse<T>> {
   return apiRequest<T>(url, { ...options, method: "POST", body });
@@ -140,9 +140,9 @@ export async function apiPost<T = any>(
 /**
  * PUT request wrapper
  */
-export async function apiPut<T = any>(
+export async function apiPut<T = unknown>(
   url: string,
-  body?: any,
+  body?: unknown,
   options?: Omit<ApiRequestOptions, "method">,
 ): Promise<ApiResponse<T>> {
   return apiRequest<T>(url, { ...options, method: "PUT", body });
@@ -151,7 +151,7 @@ export async function apiPut<T = any>(
 /**
  * DELETE request wrapper
  */
-export async function apiDelete<T = any>(
+export async function apiDelete<T = unknown>(
   url: string,
   options?: Omit<ApiRequestOptions, "method" | "body">,
 ): Promise<ApiResponse<T>> {
@@ -161,9 +161,9 @@ export async function apiDelete<T = any>(
 /**
  * PATCH request wrapper
  */
-export async function apiPatch<T = any>(
+export async function apiPatch<T = unknown>(
   url: string,
-  body?: any,
+  body?: unknown,
   options?: Omit<ApiRequestOptions, "method">,
 ): Promise<ApiResponse<T>> {
   return apiRequest<T>(url, { ...options, method: "PATCH", body });
@@ -172,7 +172,7 @@ export async function apiPatch<T = any>(
 /**
  * Upload file with progress tracking
  */
-export async function apiUpload<T = any>(
+export async function apiUpload<T = unknown>(
   url: string,
   file: File,
   options?: {
@@ -261,13 +261,13 @@ export async function apiBatch<T = any>(
 /**
  * Retry logic for failed requests
  */
-export async function apiWithRetry<T = any>(
+export async function apiWithRetry<T = unknown>(
   url: string,
   options: ApiRequestOptions = {},
   maxRetries: number = 3,
   retryDelay: number = 1000,
 ): Promise<ApiResponse<T>> {
-  let lastError: any;
+  let lastError: Error;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {

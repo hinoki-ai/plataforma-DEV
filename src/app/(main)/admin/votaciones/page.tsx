@@ -2,25 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { motion } from "motion/react";
 import { SkeletonLoader } from "@/components/ui/dashboard-loader";
 import {
   Vote,
   Plus,
   Edit,
   Trash2,
-  Eye,
   BarChart3,
   Calendar,
   Users,
   CheckCircle,
   Clock,
-  AlertCircle,
-  Filter,
-  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

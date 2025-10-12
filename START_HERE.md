@@ -1,6 +1,6 @@
-# 🚀 START HERE - Manitos Pintadas School Management System
+# 🚀 START HERE - Plataforma Astral SaaS Platform
 
-**Project**: Manitos Pintadas  
+**Project**: Plataforma Astral  
 **Stack**: Next.js 15 + React 19 + TypeScript + Convex  
 **Status**: Partial Migration (Infrastructure Complete, Routes In Progress)
 
@@ -88,8 +88,8 @@ curl http://localhost:3000/api/db/health
 
 ### Folder Structure
 
-```
-manitos-pintadas/
+```text
+plataforma-astral/
 ├── src/
 │   ├── app/                    # Next.js App Router
 │   │   ├── (auth)/            # Auth pages
@@ -111,12 +111,12 @@ manitos-pintadas/
 
 ## 🔐 User Roles & Access
 
-| Role         | Access                  | Default Email               | Password    |
-| ------------ | ----------------------- | --------------------------- | ----------- |
-| **ADMIN**    | Full system access      | admin@manitospintadas.cl    | admin123    |
-| **PROFESOR** | Teaching tools          | profesor@manitospintadas.cl | profesor123 |
-| **PARENT**   | Student info & meetings | parent@manitospintadas.cl   | parent123   |
-| **PUBLIC**   | Limited public access   | -                           | -           |
+| Role         | Access                  | Default Email                  | Password    |
+| ------------ | ----------------------- | ------------------------------ | ----------- |
+| **ADMIN**    | Full system access      | <admin@plataforma-astral.com>    | admin123    |
+| **PROFESOR** | Teaching tools          | <profesor@plataforma-astral.com> | profesor123 |
+| **PARENT**   | Student info & meetings | <parent@plataforma-astral.com>   | parent123   |
+| **PUBLIC**   | Limited public access   | -                              | -           |
 
 ---
 

@@ -1,29 +1,29 @@
-# 🏗️ Branch Strategy - Manitos Pintadas School Management System
+# 🏗️ Branch Strategy - Plataforma Astral SaaS Platform
 
 ## Branch Structure
 
 ### ✅ Active Branches
 
-#### `main` (Client Production Branch)
+#### `main` (Production Branch)
 
-- **Purpose**: Real client production code
-- **Environment**: manitospintadas.cl (Client site)
+- **Purpose**: Production-ready SaaS platform code
+- **Environment**: plataforma-astral.com (Main SaaS platform)
 - **Deployment**: Automatic on push (HIGH RISK)
 - **Protection**: Maximum security protection
-- **Workflow**: Only thoroughly tested, client-approved code
+- **Workflow**: Only thoroughly tested, production-ready code
 
-#### `prod` (Service/Demo Branch)
+#### `prod` (Staging Branch)
 
-- **Purpose**: Service and demo site
-- **Environment**: school.aramac.dev (Your service site)
+- **Purpose**: Pre-production testing and staging
+- **Environment**: plataforma-astral.com (Staging environment)
 - **Deployment**: Automatic on push
 - **Protection**: Standard protection
-- **Workflow**: Marketing materials, demos, service features
+- **Workflow**: Final testing before production deployment
 
-#### `dev.school.aramac.dev` (Development Branch)
+#### `dev` (Development Branch)
 
 - **Purpose**: Primary development and testing
-- **Environment**: dev.school.aramac.dev (Sandbox)
+- **Environment**: dev.plataforma-astral.com (Development sandbox)
 - **Deployment**: Automatic on push
 - **Protection**: Light protection
 - **Workflow**: All new features, bug fixes, and experiments
@@ -50,9 +50,9 @@
 ### Development Process
 
 ```bash
-# 1. Always work on dev.school.aramac.dev
-git checkout dev.school.aramac.dev
-git pull origin dev.school.aramac.dev
+# 1. Always work on dev branch
+git checkout dev
+git pull origin dev
 
 # 2. Create feature branches if needed (optional)
 git checkout -b feature/new-feature
@@ -62,29 +62,29 @@ git add .
 git commit -m "feat: add new feature"
 
 # 4. Merge back to dev (if using feature branches)
-git checkout dev.school.aramac.dev
+git checkout dev
 git merge feature/new-feature
 
 # 5. Push to deploy to dev environment
-git push origin dev.school.aramac.dev
+git push origin dev
 ```
 
-### Service Deployment (school.aramac.dev)
+### Staging Deployment (plataforma-astral.com staging)
 
 ```bash
-# Deploy to service/demo site
+# Deploy to staging environment
 git checkout prod
-git merge dev.school.aramac.dev  # After testing in dev
-git push origin prod  # Auto-deploys to school.aramac.dev
+git merge dev  # After testing in dev
+git push origin prod  # Auto-deploys to plataforma-astral.com (staging)
 ```
 
-### Client Production Deployment (manitospintadas.cl)
+### Production Deployment (plataforma-astral.com)
 
 ```bash
-# Only deploy thoroughly tested, client-approved code
+# Only deploy thoroughly tested, production-ready code
 git checkout main
-git merge prod  # Only after client approval
-git push origin main  # Auto-deploys to manitospintadas.cl
+git merge prod  # Only after thorough testing
+git push origin main  # Auto-deploys to plataforma-astral.com
 ```
 
 ## 🛡️ Branch Protection
@@ -97,7 +97,7 @@ git push origin main  # Auto-deploys to manitospintadas.cl
 
 ### Manual Reviews Required
 
-- All merges to `manitospintadas.cl` require review
+- All merges to `main` require review
 - Check for:
   - Test coverage
   - Performance impact
@@ -106,18 +106,18 @@ git push origin main  # Auto-deploys to manitospintadas.cl
 
 ## 📋 Environment Mapping
 
-| Branch                  | Environment         | URL                     | Auto-deploy | Risk Level |
-| ----------------------- | ------------------- | ----------------------- | ----------- | ---------- |
-| `dev.school.aramac.dev` | Development Sandbox | `dev.school.aramac.dev` | ✅ Yes      | 🟢 Low     |
-| `prod`                  | Service/Demo Site   | `school.aramac.dev`     | ✅ Yes      | 🟡 Medium  |
-| `main`                  | Client Production   | `manitospintadas.cl`    | ✅ Yes      | 🔴 High    |
+| Branch  | Environment         | URL                          | Auto-deploy | Risk Level |
+| ------- | ------------------- | ---------------------------- | ----------- | ---------- |
+| `dev`   | Development Sandbox | `dev.plataforma-astral.com` | ✅ Yes      | 🟢 Low     |
+| `prod`  | Staging Environment | `plataforma-astral.com`     | ✅ Yes      | 🟡 Medium  |
+| `main`  | Production Platform | `plataforma-astral.com`     | ✅ Yes      | 🔴 High    |
 
 ## ⚠️ Important Rules
 
 1. **Never work directly on `main` or `prod` branches**
-2. **Always develop on `dev.school.aramac.dev` first**
+2. **Always develop on `dev` branch first**
 3. **Test on dev before promoting to `prod`**
-4. **Only promote to `main` after client approval**
+4. **Only promote to `main` after thorough testing and approval**
 5. **Run branch checks regularly**: `npm run check-branches`
 6. **Use feature branches for complex changes** (optional)
 7. **Keep all branches clean and deployable**
@@ -129,9 +129,9 @@ git push origin main  # Auto-deploys to manitospintadas.cl
 npm run check-branches
 
 # Deploy commands (automatic on push to respective branches)
-# dev.school.aramac.dev → dev.school.aramac.dev
-# prod → school.aramac.dev
-# main → manitospintadas.cl
+# dev → dev.plataforma-astral.com
+# prod → plataforma-astral.com (staging)
+# main → plataforma-astral.com (production)
 ```
 
 ## 📞 Contact

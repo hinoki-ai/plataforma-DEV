@@ -7,7 +7,6 @@
 
 import { signIn, signOut } from "@/lib/auth";
 import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
 
 /**
  * Authenticate user with credentials (for useActionState hook)
@@ -71,7 +70,7 @@ export async function logoutAction() {
   try {
     await signOut({ redirect: false });
     return { success: true };
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error: "Error al cerrar sesión" };
   }
 }

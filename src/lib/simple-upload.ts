@@ -1,6 +1,5 @@
 import { writeFile, mkdir, unlink, access } from "fs/promises";
 import { join } from "path";
-import { NextRequest } from "next/server";
 import { isCornerstoneLocked, lockCornerstone } from "./cornerstone";
 
 export interface SimpleFileMetadata {
@@ -53,7 +52,7 @@ export class SimpleFileStorage {
         await lockCornerstone(filename, options.note);
       }
       return meta;
-    } catch (error) {
+    } catch (_error) {
       // Production: Silently handle errors with proper error messages
       throw new Error("Failed to upload file");
     }

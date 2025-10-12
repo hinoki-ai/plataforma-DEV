@@ -57,7 +57,7 @@ export function DashboardStats({
   className,
 }: DashboardStatsProps) {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: _session } = useSession();
 
   // Auto-detect variant based on route and session
   const detectedVariant: Exclude<DashboardStatsVariant, "auto"> =

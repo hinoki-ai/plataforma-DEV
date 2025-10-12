@@ -14,16 +14,16 @@
     "NODE_ENV": "production",
     "APP_ENV": "prod",
     "NEXT_PUBLIC_APP_ENV": "prod",
-    "NEXT_PUBLIC_DOMAIN": "manitospintadas.cl"
+    "NEXT_PUBLIC_DOMAIN": "plataforma-astral.com"
   },
-  "alias": ["manitospintadas.cl", "www.manitospintadas.cl"],
+  "alias": ["plataforma-astral.com", "www.plataforma-astral.com"],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://manitospintadas.cl"
+          "value": "https://plataforma-astral.com"
         },
         {
           "key": "Access-Control-Allow-Methods",

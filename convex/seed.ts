@@ -23,7 +23,7 @@ export const seedDatabase = mutation({
     // Create Admin User
     const adminId = await ctx.db.insert("users", {
       name: "Administrador Principal",
-      email: "admin@manitospintadas.cl",
+      email: "admin@plataforma-astral.com",
       password: hashedAdminPassword,
       role: "ADMIN",
       isActive: true,
@@ -38,7 +38,7 @@ export const seedDatabase = mutation({
     // Create Profesor User
     const profesorId = await ctx.db.insert("users", {
       name: "Profesor de Prueba",
-      email: "profesor@manitospintadas.cl",
+      email: "profesor@plataforma-astral.com",
       password: hashedProfesorPassword,
       role: "PROFESOR",
       isActive: true,
@@ -53,7 +53,7 @@ export const seedDatabase = mutation({
     // Create Parent User
     const parentId = await ctx.db.insert("users", {
       name: "Padre/Madre de Prueba",
-      email: "parent@manitospintadas.cl",
+      email: "parent@plataforma-astral.com",
       password: hashedParentPassword,
       role: "PARENT",
       isActive: true,
@@ -67,13 +67,13 @@ export const seedDatabase = mutation({
 
     // Create School Info
     await ctx.db.insert("schoolInfo", {
-      name: "Manitos Pintadas",
+      name: "Plataforma Astral Demo School",
       mission: "Proporcionar educación de calidad para todos los niños",
       vision: "Ser líderes en innovación educativa",
       address: "Santiago, Chile",
       phone: "+56912345678",
-      email: "contacto@manitospintadas.cl",
-      website: "https://manitospintadas.cl",
+      email: "contacto@plataforma-astral.com",
+      website: "https://plataforma-astral.com",
       institutionType: "PRESCHOOL",
       createdAt: now,
       updatedAt: now,
@@ -101,7 +101,7 @@ export const seedDatabase = mutation({
       studentName: "Juan Pérez",
       studentGrade: "Pre-Kinder",
       guardianName: "Padre/Madre de Prueba",
-      guardianEmail: "parent@manitospintadas.cl",
+      guardianEmail: "parent@plataforma-astral.com",
       guardianPhone: "+56911223344",
       scheduledDate: tomorrow,
       scheduledTime: "15:00",

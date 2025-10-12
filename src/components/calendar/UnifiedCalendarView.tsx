@@ -6,20 +6,14 @@
 
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useSpring,
-  useMotionValue,
-} from "motion/react";
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   format,
   isToday,
   isSameMonth,
   startOfMonth,
   endOfMonth,
-  eachDayOfInterval,
   getDay,
   addMonths,
   subMonths,
@@ -34,13 +28,9 @@ import {
   Calendar as CalendarIcon,
   Clock,
   MapPin,
-  Users,
   TrendingUp,
   Search,
-  Settings,
   RefreshCw,
-  Eye,
-  Plus,
 } from "lucide-react";
 
 import { Calendar } from "@/components/ui/calendar";
@@ -424,23 +414,28 @@ export default function UnifiedCalendarView({
   };
 
   // Enhanced category system - covers ALL EventCategory values
-  const categorySystem: Record<EventCategory, {
-    label: string;
-    color: string;
-    accent: string;
-    border: string;
-    icon: string;
-  }> = {
+  const categorySystem: Record<
+    EventCategory,
+    {
+      label: string;
+      color: string;
+      accent: string;
+      border: string;
+      icon: string;
+    }
+  > = {
     ADMIN: {
       label: "Administración",
-      color: "bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300",
+      color:
+        "bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300",
       accent: "bg-violet-500",
       border: "border-violet-200 dark:border-violet-800",
       icon: "🔐",
     },
     PROFESOR: {
       label: "Profesores",
-      color: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300",
+      color:
+        "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300",
       accent: "bg-emerald-500",
       border: "border-emerald-200 dark:border-emerald-800",
       icon: "👨‍🏫",
@@ -454,7 +449,8 @@ export default function UnifiedCalendarView({
     },
     CULTURAL: {
       label: "Cultural",
-      color: "bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/30 dark:text-fuchsia-300",
+      color:
+        "bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/30 dark:text-fuchsia-300",
       accent: "bg-fuchsia-500",
       border: "border-fuchsia-200 dark:border-fuchsia-800",
       icon: "🎭",
@@ -560,7 +556,10 @@ export default function UnifiedCalendarView({
 
   // Helper function to safely access categorySystem with fallback
   const getCategoryConfig = (category: EventCategory) => {
-    return categorySystem[category as keyof typeof categorySystem] || categorySystem.OTHER;
+    return (
+      categorySystem[category as keyof typeof categorySystem] ||
+      categorySystem.OTHER
+    );
   };
 
   // Animation variants

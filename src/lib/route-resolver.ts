@@ -42,11 +42,6 @@ export function resolveRoute(
     };
   }
 
-  // Handle other routes that need intelligent resolution
-  if (requestedPath.startsWith("/equipo-multidisciplinario")) {
-    return resolveTeamRoute(requestedPath, session);
-  }
-
   // No redirection needed
   return {
     shouldRedirect: false,
@@ -69,56 +64,6 @@ function getRoleBasedCalendarPath(role: ExtendedUserRole): string {
     default:
       return "/calendario-escolar";
   }
-}
-
-/**
- * Resolve team/equipo routes intelligently
- */
-function resolveTeamRoute(
-  requestedPath: string,
-  session: { user: { role: ExtendedUserRole } } | null,
-): RouteResolution {
-  // Public team route - always accessible
-  if (requestedPath === "/public/equipo-multidisciplinario") {
-    return {
-      shouldRedirect: false,
-      redirectPath: "",
-      reason: "none",
-    };
-  }
-
-  // If accessing generic equipo route, determine best path
-  if (requestedPath === "/equipo-multidisciplinario") {
-    if (!session) {
-      // Unauthenticated users go to public view
-      return {
-        shouldRedirect: true,
-        redirectPath: "/public/equipo-multidisciplinario",
-        reason: "unauthenticated",
-      };
-    }
-
-    // Authenticated users - route based on role
-    if (session.user.role === "ADMIN") {
-      return {
-        shouldRedirect: true,
-        redirectPath: "/admin/equipo-multidisciplinario",
-        reason: "role-based",
-      };
-    } else {
-      return {
-        shouldRedirect: true,
-        redirectPath: "/public/equipo-multidisciplinario",
-        reason: "role-based",
-      };
-    }
-  }
-
-  return {
-    shouldRedirect: false,
-    redirectPath: "",
-    reason: "none",
-  };
 }
 
 /**

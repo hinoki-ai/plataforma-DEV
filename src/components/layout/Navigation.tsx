@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,6 @@ import { DesktopToggle } from "@/components/ui/desktop-toggle";
 import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import { navigation, layout } from "@/lib/responsive-utils";
 import { useTheme } from "next-themes";
-import { OptimizedImage } from "@/components/ui/optimized-image";
 // 🕊️ DIVINE PARSING ORACLE - Enhanced navigation with route-based loading
 import { useLanguage } from "@/components/language/LanguageContext";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
@@ -111,7 +111,7 @@ export default function Navigation() {
                   href="/"
                   className="text-xl font-bold text-foreground hover:text-primary transition-colors ml-4"
                 >
-                  Manitos Pintadas
+                  Plataforma Astral
                 </Link>
               </div>
 
@@ -197,11 +197,11 @@ export default function Navigation() {
               <div className="flex items-center space-x-1">
                 {/* Developer favicon removed */}
 
-                {/* Position 2: Client favicon - Manitos Pintadas branding */}
+                {/* Position 2: Client favicon - Plataforma Astral branding */}
                 <span className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-background shadow border border-border transition-all duration-300 overflow-hidden">
-                  <img
-                    src="/manitos-favicon.png"
-                    alt="Manitos Pintadas"
+                  <Image
+                    src="/dfav.png"
+                    alt="Plataforma Astral"
                     width={32}
                     height={32}
                     className="object-contain"
@@ -234,22 +234,6 @@ export default function Navigation() {
                     className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                   >
                     {t("nav.educational.project")}
-                  </Link>
-
-                  {/* Position 5: Fotos y Videos */}
-                  <Link
-                    href="/fotos-videos"
-                    className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
-                  >
-                    {t("nav.photos.videos")}
-                  </Link>
-
-                  {/* Position 3: Equipo Multidisciplinario */}
-                  <Link
-                    href="/public/equipo-multidisciplinario"
-                    className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
-                  >
-                    {t("nav.multidisciplinary.team")}
                   </Link>
 
                   {/* Position 2: Portal Escolar/Cerrar Sesión */}
@@ -308,18 +292,6 @@ export default function Navigation() {
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
                     {t("nav.educational.project")}
-                  </Link>
-                  <Link
-                    href="/fotos-videos"
-                    className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
-                  >
-                    {t("nav.photos.videos")}
-                  </Link>
-                  <Link
-                    href="/public/equipo-multidisciplinario"
-                    className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
-                  >
-                    {t("nav.multidisciplinary.team")}
                   </Link>
                 </>
               ) : null}

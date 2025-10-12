@@ -1,7 +1,7 @@
 # Emergency Access Procedures
 
-**System**: Manitos Pintadas School Management System  
-**Site**: https://school.aramac.dev  
+**System**: Plataforma Astral Educational Management System  
+**Site**: <https://school.aramac.dev>  
 **Last Updated**: September 1, 2025  
 **Classification**: CONFIDENTIAL - AUTHORIZED PERSONNEL ONLY
 
@@ -13,7 +13,7 @@ When the standard authentication system fails, emergency access procedures ensur
 
 ### Credentials (CONFIDENTIAL)
 
-```
+```text
 Email: admin@manitospintadas.cl
 Password: admin123
 ```
@@ -119,7 +119,7 @@ If any of these work, emergency access is NOT authorized.
 
 Create incident log entry:
 
-```
+```text
 Timestamp: [Current UTC time]
 Reporter: [Your name/role]
 Issue: [Brief description of failure]
@@ -153,15 +153,14 @@ Work to restore standard authentication as quickly as possible:
 # Common restoration steps
 npx vercel env ls | grep NEXTAUTH_URL
 npx vercel --prod
-npm run create-admin
-npm run verify-supabase
+npx convex dashboard  # Create admin user manually
 ```
 
 ### Step 6: Document Resolution (5 minutes)
 
 Update incident log:
 
-```
+```text
 Resolution Time: [UTC timestamp]
 Actions Taken: [List of emergency actions]
 Normal Auth Restored: [YES/NO]
@@ -279,12 +278,12 @@ npm run verify-users
 
 - **Security Officer**: [Contact info]
 - **Database Administrator**: [Contact info]
-- **Vercel Support**: https://vercel.com/support
+- **Vercel Support**: <https://vercel.com/support>
 
 ### External Support
 
-- **Supabase Support**: https://supabase.com/support
-- **NextAuth.js Community**: https://github.com/nextauthjs/next-auth/discussions
+- **Supabase Support**: <https://supabase.com/support>
+- **NextAuth.js Community**: <https://github.com/nextauthjs/next-auth/discussions>
 
 ## 🔄 POST-INCIDENT PROCEDURES
 

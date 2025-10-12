@@ -57,7 +57,7 @@
   "parent.students.address": "Address",
   "parent.students.inquiries": "For Inquiries",
   "parent.students.secretary_hours": "Secretary: Service hours 8:00 to 17:00 hrs",
-  "parent.students.email": "Email: contacto@manitospintadas.cl",
+  "parent.students.email": "Email: contacto@plataformaastral.com",
 
   "parent.students.loading": "Loading...",
   "parent.students.level_pre_kinder": "Pre-Kinder and Kinder",
@@ -111,7 +111,7 @@
   "parent.communication.contact.director.title": "Direction",
   "parent.communication.contact.director.schedule": "Service hours by appointment",
   "parent.communication.contact.director.email": "Email",
-  "parent.communication.contact.director.email_address": "direccion@manitospintadas.cl",
+  "parent.communication.contact.director.email_address": "direccion@plataformaastral.com",
   "parent.communication.contact.emergency.title": "Emergencies",
   "parent.communication.contact.emergency.description": "Only for emergencies during school hours",
   "parent.communication.contact.emergency.phone": "Phone",

@@ -1,8 +1,8 @@
-# Manitos Pintadas Dashboard API Documentation
+# Plataforma Astral Dashboard API Documentation
 
 ## Overview
 
-The Manitos Pintadas Dashboard provides a comprehensive REST API for managing school operations across multiple user roles (Master, Admin, Profesor, Parent). This documentation covers all API endpoints, authentication, and usage patterns.
+The Plataforma Astral Dashboard provides a comprehensive REST API for managing educational operations across multiple user roles (Master, Admin, Profesor, Parent). This documentation covers all API endpoints, authentication, and usage patterns.
 
 ## Authentication
 
@@ -23,7 +23,7 @@ Authorization: Bearer <jwt-token>
 
 ## Base URL
 
-```
+```text
 https://your-domain.com/api
 ```
 
@@ -342,7 +342,7 @@ Server-Sent Events stream for real-time notifications.
 
 **Response:** Server-Sent Events stream
 
-```
+```json
 data: {"type":"notification","title":"New Message","message":"...","timestamp":"2024-01-01T00:00:00Z"}
 
 data: {"type":"heartbeat","timestamp":"2024-01-01T00:00:05Z"}
@@ -526,7 +526,7 @@ API endpoints are protected by rate limiting:
 
 Rate limit headers are included in responses:
 
-```
+```http
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 59
 X-RateLimit-Reset: 1638360000

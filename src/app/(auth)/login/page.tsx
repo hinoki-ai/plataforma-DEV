@@ -65,7 +65,8 @@ export default function LoginPage() {
 
   const { status, data: session } = useSession();
 
-  const redirectUrl = useMemo(() => {
+  // Redirect URL calculation (handled by server action)
+  const _redirectUrl = useMemo(() => {
     if (status !== "authenticated" || !session?.user?.role) return null;
     switch (session.user.role) {
       case "ADMIN":

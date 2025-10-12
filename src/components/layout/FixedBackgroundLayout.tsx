@@ -58,7 +58,6 @@ export function FixedBackgroundLayout({
     <PageTransition {...pageTransitionProps}>
       <div
         className={`relative min-h-screen ${backgroundClasses} bg-variable ${className}`}
-         
         style={
           { "--bg-image": `url(${backgroundImage})` } as React.CSSProperties
         }

@@ -15,7 +15,6 @@ import {
   Download,
   FileText,
   Link as LinkIcon,
-  Video,
   Image,
   Users,
   Heart,
@@ -286,23 +285,6 @@ export default async function RecursosPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Video className="h-5 w-5" />
-              Videos Educativos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-600 mb-4">
-              Explora videos educativos de nuestro equipo.
-            </p>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/fotos-videos">Abrir Videos</Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
               Talleres para Padres
             </CardTitle>
@@ -336,7 +318,7 @@ export default async function RecursosPage() {
                   <Link href="/parent/comunicacion">Enviar Solicitud</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="mailto:recursos@manitospintadas.cl">
+                  <Link href="mailto:recursos@plataforma-astral.com">
                     Email Directo
                   </Link>
                 </Button>

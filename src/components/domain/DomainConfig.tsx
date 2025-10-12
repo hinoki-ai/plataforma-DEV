@@ -1,10 +1,8 @@
 "use client";
 
-interface DomainConfigProps {
-  domainStatus?: any;
-}
+interface DomainConfigProps {}
 
-export function DomainConfig({ domainStatus }: DomainConfigProps) {
+export function DomainConfig({}: DomainConfigProps) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">

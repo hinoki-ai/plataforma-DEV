@@ -23,22 +23,17 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Settings,
   GripVertical,
   MoreHorizontal,
-  Eye,
   EyeOff,
   Trash2,
   Plus,
-  BarChart3,
   Calendar,
   MessageSquare,
-  Users,
   BookOpen,
-  Bell,
   TrendingUp,
   Clock,
 } from "lucide-react";

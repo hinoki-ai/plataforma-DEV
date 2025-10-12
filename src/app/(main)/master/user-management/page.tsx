@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
-import { dbLogger } from "@/lib/logger";
 import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

@@ -1,8 +1,8 @@
-# Manitos Pintadas Dashboard - Deployment Guide
+# Plataforma Astral Dashboard - Deployment Guide
 
 ## Overview
 
-This guide covers the deployment process for the Manitos Pintadas school management dashboard. The application is built with Next.js 14, uses PostgreSQL as the database, and supports multiple deployment platforms.
+This guide covers the deployment process for the Plataforma Astral educational management dashboard. The application is built with Next.js 14, uses PostgreSQL as the database, and supports multiple deployment platforms.
 
 ## Prerequisites
 
@@ -154,7 +154,7 @@ npm run start
 
 Add the following environment variables in Vercel dashboard:
 
-```
+```bash
 DATABASE_URL=postgresql://...
 NEXTAUTH_SECRET=...
 NEXTAUTH_URL=https://your-project.vercel.app
@@ -602,6 +602,6 @@ curl -I https://your-domain.com
 For deployment support:
 
 - 📧 Email: deploy@manitospintadas.com
-- 📖 Documentation: https://docs.manitospintadas.com/deployment
-- 🐛 Issues: https://github.com/manitos-pintadas/dashboard/issues
-- 💬 Community: https://community.manitospintadas.com
+- 📖 Documentation: <https://docs.manitospintadas.com/deployment>
+- 🐛 Issues: <https://github.com/manitos-pintadas/dashboard/issues>
+- 💬 Community: <https://community.manitospintadas.com>

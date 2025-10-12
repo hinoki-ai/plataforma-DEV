@@ -1,7 +1,7 @@
 {
-  "name": "Escuela Especial de Lenguaje Manitos Pintadas - Herramientas Administrativas",
-  "short_name": "Manitos Pintadas",
-  "description": "Herramientas administrativas para la Escuela Especial de Lenguaje Manitos Pintadas",
+  "name": "Plataforma Educativa Astral - Herramientas Administrativas",
+  "short_name": "Plataforma Astral",
+  "description": "Herramientas administrativas para la Plataforma Educativa Astral",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -9,7 +9,6 @@ import { Metadata } from "next";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
-import { dbLogger } from "@/lib/logger";
 import { GodModeDashboard } from "@/components/master/GodModeDashboard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { Crown } from "lucide-react";
@@ -104,7 +103,7 @@ function SupremeLoadingSkeleton() {
 }
 
 // Supreme error boundary fallback
-const SupremeErrorFallback: React.ComponentType<{
+const _SupremeErrorFallback: React.ComponentType<{
   error: Error;
   retry: () => void;
 }> = ({ error, retry }) => {

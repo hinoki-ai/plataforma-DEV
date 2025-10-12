@@ -1,12 +1,12 @@
 # Vercel Deployment Guide
 
-**Project**: Manitos Pintadas School Management System  
-**Production URL**: https://school.aramac.dev  
+**Project**: Plataforma Astral Educational Management System  
+**Production URL**: <https://school.aramac.dev>  
 **Last Updated**: September 1, 2025
 
 ## 🚀 DEPLOYMENT OVERVIEW
 
-The Manitos Pintadas system is deployed on Vercel with the following configuration:
+The Plataforma Astral system is deployed on Vercel with the following configuration:
 
 - **Framework**: Next.js 15
 - **Build Command**: `npm run build`
@@ -46,7 +46,7 @@ Domain: school.aramac.dev
 # Core Application
 NEXTAUTH_URL="https://school.aramac.dev"
 NEXTAUTH_SECRET="production-secret-32-chars-minimum"
-DATABASE_URL="postgresql://user:pass@host:port/db?sslmode=require"
+NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"
 
 # OAuth Providers
 GOOGLE_CLIENT_ID="108364777055-r7vp0o8iur71l63dh9tj43gkdvsasc9o.apps.googleusercontent.com"
@@ -55,13 +55,8 @@ GOOGLE_CLIENT_SECRET="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"
 # File Storage
 CLOUDINARY_URL="cloudinary://556976281197323:x7lXEyiBsj1p4tS9843ZFnfVTOs@dzut7fqpa"
 
-# Supabase (Auto-injected by Vercel)
-POSTGRES_URL="postgresql://..."
-POSTGRES_PRISMA_URL="postgresql://..."
-POSTGRES_URL_NON_POOLING="postgresql://..."
-SUPABASE_URL="https://..."
-SUPABASE_ANON_KEY="..."
-SUPABASE_SERVICE_ROLE_KEY="..."
+# Convex (Auto-injected by Vercel)
+NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"
 ```
 
 ### Environment Variable Management
@@ -94,7 +89,7 @@ npx vercel env pull .env.vercel
 
 ```bash
 # Critical variables to verify:
-npx vercel env ls | grep -E "NEXTAUTH_URL|DATABASE_URL|NEXTAUTH_SECRET"
+npx vercel env ls | grep -E "NEXTAUTH_URL|NEXT_PUBLIC_CONVEX_URL|NEXTAUTH_SECRET"
 
 # Ensure NEXTAUTH_URL matches production domain
 # Should be: https://school.aramac.dev
@@ -172,14 +167,14 @@ npx vercel logs https://school-aramac-[hash].vercel.app
 
 **Symptoms**: Deployment fails during build phase
 
-#### Common Causes:
+#### Common Causes
 
 - TypeScript compilation errors
 - Missing dependencies
 - Environment variable issues during build
 - Database connection failures during build
 
-#### Solutions:
+#### Solutions
 
 ```bash
 # Fix TypeScript errors
@@ -199,7 +194,7 @@ npx vercel env ls
 
 **Symptoms**: Login fails after successful deployment
 
-#### Root Cause Check:
+#### Root Cause Check
 
 ```bash
 # Check NEXTAUTH_URL
@@ -208,7 +203,7 @@ npx vercel env ls | grep NEXTAUTH_URL
 # Should match production domain exactly
 ```
 
-#### Solution:
+#### Solution
 
 ```bash
 # Update NEXTAUTH_URL if incorrect
@@ -224,17 +219,17 @@ npx vercel --prod
 
 **Symptoms**: Runtime errors related to Prisma/database
 
-#### Diagnostic:
+#### Diagnostic
 
 ```bash
 # Check database environment variables
-npx vercel env ls | grep -E "DATABASE|POSTGRES|SUPABASE"
+npx vercel env ls | grep -E "NEXT_PUBLIC_CONVEX_URL"
 
-# Test database connection locally
-npm run verify-supabase
+# Test Convex connection
+npx convex dashboard
 ```
 
-#### Solution:
+#### Solution
 
 ```bash
 # Regenerate Prisma client for production
@@ -342,7 +337,7 @@ export const runtime = "edge";
 ### Environment Variables
 
 - [ ] NEXTAUTH_URL correct for target environment
-- [ ] DATABASE_URL pointing to correct database
+- [ ] NEXT_PUBLIC_CONVEX_URL pointing to correct Convex project
 - [ ] OAuth credentials valid and current
 - [ ] All required variables present
 - [ ] No sensitive data exposed
@@ -408,8 +403,8 @@ npm run analyze
 # Enable production optimizations
 NODE_ENV=production
 
-# Use database connection pooling
-DATABASE_URL with pooling parameters
+# Use Convex for real-time database
+NEXT_PUBLIC_CONVEX_URL for client connections
 
 # Implement proper caching headers
 Cache-Control: public, s-maxage=31536000, immutable

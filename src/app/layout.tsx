@@ -25,7 +25,7 @@ const inter = Inter({
 });
 
 // Apple touch icon is configured via Next.js metadata API (modern approach)
- 
+
 export const metadata: Metadata = {
   ...homeMetadata,
   icons: {
@@ -50,7 +50,7 @@ function RootLayoutInner({
         <meta name="msapplication-TileColor" content="#1e40af" />
         <meta name="msapplication-TileImage" content="/tile-150.png" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="application-name" content="Manitos Pintadas" />
+        <meta name="application-name" content="Plataforma Astral" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
@@ -82,7 +82,7 @@ function RootLayoutInner({
         <link rel="shortcut icon" href="/dfav.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Manitos Pintadas" />
+        <meta name="apple-mobile-web-app-title" content="Plataforma Astral" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>

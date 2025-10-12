@@ -13,9 +13,9 @@ interface SEOConfig {
 }
 
 const DEFAULT_SEO = {
-  siteName: "Manitos Pintadas - Sistema de Gestión Escolar",
+  siteName: "Plataforma Astral - Sistema de Gestión Educativa",
   description:
-    "Sistema integral de gestión escolar para Manitos Pintadas. Planificaciones, reservas y administración educativa.",
+    "Sistema integral de gestión educativa para Plataforma Astral. Planificaciones, reservas y administración educativa.",
   keywords: [
     "escuela especial",
     "lenguaje",
@@ -27,9 +27,9 @@ const DEFAULT_SEO = {
     "terapia ocupacional",
     "psicología educacional",
   ],
-  url: "https://manitos-pintadas.vercel.app",
+  url: "https://plataforma-astral.vercel.app",
   image: "/images/og-image.jpg",
-  author: "Manitos Pintadas",
+  author: "Plataforma Astral",
   locale: "es_CL",
   alternateLocales: ["es"],
 };
@@ -93,7 +93,7 @@ export function generateMetadata(config: SEOConfig): Metadata {
       title: fullTitle,
       description,
       images: [fullImage],
-      creator: "@ManitosPintadas",
+      creator: "@PlataformaAstral",
     },
 
     // Additional SEO
@@ -171,31 +171,25 @@ export const planificacionesMetadata = generateMetadata({
 });
 
 export const equipoMetadata = generateMetadata({
-  title: "Equipo Multidisciplinario",
+  title: "Equipo",
   description:
-    "Conoce nuestro equipo de profesionales: fonoaudióloga, terapeuta ocupacional y psicóloga. Reserva tu cita.",
-  keywords: [
-    "equipo",
-    "multidisciplinario",
-    "fonoaudiología",
-    "terapia ocupacional",
-    "psicología",
-  ],
-  url: "/public/equipo-multidisciplinario",
+    "Conoce al equipo de Manitos Pintadas. Profesionales especializados en educación especial.",
+  keywords: ["equipo", "profesionales", "educación especial"],
+  url: "/equipo",
 });
 
 export const reservasMetadata = generateMetadata({
-  title: "Reservar Cita",
+  title: "Reservas",
   description:
-    "Solicita una cita con nuestro equipo multidisciplinario. Atención especializada para estudiantes.",
-  keywords: ["reservas", "citas", "atención", "especializada"],
-  url: "/public/equipo-multidisciplinario/reservar",
+    "Sistema de reservas para servicios especializados. Agenda citas y sesiones terapéuticas.",
+  keywords: ["reservas", "citas", "terapia"],
+  url: "/reservas",
 });
 
 // JSON-LD structured data
 export function generateSchemaOrg(
   type: "organization" | "educational" | "article",
-  data: any,
+  data: Record<string, unknown>,
 ) {
   const baseSchema = {
     "@context": "https://schema.org",
@@ -228,15 +222,15 @@ export const organizationSchema = generateSchemaOrg("organization", {
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "admissions",
-    email: "contacto@manitospintadas.cl",
+    email: "contacto@plataforma-astral.com",
   },
   sameAs: [
     "https://www.facebook.com/ManitosPintadas",
-    "https://www.instagram.com/manitospintadas",
+    "https://www.instagram.com/plataformaastral",
   ],
 });
 
-export default {
+const seoUtils = {
   generateMetadata,
   homeMetadata,
   loginMetadata,
@@ -248,3 +242,5 @@ export default {
   generateSchemaOrg,
   organizationSchema,
 };
+
+export default seoUtils;

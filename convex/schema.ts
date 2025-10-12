@@ -2,7 +2,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 /**
- * Convex Schema for Manitos Pintadas School Management System
+ * Convex Schema for Plataforma Astral Educational Management System
  * Migrated from Prisma schema on 2025-01-07
  */
 
@@ -453,6 +453,28 @@ export default defineSchema({
     .index("by_grade", ["grade"]),
 
   // ==================== NOTIFICATIONS ====================
+
+  // ==================== DOCUMENT STORAGE ====================
+
+  documents: defineTable({
+    name: v.string(),
+    originalName: v.string(),
+    fileId: v.id("_storage"),
+    type: v.string(), // "pdf", "document", etc.
+    category: v.string(), // "reglamento", "plan", "manual", "protocolo", etc.
+    number: v.optional(v.number()), // for numbered documents
+    size: v.number(),
+    mimeType: v.string(),
+    uploadedBy: v.id("users"),
+    isPublic: v.boolean(), // public access or role-based
+    downloadCount: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_category", ["category"])
+    .index("by_uploadedBy", ["uploadedBy"])
+    .index("by_isPublic", ["isPublic"])
+    .index("by_createdAt", ["createdAt"]),
 
   notifications: defineTable({
     title: v.string(),

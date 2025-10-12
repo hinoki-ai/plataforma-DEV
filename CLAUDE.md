@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Manitos Pintadas** is a Chilean school management system built with Next.js 15 and Convex (serverless backend), featuring role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
+**Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 15 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
 
 ## 📚 Critical Documentation (NEW)
 
@@ -15,15 +15,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # 1. Check system status (30 seconds)
-curl -I https://school.aramac.dev
-curl -s https://school.aramac.dev/api/auth/session
+curl -I https://plataforma-astral.com
+curl -s https://plataforma-astral.com/api/auth/session
 
 # 2. Test emergency access if normal login fails
-# Email: admin@manitospintadas.cl | Password: admin123
+# Email: admin@plataforma-astral.com | Password: admin123
 
 # 3. Most common fix - check NEXTAUTH_URL
 npx vercel env ls | grep NEXTAUTH_URL
-# Should show: https://school.aramac.dev
+# Should show: https://plataforma-astral.com
 ```
 
 ### Documentation Reference
@@ -285,18 +285,18 @@ const isAdmin = session?.user?.role === "ADMIN";
 
 | Role     | Email                                                             | Password    |
 | -------- | ----------------------------------------------------------------- | ----------- |
-| ADMIN    | [admin@manitospintadas.cl](mailto:admin@manitospintadas.cl)       | admin123    |
-| PROFESOR | [profesor@manitospintadas.cl](mailto:profesor@manitospintadas.cl) | profesor123 |
-| PARENT   | [parent@manitospintadas.cl](mailto:parent@manitospintadas.cl)     | parent123   |
+| ADMIN    | [admin@plataforma-astral.com](mailto:admin@plataforma-astral.com)       | admin123    |
+| PROFESOR | [profesor@plataforma-astral.com](mailto:profesor@plataforma-astral.com) | profesor123 |
+| PARENT   | [parent@plataforma-astral.com](mailto:parent@plataforma-astral.com)     | parent123   |
 
 ## Environment Configuration
 
 ### Required Variables
 
 ```bash
-DATABASE_URL=postgresql://...
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-32-char-secret
+NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
 CLOUDINARY_URL=cloudinary://...
 ```
 
@@ -375,7 +375,7 @@ GOOGLE_CLIENT_SECRET=...
 # Complete development setup from scratch
 npm install
 npm run db:generate && npm run db:push && npm run db:seed
-npm run create-all-test-users
+Use Convex dashboard for test user creation
 npm run dev
 
 # Alternative automated setup
@@ -398,7 +398,7 @@ npm run test:all            # Run complete test suite (495+ tests)
 npm run analyze             # Bundle analysis
 npm run test:performance    # Lighthouse performance tests
 npm run verify-env          # Check environment configuration
-npm run verify-supabase     # Test database connection
+npx convex dashboard        # View Convex dashboard
 tsx scripts/seed-team-members.ts # Seed team member data
 npm run env:status          # Check environment status
 ```
@@ -446,7 +446,7 @@ The `scripts/` directory contains several utility scripts for development and de
 ./scripts/validate-deployment.sh # Validate deployment configuration
 
 # Database utilities
-tsx scripts/emergency-seed.ts   # Emergency database seeding
+npx convex dashboard           # Manage Convex data
 tsx scripts/seed-team-members.ts # Populate team member data
 tsx scripts/count-users.ts      # Count and display all users
 tsx scripts/verify-users.ts     # Verify test users in database

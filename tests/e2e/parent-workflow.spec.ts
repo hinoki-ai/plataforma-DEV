@@ -3,7 +3,7 @@ import { loginAsParent } from "./fixtures/auth.fixture";
 
 // Parent specific test credentials
 const PARENT_CREDENTIALS = {
-  email: "parent@manitospintadas.cl",
+  email: "parent@plataforma-astral.com",
   password: "parent123",
 };
 

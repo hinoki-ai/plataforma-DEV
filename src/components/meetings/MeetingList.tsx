@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { MeetingCard } from "./MeetingCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -31,11 +31,7 @@ export function MeetingList({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadMeetings();
-  }, [isAdmin, session?.user?.id]);
-
-  const loadMeetings = async () => {
+  const loadMeetings = useCallback(async () => {
     try {
       setLoading(true);
       let response;
@@ -89,7 +85,11 @@ export function MeetingList({
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAdmin, session?.user?.id]);
+
+  useEffect(() => {
+    loadMeetings();
+  }, [loadMeetings]);
 
   const handleStatusChange = async (id: string, status: MeetingStatus) => {
     // Convert MeetingStatus enum to string literal type expected by API

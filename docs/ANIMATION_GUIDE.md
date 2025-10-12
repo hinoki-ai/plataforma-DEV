@@ -1,6 +1,6 @@
 # CSS Keyframe Animations Guide
 
-This guide implements the comprehensive keyframe animation concepts from [Josh Comeau's Interactive Guide to Keyframe Animations](https://www.joshwcomeau.com/animation/keyframe-animations/) in our Manitos Pintadas School website.
+This guide implements the comprehensive keyframe animation concepts from [Josh Comeau's Interactive Guide to Keyframe Animations](https://www.joshwcomeau.com/animation/keyframe-animations/) in our Plataforma Astral Educational website.
 
 ## Table of Contents
 

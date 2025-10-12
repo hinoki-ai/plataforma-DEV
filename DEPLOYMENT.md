@@ -1,14 +1,14 @@
-# 🚀 Deployment Guide - Manitos Pintadas School Management System
+# 🚀 Deployment Guide - Plataforma Astral SaaS Platform
 
 ## 🏗️ Architecture Overview
 
-The Manitos Pintadas project uses a **three-branch deployment strategy** with **Convex backend** and **Vercel frontend** to ensure safe, reliable deployments across different environments:
+Plataforma Astral is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features. It uses a **three-branch deployment strategy** with **Convex backend** and **Vercel frontend** to ensure safe, reliable deployments across different environments:
 
 ```mermaid
 graph TB
-    A[main branch] --> B[manitospintadas.cl]
-    C[dev branch] --> D[school.aramac.dev]
-    E[prod branch] --> F[manitospintadas.cl]
+    A[main branch] --> B[plataforma-astral.com]
+    C[dev branch] --> D[dev.plataforma-astral.com]
+    E[prod branch] --> F[plataforma-astral.com]
 
     A --> |Convex deploy + Vercel| B
     C --> |Convex deploy + Vercel auto| D
@@ -26,15 +26,15 @@ graph TB
 
 ## 🌐 Environment Structure
 
-| Environment         | Branch | URL                  | Purpose               | Auto-Deploy      | Backend            |
-| ------------------- | ------ | -------------------- | --------------------- | ---------------- | ------------------ |
-| **Main Production** | `main` | `manitospintadas.cl` | Primary school site   | ❌ Protected     | Convex Production  |
-| **Development**     | `dev`  | `school.aramac.dev`  | Testing & Integration | ✅ Frequent Auto | Convex Development |
-| **Production**      | `prod` | `manitospintadas.cl` | Live Production       | ⚠️ Rare Manual   | Convex Production  |
+| Environment         | Branch | URL                          | Purpose                         | Auto-Deploy      | Backend            |
+| ------------------- | ------ | ---------------------------- | ------------------------------- | ---------------- | ------------------ |
+| **Main Production** | `main` | `plataforma-astral.com`      | Primary SaaS platform          | ❌ Protected     | Convex Production  |
+| **Development**     | `dev`  | `dev.plataforma-astral.com`   | Testing & Integration          | ✅ Frequent Auto | Convex Development |
+| **Production**      | `prod` | `plataforma-astral.com`      | Live SaaS Production           | ⚠️ Rare Manual   | Convex Production  |
 
 ## 🚀 Deployment Workflows
 
-### Development Deployment (dev → school.aramac.dev)
+### Development Deployment (dev → dev.plataforma-astral.com)
 
 1. **Automatic Triggers**:
    - Push to `dev` branch
@@ -50,10 +50,10 @@ graph TB
    - Uses `vercel.dev.json`
    - Environment: `development`
    - Backend: Convex Development
-   - Frontend: Vercel (school.aramac.dev)
+   - Frontend: Vercel (dev.plataforma-astral.com)
    - Features: Debug mode enabled, comprehensive logging
 
-### Production Deployment (prod → manitospintadas.cl)
+### Production Deployment (prod → plataforma-astral.com)
 
 1. **Manual Triggers** (RARE - Weekly at most):
    - Push to `prod` branch (requires explicit confirmation)
@@ -69,7 +69,7 @@ graph TB
    - Uses `vercel.prod.json`
    - Environment: `production`
    - Backend: Convex Production
-   - Frontend: Vercel (manitospintadas.cl)
+   - Frontend: Vercel (plataforma-astral.com)
    - Features: Optimized builds, monitoring enabled, strict security headers
 
 ## 🔄 Convex Deployment Process
@@ -98,9 +98,9 @@ Convex functions are automatically deployed when you run the build process. The 
 
 Each deployment environment connects to a separate Convex project:
 
-- **Development**: `school.aramac.dev` → Convex Development Project
-- **Production**: `manitospintadas.cl` → Convex Production Project
-- **Main**: `manitospintadas.cl` → Convex Production Project
+- **Development**: `dev.plataforma-astral.com` → Convex Development Project
+- **Production**: `plataforma-astral.com` → Convex Production Project
+- **Main**: `plataforma-astral.com` → Convex Production Project
 
 ### Environment Variables for Convex
 
@@ -127,7 +127,7 @@ CLOUDINARY_API_SECRET=your-cloudinary-api-secret
 ```bash
 # Clone and setup
 git clone [repository-url]
-cd manitos-pintadas
+cd plataforma-astral
 npm install
 
 # Initialize Convex backend
@@ -194,11 +194,11 @@ git push -u origin feature/your-feature-name
 ```mermaid
 graph LR
     A[Feature Branch] --> B[dev branch]
-    B --> C[school.aramac.dev]
+    B --> C[dev.plataforma-astral.com]
     B --> |After testing| D[prod branch]
-    D --> E[school.aramac.dev]
+    D --> E[dev.plataforma-astral.com]
     D --> |Manual process| F[main branch]
-    F --> G[manitospintadas.cl]
+    F --> G[plataforma-astral.com]
 ```
 
 1. **Feature → Development**:
@@ -208,7 +208,7 @@ graph LR
    git pull origin dev
    git merge feature/your-feature
    git push origin dev
-   # Automatically deploys to school.aramac.dev
+   # Automatically deploys to dev.plataforma-astral.com
    ```
 
 2. **Development → Production**:
@@ -218,7 +218,7 @@ graph LR
    git pull origin prod
    git merge dev
    git push origin prod
-   # Automatically deploys to school.aramac.dev
+   # Automatically deploys to dev.plataforma-astral.com
    ```
 
 3. **Production → Main** (Manual process):
@@ -229,7 +229,7 @@ graph LR
    git pull origin main
    git merge prod
    git push origin main
-   # Manual deployment to manitospintadas.cl
+   # Manual deployment to plataforma-astral.com
    ```
 
 ## 🧪 Testing Strategy
@@ -267,9 +267,9 @@ The deployment system includes multiple layers of validation to prevent accident
 
 ### Deployment Rules
 
-- **Development**: `dev` branch → `school.aramac.dev` (Convex dev + Vercel auto)
-- **Production**: `prod` branch → `manitospintadas.cl` (Convex prod + Vercel manual)
-- **Main**: `main` branch → `manitospintadas.cl` (Convex prod + Vercel protected)
+- **Development**: `dev` branch → `dev.plataforma-astral.com` (Convex dev + Vercel auto)
+- **Production**: `prod` branch → `plataforma-astral.com` (Convex prod + Vercel manual)
+- **Main**: `main` branch → `plataforma-astral.com` (Convex prod + Vercel protected)
 
 ### Safeguard Alerts
 
@@ -328,16 +328,16 @@ Shared:
 
 ```bash
 # Basic health check (development)
-curl https://school.aramac.dev/api/health
+curl https://dev.plataforma-astral.com/api/health
 
 # Basic health check (production)
-curl https://manitospintadas.cl/api/health
+curl https://plataforma-astral.com/api/health
 
 # Database connectivity
-curl https://school.aramac.dev/api/health/database
+curl https://dev.plataforma-astral.com/api/health/database
 
 # Authentication status
-curl https://school.aramac.dev/api/health/auth
+curl https://dev.plataforma-astral.com/api/health/auth
 ```
 
 ### Monitoring Features
@@ -478,7 +478,7 @@ npx convex dashboard            # Open Convex dashboard
 npm run convex:deploy           # Deploy Convex to production
 
 # Database management
-npm run create-admin            # Create admin user
+npx convex dashboard            # Manage Convex data
 npm run verify-env              # Verify environment configuration
 ```
 

@@ -188,7 +188,7 @@ export async function exportCalendarEventsInFormat(
               .split(".")[0] + "Z";
 
           return `BEGIN:VEVENT
-UID:${event.id}@manitospintadas.cl
+UID:${event.id}@plataforma-astral.com
 DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z
 DTSTART:${startDate}
 DTEND:${endDate}
@@ -416,7 +416,11 @@ export async function importCalendarEventsFromCSV(
               break;
             case "priority":
               const priorityValue = values[index].toUpperCase();
-              if (priorityValue === "LOW" || priorityValue === "MEDIUM" || priorityValue === "HIGH") {
+              if (
+                priorityValue === "LOW" ||
+                priorityValue === "MEDIUM" ||
+                priorityValue === "HIGH"
+              ) {
                 event.priority = priorityValue;
               }
               break;

@@ -8,7 +8,7 @@
 
 ### Overview
 
-The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid approach:
+The Plataforma Astral authentication system uses **NextAuth.js v5** with a hybrid approach:
 
 - **Credentials Provider**: For staff (ADMIN, PROFESOR) - database authentication
 - **OAuth Providers**: For parents (PARENT) - Google/Facebook login
@@ -16,7 +16,7 @@ The Manitos Pintadas authentication system uses **NextAuth.js v5** with a hybrid
 
 ### Authentication Flow
 
-```
+```text
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │ User Login  │───▶│ NextAuth.js │───▶│ Prisma DB   │───▶│ JWT Session │
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
@@ -206,7 +206,7 @@ curl -I https://school.aramac.dev
 
 ```bash
 # Create test users
-npm run create-all-test-users
+Use Convex dashboard to create test users
 
 # Test credentials:
 ADMIN: admin@manitospintadas.cl / admin123
@@ -273,7 +273,7 @@ npx prisma generate
 npx prisma db push
 
 # Recreate admin user
-npm run create-admin
+Use Convex dashboard to create admin user
 
 # Verify users exist
 npm run verify-users

@@ -3,17 +3,19 @@
  * Server-side calendar operations using Convex backend
  */
 
-import { getConvexClient } from '@/lib/convex';
-import { api } from '@/convex/_generated/api';
-import type { CalendarQuery, CalendarStats } from './types';
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
+import type { CalendarQuery, CalendarStats } from "./types";
 
 /**
  * Get calendar statistics
  */
-export async function getCalendarStatistics(query?: CalendarQuery): Promise<CalendarStats> {
+export async function getCalendarStatistics(
+  query?: CalendarQuery,
+): Promise<CalendarStats> {
   try {
     const client = getConvexClient();
-    
+
     // Fetch all calendar events
     const events = await client.query(api.calendar.getCalendarEvents, {
       startDate: query?.startDate?.getTime(),
@@ -46,7 +48,7 @@ export async function getCalendarStatistics(query?: CalendarQuery): Promise<Cale
 
     return stats;
   } catch (error) {
-    console.error('Error getting calendar statistics:', error);
+    console.error("Error getting calendar statistics:", error);
     throw error;
   }
 }
@@ -55,5 +57,5 @@ export async function getCalendarStatistics(query?: CalendarQuery): Promise<Cale
  * Export calendar events (placeholder - actual implementation in actions)
  */
 export function exportCalendarEvents() {
-  throw new Error('Use calendar actions for exporting events');
+  throw new Error("Use calendar actions for exporting events");
 }

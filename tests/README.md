@@ -38,7 +38,7 @@ tests/
 
 ```bash
 npx playwright install      # Install browsers
-npm run create-all-test-users # Create test users
+Use Convex dashboard to create test users
 ```
 
 ### Development
@@ -52,6 +52,7 @@ npm run test:e2e:debug     # Debug mode
 ## 🎯 Test Philosophy
 
 We follow a **lean testing approach** focused on:
+
 - ✅ Core business logic (auth, calendar, planning)
 - ✅ Critical user workflows (admin, teacher, parent)
 - ✅ API endpoints and integrations

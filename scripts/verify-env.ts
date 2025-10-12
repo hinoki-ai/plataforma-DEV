@@ -23,13 +23,6 @@ interface EnvValidation {
 }
 
 const ENV_REQUIREMENTS: EnvValidation[] = [
-  // Database Configuration
-  {
-    name: "DATABASE_URL",
-    required: true,
-    type: "url",
-    description: "Database connection string (PostgreSQL),",
-  },
 
   // Authentication Configuration
   {
@@ -114,7 +107,6 @@ interface ValidationResult {
   errors: string[];
   warnings: string[];
   environment: string;
-  databaseType: string;
 }
 
 function validateEnvironmentVariable(env: EnvValidation): {
@@ -132,21 +124,6 @@ function validateEnvironmentVariable(env: EnvValidation): {
     return { valid: true, warning: `${env.name} is not set (optional)` };
   }
 
-  if (env.name === "DATABASE_URL") {
-    const dbUrl = value!;
-
-    // Validate PostgreSQL URL format
-    if (
-      !dbUrl.startsWith("postgresql://") &&
-      !dbUrl.startsWith("postgres://")
-    ) {
-      return {
-        valid: false,
-        error:
-          "DATABASE_URL must use PostgreSQL format (postgresql://user:password@host:port/database)",
-      };
-    }
-  }
 
   if (env.pattern && !new RegExp(env.pattern).test(value!)) {
     return { valid: false, error: `${env.name} format is invalid` };
@@ -155,14 +132,6 @@ function validateEnvironmentVariable(env: EnvValidation): {
   return { valid: true };
 }
 
-function getDatabaseType(): string {
-  const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl) return "Not configured ❌";
-
-  return dbUrl.startsWith("postgresql://") || dbUrl.startsWith("postgres://")
-    ? "PostgreSQL ✅"
-    : "PostgreSQL ❌ (Expected PostgreSQL)";
-}
 
 function validateEnvironment(): ValidationResult {
   const errors: string[] = [];
@@ -179,28 +148,16 @@ function validateEnvironment(): ValidationResult {
     }
   }
 
-  // Validate database configuration
-  const dbUrl = process.env.DATABASE_URL;
-  if (
-    !dbUrl?.startsWith("postgresql://") &&
-    !dbUrl?.startsWith("postgres://")
-  ) {
-    errors.push(
-      "DATABASE_URL must use PostgreSQL format (postgresql://user:password@host:port/database)",
-    );
-  }
-
   return {
     valid: errors.length === 0,
     errors,
     warnings,
     environment: process.env.NODE_ENV || "development",
-    databaseType: getDatabaseType(),
   };
 }
 
 async function main() {
-  console.log("🚀 Manitos Pintadas - Environment Validation");
+  console.log("🚀 Plataforma Astral - Environment Validation");
   console.log("================================================");
 
   const result = validateEnvironment();
@@ -220,10 +177,10 @@ async function main() {
       "   1. Check your .env file exists and has all required variables",
     );
     console.log("   2. For production: Update NEXTAUTH_URL to your domain");
-    console.log("   3. For production: Use PostgreSQL DATABASE_URL");
+    console.log("   3. Set NEXT_PUBLIC_CONVEX_URL to your Convex project URL");
     console.log("   4. Generate secure NEXTAUTH_SECRET (32+ characters)");
     console.log("\n💡 Example production .env:");
-    console.log('   DATABASE_URL="file:./prisma/production.db"');
+    console.log('   NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"');
     console.log('   NEXTAUTH_URL="https://your-domain.vercel.app"');
     console.log('   NEXTAUTH_SECRET="your-super-secure-key-here"');
 
@@ -232,9 +189,7 @@ async function main() {
 
   // Success message
   console.log("\n✅ Environment validation passed!");
-  console.log(
-    `📊 Summary: ${result.environment} environment with ${result.databaseType}`,
-  );
+  console.log(`📊 Summary: ${result.environment} environment`);
   console.log("🎯 Ready for deployment!");
 
   return result;

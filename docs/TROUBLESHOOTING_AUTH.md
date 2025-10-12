@@ -306,8 +306,8 @@ curl -vI https://school.aramac.dev 2>&1 | grep -E "(certificate|SSL|TLS)"
 
    ```bash
    # Full database user recreation
-   npm run create-admin
-   npm run create-all-test-users
+   npx convex dashboard  # Create admin user manually
+   Use Convex dashboard to create test users
 
    # Test each user type
    # ADMIN: admin@manitospintadas.cl / admin123

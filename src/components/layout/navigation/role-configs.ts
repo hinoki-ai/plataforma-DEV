@@ -61,12 +61,6 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Equipo Multidisciplinario",
-        href: "/admin/equipo-multidisciplinario",
-        icon: NavigationIcons.Team,
-        shortcut: "Alt+E",
-      },
-      {
         title: "Reuniones",
         href: "/admin/reuniones",
         icon: NavigationIcons.Meeting,
@@ -351,12 +345,6 @@ export const MASTER_NAVIGATION = [
     title: STANDARD_SECTION_ORDER.COMMUNICATION,
     defaultOpen: false,
     items: [
-      {
-        title: "Equipo Multidisciplinario",
-        href: "/admin/equipo-multidisciplinario",
-        icon: NavigationIcons.Team,
-        shortcut: "Alt+T",
-      },
       {
         title: "Reuniones",
         href: "/admin/reuniones",

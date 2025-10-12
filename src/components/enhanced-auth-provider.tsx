@@ -10,7 +10,7 @@ interface EnhancedAuthProviderProps {
 
 export function EnhancedAuthProvider({ children }: EnhancedAuthProviderProps) {
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
+  const _router = useRouter();
 
   useEffect(() => {
     setMounted(true);

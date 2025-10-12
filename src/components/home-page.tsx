@@ -1,7 +1,7 @@
 // ⚡ Performance: PPR-optimized HomePage with static shell and dynamic components
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { DesktopToggle } from "@/components/ui/desktop-toggle";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
@@ -27,7 +26,7 @@ import {
 export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
-  const { t, language, loadedNamespaces, isLoading, error } = useLanguage();
+  const { t, _language, _loadedNamespaces, _isLoading, _error } = useLanguage();
 
   // Component mounted successfully
 
@@ -239,15 +238,6 @@ export function HomePage() {
                   {t("home.footer.quick.links", "common")}
                 </h4>
                 <ul className="space-y-2">
-                  <li>
-                    <Link
-                      href="/public/equipo-multidisciplinario"
-                      className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t("home.footer.aria.team", "common")}
-                    >
-                      {t("home.footer.links.team", "common")}
-                    </Link>
-                  </li>
                   <li>
                     <Link
                       href="/login"

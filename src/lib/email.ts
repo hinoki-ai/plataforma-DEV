@@ -42,9 +42,9 @@ export async function sendConfirmationEmail({
     const verificationUrl = `${process.env.APP_URL}/centro-consejo/verificar?token=${verificationToken}`;
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
+      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
       to,
-      subject: "Confirma tu registro - Centro de Padres Manitos Pintadas",
+      subject: "Confirma tu registro - Centro de Padres Plataforma Astral",
       html: getConfirmationEmailTemplate({ name, verificationUrl }),
       text: getConfirmationEmailText({ name, verificationUrl }),
     };
@@ -79,9 +79,9 @@ export async function sendWelcomeEmail({
     const dashboardUrl = `${process.env.APP_URL}/centro-consejo/dashboard`;
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
+      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
       to,
-      subject: "¡Bienvenido al Centro de Padres Manitos Pintadas!",
+      subject: "¡Bienvenido al Centro de Padres Plataforma Astral!",
       html: getWelcomeEmailTemplate({ name, dashboardUrl }),
       text: getWelcomeEmailText({ name, dashboardUrl }),
     };
@@ -132,7 +132,7 @@ export async function sendMeetingRequestNotification(
     const staff = await client.query(api.users.getStaffUsers, {});
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
+      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
       to: staff.map((s) => s.email).filter(Boolean),
       subject: `Nueva Solicitud de Reunión - ${data.studentName}`,
       html: getMeetingRequestEmailTemplate(data),
@@ -158,7 +158,7 @@ export async function sendMeetingConfirmation(
     const transporter = createTransport();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
+      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
       to: data.to,
       subject: `Confirmación de Reunión - ${data.meetingTitle}`,
       html: getMeetingConfirmationEmailTemplate(data),
@@ -188,7 +188,7 @@ export async function sendMeetingStatusUpdate(
     const transporter = createTransport();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@manitospintadas.cl",
+      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
       to,
       subject: `Actualización de Reunión - ${meetingTitle}`,
       html: getMeetingStatusUpdateTemplate({
@@ -249,7 +249,7 @@ function getConfirmationEmailTemplate({
         </div>
         <div class="content">
           <h2>Confirma tu cuenta</h2>
-          <p>Para completar tu registro en el Centro de Padres y Consejo Escolar de la Escuela Especial de Lenguaje Manitos Pintadas, necesitamos que confirmes tu dirección de correo electrónico.</p>
+          <p>Para completar tu registro en el Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral, necesitamos que confirmes tu dirección de correo electrónico.</p>
           
           <p style="text-align: center;">
             <a href="${verificationUrl}" class="button">Confirmar mi cuenta</a>
@@ -263,7 +263,7 @@ function getConfirmationEmailTemplate({
           <p>Si no te registraste en nuestro sitio, puedes ignorar este email de forma segura.</p>
         </div>
         <div class="footer">
-          <p>Escuela Especial de Lenguaje Manitos Pintadas<br>
+          <p>Plataforma Educativa Astral<br>
           Centro de Padres y Consejo Escolar</p>
         </div>
       </div>
@@ -282,7 +282,7 @@ function getConfirmationEmailText({
   return `
 ¡Hola ${name}!
 
-Gracias por registrarte en el Centro de Padres y Consejo Escolar de la Escuela Especial de Lenguaje Manitos Pintadas.
+Gracias por registrarte en el Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral.
 
 Para completar tu registro, necesitamos que confirmes tu dirección de correo electrónico haciendo clic en el siguiente enlace:
 
@@ -293,7 +293,7 @@ Este enlace de confirmación expirará en 24 horas por seguridad.
 Si no te registraste en nuestro sitio, puedes ignorar este email de forma segura.
 
 Saludos cordiales,
-Escuela Especial de Lenguaje Manitos Pintadas
+Plataforma Educativa Astral
 Centro de Padres y Consejo Escolar
   `;
 }
@@ -331,7 +331,7 @@ function getWelcomeEmailTemplate({
         </div>
         <div class="content">
           <h2>¡Ya eres parte de nuestra comunidad!</h2>
-          <p>Felicitaciones por unirte al Centro de Padres y Consejo Escolar de la Escuela Especial de Lenguaje Manitos Pintadas.</p>
+          <p>Felicitaciones por unirte al Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral.</p>
           
           <div class="features">
             <div class="feature">
@@ -359,7 +359,7 @@ function getWelcomeEmailTemplate({
           <p>¿Necesitas ayuda? No dudes en contactarnos. Estamos aquí para apoyarte en el proceso educativo de tu hijo/a.</p>
         </div>
         <div class="footer">
-          <p>Escuela Especial de Lenguaje Manitos Pintadas<br>
+          <p>Plataforma Educativa Astral<br>
           Centro de Padres y Consejo Escolar</p>
         </div>
       </div>
@@ -378,7 +378,7 @@ function getWelcomeEmailText({
   return `
 ¡Bienvenido ${name}!
 
-Tu cuenta ha sido confirmada exitosamente y ya eres parte del Centro de Padres y Consejo Escolar de la Escuela Especial de Lenguaje Manitos Pintadas.
+Tu cuenta ha sido confirmada exitosamente y ya eres parte del Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral.
 
 Ahora puedes:
 - Participar en eventos y reuniones
@@ -391,7 +391,7 @@ Visita tu dashboard: ${dashboardUrl}
 ¿Necesitas ayuda? No dudes en contactarnos. Estamos aquí para apoyarte en el proceso educativo de tu hijo/a.
 
 Saludos cordiales,
-Escuela Especial de Lenguaje Manitos Pintadas
+Plataforma Educativa Astral
 Centro de Padres y Consejo Escolar
   `;
 }
@@ -452,7 +452,7 @@ function getMeetingRequestEmailTemplate(data: MeetingRequestEmail) {
           </p>
         </div>
         <div class="footer">
-          <p>Escuela Especial de Lenguaje Manitos Pintadas<br>
+          <p>Plataforma Educativa Astral<br>
           Sistema de Gestión de Reuniones</p>
         </div>
       </div>
@@ -477,7 +477,7 @@ Por favor, revisa esta solicitud en el sistema administrativo.
 
 Acceder: ${process.env.APP_URL}/admin/reuniones
 
-Escuela Especial de Lenguaje Manitos Pintadas
+Plataforma Educativa Astral
   `;
 }
 
@@ -536,7 +536,7 @@ function getMeetingConfirmationEmailTemplate(data: MeetingConfirmationEmail) {
           </p>
         </div>
         <div class="footer">
-          <p>Escuela Especial de Lenguaje Manitos Pintadas<br>
+          <p>Plataforma Educativa Astral<br>
           Sistema de Gestión de Reuniones</p>
         </div>
       </div>
@@ -563,7 +563,7 @@ Por favor, llega 5 minutos antes de la hora programada.
 
 Ver mis reuniones: ${process.env.APP_URL}/parent/reuniones
 
-Escuela Especial de Lenguaje Manitos Pintadas
+Plataforma Educativa Astral
   `;
 }
 
@@ -622,7 +622,7 @@ function getMeetingStatusUpdateTemplate({
           </p>
         </div>
         <div class="footer">
-          <p>Escuela Especial de Lenguaje Manitos Pintadas<br>
+          <p>Plataforma Educativa Astral<br>
           Sistema de Gestión de Reuniones</p>
         </div>
       </div>
@@ -655,6 +655,6 @@ ${notes ? `- Notas: ${notes}` : ""}
 
 Ver detalles: ${process.env.APP_URL}/parent/reuniones
 
-Escuela Especial de Lenguaje Manitos Pintadas
+Plataforma Educativa Astral
   `;
 }

@@ -1,6 +1,6 @@
 # 🔄 Prisma to Convex Migration Guide
 
-**Project**: Manitos Pintadas School Management System  
+**Project**: Plataforma Astral Educational Management System  
 **Migration**: PostgreSQL/Prisma → Convex (Serverless Backend)  
 **Status**: Infrastructure Complete - API Routes In Progress  
 **Last Updated**: January 7, 2025
@@ -84,7 +84,7 @@ curl http://localhost:3000/api/db/health
 
 Created 12 comprehensive Convex function files:
 
-```
+```text
 convex/
 ├── users.ts              - User CRUD operations
 ├── meetings.ts           - Meeting management
@@ -160,7 +160,7 @@ Created backward-compatible wrappers in `src/services/`:
 
 #### Admin Routes (7 files)
 
-```
+```text
 src/app/api/admin/
 ├── users/route.ts                    # User management
 ├── users/[id]/route.ts              # Individual user operations
@@ -172,7 +172,7 @@ src/app/api/admin/
 
 #### Parent Routes (4 files)
 
-```
+```text
 src/app/api/parent/
 ├── communications/route.ts          # Parent communications
 ├── students/route.ts                # Student information
@@ -182,7 +182,7 @@ src/app/api/parent/
 
 #### Profesor Routes (4 files)
 
-```
+```text
 src/app/api/profesor/
 ├── dashboard/route.ts               # Teacher dashboard
 ├── activities/route.ts              # Activity management
@@ -192,7 +192,7 @@ src/app/api/profesor/
 
 #### Other Routes (7 files)
 
-```
+```text
 src/app/api/
 ├── educational-system/route.ts      # Educational system info
 ├── monitoring/route.ts              # System monitoring
@@ -339,7 +339,7 @@ const meetings = await client.query(api.meetings.getMeetingsByUser, {
 
 ## 🛠️ Step-by-Step Migration Workflow
 
-### For Each API Route:
+### For Each API Route
 
 1. **Open the file**:
 
@@ -479,7 +479,7 @@ npx convex dev
 
 Use this table to track your progress:
 
-```
+```text
 [ ] Admin Routes (0/7)
   [ ] users/route.ts
   [ ] users/[id]/route.ts
@@ -536,11 +536,11 @@ Use this table to track your progress:
 
 ### Convex Documentation
 
-- **Getting Started**: https://docs.convex.dev/
-- **Next.js Integration**: https://docs.convex.dev/quickstart/nextjs
-- **Database Queries**: https://docs.convex.dev/database/reading-data
-- **Mutations**: https://docs.convex.dev/database/writing-data
-- **React Hooks**: https://docs.convex.dev/client/react
+- **Getting Started**: <https://docs.convex.dev/>
+- **Next.js Integration**: <https://docs.convex.dev/quickstart/nextjs>
+- **Database Queries**: <https://docs.convex.dev/database/reading-data>
+- **Mutations**: <https://docs.convex.dev/database/writing-data>
+- **React Hooks**: <https://docs.convex.dev/client/react>
 
 ### Project Documentation
 

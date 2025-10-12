@@ -6,7 +6,7 @@ export const createTestTeacher = (overrides = {}) => ({
   email: faker.internet.email({
     firstName: "teacher",
     lastName: "test",
-    provider: "manitospintadas.cl",
+    provider: "plataforma-astral.com",
   }),
   name: faker.person.fullName(),
   role: "PROFESOR",
@@ -37,7 +37,7 @@ export const createTestAdmin = (overrides = {}) => ({
   email: faker.internet.email({
     firstName: "admin",
     lastName: "test",
-    provider: "manitospintadas.cl",
+    provider: "plataforma-astral.com",
   }),
   name: faker.person.fullName(),
   role: "ADMIN",
@@ -319,11 +319,11 @@ export const createTestFile = (type = "pdf") => {
 
 // Realistic school data
 export const createSchoolData = () => ({
-  name: "Colegio Manitos Pintadas",
+  name: "Plataforma Astral Demo School",
   address: faker.location.streetAddress(),
   phone: faker.phone.number("+562#######"),
   email: faker.internet.email({ provider: "manitospintadas.cl" }),
-  website: "https://manitospintadas.cl",
+  website: "https://plataforma-astral.com",
   grades: [
     "Prekinder",
     "Kinder",
@@ -384,19 +384,19 @@ export const createLargeDataset = (type, count = 100) => {
 // Consistent test data for repeatable tests
 export const createConsistentTestData = () => ({
   teacher: {
-    email: "test.teacher@manitospintadas.cl",
+    email: "test.teacher@plataforma-astral.com",
     name: "Profesor Test",
     password: "Test123!",
     role: "PROFESOR",
   },
   parent: {
-    email: "test.parent@manitospintadas.cl",
+    email: "test.parent@plataforma-astral.com",
     name: "Padre Test",
     password: "Test123!",
     role: "PARENT",
   },
   admin: {
-    email: "test.admin@manitospintadas.cl",
+    email: "test.admin@plataforma-astral.com",
     name: "Admin Test",
     password: "Test123!",
     role: "ADMIN",

@@ -178,31 +178,31 @@ const mockTeachers = [
   {
     id: "teacher-1",
     name: "María González",
-    email: "maria@manitospintadas.cl",
+    email: "maria@plataforma-astral.com",
     level: "NT1",
   },
   {
     id: "teacher-2",
     name: "Ana Rodríguez",
-    email: "ana@manitospintadas.cl",
+    email: "ana@plataforma-astral.com",
     level: "NT2",
   },
   {
     id: "teacher-3",
     name: "Carmen Silva",
-    email: "carmen@manitospintadas.cl",
+    email: "carmen@plataforma-astral.com",
     level: "NT1",
   },
   {
     id: "teacher-4",
     name: "Patricia López",
-    email: "patricia@manitospintadas.cl",
+    email: "patricia@plataforma-astral.com",
     level: "BOTH",
   },
   {
     id: "teacher-5",
     name: "Isabel Martínez",
-    email: "isabel@manitospintadas.cl",
+    email: "isabel@plataforma-astral.com",
     level: "NT2",
   },
 ];

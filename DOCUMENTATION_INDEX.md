@@ -1,6 +1,6 @@
-# 📚 Documentation Index - Manitos Pintadas
+# 📚 Documentation Index - Plataforma Astral
 
-**Complete guide to all documentation in this project**
+**Complete guide to all documentation in this SaaS platform project**
 
 ---
 
@@ -122,7 +122,7 @@ Testing guides and strategies:
 ## 📂 File Structure
 
 ```
-manitos-pintadas/
+plataforma-astral/
 ├── START_HERE.md                          👈 Start here!
 ├── README.md                              👈 Project overview
 ├── CLAUDE.md                              👈 AI assistant guide

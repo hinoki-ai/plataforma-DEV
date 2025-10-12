@@ -1,9 +1,6 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  // Database
-  DATABASE_URL: z.string().url("DATABASE_URL must be a valid URL"),
-
   // NextAuth
   NEXTAUTH_SECRET: z
     .string()
@@ -36,8 +33,8 @@ function validateEnv(): Env {
     return envSchema.parse(process.env);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const missingVars = (error as any).issues
-        .map((err: any) => `${err.path.join(".")}: ${err.message}`)
+      const missingVars = error.issues
+        .map((err) => `${err.path.join(".")}: ${err.message}`)
         .join("\n");
 
       throw new Error(

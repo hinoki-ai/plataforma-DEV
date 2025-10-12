@@ -31,15 +31,17 @@ export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
       const response = await getMeetingsByParentAction(userId);
       if (response.success && response.data) {
         // Convert Convex meetings to Meeting type with all required fields
-        const convertedMeetings: (Meeting & { teacher?: Pick<User, 'id' | 'name' | 'email'> })[] = response.data.map((m: any) => ({
+        const convertedMeetings: (Meeting & {
+          teacher?: Pick<User, "id" | "name" | "email">;
+        })[] = response.data.map((m: any) => ({
           id: m._id,
           title: m.title,
           meetingType: m.type,
           studentName: m.studentName,
-          studentGrade: m.studentGrade || '',
+          studentGrade: m.studentGrade || "",
           guardianName: m.guardianName,
           guardianEmail: m.guardianEmail,
-          guardianPhone: m.guardianPhone || '',
+          guardianPhone: m.guardianPhone || "",
           scheduledDate: new Date(m.scheduledDate),
           scheduledTime: m.scheduledTime,
           status: m.status,

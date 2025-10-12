@@ -1,5 +1,5 @@
 {
-  "name": "school-dev",
+  "name": "plataforma-astral",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,6 @@
     "convex:deploy": "npx convex deploy",
     "convex:dashboard": "npx convex dashboard",
     "verify-env": "tsx scripts/verify-env.ts",
-    "create-admin": "tsx scripts/create-admin.ts",
     "analyze": "ANALYZE=true npm run build --turbo",
     "test": "vitest",
     "test:watch": "vitest --watch",

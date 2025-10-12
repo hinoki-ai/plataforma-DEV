@@ -13,7 +13,7 @@ async function createMasterUser() {
   console.log("🔑 Creating master user...");
 
   try {
-    const masterEmail = "master@manitospintadas.cl";
+    const masterEmail = "master@plataforma-astral.com";
     const masterPassword = "master123";
 
     // Hash the password

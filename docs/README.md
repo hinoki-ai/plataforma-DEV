@@ -1,12 +1,12 @@
 # Documentation Index
 
-**Manitos Pintadas School Management System**  
+**Plataforma Astral Educational Management System**  
 **Last Updated**: September 1, 2025  
 **Status**: Authentication System FULLY OPERATIONAL ✅
 
 ## 📚 DOCUMENTATION OVERVIEW
 
-This documentation suite provides comprehensive information about the authentication system, deployment processes, and emergency procedures for the Manitos Pintadas School Management System.
+This documentation suite provides comprehensive information about the authentication system, deployment processes, and emergency procedures for the Plataforma Astral Educational Management System.
 
 ## 🚨 RECENT UPDATES
 
@@ -36,13 +36,13 @@ This documentation suite provides comprehensive information about the authentica
 
 ### 🏗️ System Architecture
 
-4. **[AUTHENTICATION_SYSTEM_DOCS.md](./AUTHENTICATION_SYSTEM_DOCS.md)**
+1. **[AUTHENTICATION_SYSTEM_DOCS.md](./AUTHENTICATION_SYSTEM_DOCS.md)**
    - Complete authentication system architecture
    - NextAuth.js configuration and security implementation
    - User roles, permissions, and access control
    - Environment configuration and testing procedures
 
-5. **[VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md)**
+2. **[VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md)**
    - Production deployment procedures
    - Environment variable management
    - Build configuration and optimization
@@ -50,7 +50,7 @@ This documentation suite provides comprehensive information about the authentica
 
 ## 🎯 QUICK REFERENCE GUIDE
 
-### Authentication Issues? Start Here:
+### Authentication Issues? Start Here
 
 1. **Check System Status** (30 seconds)
 
@@ -82,9 +82,9 @@ This documentation suite provides comprehensive information about the authentica
 
 ### Current Production Configuration
 
-- **Site**: https://school.aramac.dev ✅
+- **Site**: <https://school.aramac.dev> ✅
 - **Authentication**: NextAuth.js v5 ✅
-- **Database**: PostgreSQL (Supabase) ✅
+- **Database**: Convex (real-time, type-safe) ✅
 - **Deployment**: Vercel ✅
 - **Last Incident**: September 1, 2025 - RESOLVED ✅
 

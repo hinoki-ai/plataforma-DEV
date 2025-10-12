@@ -126,7 +126,7 @@ export default function PerfilPage() {
     if (session?.user) {
       setUserProfile({
         name: session.user.name || "Nombre del Profesor",
-        email: session.user.email || "profesor@manitospintadas.cl",
+        email: session.user.email || "profesor@plataforma-astral.com",
         phone: "+56 9 1234 5678",
         bio: "Apasionado por la educación y el desarrollo de los niños. Siempre aprendiendo y compartiendo.",
         avatar: "/public/images/avatar-placeholder.png",

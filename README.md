@@ -1,6 +1,6 @@
-# Manitos Pintadas - Sistema de Gestión Escolar
+# Plataforma Astral - SaaS Platform for Educational Management
 
-Un sistema integral de gestión escolar construido con Next.js 15 y Convex (backend serverless en tiempo real), diseñado específicamente para instituciones educativas chilenas.
+A comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 15 and Convex (real-time serverless backend), designed for educational institutions.
 
 ## 📋 Índice de Documentación
 
@@ -15,7 +15,7 @@ Un sistema integral de gestión escolar construido con Next.js 15 y Convex (back
 
 ## 📖 Descripción General
 
-**Manitos Pintadas** es una plataforma educativa que gestiona:
+**Plataforma Astral** is a comprehensive SaaS platform that manages:
 
 - 📚 Planificación docente
 - 📅 Reuniones apoderados-profesores
@@ -56,11 +56,11 @@ npm run dev
 
 ### Cuentas de Prueba
 
-| Rol          | Email                         | Contraseña  |
-| ------------ | ----------------------------- | ----------- |
-| **Admin**    | <admin@manitospintadas.cl>    | admin123    |
-| **Profesor** | <profesor@manitospintadas.cl> | profesor123 |
-| **Padre**    | <parent@manitospintadas.cl>   | parent123   |
+| Rol          | Email                              | Contraseña  |
+| ------------ | ---------------------------------- | ----------- |
+| **Admin**    | <admin@plataforma-astral.com>      | admin123    |
+| **Teacher**  | <profesor@plataforma-astral.com>   | profesor123 |
+| **Parent**   | <parent@plataforma-astral.com>     | parent123   |
 
 ## 🏗️ Arquitectura
 
@@ -69,7 +69,7 @@ npm run dev
 - **Frontend**: Next.js 15 + React 19 + TypeScript
 - **Build System**: Turbopack (optimizado para máxima velocidad)
 - **Backend**: Convex (Serverless con actualizaciones en tiempo real)
-- **Base de Datos**: Convex (NoSQL con TypeScript type-safe)
+- **Base de Datos**: Convex (TypeScript type-safe database)
 - **Autenticación**: NextAuth.js v5
 - **Estilos**: Tailwind CSS + shadcn/ui
 - **Testing**: Vitest + Playwright + Lighthouse CI
@@ -201,8 +201,8 @@ This project uses a **proper 3-tier environment structure** for maximum clarity 
 | Environment     | File               | Branch | URL                     | Purpose           | NODE_ENV    |
 | --------------- | ------------------ | ------ | ----------------------- | ----------------- | ----------- |
 | **Local**       | `.env.local`       | `main` | `localhost:3000`        | Local development | development |
-| **Development** | `.env.development` | `dev`  | `dev.school.aramac.dev` | Staging/testing   | production  |
-| **Production**  | `.env.production`  | `prod` | `school.aramac.dev`     | Live production   | production  |
+| **Development** | `.env.development` | `dev`  | `dev.plataforma-astral.com` | Staging/testing   | production  |
+| **Production**  | `.env.production`  | `prod` | `plataforma-astral.com`     | Live production   | production  |
 
 ### Environment Files
 
@@ -217,27 +217,27 @@ Complete template with all required variables and documentation.
 NODE_ENV=development
 APP_ENV=dev
 NEXTAUTH_URL="http://localhost:3000"
-DATABASE_URL="postgresql://..."  # Supabase connection
+NEXT_PUBLIC_CONVEX_URL="https://..."
 ```
 
 #### 📁 `.env.development` - Development Deployment (Ignored)
 
 ```bash
-# Used for dev.school.aramac.dev
+# Used for dev.plataforma-astral.com
 NODE_ENV=production
 APP_ENV=dev
-NEXTAUTH_URL="https://dev.school.aramac.dev"
-DATABASE_URL="postgresql://..."  # Same as production
+NEXTAUTH_URL="https://dev.plataforma-astral.com"
+NEXT_PUBLIC_CONVEX_URL="https://..."
 ```
 
 #### 📁 `.env.production` - Production Deployment (Ignored)
 
 ```bash
-# Used for school.aramac.dev
+# Used for plataforma-astral.com
 NODE_ENV=production
 APP_ENV=prod
-NEXTAUTH_URL="https://school.aramac.dev"
-DATABASE_URL="postgresql://..."  # Supabase production
+NEXTAUTH_URL="https://plataforma-astral.com"
+NEXT_PUBLIC_CONVEX_URL="https://..."
 ```
 
 ### Quick Setup
@@ -262,8 +262,8 @@ git push origin prod
 
 After deployment, login with:
 
-- **Admin**: `admin@manitospintadas.cl` / `admin123`
-- **Teacher**: `profesor@manitospintadas.cl` / `profesor123`
+- **Admin**: `admin@plataforma-astral.com` / `admin123`
+- **Teacher**: `profesor@plataforma-astral.com` / `profesor123`
 
 ### Environment Variables
 
@@ -305,7 +305,7 @@ npm run test:all             # Todos los tests
 npm run db:generate          # Generar cliente Prisma
 npm run db:push              # Aplicar esquema
 npm run db:seed              # Datos de prueba
-npm run create-admin         # Crear usuario admin
+npx convex dashboard         # Manage Convex data
 ```
 
 ## 🔍 Características por Rol
@@ -348,7 +348,7 @@ npm run create-admin         # Crear usuario admin
 
 ---
 
-**Proyecto**: Manitos Pintadas  
-**Versión**: 1.0.0  
-**Última actualización**: Marzo 2024  
-**Stack**: Next.js 15 + TypeScript + Prisma
+**Proyecto**: Plataforma Astral
+**Versión**: 1.0.0
+**Última actualización**: October 2025
+**Stack**: Next.js 15 + TypeScript + Convex

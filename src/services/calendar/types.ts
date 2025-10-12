@@ -3,7 +3,7 @@
  * Provides backward-compatible types for calendar components after Convex migration
  */
 
-import type { EventCategory, EventPriority } from '@/lib/prisma-compat-types';
+import type { EventCategory, EventPriority } from "@/lib/prisma-compat-types";
 
 // Re-export types from prisma-compat-types for backward compatibility
 export type { EventCategory, EventPriority };
@@ -38,7 +38,13 @@ export interface CalendarQuery {
 }
 
 // Calendar Export Types
-export type CalendarExportFormat = 'json' | 'csv' | 'ics' | 'JSON' | 'CSV' | 'ICAL';
+export type CalendarExportFormat =
+  | "json"
+  | "csv"
+  | "ics"
+  | "JSON"
+  | "CSV"
+  | "ICAL";
 
 export interface CalendarExportData {
   content: string;
@@ -51,7 +57,7 @@ export interface CalendarExportData {
 export type UnifiedCalendarEvent = CalendarEvent;
 
 // Recurring Event Pattern
-export type RecurringPattern = 'DAILY' | 'WEEKLY' | 'MONTHLY';
+export type RecurringPattern = "DAILY" | "WEEKLY" | "MONTHLY";
 
 export interface RecurringEventData {
   pattern: RecurringPattern;

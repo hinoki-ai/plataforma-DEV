@@ -1,8 +1,8 @@
-# Sistema de Votaciones - Manitos Pintadas
+# Sistema de Votaciones - Plataforma Astral
 
 ## 📋 Resumen Ejecutivo
 
-El Sistema de Votaciones es una plataforma integral para la gestión democrática de decisiones en el Centro de Padres de la Escuela Especial de Lenguaje Manitos Pintadas. Permite a los administradores crear, gestionar y monitorear votaciones, mientras que los padres pueden participar de manera segura y transparente.
+El Sistema de Votaciones es una plataforma integral para la gestión democrática de decisiones en el Centro de Padres de la Plataforma Educativa Astral. Permite a los administradores crear, gestionar y monitorear votaciones, mientras que los padres pueden participar de manera segura y transparente.
 
 ## 🎯 Características Principales
 
@@ -312,4 +312,4 @@ npm run test
 
 ---
 
-**Desarrollado con ❤️ para la Escuela Especial de Lenguaje Manitos Pintadas**
+**Desarrollado con ❤️ para la Plataforma Educativa Astral**

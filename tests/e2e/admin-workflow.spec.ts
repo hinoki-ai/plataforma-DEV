@@ -3,7 +3,7 @@ import { loginAsAdmin } from "./fixtures/auth.fixture";
 
 // Admin specific test credentials
 const ADMIN_CREDENTIALS = {
-  email: "admin@manitospintadas.cl",
+  email: "admin@plataforma-astral.com",
   password: "admin123",
 };
 
@@ -55,7 +55,7 @@ test.describe("Admin Workflow", () => {
       await page.getByRole("button", { name: /nuevo usuario/i }).click();
 
       // Fill teacher information
-      await page.getByLabel(/email/i).fill("new.teacher@manitospintadas.cl");
+      await page.getByLabel(/email/i).fill("new.teacher@plataforma-astral.com");
       await page.getByLabel(/nombre completo/i).fill("Nuevo Profesor Test");
       await page.getByLabel(/rol/i).selectOption("PROFESOR");
       await page.getByLabel(/grado/i).selectOption("4th");
@@ -72,7 +72,7 @@ test.describe("Admin Workflow", () => {
       // Verify success
       await expect(page.getByText("Usuario creado exitosamente")).toBeVisible();
       await expect(
-        page.getByText("new.teacher@manitospintadas.cl"),
+        page.getByText("new.teacher@plataforma-astral.com"),
       ).toBeVisible();
     });
 

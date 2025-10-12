@@ -37,11 +37,6 @@ export default function Header() {
       href: "/proyecto-educativo",
       label: t("nav.educational_project", "common"),
     },
-    { href: "/fotos-videos", label: t("nav.photos_videos", "common") },
-    {
-      href: "/public/equipo-multidisciplinario",
-      label: t("nav.multidisciplinary_team", "common"),
-    },
   ];
 
   return (

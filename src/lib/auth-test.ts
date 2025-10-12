@@ -242,8 +242,8 @@ MANUAL AUTHENTICATION FLOW TEST STEPS:
 
 2. **Login Test**
    - Use test credentials:
-     - Admin: admin@manitospintadas.cl / admin123
-     - Teacher: profesor@manitospintadas.cl / profesor123
+     - Admin: admin@plataforma-astral.com / admin123
+     - Teacher: profesor@plataforma-astral.com / profesor123
    - Enter credentials and submit
    - Expected: Redirect to /auth-success then to appropriate dashboard
 

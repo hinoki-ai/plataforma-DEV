@@ -7,9 +7,9 @@ import React, {
   createContext,
   useContext,
 } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -25,12 +25,7 @@ import {
   Smartphone,
   Maximize,
   Minimize,
-  RotateCcw,
-  Settings,
-  Palette,
   Layout,
-  Zap,
-  Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
@@ -617,14 +612,16 @@ export function ResponsiveImage({
   };
 
   return (
-    <img
+    <Image
       src={imageSize}
       alt={alt}
       className={cn("responsive-image", className)}
-      {...(quality === "low" && { loading: "lazy", decoding: "async" })}
-      {...(quality === "medium" && { loading: "lazy", decoding: "async" })}
-      {...(quality === "high" && { loading: "eager", decoding: "sync" })}
+      {...(quality === "low" && { loading: "lazy" as const })}
+      {...(quality === "medium" && { loading: "lazy" as const })}
+      {...(quality === "high" && { loading: "eager" as const })}
       sizes={sizes}
+      width={props.width || 800}
+      height={props.height || 600}
       {...props}
     />
   );

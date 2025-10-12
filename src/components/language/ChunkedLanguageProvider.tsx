@@ -296,7 +296,7 @@ const DivineParsingOracleProvider: React.FC<{
     if (typeof window !== "undefined") {
       initializeOracle();
     }
-  }, []);
+  }, [initialNamespaces]);
 
   // Language change handler
   const setLanguage = useCallback(
