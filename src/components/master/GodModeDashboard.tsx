@@ -21,40 +21,39 @@ import { SystemOverviewCard } from "./SystemOverviewCard";
 import { PerformanceMetricsCard } from "./PerformanceMetricsCard";
 import { AdvancedControlsCard } from "./AdvancedControlsCard";
 
-function SupremeActionsWarning() {
+function CriticalActionsWarning() {
   return (
     <Card className="border-yellow-200 dark:border-yellow-800">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-yellow-700 dark:text-yellow-300">
           <AlertTriangle className="h-5 w-5" />
-          Acciones Supremas Reubicadas
+          Critical Actions Relocated
         </CardTitle>
         <CardDescription className="text-yellow-600 dark:text-yellow-400">
-          Las acciones supremas peligrosas han sido movidas a un área segura
+          Critical system actions have been moved to a secure area
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Alert className="border-yellow-200 mb-4">
           <AlertTriangle className="h-4 w-4 text-yellow-600" />
           <AlertTitle className="text-yellow-800 dark:text-yellow-200">
-            ⚠️ Área de Poder Supremo Segura
+            Secure Operations Area
           </AlertTitle>
           <AlertDescription className="text-yellow-700 dark:text-yellow-300">
-            Para proteger la integridad del sistema, todas las acciones supremas
-            peligrosas han sido consolidadas en la página de{" "}
-            <strong>Operaciones Avanzadas</strong>.
+            To protect system integrity, all critical system actions have been
+            consolidated in the <strong>Advanced Operations</strong> page.
           </AlertDescription>
         </Alert>
 
         <div className="space-y-3">
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Las siguientes acciones están ahora disponibles en{" "}
-            <strong>Operaciones Avanzadas</strong>:
+            The following actions are now available in{" "}
+            <strong>Advanced Operations</strong>:
           </p>
           <ul className="list-disc list-inside text-sm space-y-1 text-slate-600 dark:text-slate-400">
-            <li>🔥 SUPREME OVERRIDE</li>
-            <li>Reinicio del Sistema</li>
-            <li>Bloqueo de Emergencia</li>
+            <li>System Override</li>
+            <li>System Restart</li>
+            <li>Emergency Lockdown</li>
           </ul>
         </div>
 
@@ -71,23 +70,22 @@ function SupremeActionsWarning() {
   );
 }
 
-function SupremeAuthorityFooter() {
+function AdminAccessFooter() {
   return (
-    <Card className="border-yellow-200 dark:border-yellow-800">
+    <Card className="border-blue-200 dark:border-blue-800">
       <CardContent className="p-6 text-center">
         <div className="flex items-center justify-center gap-4 mb-4">
           <div>
-            <h3 className="text-lg font-bold text-yellow-800 dark:text-yellow-200">
-              🏛️ SUPREME AUTHORITY CONFIRMED
+            <h3 className="text-lg font-bold text-blue-800 dark:text-blue-200">
+              Administrator Access Active
             </h3>
-            <p className="text-sm text-yellow-700 dark:text-yellow-300">
-              Sistema operativo bajo control MASTER absoluto
+            <p className="text-sm text-blue-700 dark:text-blue-300">
+              System under full administrative control
             </p>
           </div>
         </div>
-        <div className="text-xs text-yellow-600 dark:text-yellow-400 font-mono">
-          Última verificación: {new Date().toISOString()} | Estado: GOD MODE
-          ACTIVE
+        <div className="text-xs text-blue-600 dark:text-blue-400 font-mono">
+          Last verification: {new Date().toISOString()} | Status: Active
         </div>
       </CardContent>
     </Card>
@@ -98,7 +96,7 @@ export function GodModeDashboard() {
   const { data: session } = useSession();
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
-  // Real-time updates for MASTER oversight
+  // Real-time updates for administrative oversight
   useEffect(() => {
     const interval = setInterval(() => {
       setLastUpdate(new Date());
@@ -113,42 +111,40 @@ export function GodModeDashboard() {
       <MasterStatusIndicator />
 
       <MasterPageTemplate
-        title="🏛️ GOD MODE SUPREME AUTHORITY"
-        subtitle={`Bienvenido, Arquitecto Supremo ${session?.user?.name || "Master Developer"} - Nivel máximo de control`}
-        context="GOD_MODE_DASHBOARD"
+        title="Advanced System Administration"
+        subtitle={`Welcome, ${session?.user?.name || "Administrator"} - Full system access`}
+        context="ADVANCED_ADMIN_DASHBOARD"
       >
-        {/* Critical Warning - Enhanced */}
+        {/* Critical Warning */}
         <Alert className="border-yellow-200">
           <AlertTriangle className="h-4 w-4 text-yellow-600" />
           <AlertTitle className="text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
-            ⚠️ MODO DIOS ACTIVADO - AUTORIDAD SUPREMA
+            Advanced Administration Active
             <Badge variant="outline" className="text-xs">
-              CRÍTICO
+              FULL ACCESS
             </Badge>
           </AlertTitle>
           <AlertDescription className="text-yellow-700 dark:text-yellow-300 space-y-2">
             <p>
-              <strong>🏛️ SUPREME AUTHORITY ACTIVE:</strong> Tienes control
-              absoluto sobre el sistema. Todas las restricciones han sido
-              eliminadas para tu acceso MASTER.
+              <strong>Full System Access:</strong> You have complete control
+              over the system. All administrative restrictions have been removed
+              for MASTER access.
             </p>
             <p>
-              <strong>⚡ GOD MODE CAPABILITIES:</strong> Sistema de monitoreo en
-              tiempo real, control de amenazas globales, y autoridad para
-              ejecutar cualquier acción crítica.
+              <strong>Capabilities:</strong> Real-time monitoring system, global
+              threat control, and authority to execute any critical action.
             </p>
             <p className="text-sm font-mono p-2 rounded">
-              🔒 Sistema protegido por encriptación cuántica - Solo MASTER puede
-              acceder
+              Secure access - MASTER administrators only
             </p>
           </AlertDescription>
         </Alert>
 
-        {/* God Mode Status */}
+        {/* Admin Status */}
         <GodModeStatusCard />
 
-        {/* Supreme Actions - Moved to Danger Zone */}
-        <SupremeActionsWarning />
+        {/* Critical Actions - Moved to Danger Zone */}
+        <CriticalActionsWarning />
 
         {/* System Overview */}
         <SystemOverviewCard />
@@ -159,8 +155,8 @@ export function GodModeDashboard() {
         {/* Advanced Controls */}
         <AdvancedControlsCard />
 
-        {/* MASTER Authority Footer */}
-        <SupremeAuthorityFooter />
+        {/* Admin Access Footer */}
+        <AdminAccessFooter />
       </MasterPageTemplate>
     </>
   );

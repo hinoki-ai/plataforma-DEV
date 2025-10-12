@@ -76,15 +76,15 @@ const masterQuickActions: QuickAction[] = [
     category: "Core",
   },
 
-  // Advanced Tools (God Mode)
+  // Advanced Administration
   {
-    id: "god-mode",
-    title: "God Mode Dashboard",
-    description: "Supreme system control",
+    id: "advanced-admin",
+    title: "Advanced Administration",
+    description: "Full system control and monitoring",
     icon: Crown,
     href: "/master/god-mode",
     variant: "secondary",
-    category: "God Mode",
+    category: "Advanced",
   },
 ];
 
@@ -302,14 +302,14 @@ export function MasterDashboard() {
 
   return (
     <MasterPageTemplate
-      title="🏛️ Master Control Panel"
-      subtitle={`Welcome, Master Developer ${session?.user?.name || "Administrator"}`}
+      title="Administrator Dashboard"
+      subtitle={`Welcome, ${session?.user?.name || "Administrator"}`}
       context="MASTER_DASHBOARD"
     >
       {/* Quick Actions */}
       <MasterActionCard
-        title="Quick Actions - Master Tools"
-        description="Advanced tools available for master administrators"
+        title="Quick Actions - Administrative Tools"
+        description="Advanced tools for system administrators"
         actions={quickActions}
         columns={4}
       />

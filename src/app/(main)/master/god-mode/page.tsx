@@ -1,6 +1,6 @@
 /**
- * 🏛️ MASTER Almighty God Mode Dashboard Page
- * Supreme Authority - Complete System Control
+ * Advanced Administration Dashboard Page
+ * Full system control and monitoring
  * Only MASTER users can access this page
  */
 
@@ -11,36 +11,36 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { GodModeDashboard } from "@/components/master/GodModeDashboard";
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import { Crown } from "lucide-react";
+import { Shield } from "lucide-react";
 
 // Force dynamic rendering for real-time updates
 export const dynamic = "force-dynamic";
 
-// Supreme SEO metadata
+// SEO metadata
 export const metadata: Metadata = {
-  title: "🏛️ MASTER God Mode - Supreme Authority Control",
+  title: "Advanced Administration - System Control",
   description:
-    "Ultimate system authority and global oversight dashboard - MASTER access only",
+    "Advanced system administration and monitoring dashboard - MASTER access only",
   keywords: [
     "master",
-    "god mode",
-    "supreme authority",
+    "administration",
     "system control",
+    "monitoring",
     "global oversight",
   ],
   robots: "noindex, nofollow", // Only MASTER should find this
   openGraph: {
-    title: "🏛️ MASTER God Mode - Supreme Control",
-    description: "Complete system authority and oversight",
+    title: "Advanced Administration - System Control",
+    description: "Complete system administration and oversight",
     type: "website",
   },
 };
 
-// Supreme loading component
-function SupremeLoadingSkeleton() {
+// Loading component
+function AdvancedLoadingSkeleton() {
   return (
     <div className="space-y-8 p-6">
-      {/* Supreme Header Skeleton */}
+      {/* Header Skeleton */}
       <div className="space-y-4">
         <div className="flex items-center justify-center gap-4">
           <Skeleton className="h-12 w-12 rounded-full" />
@@ -55,7 +55,7 @@ function SupremeLoadingSkeleton() {
         </div>
       </div>
 
-      {/* God Mode Status Skeleton */}
+      {/* Admin Status Skeleton */}
       <Card className="animate-pulse border-yellow-200 dark:border-yellow-800">
         <div className="p-6">
           <Skeleton className="h-6 w-48 mb-4" />
@@ -73,7 +73,7 @@ function SupremeLoadingSkeleton() {
         </div>
       </Card>
 
-      {/* Supreme Actions Skeleton */}
+      {/* Admin Actions Skeleton */}
       <Card className="animate-pulse border-red-200 dark:border-red-800">
         <div className="p-6">
           <Skeleton className="h-6 w-40 mb-4" />
@@ -102,8 +102,8 @@ function SupremeLoadingSkeleton() {
   );
 }
 
-// Supreme error boundary fallback
-const _SupremeErrorFallback: React.ComponentType<{
+// Error boundary fallback
+const _AdminErrorFallback: React.ComponentType<{
   error: Error;
   retry: () => void;
 }> = ({ error, retry }) => {
@@ -111,13 +111,13 @@ const _SupremeErrorFallback: React.ComponentType<{
     <div className="min-h-screen flex items-center justify-center p-6 bg-background">
       <Card className="max-w-md w-full border-red-200 bg-red-50 dark:bg-red-950/20">
         <div className="p-6 text-center space-y-4">
-          <Crown className="h-16 w-16 mx-auto text-red-600" />
+          <Shield className="h-16 w-16 mx-auto text-red-600" />
           <h2 className="text-xl font-bold text-red-800 dark:text-red-200">
-            🚨 GOD MODE COMPROMISED
+            System Error
           </h2>
           <p className="text-red-700 dark:text-red-300">
-            Supreme authority system encountered a critical error. This should
-            never happen under normal circumstances.
+            Administration system encountered a critical error. Please try
+            again.
           </p>
           <div className="text-sm text-red-600 dark:text-red-400 font-mono bg-red-100 dark:bg-red-900/20 p-2 rounded">
             {error.message}
@@ -126,7 +126,7 @@ const _SupremeErrorFallback: React.ComponentType<{
             onClick={retry}
             className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
           >
-            🔄 RESTORE SUPREME AUTHORITY
+            Retry
           </button>
         </div>
       </Card>
@@ -134,30 +134,30 @@ const _SupremeErrorFallback: React.ComponentType<{
   );
 };
 
-export default function GodModePage() {
+export default function AdvancedAdminPage() {
   return (
     <RoleGuard
       roles={["MASTER"]}
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-background">
           <Card className="p-8 text-center border-red-200 bg-red-50 dark:bg-red-950/20">
-            <Crown className="h-16 w-16 mx-auto text-red-600 mb-4" />
+            <Shield className="h-16 w-16 mx-auto text-red-600 mb-4" />
             <h2 className="text-2xl font-bold text-red-800 dark:text-red-200 mb-2">
-              🚫 ACCESS DENIED
+              Access Denied
             </h2>
             <p className="text-red-700 dark:text-red-300">
-              Only MASTER has Almighty Authority to access God Mode.
+              Only MASTER administrators can access Advanced Administration.
             </p>
           </Card>
         </div>
       }
     >
       <AdvancedErrorBoundary
-        context="🏛️ GOD MODE - SUPREME AUTHORITY"
+        context="Advanced Administration"
         enableRetry={true}
         showDetails={process.env.NODE_ENV === "development"}
       >
-        <Suspense fallback={<SupremeLoadingSkeleton />}>
+        <Suspense fallback={<AdvancedLoadingSkeleton />}>
           <GodModeDashboard />
         </Suspense>
       </AdvancedErrorBoundary>

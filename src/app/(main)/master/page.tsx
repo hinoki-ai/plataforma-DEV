@@ -12,21 +12,20 @@ import { InstitutionMasterCard } from "@/components/master/InstitutionMasterCard
 export const dynamic = "force-dynamic";
 
 export default function MasterDashboardPage() {
-  // Master authority: Handle critical failures gracefully
+  // Handle critical failures gracefully
   try {
-    // Master dashboard will show enhanced state but remain functional
+    // Dashboard will show enhanced state but remain functional
   } catch (error) {
-    dbLogger.error(
-      "MASTER DASHBOARD FAILURE - SUPREME CONTROL COMPROMISED",
-      error,
-      { context: "MasterPage", masterDashboard: true, supremeAuthority: true },
-    );
-    // Dashboard will show enhanced error state but remain functional
+    dbLogger.error("Master dashboard critical error", error, {
+      context: "MasterPage",
+      masterDashboard: true,
+    });
+    // Dashboard will show error state but remain functional
   }
 
   return (
     <AdvancedErrorBoundary
-      context="🏛️ Master Dashboard"
+      context="Administrator Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >
@@ -48,7 +47,7 @@ export default function MasterDashboardPage() {
               ))}
             </div>
 
-            {/* Loading states for Master */}
+            {/* Loading states for admin dashboard */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="border-blue-200 dark:border-blue-800">
                 <div className="p-6">
@@ -90,10 +89,10 @@ export default function MasterDashboardPage() {
         }
       >
         <div className="space-y-8">
-          {/* Institution Master Control - Supreme Priority */}
+          {/* Institution Control */}
           <InstitutionMasterCard currentType="PRESCHOOL" />
 
-          {/* Standard Master Dashboard */}
+          {/* Administrator Dashboard */}
           <MasterDashboard />
         </div>
       </Suspense>

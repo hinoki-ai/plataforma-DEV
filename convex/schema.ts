@@ -144,6 +144,7 @@ export default defineSchema({
     enrollmentDate: v.number(),
     medicalInfo: v.optional(v.string()),
     emergencyContact: v.optional(v.string()),
+    emergencyPhone: v.optional(v.string()),
     allergies: v.optional(v.string()),
     specialNeeds: v.optional(v.string()),
     attendanceRate: v.optional(v.float64()),
@@ -158,6 +159,24 @@ export default defineSchema({
     .index("by_parentId", ["parentId"])
     .index("by_grade", ["grade"])
     .index("by_isActive", ["isActive"]),
+
+  // ==================== PARENT PROFILES ====================
+
+  parentProfiles: defineTable({
+    userId: v.id("users"),
+    rut: v.string(),
+    address: v.string(),
+    region: v.string(),
+    comuna: v.string(),
+    relationship: v.string(), // padre, madre, apoderado, tutor, abuelo, otro
+    emergencyContact: v.string(),
+    emergencyPhone: v.string(),
+    registrationComplete: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_rut", ["rut"]),
 
   // ==================== MEETINGS ====================
 

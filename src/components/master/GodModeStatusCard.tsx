@@ -13,16 +13,16 @@ import { Switch } from "@/components/ui/switch";
 import { Crown, Sparkles } from "lucide-react";
 import { MasterStatsCard } from "./MasterStatsCard";
 
-interface GodModeMetrics {
+interface AdminControlMetrics {
   system: {
-    status: "GOD_MODE_ACTIVE" | "MAINTENANCE" | "CRITICAL";
+    status: "ACTIVE" | "MAINTENANCE" | "CRITICAL";
     uptime: string;
     lastBackup: string;
     nextMaintenance: string;
   };
   authority: {
-    godModeActive: boolean;
-    supremeOverride: boolean;
+    adminActive: boolean;
+    systemOverride: boolean;
     globalControl: boolean;
   };
   threats: {
@@ -38,20 +38,20 @@ interface GodModeMetrics {
 }
 
 export function GodModeStatusCard() {
-  const [godModeActive, setGodModeActive] = useState(true);
-  const [supremeOverride, setSupremeOverride] = useState(false);
+  const [adminActive, setAdminActive] = useState(true);
+  const [systemOverride, setSystemOverride] = useState(false);
 
-  const metrics: GodModeMetrics = useMemo(
+  const metrics: AdminControlMetrics = useMemo(
     () => ({
       system: {
-        status: godModeActive ? "GOD_MODE_ACTIVE" : "MAINTENANCE",
+        status: adminActive ? "ACTIVE" : "MAINTENANCE",
         uptime: "99.99%",
         lastBackup: "2 minutos atrás",
         nextMaintenance: "Esta noche 2:00 AM",
       },
       authority: {
-        godModeActive,
-        supremeOverride,
+        adminActive,
+        systemOverride,
         globalControl: true,
       },
       threats: {
@@ -65,7 +65,7 @@ export function GodModeStatusCard() {
         efficiency: 100,
       },
     }),
-    [godModeActive, supremeOverride],
+    [adminActive, systemOverride],
   );
 
   const systemStats = [
@@ -99,51 +99,51 @@ export function GodModeStatusCard() {
     <div className="space-y-6">
       <Card className="border-yellow-200 dark:border-yellow-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-yellow-700 dark:text-yellow-300">
+          <CardTitle className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
             <Crown className="h-6 w-6" />
-            ESTADO GOD MODE SUPREMO
+            Administration Control Status
           </CardTitle>
-          <CardDescription className="text-yellow-600 dark:text-yellow-400">
-            Control absoluto del sistema - Nivel máximo de autoridad
+          <CardDescription className="text-blue-600 dark:text-blue-400">
+            Full system control - Maximum authority level
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Status Indicator */}
-          <div className="flex items-center justify-between p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
+          <div className="flex items-center justify-between p-4 rounded-lg border border-blue-200 dark:border-blue-800">
             <div className="flex items-center gap-3">
               <div
-                className={`h-3 w-3 rounded-full ${godModeActive ? "bg-green-500 animate-pulse" : "bg-yellow-500"}`}
+                className={`h-3 w-3 rounded-full ${adminActive ? "bg-green-500 animate-pulse" : "bg-yellow-500"}`}
               />
               <div>
-                <p className="font-semibold text-yellow-800 dark:text-yellow-200">
-                  {godModeActive ? "GOD MODE ACTIVO" : "MODO MANTENIMIENTO"}
+                <p className="font-semibold text-blue-800 dark:text-blue-200">
+                  {adminActive ? "ADMIN ACTIVE" : "MAINTENANCE MODE"}
                 </p>
-                <p className="text-sm text-yellow-600 dark:text-yellow-400">
+                <p className="text-sm text-blue-600 dark:text-blue-400">
                   Uptime: {metrics.system.uptime}
                 </p>
               </div>
             </div>
-            <Badge variant={godModeActive ? "default" : "secondary"}>
-              {godModeActive ? "SUPREME" : "MAINTENANCE"}
+            <Badge variant={adminActive ? "default" : "secondary"}>
+              {adminActive ? "ACTIVE" : "MAINTENANCE"}
             </Badge>
           </div>
 
           {/* Authority Controls */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center justify-between p-3 rounded-lg">
-              <span className="text-sm font-medium">God Mode</span>
+              <span className="text-sm font-medium">Admin Mode</span>
               <Switch
-                checked={godModeActive}
-                onCheckedChange={setGodModeActive}
-                className="data-[state=checked]:bg-yellow-600"
+                checked={adminActive}
+                onCheckedChange={setAdminActive}
+                className="data-[state=checked]:bg-blue-600"
               />
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-lg">
-              <span className="text-sm font-medium">Supreme Override</span>
+              <span className="text-sm font-medium">System Override</span>
               <Switch
-                checked={supremeOverride}
-                onCheckedChange={setSupremeOverride}
+                checked={systemOverride}
+                onCheckedChange={setSystemOverride}
                 className="data-[state=checked]:bg-red-600"
               />
             </div>
