@@ -1,10 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout";
-import Header from "@/components/layout/Header";
-import { UnifiedErrorBoundary } from "@/components/ui/unified-error-boundary";
-
 export default function Error({
   error,
   reset,
@@ -12,44 +7,55 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // Simple error logging for main error page
-  useEffect(() => {
-    console.error("🚨 Main Error Page:", {
-      message: error?.message || "Unknown error",
-      stack: error?.stack?.slice(0, 500) || "No stack trace available",
-      digest: error?.digest || "No digest available",
-      url: typeof window !== "undefined" ? window.location.href : "SSR",
-      timestamp: new Date().toISOString(),
-    });
-  }, [error]);
-
   return (
-    <FixedBackgroundLayout
-      backgroundImage="/bg2.jpg"
-      overlayType="gradient"
-      responsivePositioning="default"
-      pageTransitionProps={{
-        skeletonType: "page",
-        duration: 500,
-        enableProgressiveAnimation: false,
-      }}
-    >
-      <Header />
-      <div className="flex items-center justify-center p-4 min-h-[calc(100vh-73px)]">
-        <div className="max-w-md w-full">
-          {/* Unified Error Boundary - Full variant for main error page */}
-          <UnifiedErrorBoundary
-            context="main_error_page"
-            variant="full"
-            enableRetry={true}
-            enableHome={true}
-            showDetails={true}
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #ef4444 0%, #a855f7 100%)'
+    }}>
+      <div style={{
+        maxWidth: '28rem',
+        padding: '2rem',
+        textAlign: 'center',
+        color: 'white'
+      }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>¡Ups! Algo salió mal</h1>
+        <p style={{ marginBottom: '2rem', opacity: 0.8 }}>
+          {error?.message || "Ha ocurrido un error inesperado"}
+        </p>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+          <button
+            onClick={reset}
+            style={{
+              padding: '0.75rem 1.5rem',
+              background: 'white',
+              color: '#a855f7',
+              borderRadius: '0.5rem',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: '500'
+            }}
           >
-            {/* Force error to trigger the boundary */}
-            <div>Error occurred: {error?.message || "Unknown error"}</div>
-          </UnifiedErrorBoundary>
+            Intentar nuevamente
+          </button>
+          <a
+            href="/"
+            style={{
+              display: 'inline-block',
+              padding: '0.75rem 1.5rem',
+              background: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              borderRadius: '0.5rem',
+              textDecoration: 'none',
+              fontWeight: '500'
+            }}
+          >
+            Volver al inicio
+          </a>
         </div>
       </div>
-    </FixedBackgroundLayout>
+    </div>
   );
 }

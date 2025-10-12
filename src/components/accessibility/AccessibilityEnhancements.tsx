@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -11,8 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -23,11 +20,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   Accessibility,
   Eye,
   Ear,
@@ -35,25 +27,18 @@ import {
   Type,
   Contrast,
   Volume2,
-  VolumeX,
   Play,
   Pause,
-  SkipForward,
-  SkipBack,
   Settings,
-  Monitor,
   Keyboard,
   MousePointer,
   Focus,
   Zap,
-  Sun,
-  Moon,
   Palette,
   Globe,
   Coffee,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
 
 interface AccessibilitySettings {
   fontSize: number;
@@ -214,7 +199,6 @@ interface AccessibilityPanelProps {
 
 export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
   const { settings, saveSettings, resetSettings } = useAccessibilitySettings();
-  const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
   const contrastOptions = [

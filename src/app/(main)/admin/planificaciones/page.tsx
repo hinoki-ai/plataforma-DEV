@@ -7,11 +7,12 @@ import { PlanningDashboard } from "@/components/planning/PlanningDashboard";
 import { PageTransition } from "@/components/ui/page-transition";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
 import { useLanguage } from "@/components/language/LanguageContext";
+import type { PlanningDocumentsResponse } from "@/lib/types/service-responses";
 
 export default function AdminPlanificacionesPage() {
   const { t } = useLanguage();
   const searchParams = useSearchParams();
-  const [documents, setDocuments] = useState<any>(null);
+  const [documents, setDocuments] = useState<PlanningDocumentsResponse["data"]>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

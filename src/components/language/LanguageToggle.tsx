@@ -239,7 +239,7 @@ export function LanguageToggle() {
                       } ${focusedIndex === index ? "bg-accent" : ""}`}
                       role="option"
                       aria-label={option.ariaLabel}
-                      aria-selected={isSelected}
+                      {...(isSelected ? { "aria-selected": true } : { "aria-selected": false })}
                       tabIndex={focusedIndex === index ? 0 : -1}
                     >
                       <div className="flex items-center gap-2">

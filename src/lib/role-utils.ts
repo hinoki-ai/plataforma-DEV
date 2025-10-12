@@ -15,8 +15,6 @@ export interface RoleAccess {
 export function getRoleAccess(role?: ExtendedUserRole | string): RoleAccess {
   const userRole = role as ExtendedUserRole;
 
-  console.log("getRoleAccess - Input role:", role, "userRole:", userRole);
-
   const access = {
     // MASTER has access to everything - Supreme Authority
     canAccessAdmin: userRole === "MASTER" || userRole === "ADMIN",
@@ -30,7 +28,6 @@ export function getRoleAccess(role?: ExtendedUserRole | string): RoleAccess {
     canAccessPublic: true, // Everyone can access public pages
   };
 
-  console.log("getRoleAccess - Access result:", access);
   return access;
 }
 

@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-import { ExtendedUserRole } from "@/lib/authorization";
 
 interface FormData {
   fullName: string;

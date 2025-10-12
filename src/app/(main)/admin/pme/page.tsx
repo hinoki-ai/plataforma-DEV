@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { PageTransition } from "@/components/ui/page-transition";
 import { PMEDashboard } from "@/components/pme/PMEDashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 import {
@@ -21,7 +19,6 @@ import {
   Trash2,
   CheckCircle,
   AlertTriangle,
-  Crown,
   FileText,
 } from "lucide-react";
 import { PMEGoal } from "@/lib/types/pme";
@@ -30,7 +27,7 @@ import { toast } from "sonner";
 export const dynamic = "force-dynamic";
 
 // Mock data representing ALL teachers' PME goals - Admin sees EVERYTHING
-const mockAllPMEGoals: any[] = [
+const mockAllPMEGoals: PMEGoal[] = [
   // Teacher 1 Goals
   {
     id: "pme-1",
@@ -208,9 +205,8 @@ const mockTeachers = [
 ];
 
 export default function AdminPMEPage() {
-  const { data: session } = useSession();
   const { t } = useDivineParsing(["common", "admin", "profesor"]);
-  const [allGoals, setAllGoals] = useState<any[]>([]);
+  const [allGoals, setAllGoals] = useState<PMEGoal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTeacher, setSelectedTeacher] = useState<string | "all">("all");
 

@@ -4,7 +4,7 @@
 
 **Simple approach**: One branch (`main`), automatic deployments to production.
 
-```
+```text
 localhost:3000 → test → commit → push main → plataforma.aramac.dev
 ```
 
@@ -123,7 +123,7 @@ git push origin --delete branch-name
 
 ## 🔄 Deployment Pipeline
 
-```
+```text
 ┌─────────────────┐
 │ Local Machine   │
 │  localhost:3000 │

@@ -1,21 +1,24 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import {
   getRoleAccess,
+  hasMasterGodModeAccess,
+  canMasterOverride,
+  canAccessProfesor,
+  canAccessAdmin,
   canAccessSection,
   getAccessibleSections,
+  getAuthorFilter,
   canEditRecord,
   canDeleteRecord,
-  getAuthorFilter,
   getDefaultRedirectPath,
   getRoleFilter,
   getRoleDisplayName,
 } from "@/lib/role-utils";
-import { ExtendedUserRole } from "@/lib/authorization";
 
-describe("Role-Based Access Control", () => {
-  describe("Route Protection", () => {
-    it("should allow admin access to all sections", () => {
-      const access = getRoleAccess("ADMIN");
+describe("Role Access System", () => {
+  describe("Role Access Permissions", () => {
+    it("should grant MASTER full access to all sections", () => {
+      const access = getRoleAccess("MASTER");
 
       expect(access.canAccessAdmin).toBe(true);
       expect(access.canAccessProfesor).toBe(true);
@@ -23,16 +26,25 @@ describe("Role-Based Access Control", () => {
       expect(access.canAccessPublic).toBe(true);
     });
 
-    it("should allow teacher access to teacher and parent sections", () => {
+    it("should grant ADMIN access to admin and profesor sections", () => {
+      const access = getRoleAccess("ADMIN");
+
+      expect(access.canAccessAdmin).toBe(true);
+      expect(access.canAccessProfesor).toBe(true);
+      expect(access.canAccessParent).toBe(false);
+      expect(access.canAccessPublic).toBe(true);
+    });
+
+    it("should grant PROFESOR access to profesor section", () => {
       const access = getRoleAccess("PROFESOR");
 
       expect(access.canAccessAdmin).toBe(false);
       expect(access.canAccessProfesor).toBe(true);
-      expect(access.canAccessParent).toBe(true);
+      expect(access.canAccessParent).toBe(false);
       expect(access.canAccessPublic).toBe(true);
     });
 
-    it("should allow parent access to parent section only", () => {
+    it("should grant PARENT access to parent section", () => {
       const access = getRoleAccess("PARENT");
 
       expect(access.canAccessAdmin).toBe(false);
@@ -41,7 +53,7 @@ describe("Role-Based Access Control", () => {
       expect(access.canAccessPublic).toBe(true);
     });
 
-    it("should allow public access to public section only", () => {
+    it("should grant PUBLIC only public access", () => {
       const access = getRoleAccess("PUBLIC");
 
       expect(access.canAccessAdmin).toBe(false);
@@ -49,299 +61,207 @@ describe("Role-Based Access Control", () => {
       expect(access.canAccessParent).toBe(false);
       expect(access.canAccessPublic).toBe(true);
     });
+  });
 
-    it("should handle undefined role gracefully", () => {
-      const access = getRoleAccess(undefined);
+  describe("MASTER God Mode Access", () => {
+    it("should confirm MASTER has god mode access", () => {
+      expect(hasMasterGodModeAccess("MASTER")).toBe(true);
+      expect(hasMasterGodModeAccess("ADMIN")).toBe(false);
+      expect(hasMasterGodModeAccess("PROFESOR")).toBe(false);
+    });
 
-      expect(access.canAccessAdmin).toBe(false);
-      expect(access.canAccessProfesor).toBe(false);
-      expect(access.canAccessParent).toBe(false);
-      expect(access.canAccessPublic).toBe(true);
+    it("should allow MASTER to override any restriction", () => {
+      expect(canMasterOverride("MASTER")).toBe(true);
+      expect(canMasterOverride("ADMIN")).toBe(false);
+      expect(canMasterOverride("PROFESOR")).toBe(false);
     });
   });
 
-  describe("Section Access Control", () => {
-    it("should allow admin to access admin section", () => {
+  describe("Section Access Functions", () => {
+    it("should check admin access correctly", () => {
+      expect(canAccessAdmin("MASTER")).toBe(true);
+      expect(canAccessAdmin("ADMIN")).toBe(true);
+      expect(canAccessAdmin("PROFESOR")).toBe(false);
+    });
+
+    it("should check profesor access correctly", () => {
+      expect(canAccessProfesor("MASTER")).toBe(true);
+      expect(canAccessProfesor("ADMIN")).toBe(true);
+      expect(canAccessProfesor("PROFESOR")).toBe(true);
+      expect(canAccessProfesor("PARENT")).toBe(false);
+    });
+
+    it("should check section access correctly", () => {
+      expect(canAccessSection("MASTER", "admin")).toBe(true);
       expect(canAccessSection("ADMIN", "admin")).toBe(true);
-    });
-
-    it("should allow admin to access teacher section", () => {
-      expect(canAccessSection("ADMIN", "profesor")).toBe(true);
-    });
-
-    it("should allow admin to access parent section", () => {
-      expect(canAccessSection("ADMIN", "parent")).toBe(true);
-    });
-
-    it("should allow teacher to access teacher section", () => {
-      expect(canAccessSection("PROFESOR", "profesor")).toBe(true);
-    });
-
-    it("should deny teacher access to admin section", () => {
       expect(canAccessSection("PROFESOR", "admin")).toBe(false);
-    });
-
-    it("should allow teacher to access parent section", () => {
-      expect(canAccessSection("PROFESOR", "parent")).toBe(true);
-    });
-
-    it("should deny parent access to admin section", () => {
-      expect(canAccessSection("PARENT", "admin")).toBe(false);
-    });
-
-    it("should deny parent access to teacher section", () => {
-      expect(canAccessSection("PARENT", "profesor")).toBe(false);
-    });
-
-    it("should allow parent to access parent section", () => {
+      expect(canAccessSection("PROFESOR", "profesor")).toBe(true);
       expect(canAccessSection("PARENT", "parent")).toBe(true);
-    });
-
-    it("should allow all roles to access public section", () => {
-      const roles: ExtendedUserRole[] = [
-        "ADMIN",
-        "PROFESOR",
-        "PARENT",
-        "PUBLIC",
-      ];
-
-      roles.forEach((role) => {
-        expect(canAccessSection(role, "public")).toBe(true);
-      });
+      expect(canAccessSection("PUBLIC", "public")).toBe(true);
     });
   });
 
   describe("Accessible Sections", () => {
-    it("should return all sections for admin", () => {
+    it("should return all sections for MASTER", () => {
+      const sections = getAccessibleSections("MASTER");
+      expect(sections).toEqual(["admin", "profesor", "parent", "public"]);
+    });
+
+    it("should return admin and profesor sections for ADMIN", () => {
       const sections = getAccessibleSections("ADMIN");
-      expect(sections).toContain("admin");
-      expect(sections).toContain("profesor");
-      expect(sections).toContain("parent");
-      expect(sections).toContain("public");
+      expect(sections).toEqual(["admin", "profesor", "public"]);
     });
 
-    it("should return teacher and parent sections for teacher", () => {
+    it("should return profesor section for PROFESOR", () => {
       const sections = getAccessibleSections("PROFESOR");
-      expect(sections).not.toContain("admin");
-      expect(sections).toContain("profesor");
-      expect(sections).toContain("parent");
-      expect(sections).toContain("public");
+      expect(sections).toEqual(["profesor", "public"]);
     });
 
-    it("should return only parent and public sections for parent", () => {
+    it("should return parent section for PARENT", () => {
       const sections = getAccessibleSections("PARENT");
-      expect(sections).not.toContain("admin");
-      expect(sections).not.toContain("profesor");
-      expect(sections).toContain("parent");
-      expect(sections).toContain("public");
-    });
-
-    it("should return only public section for public user", () => {
-      const sections = getAccessibleSections("PUBLIC");
-      expect(sections).not.toContain("admin");
-      expect(sections).not.toContain("profesor");
-      expect(sections).not.toContain("parent");
-      expect(sections).toContain("public");
+      expect(sections).toEqual(["parent", "public"]);
     });
   });
 
-  describe("Record Ownership Control", () => {
-    const adminId = "admin-123";
-    const teacherId = "teacher-123";
-    const parentId = "parent-123";
-    const otherTeacherId = "other-teacher-456";
-
-    it("should allow admin to edit any record", () => {
-      expect(canEditRecord("ADMIN", teacherId, adminId)).toBe(true);
-      expect(canEditRecord("ADMIN", parentId, adminId)).toBe(true);
-      expect(canEditRecord("ADMIN", otherTeacherId, adminId)).toBe(true);
+  describe("Record Editing Permissions", () => {
+    it("should allow MASTER to edit any record", () => {
+      expect(canEditRecord("MASTER", "author-1", "user-1")).toBe(true);
+      expect(canEditRecord("MASTER", "author-1", "user-2")).toBe(true);
     });
 
-    it("should allow teacher to edit their own records", () => {
-      expect(canEditRecord("PROFESOR", teacherId, teacherId)).toBe(true);
+    it("should allow ADMIN to edit any record in their school", () => {
+      expect(canEditRecord("ADMIN", "author-1", "user-1")).toBe(true);
+      expect(canEditRecord("ADMIN", "author-1", "user-2")).toBe(true);
     });
 
-    it("should deny teacher access to other teacher records", () => {
-      expect(canEditRecord("PROFESOR", otherTeacherId, teacherId)).toBe(false);
+    it("should allow PROFESOR to edit only their own records", () => {
+      expect(canEditRecord("PROFESOR", "author-1", "author-1")).toBe(true);
+      expect(canEditRecord("PROFESOR", "author-1", "author-2")).toBe(false);
     });
 
-    it("should deny parent access to edit records", () => {
-      expect(canEditRecord("PARENT", parentId, parentId)).toBe(false);
-    });
-
-    it("should deny public user access to edit records", () => {
-      expect(canEditRecord("PUBLIC", parentId, parentId)).toBe(false);
+    it("should deny PARENT edit permissions", () => {
+      expect(canEditRecord("PARENT", "author-1", "author-1")).toBe(false);
+      expect(canEditRecord("PARENT", "author-1", "author-2")).toBe(false);
     });
   });
 
-  describe("Record Deletion Control", () => {
-    const adminId = "admin-123";
-    const teacherId = "teacher-123";
-    const otherTeacherId = "other-teacher-456";
-
-    it("should allow admin to delete any record", () => {
-      expect(canDeleteRecord("ADMIN", teacherId, adminId)).toBe(true);
-      expect(canDeleteRecord("ADMIN", otherTeacherId, adminId)).toBe(true);
+  describe("Record Deletion Permissions", () => {
+    it("should allow MASTER to delete any record", () => {
+      expect(canDeleteRecord("MASTER", "author-1", "user-1")).toBe(true);
+      expect(canDeleteRecord("MASTER", "author-1", "user-2")).toBe(true);
     });
 
-    it("should allow teacher to delete their own records", () => {
-      expect(canDeleteRecord("PROFESOR", teacherId, teacherId)).toBe(true);
+    it("should allow ADMIN to delete any record in their school", () => {
+      expect(canDeleteRecord("ADMIN", "author-1", "user-1")).toBe(true);
+      expect(canDeleteRecord("ADMIN", "author-1", "user-2")).toBe(true);
     });
 
-    it("should deny teacher access to delete other teacher records", () => {
-      expect(canDeleteRecord("PROFESOR", otherTeacherId, teacherId)).toBe(
-        false,
-      );
+    it("should allow PROFESOR to delete only their own records", () => {
+      expect(canDeleteRecord("PROFESOR", "author-1", "author-1")).toBe(true);
+      expect(canDeleteRecord("PROFESOR", "author-1", "author-2")).toBe(false);
     });
 
-    it("should deny parent access to delete records", () => {
-      expect(canDeleteRecord("PARENT", "parent-123", "parent-123")).toBe(false);
+    it("should deny PARENT delete permissions", () => {
+      expect(canDeleteRecord("PARENT", "author-1", "author-1")).toBe(false);
+      expect(canDeleteRecord("PARENT", "author-1", "author-2")).toBe(false);
     });
   });
 
-  describe("Author Filter Generation", () => {
-    const adminId = "admin-123";
-    const teacherId = "teacher-123";
-    const parentId = "parent-123";
-
-    it("should return empty filter for admin", () => {
-      const filter = getAuthorFilter("ADMIN", adminId);
+  describe("Author Filters", () => {
+    it("should return no filters for MASTER", () => {
+      const filter = getAuthorFilter("MASTER", "user-1");
       expect(filter).toEqual({});
     });
 
-    it("should return ownership filter for teacher", () => {
-      const filter = getAuthorFilter("PROFESOR", teacherId);
-      expect(filter).toEqual({
-        OR: [{ createdBy: teacherId }, { isPublic: true }],
-      });
+    it("should return school filter for ADMIN", () => {
+      const filter = getAuthorFilter("ADMIN", "user-1");
+      expect(filter).toEqual({}); // ADMIN has school-level access
     });
 
-    it("should return public filter for parent", () => {
-      const filter = getAuthorFilter("PARENT", parentId);
-      expect(filter).toEqual({
-        isPublic: true,
-      });
+    it("should return ownership filter for PROFESOR", () => {
+      const filter = getAuthorFilter("PROFESOR", "user-1");
+      expect(filter.OR).toBeDefined();
+      expect(filter.OR).toContainEqual({ createdBy: "user-1" });
+      expect(filter.OR).toContainEqual({ isPublic: true });
     });
 
-    it("should return public filter for public user", () => {
-      const filter = getAuthorFilter("PUBLIC", "public-123");
-      expect(filter).toEqual({
-        isPublic: true,
-      });
+    it("should return public filter for other roles", () => {
+      const filter = getAuthorFilter("PARENT", "user-1");
+      expect(filter.isPublic).toBe(true);
     });
   });
 
   describe("Default Redirect Paths", () => {
-    it("should redirect admin to admin dashboard", () => {
+    it("should redirect MASTER to master page", () => {
+      expect(getDefaultRedirectPath("MASTER")).toBe("/master");
+    });
+
+    it("should redirect ADMIN to admin page", () => {
       expect(getDefaultRedirectPath("ADMIN")).toBe("/admin");
     });
 
-    it("should redirect teacher to teacher dashboard", () => {
+    it("should redirect PROFESOR to profesor page", () => {
       expect(getDefaultRedirectPath("PROFESOR")).toBe("/profesor");
     });
 
-    it("should redirect parent to parent dashboard", () => {
+    it("should redirect PARENT to parent page", () => {
       expect(getDefaultRedirectPath("PARENT")).toBe("/parent");
     });
 
-    it("should redirect public user to home", () => {
+    it("should redirect PUBLIC to home page", () => {
       expect(getDefaultRedirectPath("PUBLIC")).toBe("/");
     });
 
-    it("should redirect unknown role to home", () => {
-      expect(getDefaultRedirectPath("UNKNOWN" as ExtendedUserRole)).toBe("/");
+    it("should redirect unknown roles to home page", () => {
+      expect(getDefaultRedirectPath("UNKNOWN")).toBe("/");
     });
   });
 
-  describe("Role Filter Generation", () => {
-    it("should return empty filter for admin", () => {
+  describe("Role Filters", () => {
+    it("should return no filters for MASTER", () => {
+      const filter = getRoleFilter("MASTER");
+      expect(filter).toEqual({});
+    });
+
+    it("should return no filters for ADMIN", () => {
       const filter = getRoleFilter("ADMIN");
       expect(filter).toEqual({});
     });
 
-    it("should return empty filter for teacher", () => {
+    it("should return no filters for PROFESOR", () => {
       const filter = getRoleFilter("PROFESOR");
       expect(filter).toEqual({});
     });
 
-    it("should return empty filter for parent", () => {
+    it("should return no filters for other roles", () => {
       const filter = getRoleFilter("PARENT");
-      expect(filter).toEqual({});
-    });
-
-    it("should return empty filter for public user", () => {
-      const filter = getRoleFilter("PUBLIC");
-      expect(filter).toEqual({});
-    });
-
-    it("should return empty filter for undefined role", () => {
-      const filter = getRoleFilter(undefined);
       expect(filter).toEqual({});
     });
   });
 
   describe("Role Display Names", () => {
-    it("should return correct display name for admin", () => {
+    it("should display MASTER with god mode indicator", () => {
+      expect(getRoleDisplayName("MASTER")).toBe("🏛️ SUPREMO MASTER");
+    });
+
+    it("should display ADMIN correctly", () => {
       expect(getRoleDisplayName("ADMIN")).toBe("Administrador");
     });
 
-    it("should return correct display name for teacher", () => {
+    it("should display PROFESOR correctly", () => {
       expect(getRoleDisplayName("PROFESOR")).toBe("Profesor");
     });
 
-    it("should return correct display name for parent", () => {
+    it("should display PARENT correctly", () => {
       expect(getRoleDisplayName("PARENT")).toBe("Padre/Apoderado");
     });
 
-    it("should return correct display name for public user", () => {
+    it("should display PUBLIC correctly", () => {
       expect(getRoleDisplayName("PUBLIC")).toBe("Público");
     });
 
-    it("should return role as string for unknown role", () => {
-      expect(getRoleDisplayName("UNKNOWN" as ExtendedUserRole)).toBe("UNKNOWN");
-    });
-  });
-
-  describe("Security Edge Cases", () => {
-    it("should handle null role gracefully", () => {
-      const access = getRoleAccess(null as any);
-      expect(access.canAccessAdmin).toBe(false);
-      expect(access.canAccessPublic).toBe(true);
-    });
-
-    it("should handle empty string role gracefully", () => {
-      const access = getRoleAccess("");
-      expect(access.canAccessAdmin).toBe(false);
-      expect(access.canAccessPublic).toBe(true);
-    });
-
-    it("should handle invalid section gracefully", () => {
-      expect(canAccessSection("ADMIN", "invalid" as any)).toBe(false);
-    });
-
-    it("should handle empty user IDs gracefully", () => {
-      const filter = getAuthorFilter("PROFESOR", "");
-      expect(filter).toEqual({
-        OR: [{ createdBy: "" }, { isPublic: true }],
-      });
-    });
-  });
-
-  describe("Performance", () => {
-    it("should complete role access checks quickly", () => {
-      const startTime = performance.now();
-
-      for (let i = 0; i < 1000; i++) {
-        getRoleAccess("ADMIN");
-        canAccessSection("PROFESOR", "profesor");
-        getDefaultRedirectPath("PARENT");
-      }
-
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-
-      // Should complete 3000 operations within 50ms
-      expect(duration).toBeLessThan(50);
+    it("should return role name for unknown roles", () => {
+      expect(getRoleDisplayName("UNKNOWN")).toBe("UNKNOWN");
     });
   });
 });

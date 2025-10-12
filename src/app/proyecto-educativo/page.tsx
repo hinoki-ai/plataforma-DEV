@@ -3,7 +3,6 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -38,7 +37,6 @@ export default function ProyectoEducativoPage() {
   const { isDesktopForced } = useDesktopToggle();
   const { t } = useDivineParsing(["common"]);
   const [mounted, setMounted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   // Video capsule state
   const [videoCapsule, setVideoCapsule] = useState<VideoCapsule>({
@@ -72,19 +70,7 @@ export default function ProyectoEducativoPage() {
   useEffect(() => {
     setMounted(true);
     loadVideoCapsule();
-
-    // Simulate initial loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
-
-    return () => clearTimeout(timer);
   }, []);
-
-  const handleEdit = () => {
-    setEditingCapsule(videoCapsule);
-    setEditModalOpen(true);
-  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -108,56 +94,6 @@ export default function ProyectoEducativoPage() {
       setIsSaving(false);
     }
   };
-
-  const handleDelete = async () => {
-    if (confirm(t("proyecto_educativo.delete_confirmation", "common"))) {
-      try {
-        const response = await fetch("/api/proyecto-educativo/video-capsule", {
-          method: "DELETE",
-        });
-
-        if (response.ok) {
-          setVideoCapsule({
-            id: "default-capsule",
-            title: t(
-              "proyecto_educativo.video_capsule_default_title",
-              "common",
-            ),
-            url: "",
-            description: t(
-              "proyecto_educativo.video_capsule_default_description",
-              "common",
-            ),
-            isActive: false,
-          });
-        }
-      } catch (error) {
-        console.error("Error deleting video capsule:", error);
-      }
-    }
-  };
-
-  const getVideoEmbedUrl = (url: string) => {
-    if (!url) return null;
-
-    // YouTube
-    if (url.includes("youtube.com/watch") || url.includes("youtu.be/")) {
-      const videoId = url.includes("youtube.com/watch")
-        ? url.split("v=")[1]?.split("&")[0]
-        : url.split("youtu.be/")[1]?.split("?")[0];
-      return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-    }
-
-    // Vimeo
-    if (url.includes("vimeo.com/")) {
-      const videoId = url.split("vimeo.com/")[1]?.split("/")[0];
-      return videoId ? `https://player.vimeo.com/video/${videoId}` : null;
-    }
-
-    return null;
-  };
-
-  const embedUrl = getVideoEmbedUrl(videoCapsule.url);
 
   return (
     <FixedBackgroundLayout

@@ -24,13 +24,38 @@ const inter = Inter({
   adjustFontFallback: true,
 });
 
-// Apple touch icon is configured via Next.js metadata API (modern approach)
+// Apple touch icon configured via Next.js metadata API
 
 export const metadata: Metadata = {
   ...homeMetadata,
   icons: {
+    icon: [
+      { url: "/dfav.png", sizes: "32x32", type: "image/png" },
+      { url: "/dfav.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/dfav.png",
     apple: "/apple-touch-icon-180.png",
   },
+  manifest: "/manifest.json",
+  applicationName: "Plataforma Astral",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Plataforma Astral",
+  },
+  other: {
+    "msapplication-TileColor": "#1e40af",
+    "msapplication-TileImage": "/tile-150.png",
+    "msapplication-config": "/browserconfig.xml",
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  colorScheme: "light dark",
 };
 
 function RootLayoutInner({
@@ -40,57 +65,11 @@ function RootLayoutInner({
 }>) {
   return (
     <html lang="es-CL" suppressHydrationWarning>
-      <head>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: organizationSchema }}
         />
-        {/* Removed theme-color meta tag - not supported by Firefox/Opera */}
-        <meta name="color-scheme" content="light dark" />
-        <meta name="msapplication-TileColor" content="#1e40af" />
-        <meta name="msapplication-TileImage" content="/tile-150.png" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="application-name" content="Plataforma Astral" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
-        />
-
-        {/* Preload homepage background image for performance */}
-        <link rel="preload" as="image" href="/bg2.jpg" />
-
-        {/* Responsive background images for different screen sizes */}
-        <link
-          rel="preload"
-          as="image"
-          href="/bg2-mobile.jpg"
-          media="(max-width: 768px)"
-        />
-        <link
-          rel="preload"
-          as="image"
-          href="/bg2-desktop.jpg"
-          media="(min-width: 769px)"
-        />
-
-        {/* Preload critical resources */}
-        {/* Google Fonts preconnect handled automatically by next/font/google */}
-
-        {/* BROWSER TAB FAVICON - Default favicon for SSR */}
-        <link rel="icon" type="image/png" sizes="32x32" href="/dfav.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/dfav.png" />
-        <link rel="shortcut icon" href="/dfav.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Plataforma Astral" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon-180.png"
-        />
-        <link rel="manifest" href="/manifest.json" />
-      </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
         {/* ARIA Live Regions for screen readers */}
         <div
           aria-live="polite"

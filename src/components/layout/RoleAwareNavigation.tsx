@@ -173,7 +173,7 @@ export function RoleAwareNavigation({
       isParentRoute,
       isPublicRoute,
       quickActions,
-      user: navUser,
+      user,
     };
   }, [currentRole, pathname, user]);
 

@@ -1,8 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { UnifiedErrorBoundary } from "@/components/ui/unified-error-boundary";
-
 export default function GlobalError({
   error,
   reset,
@@ -10,59 +7,42 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // Simple fallback translations for global errors
-  const t = (key: string, namespace?: string) => {
-    const fallbacks: Record<string, string> = {
-      "error.global_title": "¡Ups! Algo salió mal",
-      "error.global_message":
-        "Lo sentimos, ha ocurrido un error inesperado. Por favor, intenta nuevamente.",
-      "common.retry": "Intenta nuevamente",
-      "error.dev_info": "Información adicional (desarrollo)",
-    };
-    return fallbacks[key] || key;
-  };
-
-  useEffect(() => {
-    console.error("Global Error:", error);
-
-    // Report to error monitoring service if available
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "exception", {
-        description: error.message,
-        fatal: true,
-      });
-    }
-  }, [error]);
-
   return (
     <html lang="es-CL">
-      <head>
-        <title>Global Error - Manitos Pintadas</title>
-        <meta
-          name="description"
-          content="Ha ocurrido un error crítico en la aplicación"
-        />
-        <style>{`
-          body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          }
-        `}</style>
-      </head>
-      <body className="min-h-screen flex items-center justify-center p-4">
-        <div className="max-w-md w-full">
-          {/* Unified Error Boundary for global errors */}
-          <UnifiedErrorBoundary
-            context="global_error"
-            variant="full"
-            enableRetry={true}
-            enableHome={true}
-            showDetails={process.env.NODE_ENV === "development"}
+      <body style={{
+        margin: 0,
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
+        background: 'linear-gradient(135deg, #ef4444 0%, #a855f7 100%)',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <div style={{
+          maxWidth: '28rem',
+          padding: '2rem',
+          textAlign: 'center',
+          color: 'white'
+        }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Error Global</h1>
+          <p style={{ marginBottom: '2rem', opacity: 0.8 }}>
+            {error?.message || "Ha ocurrido un error crítico"}
+          </p>
+          <button
+            onClick={reset}
+            style={{
+              padding: '0.75rem 1.5rem',
+              background: 'white',
+              color: '#a855f7',
+              borderRadius: '0.5rem',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: '500'
+            }}
           >
-            {/* Force error to trigger the boundary */}
-            <div>Global error occurred: {error.message}</div>
-          </UnifiedErrorBoundary>
+            Intentar nuevamente
+          </button>
         </div>
       </body>
     </html>
