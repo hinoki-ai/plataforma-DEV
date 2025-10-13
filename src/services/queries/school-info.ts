@@ -8,7 +8,7 @@ import { api } from "../../../convex/_generated/api";
 export async function getSchoolInfo() {
   try {
     const client = getConvexClient();
-    const info = await client.query(api.schoolInfo.getSchoolInfo, {});
+    const info = await client.query(api.institutionInfo.getSchoolInfo, {});
 
     if (!info) {
       return { success: false, error: "Información escolar no encontrada" };

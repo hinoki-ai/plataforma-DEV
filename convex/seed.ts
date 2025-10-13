@@ -83,7 +83,7 @@ export const seedDatabase = mutation({
     });
 
     // Create School Info
-    await ctx.db.insert("schoolInfo", {
+    await ctx.db.insert("institutionInfo", {
       name: "Plataforma Astral Demo School",
       mission: "Proporcionar educación de calidad para todos los niños",
       vision: "Ser líderes en innovación educativa",
@@ -193,7 +193,7 @@ export const clearDatabase = mutation({
       "meetings",
       "students",
       "teamMembers",
-      "schoolInfo",
+      "institutionInfo",
       "planningDocuments",
       "verificationTokens",
       "sessions",

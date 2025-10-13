@@ -15,7 +15,7 @@ export async function GET() {
     const client = getConvexClient();
 
     // Get current institution configuration from school info
-    const schoolInfo = await client.query(api.schoolInfo.getSchoolInfo, {});
+    const schoolInfo = await client.query(api.institutionInfo.getSchoolInfo, {});
 
     if (!schoolInfo) {
       // Return default configuration if no school info exists
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     const client = getConvexClient();
 
     // Update or create school info with new institution type
-    await client.mutation(api.schoolInfo.createOrUpdateSchoolInfo, {
+    await client.mutation(api.institutionInfo.createOrUpdateSchoolInfo, {
       name: "Manitos Pintadas Educational Institution",
       mission: "Educating and nurturing young minds",
       vision: "A leading educational institution in our community",

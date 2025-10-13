@@ -8,7 +8,7 @@ import { withApiErrorHandling } from "@/lib/error-handler";
 // GET: Public access to school information
 export const GET = withApiErrorHandling(async () => {
   const client = getConvexClient();
-  const schoolInfo = await client.query(api.schoolInfo.getSchoolInfo, {});
+  const schoolInfo = await client.query(api.institutionInfo.getSchoolInfo, {});
 
   if (!schoolInfo) {
     return NextResponse.json(
@@ -60,7 +60,7 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
 
   const client = getConvexClient();
   const schoolInfoId = await client.mutation(
-    api.schoolInfo.createOrUpdateSchoolInfo,
+    api.institutionInfo.createOrUpdateSchoolInfo,
     {
       name,
       mission,
@@ -74,7 +74,7 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
     },
   );
 
-  const schoolInfo = await client.query(api.schoolInfo.getSchoolInfo, {});
+  const schoolInfo = await client.query(api.institutionInfo.getSchoolInfo, {});
 
   return NextResponse.json({
     success: true,
@@ -114,12 +114,12 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
   }
 
   const client = getConvexClient();
-  await client.mutation(api.schoolInfo.createOrUpdateSchoolInfo, {
+  await client.mutation(api.institutionInfo.createOrUpdateSchoolInfo, {
     ...updateData,
     institutionType: updateData.institutionType || "PRESCHOOL",
   });
 
-  const schoolInfo = await client.query(api.schoolInfo.getSchoolInfo, {});
+  const schoolInfo = await client.query(api.institutionInfo.getSchoolInfo, {});
 
   return NextResponse.json({
     success: true,

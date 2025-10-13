@@ -11,7 +11,7 @@ export async function GET() {
   try {
     const client = getConvexClient();
     const institutions = await client.query(
-      api.schoolInfo.getAllInstitutions,
+      api.institutionInfo.getAllInstitutions,
       {},
     );
 

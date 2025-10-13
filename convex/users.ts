@@ -132,7 +132,7 @@ export const createUser = mutation({
     isOAuthUser: v.optional(v.boolean()),
     createdByAdmin: v.optional(v.string()),
     parentRole: v.optional(v.string()),
-    institutionId: v.optional(v.id("schoolInfo")),
+    institutionId: v.optional(v.id("institutionInfo")),
     status: v.optional(
       v.union(
         v.literal("PENDING"),
@@ -188,7 +188,7 @@ export const createUserAction: any = action({
     isOAuthUser: v.optional(v.boolean()),
     createdByAdmin: v.optional(v.string()),
     parentRole: v.optional(v.string()),
-    institutionId: v.optional(v.id("schoolInfo")),
+    institutionId: v.optional(v.id("institutionInfo")),
     status: v.optional(
       v.union(
         v.literal("PENDING"),
@@ -243,7 +243,7 @@ export const updateUser = mutation({
       ),
     ),
     parentRole: v.optional(v.string()),
-    institutionId: v.optional(v.id("schoolInfo")),
+    institutionId: v.optional(v.id("institutionInfo")),
   },
   handler: async (ctx, { id, ...updates }) => {
     const user = await ctx.db.get(id);
@@ -391,7 +391,7 @@ export const registerParentComplete = mutation({
     childGrade: v.string(),
 
     // Institution
-    institutionId: v.optional(v.id("schoolInfo")),
+    institutionId: v.optional(v.id("institutionInfo")),
 
     // Optional OAuth fields
     provider: v.optional(v.string()),
