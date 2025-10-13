@@ -32,33 +32,15 @@ export async function authenticate(
       return "Credenciales inválidas. Por favor verifique su email y contraseña.";
     }
 
-    // Determine redirect URL based on user role
-    let redirectUrl = "/";
-    switch (user.role) {
-      case "MASTER":
-        redirectUrl = "/master";
-        break;
-      case "ADMIN":
-        redirectUrl = "/admin";
-        break;
-      case "PROFESOR":
-        redirectUrl = "/profesor";
-        break;
-      case "PARENT":
-        redirectUrl = user.needsRegistration ? "/centro-consejo" : "/parent";
-        break;
-      default:
-        redirectUrl = "/";
-    }
-
-    // Sign in and redirect to the appropriate dashboard
+    // Sign in without immediate redirect to avoid timing issues
     await signIn("credentials", {
       email,
       password,
-      redirectTo: redirectUrl,
+      redirect: false,
     });
 
-    // This line should never be reached if signIn succeeds (it redirects)
+    // Use auth-success page for proper session validation before redirect
+    // This prevents redirect loops caused by middleware checking session before it's fully set
     return undefined;
   } catch (error) {
     if (error instanceof AuthError) {
