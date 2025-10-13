@@ -65,6 +65,28 @@ import dashboardEN from "../../locales/en/dashboard.json";
 import languageES from "../../locales/es/language.json";
 import languageEN from "../../locales/en/language.json";
 
+// Direct translation map for reliable synchronous access
+const translations = {
+  es: {
+    common: commonES,
+    navigation: navigationES,
+    admin: adminES,
+    parent: parentES,
+    profesor: profesorES,
+    dashboard: dashboardES,
+    language: languageES,
+  },
+  en: {
+    common: commonEN,
+    navigation: navigationEN,
+    admin: adminEN,
+    parent: parentEN,
+    profesor: profesorEN,
+    dashboard: dashboardEN,
+    language: languageEN,
+  },
+} as const;
+
 // Translation registry - maps language-namespace to translation objects
 const translationRegistry: Record<string, TranslationStrings> = {
   "es-common": commonES,
@@ -248,13 +270,15 @@ const DivineParsingOracleProvider: React.FC<{
     useState<string[]>(initialNamespaces);
   const [loadedTranslations, setLoadedTranslations] = useState<LoadedNamespace>(
     () => {
-      // Pre-load initial translations synchronously with detected language to prevent hydration mismatch
+      // Pre-load initial translations synchronously with detected language
       const initialTranslations: LoadedNamespace = {};
-      for (const namespace of initialNamespaces) {
-        const key = `${initialLang}-${namespace}`;
-        const translations = translationRegistry[key];
-        if (translations) {
-          initialTranslations[namespace] = translations;
+      const langTranslations = translations[initialLang as keyof typeof translations];
+      if (langTranslations) {
+        for (const namespace of initialNamespaces) {
+          const nsTranslations = langTranslations[namespace as keyof typeof langTranslations];
+          if (nsTranslations && typeof nsTranslations === 'object') {
+            initialTranslations[namespace] = nsTranslations as TranslationStrings;
+          }
         }
       }
       return initialTranslations;
@@ -453,19 +477,23 @@ const DivineParsingOracleProvider: React.FC<{
     [language, loadedNamespaces],
   );
 
-  // Translation function - uses flat key lookup (keys contain dots as-is)
+  // Translation function - uses direct synchronous lookup for reliability
   const t = useMemo(() => {
     return (key: string, namespace: string = "common"): string => {
       try {
-        // Direct lookup in loaded translations first - flat key lookup
-        if (loadedTranslations[namespace]) {
-          const value = loadedTranslations[namespace][key];
-          if (value !== undefined && value !== null) {
-            return value;
+        // Direct synchronous lookup from translations object
+        const langTranslations = translations[language as keyof typeof translations];
+        if (langTranslations) {
+          const namespaceTranslations = langTranslations[namespace as keyof typeof langTranslations];
+          if (namespaceTranslations && typeof namespaceTranslations === 'object') {
+            const value = (namespaceTranslations as any)[key];
+            if (value !== undefined && value !== null && typeof value === 'string') {
+              return value;
+            }
           }
         }
 
-        // Fallback to registry - flat key lookup
+        // Fallback to registry for compatibility
         const registryKey = `${language}-${namespace}`;
         const registryTranslations = translationRegistry[registryKey];
         if (registryTranslations) {
@@ -481,7 +509,7 @@ const DivineParsingOracleProvider: React.FC<{
         return key;
       }
     };
-  }, [loadedTranslations, loadedNamespaces, language]);
+  }, [language]);
 
   // Utility functions
   const getLoadedNamespaces = useCallback(
