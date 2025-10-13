@@ -26,7 +26,7 @@ export default function AuthSuccessPage() {
   const performRedirect = useCallback((path: string, reason: string) => {
     if (redirected) return;
     
-    console.log(`AuthSuccess - Redirecting to ${path} (${reason})`);
+    console.log(`🚀 AuthSuccess - Redirecting to ${path} (${reason})`);
     setRedirected(true);
     
     // Use router.replace for smoother client-side navigation
@@ -38,23 +38,19 @@ export default function AuthSuccessPage() {
 
     const checkAuthAndRedirect = async () => {
       console.log(
-        "AuthSuccess - Status:",
-        status,
-        "Session:",
-        session?.user ? "exists" : "null",
-        "Role:",
-        session?.user?.role,
-        "Retry:",
-        retryCount,
+        "🔍 AuthSuccess Check:",
+        { status, hasSession: !!session?.user, role: session?.user?.role, retry: retryCount }
       );
 
       // Still loading - wait for session
       if (status === "loading") {
+        console.log("⏳ Session still loading...");
         return;
       }
 
       // Unauthenticated - redirect to login
       if (status === "unauthenticated") {
+        console.warn("❌ Not authenticated, redirecting to login");
         performRedirect("/login", "unauthenticated");
         return;
       }
@@ -63,35 +59,45 @@ export default function AuthSuccessPage() {
       if (status === "authenticated") {
         // Validate session has required data
         if (!session?.user) {
-          // Retry up to 3 times with delay if session user data is missing
-          if (retryCount < 3) {
-            console.log("AuthSuccess - Session user data missing, retrying...");
-            setTimeout(() => setRetryCount(prev => prev + 1), 300);
+          // Retry up to 5 times with exponential backoff for production
+          if (retryCount < 5) {
+            const delay = 200 * Math.pow(1.5, retryCount); // 200ms, 300ms, 450ms, 675ms, 1012ms
+            console.log(`⏳ Session user data missing, retry ${retryCount + 1}/5 in ${Math.round(delay)}ms`);
+            setTimeout(() => setRetryCount(prev => prev + 1), delay);
             return;
           }
           
           // After retries, redirect to login
-          console.error("AuthSuccess - Session user data missing after retries");
-          performRedirect("/login", "session data missing");
+          console.error("❌ Session user data missing after 5 retries");
+          performRedirect("/login", "session data missing after retries");
           return;
         }
 
-        // Validate role exists
+        // Validate role exists and is valid
         const role = session.user.role as UserRole;
         if (!role || !ROLE_PATHS[role]) {
-          console.error("AuthSuccess - Invalid or missing role:", role);
+          console.error("❌ Invalid or missing role:", role);
           performRedirect("/login", "invalid role");
+          return;
+        }
+
+        // Additional validation: ensure session has all required fields
+        if (!session.user.email || !session.user.id) {
+          console.error("❌ Session missing required fields", { email: !!session.user.email, id: !!session.user.id });
+          performRedirect("/login", "incomplete session data");
           return;
         }
 
         // Handle PARENT with registration requirement
         if (role === "PARENT" && session.user.needsRegistration) {
+          console.log("📝 Parent needs registration");
           performRedirect("/centro-consejo", "parent needs registration");
           return;
         }
 
-        // Redirect to role-based dashboard
+        // All validations passed - redirect to role-based dashboard
         const targetPath = ROLE_PATHS[role];
+        console.log(`✅ Session valid, redirecting to ${targetPath}`);
         performRedirect(targetPath, `role: ${role}`);
       }
     };
@@ -99,14 +105,15 @@ export default function AuthSuccessPage() {
     checkAuthAndRedirect();
   }, [session, status, router, redirected, retryCount, performRedirect]);
 
-  // Safety timeout to prevent infinite loading (10 seconds)
+  // Safety timeout to prevent infinite loading (15 seconds for production)
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!redirected) {
-        console.warn("AuthSuccess - Timeout reached, redirecting to home");
-        performRedirect("/", "timeout");
+        console.error("⏰ AuthSuccess timeout reached after 15s");
+        // On timeout, try to redirect to login for safety
+        performRedirect("/login", "timeout - please try again");
       }
-    }, 10000);
+    }, 15000);
 
     return () => clearTimeout(timeout);
   }, [redirected, performRedirect]);

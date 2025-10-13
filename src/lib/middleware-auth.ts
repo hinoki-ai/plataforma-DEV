@@ -30,29 +30,31 @@ export async function getMiddlewareAuth(
   request: NextRequest,
 ): Promise<MiddlewareSession | null> {
   try {
-    // Determine cookie names based on environment
-    // In production with HTTPS, NextAuth uses __Secure- prefix
-    // In development (HTTP), it uses standard names
-    const isSecure = process.env.NODE_ENV === "production" || 
-                     request.nextUrl.protocol === "https:";
+    // Determine cookie names based on environment and protocol
+    // Production with HTTPS uses __Secure- prefix (mandatory for NextAuth v5)
+    // Development (HTTP) uses standard names
+    const protocol = request.nextUrl.protocol;
+    const isSecure = process.env.NODE_ENV === "production" || protocol === "https:";
     
+    // Priority order: most specific first
     const cookieNames = isSecure 
       ? [
-          "__Secure-next-auth.session-token",
-          "__Secure-authjs.session-token",
-          "next-auth.session-token", // Fallback
+          "__Secure-next-auth.session-token",  // NextAuth v5 default for HTTPS
+          "__Secure-authjs.session-token",     // Auth.js alternative
+          "next-auth.session-token",           // Fallback for misconfigured HTTPS
           "authjs.session-token",
         ]
       : [
-          "next-auth.session-token",
+          "next-auth.session-token",           // Development default
           "authjs.session-token",
-          "__Secure-next-auth.session-token", // Fallback
+          "__Secure-next-auth.session-token",  // Check secure cookies too
           "__Secure-authjs.session-token",
         ];
 
     let token: string | undefined;
     let foundCookieName: string | undefined;
     
+    // Try to find token in order of priority
     for (const cookieName of cookieNames) {
       token = request.cookies.get(cookieName)?.value;
       if (token) {
@@ -64,11 +66,16 @@ export async function getMiddlewareAuth(
       }
     }
 
+    // No token found - log debug info
     if (!token) {
       if (process.env.NODE_ENV === "development") {
         const allCookies = request.cookies.getAll();
-        console.log("❌ No session token found. Available cookies:", 
-          allCookies.map(c => c.name).join(", ") || "none");
+        console.log("❌ No session token found. Environment:", {
+          nodeEnv: process.env.NODE_ENV,
+          protocol,
+          isSecure,
+          availableCookies: allCookies.map(c => c.name).join(", ") || "none"
+        });
       }
       return null;
     }
