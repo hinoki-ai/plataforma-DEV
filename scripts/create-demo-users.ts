@@ -83,7 +83,6 @@ async function createDemoUsers() {
     console.log("           loreto@astral.cl / demo123");
     console.log("   PROFESOR: profesor@astral.cl / demo123");
     console.log("   PARENT: apoderado@astral.cl / demo123");
-
   } catch (error) {
     console.error("❌ Failed to create demo users:", error);
     throw error;

@@ -50,11 +50,12 @@ async function resetPassword() {
     console.log(`\n🎉 You can now log in with:`);
     console.log(`   Email: ${email}`);
     console.log(`   Password: ${newPassword}`);
-    
+
     // Verify the password works
     const isValid = await bcryptjs.compare(newPassword, hashedPassword);
-    console.log(`\n🔍 Verification: ${isValid ? "✅ Password hash is valid" : "❌ Something went wrong"}`);
-
+    console.log(
+      `\n🔍 Verification: ${isValid ? "✅ Password hash is valid" : "❌ Something went wrong"}`,
+    );
   } catch (error: any) {
     console.error("❌ Error resetting password:", error.message);
     console.error("\nFull error:", error);

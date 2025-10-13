@@ -219,7 +219,9 @@ export function AdvancedSettingsDropdown({
           >
             <Settings2 className="mr-3 h-4 w-4 text-slate-600" />
             <div className="flex flex-col items-start flex-1">
-              <span className="font-medium text-sm">Configuración Avanzada</span>
+              <span className="font-medium text-sm">
+                Configuración Avanzada
+              </span>
               <span className="text-[10px] opacity-70">
                 Vista, desarrollo y más
               </span>
@@ -372,7 +374,10 @@ export function AdvancedSettingsDropdown({
               <span className="text-muted-foreground font-medium">
                 Estado del Sistema:
               </span>
-              <Badge variant="outline" className="text-xs bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800">
+              <Badge
+                variant="outline"
+                className="text-xs bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800"
+              >
                 ✓ Operativo
               </Badge>
             </div>

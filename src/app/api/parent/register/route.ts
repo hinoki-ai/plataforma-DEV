@@ -61,16 +61,26 @@ export async function POST(request: Request) {
 
     // Validate required fields
     const requiredFields = [
-      "fullName", "email", "phone", "rut", "childName", "childGrade",
-      "relationship", "address", "region", "comuna", "emergencyContact", "emergencyPhone",
-      "institutionId"
+      "fullName",
+      "email",
+      "phone",
+      "rut",
+      "childName",
+      "childGrade",
+      "relationship",
+      "address",
+      "region",
+      "comuna",
+      "emergencyContact",
+      "emergencyPhone",
+      "institutionId",
     ];
-    
+
     for (const field of requiredFields) {
       if (!data[field as keyof typeof data]) {
         return NextResponse.json(
           { success: false, error: `Campo requerido faltante: ${field}` },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }

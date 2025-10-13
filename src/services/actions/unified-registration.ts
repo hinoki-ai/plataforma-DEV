@@ -69,7 +69,7 @@ export async function registerParentComplete(data: {
 
     // Generate password if not provided (for OAuth users)
     const password = data.password || generateRandomPassword();
-    
+
     // Hash password
     const hashedPassword = await bcryptjs.hash(password, 10);
 
@@ -92,12 +92,12 @@ export async function registerParentComplete(data: {
       isOAuthUser: data.isOAuthUser ?? false,
     });
 
-    return { 
-      success: true, 
-      data: { 
+    return {
+      success: true,
+      data: {
         id: result.userId,
         studentId: result.studentId,
-      } 
+      },
     };
   } catch (error) {
     console.error("Failed to register parent:", error);
@@ -117,8 +117,9 @@ export async function registerParentComplete(data: {
  * Generate a random secure password for OAuth users
  */
 function generateRandomPassword(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-  let password = '';
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+  let password = "";
   for (let i = 0; i < 16; i++) {
     password += chars.charAt(Math.floor(Math.random() * chars.length));
   }

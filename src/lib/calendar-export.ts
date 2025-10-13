@@ -103,8 +103,7 @@ export function generateMeetingEvent(meeting: any) {
       meeting.description || "Reunión del Centro de Padres y Consejo Escolar",
     startDate,
     endDate,
-    location:
-      meeting.location || "Institución Educativa",
+    location: meeting.location || "Institución Educativa",
     organizer: "plataforma.aramac.dev",
   };
 }

@@ -61,7 +61,9 @@ async function checkUser() {
       console.log("\n💡 Possible solutions:");
       console.log("   1. Verify the correct password");
       console.log("   2. Reset password via Convex dashboard");
-      console.log("   3. Create new password hash with: npx tsx scripts/hash-password.ts");
+      console.log(
+        "   3. Create new password hash with: npx tsx scripts/hash-password.ts",
+      );
     } else {
       console.log("\n✅ Password is correct! Login should work.");
       console.log("\n🔍 If login still fails, check:");

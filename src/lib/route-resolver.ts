@@ -31,8 +31,6 @@ export function resolveRoute(
   };
 }
 
-
-
 /**
  * Get appropriate dashboard path based on role
  */

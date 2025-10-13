@@ -68,7 +68,7 @@ async function seedProduction() {
   for (const userData of USERS) {
     try {
       console.log(`\n👤 Processing: ${userData.email} (${userData.role})`);
-      
+
       // Check if user exists
       const existingUser = await client.query(api.users.getUserByEmail, {
         email: userData.email,
@@ -101,8 +101,9 @@ async function seedProduction() {
 
       // Verify password
       const isValid = await bcryptjs.compare(userData.password, hashedPassword);
-      console.log(`   🔐 Password verification: ${isValid ? "✅ PASS" : "❌ FAIL"}`);
-
+      console.log(
+        `   🔐 Password verification: ${isValid ? "✅ PASS" : "❌ FAIL"}`,
+      );
     } catch (error: any) {
       console.error(`   ❌ Error with ${userData.email}:`, error.message);
       results.errors++;
@@ -127,7 +128,9 @@ async function seedProduction() {
       PROFESOR: "👨‍🏫",
       PARENT: "👨‍👩‍👧‍👦",
     }[user.role];
-    console.log(`${roleEmoji} ${user.role.padEnd(8)} ${user.email.padEnd(25)} / ${user.password}`);
+    console.log(
+      `${roleEmoji} ${user.role.padEnd(8)} ${user.email.padEnd(25)} / ${user.password}`,
+    );
   });
   console.log("=".repeat(70));
   console.log("\n🌐 Login at: https://plataforma.aramac.dev/login\n");
