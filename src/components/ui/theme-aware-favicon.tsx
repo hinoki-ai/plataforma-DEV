@@ -12,28 +12,18 @@ export function ThemeAwareFavicon() {
 
   useEffect(() => {
     const updateFavicon = (isDark: boolean) => {
-      const favicon32 = document.querySelector(
-        'link[rel="icon"][sizes="32x32"]',
-      ) as HTMLLinkElement;
-      const favicon16 = document.querySelector(
-        'link[rel="icon"][sizes="16x16"]',
-      ) as HTMLLinkElement;
-      const shortcutIcon = document.querySelector(
-        'link[rel="shortcut icon"]',
-      ) as HTMLLinkElement;
+      // Find all favicon link elements
+      const faviconLinks = document.querySelectorAll(
+        'link[rel*="icon"]',
+      ) as NodeListOf<HTMLLinkElement>;
 
-      if (favicon32)
-        favicon32.href = isDark
-          ? "/josh-happy-dark.png"
-          : "/josh-happy-light.png";
-      if (favicon16)
-        favicon16.href = isDark
-          ? "/josh-happy-dark.png"
-          : "/josh-happy-light.png";
-      if (shortcutIcon)
-        shortcutIcon.href = isDark
-          ? "/josh-happy-dark.png"
-          : "/josh-happy-light.png";
+      faviconLinks.forEach((link) => {
+        // Only update links that point to our theme-aware favicons (josh-happy images)
+        const currentHref = link.href;
+        if (currentHref.includes("josh-happy")) {
+          link.href = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
+        }
+      });
     };
 
     // Update favicon based on current theme
@@ -41,13 +31,7 @@ export function ThemeAwareFavicon() {
       updateFavicon(resolvedTheme === "dark");
     }
 
-    // Listen for theme changes
-    const handleThemeChange = (newTheme: string) => {
-      updateFavicon(newTheme === "dark");
-    };
-
-    // We can't directly listen to theme changes from next-themes
-    // So we'll use a MutationObserver on the document's class attribute
+    // Listen for theme changes using MutationObserver on document class
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (

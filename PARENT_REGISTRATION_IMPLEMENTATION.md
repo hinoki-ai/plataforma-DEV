@@ -146,6 +146,7 @@ User redirected to /centro-consejo/exito
    - Should redirect to success page
 
 5. **Verify in Convex Dashboard**:
+
    ```bash
    npx convex dashboard
    ```

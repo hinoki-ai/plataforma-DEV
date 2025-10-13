@@ -621,7 +621,6 @@
     animation-delay: var(--animation-delay, 0s);
   }
 
-
   .auth-container {
     top: -20px;
   }

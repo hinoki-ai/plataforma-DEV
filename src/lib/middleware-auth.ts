@@ -65,7 +65,11 @@ export async function getMiddlewareAuth(
     };
   } catch (error) {
     // Token is invalid or expired
-    console.warn("Middleware auth error:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.warn("Middleware auth error:", error);
+    }
+    // Log minimal info in production for debugging
+    console.log("❌ Auth failed - Token invalid/expired");
     return null;
   }
 }

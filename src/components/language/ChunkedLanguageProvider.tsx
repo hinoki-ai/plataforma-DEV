@@ -272,12 +272,15 @@ const DivineParsingOracleProvider: React.FC<{
     () => {
       // Pre-load initial translations synchronously with detected language
       const initialTranslations: LoadedNamespace = {};
-      const langTranslations = translations[initialLang as keyof typeof translations];
+      const langTranslations =
+        translations[initialLang as keyof typeof translations];
       if (langTranslations) {
         for (const namespace of initialNamespaces) {
-          const nsTranslations = langTranslations[namespace as keyof typeof langTranslations];
-          if (nsTranslations && typeof nsTranslations === 'object') {
-            initialTranslations[namespace] = nsTranslations as TranslationStrings;
+          const nsTranslations =
+            langTranslations[namespace as keyof typeof langTranslations];
+          if (nsTranslations && typeof nsTranslations === "object") {
+            initialTranslations[namespace] =
+              nsTranslations as TranslationStrings;
           }
         }
       }
@@ -482,12 +485,21 @@ const DivineParsingOracleProvider: React.FC<{
     return (key: string, namespace: string = "common"): string => {
       try {
         // Direct synchronous lookup from translations object
-        const langTranslations = translations[language as keyof typeof translations];
+        const langTranslations =
+          translations[language as keyof typeof translations];
         if (langTranslations) {
-          const namespaceTranslations = langTranslations[namespace as keyof typeof langTranslations];
-          if (namespaceTranslations && typeof namespaceTranslations === 'object') {
+          const namespaceTranslations =
+            langTranslations[namespace as keyof typeof langTranslations];
+          if (
+            namespaceTranslations &&
+            typeof namespaceTranslations === "object"
+          ) {
             const value = (namespaceTranslations as any)[key];
-            if (value !== undefined && value !== null && typeof value === 'string') {
+            if (
+              value !== undefined &&
+              value !== null &&
+              typeof value === "string"
+            ) {
               return value;
             }
           }
