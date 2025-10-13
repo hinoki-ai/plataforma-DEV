@@ -75,11 +75,17 @@ export function ContextProvider({
     );
 
     const isPublicRoute = !isAuthRoute;
+    // Only consider authenticated when status is explicitly "authenticated"
+    // During loading, treat as not authenticated to prevent hydration issues
     const isAuthenticated = status === "authenticated" && Boolean(session);
 
     // Auto-detect context based on route and auth state
+    // During loading state, default to public context to match server render
     const detectedContext: AppContext =
-      forceContext || (isAuthRoute && isAuthenticated ? "auth" : "public");
+      forceContext ||
+      (status !== "loading" && isAuthRoute && isAuthenticated
+        ? "auth"
+        : "public");
 
     /**
      * Get adaptive card styles based on current context

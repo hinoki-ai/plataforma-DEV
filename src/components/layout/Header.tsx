@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AdaptiveButton } from "@/components/ui/adaptive-button";
 import { ChevronLeft, Menu, X } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useAppContext } from "@/components/providers/ContextProvider";
 import { cn } from "@/lib/utils";
 import LoginButton from "./LoginButton";
@@ -16,14 +15,19 @@ import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { data: session } = useSession();
   const pathname = usePathname();
-  const { theme } = useTheme();
   const { context, isPublicRoute, isAuthRoute } = useAppContext();
   const { t } = useDivineParsing(["common", "navigation"]);
 
+  // Handle client-side mounting to prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Determine if we're in authenticated context (use context-aware logic)
-  const isAuthenticatedRoute = isAuthRoute;
+  const isAuthenticatedRoute = mounted && isAuthRoute;
 
   // Reset mobile menu state on route changes to prevent stuck states
   useEffect(() => {
@@ -34,6 +38,24 @@ export default function Header() {
   const publicNavLinks = [
     { href: "/centro-consejo", label: t("nav.center.council", "navigation") },
   ];
+
+  // Show loading skeleton until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-4">
+              <div className="h-8 w-48 bg-muted/50 rounded animate-pulse" />
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-24 bg-muted/50 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">

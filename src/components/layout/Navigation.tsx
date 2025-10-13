@@ -19,15 +19,20 @@ import { useDivineParsing } from "@/components/language/useDivineLanguage";
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   const { isDesktopForced } = useResponsiveMode();
-  const { theme } = useTheme();
   const { t } = useLanguage();
 
   // 🕊️ DIVINE PARSING ORACLE - Route-based namespace loading
   const divineOracle = useDivineParsing();
+
+  // Handle client-side mounting to prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Load route-specific namespaces
   useEffect(() => {
@@ -92,6 +97,25 @@ export default function Navigation() {
     process.env.NODE_ENV === "development"
       ? divineOracle.getTranslationStats()
       : null;
+
+  // Show loading skeleton until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <nav className="bg-background shadow-sm border-b border-border relative">
+        <div className={layout.container(isDesktopForced)}>
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <div className="h-8 w-48 bg-muted/50 rounded animate-pulse" />
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-24 bg-muted/50 rounded animate-pulse" />
+              <div className="h-8 w-8 bg-muted/50 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="bg-background shadow-sm border-b border-border relative">

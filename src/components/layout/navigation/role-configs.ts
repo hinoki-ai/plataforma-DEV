@@ -38,6 +38,12 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
+        title: "Libro de Clases",
+        href: "/admin/libro-clases",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+L",
+      },
+      {
         title: "Planificaciones",
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
@@ -128,6 +134,12 @@ export const PROFESOR_NAVIGATION = [
     title: ROLE_SPECIFIC_SECTIONS.PROFESOR.academic,
     defaultOpen: true,
     items: [
+      {
+        title: "Libro de Clases",
+        href: "/profesor/libro-clases",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+L",
+      },
       {
         title: "Planificaciones",
         href: "/profesor/planificaciones",
@@ -322,6 +334,12 @@ export const MASTER_NAVIGATION = [
     title: STANDARD_SECTION_ORDER.ACADEMIC,
     defaultOpen: false,
     items: [
+      {
+        title: "Libro de Clases",
+        href: "/admin/libro-clases",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+L",
+      },
       {
         title: "Planificaciones",
         href: "/profesor/planificaciones",

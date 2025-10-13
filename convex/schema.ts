@@ -536,4 +536,227 @@ export default defineSchema({
     .index("by_createdAt", ["createdAt"])
     .index("by_expiresAt", ["expiresAt"])
     .index("by_recipientId_read", ["recipientId", "read"]),
+
+  // ==================== LIBRO DE CLASES (Chilean Class Book) ====================
+
+  // Cursos/Clases - Class/Course definitions
+  courses: defineTable({
+    name: v.string(), // e.g., "8vo Básico A", "1ro Medio B"
+    level: v.string(), // e.g., "BASICA", "MEDIA"
+    grade: v.string(), // e.g., "8vo", "1ro Medio"
+    section: v.string(), // e.g., "A", "B", "C"
+    academicYear: v.number(), // e.g., 2025
+    teacherId: v.id("users"), // Profesor jefe
+    subjects: v.array(v.string()), // List of subjects taught in this course
+    maxStudents: v.optional(v.number()),
+    schedule: v.optional(v.any()), // JSON with class schedule
+    isActive: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_teacherId", ["teacherId"])
+    .index("by_academicYear", ["academicYear"])
+    .index("by_level", ["level"])
+    .index("by_grade", ["grade"])
+    .index("by_isActive", ["isActive"])
+    .index("by_academicYear_grade", ["academicYear", "grade", "isActive"]),
+
+  // Estudiantes en Cursos - Student enrollment in courses
+  courseStudents: defineTable({
+    courseId: v.id("courses"),
+    studentId: v.id("students"),
+    enrollmentDate: v.number(),
+    isActive: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index("by_courseId", ["courseId"])
+    .index("by_studentId", ["studentId"])
+    .index("by_courseId_isActive", ["courseId", "isActive"]),
+
+  // Asistencia Diaria - Daily attendance records
+  classAttendance: defineTable({
+    courseId: v.id("courses"),
+    studentId: v.id("students"),
+    date: v.number(), // Timestamp of the day
+    status: v.union(
+      v.literal("PRESENTE"), // Present
+      v.literal("AUSENTE"), // Absent
+      v.literal("ATRASADO"), // Late
+      v.literal("JUSTIFICADO"), // Justified absence
+      v.literal("RETIRADO"), // Early departure
+    ),
+    subject: v.optional(v.string()), // Optional: specific subject
+    period: v.optional(v.string()), // Optional: class period (1st, 2nd, etc.)
+    observation: v.optional(v.string()), // Notes about attendance
+    registeredBy: v.id("users"), // Teacher who registered
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_courseId", ["courseId"])
+    .index("by_studentId", ["studentId"])
+    .index("by_date", ["date"])
+    .index("by_courseId_date", ["courseId", "date"])
+    .index("by_studentId_date", ["studentId", "date"]),
+
+  // Registro de Contenidos y Objetivos - Daily lesson content
+  classContent: defineTable({
+    courseId: v.id("courses"),
+    date: v.number(),
+    subject: v.string(), // Subject/Asignatura
+    topic: v.string(), // Topic/Tema
+    objectives: v.string(), // Learning objectives
+    content: v.string(), // Content taught
+    activities: v.optional(v.string()), // Activities performed
+    resources: v.optional(v.string()), // Materials/resources used
+    homework: v.optional(v.string()), // Homework assigned
+    period: v.optional(v.string()), // Class period
+    teacherId: v.id("users"),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_courseId", ["courseId"])
+    .index("by_teacherId", ["teacherId"])
+    .index("by_date", ["date"])
+    .index("by_subject", ["subject"])
+    .index("by_courseId_date", ["courseId", "date"]),
+
+  // Observaciones del Estudiante - Student behavioral observations (Chilean standard)
+  studentObservations: defineTable({
+    studentId: v.id("students"),
+    courseId: v.id("courses"),
+    date: v.number(),
+    type: v.union(
+      v.literal("POSITIVA"), // Positive observation
+      v.literal("NEGATIVA"), // Negative observation
+      v.literal("NEUTRA"), // Neutral observation
+    ),
+    category: v.union(
+      v.literal("COMPORTAMIENTO"), // Behavior
+      v.literal("RENDIMIENTO"), // Academic performance
+      v.literal("ASISTENCIA"), // Attendance
+      v.literal("PARTICIPACION"), // Participation
+      v.literal("RESPONSABILIDAD"), // Responsibility
+      v.literal("CONVIVENCIA"), // Coexistence
+      v.literal("OTRO"), // Other
+    ),
+    observation: v.string(), // The observation text
+    subject: v.optional(v.string()), // Related subject if applicable
+    severity: v.optional(
+      v.union(v.literal("LEVE"), v.literal("GRAVE"), v.literal("GRAVISIMA")),
+    ), // For negative observations
+    actionTaken: v.optional(v.string()), // Actions taken
+    notifyParent: v.boolean(), // Whether to notify parent
+    parentNotified: v.boolean(), // Whether parent was notified
+    parentSignature: v.optional(v.string()), // Parent acknowledgment
+    teacherId: v.id("users"),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_studentId", ["studentId"])
+    .index("by_courseId", ["courseId"])
+    .index("by_teacherId", ["teacherId"])
+    .index("by_date", ["date"])
+    .index("by_type", ["type"])
+    .index("by_studentId_date", ["studentId", "date"]),
+
+  // Registro de Evaluaciones - Grades/evaluation records
+  classGrades: defineTable({
+    studentId: v.id("students"),
+    courseId: v.id("courses"),
+    subject: v.string(),
+    evaluationType: v.union(
+      v.literal("PRUEBA"), // Test
+      v.literal("TRABAJO"), // Assignment
+      v.literal("EXAMEN"), // Exam
+      v.literal("PRESENTACION"), // Presentation
+      v.literal("PROYECTO"), // Project
+      v.literal("TAREA"), // Homework
+      v.literal("PARTICIPACION"), // Participation
+      v.literal("OTRO"), // Other
+    ),
+    evaluationName: v.string(), // Name of the evaluation
+    date: v.number(),
+    grade: v.float64(), // Grade (1.0 - 7.0 in Chile)
+    maxGrade: v.float64(), // Maximum possible grade
+    percentage: v.optional(v.float64()), // Percentage weight
+    comments: v.optional(v.string()),
+    period: v.union(
+      v.literal("PRIMER_SEMESTRE"),
+      v.literal("SEGUNDO_SEMESTRE"),
+      v.literal("ANUAL"),
+    ),
+    teacherId: v.id("users"),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_studentId", ["studentId"])
+    .index("by_courseId", ["courseId"])
+    .index("by_subject", ["subject"])
+    .index("by_date", ["date"])
+    .index("by_studentId_subject", ["studentId", "subject"]),
+
+  // Asistencia a Reuniones de Apoderados - Parent meeting attendance
+  parentMeetingAttendance: defineTable({
+    courseId: v.id("courses"),
+    studentId: v.id("students"),
+    parentId: v.id("users"),
+    meetingDate: v.number(),
+    meetingNumber: v.number(), // Meeting number (1st, 2nd, 3rd, etc. of the year)
+    attended: v.boolean(),
+    representativeName: v.optional(v.string()), // Name of person who attended
+    relationship: v.optional(v.string()), // Relationship to student
+    signature: v.optional(v.string()), // Digital signature/confirmation
+    observations: v.optional(v.string()),
+    agreements: v.optional(v.string()), // Agreements made in the meeting
+    registeredBy: v.id("users"),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_courseId", ["courseId"])
+    .index("by_studentId", ["studentId"])
+    .index("by_parentId", ["parentId"])
+    .index("by_meetingDate", ["meetingDate"])
+    .index("by_courseId_meetingDate", ["courseId", "meetingDate"]),
+
+  // Actividades Extra-programáticas - Extra-curricular activities
+  extraCurricularActivities: defineTable({
+    name: v.string(),
+    description: v.string(),
+    category: v.union(
+      v.literal("DEPORTIVA"), // Sports
+      v.literal("ARTISTICA"), // Arts
+      v.literal("CULTURAL"), // Cultural
+      v.literal("CIENTIFICA"), // Scientific
+      v.literal("SOCIAL"), // Social
+      v.literal("ACADEMICA"), // Academic
+      v.literal("OTRA"), // Other
+    ),
+    schedule: v.optional(v.string()), // Activity schedule
+    instructorId: v.optional(v.id("users")),
+    location: v.optional(v.string()),
+    maxParticipants: v.optional(v.number()),
+    isActive: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_instructorId", ["instructorId"])
+    .index("by_category", ["category"])
+    .index("by_isActive", ["isActive"]),
+
+  // Participación en Actividades Extra-programáticas
+  extraCurricularParticipants: defineTable({
+    activityId: v.id("extraCurricularActivities"),
+    studentId: v.id("students"),
+    courseId: v.id("courses"),
+    enrollmentDate: v.number(),
+    isActive: v.boolean(),
+    attendance: v.optional(v.any()), // JSON array of attendance records
+    performance: v.optional(v.string()), // Performance notes
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_activityId", ["activityId"])
+    .index("by_studentId", ["studentId"])
+    .index("by_courseId", ["courseId"])
+    .index("by_isActive", ["isActive"]),
 });
