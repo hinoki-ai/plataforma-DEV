@@ -178,18 +178,29 @@ npm run test:a11y
 
 ## 🚢 Despliegue
 
-### Desarrollo
+### 📚 Documentación Completa
+
+**IMPORTANTE**: Lee la documentación completa antes de cualquier despliegue:
+
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Guía completa de despliegue con troubleshooting
+- **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** - Checklist rápido de despliegue
+
+### Desarrollo Local
 
 ```bash
-npm run dev          # Servidor de desarrollo
-npm run db:studio    # Interfaz de base de datos
+npm run dev          # Servidor de desarrollo (localhost:3000)
+npx convex dev       # Backend Convex (terminal separada)
 ```
 
 ### Producción
 
 ```bash
+# ⚠️ VER DEPLOYMENT.md PARA PROCEDIMIENTOS COMPLETOS
+npm run lint         # Verificar calidad de código
+npm run type-check   # Verificar TypeScript
 npm run build        # Construir para producción
-npm run start        # Servidor de producción
+npx convex deploy    # Desplegar backend
+git push origin main # Desplegar frontend (Vercel)
 ```
 
 ## 🚀 Simple Deployment Strategy
@@ -203,7 +214,7 @@ This project uses **industry-standard single-branch deployment**:
 | **Development** | Local Machine | `localhost:3000`        | Local development |
 | **Production**  | Vercel        | `plataforma.aramac.dev` | Live production   |
 
-### Quick Start
+### Quick Start (Development Only)
 
 ```bash
 # 1. Local development
@@ -212,10 +223,12 @@ npm run dev              # Next.js on localhost:3000
 npx convex dev          # Convex backend (separate terminal)
 
 # 2. Deploy to production
+# ⚠️ VER DEPLOYMENT.md - No uses estos comandos directamente
 npm run lint            # Check code quality
 npm run type-check      # Verify TypeScript
+npm run build          # Test build (CRITICAL)
 npx convex deploy       # Deploy backend
-git push origin main    # Deploy frontend (auto-deploys to Vercel)
+git push origin main    # Deploy frontend (may fail - see docs)
 ```
 
 ### Test Credentials
