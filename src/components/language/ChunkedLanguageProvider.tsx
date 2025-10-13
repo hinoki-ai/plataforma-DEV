@@ -440,23 +440,33 @@ const DivineParsingOracleProvider: React.FC<{
     [language, loadedNamespaces],
   );
 
-  // Translation function - simplified and direct
+  // Helper function to get nested value from object using dot notation
+  const getNestedValue = (obj: any, path: string): any => {
+    return path.split('.').reduce((current, key) => {
+      return current && current[key] !== undefined ? current[key] : undefined;
+    }, obj);
+  };
+
+  // Translation function - supports nested keys with dot notation
   const t = useMemo(() => {
     return (key: string, namespace: string = "common"): string => {
       try {
-        // Direct lookup in loaded translations first
-        if (
-          loadedTranslations[namespace] &&
-          loadedTranslations[namespace][key] !== undefined
-        ) {
-          return loadedTranslations[namespace][key];
+        // Direct lookup in loaded translations first - supports nested keys
+        if (loadedTranslations[namespace]) {
+          const value = getNestedValue(loadedTranslations[namespace], key);
+          if (value !== undefined) {
+            return value;
+          }
         }
 
-        // Fallback to registry
+        // Fallback to registry - supports nested keys
         const registryKey = `${language}-${namespace}`;
         const registryTranslations = translationRegistry[registryKey];
-        if (registryTranslations && registryTranslations[key] !== undefined) {
-          return registryTranslations[key];
+        if (registryTranslations) {
+          const value = getNestedValue(registryTranslations, key);
+          if (value !== undefined) {
+            return value;
+          }
         }
 
         // Final fallback

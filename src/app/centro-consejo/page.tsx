@@ -228,14 +228,22 @@ export default function CentroConsejoPage() {
       "daniela_paredes",
     ];
 
-    return testimonialKeys.map((key) => ({
-      id: key,
-      name: t(`centro_consejo.testimonials.${key}.name`, "common"),
-      role: t(`centro_consejo.testimonials.${key}.role`, "common"),
-      content: t(`centro_consejo.testimonials.${key}.content`, "common"),
-      avatar:
-        testimonialAvatars[key as keyof typeof testimonialAvatars] || "👤",
-    }));
+    const testimonials = testimonialKeys.map((key) => {
+      const name = t(`centro_consejo.testimonials.${key}.name`, "common");
+      const role = t(`centro_consejo.testimonials.${key}.role`, "common");
+      const content = t(`centro_consejo.testimonials.${key}.content`, "common");
+
+      return {
+        id: key,
+        name,
+        role,
+        content,
+        avatar:
+          testimonialAvatars[key as keyof typeof testimonialAvatars] || "👤",
+      };
+    });
+
+    return testimonials;
   };
 
   // Get current 3 testimonials to display
