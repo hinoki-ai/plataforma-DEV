@@ -7,14 +7,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ThemeIcons } from "@/components/icons/hero-icons";
+import { useSession } from "next-auth/react";
 
 export function DesktopToggle() {
+  const { data: session } = useSession();
   const { toggleDesktopMode } = useDesktopToggle();
   const { isDesktopForced, isActualMobile } = useResponsiveMode();
   const [isVisible, setIsVisible] = useState(false);
 
   // Only show the toggle if we're on a mobile device
-  if (!isActualMobile) {
+  // Don't show for MASTER users as they have the advanced dropdown
+  if (!isActualMobile || session?.user?.role === "MASTER") {
     return null;
   }
 
