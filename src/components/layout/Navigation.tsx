@@ -157,7 +157,7 @@ export default function Navigation() {
                   size="sm"
                   onClick={() => setIsOpen(!isOpen)}
                   className="text-sm font-medium transition-all duration-200 hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  aria-label={t("nav.toggle.menu")}
+                  aria-label={t("nav.toggle.menu", "navigation")}
                 >
                   <svg
                     className="h-4 w-4"
@@ -225,7 +225,7 @@ export default function Navigation() {
                     href="/centro-consejo"
                     className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                   >
-                    {t("nav.center.council")}
+                    {t("nav.center.council", "navigation")}
                   </Link>
 
                   {/* Position 2: Portal Escolar/Cerrar Sesión */}
@@ -235,7 +235,7 @@ export default function Navigation() {
                       className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                       prefetch={false}
                     >
-                      {t("nav.school.portal")}
+                      {t("nav.school.portal", "navigation")}
                     </Link>
                   ) : (
                     <form onSubmit={handleLogout}>
@@ -246,7 +246,7 @@ export default function Navigation() {
                         disabled={isLoggingOut}
                         className="text-sm font-medium transition-all duration-200 hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
                       >
-                        {isLoggingOut ? "..." : t("nav.logout")}
+                        {isLoggingOut ? "..." : t("nav.logout", "navigation")}
                       </Button>
                     </form>
                   )}
@@ -277,7 +277,7 @@ export default function Navigation() {
                     href="/centro-consejo"
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
-                    {t("nav.center.council")}
+                    {t("nav.center.council", "navigation")}
                   </Link>
                 </>
               ) : null}

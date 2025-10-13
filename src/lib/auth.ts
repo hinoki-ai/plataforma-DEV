@@ -115,6 +115,7 @@ export const authOptions: NextAuthConfig = {
       : []),
   ],
   callbacks: {
+
     async signIn({ user, account, profile, email, credentials }: any) {
       try {
         if (process.env.NODE_ENV === "development") {
