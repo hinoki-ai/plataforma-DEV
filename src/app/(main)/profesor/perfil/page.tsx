@@ -44,13 +44,13 @@ export default function PerfilPage() {
   const [isSaving, setIsSaving] = useState(false);
 
   const tabs = [
-    { key: "resumen", label: t("profesor.tabs.summary", "Resumen") },
-    { key: "tareas", label: t("profesor.tabs.tasks", "Tareas") },
+    { key: "resumen", label: t("profesor.tabs.summary", "common") },
+    { key: "tareas", label: t("profesor.tabs.tasks", "common") },
     {
       key: "certificados",
-      label: t("profesor.tabs.certificates", "Certificados"),
+      label: t("profesor.tabs.certificates", "common"),
     },
-    { key: "ajustes", label: t("profesor.tabs.settings", "Ajustes") },
+    { key: "ajustes", label: t("profesor.tabs.settings", "common") },
   ];
 
   const [userProfile, setUserProfile] = useState({
@@ -237,7 +237,7 @@ export default function PerfilPage() {
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm" className="mb-2">
                   <Edit className="mr-2 h-4 w-4" />
-                  {t("profesor.edit_profile", "Editar Perfil")}
+                  {t("profesor.edit_profile", "common")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md">
