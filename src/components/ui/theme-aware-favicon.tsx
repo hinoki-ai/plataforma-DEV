@@ -22,9 +22,18 @@ export function ThemeAwareFavicon() {
         'link[rel="shortcut icon"]',
       ) as HTMLLinkElement;
 
-      if (favicon32) favicon32.href = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
-      if (favicon16) favicon16.href = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
-      if (shortcutIcon) shortcutIcon.href = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
+      if (favicon32)
+        favicon32.href = isDark
+          ? "/josh-happy-dark.png"
+          : "/josh-happy-light.png";
+      if (favicon16)
+        favicon16.href = isDark
+          ? "/josh-happy-dark.png"
+          : "/josh-happy-light.png";
+      if (shortcutIcon)
+        shortcutIcon.href = isDark
+          ? "/josh-happy-dark.png"
+          : "/josh-happy-light.png";
     };
 
     // Update favicon based on current theme

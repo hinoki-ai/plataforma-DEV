@@ -34,7 +34,7 @@ async function fixPassword() {
     if (!user) {
       console.error("❌ User not found!");
       console.log("💡 Creating user...");
-      
+
       const hashedPassword = await bcryptjs.hash(CREDENTIALS.password, 10);
       const userId = await client.mutation(api.users.createUser, {
         email: CREDENTIALS.email,
@@ -43,7 +43,7 @@ async function fixPassword() {
         role: "MASTER",
         isActive: true,
       });
-      
+
       console.log("✅ User created successfully!");
       console.log(`📧 Email: ${CREDENTIALS.email}`);
       console.log(`🔑 Password: ${CREDENTIALS.password}`);
@@ -60,23 +60,25 @@ async function fixPassword() {
     // Reset password with bcrypt
     console.log("\n🔄 Resetting password...");
     const hashedPassword = await bcryptjs.hash(CREDENTIALS.password, 10);
-    
+
     await client.mutation(api.users.updateUser, {
       id: user._id,
       password: hashedPassword,
       isActive: true, // Ensure account is active
     });
-    
+
     console.log("✅ Password reset successfully!");
     console.log(`📧 Email: ${CREDENTIALS.email}`);
     console.log(`🔑 Password: ${CREDENTIALS.password}`);
     console.log(`🎯 Role: ${user.role}`);
-    
+
     // Verify the password works
     console.log("\n🧪 Testing password...");
-    const isValid = await bcryptjs.compare(CREDENTIALS.password, hashedPassword);
+    const isValid = await bcryptjs.compare(
+      CREDENTIALS.password,
+      hashedPassword,
+    );
     console.log(`   Password verification: ${isValid ? "✅ PASS" : "❌ FAIL"}`);
-
   } catch (error) {
     console.error("❌ Error:", error);
     throw error;

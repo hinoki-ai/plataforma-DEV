@@ -52,9 +52,12 @@ export async function authenticateUser(
     if (user.role === "PARENT" && user.isOAuthUser) {
       // Check if parent has completed registration
       try {
-        const parentProfile = await client.query(api.users.getParentProfileByUserId, {
-          userId: user._id,
-        });
+        const parentProfile = await client.query(
+          api.users.getParentProfileByUserId,
+          {
+            userId: user._id,
+          },
+        );
         needsRegistration = !parentProfile?.registrationComplete;
       } catch (error) {
         // If no parent profile exists, they need registration

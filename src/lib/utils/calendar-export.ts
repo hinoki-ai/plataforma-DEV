@@ -87,7 +87,8 @@ export function generateICalendar(
     ? events.filter((event) => selectedCategories.includes(event.category))
     : events;
 
-  const calendarName = "Calendario Escolar 2025 - Plataforma Institucional Astral";
+  const calendarName =
+    "Calendario Escolar 2025 - Plataforma Institucional Astral";
   const calendarDescription =
     "Calendario oficial institucional para el año escolar 2025. Incluye fechas académicas, feriados, eventos especiales y actividades para familias.";
 

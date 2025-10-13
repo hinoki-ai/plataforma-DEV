@@ -33,7 +33,7 @@ async function fixProductionPassword() {
     if (!user) {
       console.error("❌ User not found in production!");
       console.log("\n💡 Creating user in production...");
-      
+
       const hashedPassword = await bcryptjs.hash(CREDENTIALS.password, 10);
       const userId = await client.mutation(api.users.createUser, {
         email: CREDENTIALS.email,
@@ -42,7 +42,7 @@ async function fixProductionPassword() {
         role: "MASTER",
         isActive: true,
       });
-      
+
       console.log("✅ User created in production!");
       console.log(`📧 Email: ${CREDENTIALS.email}`);
       console.log(`🔑 Password: ${CREDENTIALS.password}`);
@@ -61,26 +61,30 @@ async function fixProductionPassword() {
     // Check current password format
     if (user.password) {
       const isBcrypt = /^\$2[abyxz]\$/.test(user.password);
-      console.log(`   Current hash format: ${isBcrypt ? "bcrypt ✅" : "PBKDF2/other ❌"}`);
+      console.log(
+        `   Current hash format: ${isBcrypt ? "bcrypt ✅" : "PBKDF2/other ❌"}`,
+      );
     }
 
     // Reset password with bcrypt
     console.log("\n🔄 Resetting password in production...");
     const hashedPassword = await bcryptjs.hash(CREDENTIALS.password, 10);
-    
+
     await client.mutation(api.users.updateUser, {
       id: user._id,
       password: hashedPassword,
       isActive: true, // Ensure account is active
     });
-    
+
     console.log("✅ Password reset in production successfully!");
-    
+
     // Verify the password works
     console.log("\n🧪 Testing password hash...");
-    const isValid = await bcryptjs.compare(CREDENTIALS.password, hashedPassword);
+    const isValid = await bcryptjs.compare(
+      CREDENTIALS.password,
+      hashedPassword,
+    );
     console.log(`   Password verification: ${isValid ? "✅ PASS" : "❌ FAIL"}`);
-
   } catch (error) {
     console.error("❌ Error:", error);
     throw error;

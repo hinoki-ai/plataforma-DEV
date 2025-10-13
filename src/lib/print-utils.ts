@@ -7,7 +7,8 @@
 import { APP_NAME } from "./constants";
 
 // Institution name can be configured per tenant
-const INSTITUTION_NAME = process.env.NEXT_PUBLIC_INSTITUTION_NAME || "Institución Educativa";
+const INSTITUTION_NAME =
+  process.env.NEXT_PUBLIC_INSTITUTION_NAME || "Institución Educativa";
 const PLATFORM_NAME = APP_NAME;
 
 /**

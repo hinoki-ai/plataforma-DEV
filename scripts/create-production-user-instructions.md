@@ -3,6 +3,7 @@
 ## Quick Fix via Convex Dashboard
 
 1. **Open Production Convex Dashboard:**
+
    ```bash
    # Open this URL in your browser:
    https://dashboard.convex.dev/t/hinoki-ai/manitos-pintadas/industrious-manatee-7/data
@@ -11,13 +12,14 @@
 2. **Find/Create User:**
    - Go to the `users` table
    - Search for `agustin@astral.cl`
-   
 3. **If user EXISTS:**
    - Click on the user row
    - Copy this bcrypt hash (password: `59163476a`):
+
    ```
    $2a$10$nDqQE4yF7JvPz3qH.K5V.eZ3zM7xQW8JvGR5Y6tN8pKLmH9Q2tXWm
    ```
+
    - Update the `password` field with this hash
    - Make sure `isActive` is `true`
    - Save changes
@@ -54,11 +56,13 @@ CONVEX_DEPLOYMENT=prod:industrious-manatee-7 npx tsx scripts/fix-production-pass
 ```
 
 Or set it in a `.env.production` file:
+
 ```bash
 CONVEX_DEPLOYMENT=prod:industrious-manatee-7
 ```
 
 Then run:
+
 ```bash
 npx tsx scripts/fix-production-password.ts
 ```

@@ -376,7 +376,7 @@ export const registerParentComplete = mutation({
     email: v.string(),
     password: v.string(),
     phone: v.string(),
-    
+
     // Parent profile fields
     rut: v.string(),
     address: v.string(),
@@ -385,14 +385,14 @@ export const registerParentComplete = mutation({
     relationship: v.string(),
     emergencyContact: v.string(),
     emergencyPhone: v.string(),
-    
+
     // Student fields
     childName: v.string(),
     childGrade: v.string(),
-    
+
     // Institution
     institutionId: v.optional(v.id("schoolInfo")),
-    
+
     // Optional OAuth fields
     provider: v.optional(v.string()),
     isOAuthUser: v.optional(v.boolean()),

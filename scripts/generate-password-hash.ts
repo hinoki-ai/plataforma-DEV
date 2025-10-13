@@ -17,7 +17,7 @@ async function generateHash() {
   console.log("\n" + "=".repeat(70));
   console.log("\n✅ Copy this hash to use in Convex dashboard");
   console.log("=".repeat(70) + "\n");
-  
+
   // Verify it works
   const isValid = await bcryptjs.compare(password, hash);
   console.log(`✅ Verification test: ${isValid ? "PASS" : "FAIL"}\n`);

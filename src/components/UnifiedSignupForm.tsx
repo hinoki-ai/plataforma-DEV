@@ -480,7 +480,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [comunas, setComunas] = useState<string[]>([]);
-  const [institutions, setInstitutions] = useState<Array<{ _id: string; name: string }>>([]);
+  const [institutions, setInstitutions] = useState<
+    Array<{ _id: string; name: string }>
+  >([]);
   const [isGoogleConfigured, setIsGoogleConfigured] = useState(false);
   const router = useRouter();
 

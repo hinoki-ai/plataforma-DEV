@@ -35,7 +35,7 @@ async function verifyAndFixLogin() {
     if (!user) {
       console.error("❌ User not found!");
       console.log("\n💡 Creating user with demo password...");
-      
+
       const hashedPassword = await bcryptjs.hash(TEST_CREDENTIALS.password, 10);
       await client.mutation(api.users.createUser, {
         email: TEST_CREDENTIALS.email,
@@ -43,7 +43,7 @@ async function verifyAndFixLogin() {
         name: "Agustin - Master Admin",
         role: "MASTER",
       });
-      
+
       console.log("✅ User created successfully!");
       console.log(`📧 Email: ${TEST_CREDENTIALS.email}`);
       console.log(`🔑 Password: ${TEST_CREDENTIALS.password}`);
@@ -58,17 +58,17 @@ async function verifyAndFixLogin() {
 
     // 2. Test password verification
     console.log("\n🔐 Step 2: Testing password verification...");
-    
+
     if (!user.password) {
       console.error("❌ User has no password set!");
       console.log("🔄 Setting password...");
-      
+
       const hashedPassword = await bcryptjs.hash(TEST_CREDENTIALS.password, 10);
       await client.mutation(api.users.updateUser, {
         id: user._id,
         password: hashedPassword,
       });
-      
+
       console.log("✅ Password set successfully!");
       console.log(`🔑 Password: ${TEST_CREDENTIALS.password}`);
       return;
@@ -81,8 +81,11 @@ async function verifyAndFixLogin() {
 
     // Try to verify with bcryptjs
     try {
-      const isValid = await bcryptjs.compare(TEST_CREDENTIALS.password, user.password);
-      
+      const isValid = await bcryptjs.compare(
+        TEST_CREDENTIALS.password,
+        user.password,
+      );
+
       if (isValid) {
         console.log("\n✅ Password verification SUCCESSFUL!");
         console.log(`📧 Email: ${TEST_CREDENTIALS.email}`);
@@ -92,13 +95,16 @@ async function verifyAndFixLogin() {
       } else {
         console.log("\n❌ Password verification FAILED!");
         console.log("🔄 Resetting password with correct hash...");
-        
-        const hashedPassword = await bcryptjs.hash(TEST_CREDENTIALS.password, 10);
+
+        const hashedPassword = await bcryptjs.hash(
+          TEST_CREDENTIALS.password,
+          10,
+        );
         await client.mutation(api.users.updateUser, {
           id: user._id,
           password: hashedPassword,
         });
-        
+
         console.log("✅ Password reset successfully!");
         console.log(`📧 Email: ${TEST_CREDENTIALS.email}`);
         console.log(`🔑 Password: ${TEST_CREDENTIALS.password}`);
@@ -107,18 +113,17 @@ async function verifyAndFixLogin() {
     } catch (error) {
       console.error("❌ Error during password verification:", error);
       console.log("🔄 Resetting password...");
-      
+
       const hashedPassword = await bcryptjs.hash(TEST_CREDENTIALS.password, 10);
       await client.mutation(api.users.updateUser, {
         id: user._id,
         password: hashedPassword,
       });
-      
+
       console.log("✅ Password reset successfully!");
       console.log(`📧 Email: ${TEST_CREDENTIALS.email}`);
       console.log(`🔑 Password: ${TEST_CREDENTIALS.password}`);
     }
-
   } catch (error) {
     console.error("❌ Error:", error);
     throw error;

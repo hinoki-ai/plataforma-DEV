@@ -29,10 +29,12 @@ This update implements two major improvements to the platform:
 **File**: `convex/schema.ts`
 
 #### Users Table
+
 - **Added** `institutionId: v.optional(v.id("schoolInfo"))` field
 - **Added** `.index("by_institutionId", ["institutionId"])` index
 
 #### SchoolInfo Table
+
 - **Added** `isActive: v.optional(v.boolean())` field for active/inactive institution management
 - **Added** `.index("by_name", ["name"])` index
 - **Added** `.index("by_isActive", ["isActive"])` index
@@ -46,16 +48,19 @@ This update implements two major improvements to the platform:
 **File**: `convex/schoolInfo.ts`
 
 #### New Queries
+
 - `getAllInstitutions()`: Fetches all active institutions
 - `getInstitutionById(institutionId)`: Fetches a specific institution by ID
 
 #### Updated Mutations
+
 - `createOrUpdateSchoolInfo()`: Now sets `isActive: true` by default
 - `createInstitution()`: New mutation for creating additional institutions
 
 **File**: `convex/users.ts`
 
 #### Updated Functions
+
 - `createUser()`: Added `institutionId` parameter
 - `createUserAction()`: Added `institutionId` parameter
 - `updateUser()`: Added `institutionId` parameter
@@ -68,15 +73,18 @@ This update implements two major improvements to the platform:
 ### 4. API Endpoints
 
 #### New Endpoint
+
 **File**: `src/app/api/institutions/route.ts`
 
 ```
 GET /api/institutions
 ```
+
 - Returns all active institutions
 - Used by frontend to populate institution dropdown
 
 #### Updated Endpoints
+
 **File**: `src/app/api/admin/users/route.ts`
 
 - `POST /api/admin/users`: Now accepts `institutionId` in request body
@@ -103,6 +111,7 @@ GET /api/institutions
 **File**: `src/components/UnifiedSignupForm.tsx`
 
 #### Changes
+
 - **Added** `institutionId` field to FormData interface
 - **Added** institution dropdown in Step 1 (Personal Information)
 - **Added** institutions state to store fetched institutions
@@ -110,6 +119,7 @@ GET /api/institutions
 - **Added** validation for required `institutionId` field
 
 #### UI Enhancement
+
 New field added to the first step of parent registration:
 
 ```tsx

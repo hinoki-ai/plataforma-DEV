@@ -49,7 +49,9 @@ async function checkMasterUser() {
     }
 
     console.log("🎉 Master user is properly configured!");
-    console.log("💡 Login credentials: master@plataforma-astral.com / master123");
+    console.log(
+      "💡 Login credentials: master@plataforma-astral.com / master123",
+    );
 
     return true;
   } catch (error) {
