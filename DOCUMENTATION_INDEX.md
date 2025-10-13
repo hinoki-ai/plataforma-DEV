@@ -44,8 +44,9 @@ Guides for deploying and managing the application:
 
 | Document                                                   | Purpose                                     | Read Time |
 | ---------------------------------------------------------- | ------------------------------------------- | --------- |
-| **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** | Complete deployment guide (Vercel + Convex) | 15 min    |
-| **[DEPLOYMENT.md](./DEPLOYMENT.md)**                       | Quick deployment reference                  | 5 min     |
+| **[DEPLOYMENT.md](./DEPLOYMENT.md)**                       | **📋 Complete deployment guide with troubleshooting** | 20 min    |
+| **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)**   | **🚨 Quick deployment checklist & emergency commands** | 2 min     |
+| **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** | Legacy deployment guide (Vercel + Convex)   | 15 min    |
 | **[OPERATIONAL_STATUS.md](./OPERATIONAL_STATUS.md)**       | Current operational status                  | 2 min     |
 | **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)**             | Git branching strategy                      | 3 min     |
 
@@ -108,7 +109,7 @@ Refer to `CLAUDE.md` for testing guidelines.
 | ------------------------------------- | ----------------------------------- |
 | Set up the project for the first time | START_HERE.md                       |
 | Understand the architecture           | docs/ARCHITECTURE.md                |
-| Deploy to production                  | DEPLOYMENT.md                       |
+| Deploy to production                  | DEPLOYMENT.md + DEPLOYMENT_CHECKLIST.md |
 | Understand authentication             | docs/AUTHENTICATION_SYSTEM_DOCS.md  |
 | Troubleshoot auth issues              | docs/TROUBLESHOOTING_AUTH.md        |
 | Work on the codebase (AI)             | CLAUDE.md                           |
@@ -133,7 +134,8 @@ plataforma-astral/
 ├── MIGRATION.md                           👈 Migration status
 ├── DOCUMENTATION_INDEX.md                 👈 You are here
 │
-├── DEPLOYMENT.md                          🚀 Deployment guide
+├── DEPLOYMENT.md                          🚀 Complete deployment guide
+├── DEPLOYMENT_CHECKLIST.md                🚨 Deployment checklist
 ├── BRANCH_STRATEGY.md                     📊 Git workflow
 │
 ├── docs/                                  📚 Technical docs
