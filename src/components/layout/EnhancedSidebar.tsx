@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { RoleSwitcher } from "@/components/auth/RoleSwitcher";
+import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
 
 interface EnhancedSidebarProps {
   className?: string;
@@ -1110,6 +1111,16 @@ export function EnhancedSidebar({
                     </span>
                   </div>
                 </Button>
+              </div>
+
+              {/* 🎛️ ADVANCED SETTINGS */}
+              <div className="space-y-2 border-t border-slate-200 dark:border-slate-800 pt-4">
+                <div className="px-2 py-1">
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                    🎛️ Developer Tools
+                  </span>
+                </div>
+                <AdvancedSettingsDropdown isCollapsed={isCollapsed} />
               </div>
             </div>
           )}
