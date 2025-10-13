@@ -15,17 +15,17 @@ interface SEOConfig {
 const DEFAULT_SEO = {
   siteName: "Plataforma Institucional Astral",
   description:
-    "Sistema integral de gestión educativa para Plataforma Astral. Planificaciones, reservas y administración educativa.",
+    "Sistema líder nacional de gestión educativa integral. Solución SaaS profesional para instituciones de excelencia.",
   keywords: [
-    "escuela especial",
-    "lenguaje",
-    "educación especial",
-    "planificaciones",
+    "plataforma educativa",
+    "gestión institucional",
+    "SaaS educativo",
+    "planificación académica",
     "sistema educativo",
     "gestión escolar",
-    "fonoaudiología",
-    "terapia ocupacional",
-    "psicología educacional",
+    "administración educativa",
+    "tecnología educativa",
+    "solución integral",
   ],
   url: "https://plataforma-astral.vercel.app",
   image: "/images/og-image.jpg",
@@ -131,7 +131,7 @@ export function generateMetadata(config: SEOConfig): Metadata {
 
 // Pre-configured metadata for common pages
 export const homeMetadata = generateMetadata({
-  title: "Inicio - Manitos Pintadas",
+  title: "Plataforma Institucional Astral",
   description:
     "Bienvenido al sistema de gestión de Manitos Pintadas. Accede a planificaciones, reservas y servicios especializados.",
   keywords: ["inicio", "bienvenida", "educación especial"],

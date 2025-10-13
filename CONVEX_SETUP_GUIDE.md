@@ -66,9 +66,9 @@ In the dashboard:
 
 This creates test users:
 
-- **Admin**: admin@manitospintadas.cl / admin123
-- **Profesor**: profesor@manitospintadas.cl / profesor123
-- **Parent**: parent@manitospintadas.cl / parent123
+- **Admin**: admin@plataforma-astral.com / admin123
+- **Profesor**: profesor@plataforma-astral.com / profesor123
+- **Parent**: parent@plataforma-astral.com / parent123
 
 ### Step 4: Start Next.js
 
@@ -88,7 +88,7 @@ This starts both Convex and Next.js together.
 
 1. Go to http://localhost:3000/login
 2. Login with:
-   - Email: `admin@manitospintadas.cl`
+   - Email: `admin@plataforma-astral.com`
    - Password: `admin123`
 3. You should be redirected to `/admin`
 
@@ -232,7 +232,7 @@ npx convex dashboard
 
 # Or check if user exists:
 # In dashboard Functions tab, run:
-# users:getUserByEmail with args: {"email": "admin@manitospintadas.cl"}
+# users:getUserByEmail with args: {"email": "admin@plataforma-astral.com"}
 ```
 
 ### OAuth login creates duplicate users

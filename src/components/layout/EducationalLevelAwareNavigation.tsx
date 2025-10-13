@@ -58,17 +58,6 @@ export function EducationalLevelAwareNavigation({
   const getNavigationItems = (): NavigationItem[] => {
     const baseItems: NavigationItem[] = [
       {
-        label: "Calendario",
-        href: "/calendario-escolar",
-        icon: Calendar,
-        institutionTypes: [
-          "PRESCHOOL",
-          "BASIC_SCHOOL",
-          "HIGH_SCHOOL",
-          "COLLEGE",
-        ],
-      },
-      {
         label: "Equipo",
         href: "/equipo-multidisciplinario",
         icon: Users,

@@ -34,10 +34,10 @@ export interface SEOOptions {
 }
 
 const DEFAULT_CONFIG = {
-  siteName: "Manitos Pintadas - Jardín Infantil",
-  domain: "https://manitospintadas.cl",
+  siteName: "Plataforma Astral - Sistema Educativo",
+  domain: "https://plataforma.aramac.dev",
   defaultImage: "/og-image.jpg",
-  twitter: "@manitospintadas",
+  twitter: "@plataforma-astral",
   keywords: [
     "jardín infantil",
     "educación inicial",
@@ -394,7 +394,7 @@ export function getPageStructuredData(page: string) {
         description:
           "Jardín infantil enfocado en el desarrollo integral de niños y niñas a través de metodologías innovadoras.",
         telephone: "+56 2 1234 5678",
-        email: "contacto@manitospintadas.cl",
+        email: "contacto@plataforma-astral.com",
       });
 
     case "team":

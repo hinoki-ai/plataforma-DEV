@@ -56,7 +56,7 @@ The Plataforma Astral authentication system uses **NextAuth.js v5** with a hybri
 
 // Emergency Bypass:
 - Admin access when database fails
-- Hardcoded credentials: admin@manitospintadas.cl / admin123
+- Hardcoded credentials: admin@plataforma-astral.com / admin123
 ```
 
 ### 3. Route Protection (`src/middleware.ts`)
@@ -209,9 +209,9 @@ curl -I https://school.aramac.dev
 Use Convex dashboard to create test users
 
 # Test credentials:
-ADMIN: admin@manitospintadas.cl / admin123
-PROFESOR: profesor@manitospintadas.cl / profesor123
-PARENT: parent@manitospintadas.cl / parent123
+ADMIN: admin@plataforma-astral.com / admin123
+PROFESOR: profesor@plataforma-astral.com / profesor123
+PARENT: parent@plataforma-astral.com / parent123
 ```
 
 ### Authentication Tests
@@ -250,13 +250,13 @@ If authentication system fails completely:
 
    ```typescript
    // Lines 27-40 and 82-94
-   if (email === "admin@manitospintadas.cl" && password === "admin123") {
+   if (email === "admin@plataforma-astral.com" && password === "admin123") {
      return emergency_admin_user;
    }
    ```
 
 2. **Emergency Credentials**:
-   - Email: `admin@manitospintadas.cl`
+   - Email: `admin@plataforma-astral.com`
    - Password: `admin123`
 
 3. **Emergency Access Process**:

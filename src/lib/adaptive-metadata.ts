@@ -52,15 +52,15 @@ export function generateMetadata({
   additionalMeta = {},
 }: AdaptiveMetadataOptions): Metadata {
   // Base metadata
-  const baseTitle = "Escuela Manitos Pintadas";
+  const baseTitle = "Plataforma Institucional Astral";
   const baseDescription =
-    "Educación integral y desarrollo humano en un ambiente de amor y respeto";
+    "Sistema líder nacional de gestión educativa integral para instituciones de excelencia";
   const baseKeywords = [
-    "educación",
-    "escuela",
-    "manitos pintadas",
-    "desarrollo integral",
-    "niños",
+    "plataforma educativa",
+    "gestión institucional",
+    "plataforma astral",
+    "SaaS educativo",
+    "tecnología educativa",
   ];
 
   // Context-specific configurations
@@ -68,22 +68,22 @@ export function generateMetadata({
     public: {
       titleTemplate: `%s | ${baseTitle}`,
       defaultDescription:
-        "Descubre nuestra propuesta educativa centrada en el desarrollo integral de cada niño y niña.",
+        "Plataforma SaaS líder nacional para gestión educativa integral y comunicación institucional.",
       keywordPrefix: [
-        "educación pública",
-        "comunidad educativa",
-        "proyecto educativo",
+        "sistema educativo",
+        "plataforma institucional",
+        "solución SaaS",
       ],
       robots: "index, follow",
     },
     auth: {
       titleTemplate: `%s - Panel | ${baseTitle}`,
       defaultDescription:
-        "Panel de gestión educativa para profesores y administradores.",
+        "Sistema profesional de gestión educativa para docentes, administradores y familias.",
       keywordPrefix: [
         "gestión educativa",
         "panel administrativo",
-        "herramientas docentes",
+        "herramientas institucionales",
       ],
       robots: "noindex, nofollow",
     },
@@ -137,9 +137,9 @@ export function generateMetadata({
 
   // Context-specific additions
   if (context === "public") {
-    metadata.authors = [{ name: "Escuela Manitos Pintadas" }];
-    metadata.creator = "Escuela Manitos Pintadas";
-    metadata.publisher = "Escuela Manitos Pintadas";
+    metadata.authors = [{ name: "Plataforma Institucional Astral" }];
+    metadata.creator = "Plataforma Institucional Astral";
+    metadata.publisher = "Plataforma Institucional Astral";
 
     // Canonical URL for public pages
     if (url) {

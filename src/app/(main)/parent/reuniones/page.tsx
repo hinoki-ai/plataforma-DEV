@@ -8,15 +8,15 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Reuniones de Apoderados | Manitos Pintadas",
+  title: "Reuniones de Apoderados | Plataforma Astral",
   description:
-    "Gestiona y visualiza las reuniones con los profesores de tu hijo/a en la Escuela Especial de Lenguaje Manitos Pintadas.",
+    "Sistema profesional de gestión de reuniones entre familias y docentes. Facilita la comunicación y seguimiento académico.",
   keywords:
-    "reuniones apoderados, escuela especial lenguaje, Manitos Pintadas, comunicación padres profesores",
+    "reuniones apoderados, gestión educativa, plataforma institucional, comunicación padres profesores",
   openGraph: {
-    title: "Reuniones de Apoderados | Manitos Pintadas",
+    title: "Reuniones de Apoderados | Plataforma Astral",
     description:
-      "Mantén una comunicación efectiva con los profesores de tu hijo/a.",
+      "Sistema integral para gestionar reuniones y mantener comunicación efectiva entre familias y docentes.",
     type: "website",
   },
 };

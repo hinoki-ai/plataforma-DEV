@@ -23,29 +23,16 @@ const nextConfig: NextConfig = {
   // output: "standalone",
 
   // Performance optimizations
-  productionBrowserSourceMaps: false,
+  productionBrowserSourceMaps: true,
   compress: true,
   poweredByHeader: false,
 
   // Skip trailing slash redirect for better compatibility
   skipTrailingSlashRedirect: true,
 
-  // Turbopack-optimized build configuration with maximum performance
-  turbopack: {
-    // Optimize module resolution
-    resolveAlias: {
-      "@/*": ["./src/*"],
-      "@/components": ["./src/components"],
-      "@/lib": ["./src/lib"],
-      "@/styles": ["./src/styles"],
-    },
-    // Optimize chunking strategy
-    rules: {
-      "*.svg": {
-        loaders: ["@svgr/webpack"],
-        as: "*.js",
-      },
-    },
+  // Generate buildId to help with debugging
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
   },
 
   // experimental: {

@@ -43,7 +43,7 @@ User Login → NextAuth.js → NEXTAUTH_URL validation → JWT creation → Sess
 **Before (BROKEN)**:
 
 ```bash
-NEXTAUTH_URL="https://manitos-pintadas.vercel.app"  # OLD DOMAIN
+NEXTAUTH_URL="https://plataforma.aramac.dev"  # CURRENT DOMAIN
 ```
 
 **After (WORKING)**:
@@ -93,9 +93,9 @@ NEXTAUTH_URL="https://school.aramac.dev"  # CURRENT DOMAIN
 
 ### Test Credentials (Post-Fix)
 
-- **ADMIN**: `admin@manitospintadas.cl` / `admin123`
-- **PROFESOR**: `profesor@manitospintadas.cl` / `profesor123`
-- **PARENT**: `parent@manitospintadas.cl` / `parent123`
+- **ADMIN**: `admin@plataforma-astral.com` / `admin123`
+- **PROFESOR**: `profesor@plataforma-astral.com` / `profesor123`
+- **PARENT**: `parent@plataforma-astral.com` / `parent123`
 
 ### System Status Checks
 
@@ -193,7 +193,7 @@ npx vercel ls
 
 If authentication fails, emergency admin access is available:
 
-- **Email**: `admin@manitospintadas.cl`
+- **Email**: `admin@plataforma-astral.com`
 - **Password**: `admin123`
 - **Bypass Location**: `src/lib/auth-prisma.ts` lines 27-40 and 82-94
 

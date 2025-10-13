@@ -103,7 +103,7 @@ function EstudiantesContent() {
           academicProgress: child.average ? child.average * 10 : 0, // Convert to percentage, handle null values
           teacher: {
             name: "Profesor Asignado", // This would come from the Student model
-            email: "profesor@manitospintadas.cl",
+            email: "profesor@plataforma-astral.com",
             phone: "+56 9 0000 0000",
           },
           subjects: child.subjects || [

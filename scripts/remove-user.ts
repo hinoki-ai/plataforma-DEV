@@ -41,7 +41,7 @@ async function removeUser(email: string) {
 }
 
 // Remove María López
-removeUser("parent@manitospintadas.cl").catch((error) => {
+removeUser("parent@plataforma-astral.com").catch((error) => {
   console.error("Fatal error during user removal:", error);
   process.exit(1);
 });

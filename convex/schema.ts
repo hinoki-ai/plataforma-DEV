@@ -37,6 +37,7 @@ export default defineSchema({
     isOAuthUser: v.boolean(),
     clerkId: v.optional(v.string()),
     createdByAdmin: v.optional(v.string()),
+    institutionId: v.optional(v.id("schoolInfo")),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
@@ -44,6 +45,7 @@ export default defineSchema({
     .index("by_role", ["role"])
     .index("by_isActive", ["isActive"])
     .index("by_createdByAdmin", ["createdByAdmin"])
+    .index("by_institutionId", ["institutionId"])
     .index("by_createdAt", ["createdAt"]),
 
   accounts: defineTable({
@@ -114,9 +116,12 @@ export default defineSchema({
     customGrades: v.optional(v.any()), // JSON array
     customSubjects: v.optional(v.any()), // JSON array
     educationalConfig: v.optional(v.any()), // JSON object
+    isActive: v.optional(v.boolean()),
     createdAt: v.number(),
     updatedAt: v.number(),
-  }),
+  })
+    .index("by_name", ["name"])
+    .index("by_isActive", ["isActive"]),
 
   // ==================== TEAM MEMBERS ====================
 

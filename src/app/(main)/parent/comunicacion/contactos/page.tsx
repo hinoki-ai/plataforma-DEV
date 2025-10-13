@@ -50,7 +50,7 @@ export default function ContactosPage() {
     {
       id: "1",
       name: "María González",
-      email: "direccion@manitospintadas.cl",
+      email: "direccion@plataforma-astral.com",
       phone: "+56 9 1234 5678",
       role: "Directora",
       department: "Dirección",
@@ -61,7 +61,7 @@ export default function ContactosPage() {
     {
       id: "2",
       name: "Carlos Rodríguez",
-      email: "profesor.jefe@manitospintadas.cl",
+      email: "profesor.jefe@plataforma-astral.com",
       phone: "+56 9 2345 6789",
       role: "Profesor Jefe",
       department: "Docencia",
@@ -72,7 +72,7 @@ export default function ContactosPage() {
     {
       id: "3",
       name: "Ana Silva",
-      email: "pie@manitospintadas.cl",
+      email: "pie@plataforma-astral.com",
       phone: "+56 9 3456 7890",
       role: "Coordinadora PIE",
       department: "Educación Especial",
@@ -83,7 +83,7 @@ export default function ContactosPage() {
     {
       id: "4",
       name: "Dr. Patricia Morales",
-      email: "psicopedagoga@manitospintadas.cl",
+      email: "psicopedagoga@plataforma-astral.com",
       phone: "+56 9 4567 8901",
       role: "Psicopedagoga",
       department: "Salud Mental",
@@ -94,7 +94,7 @@ export default function ContactosPage() {
     {
       id: "5",
       name: "Roberto Díaz",
-      email: "fonoaudiologo@manitospintadas.cl",
+      email: "fonoaudiologo@plataforma-astral.com",
       phone: "+56 9 5678 9012",
       role: "Fonoaudiólogo",
       department: "Salud",
@@ -105,7 +105,7 @@ export default function ContactosPage() {
     {
       id: "6",
       name: "Secretaría Administrativa",
-      email: "secretaria@manitospintadas.cl",
+      email: "secretaria@plataforma-astral.com",
       phone: "+56 9 8765 4321",
       role: "Administrativo",
       department: "Administración",

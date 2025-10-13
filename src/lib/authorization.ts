@@ -111,7 +111,7 @@ const rolePermissions: Record<ExtendedUserRole, Permission[]> = {
   PROFESOR: [
     Permissions.SCHOOL_INFO_VIEW,
     Permissions.RESERVATIONS_VIEW,
-    Permissions.USERS_CREATE_PARENT,
+    // PROFESOR cannot create other users (including PARENT)
     Permissions.PLANNING_DOCUMENTS_OWN,
     Permissions.PROFESOR_DASHBOARD_ACCESS,
     Permissions.PARENT_DASHBOARD_ACCESS,

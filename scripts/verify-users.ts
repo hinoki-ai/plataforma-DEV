@@ -11,12 +11,12 @@ async function verifyUsers() {
   console.log("🔍 Verifying test users in Convex database...");
 
   const testEmails = [
-    "admin@manitospintadas.cl",
-    "profesor@manitospintadas.cl",
-    "admina@manitospintadas.cl",
-    "profesora@manitospintadas.cl",
-    "apoderado@manitospintadas.cl",
-    "apoderada@manitospintadas.cl",
+    "admin@plataforma-astral.com",
+    "profesor@plataforma-astral.com",
+    "admina@plataforma-astral.com",
+    "profesora@plataforma-astral.com",
+    "apoderado@plataforma-astral.com",
+    "apoderada@plataforma-astral.com",
   ];
 
   try {

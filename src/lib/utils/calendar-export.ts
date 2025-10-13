@@ -38,7 +38,7 @@ function generateICalEvent(event: CalendarEvent): string {
   ); // Next day for all-day events
 
   // Generate unique UID
-  const uid = `${event.id}@manitospintadas.cl`;
+  const uid = `${event.id}@plataforma-astral.com`;
 
   // Create timestamp
   const now = new Date();
@@ -67,8 +67,8 @@ function generateICalEvent(event: CalendarEvent): string {
     "TRANSP:TRANSPARENT", // All-day events are typically transparent
     "STATUS:CONFIRMED",
     "CLASS:PUBLIC",
-    "LOCATION:Escuela Especial de Lenguaje Manitos Pintadas\\, Chile",
-    "ORGANIZER;CN=Manitos Pintadas:mailto:contacto@manitospintadas.cl",
+    "LOCATION:Institución Educativa\\, Chile",
+    "ORGANIZER;CN=Plataforma Astral:mailto:contacto@plataforma-astral.com",
     "END:VEVENT",
   ];
 
@@ -87,14 +87,14 @@ export function generateICalendar(
     ? events.filter((event) => selectedCategories.includes(event.category))
     : events;
 
-  const calendarName = "Calendario Escolar 2025 - Manitos Pintadas";
+  const calendarName = "Calendario Escolar 2025 - Plataforma Institucional Astral";
   const calendarDescription =
-    "Calendario oficial de la Escuela Especial de Lenguaje Manitos Pintadas para el año escolar 2025. Incluye fechas académicas, feriados, eventos especiales y actividades para padres.";
+    "Calendario oficial institucional para el año escolar 2025. Incluye fechas académicas, feriados, eventos especiales y actividades para familias.";
 
   const header = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Manitos Pintadas//Calendario Escolar 2025//ES",
+    "PRODID:-//Plataforma Institucional Astral//Calendario Escolar 2025//ES",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${escapeICalText(calendarName)}`,
@@ -131,7 +131,7 @@ export function generateICalendar(
  */
 export function downloadICalendar(
   selectedCategories?: EventCategory[],
-  filename: string = "calendario-escolar-2025-manitos-pintadas.ics",
+  filename: string = "calendario-escolar-2025-plataforma-astral.ics",
 ): void {
   // Ensure this only runs on the client
   if (typeof window === "undefined" || typeof document === "undefined") {
@@ -232,7 +232,7 @@ export function generateCalendarSummary(
   };
 
   const summary = [
-    `Calendario Escolar 2025 - Escuela Especial de Lenguaje Manitos Pintadas`,
+    `Calendario Escolar 2025 - Plataforma Institucional Astral`,
     ``,
     `Total de eventos: ${stats.totalEvents}`,
     ``,
@@ -254,8 +254,8 @@ export function generateCalendarSummary(
     `incluyendo el inicio de clases (5 de marzo), vacaciones de invierno (20 de junio`,
     `al 7 de julio), fiestas patrias, y el término del año escolar (19 de diciembre).`,
     ``,
-    `Para más información, visite: https://manitospintadas.cl`,
-    `Contacto: contacto@manitospintadas.cl`,
+    `Para más información, visite: https://plataforma.aramac.dev`,
+    `Contacto: contacto@plataforma-astral.com`,
   ];
 
   return summary.join("\n");
