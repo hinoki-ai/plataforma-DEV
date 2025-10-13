@@ -412,7 +412,7 @@ export default function AdminPMEPage() {
                 {adminStats.needsRevision}
               </div>
               <div className="text-xs text-muted-foreground">
-                {t("common.needs_revision", "Needs Revision")}
+                {t("common.needs_revision", "common")}
               </div>
             </CardContent>
           </Card>
@@ -495,7 +495,7 @@ export default function AdminPMEPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-red-700">
               <AlertTriangle className="w-5 h-5" />
-              {t("admin.pme.admin_actions", "Special Administrative Actions")}
+              {t("admin.pme.admin_actions", "admin")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -515,7 +515,7 @@ export default function AdminPMEPage() {
                 <div className="text-left">
                   <div className="font-medium">{t("ui.force_complete")}</div>
                   <div className="text-xs text-muted-foreground">
-                    {t("admin.pme.mark_completed", "Mark goal as completed")}
+                    {t("admin.pme.mark_completed", "admin")}
                   </div>
                 </div>
               </Button>
@@ -534,7 +534,7 @@ export default function AdminPMEPage() {
                 <div className="text-left">
                   <div className="font-medium">{t("ui.delete_goals")}</div>
                   <div className="text-xs text-muted-foreground">
-                    {t("admin.pme.delete_permanently", "Delete permanently")}
+                    {t("admin.pme.delete_permanently", "admin")}
                   </div>
                 </div>
               </Button>
