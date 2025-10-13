@@ -189,7 +189,7 @@ const configSections: ConfigSection[] = [
         label: "Orígenes CORS",
         description: "Orígenes permitidos para CORS",
         type: "textarea",
-        value: "http://localhost:3000\nhttps://manitos-pintadas.com",
+        value: "http://localhost:3000\nhttps://plataforma.aramac.dev",
       },
     ],
   },

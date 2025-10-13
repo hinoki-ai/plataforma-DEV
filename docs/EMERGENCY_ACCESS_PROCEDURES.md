@@ -14,7 +14,7 @@ When the standard authentication system fails, emergency access procedures ensur
 ### Credentials (CONFIDENTIAL)
 
 ```text
-Email: admin@manitospintadas.cl
+Email: admin@plataforma-astral.com
 Password: admin123
 ```
 
@@ -34,7 +34,7 @@ Located in `src/lib/auth-prisma.ts` at lines 27-40 and 82-94:
 ```typescript
 // EMERGENCY BYPASS: Allow admin access when database is unavailable
 if (
-  email.toLowerCase() === "admin@manitospintadas.cl" &&
+  email.toLowerCase() === "admin@plataforma-astral.com" &&
   password === "admin123"
 ) {
   logger.warn("EMERGENCY BYPASS: Admin authentication without database", {
@@ -42,7 +42,7 @@ if (
   });
   return {
     id: "emergency-admin-id",
-    email: "admin@manitospintadas.cl",
+    email: "admin@plataforma-astral.com",
     name: "Emergency Admin",
     role: "ADMIN",
   };
@@ -132,7 +132,7 @@ Authorization: [Manager name if available]
 
 1. Navigate to <https://school.aramac.dev/login>
 2. Enter emergency credentials:
-   - Email: <admin@manitospintadas.cl>
+   - Email: <admin@plataforma-astral.com>
    - Password: admin123
 3. Verify successful login with admin privileges
 

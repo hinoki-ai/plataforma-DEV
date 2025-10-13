@@ -7,15 +7,15 @@ import { PageTransition } from "@/components/ui/page-transition";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Calendario Escolar 2025 - Administración | Manitos Pintadas",
+  title: "Calendario Escolar 2025 - Administración | Plataforma Astral",
   description:
-    "Calendario escolar oficial 2025 para administradores de Escuela Especial de Lenguaje Manitos Pintadas. Gestión completa de fechas importantes, eventos académicos y actividades preescolares.",
+    "Sistema profesional de gestión de calendario escolar. Administra fechas importantes, eventos académicos y actividades institucionales desde una plataforma integral.",
   keywords:
-    "calendario escolar, administración, educación preescolar, Chile, 2025, NT1, NT2, gestión, Manitos Pintadas",
+    "calendario escolar, administración, gestión educativa, Chile, 2025, plataforma SaaS, Astral",
   openGraph: {
-    title: "Calendario Escolar 2025 - Administración | Manitos Pintadas",
+    title: "Calendario Escolar 2025 - Administración | Plataforma Astral",
     description:
-      "Gestiona el calendario escolar completo del año 2025 desde el panel administrativo con funciones avanzadas.",
+      "Sistema profesional de gestión de calendario escolar con funciones avanzadas de administración.",
     type: "website",
   },
 };

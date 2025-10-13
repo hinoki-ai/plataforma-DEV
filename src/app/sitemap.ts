@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://manitos-pintadas.vercel.app";
+  const baseUrl = "https://plataforma.aramac.dev";
   const currentDate = new Date();
 
   return [

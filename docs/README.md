@@ -60,7 +60,7 @@ This documentation suite provides comprehensive information about the authentica
    ```
 
 2. **Test Emergency Access** (1 minute)
-   - Email: `admin@manitospintadas.cl`
+   - Email: `admin@plataforma-astral.com`
    - Password: `admin123`
    - If this works → Follow [TROUBLESHOOTING_AUTH.md](./TROUBLESHOOTING_AUTH.md)
    - If this fails → Follow [EMERGENCY_ACCESS_PROCEDURES.md](./EMERGENCY_ACCESS_PROCEDURES.md)
@@ -92,9 +92,9 @@ This documentation suite provides comprehensive information about the authentica
 ### Test Credentials
 
 ```bash
-ADMIN: admin@manitospintadas.cl / admin123
-PROFESOR: profesor@manitospintadas.cl / profesor123
-PARENT: parent@manitospintadas.cl / parent123
+ADMIN: admin@plataforma-astral.com / admin123
+PROFESOR: profesor@plataforma-astral.com / profesor123
+PARENT: parent@plataforma-astral.com / parent123
 ```
 
 ### Critical Environment Variables

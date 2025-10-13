@@ -40,7 +40,7 @@ export function getReservationMessage(reservation: {
 
   return {
     phone: reservation.guardianPhone,
-    message: `📅 *Reserva Confirmada*\n\nHola ${reservation.guardianName},\n\n✅ Tu reunión ha sido confirmada:\n\n📍 *Escuela:* Manitos Pintadas\n📅 *Fecha:* ${date}\n⏰ *Hora:* ${time}\n👨‍👩‍👧‍👦 *Estudiante:* ${reservation.studentName}\n\nPor favor llega 10 minutos antes.\n\n¡Nos vemos pronto!`,
+    message: `📅 *Reserva Confirmada*\n\nHola ${reservation.guardianName},\n\n✅ Tu reunión ha sido confirmada:\n\n📍 *Lugar:* Institución Educativa\n📅 *Fecha:* ${date}\n⏰ *Hora:* ${time}\n👨‍👩‍👧‍👦 *Estudiante:* ${reservation.studentName}\n\nPor favor llega 10 minutos antes.\n\n¡Nos vemos pronto!`,
   };
 }
 
@@ -59,7 +59,7 @@ export function getMeetingReminder(meeting: {
 
   return {
     phone: meeting.phone,
-    message: `⏰ *Recordatorio de Reunión*\n\n📅 *Fecha:* ${date}\n⏰ *Hora:* ${time}\n📍 *Lugar:* ${meeting.location || "Escuela Manitos Pintadas"}\n\n*Título:* ${meeting.title}\n\n¡No olvides asistir!`,
+    message: `⏰ *Recordatorio de Reunión*\n\n📅 *Fecha:* ${date}\n⏰ *Hora:* ${time}\n📍 *Lugar:* ${meeting.location || "Institución Educativa"}\n\n*Título:* ${meeting.title}\n\n¡No olvides asistir!`,
   };
 }
 
@@ -198,11 +198,11 @@ export function isWhatsAppAvailable(): boolean {
  */
 export const whatsAppTemplates = {
   welcome: (name: string) =>
-    `🎉 *¡Bienvenido a Manitos Pintadas!*\n\nHola ${name},\n\nGracias por unirte al Centro de Padres. Aquí encontrarás:\n\n✅ Información importante\n✅ Eventos y reuniones\n✅ Comunicación directa\n\n¡Estamos aquí para apoyarte!`,
+    `🎉 *¡Bienvenido a Plataforma Institucional Astral!*\n\nHola ${name},\n\nGracias por unirte a nuestra comunidad educativa. Aquí encontrarás:\n\n✅ Información importante\n✅ Eventos y reuniones\n✅ Comunicación directa\n\n¡Estamos aquí para apoyarte!`,
 
   birthday: (name: string) =>
-    `🎂 *¡Feliz Cumpleaños!*\n\nHola ${name},\n\nDesde la Escuela Especial de Lenguaje Manitos Pintadas te deseamos un feliz cumpleaños.\n\n🎉 Que este día esté lleno de alegría y bendiciones.\n\n¡Felicidades!`,
+    `🎂 *¡Feliz Cumpleaños!*\n\nHola ${name},\n\nDesde Plataforma Institucional Astral te deseamos un feliz cumpleaños.\n\n🎉 Que este día esté lleno de alegría y bendiciones.\n\n¡Felicidades!`,
 
   emergency: (message: string) =>
-    `🚨 *COMUNICADO URGENTE*\n\n${message}\n\nPor favor, contacta a la escuela lo antes posible.\n\n📞 Teléfono: +569XXXXXXXX\n📧 Email: contacto@manitospintadas.cl`,
+    `🚨 *COMUNICADO URGENTE*\n\n${message}\n\nPor favor, contacta a la institución lo antes posible.\n\n📞 Teléfono: +569XXXXXXXX\n📧 Email: contacto@plataforma-astral.com`,
 };

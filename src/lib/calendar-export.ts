@@ -25,7 +25,7 @@ function generateICS(event: CalendarEvent): string {
     );
   };
 
-  const uid = `${Date.now()}@manitospintadas.cl`;
+  const uid = `${Date.now()}@plataforma-astral.com`;
   const now = new Date();
   const created = formatDate(now);
   const start = formatDate(event.startDate);
@@ -34,7 +34,7 @@ function generateICS(event: CalendarEvent): string {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Escuela Manitos Pintadas//Sistema de Reservas//ES",
+    "PRODID:-//Plataforma Institucional Astral//Sistema de Gestión//ES",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
@@ -85,8 +85,8 @@ export function generateReservationEvent(reservation: any) {
     description: `Reunión programada con ${reservation.guardianName} para ${reservation.studentName}. Tipo: ${reservation.meetingType}. Contacto: ${reservation.guardianEmail} - ${reservation.guardianPhone}`,
     startDate,
     endDate,
-    location: "Escuela Especial de Lenguaje Manitos Pintadas",
-    organizer: "manitospintadas.cl",
+    location: "Institución Educativa",
+    organizer: "plataforma.aramac.dev",
   };
 }
 
@@ -104,8 +104,8 @@ export function generateMeetingEvent(meeting: any) {
     startDate,
     endDate,
     location:
-      meeting.location || "Escuela Especial de Lenguaje Manitos Pintadas",
-    organizer: "manitospintadas.cl",
+      meeting.location || "Institución Educativa",
+    organizer: "plataforma.aramac.dev",
   };
 }
 
@@ -140,7 +140,7 @@ export function getWhatsAppCalendarUrl(event: CalendarEvent): string {
   const formatTime = (date: Date) =>
     date.toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" });
 
-  const message = `📅 ${event.title}\n\n📍 ${event.location || "Escuela Manitos Pintadas"}\n📅 ${formatDate(event.startDate)}\n⏰ ${formatTime(event.startDate)}\n\n${event.description}`;
+  const message = `📅 ${event.title}\n\n📍 ${event.location || "Institución Educativa"}\n📅 ${formatDate(event.startDate)}\n⏰ ${formatTime(event.startDate)}\n\n${event.description}`;
 
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
@@ -160,7 +160,7 @@ export const calendarButtons = {
       action: () =>
         downloadICS(
           generateReservationEvent(reservation),
-          "reunion-manitos-pintadas.ics",
+          "reunion-plataforma-astral.ics",
         ),
       icon: "📥",
     },

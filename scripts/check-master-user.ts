@@ -18,7 +18,7 @@ async function checkMasterUser() {
 
     const client = new ConvexHttpClient(deploymentUrl);
     const masterUser = await client.query(api.users.getUserByEmail, {
-      email: "master@manitospintadas.cl",
+      email: "master@plataforma-astral.com",
     });
 
     if (!masterUser) {
@@ -49,7 +49,7 @@ async function checkMasterUser() {
     }
 
     console.log("🎉 Master user is properly configured!");
-    console.log("💡 Login credentials: master@manitospintadas.cl / master123");
+    console.log("💡 Login credentials: master@plataforma-astral.com / master123");
 
     return true;
   } catch (error) {

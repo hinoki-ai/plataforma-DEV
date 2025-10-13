@@ -24,7 +24,7 @@ curl -s https://school.aramac.dev/api/auth/session
 
 Try emergency admin credentials:
 
-- **Email**: <admin@manitospintadas.cl>
+- **Email**: <admin@plataforma-astral.com>
 - **Password**: admin123
 
 If this works → Issue is with regular authentication  
@@ -59,7 +59,7 @@ npx vercel env ls
 
    ```bash
    # Should be: https://school.aramac.dev
-   # NOT: https://manitos-pintadas.vercel.app (old domain)
+   # NOT: https://manitos-pintadas.vercel.app (old domain - now plataforma.aramac.dev)
    ```
 
 #### Issue #1: Solution
@@ -193,7 +193,7 @@ client.query('users.getUserCountByRole', {}).then(() => {
 
    ```typescript
    // Should exist at lines 27-40 and 82-94
-   if (email.toLowerCase() === 'admin@manitospintadas.cl' && password === 'admin123')
+   if (email.toLowerCase() === 'admin@plataforma-astral.com' && password === 'admin123')
    ```
 
 2. Check for syntax errors or modifications
@@ -225,9 +225,9 @@ npx prisma studio
 
 # Check user records exist:
 # SELECT * FROM "User" WHERE email IN (
-#   'admin@manitospintadas.cl',
-#   'profesor@manitospintadas.cl',
-#   'parent@manitospintadas.cl'
+#   'admin@plataforma-astral.com',
+#   'profesor@plataforma-astral.com',
+#   'parent@plataforma-astral.com'
 # );
 ```
 
@@ -312,9 +312,9 @@ curl -vI https://school.aramac.dev 2>&1 | grep -E "(certificate|SSL|TLS)"
    Use Convex dashboard to create test users
 
    # Test each user type
-   # ADMIN: admin@manitospintadas.cl / admin123
-   # PROFESOR: profesor@manitospintadas.cl / profesor123
-   # PARENT: parent@manitospintadas.cl / parent123
+   # ADMIN: admin@plataforma-astral.com / admin123
+   # PROFESOR: profesor@plataforma-astral.com / profesor123
+   # PARENT: parent@plataforma-astral.com / parent123
    ```
 
 ### Communication Template

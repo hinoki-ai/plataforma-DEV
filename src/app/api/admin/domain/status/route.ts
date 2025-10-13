@@ -35,7 +35,7 @@ export async function GET() {
 
     // For demo purposes, using a mock domain
     // In production, this would be configured in environment or database
-    const domain = "escuela-manitos-pintadas.cl";
+    const domain = "plataforma.aramac.dev";
 
     // Check DNS records
     const dnsRecords = await checkDNSRecords(domain);

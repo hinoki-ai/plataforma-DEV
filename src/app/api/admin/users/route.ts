@@ -40,6 +40,7 @@ const createUserSchema = z.object({
   password: passwordSchema,
   role: z.enum(["ADMIN", "PROFESOR", "PARENT"]),
   isActive: z.boolean().optional().default(true),
+  institutionId: z.string().optional(),
 });
 
 // const updateUserSchema = z.object({
@@ -209,7 +210,7 @@ export async function POST(request: NextRequest) {
               currentAdminsCreated: adminCount,
               maxAllowed: 1,
               contactInfo: {
-                email: "support@manitospintadas.com",
+                email: "support@plataforma-astral.com",
                 message: "Solicita ampliación de slots de administrador",
               },
             },
@@ -227,6 +228,7 @@ export async function POST(request: NextRequest) {
       email: validatedData.email,
       password: hashedPassword,
       role: validatedData.role,
+      institutionId: validatedData.institutionId as any, // Type assertion for Convex ID
       createdByAdmin: session.user.id, // Track which admin created this user
     });
 

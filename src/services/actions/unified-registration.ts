@@ -59,6 +59,7 @@ export async function registerParentComplete(data: {
   comuna: string;
   emergencyContact: string;
   emergencyPhone: string;
+  institutionId?: string;
   password?: string;
   provider?: string;
   isOAuthUser?: boolean;
@@ -86,6 +87,7 @@ export async function registerParentComplete(data: {
       emergencyPhone: data.emergencyPhone,
       childName: data.childName,
       childGrade: data.childGrade,
+      institutionId: data.institutionId as any, // Type assertion for Convex ID
       provider: data.provider,
       isOAuthUser: data.isOAuthUser ?? false,
     });

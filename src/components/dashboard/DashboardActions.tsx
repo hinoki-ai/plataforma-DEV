@@ -22,6 +22,7 @@ import {
   UserPlus,
   Clock,
   MessageSquare,
+  Vote,
 } from "lucide-react";
 
 export type DashboardActionsVariant =
@@ -196,17 +197,17 @@ export function DashboardActions({
         return [
           ...baseActions,
           {
-            label: "Ver Calendario",
-            href: "/calendario-escolar",
-            icon: Calendar,
-            description: "Consultar eventos públicos",
+            label: "Iniciar Sesión",
+            href: "/login",
+            icon: Users,
+            description: "Accede a tu institución",
             primary: true,
           },
           {
-            label: "Conocer Equipo",
-            href: "/equipo-multidisciplinario",
-            icon: Users,
-            description: "Nuestro equipo multidisciplinario",
+            label: "Centro Consejo",
+            href: "/centro-consejo",
+            icon: Vote,
+            description: "Información del Centro de Padres",
           },
         ];
 

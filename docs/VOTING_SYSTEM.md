@@ -198,7 +198,7 @@ NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-secret-key"
 
 # Roles de usuario
-DEFAULT_ADMIN_EMAIL="admin@manitospintadas.cl"
+DEFAULT_ADMIN_EMAIL="admin@plataforma-astral.com"
 DEFAULT_ADMIN_PASSWORD="admin123"
 ```
 
@@ -300,7 +300,7 @@ npm run test
 
 ### Contacto
 
-- **Email**: <soporte@manitospintadas.cl>
+- **Email**: <soporte@plataforma-astral.com>
 - **Teléfono**: (45) 278 3486
 - **Horarios**: Lunes a Viernes 8:00 - 17:00
 

@@ -22,27 +22,8 @@ export function resolveRoute(
   requestedPath: string,
   session: { user: { role: ExtendedUserRole } } | null,
 ): RouteResolution {
-  // Handle calendario-escolar route
-  if (requestedPath === "/calendario-escolar") {
-    if (!session) {
-      return {
-        shouldRedirect: true,
-        redirectPath:
-          "/login?callbackUrl=" + encodeURIComponent("/calendario-escolar"),
-        reason: "unauthenticated",
-      };
-    }
-
-    // Route authenticated users to their appropriate calendar
-    const rolePath = getRoleBasedCalendarPath(session.user.role);
-    return {
-      shouldRedirect: true,
-      redirectPath: rolePath,
-      reason: "role-based",
-    };
-  }
-
-  // No redirection needed
+  // No special route handling needed - all routes are institution-specific
+  // and handled by middleware
   return {
     shouldRedirect: false,
     redirectPath: "",
@@ -50,21 +31,7 @@ export function resolveRoute(
   };
 }
 
-/**
- * Get the appropriate calendar path based on user role
- */
-function getRoleBasedCalendarPath(role: ExtendedUserRole): string {
-  switch (role) {
-    case "ADMIN":
-      return "/admin/calendario-escolar";
-    case "PROFESOR":
-      return "/profesor/calendario-escolar";
-    case "PARENT":
-      return "/parent/calendario-escolar";
-    default:
-      return "/calendario-escolar";
-  }
-}
+
 
 /**
  * Get appropriate dashboard path based on role

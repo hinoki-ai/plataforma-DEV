@@ -53,6 +53,7 @@ export async function POST(request: Request) {
       comuna: formData.get("comuna") as string,
       emergencyContact: formData.get("emergencyContact") as string,
       emergencyPhone: formData.get("emergencyPhone") as string,
+      institutionId: formData.get("institutionId") as string,
       password: formData.get("password") as string | undefined,
       provider: formData.get("provider") as string | undefined,
       isOAuthUser: formData.get("provider") ? true : false,
@@ -61,7 +62,8 @@ export async function POST(request: Request) {
     // Validate required fields
     const requiredFields = [
       "fullName", "email", "phone", "rut", "childName", "childGrade",
-      "relationship", "address", "region", "comuna", "emergencyContact", "emergencyPhone"
+      "relationship", "address", "region", "comuna", "emergencyContact", "emergencyPhone",
+      "institutionId"
     ];
     
     for (const field of requiredFields) {

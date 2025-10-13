@@ -10,15 +10,15 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Calendario Escolar | Manitos Pintadas",
+  title: "Calendario Escolar | Plataforma Astral",
   description:
-    "Calendario escolar oficial para Escuela Especial de Lenguaje Manitos Pintadas. Fechas importantes, eventos académicos y actividades preescolares.",
+    "Sistema de calendario institucional con fechas importantes, eventos académicos y actividades para toda la comunidad educativa.",
   keywords:
-    "calendario escolar, educación preescolar, Chile, NT1, NT2, Manitos Pintadas",
+    "calendario escolar, gestión educativa, plataforma institucional, eventos académicos",
   openGraph: {
-    title: "Calendario Escolar | Manitos Pintadas",
+    title: "Calendario Escolar | Plataforma Astral",
     description:
-      "Descubre las fechas importantes del año escolar para nuestra escuela especial de lenguaje.",
+      "Accede al calendario institucional con fechas importantes y eventos académicos.",
     type: "website",
   },
 };

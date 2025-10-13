@@ -929,7 +929,7 @@ export default function CentroConsejoPage() {
               <div className="space-y-2 text-gray-300">
                 <p>📍 Anibal Pinto Nº 160, Los Sauces, Chile</p>
                 <p>📞 (45) 278 3486</p>
-                <p>✉️ centrodepadres@manitospintadas.cl</p>
+                <p>✉️ centrodepadres@plataforma-astral.com</p>
               </div>
             </div>
 
@@ -994,7 +994,7 @@ export default function CentroConsejoPage() {
                 className="text-gray-300 hover:text-white transition duration-200 underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
                 aria-label={t("centro_consejo.footer.home_link_aria", "common")}
               >
-                Manitos Pintadas
+                Plataforma Institucional Astral
               </Link>
             </p>
           </div>

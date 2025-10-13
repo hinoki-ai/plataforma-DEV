@@ -206,7 +206,7 @@ export class Logger {
         },
         body: JSON.stringify({
           ...logData,
-          service: "manitos-pintadas",
+          service: "plataforma-astral",
           environment: process.env.NODE_ENV,
         }),
       });

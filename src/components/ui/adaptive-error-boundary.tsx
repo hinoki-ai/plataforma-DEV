@@ -262,10 +262,10 @@ export class AdaptiveErrorBoundary extends Component<Props, State> {
                 <p className="text-center text-sm text-gray-400 pt-4 border-t border-gray-700/50">
                   Si necesitas ayuda, puedes contactarnos en{" "}
                   <a
-                    href="mailto:contacto@manitospintadas.cl"
+                    href="mailto:contacto@plataforma-astral.com"
                     className="text-white hover:underline"
                   >
-                    contacto@manitospintadas.cl
+                    contacto@plataforma-astral.com
                   </a>
                 </p>
               )}

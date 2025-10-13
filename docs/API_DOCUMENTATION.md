@@ -616,6 +616,6 @@ npm start
 
 For API support and questions:
 
-- Email: <support@manitospintadas.com>
-- Documentation: <https://docs.manitospintadas.com>
-- API Status: <https://status.manitospintadas.com>
+- Email: <support@plataforma-astral.com>
+- Documentation: <https://docs.plataforma-astral.com>
+- API Status: <https://status.plataforma-astral.com>

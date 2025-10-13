@@ -23,6 +23,7 @@ interface FormData {
   emergencyContact: string;
   emergencyPhone: string;
   role: "padre" | "madre" | "apoderado" | "otro";
+  institutionId: string;
 }
 
 const grades = [
@@ -451,7 +452,7 @@ const stepTitles = [
 
 const stepDescriptions = [
   "Tus datos básicos de contacto",
-  "Datos de tu hijo/a que asiste a Manitos Pintadas",
+  "Datos de tu hijo/a en la institución educativa",
   "Tu dirección y ubicación",
   "Persona a contactar en caso de emergencia",
 ];
@@ -472,12 +473,14 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     emergencyContact: "",
     emergencyPhone: "",
     role: "padre",
+    institutionId: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [comunas, setComunas] = useState<string[]>([]);
+  const [institutions, setInstitutions] = useState<Array<{ _id: string; name: string }>>([]);
   const [isGoogleConfigured, setIsGoogleConfigured] = useState(false);
   const router = useRouter();
 
@@ -513,6 +516,20 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
       .catch(() => setIsGoogleConfigured(false));
   }, []);
 
+  // Fetch institutions
+  useEffect(() => {
+    fetch("/api/institutions")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.institutions) {
+          setInstitutions(data.institutions);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching institutions:", error);
+      });
+  }, []);
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
@@ -537,6 +554,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           if (!formData.phone.trim())
             newErrors.phone = "El teléfono es requerido";
           if (!formData.rut.trim()) newErrors.rut = "El RUT es requerido";
+          if (!formData.institutionId)
+            newErrors.institutionId = "La institución es requerida";
           break;
 
         case 2:
@@ -759,6 +778,27 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     {errors.rut && <ErrorMessage message={errors.rut} />}
                   </LabelInputContainer>
                 </div>
+
+                <LabelInputContainer>
+                  <Label htmlFor="institutionId">Institución Educativa *</Label>
+                  <Select
+                    id="institutionId"
+                    name="institutionId"
+                    value={formData.institutionId}
+                    onChange={handleChange}
+                    error={errors.institutionId}
+                  >
+                    <option value="">Selecciona tu institución</option>
+                    {institutions.map((institution) => (
+                      <option key={institution._id} value={institution._id}>
+                        {institution.name}
+                      </option>
+                    ))}
+                  </Select>
+                  {errors.institutionId && (
+                    <ErrorMessage message={errors.institutionId} />
+                  )}
+                </LabelInputContainer>
               </div>
             </div>
           )}

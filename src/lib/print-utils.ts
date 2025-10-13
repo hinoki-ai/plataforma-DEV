@@ -1,7 +1,14 @@
 /**
  * Print utilities for meeting reports and documents
  * Quick wins for better print experience
+ * Configurable for multi-tenant institutional use
  */
+
+import { APP_NAME } from "./constants";
+
+// Institution name can be configured per tenant
+const INSTITUTION_NAME = process.env.NEXT_PUBLIC_INSTITUTION_NAME || "Institución Educativa";
+const PLATFORM_NAME = APP_NAME;
 
 /**
  * Trigger browser print dialog with custom options
@@ -18,7 +25,7 @@ export function printElement(elementId: string) {
     <html>
       <head>
         <meta charset="UTF-8">
-        <title>Reporte - Manitos Pintadas</title>
+        <title>Reporte - ${PLATFORM_NAME}</title>
         <style>
           body { 
             font-family: Arial, sans-serif; 
@@ -106,7 +113,7 @@ export function generateReservationReport(reservations: any[]) {
 
   return `
     <div class="header">
-      <div class="school-name">Escuela Especial de Lenguaje Manitos Pintadas</div>
+      <div class="school-name">${INSTITUTION_NAME}</div>
       <div class="report-title">Reporte de Reservas</div>
       <div class="date">Generado: ${reportDate}</div>
     </div>
@@ -149,7 +156,7 @@ export function generateReservationReport(reservations: any[]) {
     </div>
     
     <div class="footer">
-      Escuela Especial de Lenguaje Manitos Pintadas - Centro de Padres y Consejo Escolar
+      ${INSTITUTION_NAME} - Powered by ${PLATFORM_NAME}
     </div>
   `;
 }
@@ -162,7 +169,7 @@ export function generateMeetingDocument(meeting: any) {
 
   return `
     <div class="header">
-      <div class="school-name">Escuela Especial de Lenguaje Manitos Pintadas</div>
+      <div class="school-name">${INSTITUTION_NAME}</div>
       <div class="report-title">Acta de Reunión</div>
       <div class="date">Fecha: ${meetingDate}</div>
     </div>
@@ -194,7 +201,7 @@ export function generateMeetingDocument(meeting: any) {
     </div>
     
     <div class="footer">
-      Generado automáticamente por el Sistema de Gestión Escolar Manitos Pintadas
+      Generado automáticamente por ${PLATFORM_NAME}
     </div>
   `;
 }

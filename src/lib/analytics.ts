@@ -19,7 +19,7 @@ interface AnalyticsData {
 
 class SimpleAnalytics {
   private data: AnalyticsData;
-  private storageKey = "manitos-analytics";
+  private storageKey = "plataforma-astral-analytics";
 
   constructor() {
     this.data = this.loadData();
