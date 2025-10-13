@@ -72,21 +72,46 @@ export default function LoginPage() {
     if (authState?.success && !isLoading) {
       setIsLoading(true);
       
-      // Force session update before redirect
-      update()
-        .then(() => {
-          // Wait for session to be fully established (200ms should be enough)
-          return new Promise(resolve => setTimeout(resolve, 200));
-        })
-        .then(() => {
-          // Use router.push instead of window.location for smoother navigation
+      // Multi-step session establishment for production reliability
+      const establishSession = async () => {
+        try {
+          // Step 1: Update session
+          await update();
+          
+          // Step 2: Wait for cookie to be written (production needs more time)
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Step 3: Verify session exists with retry
+          let retries = 3;
+          let sessionEstablished = false;
+          
+          while (retries > 0 && !sessionEstablished) {
+            const response = await fetch('/api/auth/session', { 
+              cache: 'no-store',
+              credentials: 'include'
+            });
+            const sessionData = await response.json();
+            
+            if (sessionData?.user?.role) {
+              sessionEstablished = true;
+              console.log('✅ Session established for role:', sessionData.user.role);
+            } else {
+              console.log('⏳ Session not ready, retrying...', retries - 1);
+              await new Promise(resolve => setTimeout(resolve, 300));
+              retries--;
+            }
+          }
+          
+          // Step 4: Navigate after session is confirmed
           router.push("/auth-success");
-        })
-        .catch((error) => {
-          console.error("Session update failed:", error);
-          // Fallback to direct navigation if update fails
+        } catch (error) {
+          console.error("Session establishment failed:", error);
+          // Fallback: navigate anyway, auth-success will handle retries
           router.push("/auth-success");
-        });
+        }
+      };
+      
+      establishSession();
     }
   }, [authState, isLoading, update, router]);
 
