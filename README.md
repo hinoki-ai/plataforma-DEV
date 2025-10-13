@@ -178,12 +178,13 @@ npm run test:a11y
 
 ## 🚢 Despliegue
 
-### 📚 Documentación Completa
+### 📚 Complete Documentation
 
-**IMPORTANTE**: Lee la documentación completa antes de cualquier despliegue:
+**IMPORTANT**: Read the complete documentation before any deployment:
 
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Guía completa de despliegue con troubleshooting
-- **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** - Checklist rápido de despliegue
+- **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Complete documentation index
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete deployment guide with troubleshooting
+- **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** - Quick deployment checklist
 
 ### Desarrollo Local
 
@@ -254,31 +255,38 @@ CLOUDINARY_URL="cloudinary://KEY:SECRET@CLOUD_NAME"
 
 ## 📚 Documentación Completa
 
-### Documentos Disponibles
+### Core Documentation
 
-- **[PROJECT_DOCUMENTATION.md](./PROJECT_DOCUMENTATION.md)** - Documentación técnica completa
-- **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - Documentación de API y Server Actions
-- **[DATABASE.md](./DATABASE.md)** - Esquema detallado de base de datos
-- **[TESTING.md](./TESTING.md)** - Estrategia de testing
+- **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Complete documentation index
+- **[START_HERE.md](./START_HERE.md)** - First-time setup guide
+- **[CLAUDE.md](./CLAUDE.md)** - AI assistant development guide
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment guide with troubleshooting
+
+### Technical Documentation (`docs/` directory)
+
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture
+- **[docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)** - API and Server Actions
+- **[docs/AUTHENTICATION_SYSTEM_DOCS.md](./docs/AUTHENTICATION_SYSTEM_DOCS.md)** - Authentication system
+- **[docs/ROLE_SYSTEM.md](./docs/ROLE_SYSTEM.md)** - Role-based access control
+- **[docs/VOTING_SYSTEM.md](./docs/VOTING_SYSTEM.md)** - Centro Consejo voting
 
 ### Comandos Rápidos
 
 ```bash
 # Desarrollo
-npm run dev                    # Iniciar servidor
-npm run db:studio             # Base de datos GUI
-npm run format                # Formatear código
+npm run dev                    # Iniciar servidor Next.js
+npx convex dev                 # Iniciar backend Convex
+npm run format                 # Formatear código
 
 # Testing
-npm run test                  # Tests unitarios
-npm run test:e2e             # Tests E2E
-npm run test:all             # Todos los tests
+npm run test:unit              # Tests unitarios
+npm run test:e2e               # Tests E2E
+npm run test:all               # Todos los tests
 
-# Base de datos
-npm run db:generate          # Generar cliente Prisma
-npm run db:push              # Aplicar esquema
-npm run db:seed              # Datos de prueba
-npx convex dashboard         # Manage Convex data
+# Base de datos Convex
+npx convex dashboard           # Dashboard web de Convex
+npx convex deploy              # Desplegar a producción
+npx convex logs                # Ver logs de Convex
 ```
 
 ## 🔍 Características por Rol

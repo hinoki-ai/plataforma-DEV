@@ -113,7 +113,7 @@ const nextConfig: NextConfig = {
                     "style-src 'self' 'unsafe-inline' localhost:* *.local",
                     "img-src 'self' data: blob: localhost:* *.local https://res.cloudinary.com https://*.cloudinary.com",
                     "font-src 'self' data: localhost:* *.local",
-                    "connect-src 'self' ws: wss: localhost:* *.local https://api.cloudinary.com",
+                    "connect-src 'self' ws: wss: localhost:* *.local https://api.cloudinary.com https://industrious-manatee-7.convex.cloud",
                     "media-src 'self' data: blob: localhost:* *.local https://res.cloudinary.com",
                     "object-src 'none'",
                     "base-uri 'self'",
@@ -125,7 +125,7 @@ const nextConfig: NextConfig = {
                     "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
                     "img-src 'self' data: https://res.cloudinary.com https://*.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl https://facebook.com https://*.facebook.com https://twitter.com https://*.twitter.com https://instagram.com https://*.instagram.com https://youtube.com https://*.youtube.com",
                     "font-src 'self' data:",
-                    "connect-src 'self' https://api.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl",
+                    "connect-src 'self' https://api.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl https://industrious-manatee-7.convex.cloud",
                     "media-src 'self' https://res.cloudinary.com",
                     "object-src 'none'",
                     "base-uri 'self'",
