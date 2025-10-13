@@ -51,11 +51,12 @@ export default async function middleware(req: NextRequest) {
     const { nextUrl } = req;
     const pathname = nextUrl.pathname;
 
-    // Skip middleware for static assets and system paths
+    // Skip middleware for static assets, system paths, and auth transition pages
     if (
       pathname.includes("_next/static") ||
       pathname.includes("_next/image") ||
       pathname.includes("favicon") ||
+      pathname.startsWith("/auth-success") ||
       pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js)$/)
     ) {
       return NextResponse.next();
@@ -91,7 +92,8 @@ export default async function middleware(req: NextRequest) {
     if (requiresAuth && !isLoggedIn) {
       console.log(`🔒 Auth required for ${pathname} but user not logged in - redirecting to login`);
       const loginUrl = new URL("/login", nextUrl);
-      loginUrl.searchParams.set("callbackUrl", nextUrl.toString());
+      // Preserve the original URL for redirect after login
+      loginUrl.searchParams.set("callbackUrl", pathname + nextUrl.search);
       const response = NextResponse.redirect(loginUrl);
       return addSecurityHeaders(response);
     }
@@ -129,8 +131,16 @@ export default async function middleware(req: NextRequest) {
   } catch (error) {
     console.error("🚨 Middleware error:", error);
 
-    // Fail secure - redirect to login on error
-    const response = NextResponse.redirect(new URL("/login", req.nextUrl));
+    // Fail secure - redirect to login on error, preserving callback URL
+    const loginUrl = new URL("/login", req.nextUrl);
+    const pathname = req.nextUrl.pathname;
+    
+    // Only add callback if not already on auth pages
+    if (!pathname.startsWith("/login") && !pathname.startsWith("/registro")) {
+      loginUrl.searchParams.set("callbackUrl", pathname + req.nextUrl.search);
+    }
+    
+    const response = NextResponse.redirect(loginUrl);
     return addSecurityHeaders(response);
   }
 }
