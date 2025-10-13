@@ -84,13 +84,16 @@ export default function LoginPage() {
     }
   }, [status, session?.user?.role, session?.user?.needsRegistration]);
 
-  // Handle authentication state changes - simplified since server handles redirects
+  // Handle authentication state changes - redirect to auth-success for proper session handling
   useEffect(() => {
     if (status === "loading") {
       setIsLoading(true);
     } else if (status === "authenticated") {
-      setIsLoading(false);
-      // Server action handles redirect to /auth-success
+      // Redirect to auth-success page which will handle role-based routing
+      // This prevents redirect loops by ensuring session is fully set before middleware checks
+      if (typeof window !== "undefined") {
+        window.location.href = "/auth-success";
+      }
     } else {
       setIsLoading(false);
     }
