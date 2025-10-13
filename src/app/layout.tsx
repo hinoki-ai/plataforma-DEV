@@ -38,11 +38,11 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.json",
-  applicationName: "Plataforma SaaS Chile",
+  applicationName: "Plataforma Astral",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Plataforma SaaS Chile - Tecnología Educativa Líder",
+    title: "Plataforma Astral",
   },
   other: {
     "msapplication-TileColor": "#1e40af",
