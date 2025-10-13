@@ -222,18 +222,36 @@ const DivineParsingOracleProvider: React.FC<{
   initialNamespaces?: string[];
   initialLanguage?: Language;
 }> = ({ children, initialNamespaces = ["common"], initialLanguage }) => {
+  // Detect initial language synchronously to prevent hydration mismatch
+  const getInitialLanguage = (): Language => {
+    // If initialLanguage is provided, use it
+    if (initialLanguage) return initialLanguage;
+
+    // On server, always use default
+    if (typeof window === "undefined") return "es";
+
+    // Check stored preference first
+    const stored = getStoredLanguage();
+    if (stored) return stored;
+
+    // Then check browser language
+    return detectBrowserLanguage();
+  };
+
+  const initialLang = getInitialLanguage();
+
   // Core state - prevent hydration mismatch by using consistent initial values
-  const [language, setLanguageState] = useState<Language>("es");
+  const [language, setLanguageState] = useState<Language>(initialLang);
   const [isLoading, setIsLoading] = useState(false); // Start as false to prevent hydration issues
   const [error, setError] = useState<string | null>(null);
   const [loadedNamespaces, setLoadedNamespaces] =
     useState<string[]>(initialNamespaces);
   const [loadedTranslations, setLoadedTranslations] = useState<LoadedNamespace>(
     () => {
-      // Pre-load initial translations synchronously to prevent hydration mismatch
+      // Pre-load initial translations synchronously with detected language to prevent hydration mismatch
       const initialTranslations: LoadedNamespace = {};
       for (const namespace of initialNamespaces) {
-        const key = `es-${namespace}`; // Use default language
+        const key = `${initialLang}-${namespace}`;
         const translations = translationRegistry[key];
         if (translations) {
           initialTranslations[namespace] = translations;
@@ -260,26 +278,21 @@ const DivineParsingOracleProvider: React.FC<{
         setError(null);
         setIsLoading(true);
 
-        // Detect language on client only
-        const stored = getStoredLanguage();
-        const detected = stored || detectBrowserLanguage();
+        // Check if we need to update stored language preference
+        const currentStored = getStoredLanguage();
+        if (currentStored !== language) {
+          setStoredLanguage(language);
+        }
 
-        // Only update if different from initial state to prevent unnecessary re-renders
-        if (detected !== "es") {
-          setLanguageState(detected);
-          setStoredLanguage(detected);
-
-          // Reload initial namespaces with detected language if different
+        // If language changed from initial detection, reload translations
+        if (language !== initialLang) {
           if (initialNamespaces.length > 0) {
             const newTranslations = await invokeOracles(
-              detected,
+              language,
               initialNamespaces,
             );
             setLoadedTranslations(newTranslations);
           }
-        } else {
-          // If language is still 'es', we're good with the pre-loaded translations
-          setStoredLanguage("es");
         }
       } catch (err) {
         // Log in development only
@@ -296,7 +309,7 @@ const DivineParsingOracleProvider: React.FC<{
     if (typeof window !== "undefined") {
       initializeOracle();
     }
-  }, [initialNamespaces]);
+  }, [initialNamespaces, language, initialLang]);
 
   // Language change handler
   const setLanguage = useCallback(
