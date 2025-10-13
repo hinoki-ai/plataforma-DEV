@@ -2,27 +2,20 @@
 
 **Complete guide to all documentation in this SaaS platform project**
 
+**Last Updated**: October 13, 2025  
+**Status**: ✅ Production ready with full Convex integration
+
 ---
 
 ## 🚀 Getting Started
 
 Start here if you're new to the project:
 
-| Document                             | Purpose                                    | Read Time |
-| ------------------------------------ | ------------------------------------------ | --------- |
-| **[START_HERE.md](./START_HERE.md)** | 👉 **START HERE** - First-time setup guide | 5 min     |
-| **[README.md](./README.md)**         | Project overview and quick reference       | 10 min    |
-| **[.env.example](./.env.example)**   | Environment variables template             | 2 min     |
-
----
-
-## 🔄 Migration Status (Completed)
-
-Historical information about the completed Prisma to Convex migration:
-
-| Document                           | Purpose                                             | Read Time |
-| ---------------------------------- | --------------------------------------------------- | --------- |
-| **[MIGRATION.md](./MIGRATION.md)** | ✅ Completed migration guide (historical reference) | 15 min    |
+| Document | Purpose | Read Time |
+| --- | --- | --- |
+| **[START_HERE.md](./START_HERE.md)** | 👉 **START HERE** - First-time setup guide | 5 min |
+| **[README.md](./README.md)** | Project overview and quick reference | 10 min |
+| **[CLAUDE.md](./CLAUDE.md)** | AI Assistant guide for development | 15 min |
 
 ---
 
@@ -30,11 +23,11 @@ Historical information about the completed Prisma to Convex migration:
 
 Essential documentation for working on the codebase:
 
-| Document                                             | Purpose                                                                        | Audience      |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------ | ------------- |
-| **[CLAUDE.md](./CLAUDE.md)**                         | **AI Assistant Guide** - Complete development patterns, architecture, commands | AI Assistants |
-| **[CONVEX_SETUP_GUIDE.md](./CONVEX_SETUP_GUIDE.md)** | Convex setup and configuration guide                                           | Developers    |
-| **[MIGRATION.md](./MIGRATION.md)**                   | Completed migration documentation (historical reference)                       | Developers    |
+| Document | Purpose | Audience |
+| --- | --- | --- |
+| **[CLAUDE.md](./CLAUDE.md)** | **AI Assistant Guide** - Complete development patterns, architecture, commands | AI Assistants |
+| **[CONVEX_SETUP_GUIDE.md](./CONVEX_SETUP_GUIDE.md)** | Convex setup and configuration guide | Developers |
+| **[MIGRATION.md](./MIGRATION.md)** | Completed Prisma→Convex migration (historical reference) | Developers |
 
 ---
 
@@ -42,13 +35,12 @@ Essential documentation for working on the codebase:
 
 Guides for deploying and managing the application:
 
-| Document                                                   | Purpose                                     | Read Time |
-| ---------------------------------------------------------- | ------------------------------------------- | --------- |
-| **[DEPLOYMENT.md](./DEPLOYMENT.md)**                       | **📋 Complete deployment guide with troubleshooting** | 20 min    |
-| **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)**   | **🚨 Quick deployment checklist & emergency commands** | 2 min     |
-| **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** | Legacy deployment guide (Vercel + Convex)   | 15 min    |
-| **[OPERATIONAL_STATUS.md](./OPERATIONAL_STATUS.md)**       | Current operational status                  | 2 min     |
-| **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)**             | Git branching strategy                      | 3 min     |
+| Document | Purpose | Read Time |
+| --- | --- | --- |
+| **[DEPLOYMENT.md](./DEPLOYMENT.md)** | **📋 Complete deployment guide with troubleshooting** | 20 min |
+| **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** | **🚨 Quick deployment checklist & emergency commands** | 2 min |
+| **[OPERATIONAL_STATUS.md](./OPERATIONAL_STATUS.md)** | Current operational status | 2 min |
+| **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)** | Git branching strategy | 3 min |
 
 ---
 
@@ -69,14 +61,12 @@ Detailed technical documentation organized by topic:
 - **[docs/protected-paths.md](./docs/protected-paths.md)** - List of protected routes
 - **[docs/EMERGENCY_ACCESS_PROCEDURES.md](./docs/EMERGENCY_ACCESS_PROCEDURES.md)** - Emergency access protocols
 
-### Troubleshooting & Incidents
+### Troubleshooting
 
 - **[docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)** - Auth troubleshooting guide
-- **[docs/INCIDENT_REPORT_AUTH_FIX_2025-09-01.md](./docs/INCIDENT_REPORT_AUTH_FIX_2025-09-01.md)** - Auth incident report (Sept 2025)
 
-### Deployment & Environment
+### Environment & Configuration
 
-- **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** - Complete deployment guide (Vercel + Convex)
 - **[docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md)** - Environment configuration guide
 
 ### Features & Functionality
@@ -105,22 +95,20 @@ Refer to `CLAUDE.md` for testing guidelines.
 
 ### "I want to..."
 
-| Goal                                  | Document                            |
-| ------------------------------------- | ----------------------------------- |
-| Set up the project for the first time | START_HERE.md                       |
-| Understand the architecture           | docs/ARCHITECTURE.md                |
-| Deploy to production                  | DEPLOYMENT.md + DEPLOYMENT_CHECKLIST.md |
-| Understand authentication             | docs/AUTHENTICATION_SYSTEM_DOCS.md  |
-| Troubleshoot auth issues              | docs/TROUBLESHOOTING_AUTH.md        |
-| Work on the codebase (AI)             | CLAUDE.md                           |
-| See migration status                  | MIGRATION.md                        |
-| Understand the voting system          | docs/VOTING_SYSTEM.md               |
-| Set up environment variables          | docs/ENVIRONMENT.md                 |
-| Run tests                             | MASTER-TEST-GUIDE.md                |
-| Understand API endpoints              | docs/API_DOCUMENTATION.md           |
-| Learn about role-based access         | docs/ROLE_SYSTEM.md                 |
-| Deploy to production                  | docs/DEPLOYMENT_GUIDE.md            |
-| Emergency access                      | docs/EMERGENCY_ACCESS_PROCEDURES.md |
+| Goal | Document |
+| --- | --- |
+| Set up the project for the first time | START_HERE.md |
+| Understand the architecture | docs/ARCHITECTURE.md |
+| Deploy to production | DEPLOYMENT.md + DEPLOYMENT_CHECKLIST.md |
+| Understand authentication | docs/AUTHENTICATION_SYSTEM_DOCS.md |
+| Troubleshoot auth issues | docs/TROUBLESHOOTING_AUTH.md |
+| Work on the codebase (AI) | CLAUDE.md |
+| See migration status | MIGRATION.md |
+| Understand the voting system | docs/VOTING_SYSTEM.md |
+| Set up environment variables | docs/ENVIRONMENT.md |
+| Understand API endpoints | docs/API_DOCUMENTATION.md |
+| Learn about role-based access | docs/ROLE_SYSTEM.md |
+| Emergency access | docs/EMERGENCY_ACCESS_PROCEDURES.md |
 
 ---
 
@@ -131,7 +119,7 @@ plataforma-astral/
 ├── START_HERE.md                          👈 Start here!
 ├── README.md                              👈 Project overview
 ├── CLAUDE.md                              👈 AI assistant guide
-├── MIGRATION.md                           👈 Migration status
+├── MIGRATION.md                           👈 Migration status (historical)
 ├── DOCUMENTATION_INDEX.md                 👈 You are here
 │
 ├── DEPLOYMENT.md                          🚀 Complete deployment guide
@@ -143,7 +131,16 @@ plataforma-astral/
 │   ├── API_DOCUMENTATION.md
 │   ├── AUTHENTICATION_SYSTEM_DOCS.md
 │   ├── ROLE_SYSTEM.md
-│   └── [... more technical docs]
+│   ├── TROUBLESHOOTING_AUTH.md
+│   ├── ENVIRONMENT.md
+│   ├── VOTING_SYSTEM.md
+│   ├── ANIMATION_GUIDE.md
+│   ├── EMERGENCY_ACCESS_PROCEDURES.md
+│   └── protected-paths.md
+│
+├── archive/                               📦 Historical documents
+│   ├── authentication-fixes-2024/
+│   └── incidents/
 │
 ├── tests/                                 🧪 Test files
 ├── src/                                   💻 Source code
@@ -152,29 +149,73 @@ plataforma-astral/
 
 ---
 
-## ⚠️ Removed/Deprecated Documents
+## 📦 Archived Documents
 
-The following documents have been removed or consolidated:
+Historical documents have been moved to the `archive/` directory:
 
-### Removed (Outdated/Redundant)
+### Authentication Fixes (2024-2025)
 
-- `CONVEX_INTEGRATION_REPORT.md` - Report file (migration complete)
-- `AUTH_SYSTEM_EXTRACTION.md` - Redundant with AUTHENTICATION_SYSTEM_DOCS.md
-- `MULTI_TENANT_MIGRATION_PLAN.md` - Planning doc (not currently implemented)
-- `MULTI_TENANT_ARCHITECTURE_DIAGRAM.md` - Planning doc (not currently implemented)
-- `docs/AUTH.md` - Consolidated into AUTHENTICATION_SYSTEM_DOCS.md
-- `docs/VERCEL_DEPLOYMENT_GUIDE.md` - Merged into DEPLOYMENT_GUIDE.md
-- `docs/ENVIRONMENT-SETUP.md` - Merged into ENVIRONMENT.md
+- `archive/authentication-fixes-2024/AUTHENTICATION_SUMMARY.md` - October 2024 fix
+- `archive/authentication-fixes-2024/AUTHENTICATION_FIXED.md` - Fix details
+- `archive/authentication-fixes-2024/AUTH_SYSTEM_ANALYSIS.md` - Analysis
+- `archive/authentication-fixes-2024/PRODUCTION_DEPLOYMENT.md` - Deployment guide
+- `archive/authentication-fixes-2024/AUTH_TEST_CREDENTIALS.md` - Test credentials
 
-### Use These Instead
+### Incident Reports
 
-- For auth → `docs/AUTHENTICATION_SYSTEM_DOCS.md`
-- For deployment → `docs/DEPLOYMENT_GUIDE.md`
-- For environment → `docs/ENVIRONMENT.md`
-- For migration info → `MIGRATION.md` (historical reference)
+- `archive/incidents/INCIDENT_REPORT_AUTH_FIX_2025-09-01.md` - September 2025 incident
+
+### Deprecated Technology Guides
+
+- `archive/deprecated/PARENT_REGISTRATION_IMPLEMENTATION.md` - Old implementation
+- `archive/deprecated/INSTITUTION_SUPPORT_UPDATE.md` - Old update
+
+**Note**: These documents are kept for historical reference and context but are no longer actively maintained.
 
 ---
 
-**Last Updated**: January 2025  
+## 🎯 Documentation Standards
+
+### When Creating New Documentation
+
+1. **Location**: Place in appropriate directory (`docs/` for technical, root for guides)
+2. **Naming**: Use `UPPERCASE_WITH_UNDERSCORES.md` format
+3. **Index**: Add entry to this file
+4. **Headers**: Include status, last updated date, and purpose
+5. **Links**: Use relative links to other documentation
+
+### When Updating Documentation
+
+1. Update "Last Updated" timestamp
+2. Add note about what changed
+3. Update relevant cross-references
+4. Check for broken links
+
+### Archiving Documents
+
+Move outdated documents to `archive/` with:
+- Original filename preserved
+- Organized by category
+- Link from this index to archived location
+
+---
+
+## 📊 Documentation Health
+
+| Category | Status | Notes |
+| --- | --- | --- |
+| Getting Started | ✅ Up to date | START_HERE.md, README.md current |
+| Authentication | ✅ Up to date | Historical issues resolved and archived |
+| Deployment | ✅ Up to date | Single source of truth (DEPLOYMENT.md) |
+| Architecture | ✅ Up to date | Reflects Convex migration |
+| API Documentation | ⚠️ In progress | Being updated for Convex |
+| Testing | ⚠️ In progress | Being updated for Convex migration |
+
+---
+
+**Last Updated**: October 13, 2025  
 **Status**: ✅ Documentation consolidated and up-to-date  
-**Questions?**: See START_HERE.md or CLAUDE.md
+**Next Review**: December 2025  
+**Maintained by**: Development team
+
+For questions or updates, see START_HERE.md or CLAUDE.md
