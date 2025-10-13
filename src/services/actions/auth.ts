@@ -51,13 +51,14 @@ export async function authenticate(
         redirectUrl = "/";
     }
 
+    // Sign in and redirect to the appropriate dashboard
     await signIn("credentials", {
       email,
       password,
       redirectTo: redirectUrl,
     });
 
-    // If signIn succeeds, redirect will happen automatically
+    // This line should never be reached if signIn succeeds (it redirects)
     return undefined;
   } catch (error) {
     if (error instanceof AuthError) {

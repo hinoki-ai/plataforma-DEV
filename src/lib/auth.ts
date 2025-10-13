@@ -115,6 +115,12 @@ export const authOptions: NextAuthConfig = {
       : []),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allow relative URLs and URLs from the same domain
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
     async signIn({ user, account, profile, email, credentials }: any) {
       try {
         if (process.env.NODE_ENV === "development") {
