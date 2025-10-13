@@ -125,7 +125,7 @@ The Plataforma Astral SaaS platform has been verified as **fully operational** w
 
 ### Production Build
 
-```
+```text
 ✅ Build completed successfully
 ✅ 111 routes compiled
 ✅ No build errors

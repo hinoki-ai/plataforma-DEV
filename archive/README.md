@@ -41,7 +41,8 @@ Documentation for deprecated features or outdated implementation guides:
 - **INSTITUTION_SUPPORT_UPDATE.md** - Old institution support update
 - **I18N_SYSTEM_VERIFICATION.md** - Internationalization verification (feature complete)
 
-**Why archived**: 
+**Why archived**:
+
 - Features have been fully implemented or replaced
 - Documentation superseded by current guides
 - Technology migration complete (e.g., Prisma → Convex)
@@ -86,4 +87,3 @@ Documents are archived when:
 
 **Maintained by**: Development team  
 **Archive retention**: Indefinite (until no longer needed for reference)
-
