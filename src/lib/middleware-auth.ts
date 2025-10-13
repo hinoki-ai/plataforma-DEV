@@ -30,18 +30,33 @@ export async function getMiddlewareAuth(
   request: NextRequest,
 ): Promise<MiddlewareSession | null> {
   try {
-    // Try multiple cookie names for NextAuth session token
-    const cookieNames = [
-      "next-auth.session-token",
-      "__Secure-next-auth.session-token",
-      "authjs.session-token",
-      "__Secure-authjs.session-token",
-    ];
+    // Determine cookie names based on environment
+    // In production with HTTPS, NextAuth uses __Secure- prefix
+    // In development (HTTP), it uses standard names
+    const isSecure = process.env.NODE_ENV === "production" || 
+                     request.nextUrl.protocol === "https:";
+    
+    const cookieNames = isSecure 
+      ? [
+          "__Secure-next-auth.session-token",
+          "__Secure-authjs.session-token",
+          "next-auth.session-token", // Fallback
+          "authjs.session-token",
+        ]
+      : [
+          "next-auth.session-token",
+          "authjs.session-token",
+          "__Secure-next-auth.session-token", // Fallback
+          "__Secure-authjs.session-token",
+        ];
 
     let token: string | undefined;
+    let foundCookieName: string | undefined;
+    
     for (const cookieName of cookieNames) {
       token = request.cookies.get(cookieName)?.value;
       if (token) {
+        foundCookieName = cookieName;
         if (process.env.NODE_ENV === "development") {
           console.log("🔑 Found session token in cookie:", cookieName);
         }
@@ -51,7 +66,9 @@ export async function getMiddlewareAuth(
 
     if (!token) {
       if (process.env.NODE_ENV === "development") {
-        console.log("❌ No session token found in cookies");
+        const allCookies = request.cookies.getAll();
+        console.log("❌ No session token found. Available cookies:", 
+          allCookies.map(c => c.name).join(", ") || "none");
       }
       return null;
     }
@@ -92,9 +109,10 @@ export async function getMiddlewareAuth(
     // Token is invalid or expired
     if (process.env.NODE_ENV === "development") {
       console.warn("❌ Middleware auth error:", error);
+    } else {
+      // Log minimal info in production for debugging (without sensitive details)
+      console.log("❌ Auth validation failed");
     }
-    // Log minimal info in production for debugging
-    console.log("❌ Auth failed - Token invalid/expired");
     return null;
   }
 }

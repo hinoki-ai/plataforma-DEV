@@ -40,6 +40,11 @@ export const authOptions: NextAuthConfig = {
     maxAge: 24 * 60 * 60, // 24 hours
     updateAge: 60 * 60, // Update session every hour to prevent expiration
   },
+  pages: {
+    signIn: "/login",
+    signOut: "/login",
+    error: "/login",
+  },
   trustHost: true,
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,

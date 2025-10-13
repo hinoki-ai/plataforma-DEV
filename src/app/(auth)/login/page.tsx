@@ -67,35 +67,41 @@ export default function LoginPage() {
 
   const { status, data: session, update } = useSession();
 
-  // Handle successful authentication - redirect immediately
+  // Handle successful authentication - redirect with proper session sync
   useEffect(() => {
     if (authState?.success && !isLoading) {
       setIsLoading(true);
-      // Force session update and redirect
-      update().then(() => {
-        // Small delay to ensure session is fully updated
-        setTimeout(() => {
-          if (typeof window !== "undefined") {
-            window.location.href = "/auth-success";
-          }
-        }, 100);
-      });
+      
+      // Force session update before redirect
+      update()
+        .then(() => {
+          // Wait for session to be fully established (200ms should be enough)
+          return new Promise(resolve => setTimeout(resolve, 200));
+        })
+        .then(() => {
+          // Use router.push instead of window.location for smoother navigation
+          router.push("/auth-success");
+        })
+        .catch((error) => {
+          console.error("Session update failed:", error);
+          // Fallback to direct navigation if update fails
+          router.push("/auth-success");
+        });
     }
-  }, [authState, isLoading, update]);
+  }, [authState, isLoading, update, router]);
 
-  // Fallback: Handle authentication state changes from session
+  // Fallback: Handle authentication state changes from session (e.g., OAuth)
   useEffect(() => {
     if (status === "loading") {
       setIsLoading(true);
-    } else if (status === "authenticated" && !authState?.success) {
-      // Redirect to auth-success page which will handle role-based routing
-      if (typeof window !== "undefined") {
-        window.location.href = "/auth-success";
-      }
+    } else if (status === "authenticated" && !authState?.success && !isLoading) {
+      // Only redirect if we're not already in the middle of a login flow
+      setIsLoading(true);
+      router.push("/auth-success");
     } else if (status === "unauthenticated") {
       setIsLoading(false);
     }
-  }, [status, authState]);
+  }, [status, authState, isLoading, router]);
 
   const emailError = useMemo(
     () =>
