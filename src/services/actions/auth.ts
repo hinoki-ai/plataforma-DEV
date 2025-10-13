@@ -7,6 +7,7 @@
 
 import { signIn, signOut } from "@/lib/auth";
 import { AuthError } from "next-auth";
+import { authenticateUser } from "@/lib/auth-convex";
 
 /**
  * Authenticate user with credentials (for useActionState hook)
@@ -24,10 +25,36 @@ export async function authenticate(
       return "Por favor ingrese email y contraseña";
     }
 
+    // First authenticate to get user data without redirect
+    const user = await authenticateUser(email, password);
+
+    if (!user) {
+      return "Credenciales inválidas. Por favor verifique su email y contraseña.";
+    }
+
+    // Determine redirect URL based on user role
+    let redirectUrl = "/";
+    switch (user.role) {
+      case "MASTER":
+        redirectUrl = "/master";
+        break;
+      case "ADMIN":
+        redirectUrl = "/admin";
+        break;
+      case "PROFESOR":
+        redirectUrl = "/profesor";
+        break;
+      case "PARENT":
+        redirectUrl = user.needsRegistration ? "/centro-consejo" : "/parent";
+        break;
+      default:
+        redirectUrl = "/";
+    }
+
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/auth-success",
+      redirectTo: redirectUrl,
     });
 
     // If signIn succeeds, redirect will happen automatically

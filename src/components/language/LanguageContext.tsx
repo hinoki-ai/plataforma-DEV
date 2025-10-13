@@ -62,7 +62,7 @@ type TranslationKey = keyof typeof translations.es;
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   return (
     <DivineParsingOracleProvider
-      initialNamespaces={["common", "navigation", "language"]}
+      initialNamespaces={["common", "navigation", "language", "admin", "profesor", "parent", "dashboard"]}
       initialLanguage="es"
     >
       <LegacyLanguageAdapter>{children}</LegacyLanguageAdapter>
@@ -85,12 +85,19 @@ function LegacyLanguageAdapter({ children }: { children: React.ReactNode }) {
       // Try divine oracle with the correct namespace
       const divineTranslation = divineContext.t(key, targetNamespace);
 
+      // Only fallback to legacy translations if the key is still returned unchanged
       if (divineTranslation !== key) {
         return divineTranslation;
       }
 
       // Fallback to legacy translations for immediate compatibility
-      return translations[divineContext.language][key as TranslationKey] || key;
+      const legacyTranslation = translations[divineContext.language][key as TranslationKey];
+      if (legacyTranslation) {
+        return legacyTranslation;
+      }
+
+      // Final fallback: return the key itself to make missing translations visible
+      return key;
     },
     isLoading: divineContext.isLoading,
     error: divineContext.error,

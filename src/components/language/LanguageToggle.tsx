@@ -170,7 +170,7 @@ export function LanguageToggle() {
           variant="outline"
           size="sm"
           onClick={handleToggle}
-          aria-label={t("language.toggle")}
+          aria-label={t("language.toggle", "language")}
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-controls="language-listbox"

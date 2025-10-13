@@ -96,6 +96,19 @@ export const getUserCountByRole = query({
   },
 });
 
+/**
+ * Get parent profile by user ID
+ */
+export const getParentProfileByUserId = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    return await ctx.db
+      .query("parentProfiles")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .first();
+  },
+});
+
 // ==================== MUTATIONS ====================
 
 /**

@@ -19,6 +19,8 @@ export interface User {
   image: string | null;
   password?: string;
   isActive: boolean;
+  needsRegistration?: boolean;
+  isOAuthUser?: boolean;
 }
 
 /**
@@ -45,6 +47,21 @@ export async function authenticateUser(
       return null;
     }
 
+    // Determine if user needs registration (for parent OAuth users)
+    let needsRegistration = false;
+    if (user.role === "PARENT" && user.isOAuthUser) {
+      // Check if parent has completed registration
+      try {
+        const parentProfile = await client.query(api.users.getParentProfileByUserId, {
+          userId: user._id,
+        });
+        needsRegistration = !parentProfile?.registrationComplete;
+      } catch (error) {
+        // If no parent profile exists, they need registration
+        needsRegistration = true;
+      }
+    }
+
     // Return user without password
     return {
       _id: user._id,
@@ -54,6 +71,8 @@ export async function authenticateUser(
       role: user.role,
       image: user.image ?? null,
       isActive: user.isActive,
+      needsRegistration,
+      isOAuthUser: user.isOAuthUser,
     };
   } catch (error) {
     console.error("Authentication error:", error);
