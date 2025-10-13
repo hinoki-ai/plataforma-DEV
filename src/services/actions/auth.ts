@@ -11,51 +11,74 @@ import { authenticateUser } from "@/lib/auth-convex";
 
 /**
  * Authenticate user with credentials (for useActionState hook)
- * Returns error message string or undefined on success
+ * Returns { success: true } on success or { success: false, error: string } on failure
  */
 export async function authenticate(
-  prevState: string | undefined,
+  prevState: { success: boolean; error?: string } | undefined,
   formData: FormData,
-): Promise<string | undefined> {
+): Promise<{ success: boolean; error?: string }> {
   try {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
     if (!email || !password) {
-      return "Por favor ingrese email y contraseña";
+      return {
+        success: false,
+        error: "Por favor ingrese email y contraseña",
+      };
     }
 
     // First authenticate to get user data without redirect
     const user = await authenticateUser(email, password);
 
     if (!user) {
-      return "Credenciales inválidas. Por favor verifique su email y contraseña.";
+      return {
+        success: false,
+        error: "Credenciales inválidas. Por favor verifique su email y contraseña.",
+      };
     }
 
     // Sign in without immediate redirect to avoid timing issues
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email,
       password,
       redirect: false,
     });
 
-    // Use auth-success page for proper session validation before redirect
-    // This prevents redirect loops caused by middleware checking session before it's fully set
-    return undefined;
+    if (!result || result.error) {
+      return {
+        success: false,
+        error: "Error de autenticación. Por favor intente nuevamente.",
+      };
+    }
+
+    // Return success - client will handle redirect to auth-success
+    return { success: true };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return "Credenciales inválidas. Por favor verifique su email y contraseña.";
+          return {
+            success: false,
+            error: "Credenciales inválidas. Por favor verifique su email y contraseña.",
+          };
         case "CallbackRouteError":
-          return "Error de autenticación. Por favor intente nuevamente.";
+          return {
+            success: false,
+            error: "Error de autenticación. Por favor intente nuevamente.",
+          };
         default:
-          return "Error de autenticación. Por favor intente nuevamente.";
+          return {
+            success: false,
+            error: "Error de autenticación. Por favor intente nuevamente.",
+          };
       }
     }
 
-    // If it's a redirect (successful login), rethrow
-    throw error;
+    return {
+      success: false,
+      error: "Error inesperado. Por favor intente nuevamente.",
+    };
   }
 }
 

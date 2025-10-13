@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/language/LanguageContext";
 
@@ -54,7 +55,7 @@ function SubmitButton({ isLoading: parentLoading }: { isLoading: boolean }) {
 }
 
 export default function LoginPage() {
-  const [errorMessage, dispatch] = useActionState(authenticate, undefined);
+  const [authState, dispatch] = useActionState(authenticate, undefined);
   const [showPassword, setShowPassword] = useState(false);
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
@@ -62,42 +63,39 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useLanguage();
+  const router = useRouter();
 
-  const { status, data: session } = useSession();
+  const { status, data: session, update } = useSession();
 
-  // Redirect URL calculation (handled by server action)
-  const _redirectUrl = useMemo(() => {
-    if (status !== "authenticated" || !session?.user?.role) return null;
-    switch (session.user.role) {
-      case "ADMIN":
-        return "/admin";
-      case "PROFESOR":
-        return "/profesor";
-      case "PARENT":
-        return "/parent";
-      case "PUBLIC":
-        return session.user.needsRegistration
-          ? "/centro-consejo"
-          : "/centro-consejo/dashboard";
-      default:
-        return "/";
+  // Handle successful authentication - redirect immediately
+  useEffect(() => {
+    if (authState?.success && !isLoading) {
+      setIsLoading(true);
+      // Force session update and redirect
+      update().then(() => {
+        // Small delay to ensure session is fully updated
+        setTimeout(() => {
+          if (typeof window !== "undefined") {
+            window.location.href = "/auth-success";
+          }
+        }, 100);
+      });
     }
-  }, [status, session?.user?.role, session?.user?.needsRegistration]);
+  }, [authState, isLoading, update]);
 
-  // Handle authentication state changes - redirect to auth-success for proper session handling
+  // Fallback: Handle authentication state changes from session
   useEffect(() => {
     if (status === "loading") {
       setIsLoading(true);
-    } else if (status === "authenticated") {
+    } else if (status === "authenticated" && !authState?.success) {
       // Redirect to auth-success page which will handle role-based routing
-      // This prevents redirect loops by ensuring session is fully set before middleware checks
       if (typeof window !== "undefined") {
         window.location.href = "/auth-success";
       }
-    } else {
+    } else if (status === "unauthenticated") {
       setIsLoading(false);
     }
-  }, [status]);
+  }, [status, authState]);
 
   const emailError = useMemo(
     () =>
@@ -229,12 +227,12 @@ export default function LoginPage() {
           )}
         </div>
 
-        {errorMessage && (
+        {authState?.error && (
           <div
             className="text-destructive text-sm text-center mb-6"
             role="alert"
           >
-            {errorMessage}
+            {authState.error}
           </div>
         )}
 
