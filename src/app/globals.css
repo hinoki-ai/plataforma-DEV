@@ -499,6 +499,29 @@
     --bg-image: url(/bg17.jpg);
   }
 
+  /* Portrait mode background for mobile devices */
+  @media (max-width: 768px) and (orientation: portrait) {
+    .bg-home-page {
+      position: relative;
+      background: none;
+    }
+
+    .bg-home-page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url(/bg17.jpg);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transform: scaleX(-1);
+      z-index: -1;
+    }
+  }
+
   /* Typography utilities */
   .hero-description {
     margin-top: 60px;
