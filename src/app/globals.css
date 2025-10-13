@@ -496,7 +496,7 @@
 
   /* Home page background */
   .bg-home-page {
-    --bg-image: url(/bg2.jpg);
+    --bg-image: url(/bg17.jpg);
   }
 
   /* Typography utilities */
@@ -621,14 +621,6 @@
     animation-delay: var(--animation-delay, 0s);
   }
 
-  /* Auth layout styles */
-  .auth-background {
-    background-image: url(/logbg.png);
-  }
-
-  .auth-login-bg {
-    background-image: url(/logbg.png);
-  }
 
   .auth-container {
     top: -20px;
