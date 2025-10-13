@@ -13,7 +13,7 @@ interface SEOConfig {
 }
 
 const DEFAULT_SEO = {
-  siteName: "Plataforma SaaS Chile",
+  siteName: "Plataforma Astral",
   description:
     "Plataforma SaaS líder en Chile para gestión educativa institucional. Tecnología de vanguardia y soluciones innovadoras para instituciones de excelencia chilenas.",
   keywords: [
@@ -137,7 +137,7 @@ export function generateMetadata(config: SEOConfig): Metadata {
 
 // Pre-configured metadata for common pages
 export const homeMetadata = generateMetadata({
-  title: "Plataforma SaaS Chile - Tecnología Educativa Líder",
+  title: "Plataforma Astral",
   description:
     "Plataforma SaaS líder en Chile para gestión educativa institucional. Tecnología de vanguardia para instituciones de excelencia chilenas.",
   keywords: ["inicio", "bienvenida", "SaaS Chile", "tecnología educativa"],
@@ -214,8 +214,8 @@ export function generateSchemaOrg(
 }
 
 export const organizationSchema = generateSchemaOrg("organization", {
-  name: "Plataforma SaaS Chile",
-  alternateName: "Plataforma SaaS Chile - Tecnología Educativa Líder",
+  name: "Plataforma Astral",
+  alternateName: "Plataforma Astral",
   description: DEFAULT_SEO.description,
   url: DEFAULT_SEO.url,
   logo: `${DEFAULT_SEO.url}/images/logo.png`,
