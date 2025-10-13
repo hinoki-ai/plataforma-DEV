@@ -1,12 +1,14 @@
 {
-  "name": "Plataforma Institucional Astral",
-  "short_name": "Plataforma Institucional Astral",
-  "description": "Herramientas administrativas para la Plataforma Educativa Astral",
+  "name": "Plataforma SaaS Chile - Tecnología Educativa Líder",
+  "short_name": "Plataforma SaaS Chile",
+  "description": "Plataforma SaaS líder en Chile para gestión educativa institucional. Tecnología de vanguardia para instituciones de excelencia.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1e40af",
   "orientation": "portrait-primary",
+  "lang": "es-CL",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/android-chrome-512x512.png",
@@ -39,5 +41,13 @@
       "purpose": "apple-touch-icon"
     }
   ],
-  "categories": ["education", "productivity", "utilities"]
+  "categories": ["education", "productivity", "utilities", "business"],
+  "screenshots": [
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
 }

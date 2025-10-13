@@ -89,6 +89,7 @@ export default async function middleware(req: NextRequest) {
     );
 
     if (requiresAuth && !isLoggedIn) {
+      console.log(`🔒 Auth required for ${pathname} but user not logged in - redirecting to login`);
       const loginUrl = new URL("/login", nextUrl);
       loginUrl.searchParams.set("callbackUrl", nextUrl.toString());
       const response = NextResponse.redirect(loginUrl);

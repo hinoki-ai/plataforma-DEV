@@ -1,6 +1,6 @@
-# Plataforma Astral - SaaS Platform for Educational Management
+# Plataforma SaaS Chile - Tecnología Educativa Líder
 
-A comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 15 and Convex (real-time serverless backend), designed for educational institutions.
+Plataforma SaaS líder en Chile para gestión educativa institucional. Tecnología de vanguardia y soluciones innovadoras para instituciones de excelencia chilenas, construida con Next.js 15 y Convex (backend serverless en tiempo real).
 
 ## 📋 Índice de Documentación
 
@@ -15,7 +15,7 @@ A comprehensive SaaS platform for teacher, admin, and parent control with extens
 
 ## 📖 Descripción General
 
-**Plataforma Astral** is a comprehensive SaaS platform that manages:
+**Plataforma SaaS Chile** es la plataforma SaaS líder en Chile que gestiona:
 
 - 📚 Planificación docente
 - 📅 Reuniones apoderados-profesores
@@ -56,11 +56,11 @@ npm run dev
 
 ### Cuentas de Prueba
 
-| Rol         | Email                            | Contraseña  |
-| ----------- | -------------------------------- | ----------- |
-| **Admin**   | <admin@plataforma-astral.com>    | admin123    |
-| **Teacher** | <profesor@plataforma-astral.com> | profesor123 |
-| **Parent**  | <parent@plataforma-astral.com>   | parent123   |
+| Rol         | Email                              | Contraseña  |
+| ----------- | ---------------------------------- | ----------- |
+| **Admin**   | <admin@plataformasaaschile.com>    | admin123    |
+| **Teacher** | <profesor@plataformasaaschile.com> | profesor123 |
+| **Parent**  | <parent@plataformasaaschile.com>   | parent123   |
 
 ## 🏗️ Arquitectura
 
@@ -209,10 +209,10 @@ This project uses **industry-standard single-branch deployment**:
 
 ### Environment Matrix
 
-| Environment     | Location      | URL                     | Purpose           |
-| --------------- | ------------- | ----------------------- | ----------------- |
-| **Development** | Local Machine | `localhost:3000`        | Local development |
-| **Production**  | Vercel        | `plataforma.aramac.dev` | Live production   |
+| Environment     | Location      | URL                        | Purpose           |
+| --------------- | ------------- | -------------------------- | ----------------- |
+| **Development** | Local Machine | `localhost:3000`           | Local development |
+| **Production**  | Vercel        | `plataforma-saas-chile.cl` | Live production   |
 
 ### Quick Start (Development Only)
 
@@ -235,8 +235,8 @@ git push origin main    # Deploy frontend (may fail - see docs)
 
 After deployment, login with:
 
-- **Admin**: `admin@plataforma-astral.com` / `admin123`
-- **Teacher**: `profesor@plataforma-astral.com` / `profesor123`
+- **Admin**: `admin@plataformasaaschile.com` / `admin123`
+- **Teacher**: `profesor@plataformasaaschile.com` / `profesor123`
 
 ### Environment Variables
 
@@ -321,7 +321,7 @@ npx convex dashboard         # Manage Convex data
 
 ---
 
-**Proyecto**: Plataforma Astral
+**Proyecto**: Plataforma SaaS Chile
 **Versión**: 1.0.0
 **Última actualización**: October 2025
 **Stack**: Next.js 15 + TypeScript + Convex

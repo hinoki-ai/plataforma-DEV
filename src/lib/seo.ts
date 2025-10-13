@@ -13,10 +13,12 @@ interface SEOConfig {
 }
 
 const DEFAULT_SEO = {
-  siteName: "Plataforma Institucional Astral",
+  siteName: "Plataforma SaaS Chile",
   description:
-    "Sistema líder nacional de gestión educativa integral. Solución SaaS profesional para instituciones de excelencia.",
+    "Plataforma SaaS líder en Chile para gestión educativa institucional. Tecnología de vanguardia y soluciones innovadoras para instituciones de excelencia chilenas.",
   keywords: [
+    "SaaS Chile",
+    "tecnología chilena",
     "plataforma educativa",
     "gestión institucional",
     "SaaS educativo",
@@ -26,10 +28,14 @@ const DEFAULT_SEO = {
     "administración educativa",
     "tecnología educativa",
     "solución integral",
+    "software educativo Chile",
+    "plataforma tecnológica",
+    "innovación educativa",
+    "SaaS institucional",
   ],
   url: "https://plataforma-astral.vercel.app",
   image: "/images/og-image.jpg",
-  author: "Plataforma Astral",
+  author: "Plataforma SaaS Chile",
   locale: "es_CL",
   alternateLocales: ["es"],
 };
@@ -131,58 +137,58 @@ export function generateMetadata(config: SEOConfig): Metadata {
 
 // Pre-configured metadata for common pages
 export const homeMetadata = generateMetadata({
-  title: "Plataforma Institucional Astral",
+  title: "Plataforma SaaS Chile - Tecnología Educativa Líder",
   description:
-    "Bienvenido al sistema de gestión de Manitos Pintadas. Accede a planificaciones, reservas y servicios especializados.",
-  keywords: ["inicio", "bienvenida", "educación especial"],
+    "Plataforma SaaS líder en Chile para gestión educativa institucional. Tecnología de vanguardia para instituciones de excelencia chilenas.",
+  keywords: ["inicio", "bienvenida", "SaaS Chile", "tecnología educativa"],
   url: "/",
 });
 
 export const loginMetadata = generateMetadata({
-  title: "Iniciar Sesión",
+  title: "Iniciar Sesión - Plataforma SaaS Chile",
   description:
-    "Accede al sistema de gestión escolar Manitos Pintadas. Portal para profesores y administradores.",
-  keywords: ["login", "acceso", "profesores"],
+    "Accede a la plataforma SaaS líder en Chile para gestión educativa. Portal seguro para profesores y administradores.",
+  keywords: ["login", "acceso", "profesores", "SaaS Chile"],
   url: "/login",
 });
 
 export const profesorMetadata = generateMetadata({
-  title: "Portal del Profesor",
+  title: "Portal del Profesor - Plataforma SaaS Chile",
   description:
-    "Portal exclusivo para profesores. Gestiona planificaciones, recursos y seguimiento académico.",
-  keywords: ["profesor", "docente", "planificaciones"],
+    "Portal exclusivo para profesores en la plataforma SaaS líder de Chile. Gestiona planificaciones, recursos y seguimiento académico.",
+  keywords: ["profesor", "docente", "planificaciones", "SaaS Chile"],
   url: "/profesor",
 });
 
 export const adminMetadata = generateMetadata({
-  title: "Panel de Administración",
+  title: "Panel de Administración - Plataforma SaaS Chile",
   description:
-    "Panel de control administrativo. Gestión de usuarios, reservas y configuración del sistema.",
-  keywords: ["administración", "panel", "gestión"],
+    "Panel de control administrativo de la plataforma SaaS líder en Chile. Gestión de usuarios, configuración y administración del sistema.",
+  keywords: ["administración", "panel", "gestión", "SaaS Chile"],
   url: "/admin",
 });
 
 export const planificacionesMetadata = generateMetadata({
-  title: "Planificaciones",
+  title: "Planificaciones - Plataforma SaaS Chile",
   description:
-    "Crea, edita y gestiona planificaciones educativas. Herramientas para la organización pedagógica.",
-  keywords: ["planificaciones", "pedagogía", "educación"],
+    "Crea, edita y gestiona planificaciones educativas en la plataforma SaaS líder de Chile. Herramientas avanzadas para la organización pedagógica.",
+  keywords: ["planificaciones", "pedagogía", "educación", "SaaS Chile"],
   url: "/profesor/planificaciones",
 });
 
 export const equipoMetadata = generateMetadata({
-  title: "Equipo",
+  title: "Equipo - Plataforma SaaS Chile",
   description:
-    "Conoce al equipo de Manitos Pintadas. Profesionales especializados en educación especial.",
-  keywords: ["equipo", "profesionales", "educación especial"],
+    "Conoce al equipo de tecnología detrás de la plataforma SaaS líder en Chile. Profesionales especializados en soluciones educativas innovadoras.",
+  keywords: ["equipo", "profesionales", "tecnología educativa", "SaaS Chile"],
   url: "/equipo",
 });
 
 export const reservasMetadata = generateMetadata({
-  title: "Reservas",
+  title: "Reservas - Plataforma SaaS Chile",
   description:
-    "Sistema de reservas para servicios especializados. Agenda citas y sesiones terapéuticas.",
-  keywords: ["reservas", "citas", "terapia"],
+    "Sistema avanzado de reservas en la plataforma SaaS líder de Chile. Agenda citas y sesiones especializadas con tecnología de vanguardia.",
+  keywords: ["reservas", "citas", "SaaS Chile", "tecnología"],
   url: "/reservas",
 });
 
@@ -208,8 +214,8 @@ export function generateSchemaOrg(
 }
 
 export const organizationSchema = generateSchemaOrg("organization", {
-  name: "Manitos Pintadas",
-  alternateName: "Manitos Pintadas",
+  name: "Plataforma SaaS Chile",
+  alternateName: "Plataforma SaaS Chile - Tecnología Educativa Líder",
   description: DEFAULT_SEO.description,
   url: DEFAULT_SEO.url,
   logo: `${DEFAULT_SEO.url}/images/logo.png`,
@@ -221,13 +227,24 @@ export const organizationSchema = generateSchemaOrg("organization", {
   },
   contactPoint: {
     "@type": "ContactPoint",
-    contactType: "admissions",
+    contactType: "customer service",
     email: "contacto@plataforma-astral.com",
   },
   sameAs: [
-    "https://www.facebook.com/ManitosPintadas",
-    "https://www.instagram.com/plataformaastral",
+    "https://www.linkedin.com/company/plataforma-saas-chile",
+    "https://www.instagram.com/plataformasaaschile",
   ],
+  knowsAbout: [
+    "Tecnología Educativa",
+    "SaaS",
+    "Gestión Educativa",
+    "Innovación Digital",
+    "Software Educativo Chile"
+  ],
+  serviceArea: {
+    "@type": "Country",
+    name: "Chile"
+  }
 });
 
 const seoUtils = {

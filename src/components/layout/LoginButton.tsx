@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 import { useLanguage } from "@/components/language/LanguageContext";
-import { useRoleSwitching } from "@/hooks/useRoleSwitching";
 import { UserRole } from "@/lib/prisma-compat-types";
 
 import {
@@ -50,37 +49,6 @@ const ROLE_CONFIG = {
   default: { icon: Building, color: "text-gray-500", name: "Usuario" },
 } as const;
 
-// Role switching configuration for MASTER users
-const ROLE_SWITCH_CONFIG = [
-  {
-    role: "MASTER" as UserRole,
-    icon: Crown,
-    name: "Desarrollador",
-    description: "Acceso completo al sistema",
-    color: "text-yellow-500",
-  },
-  {
-    role: "ADMIN" as UserRole,
-    icon: Shield,
-    name: "Administrador",
-    description: "Gestión administrativa",
-    color: "text-red-500",
-  },
-  {
-    role: "PROFESOR" as UserRole,
-    icon: BookOpen,
-    name: "Profesor",
-    description: "Funciones docentes",
-    color: "text-blue-500",
-  },
-  {
-    role: "PARENT" as UserRole,
-    icon: UsersIcon,
-    name: "Padre/Apoderado",
-    description: "Vista de padres",
-    color: "text-green-500",
-  },
-] as const;
 
 // ⚡ Performance: Extract initials function to prevent recreation
 const getInitials = (name?: string | null): string => {
@@ -107,14 +75,6 @@ export default function LoginButton() {
   const { language, setLanguage } = useLanguage();
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
-  const {
-    switchRole,
-    isSwitching,
-    error,
-    clearError,
-    currentRole,
-    hasSwitched,
-  } = useRoleSwitching();
 
   // Remove manual theme handling - let ThemeProvider handle this
 
@@ -158,25 +118,7 @@ export default function LoginButton() {
     }
   }, [router]);
 
-  // Role switching handler for MASTER users
-  const handleRoleSwitch = useCallback(
-    async (targetRole: UserRole) => {
-      if (targetRole === currentRole) return;
 
-      const result = await switchRole(targetRole);
-      if (!result.success && result.error) {
-        console.error("Role switch failed:", result.error);
-      }
-    },
-    [switchRole, currentRole],
-  );
-
-  // Clear errors when dropdown closes
-  useEffect(() => {
-    if (!isOpen && error) {
-      clearError();
-    }
-  }, [isOpen, error, clearError]);
 
   // ⚡ Performance: Optimized role data calculation with static config
   const roleData = useMemo(() => {
@@ -303,80 +245,6 @@ export default function LoginButton() {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            {/* Role Switching Dropdown for MASTER users */}
-            {session.user.role === "MASTER" && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <Crown className="mr-2 h-4 w-4" />
-                    <span>Cambiar Rol</span>
-                    <ChevronDown className="ml-auto h-4 w-4" />
-                  </DropdownMenuItem>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  sideOffset={8}
-                  align="start"
-                  className="w-64"
-                >
-                  <DropdownMenuLabel className="text-xs font-medium">
-                    Seleccionar Rol de Prueba
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {ROLE_SWITCH_CONFIG.map((roleConfig) => {
-                    const Icon = roleConfig.icon;
-                    const isActive = roleConfig.role === currentRole;
-
-                    return (
-                      <DropdownMenuItem
-                        key={roleConfig.role}
-                        onClick={() => handleRoleSwitch(roleConfig.role)}
-                        disabled={isActive || isSwitching}
-                        className="flex items-center gap-3 cursor-pointer"
-                      >
-                        <Icon className={cn("h-4 w-4", roleConfig.color)} />
-                        <div className="flex-1">
-                          <div className="font-medium text-sm">
-                            {roleConfig.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {roleConfig.description}
-                          </div>
-                        </div>
-                        {isActive && (
-                          <div className="h-2 w-2 rounded-full bg-green-500" />
-                        )}
-                        {isSwitching && (
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                        )}
-                      </DropdownMenuItem>
-                    );
-                  })}
-                  {hasSwitched && (
-                    <>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => handleRoleSwitch("MASTER")}
-                        disabled={isSwitching}
-                        className="flex items-center gap-3 cursor-pointer text-yellow-600"
-                      >
-                        <Crown className="h-4 w-4" />
-                        <div className="flex-1">
-                          <div className="font-medium text-sm">
-                            Volver a MASTER
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            Rol original
-                          </div>
-                        </div>
-                        {isSwitching && (
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                        )}
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
 
             {/* Dashboard Navigation Dropdown for MASTER users */}
             {session.user.role === "MASTER" && (
@@ -388,47 +256,65 @@ export default function LoginButton() {
                     <ChevronDown className="ml-auto h-4 w-4" />
                   </DropdownMenuItem>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent sideOffset={8} align="start">
-                  <DropdownMenuItem asChild>
-                    <Link href="/master" className="cursor-pointer">
-                      <Crown className="mr-2 h-4 w-4" />
-                      <span>Master Dashboard</span>
-                    </Link>
+                <DropdownMenuContent
+                  sideOffset={8}
+                  align="start"
+                  className="w-56"
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/master");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Crown className="mr-2 h-4 w-4" />
+                    <span>Master Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin" className="cursor-pointer">
-                      <Shield className="mr-2 h-4 w-4" />
-                      <span>Admin Dashboard</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/admin");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Admin Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/profesor" className="cursor-pointer">
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      <span>Profesor Dashboard</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/profesor");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>Profesor Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/parent" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Apoderado Dashboard</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/parent");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Apoderado Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/" className="cursor-pointer">
-                      <Home className="mr-2 h-4 w-4" />
-                      <span>Inicio</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Home className="mr-2 h-4 w-4" />
+                    <span>Inicio</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
 
-            {/* Error display for role switching */}
-            {session.user.role === "MASTER" && error && (
-              <div className="px-2 py-1 text-xs text-destructive bg-destructive/10 rounded border">
-                {error}
-              </div>
-            )}
 
             {/* Dashboard Navigation Dropdown for ADMIN users */}
             {session.user.role === "ADMIN" && (
@@ -440,30 +326,50 @@ export default function LoginButton() {
                     <ChevronDown className="ml-auto h-4 w-4" />
                   </DropdownMenuItem>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent sideOffset={8} align="start">
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin" className="cursor-pointer">
-                      <Shield className="mr-2 h-4 w-4" />
-                      <span>Admin Dashboard</span>
-                    </Link>
+                <DropdownMenuContent
+                  sideOffset={8}
+                  align="start"
+                  className="w-56"
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/admin");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Admin Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/profesor" className="cursor-pointer">
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      <span>Profesor Dashboard</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/profesor");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>Profesor Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/parent" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Apoderado Dashboard</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/parent");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Apoderado Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/" className="cursor-pointer">
-                      <Home className="mr-2 h-4 w-4" />
-                      <span>Inicio</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Home className="mr-2 h-4 w-4" />
+                    <span>Inicio</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -479,24 +385,40 @@ export default function LoginButton() {
                     <ChevronDown className="ml-auto h-4 w-4" />
                   </DropdownMenuItem>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent sideOffset={8} align="start">
-                  <DropdownMenuItem asChild>
-                    <Link href="/profesor" className="cursor-pointer">
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      <span>Profesor Dashboard</span>
-                    </Link>
+                <DropdownMenuContent
+                  sideOffset={8}
+                  align="start"
+                  className="w-56"
+                >
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/profesor");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>Profesor Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/parent" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Apoderado Dashboard</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/parent");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Apoderado Dashboard</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/" className="cursor-pointer">
-                      <Home className="mr-2 h-4 w-4" />
-                      <span>Inicio</span>
-                    </Link>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/");
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Home className="mr-2 h-4 w-4" />
+                    <span>Inicio</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

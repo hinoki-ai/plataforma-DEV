@@ -39,7 +39,6 @@ import {
   FileText,
 } from "lucide-react";
 import { useLanguage } from "@/components/language/LanguageContext";
-import { RoleSwitcher } from "@/components/auth/RoleSwitcher";
 import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
 
 interface EnhancedSidebarProps {
@@ -1125,10 +1124,6 @@ export function EnhancedSidebar({
             </div>
           )}
 
-          {/* Role Switcher for MASTER users */}
-          <div className="mt-3">
-            <RoleSwitcher isCollapsed={isCollapsed} />
-          </div>
 
           {isCollapsed && (
             <Tooltip>

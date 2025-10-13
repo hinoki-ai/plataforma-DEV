@@ -11,14 +11,31 @@ export const seedDatabase = mutation({
   handler: async (ctx) => {
     const now = Date.now();
 
-    // Password: admin123, profesor123, parent123
+    // Password: master123, admin123, profesor123, parent123
     // Pre-hashed with bcrypt (10 rounds)
+    const hashedMasterPassword =
+      "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
     const hashedAdminPassword =
       "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
     const hashedProfesorPassword =
       "$2a$10$F4P0HmYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4wYZOLQQYZlYqZWp6K";
     const hashedParentPassword =
       "$2a$10$rVEyGPNjGj8bLqTaHhHjYeYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4w";
+
+    // Create Master User (Supreme Access)
+    const masterId = await ctx.db.insert("users", {
+      name: "Master Administrator",
+      email: "master@plataforma-astral.com",
+      password: hashedMasterPassword,
+      role: "MASTER",
+      isActive: true,
+      isOAuthUser: false,
+      status: "ACTIVE",
+      phone: "+56900000000",
+      emailVerified: now,
+      createdAt: now,
+      updatedAt: now,
+    });
 
     // Create Admin User
     const adminId = await ctx.db.insert("users", {
@@ -141,6 +158,7 @@ export const seedDatabase = mutation({
       success: true,
       message: "Database seeded successfully!",
       users: {
+        master: masterId,
         admin: adminId,
         profesor: profesorId,
         parent: parentId,
