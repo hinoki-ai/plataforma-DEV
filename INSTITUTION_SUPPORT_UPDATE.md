@@ -30,7 +30,7 @@ This update implements two major improvements to the platform:
 
 #### Users Table
 
-- **Added** `institutionId: v.optional(v.id("schoolInfo"))` field
+- **Added** `institutionId: v.optional(v.id("institutionInfo"))` field
 - **Added** `.index("by_institutionId", ["institutionId"])` index
 
 #### SchoolInfo Table
@@ -45,7 +45,7 @@ This update implements two major improvements to the platform:
 
 ### 3. Convex Backend Updates
 
-**File**: `convex/schoolInfo.ts`
+**File**: `convex/institutionInfo.ts`
 
 #### New Queries
 

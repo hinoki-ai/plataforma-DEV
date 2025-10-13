@@ -212,85 +212,33 @@ export function HomePage() {
           aria-label="Información de contacto y enlaces"
         >
           <div className={layout.container(isDesktopForced)}>
-            <div
-              className={
-                isDesktopForced
-                  ? "grid grid-cols-3 gap-8"
-                  : "grid grid-cols-1 md:grid-cols-3 gap-8"
-              }
-            >
-              <div>
+            <div className="text-center">
+              <div className="mb-6">
                 <h3 className="text-xl font-bold mb-4 text-white">
-                  {t("home.footer.school.name", "common")}
+                  Región de Valparaíso, Viña Del Mar
                 </h3>
                 <p className="text-gray-300 mb-4">
-                  {t("home.footer.school.description", "common")}
+                  Avenida Libertad #777
                 </p>
+              </div>
+
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold mb-4 text-white">
+                  Contact Phones
+                </h4>
                 <div className="space-y-2 text-gray-300">
-                  <p>{t("home.footer.contact.address", "common")}</p>
-                  <p>{t("home.footer.contact.phone", "common")}</p>
-                  <p>{t("home.footer.contact.email", "common")}</p>
+                  <p>Loreto Gallegos Estay</p>
+                  <p className="font-mono">+569 3743 6196</p>
+                  <p>Agustin Arancibia Mac-Guire</p>
+                  <p className="font-mono">+569 8889 6773</p>
                 </div>
               </div>
 
-              <div>
-                <h4 className="text-lg font-semibold mb-4 text-white">
-                  {t("home.footer.quick.links", "common")}
-                </h4>
-                <ul className="space-y-2">
-                  <li>
-                    <Link
-                      href="/login"
-                      className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t("home.footer.aria.portal", "common")}
-                    >
-                      {t("home.footer.links.portal", "common")}
-                    </Link>
-                  </li>
-                  <li>
-                    <a
-                      href="/mineduc"
-                      className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t("home.footer.aria.mineduc", "common")}
-                    >
-                      {t("home.footer.links.mineduc", "common")}
-                    </a>
-                  </li>
-                </ul>
+              <div className="border-t border-gray-700 mt-8 pt-8">
+                <p className="text-gray-300 pb-3">
+                  © 2023 Plataforma Astral. All rights reserved.
+                </p>
               </div>
-
-              <div>
-                <h4 className="text-lg font-semibold mb-4 text-white">
-                  {t("home.footer.information", "common")}
-                </h4>
-                <ul className="space-y-2 text-gray-300">
-                  <li>{t("home.footer.hours", "common")}</li>
-                  <li>{t("home.footer.days", "common")}</li>
-                  <li>{t("home.footer.rbd", "common")}</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-              <p className="text-gray-300 pb-3">
-                {t("home.footer.school.name", "common")} —{" "}
-                {t("home.footer.school.info", "common")}
-              </p>
-              <p className="text-gray-300 pb-3">
-                {t("home.footer.copyright", "common").replace("{year}", "2024")}
-              </p>
-              <p className="text-gray-300">
-                {t("home.footer.developed.by", "common")}{" "}
-                <a
-                  href="https://aramac.dev"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-300 hover:text-white transition duration-200 underline focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                  aria-label={t("home.footer.aria.developer", "common")}
-                >
-                  ΛRΛMΛC
-                </a>
-              </p>
             </div>
           </div>
         </footer>

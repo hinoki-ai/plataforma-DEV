@@ -1,5 +1,5 @@
 /**
- * School Information Queries and Mutations
+ * Institution Information Queries and Mutations
  */
 
 import { v } from "convex/values";
@@ -10,9 +10,9 @@ import { query, mutation } from "./_generated/server";
 export const getSchoolInfo = query({
   args: {},
   handler: async (ctx) => {
-    // Legacy support: return first school info record
-    const schools = await ctx.db.query("schoolInfo").collect();
-    return schools[0] || null;
+    // Legacy support: return first institution info record
+    const institutions = await ctx.db.query("institutionInfo").collect();
+    return institutions[0] || null;
   },
 });
 
@@ -23,7 +23,7 @@ export const getAllInstitutions = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db
-      .query("schoolInfo")
+      .query("institutionInfo")
       .withIndex("by_isActive", (q) => q.eq("isActive", true))
       .collect();
   },
@@ -33,7 +33,7 @@ export const getAllInstitutions = query({
  * Get institution by ID
  */
 export const getInstitutionById = query({
-  args: { institutionId: v.id("schoolInfo") },
+  args: { institutionId: v.id("institutionInfo") },
   handler: async (ctx, { institutionId }) => {
     return await ctx.db.get(institutionId);
   },
@@ -63,7 +63,7 @@ export const createOrUpdateSchoolInfo = mutation({
     educationalConfig: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
-    const existing = await ctx.db.query("schoolInfo").first();
+    const existing = await ctx.db.query("institutionInfo").first();
     const now = Date.now();
 
     if (existing) {
@@ -73,7 +73,7 @@ export const createOrUpdateSchoolInfo = mutation({
       });
       return existing._id;
     } else {
-      return await ctx.db.insert("schoolInfo", {
+      return await ctx.db.insert("institutionInfo", {
         ...args,
         isActive: true,
         createdAt: now,
@@ -109,7 +109,7 @@ export const createInstitution = mutation({
   },
   handler: async (ctx, args) => {
     const now = Date.now();
-    return await ctx.db.insert("schoolInfo", {
+    return await ctx.db.insert("institutionInfo", {
       ...args,
       isActive: true,
       createdAt: now,

@@ -100,7 +100,7 @@ convex/
 ├── votes.ts              - Voting functionality
 ├── media.ts              - Photos & videos
 ├── teamMembers.ts        - Team management
-├── schoolInfo.ts         - School information
+├── institutionInfo.ts    - Institution information
 └── auth.ts               - OAuth & sessions
 ```
 

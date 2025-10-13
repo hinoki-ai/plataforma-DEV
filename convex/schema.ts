@@ -37,7 +37,7 @@ export default defineSchema({
     isOAuthUser: v.boolean(),
     clerkId: v.optional(v.string()),
     createdByAdmin: v.optional(v.string()),
-    institutionId: v.optional(v.id("schoolInfo")),
+    institutionId: v.optional(v.id("institutionInfo")),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
@@ -95,9 +95,9 @@ export default defineSchema({
     .index("by_grade", ["grade"])
     .index("by_updatedAt", ["updatedAt"]),
 
-  // ==================== SCHOOL INFORMATION ====================
+  // ==================== INSTITUTION INFORMATION ====================
 
-  schoolInfo: defineTable({
+  institutionInfo: defineTable({
     name: v.string(),
     mission: v.string(),
     vision: v.string(),
