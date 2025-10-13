@@ -175,11 +175,13 @@ export const authOptions: NextAuthConfig = {
       }
     },
 
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, account }: any) {
       // Persist user data to token on sign in
       if (user) {
         token.role = user.role;
         token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
         token.needsRegistration = user.needsRegistration;
         token.isOAuthUser = user.isOAuthUser;
         if (process.env.NODE_ENV === "development") {
@@ -188,9 +190,26 @@ export const authOptions: NextAuthConfig = {
             user.role,
             "Token role:",
             token.role,
+            "User ID:",
+            user.id,
           );
         }
       }
+      
+      // Ensure token always has these properties
+      if (!token.role && token.sub) {
+        // Try to fetch user data from Convex if missing
+        try {
+          const userFromDb = await findUserByEmail(token.email as string);
+          if (userFromDb) {
+            token.role = userFromDb.role;
+            token.id = userFromDb.id;
+          }
+        } catch (error) {
+          console.error("Failed to fetch user in JWT callback:", error);
+        }
+      }
+      
       return token;
     },
 

@@ -30,31 +30,56 @@ export async function getMiddlewareAuth(
   request: NextRequest,
 ): Promise<MiddlewareSession | null> {
   try {
-    // Get the session token from cookies (NextAuth uses 'next-auth.session-token')
-    const token =
-      request.cookies.get("next-auth.session-token")?.value ||
-      request.cookies.get("__Secure-next-auth.session-token")?.value;
+    // Try multiple cookie names for NextAuth session token
+    const cookieNames = [
+      "next-auth.session-token",
+      "__Secure-next-auth.session-token",
+      "authjs.session-token",
+      "__Secure-authjs.session-token",
+    ];
+
+    let token: string | undefined;
+    for (const cookieName of cookieNames) {
+      token = request.cookies.get(cookieName)?.value;
+      if (token) {
+        if (process.env.NODE_ENV === "development") {
+          console.log("🔑 Found session token in cookie:", cookieName);
+        }
+        break;
+      }
+    }
 
     if (!token) {
+      if (process.env.NODE_ENV === "development") {
+        console.log("❌ No session token found in cookies");
+      }
       return null;
     }
 
     // Verify and decode the JWT
     const { payload } = await jwtVerify(token, JWT_SECRET);
 
+    if (process.env.NODE_ENV === "development") {
+      console.log("✅ JWT verified, payload:", {
+        id: payload.id,
+        email: payload.email,
+        role: payload.role,
+      });
+    }
+
     // Extract user data from JWT payload
     const user: MiddlewareUser = {
-      id: payload.id as string,
+      id: (payload.id || payload.sub) as string,
       email: payload.email as string,
-      name: payload.name as string | null,
+      name: (payload.name as string) || null,
       role: payload.role as
         | "MASTER"
         | "ADMIN"
         | "PROFESOR"
         | "PARENT"
         | "PUBLIC",
-      needsRegistration: payload.needsRegistration as boolean,
-      isOAuthUser: payload.isOAuthUser as boolean,
+      needsRegistration: (payload.needsRegistration as boolean) || false,
+      isOAuthUser: (payload.isOAuthUser as boolean) || false,
     };
 
     return {
@@ -66,7 +91,7 @@ export async function getMiddlewareAuth(
   } catch (error) {
     // Token is invalid or expired
     if (process.env.NODE_ENV === "development") {
-      console.warn("Middleware auth error:", error);
+      console.warn("❌ Middleware auth error:", error);
     }
     // Log minimal info in production for debugging
     console.log("❌ Auth failed - Token invalid/expired");
