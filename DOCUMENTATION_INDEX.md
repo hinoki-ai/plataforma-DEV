@@ -1,6 +1,6 @@
 # 📚 Documentation Index - Plataforma Astral
 
-**Complete guide to all documentation in this SaaS platform project**
+## Complete guide to all documentation in this SaaS platform project
 
 **Last Updated**: October 13, 2025  
 **Status**: ✅ Production ready with full Convex integration
@@ -114,7 +114,7 @@ Refer to `CLAUDE.md` for testing guidelines.
 
 ## 📂 File Structure
 
-```
+```text
 plataforma-astral/
 ├── START_HERE.md                          👈 Start here!
 ├── README.md                              👈 Project overview
@@ -194,6 +194,7 @@ Historical documents have been moved to the `archive/` directory:
 ### Archiving Documents
 
 Move outdated documents to `archive/` with:
+
 - Original filename preserved
 - Organized by category
 - Link from this index to archived location

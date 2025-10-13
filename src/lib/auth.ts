@@ -43,9 +43,6 @@ export const authOptions: NextAuthConfig = {
   trustHost: true,
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: '/login',
-  },
   logger: {
     error(error: Error) {
       logger.error("NextAuth Error", {
@@ -234,10 +231,6 @@ export const authOptions: NextAuthConfig = {
       }
       return session;
     },
-  },
-  pages: {
-    signIn: "/login",
-    error: "/login",
   },
   events: {
     async signIn(message) {
