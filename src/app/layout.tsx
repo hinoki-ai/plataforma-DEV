@@ -30,22 +30,23 @@ export const metadata: Metadata = {
   ...homeMetadata,
   icons: {
     icon: [
-      { url: "/dfav.png", sizes: "32x32", type: "image/png" },
-      { url: "/dfav.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
     ],
-    shortcut: "/dfav.png",
-    apple: "/apple-touch-icon-180.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.json",
-  applicationName: "Plataforma Astral",
+  applicationName: "Plataforma Institucional Astral",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Plataforma Astral",
+    title: "Plataforma Institucional Astral",
   },
   other: {
     "msapplication-TileColor": "#1e40af",
-    "msapplication-TileImage": "/tile-150.png",
+    "msapplication-TileImage": "/favicon-32x32.png",
     "msapplication-config": "/browserconfig.xml",
   },
 };

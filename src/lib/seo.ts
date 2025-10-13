@@ -13,7 +13,7 @@ interface SEOConfig {
 }
 
 const DEFAULT_SEO = {
-  siteName: "Plataforma Astral - Sistema de Gestión Educativa",
+  siteName: "Plataforma Institucional Astral",
   description:
     "Sistema integral de gestión educativa para Plataforma Astral. Planificaciones, reservas y administración educativa.",
   keywords: [
