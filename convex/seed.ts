@@ -7,20 +7,34 @@ import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const seedDatabase = mutation({
-  args: {},
-  handler: async (ctx) => {
+  args: { 
+    skipIfUsersExist: v.optional(v.boolean())
+  },
+  handler: async (ctx, { skipIfUsersExist = true }) => {
+    // PRODUCTION SAFETY: Check if users already exist
+    if (skipIfUsersExist) {
+      const existingUsers = await ctx.db.query("users").first();
+      if (existingUsers) {
+        throw new Error(
+          "⚠️ PRODUCTION SAFETY: Users already exist in database. " +
+          "This seed script is for NEW databases only. " +
+          "To force seed (will create duplicate users), pass skipIfUsersExist: false"
+        );
+      }
+    }
+    
     const now = Date.now();
 
     // Password: master123, admin123, profesor123, parent123
-    // Pre-hashed with bcrypt (10 rounds)
+    // Pre-hashed with bcrypt (10 rounds) - CORRECTED HASHES
     const hashedMasterPassword =
-      "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
+      "$2b$10$.CMNqsxLIY3X9LAunrPvaOG1GIGmvwNi70Ksth1hHOlMrqQyp9UOy";
     const hashedAdminPassword =
-      "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
+      "$2b$10$07JuDiQUuQj9AQYD7k7KSeNbPVSx0n6cA8N17biZ95Qroq3owdtRm";
     const hashedProfesorPassword =
-      "$2a$10$F4P0HmYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4wYZOLQQYZlYqZWp6K";
+      "$2b$10$cd7.dEqS/9KNbYaG7DSgmeKUXOBvKN4qNzNXHK1TGdYaRf26xqtAu";
     const hashedParentPassword =
-      "$2a$10$rVEyGPNjGj8bLqTaHhHjYeYqZWp6K0YlxY1EJ.QQZJ4p6qXO.JJ4w";
+      "$2b$10$F1C0aQWCrE59er8wB0p94OThHCBMPrpxRA3esWSW0UuPS/Aa0FLZS";
 
     // Create Master User (Supreme Access)
     const masterId = await ctx.db.insert("users", {
@@ -169,10 +183,20 @@ export const seedDatabase = mutation({
 });
 
 export const clearDatabase = mutation({
-  args: { confirm: v.boolean() },
-  handler: async (ctx, { confirm }) => {
+  args: { confirm: v.boolean(), safetyCode: v.optional(v.string()) },
+  handler: async (ctx, { confirm, safetyCode }) => {
     if (!confirm) {
       throw new Error("Must confirm to clear database");
+    }
+    
+    // PRODUCTION SAFETY: Require special code to clear database
+    const SAFETY_CODE = "DELETE_ALL_DATA_PERMANENTLY_2024";
+    if (safetyCode !== SAFETY_CODE) {
+      throw new Error(
+        "⚠️ PRODUCTION SAFETY: This will delete ALL data including real users. " +
+        "To proceed, you must provide the correct safetyCode parameter. " +
+        "DO NOT run this in production unless you're absolutely sure!"
+      );
     }
 
     // Clear all tables (in reverse order of dependencies)
