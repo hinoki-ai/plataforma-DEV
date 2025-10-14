@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/language/LanguageContext";
 
@@ -63,57 +62,34 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useLanguage();
-  const router = useRouter();
 
   const { status, data: session, update } = useSession();
 
-  // Handle successful authentication - redirect with proper session sync
+  // Handle successful authentication - redirect immediately
   useEffect(() => {
     if (authState?.success && !isLoading) {
+      console.log('✅ Login successful, redirecting to auth-success');
       setIsLoading(true);
       
-      // Multi-step session establishment for production reliability
-      const establishSession = async () => {
+      // Simple approach: update session and redirect
+      // auth-success page will handle validation and retries
+      const redirect = async () => {
         try {
-          // Step 1: Update session
           await update();
-          
-          // Step 2: Wait for cookie to be written (production needs more time)
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          // Step 3: Verify session exists with retry
-          let retries = 3;
-          let sessionEstablished = false;
-          
-          while (retries > 0 && !sessionEstablished) {
-            const response = await fetch('/api/auth/session', { 
-              cache: 'no-store',
-              credentials: 'include'
-            });
-            const sessionData = await response.json();
-            
-            if (sessionData?.user?.role) {
-              sessionEstablished = true;
-              console.log('✅ Session established for role:', sessionData.user.role);
-            } else {
-              console.log('⏳ Session not ready, retrying...', retries - 1);
-              await new Promise(resolve => setTimeout(resolve, 300));
-              retries--;
-            }
-          }
-          
-          // Step 4: Navigate after session is confirmed with full page reload
-          window.location.href = "/auth-success";
+          // Small delay to ensure cookie is written
+          setTimeout(() => {
+            window.location.href = "/auth-success";
+          }, 100);
         } catch (error) {
-          console.error("Session establishment failed:", error);
-          // Fallback: navigate anyway, auth-success will handle retries
+          console.error("Session update failed:", error);
+          // Redirect anyway, auth-success will handle it
           window.location.href = "/auth-success";
         }
       };
       
-      establishSession();
+      redirect();
     }
-  }, [authState, isLoading, update, router]);
+  }, [authState, isLoading, update]);
 
   // Fallback: Handle authentication state changes from session (e.g., OAuth)
   useEffect(() => {
@@ -126,7 +102,7 @@ export default function LoginPage() {
     } else if (status === "unauthenticated") {
       setIsLoading(false);
     }
-  }, [status, authState, isLoading, router]);
+  }, [status, authState, isLoading]);
 
   const emailError = useMemo(
     () =>
