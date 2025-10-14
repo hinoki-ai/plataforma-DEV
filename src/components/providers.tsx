@@ -20,12 +20,30 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
   const shouldRefetchOnFocus =
     pathname === "/login" || pathname === "/auth-success";
 
-  // CRITICAL: Use window.location.origin for baseUrl on client side
-  // SessionProvider is a client component and needs the base URL to construct
-  // fetch requests to /api/auth/*. Without this, auth requests fail with NetworkError.
-  // Cannot use NEXTAUTH_URL env var as it's server-side only (no NEXT_PUBLIC_ prefix).
+  // CRITICAL FIX: SessionProvider baseUrl configuration
+  // ================================================================
+  // PROBLEM: Without baseUrl, SessionProvider cannot construct proper URLs
+  // for auth API requests (/api/auth/session, /api/auth/csrf, etc.),
+  // resulting in "NetworkError when attempting to fetch resource"
+  //
+  // WHY window.location.origin:
+  // - SessionProvider is a CLIENT component ("use client")
+  // - NEXTAUTH_URL env var is SERVER-SIDE ONLY (no NEXT_PUBLIC_ prefix)
+  // - process.env.NEXTAUTH_URL returns undefined in client components
+  // - window.location.origin provides the actual browser origin
+  //
+  // This ensures auth requests go to:
+  // https://plataforma.aramac.dev/api/auth/* (production)
+  // http://localhost:3000/api/auth/* (development)
+  // ================================================================
   const baseUrl =
     typeof window !== "undefined" ? window.location.origin : undefined;
+
+  if (typeof window !== "undefined" && !baseUrl) {
+    console.error(
+      "[AUTH ERROR] Failed to determine baseUrl for SessionProvider",
+    );
+  }
 
   return (
     <SessionProvider
