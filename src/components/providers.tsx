@@ -22,7 +22,8 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
 
   // Use window.location.origin for baseUrl on client side
   // This ensures the correct URL is used regardless of deployment environment
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : undefined;
+  const baseUrl =
+    typeof window !== "undefined" ? window.location.origin : undefined;
 
   return (
     <SessionProvider

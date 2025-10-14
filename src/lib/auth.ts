@@ -126,7 +126,7 @@ export const authOptions: NextAuthConfig = {
       if (url.includes("/api/auth/callback/credentials")) {
         return `${baseUrl}/auth-success`;
       }
-      
+
       // Allow relative URLs and URLs from the same domain
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       if (new URL(url).origin === baseUrl) return url;
