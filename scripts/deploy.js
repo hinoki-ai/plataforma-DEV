@@ -205,9 +205,10 @@ class DeploymentManager {
     this.log("Starting Convex deployment...", "🔄");
 
     try {
-      // Deploy Convex (uses deployment from convex.json or CONVEX_DEPLOYMENT env var)
+      // Deploy Convex to production deployment
+      const convexCommand = "CONVEX_DEPLOYMENT=industrious-manatee-7 npx convex deploy --yes";
       await this.runCommand(
-        "npx convex deploy --yes",
+        convexCommand,
         "Deploying Convex backend",
       );
 
