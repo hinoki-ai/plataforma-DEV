@@ -34,26 +34,27 @@ export async function getMiddlewareAuth(
     // Production with HTTPS uses __Secure- prefix (mandatory for NextAuth v5)
     // Development (HTTP) uses standard names
     const protocol = request.nextUrl.protocol;
-    const isSecure = process.env.NODE_ENV === "production" || protocol === "https:";
-    
+    const isSecure =
+      process.env.NODE_ENV === "production" || protocol === "https:";
+
     // Priority order: most specific first
-    const cookieNames = isSecure 
+    const cookieNames = isSecure
       ? [
-          "__Secure-next-auth.session-token",  // NextAuth v5 default for HTTPS
-          "__Secure-authjs.session-token",     // Auth.js alternative
-          "next-auth.session-token",           // Fallback for misconfigured HTTPS
+          "__Secure-next-auth.session-token", // NextAuth v5 default for HTTPS
+          "__Secure-authjs.session-token", // Auth.js alternative
+          "next-auth.session-token", // Fallback for misconfigured HTTPS
           "authjs.session-token",
         ]
       : [
-          "next-auth.session-token",           // Development default
+          "next-auth.session-token", // Development default
           "authjs.session-token",
-          "__Secure-next-auth.session-token",  // Check secure cookies too
+          "__Secure-next-auth.session-token", // Check secure cookies too
           "__Secure-authjs.session-token",
         ];
 
     let token: string | undefined;
     let foundCookieName: string | undefined;
-    
+
     // Try to find token in order of priority
     for (const cookieName of cookieNames) {
       token = request.cookies.get(cookieName)?.value;
@@ -74,7 +75,7 @@ export async function getMiddlewareAuth(
           nodeEnv: process.env.NODE_ENV,
           protocol,
           isSecure,
-          availableCookies: allCookies.map(c => c.name).join(", ") || "none"
+          availableCookies: allCookies.map((c) => c.name).join(", ") || "none",
         });
       }
       return null;

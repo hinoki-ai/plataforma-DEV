@@ -1124,7 +1124,6 @@ export function EnhancedSidebar({
             </div>
           )}
 
-
           {isCollapsed && (
             <Tooltip>
               <TooltipTrigger asChild>

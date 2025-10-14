@@ -7,8 +7,8 @@ import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const seedDatabase = mutation({
-  args: { 
-    skipIfUsersExist: v.optional(v.boolean())
+  args: {
+    skipIfUsersExist: v.optional(v.boolean()),
   },
   handler: async (ctx, { skipIfUsersExist = true }) => {
     // PRODUCTION SAFETY: Check if users already exist
@@ -17,12 +17,12 @@ export const seedDatabase = mutation({
       if (existingUsers) {
         throw new Error(
           "⚠️ PRODUCTION SAFETY: Users already exist in database. " +
-          "This seed script is for NEW databases only. " +
-          "To force seed (will create duplicate users), pass skipIfUsersExist: false"
+            "This seed script is for NEW databases only. " +
+            "To force seed (will create duplicate users), pass skipIfUsersExist: false",
         );
       }
     }
-    
+
     const now = Date.now();
 
     // Password: master123, admin123, profesor123, parent123
@@ -188,14 +188,14 @@ export const clearDatabase = mutation({
     if (!confirm) {
       throw new Error("Must confirm to clear database");
     }
-    
+
     // PRODUCTION SAFETY: Require special code to clear database
     const SAFETY_CODE = "DELETE_ALL_DATA_PERMANENTLY_2024";
     if (safetyCode !== SAFETY_CODE) {
       throw new Error(
         "⚠️ PRODUCTION SAFETY: This will delete ALL data including real users. " +
-        "To proceed, you must provide the correct safetyCode parameter. " +
-        "DO NOT run this in production unless you're absolutely sure!"
+          "To proceed, you must provide the correct safetyCode parameter. " +
+          "DO NOT run this in production unless you're absolutely sure!",
       );
     }
 

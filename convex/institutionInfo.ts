@@ -123,12 +123,14 @@ export const updateInstitution = mutation({
     email: v.optional(v.string()),
     website: v.optional(v.string()),
     logoUrl: v.optional(v.string()),
-    institutionType: v.optional(v.union(
-      v.literal("PRESCHOOL"),
-      v.literal("BASIC_SCHOOL"),
-      v.literal("HIGH_SCHOOL"),
-      v.literal("COLLEGE"),
-    )),
+    institutionType: v.optional(
+      v.union(
+        v.literal("PRESCHOOL"),
+        v.literal("BASIC_SCHOOL"),
+        v.literal("HIGH_SCHOOL"),
+        v.literal("COLLEGE"),
+      ),
+    ),
     supportedLevels: v.optional(v.any()),
     customGrades: v.optional(v.any()),
     customSubjects: v.optional(v.any()),

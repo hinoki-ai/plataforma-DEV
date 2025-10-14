@@ -52,14 +52,17 @@ export default async function middleware(req: NextRequest) {
     const pathname = nextUrl.pathname;
 
     // Skip middleware for static assets, system paths, and auth transition pages
+    // CRITICAL: /auth-success must bypass all auth checks to prevent redirect loops
     if (
       pathname.includes("_next/static") ||
       pathname.includes("_next/image") ||
       pathname.includes("favicon") ||
       pathname.startsWith("/auth-success") ||
+      pathname.startsWith("/api/auth") ||
       pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js)$/)
     ) {
-      return NextResponse.next();
+      const response = NextResponse.next();
+      return addSecurityHeaders(response);
     }
 
     // Get session and user info using middleware-compatible auth
@@ -74,14 +77,22 @@ export default async function middleware(req: NextRequest) {
       );
     }
 
-    // Handle auth pages
+    // Handle auth pages - only redirect if session is fully established
+    // CRITICAL: Don't redirect during login/registration process to avoid loops
     const isAuthPage =
       pathname.startsWith("/login") || pathname.startsWith("/registro");
 
     if (isAuthPage && isLoggedIn && userRole) {
-      const redirectPath = getRoleRedirectPath(userRole);
-      const response = NextResponse.redirect(new URL(redirectPath, nextUrl));
-      return addSecurityHeaders(response);
+      // Only redirect if user has a valid, complete session
+      // This prevents redirect loops during the login process
+      if (session?.user?.id && session?.user?.email && session?.user?.role) {
+        const redirectPath = getRoleRedirectPath(userRole);
+        console.log(
+          `👤 Logged in user on auth page, redirecting to ${redirectPath}`,
+        );
+        const response = NextResponse.redirect(new URL(redirectPath, nextUrl));
+        return addSecurityHeaders(response);
+      }
     }
 
     // Check if route requires authentication
@@ -90,7 +101,9 @@ export default async function middleware(req: NextRequest) {
     );
 
     if (requiresAuth && !isLoggedIn) {
-      console.log(`🔒 Auth required for ${pathname} but user not logged in - redirecting to login`);
+      console.log(
+        `🔒 Auth required for ${pathname} but user not logged in - redirecting to login`,
+      );
       const loginUrl = new URL("/login", nextUrl);
       // Preserve the original URL for redirect after login
       loginUrl.searchParams.set("callbackUrl", pathname + nextUrl.search);
@@ -134,12 +147,12 @@ export default async function middleware(req: NextRequest) {
     // Fail secure - redirect to login on error, preserving callback URL
     const loginUrl = new URL("/login", req.nextUrl);
     const pathname = req.nextUrl.pathname;
-    
+
     // Only add callback if not already on auth pages
     if (!pathname.startsWith("/login") && !pathname.startsWith("/registro")) {
       loginUrl.searchParams.set("callbackUrl", pathname + req.nextUrl.search);
     }
-    
+
     const response = NextResponse.redirect(loginUrl);
     return addSecurityHeaders(response);
   }

@@ -26,10 +26,10 @@ export default function AuthSuccessPage() {
       console.log("⏭️ Redirect already in progress, skipping");
       return;
     }
-    
+
     console.log(`🚀 AuthSuccess - Redirecting to ${path} (${reason})`);
     redirectedRef.current = true;
-    
+
     // Force immediate navigation with full page reload
     // This ensures session cookie is properly sent to server for SSR auth checks
     window.location.href = path;
@@ -38,10 +38,12 @@ export default function AuthSuccessPage() {
   useEffect(() => {
     if (redirectedRef.current) return;
 
-    console.log(
-      "🔍 AuthSuccess Check:",
-      { status, hasSession: !!session?.user, role: session?.user?.role, retry: retryCountRef.current }
-    );
+    console.log("🔍 AuthSuccess Check:", {
+      status,
+      hasSession: !!session?.user,
+      role: session?.user?.role,
+      retry: retryCountRef.current,
+    });
 
     // Still loading - wait for session
     if (status === "loading") {
@@ -49,9 +51,22 @@ export default function AuthSuccessPage() {
       return;
     }
 
-    // Unauthenticated - redirect to login
+    // Unauthenticated - wait a bit before redirecting (cookie might be setting)
     if (status === "unauthenticated") {
-      console.warn("❌ Not authenticated, redirecting to login");
+      // Give it one chance to load (sometimes session loads after initial render)
+      if (retryCountRef.current === 0) {
+        console.log(
+          "⏳ Not authenticated yet, waiting 500ms for session cookie...",
+        );
+        retryCountRef.current++;
+        setTimeout(() => {
+          // Trigger re-check by forcing a session update
+          window.location.reload();
+        }, 500);
+        return;
+      }
+
+      console.warn("❌ Not authenticated after retry, redirecting to login");
       performRedirect("/login", "unauthenticated");
       return;
     }
@@ -59,34 +74,21 @@ export default function AuthSuccessPage() {
     // Authenticated but waiting for session data
     if (status === "authenticated") {
       // Validate session has required data
-      if (!session?.user) {
-        // Retry up to 5 times with exponential backoff for production
-        if (retryCountRef.current < 5) {
-          const delay = 200 * Math.pow(1.5, retryCountRef.current); // 200ms, 300ms, 450ms, 675ms, 1012ms
-          console.log(`⏳ Session user data missing, retry ${retryCountRef.current + 1}/5 in ${Math.round(delay)}ms`);
-          retryCountRef.current++;
-          // Don't need to trigger re-render, just wait and let next useEffect cycle handle it
-          return;
-        }
-        
-        // After retries, redirect to login
-        console.error("❌ Session user data missing after 5 retries");
-        performRedirect("/login", "session data missing after retries");
+      if (!session?.user?.role || !session?.user?.email || !session?.user?.id) {
+        console.error("❌ Session missing required fields:", {
+          hasRole: !!session?.user?.role,
+          hasEmail: !!session?.user?.email,
+          hasId: !!session?.user?.id,
+        });
+        performRedirect("/login", "incomplete session data");
         return;
       }
 
       // Validate role exists and is valid
       const role = session.user.role as UserRole;
-      if (!role || !ROLE_PATHS[role]) {
-        console.error("❌ Invalid or missing role:", role);
+      if (!ROLE_PATHS[role]) {
+        console.error("❌ Invalid role:", role);
         performRedirect("/login", "invalid role");
-        return;
-      }
-
-      // Additional validation: ensure session has all required fields
-      if (!session.user.email || !session.user.id) {
-        console.error("❌ Session missing required fields", { email: !!session.user.email, id: !!session.user.id });
-        performRedirect("/login", "incomplete session data");
         return;
       }
 

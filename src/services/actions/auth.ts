@@ -34,7 +34,8 @@ export async function authenticate(
     if (!user) {
       return {
         success: false,
-        error: "Credenciales inválidas. Por favor verifique su email y contraseña.",
+        error:
+          "Credenciales inválidas. Por favor verifique su email y contraseña.",
       };
     }
 
@@ -60,7 +61,8 @@ export async function authenticate(
         case "CredentialsSignin":
           return {
             success: false,
-            error: "Credenciales inválidas. Por favor verifique su email y contraseña.",
+            error:
+              "Credenciales inválidas. Por favor verifique su email y contraseña.",
           };
         case "CallbackRouteError":
           return {

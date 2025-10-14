@@ -3,13 +3,15 @@
 ## Test Environment Setup
 
 ### Prerequisites
+
 1. Development server running: `npm run dev` (Terminal 1)
 2. Convex dev server running: `npx convex dev` (Terminal 2)
 3. Test users seeded in database (use `npx tsx scripts/seed-convex.ts`)
 
 ### Test Users
+
 | Role     | Email                          | Password    |
-|----------|--------------------------------|-------------|
+| -------- | ------------------------------ | ----------- |
 | MASTER   | admin@plataforma-astral.com    | admin123    |
 | ADMIN    | admin@plataforma-astral.com    | admin123    |
 | PROFESOR | profesor@plataforma-astral.com | profesor123 |
@@ -18,8 +20,10 @@
 ## Critical Test Cases
 
 ### 1. MASTER Role Login
+
 **Priority**: HIGH
 **Steps**:
+
 1. Navigate to http://localhost:3000/login
 2. Enter MASTER credentials
 3. Click login button
@@ -29,6 +33,7 @@
    - "AuthSuccess - Redirecting to /master (role: MASTER)"
 
 **Expected Result**:
+
 - ✅ Redirected to `/master` dashboard
 - ✅ No redirect loops
 - ✅ Session persists on page refresh
@@ -39,13 +44,16 @@
 ---
 
 ### 2. ADMIN Role Login
+
 **Priority**: HIGH
 **Steps**:
+
 1. Navigate to http://localhost:3000/login
 2. Enter ADMIN credentials
 3. Click login button
 
 **Expected Result**:
+
 - ✅ Redirected to `/admin` dashboard
 - ✅ No redirect loops
 - ✅ Session persists on page refresh
@@ -55,13 +63,16 @@
 ---
 
 ### 3. PROFESOR Role Login
+
 **Priority**: HIGH
 **Steps**:
+
 1. Navigate to http://localhost:3000/login
 2. Enter PROFESOR credentials
 3. Click login button
 
 **Expected Result**:
+
 - ✅ Redirected to `/profesor` dashboard
 - ✅ No redirect loops
 - ✅ Session persists on page refresh
@@ -71,13 +82,16 @@
 ---
 
 ### 4. PARENT Role Login
+
 **Priority**: HIGH
 **Steps**:
+
 1. Navigate to http://localhost:3000/login
 2. Enter PARENT credentials
 3. Click login button
 
 **Expected Result**:
+
 - ✅ Redirected to `/parent` dashboard
 - ✅ No redirect loops
 - ✅ Session persists on page refresh
@@ -87,13 +101,16 @@
 ---
 
 ### 5. Invalid Credentials
+
 **Priority**: HIGH
 **Steps**:
+
 1. Navigate to http://localhost:3000/login
 2. Enter invalid email/password
 3. Click login button
 
 **Expected Result**:
+
 - ✅ Error message displayed: "Credenciales inválidas..."
 - ✅ User stays on login page
 - ✅ No redirect occurs
@@ -103,12 +120,15 @@
 ---
 
 ### 6. Protected Route Access (Unauthenticated)
+
 **Priority**: HIGH
 **Steps**:
+
 1. Ensure logged out
 2. Navigate directly to http://localhost:3000/admin
 
 **Expected Result**:
+
 - ✅ Redirected to `/login?callbackUrl=/admin`
 - ✅ After login, redirected back to `/admin`
 
@@ -117,12 +137,15 @@
 ---
 
 ### 7. Protected Route Access (Wrong Role)
+
 **Priority**: HIGH
 **Steps**:
+
 1. Login as PARENT
 2. Try to access http://localhost:3000/admin
 
 **Expected Result**:
+
 - ✅ Redirected to `/parent` (their allowed dashboard)
 - ✅ Console shows "Unauthorized access attempt"
 
@@ -131,13 +154,16 @@
 ---
 
 ### 8. Session Persistence
+
 **Priority**: HIGH
 **Steps**:
+
 1. Login as any role
 2. Navigate to dashboard
 3. Refresh page (F5)
 
 **Expected Result**:
+
 - ✅ User stays logged in
 - ✅ Remains on same dashboard
 - ✅ No redirect to login
@@ -147,13 +173,16 @@
 ---
 
 ### 9. Logout Flow
+
 **Priority**: HIGH
 **Steps**:
+
 1. Login as any role
 2. Click logout button
 3. Observe behavior
 
 **Expected Result**:
+
 - ✅ Redirected to `/login`
 - ✅ Session cleared
 - ✅ Cannot access protected routes
@@ -164,12 +193,15 @@
 ---
 
 ### 10. Concurrent Login Attempts
+
 **Priority**: MEDIUM
 **Steps**:
+
 1. Open login page
 2. Rapidly click login button 5 times
 
 **Expected Result**:
+
 - ✅ Only one authentication attempt processed
 - ✅ No double redirects
 - ✅ Loading state prevents multiple submissions
@@ -179,13 +211,16 @@
 ---
 
 ### 11. OAuth Google Login (if enabled)
+
 **Priority**: MEDIUM
 **Steps**:
+
 1. Navigate to login page
 2. Click Google OAuth button
 3. Complete Google authentication
 
 **Expected Result**:
+
 - ✅ For PARENT users: redirected to parent dashboard
 - ✅ For non-PARENT users: OAuth blocked (teachers must use credentials)
 
@@ -194,12 +229,15 @@
 ---
 
 ### 12. Auth Success Timeout
+
 **Priority**: LOW
 **Steps**:
+
 1. Manually navigate to http://localhost:3000/auth-success
 2. Wait 10 seconds without valid session
 
 **Expected Result**:
+
 - ✅ After 10s timeout, redirected to `/`
 - ✅ Console shows "Timeout reached"
 
@@ -208,13 +246,16 @@
 ---
 
 ### 13. Browser Back Button After Login
+
 **Priority**: MEDIUM
 **Steps**:
+
 1. Login successfully
 2. Reach dashboard
 3. Click browser back button
 
 **Expected Result**:
+
 - ✅ Should redirect back to dashboard (not login)
 - ✅ Middleware prevents accessing login when authenticated
 
@@ -223,14 +264,17 @@
 ---
 
 ### 14. Multiple Browser Tabs
+
 **Priority**: MEDIUM
 **Steps**:
+
 1. Login in Tab 1
 2. Open Tab 2 to same site
 3. Logout in Tab 1
 4. Try to navigate in Tab 2
 
 **Expected Result**:
+
 - ✅ Tab 2 eventually recognizes logout
 - ✅ Protected routes redirect to login
 
@@ -241,6 +285,7 @@
 ## Performance Tests
 
 ### 15. Login Performance
+
 **Priority**: MEDIUM
 **Metric**: Time from login submit to dashboard load
 **Target**: < 2 seconds
@@ -250,6 +295,7 @@
 ---
 
 ### 16. Middleware Performance
+
 **Priority**: MEDIUM
 **Metric**: Middleware execution time per request
 **Target**: < 50ms
@@ -261,13 +307,16 @@
 ## Edge Cases
 
 ### 17. Expired Session
+
 **Priority**: HIGH
 **Steps**:
+
 1. Login
 2. Manually expire session (after 24 hours or manipulate JWT)
 3. Try to access protected route
 
 **Expected Result**:
+
 - ✅ Redirected to login
 - ✅ No errors in console
 
@@ -276,13 +325,16 @@
 ---
 
 ### 18. Invalid JWT Token
+
 **Priority**: HIGH
 **Steps**:
+
 1. Login
 2. Manually corrupt JWT token in cookies
 3. Try to access protected route
 
 **Expected Result**:
+
 - ✅ Redirected to login
 - ✅ Console shows auth validation failed
 
@@ -291,12 +343,15 @@
 ---
 
 ### 19. Missing Role in Session
+
 **Priority**: HIGH
 **Steps**:
+
 1. Manually create session without role field
 2. Navigate to auth-success
 
 **Expected Result**:
+
 - ✅ After 3 retries, redirected to login
 - ✅ Console shows "invalid role"
 
@@ -307,8 +362,10 @@
 ## Browser Compatibility
 
 ### 20. Cross-Browser Testing
+
 **Priority**: MEDIUM
 **Browsers to Test**:
+
 - Chrome/Chromium
 - Firefox
 - Safari (if available)
@@ -321,12 +378,15 @@
 ## Security Tests
 
 ### 21. XSS Protection
+
 **Priority**: HIGH
 **Steps**:
+
 1. Try to inject script in email field: `<script>alert('xss')</script>`
 2. Submit login
 
 **Expected Result**:
+
 - ✅ Script not executed
 - ✅ Validation rejects input
 
@@ -335,12 +395,15 @@
 ---
 
 ### 22. SQL Injection Protection
+
 **Priority**: HIGH
 **Steps**:
+
 1. Try SQL injection in email: `admin' OR '1'='1`
 2. Submit login
 
 **Expected Result**:
+
 - ✅ Login fails
 - ✅ No database error
 
@@ -349,11 +412,14 @@
 ---
 
 ### 23. Rate Limiting
+
 **Priority**: MEDIUM
 **Steps**:
+
 1. Make 10+ rapid login attempts
 
 **Expected Result**:
+
 - ✅ After threshold, rate limit kicks in
 - ✅ 429 status returned
 
@@ -366,54 +432,57 @@
 ```markdown
 ## Test Execution Results
 
-**Date**: ___________
-**Tester**: ___________
+**Date**: \***\*\_\_\_\*\***
+**Tester**: \***\*\_\_\_\*\***
 **Environment**: Development / Production
 
-| Test # | Test Name | Status | Notes |
-|--------|-----------|--------|-------|
-| 1 | MASTER Login | ⬜ PASS / ❌ FAIL | |
-| 2 | ADMIN Login | ⬜ PASS / ❌ FAIL | |
-| 3 | PROFESOR Login | ⬜ PASS / ❌ FAIL | |
-| 4 | PARENT Login | ⬜ PASS / ❌ FAIL | |
-| 5 | Invalid Credentials | ⬜ PASS / ❌ FAIL | |
-| 6 | Protected Route (Unauth) | ⬜ PASS / ❌ FAIL | |
-| 7 | Protected Route (Wrong Role) | ⬜ PASS / ❌ FAIL | |
-| 8 | Session Persistence | ⬜ PASS / ❌ FAIL | |
-| 9 | Logout Flow | ⬜ PASS / ❌ FAIL | |
-| 10 | Concurrent Login | ⬜ PASS / ❌ FAIL | |
-| 11 | OAuth Google | ⬜ PASS / ❌ FAIL / ⬜ SKIP | |
-| 12 | Auth Success Timeout | ⬜ PASS / ❌ FAIL | |
-| 13 | Back Button | ⬜ PASS / ❌ FAIL | |
-| 14 | Multiple Tabs | ⬜ PASS / ❌ FAIL | |
-| 15 | Login Performance | ⬜ PASS / ❌ FAIL | |
-| 16 | Middleware Performance | ⬜ PASS / ❌ FAIL | |
-| 17 | Expired Session | ⬜ PASS / ❌ FAIL | |
-| 18 | Invalid JWT | ⬜ PASS / ❌ FAIL | |
-| 19 | Missing Role | ⬜ PASS / ❌ FAIL | |
-| 20 | Cross-Browser | ⬜ PASS / ❌ FAIL | |
-| 21 | XSS Protection | ⬜ PASS / ❌ FAIL | |
-| 22 | SQL Injection | ⬜ PASS / ❌ FAIL | |
-| 23 | Rate Limiting | ⬜ PASS / ❌ FAIL | |
+| Test # | Test Name                    | Status                      | Notes |
+| ------ | ---------------------------- | --------------------------- | ----- |
+| 1      | MASTER Login                 | ⬜ PASS / ❌ FAIL           |       |
+| 2      | ADMIN Login                  | ⬜ PASS / ❌ FAIL           |       |
+| 3      | PROFESOR Login               | ⬜ PASS / ❌ FAIL           |       |
+| 4      | PARENT Login                 | ⬜ PASS / ❌ FAIL           |       |
+| 5      | Invalid Credentials          | ⬜ PASS / ❌ FAIL           |       |
+| 6      | Protected Route (Unauth)     | ⬜ PASS / ❌ FAIL           |       |
+| 7      | Protected Route (Wrong Role) | ⬜ PASS / ❌ FAIL           |       |
+| 8      | Session Persistence          | ⬜ PASS / ❌ FAIL           |       |
+| 9      | Logout Flow                  | ⬜ PASS / ❌ FAIL           |       |
+| 10     | Concurrent Login             | ⬜ PASS / ❌ FAIL           |       |
+| 11     | OAuth Google                 | ⬜ PASS / ❌ FAIL / ⬜ SKIP |       |
+| 12     | Auth Success Timeout         | ⬜ PASS / ❌ FAIL           |       |
+| 13     | Back Button                  | ⬜ PASS / ❌ FAIL           |       |
+| 14     | Multiple Tabs                | ⬜ PASS / ❌ FAIL           |       |
+| 15     | Login Performance            | ⬜ PASS / ❌ FAIL           |       |
+| 16     | Middleware Performance       | ⬜ PASS / ❌ FAIL           |       |
+| 17     | Expired Session              | ⬜ PASS / ❌ FAIL           |       |
+| 18     | Invalid JWT                  | ⬜ PASS / ❌ FAIL           |       |
+| 19     | Missing Role                 | ⬜ PASS / ❌ FAIL           |       |
+| 20     | Cross-Browser                | ⬜ PASS / ❌ FAIL           |       |
+| 21     | XSS Protection               | ⬜ PASS / ❌ FAIL           |       |
+| 22     | SQL Injection                | ⬜ PASS / ❌ FAIL           |       |
+| 23     | Rate Limiting                | ⬜ PASS / ❌ FAIL           |       |
 
 **Overall Result**: ⬜ ALL PASS / ❌ FAILURES FOUND
 
 **Failures** (if any):
-___________
+
+---
 
 **Notes**:
-___________
+
+---
 ```
 
 ## Deployment Authorization
 
 ### Sign-Off Required
+
 - [ ] All HIGH priority tests PASS
 - [ ] At least 90% of MEDIUM priority tests PASS
 - [ ] No CRITICAL bugs found
 - [ ] Performance targets met
 - [ ] Security tests pass
 
-**Authorized by**: ___________
-**Date**: ___________
+**Authorized by**: \***\*\_\_\_\*\***
+**Date**: \***\*\_\_\_\*\***
 **Ready for Production**: YES / NO

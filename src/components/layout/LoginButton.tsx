@@ -49,7 +49,6 @@ const ROLE_CONFIG = {
   default: { icon: Building, color: "text-gray-500", name: "Usuario" },
 } as const;
 
-
 // ⚡ Performance: Extract initials function to prevent recreation
 const getInitials = (name?: string | null): string => {
   if (!name) return "MP";
@@ -117,8 +116,6 @@ export default function LoginButton() {
       setIsLoggingOut(false);
     }
   }, [router]);
-
-
 
   // ⚡ Performance: Optimized role data calculation with static config
   const roleData = useMemo(() => {
@@ -245,7 +242,6 @@ export default function LoginButton() {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-
             {/* Dashboard Navigation Dropdown for MASTER users */}
             {session.user.role === "MASTER" && (
               <DropdownMenu>
@@ -314,7 +310,6 @@ export default function LoginButton() {
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
-
 
             {/* Dashboard Navigation Dropdown for ADMIN users */}
             {session.user.role === "ADMIN" && (

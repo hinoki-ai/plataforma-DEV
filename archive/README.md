@@ -10,15 +10,11 @@ This directory contains historical documentation that is no longer actively main
 
 ### `authentication-fixes-2024/`
 
-Historical authentication fix documentation from October 2024:
+Historical authentication testing documentation:
 
-- **AUTHENTICATION_SUMMARY.md** - October 2024 fix overview
-- **AUTHENTICATION_FIXED.md** - Fix implementation details
-- **AUTH_SYSTEM_ANALYSIS.md** - Root cause analysis
-- **AUTH_TEST_CREDENTIALS.md** - Test credentials used during fix
-- **PRODUCTION_DEPLOYMENT.md** - Deployment guide specific to the auth fix
+- **AUTH_TEST_CREDENTIALS.md** - Test credentials used for authentication testing
 
-**Why archived**: These issues were resolved and the authentication system has been stable since. Current auth documentation is in `docs/AUTHENTICATION_SYSTEM_DOCS.md`.
+**Why archived**: Authentication issues resolved. Current comprehensive auth documentation is in `docs/AUTHENTICATION_SYSTEM_DOCS.md`.
 
 ---
 
@@ -34,18 +30,7 @@ Historical incident reports:
 
 ### `deprecated/`
 
-Documentation for deprecated features or outdated implementation guides:
-
-- **DEPLOYMENT_GUIDE.md** - Generic deployment guide (replaced by project-specific DEPLOYMENT.md)
-- **PARENT_REGISTRATION_IMPLEMENTATION.md** - Old parent registration implementation
-- **INSTITUTION_SUPPORT_UPDATE.md** - Old institution support update
-- **I18N_SYSTEM_VERIFICATION.md** - Internationalization verification (feature complete)
-
-**Why archived**:
-
-- Features have been fully implemented or replaced
-- Documentation superseded by current guides
-- Technology migration complete (e.g., Prisma → Convex)
+Previously contained documentation for deprecated features and outdated implementation guides. All files have been removed as they were superseded by current documentation.
 
 ---
 
@@ -53,10 +38,10 @@ Documentation for deprecated features or outdated implementation guides:
 
 For up-to-date documentation, see:
 
-- **[../DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md)** - Complete documentation index
 - **[../START_HERE.md](../START_HERE.md)** - Getting started guide
 - **[../CLAUDE.md](../CLAUDE.md)** - Development guide
 - **[../docs/](../docs/)** - Technical documentation
+- **[../DEPLOYMENT.md](../DEPLOYMENT.md)** - Deployment procedures
 
 ---
 

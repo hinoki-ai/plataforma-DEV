@@ -239,12 +239,12 @@ export const organizationSchema = generateSchemaOrg("organization", {
     "SaaS",
     "Gestión Educativa",
     "Innovación Digital",
-    "Software Educativo Chile"
+    "Software Educativo Chile",
   ],
   serviceArea: {
     "@type": "Country",
-    name: "Chile"
-  }
+    name: "Chile",
+  },
 });
 
 const seoUtils = {
