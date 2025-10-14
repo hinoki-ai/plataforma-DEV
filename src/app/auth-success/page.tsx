@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { PageLoader } from "@/components/ui/unified-loader";
 import { useLanguage } from "@/components/language/LanguageContext";
 
@@ -18,7 +17,6 @@ const ROLE_PATHS: Record<UserRole, string> = {
 
 export default function AuthSuccessPage() {
   const { data: session, status } = useSession();
-  const router = useRouter();
   const [redirected, setRedirected] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const { t } = useLanguage();
@@ -29,9 +27,12 @@ export default function AuthSuccessPage() {
     console.log(`🚀 AuthSuccess - Redirecting to ${path} (${reason})`);
     setRedirected(true);
     
-    // Use router.replace for smoother client-side navigation
-    router.replace(path);
-  }, [redirected, router]);
+    // Use window.location.href for server-side session establishment
+    // This ensures session cookie is properly sent to server for SSR auth checks
+    if (typeof window !== "undefined") {
+      window.location.href = path;
+    }
+  }, [redirected]);
 
   useEffect(() => {
     if (redirected) return;
@@ -103,7 +104,7 @@ export default function AuthSuccessPage() {
     };
 
     checkAuthAndRedirect();
-  }, [session, status, router, redirected, retryCount, performRedirect]);
+  }, [session, status, redirected, retryCount, performRedirect]);
 
   // Safety timeout to prevent infinite loading (15 seconds for production)
   useEffect(() => {

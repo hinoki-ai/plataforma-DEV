@@ -102,12 +102,12 @@ export default function LoginPage() {
             }
           }
           
-          // Step 4: Navigate after session is confirmed
-          router.push("/auth-success");
+          // Step 4: Navigate after session is confirmed with full page reload
+          window.location.href = "/auth-success";
         } catch (error) {
           console.error("Session establishment failed:", error);
           // Fallback: navigate anyway, auth-success will handle retries
-          router.push("/auth-success");
+          window.location.href = "/auth-success";
         }
       };
       
@@ -122,7 +122,7 @@ export default function LoginPage() {
     } else if (status === "authenticated" && !authState?.success && !isLoading) {
       // Only redirect if we're not already in the middle of a login flow
       setIsLoading(true);
-      router.push("/auth-success");
+      window.location.href = "/auth-success";
     } else if (status === "unauthenticated") {
       setIsLoading(false);
     }
