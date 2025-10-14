@@ -87,9 +87,11 @@ export default async function middleware(req: NextRequest) {
       // This prevents redirect loops during the login process
       if (session?.user?.id && session?.user?.email && session?.user?.role) {
         const redirectPath = getRoleRedirectPath(userRole);
-        console.log(
-          `👤 Logged in user on auth page, redirecting to ${redirectPath}`,
-        );
+        if (process.env.NODE_ENV === "development") {
+          console.log(
+            `👤 Logged in user on auth page, redirecting to ${redirectPath}`,
+          );
+        }
         const response = NextResponse.redirect(new URL(redirectPath, nextUrl));
         return addSecurityHeaders(response);
       }
@@ -101,9 +103,11 @@ export default async function middleware(req: NextRequest) {
     );
 
     if (requiresAuth && !isLoggedIn) {
-      console.log(
-        `🔒 Auth required for ${pathname} but user not logged in - redirecting to login`,
-      );
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          `🔒 Auth required for ${pathname} but user not logged in - redirecting to login`,
+        );
+      }
       const loginUrl = new URL("/login", nextUrl);
       // Preserve the original URL for redirect after login
       loginUrl.searchParams.set("callbackUrl", pathname + nextUrl.search);
@@ -123,9 +127,11 @@ export default async function middleware(req: NextRequest) {
         !hasMiddlewareAccess(userRole, ROUTE_ACCESS[matchingRoute])
       ) {
         // Log unauthorized access attempt
-        console.warn(
-          `🚨 Unauthorized access attempt: ${userRole} → ${pathname}`,
-        );
+        if (process.env.NODE_ENV === "development") {
+          console.warn(
+            `🚨 Unauthorized access attempt: ${userRole} → ${pathname}`,
+          );
+        }
 
         // Redirect to appropriate dashboard or show unauthorized
         const allowedPath =

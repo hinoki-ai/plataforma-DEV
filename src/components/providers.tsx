@@ -20,13 +20,17 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
   const shouldRefetchOnFocus =
     pathname === "/login" || pathname === "/auth-success";
 
+  // Use window.location.origin for baseUrl on client side
+  // This ensures the correct URL is used regardless of deployment environment
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : undefined;
+
   return (
     <SessionProvider
       refetchInterval={600} // Refresh every 10 minutes to reduce server load
       refetchOnWindowFocus={shouldRefetchOnFocus} // Selective window focus refresh
       refetchWhenOffline={false}
       basePath="/api/auth"
-      baseUrl={process.env.NEXTAUTH_URL}
+      baseUrl={baseUrl}
     >
       {children}
     </SessionProvider>
