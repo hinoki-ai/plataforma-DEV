@@ -35,6 +35,7 @@ const convexClient = process.env.NEXT_PUBLIC_CONVEX_URL
 
 export const authOptions: NextAuthConfig = {
   adapter: convexClient ? ConvexAdapter(convexClient) : undefined,
+  basePath: "/api/auth",
   session: {
     strategy: "jwt" as const,
     maxAge: 24 * 60 * 60, // 24 hours
@@ -121,6 +122,11 @@ export const authOptions: NextAuthConfig = {
   ],
   callbacks: {
     async redirect({ url, baseUrl }) {
+      // Always redirect successful login to auth-success for proper role-based routing
+      if (url.includes("/api/auth/callback/credentials")) {
+        return `${baseUrl}/auth-success`;
+      }
+      
       // Allow relative URLs and URLs from the same domain
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       if (new URL(url).origin === baseUrl) return url;
