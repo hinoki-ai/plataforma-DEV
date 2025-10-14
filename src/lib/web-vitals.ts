@@ -81,15 +81,31 @@ async function sendToAnalytics(data: WebVitalsAnalytics) {
       });
     }
 
-    // Send to custom analytics endpoint
+    // Send to custom analytics endpoint - only if it exists
+    // Wrapped in additional try-catch to prevent console errors
     if (process.env.NODE_ENV === "production") {
-      await fetch("/api/analytics/web-vitals", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      try {
+        const response = await fetch("/api/analytics/web-vitals", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          // Don't throw on 404 - the endpoint might not exist yet
+          signal: AbortSignal.timeout(5000),
+        });
+        
+        // Silently ignore if endpoint doesn't exist
+        if (!response.ok && response.status !== 404) {
+          console.warn(`Analytics endpoint returned ${response.status}`);
+        }
+      } catch (analyticsError) {
+        // Silently fail - analytics should never break the app
+        // Only log in development
+        if (process.env.NODE_ENV === "development") {
+          console.debug("Analytics endpoint not available:", analyticsError);
+        }
+      }
     }
 
     // Console logging for development
@@ -102,7 +118,10 @@ async function sendToAnalytics(data: WebVitalsAnalytics) {
       });
     }
   } catch (error) {
-    console.error("Failed to send Web Vitals data:", error);
+    // Silently fail - don't pollute console with analytics errors
+    if (process.env.NODE_ENV === "development") {
+      console.debug("Web Vitals analytics error:", error);
+    }
   }
 }
 
