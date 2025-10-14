@@ -81,6 +81,107 @@ npx vercel ls | head -15
 npx vercel alias set https://plataforma-aramac-[new-hash].vercel.app plataforma.aramac.dev
 ```
 
+## 🤖 Automated Deployment System
+
+A comprehensive automated deployment system is available for streamlined deployments.
+
+### Quick Start
+
+```bash
+# Full automated deployment with all checks
+npm run deploy
+
+# Fast deployment (skip quality checks)
+npm run deploy:fast
+
+# Verify configuration without deploying
+npm run verify-deployment
+```
+
+### What It Does
+
+The automated system handles:
+
+- ✅ **Quality Assurance**
+  - Code formatting (Prettier)
+  - TypeScript type checking
+  - ESLint linting (zero warnings)
+  - Optional test execution
+
+- ✅ **Git Operations**
+  - Auto-staging changes
+  - Sensitive data detection
+  - Timestamped commits
+  - Branch push automation
+
+- ✅ **Backend Deployment**
+  - Convex functions deployment
+  - Schema updates and migrations
+
+- ✅ **Frontend Deployment**
+  - Next.js build and Vercel deployment
+  - Environment variable sync
+
+- ✅ **Triple Verification**
+  - 3 automated health checks (30s intervals)
+  - Configuration validation
+  - Status monitoring
+
+### Safety Features
+
+- **Sensitive Data Detection**: Prevents commits containing secrets
+- **Pre-deployment Verification**: Catches configuration issues early
+- **Interactive Confirmation**: Manual approval for non-CI environments
+- **Graceful Fallbacks**: Works in both local and CI/CD environments
+
+### Command Reference
+
+```bash
+# Standard deployment (recommended)
+npm run deploy
+
+# Fast deployment (emergency hotfix)
+npm run deploy:fast
+
+# Verification only (no deployment)
+npm run verify-deployment
+
+# Custom options
+npm run deploy -- --skip-checks    # Skip quality checks
+npm run deploy -- --skip-verification  # Skip post-deploy checks
+npm run deploy -- --help           # Show help
+```
+
+### Deployment Flow
+
+```text
+1. Quality Checks (30-60s) → Format, Type-check, Lint, Tests
+2. Git Operations (5-10s) → Stage, Scan, Commit, Push
+3. Convex Deploy (20-40s) → Functions, Schema, Migrations
+4. Vercel Deploy (2-4 min) → Build, Upload, Deploy
+5. Verification (90s) → Check #1 → Wait → Check #2 → Wait → Check #3
+
+Total: ~4-6 minutes
+```
+
+### Benefits Over Manual Deployment
+
+| Aspect           | Manual                            | Automated                                |
+| ---------------- | --------------------------------- | ---------------------------------------- |
+| **Time**         | 10-15 min + manual testing        | 4-6 min fully automatic                  |
+| **Safety**       | Error-prone, easy to forget steps | Built-in checks, sensitive data scanning |
+| **Verification** | Manual browser testing            | Triple automated health checks           |
+| **Reliability**  | Variable                          | Consistent, repeatable process           |
+
+### CI/CD Integration
+
+Works seamlessly in automated environments:
+
+- Non-interactive mode for pipelines
+- Proper exit codes for build systems
+- Environment variable support
+- Skips TTY-only prompts
+
 ## 📋 Environment Variables
 
 ### Required (Production)
@@ -211,6 +312,7 @@ git push origin --delete branch-name
 **Symptoms**: No new deployment appears after push, old version still live.
 
 **Solutions**:
+
 ```bash
 # Force manual deployment
 npx vercel --prod
@@ -228,6 +330,7 @@ npx vercel alias set https://plataforma-aramac-[hash].vercel.app plataforma.aram
 **Symptoms**: Site shows Vercel login page instead of your app.
 
 **Solutions**:
+
 ```bash
 # Deploy without automatic domain assignment
 npx vercel --prod --skip-domain
@@ -248,6 +351,7 @@ npx vercel alias set [new-deployment-url] plataforma.aramac.dev
 **Root Cause**: Complex chunked i18n system fails in production builds.
 
 **Solutions**:
+
 - The i18n system has been simplified to use direct synchronous lookups
 - If issue persists, check that `src/locales/` files exist and are properly formatted
 - Verify build completes without i18n-related errors
@@ -259,6 +363,7 @@ npx vercel alias set [new-deployment-url] plataforma.aramac.dev
 **Symptoms**: Vercel shows "Build Failed" status.
 
 **Solutions**:
+
 ```bash
 # Test build locally first
 npm run lint
@@ -281,6 +386,7 @@ npm ls --depth=0
 **Symptoms**: Site shows old content despite new deployment being "Ready".
 
 **Solutions**:
+
 ```bash
 # Check current alias assignment
 npx vercel alias ls
@@ -299,6 +405,7 @@ curl -I https://plataforma.aramac.dev
 **Symptoms**: API calls return errors, health check shows `"database": "disconnected"`.
 
 **Solutions**:
+
 ```bash
 # Check Convex status
 npx convex dashboard
@@ -321,6 +428,7 @@ npx convex logs
 **Symptoms**: Authentication fails, API calls error out.
 
 **Solutions**:
+
 ```bash
 # Check Vercel environment variables
 npx vercel env ls
@@ -342,6 +450,7 @@ npx vercel env pull .env.local
 **Symptoms**: Build fails with unexpected errors.
 
 **Solutions**:
+
 ```bash
 # Clean untracked files before deployment
 git clean -fd  # Remove untracked files/directories
@@ -356,6 +465,7 @@ git clean -xfd  # Remove ignored files too (be careful!)
 **Problem**: New deployment breaks critical functionality.
 
 **Solutions**:
+
 ```bash
 # Rollback to previous deployment
 npx vercel rollback
@@ -413,6 +523,7 @@ npx vercel ls | head -n 5
 ## 🎯 Critical Best Practices
 
 ### Deployment Safety
+
 1. **Always test locally first** - Run `npm run build` before pushing
 2. **Small commits** - Deploy small, incremental changes to minimize rollback risk
 3. **Have manual deployment ready** - GitHub webhooks can fail - know the manual commands
@@ -420,6 +531,7 @@ npx vercel ls | head -n 5
 5. **Keep multiple deployment methods** - Always have fallback options
 
 ### Pre-Deployment Checklist
+
 - [ ] All linting passes (`npm run lint`)
 - [ ] TypeScript compilation succeeds (`npm run type-check`)
 - [ ] Build completes successfully (`npm run build`)
@@ -429,6 +541,7 @@ npx vercel ls | head -n 5
 - [ ] Translations working locally (not showing keys)
 
 ### Post-Deployment Verification
+
 - [ ] Site loads without authentication prompts
 - [ ] Health check returns healthy status
 - [ ] Build number updated in HTML
@@ -438,6 +551,7 @@ npx vercel ls | head -n 5
 - [ ] No console errors in production
 
 ### Emergency Procedures
+
 1. **If deployment fails**: Use manual deployment commands
 2. **If site shows 401**: Redeploy with `--skip-domain` and manually assign alias
 3. **If translations broken**: Check i18n system was properly updated
@@ -445,6 +559,7 @@ npx vercel ls | head -n 5
 5. **If critical failure**: Use rollback commands immediately
 
 ### Maintenance
+
 - **Keep dependencies updated** - Run `npm audit` regularly
 - **Monitor Vercel/Convex dashboards** - Check for errors proactively
 - **Test deployments regularly** - Don't wait for issues to test deployment process
@@ -453,6 +568,7 @@ npx vercel ls | head -n 5
 ## 🔧 i18n System Architecture
 
 ### Current Implementation
+
 - **Framework**: Custom chunked i18n system with Divine Parsing Oracle
 - **Files**: Located in `src/locales/{es,en}/*.json`
 - **Provider**: `ChunkedLanguageProvider.tsx` with synchronous fallbacks
@@ -460,6 +576,7 @@ npx vercel ls | head -n 5
 - **Translation Function**: `t(key, namespace)` - direct synchronous lookups
 
 ### Critical Notes
+
 - **DO NOT** use complex async loading in production
 - **ALWAYS** test translations locally before deployment
 - **VERIFY** Spanish text displays (not `home.welcome.title` keys)

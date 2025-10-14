@@ -13,7 +13,7 @@ import {
   getDefaultRedirectPath,
   getRoleFilter,
   getRoleDisplayName,
-} from "@/lib/role-utils";
+} from "../../src/lib/role-utils";
 
 describe("Role Access System", () => {
   describe("Role Access Permissions", () => {
@@ -26,21 +26,21 @@ describe("Role Access System", () => {
       expect(access.canAccessPublic).toBe(true);
     });
 
-    it("should grant ADMIN access to admin and profesor sections", () => {
+    it("should grant ADMIN access to admin, profesor, and parent sections", () => {
       const access = getRoleAccess("ADMIN");
 
       expect(access.canAccessAdmin).toBe(true);
       expect(access.canAccessProfesor).toBe(true);
-      expect(access.canAccessParent).toBe(false);
+      expect(access.canAccessParent).toBe(true);
       expect(access.canAccessPublic).toBe(true);
     });
 
-    it("should grant PROFESOR access to profesor section", () => {
+    it("should grant PROFESOR access to profesor and parent sections", () => {
       const access = getRoleAccess("PROFESOR");
 
       expect(access.canAccessAdmin).toBe(false);
       expect(access.canAccessProfesor).toBe(true);
-      expect(access.canAccessParent).toBe(false);
+      expect(access.canAccessParent).toBe(true);
       expect(access.canAccessPublic).toBe(true);
     });
 
@@ -107,14 +107,14 @@ describe("Role Access System", () => {
       expect(sections).toEqual(["admin", "profesor", "parent", "public"]);
     });
 
-    it("should return admin and profesor sections for ADMIN", () => {
+    it("should return admin, profesor, and parent sections for ADMIN", () => {
       const sections = getAccessibleSections("ADMIN");
-      expect(sections).toEqual(["admin", "profesor", "public"]);
+      expect(sections).toEqual(["admin", "profesor", "parent", "public"]);
     });
 
-    it("should return profesor section for PROFESOR", () => {
+    it("should return profesor and parent sections for PROFESOR", () => {
       const sections = getAccessibleSections("PROFESOR");
-      expect(sections).toEqual(["profesor", "public"]);
+      expect(sections).toEqual(["profesor", "parent", "public"]);
     });
 
     it("should return parent section for PARENT", () => {

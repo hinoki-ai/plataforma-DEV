@@ -15,7 +15,10 @@ export async function GET() {
     const client = getConvexClient();
 
     // Get current institution configuration from school info
-    const schoolInfo = await client.query(api.institutionInfo.getSchoolInfo, {});
+    const schoolInfo = await client.query(
+      api.institutionInfo.getSchoolInfo,
+      {},
+    );
 
     if (!schoolInfo) {
       // Return default configuration if no school info exists

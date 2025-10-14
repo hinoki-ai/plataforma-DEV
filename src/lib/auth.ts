@@ -200,7 +200,7 @@ export const authOptions: NextAuthConfig = {
           );
         }
       }
-      
+
       // Ensure token always has these properties - critical for production
       if (!token.role && token.email) {
         console.log("⚠️ Token missing role, fetching from database...");
@@ -216,13 +216,16 @@ export const authOptions: NextAuthConfig = {
               id: userFromDb.id,
             });
           } else {
-            console.error("❌ User not found in database for email:", token.email);
+            console.error(
+              "❌ User not found in database for email:",
+              token.email,
+            );
           }
         } catch (error) {
           console.error("❌ Failed to fetch user in JWT callback:", error);
         }
       }
-      
+
       // Validate token has minimum required data before returning
       if (!token.role || !token.email || !token.id) {
         console.error("❌ Invalid token state:", {
@@ -231,7 +234,7 @@ export const authOptions: NextAuthConfig = {
           hasId: !!token.id,
         });
       }
-      
+
       return token;
     },
 
@@ -242,12 +245,12 @@ export const authOptions: NextAuthConfig = {
         session.user.role = token.role as UserRole;
         session.user.needsRegistration = token.needsRegistration;
         session.user.isOAuthUser = token.isOAuthUser;
-        
+
         // Ensure email is set (required field)
         if (!session.user.email && token.email) {
           session.user.email = token.email as string;
         }
-        
+
         if (process.env.NODE_ENV === "development") {
           console.log(
             "📋 Session Callback - Token role:",
@@ -256,7 +259,7 @@ export const authOptions: NextAuthConfig = {
             session.user.role,
           );
         }
-        
+
         // Validate session has all required data before returning
         if (!session.user.id || !session.user.role || !session.user.email) {
           console.error("❌ Session missing required fields:", {

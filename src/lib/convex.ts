@@ -9,7 +9,9 @@ import { ConvexHttpClient } from "convex/browser";
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL;
 
 if (!CONVEX_URL) {
-  console.error("❌ NEXT_PUBLIC_CONVEX_URL not configured - authentication will fail");
+  console.error(
+    "❌ NEXT_PUBLIC_CONVEX_URL not configured - authentication will fail",
+  );
 }
 
 // Create HTTP client for server-side operations

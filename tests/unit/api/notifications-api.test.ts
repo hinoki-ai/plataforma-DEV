@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock Next.js response
 vi.mock("next/server", () => ({
@@ -253,7 +253,7 @@ describe("Notifications API Tests", () => {
       const cacheKey = "user-notifications-user-123";
       const cacheDuration = 300; // 5 minutes
 
-      expect(cacheKey).toInclude("user-123");
+      expect(cacheKey).to.include("user-123");
       expect(cacheDuration).toBe(300);
     });
   });

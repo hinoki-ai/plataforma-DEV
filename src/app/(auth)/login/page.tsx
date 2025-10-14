@@ -68,9 +68,9 @@ export default function LoginPage() {
   // Handle successful authentication - redirect immediately
   useEffect(() => {
     if (authState?.success && !isLoading) {
-      console.log('✅ Login successful, redirecting to auth-success');
+      console.log("✅ Login successful, redirecting to auth-success");
       setIsLoading(true);
-      
+
       // Simple approach: update session and redirect
       // auth-success page will handle validation and retries
       const redirect = async () => {
@@ -86,23 +86,24 @@ export default function LoginPage() {
           window.location.href = "/auth-success";
         }
       };
-      
+
       redirect();
     }
   }, [authState, isLoading, update]);
 
-  // Fallback: Handle authentication state changes from session (e.g., OAuth)
+  // Handle loading state from session
+  // REMOVED: Auto-redirect for authenticated users - this was causing redirect loops
+  // Users should explicitly submit the login form or will be redirected by middleware
   useEffect(() => {
     if (status === "loading") {
       setIsLoading(true);
-    } else if (status === "authenticated" && !authState?.success && !isLoading) {
-      // Only redirect if we're not already in the middle of a login flow
-      setIsLoading(true);
-      window.location.href = "/auth-success";
-    } else if (status === "unauthenticated") {
-      setIsLoading(false);
+    } else {
+      // Reset loading state when session is loaded
+      if (!authState?.success) {
+        setIsLoading(false);
+      }
     }
-  }, [status, authState, isLoading]);
+  }, [status, authState]);
 
   const emailError = useMemo(
     () =>
