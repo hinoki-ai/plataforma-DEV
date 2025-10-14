@@ -28,7 +28,7 @@ export async function authenticate(
       };
     }
 
-    // First authenticate to get user data without redirect
+    // Pre-validate credentials to provide better error messages
     const user = await authenticateUser(email, password);
 
     if (!user) {
@@ -39,23 +39,21 @@ export async function authenticate(
       };
     }
 
-    // Sign in without immediate redirect to avoid timing issues
-    const result = await signIn("credentials", {
+    // Use redirect: true to let NextAuth handle the flow properly
+    // The auth.ts redirect callback will send user to /auth-success
+    // This ensures cookies are properly set before any client-side navigation
+    await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: true,
+      redirectTo: "/auth-success",
     });
 
-    if (!result || result.error) {
-      return {
-        success: false,
-        error: "Error de autenticación. Por favor intente nuevamente.",
-      };
-    }
-
-    // Return success - client will handle redirect to auth-success
+    // This line won't be reached due to redirect above
+    // But return success for type safety
     return { success: true };
   } catch (error) {
+    // Only catch actual errors, not redirects
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
@@ -77,10 +75,8 @@ export async function authenticate(
       }
     }
 
-    return {
-      success: false,
-      error: "Error inesperado. Por favor intente nuevamente.",
-    };
+    // Re-throw redirect errors (NextAuth uses throw for redirects)
+    throw error;
   }
 }
 
