@@ -25,13 +25,14 @@ export default function AuthSuccessPage() {
     if (redirected) return;
     
     console.log(`🚀 AuthSuccess - Redirecting to ${path} (${reason})`);
-    setRedirected(true);
     
     // Use window.location.href for server-side session establishment
     // This ensures session cookie is properly sent to server for SSR auth checks
-    if (typeof window !== "undefined") {
-      window.location.href = path;
-    }
+    // Set redirected state after initiating redirect to prevent double-redirect
+    setRedirected(true);
+    
+    // Force immediate navigation with full page reload
+    window.location.href = path;
   }, [redirected]);
 
   useEffect(() => {
