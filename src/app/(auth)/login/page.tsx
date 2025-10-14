@@ -63,42 +63,20 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useLanguage();
 
-  const { status, data: session, update } = useSession();
+  const { status } = useSession();
 
-  // Handle successful authentication - redirect immediately
-  useEffect(() => {
-    if (authState?.success && !isLoading) {
-      console.log("✅ Login successful, redirecting to auth-success");
-      setIsLoading(true);
-
-      // Simple approach: update session and redirect
-      // auth-success page will handle validation and retries
-      const redirect = async () => {
-        try {
-          await update();
-          // Small delay to ensure cookie is written
-          setTimeout(() => {
-            window.location.href = "/auth-success";
-          }, 100);
-        } catch (error) {
-          console.error("Session update failed:", error);
-          // Redirect anyway, auth-success will handle it
-          window.location.href = "/auth-success";
-        }
-      };
-
-      redirect();
-    }
-  }, [authState, isLoading, update]);
-
-  // Handle loading state from session
-  // REMOVED: Auto-redirect for authenticated users - this was causing redirect loops
-  // Users should explicitly submit the login form or will be redirected by middleware
+  // Handle loading state from session status
+  // Note: We don't handle success redirect here anymore because
+  // the server action now uses redirect: true, which handles navigation
+  // automatically via NextAuth's redirect callback
   useEffect(() => {
     if (status === "loading") {
       setIsLoading(true);
+    } else if (status === "authenticated") {
+      // User is already logged in, they'll be redirected by middleware
+      setIsLoading(false);
     } else {
-      // Reset loading state when session is loaded
+      // Reset loading state when not authenticated
       if (!authState?.success) {
         setIsLoading(false);
       }

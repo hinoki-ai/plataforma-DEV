@@ -123,7 +123,11 @@ export const authOptions: NextAuthConfig = {
   callbacks: {
     async redirect({ url, baseUrl }) {
       // Always redirect successful login to auth-success for proper role-based routing
-      if (url.includes("/api/auth/callback/credentials")) {
+      // This handles both direct callback URLs and explicit redirectTo parameters
+      if (
+        url.includes("/api/auth/callback/credentials") ||
+        url.includes("/auth-success")
+      ) {
         return `${baseUrl}/auth-success`;
       }
 
