@@ -60,3 +60,10 @@ convex/_generated/
 
 # OS
 Thumbs.db
+
+# Password management scripts (contain sensitive data)
+reset-master-password.mjs
+verify-prod-password.mjs
+scripts/fix-*-password.ts
+scripts/reset-password.ts
+scripts/*password*
