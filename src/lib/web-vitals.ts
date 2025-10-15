@@ -102,14 +102,14 @@ async function sendToAnalytics(data: WebVitalsAnalytics) {
       } catch (analyticsError) {
         // Silently fail - analytics should never break the app
         // Only log in development
-        if (process.env.NODE_ENV === "development") {
+        if ((process.env.NODE_ENV as string) === "development") {
           console.debug("Analytics endpoint not available:", analyticsError);
         }
       }
     }
 
     // Console logging for development
-    if (process.env.NODE_ENV === "development") {
+    if ((process.env.NODE_ENV as string) === "development") {
       console.log("🔥 Web Vitals:", {
         metric: data.metric.name,
         value: data.metric.value,
