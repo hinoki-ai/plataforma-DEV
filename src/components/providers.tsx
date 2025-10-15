@@ -20,38 +20,33 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
   const shouldRefetchOnFocus =
     pathname === "/login" || pathname === "/auth-success";
 
-  // CRITICAL FIX: SessionProvider baseUrl configuration
+  // CRITICAL FIX: NextAuth 5.0.0-beta SessionProvider Configuration
   // ================================================================
-  // PROBLEM: Without baseUrl, SessionProvider cannot construct proper URLs
-  // for auth API requests (/api/auth/session, /api/auth/csrf, etc.),
-  // resulting in "NetworkError when attempting to fetch resource"
-  //
-  // WHY window.location.origin:
-  // - SessionProvider is a CLIENT component ("use client")
-  // - NEXTAUTH_URL env var is SERVER-SIDE ONLY (no NEXT_PUBLIC_ prefix)
-  // - process.env.NEXTAUTH_URL returns undefined in client components
-  // - window.location.origin provides the actual browser origin
-  //
-  // This ensures auth requests go to:
-  // https://plataforma.aramac.dev/api/auth/* (production)
-  // http://localhost:3000/api/auth/* (development)
+  // ISSUE: NetworkError when attempting to fetch resource
+  // 
+  // APPROACHES TRIED:
+  // 1. baseUrl with window.location.origin - FAILED
+  // 2. baseUrl with process.env.NEXTAUTH_URL - FAILED (undefined on client)
+  // 
+  // CURRENT SOLUTION: Let SessionProvider use relative URLs
+  // This bypasses the baseUrl construction entirely and uses same-origin fetch
   // ================================================================
-  const baseUrl =
-    typeof window !== "undefined" ? window.location.origin : undefined;
-
-  if (typeof window !== "undefined" && !baseUrl) {
-    console.error(
-      "[AUTH ERROR] Failed to determine baseUrl for SessionProvider",
+  
+  if (typeof window !== "undefined") {
+    console.log(
+      `[AUTH DEBUG] SessionProvider configured with basePath: /api/auth (relative URLs)`,
+    );
+    console.log(
+      `[AUTH DEBUG] Session endpoint: ${window.location.origin}/api/auth/session`,
     );
   }
 
   return (
     <SessionProvider
-      refetchInterval={600} // Refresh every 10 minutes to reduce server load
-      refetchOnWindowFocus={shouldRefetchOnFocus} // Selective window focus refresh
+      refetchInterval={600} // Refresh every 10 minutes
+      refetchOnWindowFocus={shouldRefetchOnFocus} // Selective window focus
       refetchWhenOffline={false}
-      basePath="/api/auth"
-      baseUrl={baseUrl}
+      basePath="/api/auth" // Use basePath only, no baseUrl
     >
       {children}
     </SessionProvider>
