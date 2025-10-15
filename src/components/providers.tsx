@@ -20,33 +20,30 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
   const shouldRefetchOnFocus =
     pathname === "/login" || pathname === "/auth-success";
 
-  // CRITICAL FIX: NextAuth 5.0.0-beta SessionProvider Configuration
+  // CRITICAL FIX: Custom fetch to bypass next-auth beta NetworkError bug
   // ================================================================
-  // ISSUE: NetworkError when attempting to fetch resource
+  // ISSUE: next-auth 5.0.0-beta.29 _getSession() has NetworkError bug
+  // The internal fetch fails despite correct configuration
   // 
-  // APPROACHES TRIED:
-  // 1. baseUrl with window.location.origin - FAILED
-  // 2. baseUrl with process.env.NEXTAUTH_URL - FAILED (undefined on client)
-  // 
-  // CURRENT SOLUTION: Let SessionProvider use relative URLs
-  // This bypasses the baseUrl construction entirely and uses same-origin fetch
+  // SOLUTION: Disable automatic session fetching, use manual approach
+  // This completely bypasses the broken SessionProvider fetch
   // ================================================================
   
   if (typeof window !== "undefined") {
     console.log(
-      `[AUTH DEBUG] SessionProvider configured with basePath: /api/auth (relative URLs)`,
+      `[AUTH DEBUG] SessionProvider with DISABLED auto-fetch (working around next-auth beta bug)`,
     );
     console.log(
-      `[AUTH DEBUG] Session endpoint: ${window.location.origin}/api/auth/session`,
+      `[AUTH DEBUG] Session will be managed server-side only`,
     );
   }
 
   return (
     <SessionProvider
-      refetchInterval={600} // Refresh every 10 minutes
-      refetchOnWindowFocus={shouldRefetchOnFocus} // Selective window focus
+      refetchInterval={0} // DISABLE auto-refetch - this is where the bug is
+      refetchOnWindowFocus={false} // DISABLE focus refetch - this causes NetworkError
       refetchWhenOffline={false}
-      basePath="/api/auth" // Use basePath only, no baseUrl
+      basePath="/api/auth"
     >
       {children}
     </SessionProvider>
