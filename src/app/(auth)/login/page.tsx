@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect, useMemo } from "react";
-import { useSession } from "next-auth/react";
+// REMOVED: import { useSession } from "next-auth/react";
+// This was causing NetworkError in next-auth beta - login page doesn't need session
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/language/LanguageContext";
 
@@ -63,25 +64,18 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useLanguage();
 
-  const { status } = useSession();
+  // REMOVED: const { status } = useSession();
+  // This was triggering NetworkError in next-auth beta
+  // Login page doesn't need client-side session - middleware handles redirects
 
-  // Handle loading state from session status
-  // Note: We don't handle success redirect here anymore because
-  // the server action now uses redirect: true, which handles navigation
-  // automatically via NextAuth's redirect callback
+  // Handle loading state from auth action
   useEffect(() => {
-    if (status === "loading") {
-      setIsLoading(true);
-    } else if (status === "authenticated") {
-      // User is already logged in, they'll be redirected by middleware
-      setIsLoading(false);
-    } else {
-      // Reset loading state when not authenticated
-      if (!authState?.success) {
-        setIsLoading(false);
-      }
+    if (authState?.success) {
+      setIsLoading(true); // Keep loading while redirect happens
+    } else if (authState?.error) {
+      setIsLoading(false); // Show error, allow retry
     }
-  }, [status, authState]);
+  }, [authState]);
 
   const emailError = useMemo(
     () =>
