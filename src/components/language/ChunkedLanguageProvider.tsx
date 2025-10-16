@@ -480,6 +480,21 @@ const DivineParsingOracleProvider: React.FC<{
     [language, loadedNamespaces],
   );
 
+  // Helper function to get nested value from object using dot notation
+  const getNestedValue = (obj: any, path: string): any => {
+    const keys = path.split(".");
+    let current = obj;
+
+    for (const key of keys) {
+      if (current === null || current === undefined) {
+        return undefined;
+      }
+      current = current[key];
+    }
+
+    return current;
+  };
+
   // Translation function - uses direct synchronous lookup for reliability
   const t = useMemo(() => {
     return (key: string, namespace: string = "common"): string => {
@@ -494,13 +509,24 @@ const DivineParsingOracleProvider: React.FC<{
             namespaceTranslations &&
             typeof namespaceTranslations === "object"
           ) {
-            const value = (namespaceTranslations as any)[key];
+            // First try flat key lookup (backward compatibility)
+            const flatValue = (namespaceTranslations as any)[key];
             if (
-              value !== undefined &&
-              value !== null &&
-              typeof value === "string"
+              flatValue !== undefined &&
+              flatValue !== null &&
+              typeof flatValue === "string"
             ) {
-              return value;
+              return flatValue;
+            }
+
+            // Try nested path lookup (for keys like "centro_consejo.testimonials.maria_gonzalez.name")
+            const nestedValue = getNestedValue(namespaceTranslations, key);
+            if (
+              nestedValue !== undefined &&
+              nestedValue !== null &&
+              typeof nestedValue === "string"
+            ) {
+              return nestedValue;
             }
           }
         }
@@ -509,9 +535,20 @@ const DivineParsingOracleProvider: React.FC<{
         const registryKey = `${language}-${namespace}`;
         const registryTranslations = translationRegistry[registryKey];
         if (registryTranslations) {
-          const value = registryTranslations[key];
-          if (value !== undefined && value !== null) {
-            return value;
+          // Try flat lookup
+          const flatValue = registryTranslations[key];
+          if (flatValue !== undefined && flatValue !== null) {
+            return flatValue;
+          }
+
+          // Try nested lookup
+          const nestedValue = getNestedValue(registryTranslations, key);
+          if (
+            nestedValue !== undefined &&
+            nestedValue !== null &&
+            typeof nestedValue === "string"
+          ) {
+            return nestedValue;
           }
         }
 
