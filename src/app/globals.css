@@ -483,6 +483,34 @@
     background-attachment: scroll;
     /* Support for dynamic background images */
     background-image: var(--bg-image, none);
+    position: relative;
+  }
+
+  /* Mobile portrait mode: rotate background image 90deg for proper orientation using pseudo-element */
+  @media (max-width: 768px) and (orientation: portrait) {
+    .bg-responsive-desktop {
+      background-image: none; /* Remove direct background */
+      overflow: hidden;
+    }
+
+    /* Create rotated background using ::before pseudo-element */
+    .bg-responsive-desktop::before {
+      content: "";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 100vh;
+      height: 100vw;
+      margin-left: -50vh;
+      margin-top: -50vw;
+      background-image: var(--bg-image, none);
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      transform: rotate(90deg);
+      transform-origin: center center;
+      z-index: -1;
+    }
   }
 
   /* Background position variants */

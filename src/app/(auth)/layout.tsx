@@ -11,11 +11,11 @@ export default function AuthLayout({
       <div className="flex items-center justify-center p-4 h-screen overflow-y-auto md:overflow-hidden bg-[url('/bg12.jpg')] bg-cover bg-center">
         <div className="w-full max-w-sm relative px-4 sm:px-6 flex flex-col items-center -top-5">
           <div className="text-center mb-8 relative w-full -top-[45px]">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-2xl transition-all duration-700 ease-out leading-tight break-words flex flex-col items-center">
-              <div className="animate-fade-in-up block mb-1 whitespace-nowrap text-center">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-2xl transition-all duration-700 ease-out leading-tight px-2 flex flex-col items-center">
+              <div className="animate-fade-in-up block mb-1 text-center">
                 Acceso al Portal de
               </div>
-              <div className="animate-fade-in-up animation-delay-200 bg-gradient-to-r from-pink-200 to-purple-200 bg-clip-text text-transparent block whitespace-nowrap text-center">
+              <div className="animate-fade-in-up animation-delay-200 bg-gradient-to-r from-pink-200 to-purple-200 bg-clip-text text-transparent block text-center">
                 Funcionarios y Apoderados
               </div>
             </h1>
