@@ -24,18 +24,16 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
   // ================================================================
   // ISSUE: next-auth 5.0.0-beta.29 _getSession() has NetworkError bug
   // The internal fetch fails despite correct configuration
-  // 
+  //
   // SOLUTION: Disable automatic session fetching, use manual approach
   // This completely bypasses the broken SessionProvider fetch
   // ================================================================
-  
+
   if (typeof window !== "undefined") {
     console.log(
       `[AUTH DEBUG] SessionProvider with DISABLED auto-fetch (working around next-auth beta bug)`,
     );
-    console.log(
-      `[AUTH DEBUG] Session will be managed server-side only`,
-    );
+    console.log(`[AUTH DEBUG] Session will be managed server-side only`);
   }
 
   return (

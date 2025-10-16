@@ -3,6 +3,7 @@
 ## Current Situation
 
 You're experiencing **NetworkError** in the SessionProvider despite:
+
 - ✅ Having a valid session on the server (MASTER role authenticated)
 - ✅ All auth API endpoints working (4/4 tests passed)
 - ✅ Server-side authentication functioning
@@ -18,12 +19,14 @@ You're experiencing **NetworkError** in the SessionProvider despite:
 After extensive investigation and finding similar issues in next-auth 5.0.0-beta GitHub, I've deployed an **alternative configuration**:
 
 **Before (FAILED):**
+
 ```typescript
 const baseUrl = window.location.origin;
 <SessionProvider baseUrl={baseUrl} basePath="/api/auth" />
 ```
 
 **After (NEW APPROACH):**
+
 ```typescript
 <SessionProvider basePath="/api/auth" />
 // No baseUrl - let it use relative URLs
@@ -43,6 +46,7 @@ const baseUrl = window.location.origin;
 ### Step 1: Wait for Deployment (2-3 minutes)
 
 The fix is deploying now. Check deployment status:
+
 ```bash
 npx vercel list
 ```
@@ -54,17 +58,20 @@ Look for a deployment younger than 5 minutes with "Ready" status.
 **This is NOT optional. You MUST do this:**
 
 #### Chrome / Edge:
+
 1. Open DevTools (F12)
 2. Right-click the refresh button
 3. Select "Empty Cache and Hard Reload"
 4. **OR** Press `Ctrl + Shift + Delete` → Select "Cached images and files" + "Cookies" → Clear
 
 #### Firefox:
+
 1. Press `Ctrl + Shift + Delete`
 2. Select "Cache" and "Cookies"
 3. Click "Clear Now"
 
 #### Safari:
+
 1. Develop menu → Empty Caches
 2. Safari → Clear History → All History
 
@@ -73,12 +80,14 @@ Look for a deployment younger than 5 minutes with "Ready" status.
 After clearing cache and refreshing, open console (F12) and look for:
 
 **GOOD (what you want to see):**
+
 ```
 [AUTH DEBUG] SessionProvider configured with basePath: /api/auth (relative URLs)
 [AUTH DEBUG] Session endpoint: https://plataforma.aramac.dev/api/auth/session
 ```
 
 **BAD (report this):**
+
 ```
 NetworkError when attempting to fetch resource
 [AUTH CRITICAL] Failed to determine baseUrl
@@ -93,6 +102,7 @@ NetworkError when attempting to fetch resource
 5. Look for `/api/auth/session` request
 
 **What to check:**
+
 - **Request URL**: Should be `https://plataforma.aramac.dev/api/auth/session`
 - **Status**: Should be 200 OK
 - **Response**: Should contain your session data
@@ -105,6 +115,7 @@ NetworkError when attempting to fetch resource
 ### Option 1: Check CSP Headers
 
 The Content-Security-Policy might be blocking fetch requests. Test:
+
 ```bash
 curl -I https://plataforma.aramac.dev/api/auth/session | grep -i content-security
 ```
@@ -114,12 +125,14 @@ Check if `connect-src` includes `'self'`.
 ### Option 2: Try Incognito Mode
 
 Open https://plataforma.aramac.dev/login in incognito:
+
 - If it works → Browser cache/extension issue
 - If it fails → Configuration issue
 
 ### Option 3: Downgrade next-auth
 
 If the beta version is causing issues, we might need to downgrade:
+
 ```bash
 npm install next-auth@5.0.0-beta.28
 # or even
@@ -129,8 +142,9 @@ npm install next-auth@4.24.7
 ### Option 4: Custom Fetch Configuration
 
 We might need to configure a custom fetcher:
+
 ```typescript
-<SessionProvider 
+<SessionProvider
   basePath="/api/auth"
   fetchOptions={{
     credentials: 'same-origin',
@@ -142,11 +156,12 @@ We might need to configure a custom fetcher:
 ### Option 5: Disable SessionProvider Entirely
 
 As a last resort, we can fetch the session manually:
+
 ```typescript
 // In each page/component
 const session = await auth(); // Server-side
 // Or
-const { data: session } = useSWR('/api/auth/session', fetcher); // Client-side
+const { data: session } = useSWR("/api/auth/session", fetcher); // Client-side
 ```
 
 ---
@@ -154,22 +169,26 @@ const { data: session } = useSWR('/api/auth/session', fetcher); // Client-side
 ## Diagnostic Commands
 
 ### Check if deployment completed:
+
 ```bash
 cd /mnt/Secondary/Projects/Websites/Astral/Plataforma
 npx vercel list | head -8
 ```
 
 ### Test auth endpoints:
+
 ```bash
 node scripts/test-auth-endpoints.js https://plataforma.aramac.dev
 ```
 
 ### Check production build ID:
+
 ```bash
 curl -s https://plataforma.aramac.dev | grep -o "build-[0-9]*"
 ```
 
 ### Pull latest production env vars:
+
 ```bash
 npx vercel env pull .env.production.local --environment=production
 ```
@@ -205,11 +224,13 @@ npx vercel env pull .env.production.local --environment=production
 ### Why The Server Works But Client Fails
 
 **Server-side (`auth()` function):**
+
 - ✅ Works because it directly accesses the session store
 - ✅ No fetch requests needed
 - ✅ No baseUrl configuration needed
 
 **Client-side (`SessionProvider`):**
+
 - ❌ Makes fetch requests to `/api/auth/session`
 - ❌ Requires proper URL construction
 - ❌ Affected by CSP, CORS, browser cache
@@ -227,6 +248,7 @@ The issue with `baseUrl` in next-auth 5.0.0-beta:
 ### GitHub Issues Reference
 
 Similar problems in next-auth:
+
 - **#11782**: Session returns empty {} in production
 - **#9811**: TypeError: fetch failed
 - **#9597**: CLIENT_FETCH_ERROR during build
@@ -239,12 +261,14 @@ Similar problems in next-auth:
 **75% confident this will fix it** 🤞
 
 **Why not 99%?**
+
 - next-auth 5.0.0-beta.29 is unstable
 - Multiple possible causes (CSP, cache, configuration, beta bugs)
 - Similar issues in GitHub have mixed solutions
 - May require downgrade to stable version
 
 **Why 75% and not less?**
+
 - Alternative approach is based on real GitHub issues
 - Removing baseUrl is a documented workaround
 - Server-side works confirms environment is correct
