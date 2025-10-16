@@ -32,6 +32,18 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-home-page">
+      {/* Mobile portrait video background */}
+      <video
+        className="mobile-portrait-video"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      >
+        <source src="/heromobile.mp4" type="video/mp4" />
+      </video>
       <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
         <Header />
         <section className={layout.spacing.section(isDesktopForced)}>
