@@ -6,6 +6,8 @@ import { Providers } from "@/components/providers";
 import { homeMetadata, organizationSchema } from "@/lib/seo";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { ThemeAwareFavicon } from "@/components/ui/theme-aware-favicon";
+import { HomepageMusic } from "@/components/shared/HomepageMusic";
+import { AudioConsentBanner } from "@/components/shared/AudioConsentBanner";
 import "./globals.css";
 
 const inter = Inter({
@@ -95,9 +97,12 @@ function RootLayoutInner({
 
         <ErrorBoundary>
           <Providers>
+            <HomepageMusic />
             {children}
             {/* Theme-aware favicon handling */}
             <ThemeAwareFavicon />
+            {/* Audio consent banner */}
+            <AudioConsentBanner />
           </Providers>
         </ErrorBoundary>
       </body>

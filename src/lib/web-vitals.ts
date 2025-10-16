@@ -94,7 +94,7 @@ async function sendToAnalytics(data: WebVitalsAnalytics) {
           // Don't throw on 404 - the endpoint might not exist yet
           signal: AbortSignal.timeout(5000),
         });
-        
+
         // Silently ignore if endpoint doesn't exist
         if (!response.ok && response.status !== 404) {
           console.warn(`Analytics endpoint returned ${response.status}`);
