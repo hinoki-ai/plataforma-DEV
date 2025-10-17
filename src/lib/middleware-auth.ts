@@ -60,37 +60,41 @@ export async function getMiddlewareAuth(
       token = request.cookies.get(cookieName)?.value;
       if (token) {
         foundCookieName = cookieName;
-        if (process.env.NODE_ENV === "development") {
-          console.log("🔑 Found session token in cookie:", cookieName);
-        }
+        // TEMPORARY: Enable production logging to debug cookie issue
+        console.log("🔑 [MIDDLEWARE-AUTH] Found session token in cookie:", {
+          cookieName,
+          protocol,
+          isSecure,
+          nodeEnv: process.env.NODE_ENV,
+        });
         break;
       }
     }
 
     // No token found - log debug info
     if (!token) {
-      if (process.env.NODE_ENV === "development") {
-        const allCookies = request.cookies.getAll();
-        console.log("❌ No session token found. Environment:", {
-          nodeEnv: process.env.NODE_ENV,
-          protocol,
-          isSecure,
-          availableCookies: allCookies.map((c) => c.name).join(", ") || "none",
-        });
-      }
+      // TEMPORARY: Enable production logging to debug cookie issue
+      const allCookies = request.cookies.getAll();
+      console.log("❌ [MIDDLEWARE-AUTH] No session token found. Environment:", {
+        nodeEnv: process.env.NODE_ENV,
+        protocol,
+        isSecure,
+        availableCookies: allCookies.map((c) => c.name).join(", ") || "none",
+        triedCookieNames: cookieNames.join(", "),
+      });
       return null;
     }
 
     // Verify and decode the JWT
     const { payload } = await jwtVerify(token, JWT_SECRET);
 
-    if (process.env.NODE_ENV === "development") {
-      console.log("✅ JWT verified, payload:", {
-        id: payload.id,
-        email: payload.email,
-        role: payload.role,
-      });
-    }
+    // TEMPORARY: Enable production logging to debug token verification
+    console.log("✅ [MIDDLEWARE-AUTH] JWT verified, payload:", {
+      id: payload.id,
+      email: payload.email,
+      role: payload.role,
+      nodeEnv: process.env.NODE_ENV,
+    });
 
     // Extract user data from JWT payload
     const user: MiddlewareUser = {
@@ -115,12 +119,12 @@ export async function getMiddlewareAuth(
     };
   } catch (error) {
     // Token is invalid or expired
-    if (process.env.NODE_ENV === "development") {
-      console.warn("❌ Middleware auth error:", error);
-    } else {
-      // Log minimal info in production for debugging (without sensitive details)
-      console.log("❌ Auth validation failed");
-    }
+    // TEMPORARY: Enable production logging to debug validation errors
+    console.warn("❌ [MIDDLEWARE-AUTH] Middleware auth error:", {
+      errorMessage: error instanceof Error ? error.message : "Unknown error",
+      errorType: error?.constructor?.name,
+      nodeEnv: process.env.NODE_ENV,
+    });
     return null;
   }
 }
