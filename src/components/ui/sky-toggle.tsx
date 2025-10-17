@@ -12,19 +12,34 @@ interface SkyToggleProps {
 const SkyToggle = ({ className, size = "md" }: SkyToggleProps) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
+  const [displayTheme, setDisplayTheme] = React.useState(theme);
 
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
+  React.useEffect(() => {
+    if (mounted && !isTransitioning) {
+      setDisplayTheme(theme);
+    }
+  }, [theme, mounted, isTransitioning]);
+
   if (!mounted) {
     return null;
   }
 
-  const isDark = theme === "dark";
+  const isDark = displayTheme === "dark";
 
   const handleToggle = () => {
-    setTheme(isDark ? "light" : "dark");
+    const newTheme = isDark ? "light" : "dark";
+    setDisplayTheme(newTheme);
+    setIsTransitioning(true);
+
+    setTimeout(() => {
+      setTheme(newTheme);
+      setIsTransitioning(false);
+    }, 100);
   };
 
   const sizeMultiplier = size === "sm" ? 0.4 : size === "lg" ? 1.2 : 1;

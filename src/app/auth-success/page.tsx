@@ -15,8 +15,9 @@ export default async function AuthSuccessPage() {
   // Get session server-side - no client dependency needed
   const session = await auth();
 
-  // Log server-side for debugging
-  console.log("🔐 AuthSuccess Server Check:", {
+  // Enhanced logging for debugging redirect loops
+  console.log("🔐 [AUTH-SUCCESS] Session Check:", {
+    timestamp: new Date().toISOString(),
     hasSession: !!session?.user,
     role: session?.user?.role,
     email: session?.user?.email,
@@ -27,13 +28,23 @@ export default async function AuthSuccessPage() {
 
   // Not authenticated - redirect to login
   if (!session?.user) {
-    console.warn("❌ No session found, redirecting to login");
+    console.warn("❌ [AUTH-SUCCESS] No session found, redirecting to login", {
+      timestamp: new Date().toISOString(),
+    });
     redirect("/login");
   }
 
   // Validate session has required data
   if (!session.user.role || !session.user.email || !session.user.id) {
-    console.error("❌ Session missing required fields, redirecting to login");
+    console.error(
+      "❌ [AUTH-SUCCESS] Session missing required fields, redirecting to login",
+      {
+        hasRole: !!session.user.role,
+        hasEmail: !!session.user.email,
+        hasId: !!session.user.id,
+        timestamp: new Date().toISOString(),
+      },
+    );
     redirect("/login");
   }
 
@@ -41,18 +52,31 @@ export default async function AuthSuccessPage() {
 
   // Validate role exists
   if (!ROLE_PATHS[role]) {
-    console.error("❌ Invalid role:", role);
+    console.error("❌ [AUTH-SUCCESS] Invalid role:", {
+      role,
+      timestamp: new Date().toISOString(),
+    });
     redirect("/login");
   }
 
   // Handle PARENT with registration requirement
   if (role === "PARENT" && session.user.needsRegistration) {
-    console.log("📝 Parent needs registration, redirecting to centro-consejo");
+    console.log(
+      "📝 [AUTH-SUCCESS] Parent needs registration, redirecting to centro-consejo",
+      {
+        timestamp: new Date().toISOString(),
+      },
+    );
     redirect("/centro-consejo");
   }
 
   // Success - redirect to role-based dashboard
   const targetPath = ROLE_PATHS[role];
-  console.log(`✅ Redirecting authenticated ${role} to ${targetPath}`);
+  console.log(
+    `✅ [AUTH-SUCCESS] Redirecting authenticated ${role} to ${targetPath}`,
+    {
+      timestamp: new Date().toISOString(),
+    },
+  );
   redirect(targetPath);
 }

@@ -34,12 +34,16 @@
 
   /* Smooth animations */
   @media (prefers-reduced-motion: no-preference) {
+    html {
+      transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     * {
       transition:
-        color 0.2s ease-in-out,
-        background-color 0.2s ease-in-out,
-        border-color 0.2s ease-in-out,
-        box-shadow 0.2s ease-in-out;
+        color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Enhanced page load animations */
@@ -292,10 +296,6 @@
 
   body {
     @apply text-foreground;
-    /* Prevent flash of unstyled content */
-    transition:
-      background-color 0.1s ease-in-out,
-      color 0.1s ease-in-out;
   }
 
   /* Ensure full viewport coverage for background images */

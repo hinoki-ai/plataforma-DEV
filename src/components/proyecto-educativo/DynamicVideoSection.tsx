@@ -77,7 +77,7 @@ export function DynamicVideoSection() {
 
   return (
     <section className="py-4 sm:py-6 lg:py-8">
-      <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+      <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl transition-all duration-300">
         <CardHeader className="flex flex-row items-center justify-between gap-4 border-b border-gray-700/50">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-white/10 rounded-lg">

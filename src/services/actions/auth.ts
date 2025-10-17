@@ -61,9 +61,9 @@ export async function authenticate(
       userId: user.id,
     });
 
-    // Use redirect: true to let NextAuth handle the flow properly
-    // The auth.ts redirect callback will send user to /auth-success
-    // This ensures cookies are properly set before any client-side navigation
+    // CRITICAL FIX: signIn with redirect: true throws NEXT_REDIRECT
+    // This is the expected behavior for Next.js redirects
+    // We must let this error propagate up - DO NOT CATCH IT
     await signIn("credentials", {
       email,
       password,
@@ -71,13 +71,27 @@ export async function authenticate(
       redirectTo: "/auth-success",
     });
 
-    console.log("➡️ signIn() resolved (redirect may have occurred)", { email });
+    console.log("➡️ signIn() resolved (should not reach here)", { email });
 
-    // This line won't be reached due to redirect above
+    // This line won't be reached due to redirect above throwing NEXT_REDIRECT
     // But return success for type safety
     return { success: true };
   } catch (error) {
-    // Only catch actual errors, not redirects
+    // Check if this is a Next.js redirect (EXPECTED behavior)
+    const isRedirect =
+      error instanceof Error &&
+      (error.message === "NEXT_REDIRECT" ||
+        (error as any).digest?.startsWith?.("NEXT_REDIRECT"));
+
+    if (isRedirect) {
+      console.log("✅ NEXT_REDIRECT caught - re-throwing to allow redirect", {
+        error: error instanceof Error ? error.message : "unknown",
+      });
+      // CRITICAL: Re-throw redirect errors immediately - they MUST propagate
+      throw error;
+    }
+
+    // Handle actual authentication errors
     if (error instanceof AuthError) {
       console.error("🚨 AuthError caught in authenticate()", {
         type: error.type,
@@ -104,9 +118,12 @@ export async function authenticate(
       }
     }
 
-    // Re-throw redirect errors (NextAuth uses throw for redirects)
+    // For any other unexpected error, log and return error response
     console.error("🚨 Unexpected error in authenticate()", error);
-    throw error;
+    return {
+      success: false,
+      error: "Error inesperado. Por favor intente nuevamente.",
+    };
   }
 }
 
