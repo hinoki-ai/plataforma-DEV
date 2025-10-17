@@ -99,6 +99,7 @@ export function DynamicVideoSection() {
             <div className="aspect-video bg-black rounded-xl border border-primary/20 relative overflow-hidden">
               <iframe
                 src={embedUrl}
+                title={videoCapsule.title || "Video educativo"}
                 className="w-full h-full"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
