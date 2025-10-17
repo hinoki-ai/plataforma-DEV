@@ -644,10 +644,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
   const handleGoogleLogin = useCallback(() => {
     setIsLoading(true);
-    signIn("google", {
-      callbackUrl: "/centro-consejo/exito",
-      redirect: true,
-    }).catch(() => setIsLoading(false));
+    void signIn({ callbackUrl: "/centro-consejo/exito" });
   }, []);
 
   const StepIndicator = memo(function StepIndicator() {

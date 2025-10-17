@@ -1,5 +1,5 @@
 {
   "node": {
-    "externalPackages": ["bcryptjs"]
+    "externalPackages": ["bcryptjs", "svix", "@clerk/backend"]
   }
 }

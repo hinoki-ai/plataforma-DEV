@@ -4,9 +4,47 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation, action } from "./_generated/server";
+import {
+  query,
+  mutation,
+  action,
+  internalMutation,
+  type QueryCtx,
+  type MutationCtx,
+} from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 import { api } from "./_generated/api";
+
+const ROLE_VALUES = [
+  "MASTER",
+  "ADMIN",
+  "PROFESOR",
+  "PARENT",
+  "PUBLIC",
+] as const;
+
+type RoleValue = (typeof ROLE_VALUES)[number];
+
+function normalizeRole(role: unknown, fallback: RoleValue): RoleValue {
+  return ROLE_VALUES.includes(role as RoleValue)
+    ? (role as RoleValue)
+    : fallback;
+}
+
+function extractPrimaryEmail(data: any): string | null {
+  const primaryId = data?.primary_email_address_id;
+  const emails: any[] = data?.email_addresses ?? [];
+  const primary = emails.find((item) => item.id === primaryId) ?? emails[0];
+  return primary?.email_address ?? null;
+}
+
+function extractUserName(data: any): string | null {
+  const first = data?.first_name ?? "";
+  const last = data?.last_name ?? "";
+  const full = `${first} ${last}`.trim();
+  if (full.length > 0) return full;
+  return data?.username ?? null;
+}
 
 // ==================== QUERIES ====================
 
@@ -20,6 +58,161 @@ export const getUserByEmail = query({
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", email))
       .first();
+  },
+});
+
+export const getUserByClerkId = query({
+  args: { clerkId: v.string() },
+  handler: async (ctx, { clerkId }) => {
+    return await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+      .first();
+  },
+});
+
+export const currentSession = query({
+  args: { version: v.optional(v.number()) },
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null;
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .first();
+
+    if (!user || !user.isActive) {
+      return null;
+    }
+
+    const needsRegistration = await requiresParentRegistration(ctx, user);
+
+    return {
+      user: {
+        id: user._id,
+        clerkId: identity.subject,
+        email: user.email,
+        name: user.name ?? null,
+        image: user.image ?? null,
+        role: user.role,
+        needsRegistration,
+        isOAuthUser: user.isOAuthUser ?? false,
+      },
+      expires: undefined,
+    };
+  },
+});
+
+export const syncFromClerk = internalMutation({
+  args: { data: v.any() },
+  handler: async (ctx, { data }) => {
+    const clerkId = data?.id as string | undefined;
+    const email = extractPrimaryEmail(data);
+
+    if (!clerkId || !email) {
+      console.warn("Clerk sync missing identifiers", { clerkId, email });
+      return;
+    }
+
+    const name = extractUserName(data);
+    const image = data?.image_url ?? null;
+    const now = Date.now();
+    const metadataRole =
+      data?.public_metadata?.role ?? data?.private_metadata?.role;
+    const isOAuthUser = Array.isArray(data?.external_accounts)
+      ? data.external_accounts.length > 0
+      : false;
+    const isBanned = Boolean(data?.banned);
+
+    const existingByClerk = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+      .first();
+
+    if (existingByClerk) {
+      const normalizedRole = normalizeRole(
+        metadataRole,
+        existingByClerk.role as RoleValue,
+      );
+      await ctx.db.patch(existingByClerk._id, {
+        email,
+        name: name ?? existingByClerk.name,
+        image: image ?? existingByClerk.image,
+        role: normalizedRole,
+        isOAuthUser,
+        isActive: !isBanned,
+        updatedAt: now,
+      });
+      return;
+    }
+
+    const existingByEmail = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", email))
+      .first();
+
+    if (existingByEmail) {
+      const normalizedRole = normalizeRole(
+        metadataRole,
+        existingByEmail.role as RoleValue,
+      );
+      await ctx.db.patch(existingByEmail._id, {
+        clerkId,
+        name: name ?? existingByEmail.name,
+        image: image ?? existingByEmail.image,
+        role: normalizedRole,
+        isOAuthUser,
+        isActive: !isBanned,
+        updatedAt: now,
+      });
+      return;
+    }
+
+    const normalizedRole = normalizeRole(metadataRole, "PUBLIC");
+    await ctx.db.insert("users", {
+      email,
+      name: name ?? email,
+      image,
+      role: normalizedRole,
+      isActive: !isBanned,
+      parentRole: undefined,
+      status: "ACTIVE",
+      provider: isOAuthUser ? "oauth" : "clerk",
+      isOAuthUser,
+      clerkId,
+      createdByAdmin: undefined,
+      institutionId: undefined,
+      createdAt: now,
+      updatedAt: now,
+      emailVerified: undefined,
+      password: undefined,
+      phone: undefined,
+    });
+  },
+});
+
+export const disableUserFromClerk = internalMutation({
+  args: { clerkId: v.string() },
+  handler: async (ctx, { clerkId }) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+      .first();
+
+    if (!user) {
+      console.warn("Unable to disable user from Clerk sync; user not found", {
+        clerkId,
+      });
+      return;
+    }
+
+    await ctx.db.patch(user._id, {
+      isActive: false,
+      updatedAt: Date.now(),
+    });
   },
 });
 
@@ -167,6 +360,30 @@ export const createUser = mutation({
   },
 });
 
+export const linkClerkIdentity = mutation({
+  args: {
+    userId: v.id("users"),
+    clerkId: v.string(),
+  },
+  handler: async (ctx, { userId, clerkId }) => {
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw new Error("User not found while linking Clerk identity");
+    }
+
+    if (user.clerkId === clerkId) {
+      return userId;
+    }
+
+    await ctx.db.patch(userId, {
+      clerkId,
+      updatedAt: Date.now(),
+    });
+
+    return userId;
+  },
+});
+
 /**
  * Create a new user (public action for admin/master user creation)
  */
@@ -212,6 +429,29 @@ export const createUserAction: any = action({
     return await ctx.runMutation(api.users.createUser, args);
   },
 });
+
+async function requiresParentRegistration(
+  ctx: QueryCtx | MutationCtx,
+  user: Doc<"users">,
+) {
+  if (user.role !== "PARENT") return false;
+  if (!user.isOAuthUser) return false;
+
+  try {
+    const profile = await ctx.db
+      .query("parentProfiles")
+      .withIndex("by_userId", (q) => q.eq("userId", user._id))
+      .first();
+
+    return !profile?.registrationComplete;
+  } catch (error) {
+    console.warn("Failed to check parent registration status", {
+      userId: user._id,
+      error,
+    });
+    return true;
+  }
+}
 
 /**
  * Update user

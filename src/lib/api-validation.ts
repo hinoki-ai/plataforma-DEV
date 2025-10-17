@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
-import type { Session } from "next-auth";
+import type { SessionData } from "@/lib/auth-client";
 import { createSuccessResponse, handleApiError } from "@/lib/api-error";
 
 // =================================================
@@ -61,7 +61,7 @@ type RequiredRole = keyof typeof REQUIRED_ROLES;
 export interface ValidationResult<T> {
   success: true;
   data: T;
-  session: Session;
+  session: SessionData;
 }
 
 export interface ValidationError {
@@ -153,7 +153,7 @@ export async function validateApiRequest<T>(
     return {
       success: true,
       data: bodyData as T,
-      session: session as Session,
+      session: session as SessionData,
     };
   } catch (error) {
     console.error("API validation error:", error);

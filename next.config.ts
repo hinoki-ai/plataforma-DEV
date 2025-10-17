@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 // Temporarily disabled bundle analyzer to troubleshoot build issues
 // import bundleAnalyzer from "@next/bundle-analyzer";
 
@@ -47,6 +48,16 @@ const nextConfig: NextConfig = {
       pagesBufferLength: 5, // Increased from 2 to 5 for better buffering
     },
   }),
+
+  webpack: (config) => {
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias ?? {}),
+      "next-auth/react": path.resolve(__dirname, "src/lib/auth-client.tsx"),
+      "next-auth": path.resolve(__dirname, "src/lib/auth-server.ts"),
+    };
+    return config;
+  },
 
   async redirects() {
     return [

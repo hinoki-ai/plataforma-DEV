@@ -14,6 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
@@ -21,7 +22,10 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/convex/_generated/*": ["./convex/_generated/*"]
+      "@/convex/_generated/*": ["./convex/_generated/*"],
+      "next-auth/react": ["./src/lib/auth-client.tsx"],
+      "next-auth": ["./src/lib/auth-server"],
+      "next-auth/*": ["./src/lib/auth-server"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],

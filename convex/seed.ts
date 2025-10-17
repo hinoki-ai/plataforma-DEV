@@ -219,9 +219,6 @@ export const clearDatabase = mutation({
       "teamMembers",
       "institutionInfo",
       "planningDocuments",
-      "verificationTokens",
-      "sessions",
-      "accounts",
       "users",
     ] as const;
 

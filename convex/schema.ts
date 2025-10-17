@@ -46,37 +46,8 @@ export default defineSchema({
     .index("by_isActive", ["isActive"])
     .index("by_createdByAdmin", ["createdByAdmin"])
     .index("by_institutionId", ["institutionId"])
-    .index("by_createdAt", ["createdAt"]),
-
-  accounts: defineTable({
-    userId: v.id("users"),
-    type: v.string(),
-    provider: v.string(),
-    providerAccountId: v.string(),
-    refresh_token: v.optional(v.string()),
-    access_token: v.optional(v.string()),
-    expires_at: v.optional(v.number()),
-    token_type: v.optional(v.string()),
-    scope: v.optional(v.string()),
-    id_token: v.optional(v.string()),
-    session_state: v.optional(v.string()),
-  })
-    .index("by_userId", ["userId"])
-    .index("by_provider_providerAccountId", ["provider", "providerAccountId"]),
-
-  sessions: defineTable({
-    sessionToken: v.string(),
-    userId: v.id("users"),
-    expires: v.number(),
-  })
-    .index("by_sessionToken", ["sessionToken"])
-    .index("by_userId", ["userId"]),
-
-  verificationTokens: defineTable({
-    identifier: v.string(),
-    token: v.string(),
-    expires: v.number(),
-  }).index("by_identifier_token", ["identifier", "token"]),
+    .index("by_createdAt", ["createdAt"])
+    .index("by_clerkId", ["clerkId"]),
 
   // ==================== PLANNING & DOCUMENTS ====================
 

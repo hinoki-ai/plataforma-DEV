@@ -15,7 +15,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signOut } from "@/lib/auth-client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -182,11 +183,7 @@ export function Sidebar({
   // ⚡ Performance: Memoize logout handler
   const handleLogout = React.useCallback(async () => {
     try {
-      // Use NextAuth signOut with proper callback
-      await signOut({
-        callbackUrl: "/",
-        redirect: true,
-      });
+      await signOut();
     } catch (error) {
       console.error("Error during logout:", error);
       // Fallback navigation
