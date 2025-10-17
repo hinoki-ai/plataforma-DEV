@@ -38,7 +38,10 @@ export default function Header() {
 
   // Public navigation links
   const publicNavLinks = [
-    { href: "/centro-consejo", label: t("nav.center.council", "navigation") },
+    { href: "#programas", label: "Programas" },
+    { href: "#testimonios", label: "Testimonios" },
+    { href: "#precios", label: "Precios" },
+    { href: "#contacto", label: "Contacto" },
   ];
 
   // Show loading skeleton until mounted to prevent hydration mismatch
@@ -117,8 +120,12 @@ export default function Header() {
               </div>
             )}
 
-            {/* Enhanced Login Button - GOLD STANDARD */}
-            <LoginButton />
+            {/* Desktop: Login Button and Toggles */}
+            <div className="hidden md:flex items-center space-x-2">
+              <LoginButton />
+              <SoundToggle size="sm" />
+              <SkyToggle size="sm" />
+            </div>
 
             {/* Mobile Menu Button - Public pages only */}
             {!isAuthenticatedRoute && (
@@ -136,33 +143,70 @@ export default function Header() {
                 )}
               </Button>
             )}
-
-            {/* Sophisticated Toggles - Right corner */}
-            <div className="flex items-center space-x-2">
-              <SoundToggle size="sm" />
-              <SkyToggle size="sm" />
-            </div>
           </div>
         </div>
 
         {/* Mobile Navigation Menu - Public pages only */}
         {!isAuthenticatedRoute && isMobileMenuOpen && (
-          <div className="md:hidden mt-4 py-4 border-t border-border">
-            <div className="flex flex-col space-y-2">
-              {publicNavLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  variant="ghost"
-                  size="sm"
-                  className="justify-start text-sm font-medium hover:bg-muted/50 transition-colors"
-                  asChild
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Link href={link.href}>{link.label}</Link>
-                </Button>
-              ))}
+          <>
+            {/* Backdrop */}
+            <div
+              className="md:hidden fixed inset-0 top-[57px] bg-black/50 z-30"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Menu Panel */}
+            <div className="md:hidden fixed inset-x-0 top-[57px] bottom-0 bg-background z-40 overflow-y-auto">
+              <div className="flex flex-col h-full">
+                {/* Logo Section */}
+                <div className="px-6 py-6 border-b border-border">
+                  <Link
+                    href="/"
+                    className="flex items-center space-x-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <span className="text-xl font-bold text-foreground">
+                      {t("school.name")}
+                    </span>
+                  </Link>
+                </div>
+
+                {/* Navigation Links Section */}
+                <div className="flex-1 px-4 py-6">
+                  <div className="flex flex-col space-y-2">
+                    {publicNavLinks.map((link) => (
+                      <Button
+                        key={link.href}
+                        variant="ghost"
+                        size="lg"
+                        className="justify-start text-base font-medium hover:bg-muted/50 transition-colors"
+                        asChild
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Link href={link.href}>{link.label}</Link>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Settings Controls Section */}
+                <div className="px-6 py-6 border-t border-border">
+                  <p className="text-sm text-muted-foreground mb-4 text-center">
+                    Controles
+                  </p>
+                  <div className="flex items-center justify-center space-x-6">
+                    <SoundToggle size="md" />
+                    <SkyToggle size="md" />
+                  </div>
+                </div>
+
+                {/* Authentication Section */}
+                <div className="px-6 py-6 border-t border-border">
+                  <LoginButton />
+                </div>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </header>
