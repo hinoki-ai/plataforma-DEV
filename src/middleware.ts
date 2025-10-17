@@ -75,11 +75,17 @@ export default async function middleware(req: NextRequest) {
     const session = await getMiddlewareAuth(req);
     const isLoggedIn = Boolean(session?.user);
     const userRole = session?.user?.role as UserRole | undefined;
-    console.log("🔐 Middleware session check", {
+
+    // TEMPORARY: Enhanced production logging
+    console.log("🔐 [MIDDLEWARE] Session check", {
       pathname,
       isLoggedIn,
       userRole: userRole || "ANONYMOUS",
       userId: session?.user?.id,
+      hasEmail: !!session?.user?.email,
+      hasRole: !!session?.user?.role,
+      nodeEnv: process.env.NODE_ENV,
+      protocol: nextUrl.protocol,
     });
 
     // Handle auth pages - only redirect if session is fully established
@@ -92,13 +98,27 @@ export default async function middleware(req: NextRequest) {
       // This prevents redirect loops during the login process
       if (session?.user?.id && session?.user?.email && session?.user?.role) {
         const redirectPath = getRoleRedirectPath(userRole);
-        console.log("👤 Logged in user on auth page, redirecting", {
-          pathname,
-          redirectPath,
-          userRole,
-        });
+        console.log(
+          "👤 [MIDDLEWARE] Logged in user on auth page, redirecting",
+          {
+            pathname,
+            redirectPath,
+            userRole,
+            userId: session.user.id,
+            email: session.user.email,
+          },
+        );
         const response = NextResponse.redirect(new URL(redirectPath, nextUrl));
         return addSecurityHeaders(response);
+      } else {
+        // TEMPORARY: Log why redirect didn't happen
+        console.warn("⚠️ [MIDDLEWARE] Logged in but incomplete session:", {
+          pathname,
+          hasId: !!session?.user?.id,
+          hasEmail: !!session?.user?.email,
+          hasRole: !!session?.user?.role,
+          userRole,
+        });
       }
     }
 
