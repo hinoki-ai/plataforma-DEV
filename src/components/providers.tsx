@@ -29,7 +29,7 @@ function OptimizedSessionProvider({ children }: { children: React.ReactNode }) {
   // This completely bypasses the broken SessionProvider fetch
   // ================================================================
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     console.log(
       `[AUTH DEBUG] SessionProvider with DISABLED auto-fetch (working around next-auth beta bug)`,
     );
