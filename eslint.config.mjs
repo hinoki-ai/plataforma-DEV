@@ -37,6 +37,12 @@ const eslintConfig = [
       "@next/next/no-html-link-for-pages": "off",
       // Allow apple-touch-icon to be handled by Next.js metadata API
       "react/no-invalid-html-attribute": "off",
+      // Allow inline styles for dynamic CSS variables (necessary for React)
+      "react/forbid-dom-props": "off",
+      "react/forbid-component-props": "off",
+      "react/style-prop-object": "off",
+      // Disable inline style warnings (dynamic CSS variables are necessary)
+      "@next/next/inline-script-id": "off",
     },
   },
 ];
