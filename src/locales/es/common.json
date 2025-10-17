@@ -548,101 +548,67 @@
   "centro_consejo.feature_participation_desc": "Involucramiento directo en actividades escolares y eventos comunitarios",
   "centro_consejo.feature_recognition": "Reconocimiento",
   "centro_consejo.feature_recognition_desc": "Valoración del aporte de cada familia en el desarrollo educativo",
-  "centro_consejo.testimonials": {
-    "maria_gonzalez": {
-      "name": "María González",
-      "role": "Madre de Pre-Kinder",
-      "content": "El Centro de Padres me ha permitido estar más conectada con la educación de mi hija."
-    },
-    "carlos_rodriguez": {
-      "name": "Carlos Rodríguez",
-      "role": "Padre de Kínder",
-      "content": "La transparencia en la gestión nos da confianza en el proyecto educativo."
-    },
-    "ana_silva": {
-      "name": "Ana Silva",
-      "role": "Madre de Medio Mayor",
-      "content": "Los talleres nos han ayudado mucho a entender mejor el desarrollo infantil."
-    },
-    "pedro_morales": {
-      "name": "Pedro Morales",
-      "role": "Apoderado de Preparatoria",
-      "content": "La comunidad es increíble, siempre hay apoyo y colaboración entre familias."
-    },
-    "isabel_fernandez": {
-      "name": "Isabel Fernández",
-      "role": "Madre de Pre-Kinder",
-      "content": "La comunicación directa con los profesores ha mejorado mucho desde que me uní."
-    },
-    "roberto_jimenez": {
-      "name": "Roberto Jiménez",
-      "role": "Padre de Kínder",
-      "content": "Los recursos educativos que compartimos entre familias son invaluable."
-    },
-    "carmen_vega": {
-      "name": "Carmen Vega",
-      "role": "Madre de Preparatoria",
-      "content": "Me siento más empoderada como madre participando en las decisiones educativas."
-    },
-    "miguel_torres": {
-      "name": "Miguel Torres",
-      "role": "Apoderado de Pre-Kinder",
-      "content": "La red de apoyo entre padres es fundamental para el desarrollo de nuestros hijos."
-    },
-    "patricia_lopez": {
-      "name": "Patricia López",
-      "role": "Madre de Kínder",
-      "content": "Los eventos familiares nos han ayudado a crear lazos más fuertes con la escuela."
-    },
-    "francisco_herrera": {
-      "name": "Francisco Herrera",
-      "role": "Padre de Preparatoria",
-      "content": "La transparencia en el uso de recursos nos da mucha confianza."
-    },
-    "sofia_mendoza": {
-      "name": "Sofía Mendoza",
-      "role": "Madre de Pre-Kinder",
-      "content": "Los talleres de crianza han transformado mi forma de educar en casa."
-    },
-    "diego_castro": {
-      "name": "Diego Castro",
-      "role": "Padre de Kínder",
-      "content": "La participación en las actividades escolares ha fortalecido mi relación con mi hijo."
-    },
-    "valentina_ruiz": {
-      "name": "Valentina Ruiz",
-      "role": "Madre de Preparatoria",
-      "content": "El apoyo emocional entre familias es lo que más valoro del centro de padres."
-    },
-    "andres_moreno": {
-      "name": "Andrés Moreno",
-      "role": "Apoderado de Pre-Kinder",
-      "content": "La colaboración entre padres y profesores ha mejorado significativamente la educación."
-    },
-    "daniela_paredes": {
-      "name": "Daniela Paredes",
-      "role": "Madre de Kínder",
-      "content": "Los recursos que compartimos han enriquecido el aprendizaje de todos los niños."
-    }
-  },
-  "centro_consejo.footer": {
-    "title": "Centro de Padres",
-    "description": "Trabajamos juntos para construir una comunidad educativa fuerte y comprometida.",
-    "quick_access": "Acceso Rápido",
-    "dashboard_link": "Dashboard Centro de Padres",
-    "dashboard_aria": "Ir al dashboard del centro de padres",
-    "profile_link": "Mi Perfil",
-    "profile_aria": "Ver perfil del centro de padres",
-    "schedule_title": "Horarios",
-    "meetings": "Reuniones: Primer viernes de cada mes",
-    "time": "Horario: 19:00 - 21:00 hrs",
-    "location": "Lugar: Salón de actos",
-    "school_info": "Plataforma Institucional SaaS — Solución Educativa Integral",
-    "copyright": "© {year} Centro de Padres Plataforma Astral. Todos los derechos reservados.",
-    "part_of": "Parte de",
-    "home_link_aria": "Volver a la página principal de Plataforma Astral",
-    "contact_info_aria": "Información de contacto"
-  },
+  "centro_consejo.testimonials.maria_gonzalez.name": "María González",
+  "centro_consejo.testimonials.maria_gonzalez.role": "Madre de Pre-Kinder",
+  "centro_consejo.testimonials.maria_gonzalez.content": "El Centro de Padres me ha permitido estar más conectada con la educación de mi hija.",
+  "centro_consejo.testimonials.carlos_rodriguez.name": "Carlos Rodríguez",
+  "centro_consejo.testimonials.carlos_rodriguez.role": "Padre de Kínder",
+  "centro_consejo.testimonials.carlos_rodriguez.content": "La transparencia en la gestión nos da confianza en el proyecto educativo.",
+  "centro_consejo.testimonials.ana_silva.name": "Ana Silva",
+  "centro_consejo.testimonials.ana_silva.role": "Madre de Medio Mayor",
+  "centro_consejo.testimonials.ana_silva.content": "Los talleres nos han ayudado mucho a entender mejor el desarrollo infantil.",
+  "centro_consejo.testimonials.pedro_morales.name": "Pedro Morales",
+  "centro_consejo.testimonials.pedro_morales.role": "Apoderado de Preparatoria",
+  "centro_consejo.testimonials.pedro_morales.content": "La comunidad es increíble, siempre hay apoyo y colaboración entre familias.",
+  "centro_consejo.testimonials.isabel_fernandez.name": "Isabel Fernández",
+  "centro_consejo.testimonials.isabel_fernandez.role": "Madre de Pre-Kinder",
+  "centro_consejo.testimonials.isabel_fernandez.content": "La comunicación directa con los profesores ha mejorado mucho desde que me uní.",
+  "centro_consejo.testimonials.roberto_jimenez.name": "Roberto Jiménez",
+  "centro_consejo.testimonials.roberto_jimenez.role": "Padre de Kínder",
+  "centro_consejo.testimonials.roberto_jimenez.content": "Los recursos educativos que compartimos entre familias son invaluable.",
+  "centro_consejo.testimonials.carmen_vega.name": "Carmen Vega",
+  "centro_consejo.testimonials.carmen_vega.role": "Madre de Preparatoria",
+  "centro_consejo.testimonials.carmen_vega.content": "Me siento más empoderada como madre participando en las decisiones educativas.",
+  "centro_consejo.testimonials.miguel_torres.name": "Miguel Torres",
+  "centro_consejo.testimonials.miguel_torres.role": "Apoderado de Pre-Kinder",
+  "centro_consejo.testimonials.miguel_torres.content": "La red de apoyo entre padres es fundamental para el desarrollo de nuestros hijos.",
+  "centro_consejo.testimonials.patricia_lopez.name": "Patricia López",
+  "centro_consejo.testimonials.patricia_lopez.role": "Madre de Kínder",
+  "centro_consejo.testimonials.patricia_lopez.content": "Los eventos familiares nos han ayudado a crear lazos más fuertes con la escuela.",
+  "centro_consejo.testimonials.francisco_herrera.name": "Francisco Herrera",
+  "centro_consejo.testimonials.francisco_herrera.role": "Padre de Preparatoria",
+  "centro_consejo.testimonials.francisco_herrera.content": "La transparencia en el uso de recursos nos da mucha confianza.",
+  "centro_consejo.testimonials.sofia_mendoza.name": "Sofía Mendoza",
+  "centro_consejo.testimonials.sofia_mendoza.role": "Madre de Pre-Kinder",
+  "centro_consejo.testimonials.sofia_mendoza.content": "Los talleres de crianza han transformado mi forma de educar en casa.",
+  "centro_consejo.testimonials.diego_castro.name": "Diego Castro",
+  "centro_consejo.testimonials.diego_castro.role": "Padre de Kínder",
+  "centro_consejo.testimonials.diego_castro.content": "La participación en las actividades escolares ha fortalecido mi relación con mi hijo.",
+  "centro_consejo.testimonials.valentina_ruiz.name": "Valentina Ruiz",
+  "centro_consejo.testimonials.valentina_ruiz.role": "Madre de Preparatoria",
+  "centro_consejo.testimonials.valentina_ruiz.content": "El apoyo emocional entre familias es lo que más valoro del centro de padres.",
+  "centro_consejo.testimonials.andres_moreno.name": "Andrés Moreno",
+  "centro_consejo.testimonials.andres_moreno.role": "Apoderado de Pre-Kinder",
+  "centro_consejo.testimonials.andres_moreno.content": "La colaboración entre padres y profesores ha mejorado significativamente la educación.",
+  "centro_consejo.testimonials.daniela_paredes.name": "Daniela Paredes",
+  "centro_consejo.testimonials.daniela_paredes.role": "Madre de Kínder",
+  "centro_consejo.testimonials.daniela_paredes.content": "Los recursos que compartimos han enriquecido el aprendizaje de todos los niños.",
+  "centro_consejo.footer.title": "Centro de Padres",
+  "centro_consejo.footer.description": "Trabajamos juntos para construir una comunidad educativa fuerte y comprometida.",
+  "centro_consejo.footer.quick_access": "Acceso Rápido",
+  "centro_consejo.footer.dashboard_link": "Dashboard Centro de Padres",
+  "centro_consejo.footer.dashboard_aria": "Ir al dashboard del centro de padres",
+  "centro_consejo.footer.profile_link": "Mi Perfil",
+  "centro_consejo.footer.profile_aria": "Ver perfil del centro de padres",
+  "centro_consejo.footer.schedule_title": "Horarios",
+  "centro_consejo.footer.meetings": "Reuniones: Primer viernes de cada mes",
+  "centro_consejo.footer.time": "Horario: 19:00 - 21:00 hrs",
+  "centro_consejo.footer.location": "Lugar: Salón de actos",
+  "centro_consejo.footer.school_info": "Plataforma Institucional SaaS — Solución Educativa Integral",
+  "centro_consejo.footer.copyright": "© {year} Centro de Padres Plataforma Astral. Todos los derechos reservados.",
+  "centro_consejo.footer.part_of": "Parte de",
+  "centro_consejo.footer.home_link_aria": "Volver a la página principal de Plataforma Astral",
+  "centro_consejo.footer.contact_info_aria": "Información de contacto",
   "team.title": "Equipo Multidisciplinario",
   "team.description": "Nuestro equipo está formado por personas que se preocupan de corazón por el bienestar y el aprendizaje de cada niño. Aquí trabajamos juntos para acompañar, apoyar y guiar a las familias de nuestra escuelita.",
   "team.error_loading": "Error al cargar los miembros del equipo",

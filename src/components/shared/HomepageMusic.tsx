@@ -8,6 +8,8 @@ export function HomepageMusic() {
   const { preferences, isLoaded } = useAudioConsent();
   const [allowAutoplay, setAllowAutoplay] = useState(true);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isFadingRef = useRef(false);
+  const baseVolumeRef = useRef(0.25);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -28,24 +30,34 @@ export function HomepageMusic() {
     if (!audio) return;
 
     audio.loop = false;
-    audio.volume = 0.25;
+    audio.volume = baseVolumeRef.current;
     audio.muted = true;
 
     const handleTimeUpdate = () => {
+      if (!audio.duration || isNaN(audio.duration)) return;
+
       const fadeStartTime = audio.duration - 3;
 
       if (
         audio.currentTime >= fadeStartTime &&
         audio.currentTime < audio.duration
       ) {
+        isFadingRef.current = true;
         const fadeProgress = (audio.currentTime - fadeStartTime) / 3;
-        audio.volume = 0.25 * (1 - fadeProgress);
+        const newVolume = baseVolumeRef.current * (1 - fadeProgress);
+        audio.volume = Math.max(0, newVolume);
+      } else if (audio.currentTime < fadeStartTime) {
+        if (isFadingRef.current) {
+          isFadingRef.current = false;
+          audio.volume = baseVolumeRef.current;
+        }
       }
     };
 
     const handleEnded = () => {
+      isFadingRef.current = false;
       audio.currentTime = 0;
-      audio.volume = 0.25;
+      audio.volume = baseVolumeRef.current;
       if (
         preferences.musicEnabled &&
         preferences.hasConsented &&
@@ -80,7 +92,9 @@ export function HomepageMusic() {
     const startPlayback = async () => {
       try {
         audio.muted = false;
-        audio.volume = 0.25;
+        if (!isFadingRef.current) {
+          audio.volume = baseVolumeRef.current;
+        }
         audio.removeAttribute("muted");
 
         if (audio.paused) {
@@ -120,7 +134,9 @@ export function HomepageMusic() {
       if (!audio || !allowAutoplay) return;
 
       audio.muted = false;
-      audio.volume = 0.25;
+      if (!isFadingRef.current) {
+        audio.volume = baseVolumeRef.current;
+      }
       audio.removeAttribute("muted");
 
       if (audio.paused) {
@@ -138,7 +154,7 @@ export function HomepageMusic() {
     <audio
       ref={audioRef}
       id="homepage-audio"
-      src="/homepage.mp3"
+      src="/landing.mp3"
       preload="auto"
       autoPlay
       muted

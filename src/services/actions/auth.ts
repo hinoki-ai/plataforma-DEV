@@ -21,7 +21,17 @@ export async function authenticate(
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
+    console.log("🚪 authenticate() invoked", {
+      timestamp: new Date().toISOString(),
+      email,
+      hasPassword: Boolean(password && password.length > 0),
+    });
+
     if (!email || !password) {
+      console.warn("⚠️ Missing credentials submitted to authenticate()", {
+        emailPresent: Boolean(email),
+        passwordPresent: Boolean(password),
+      });
       return {
         success: false,
         error: "Por favor ingrese email y contraseña",
@@ -29,15 +39,27 @@ export async function authenticate(
     }
 
     // Pre-validate credentials to provide better error messages
+    console.log("🕵️ authenticate() calling authenticateUser", {
+      email,
+    });
     const user = await authenticateUser(email, password);
 
     if (!user) {
+      console.warn("❌ authenticateUser returned null", {
+        email,
+      });
       return {
         success: false,
         error:
           "Credenciales inválidas. Por favor verifique su email y contraseña.",
       };
     }
+
+    console.log("✅ authenticateUser succeeded, proceeding to signIn", {
+      email,
+      role: user.role,
+      userId: user.id,
+    });
 
     // Use redirect: true to let NextAuth handle the flow properly
     // The auth.ts redirect callback will send user to /auth-success
@@ -49,12 +71,19 @@ export async function authenticate(
       redirectTo: "/auth-success",
     });
 
+    console.log("➡️ signIn() resolved (redirect may have occurred)", { email });
+
     // This line won't be reached due to redirect above
     // But return success for type safety
     return { success: true };
   } catch (error) {
     // Only catch actual errors, not redirects
     if (error instanceof AuthError) {
+      console.error("🚨 AuthError caught in authenticate()", {
+        type: error.type,
+        message: error.message,
+        stack: error.stack,
+      });
       switch (error.type) {
         case "CredentialsSignin":
           return {
@@ -76,6 +105,7 @@ export async function authenticate(
     }
 
     // Re-throw redirect errors (NextAuth uses throw for redirects)
+    console.error("🚨 Unexpected error in authenticate()", error);
     throw error;
   }
 }

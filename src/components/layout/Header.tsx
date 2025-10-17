@@ -13,7 +13,7 @@ import LoginButton from "./LoginButton";
 import ProfileCompletionBadge from "./ProfileCompletionBadge";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import SkyToggle from "@/components/ui/sky-toggle";
-import { MusicToggle } from "@/components/ui/music-toggle";
+import SoundToggle from "@/components/ui/sound-toggle";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -117,12 +117,6 @@ export default function Header() {
               </div>
             )}
 
-            {/* Theme and Music Toggles */}
-            <div className="hidden md:flex items-center space-x-2">
-              <SkyToggle size="sm" />
-              <MusicToggle variant="compact" size="sm" />
-            </div>
-
             {/* Enhanced Login Button - GOLD STANDARD */}
             <LoginButton />
 
@@ -142,6 +136,12 @@ export default function Header() {
                 )}
               </Button>
             )}
+
+            {/* Sophisticated Toggles - Right corner */}
+            <div className="flex items-center space-x-2">
+              <SoundToggle size="sm" />
+              <SkyToggle size="sm" />
+            </div>
           </div>
         </div>
 

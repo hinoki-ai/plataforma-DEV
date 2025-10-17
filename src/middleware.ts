@@ -50,6 +50,11 @@ export default async function middleware(req: NextRequest) {
   try {
     const { nextUrl } = req;
     const pathname = nextUrl.pathname;
+    console.log("🛡️ Middleware entry", {
+      pathname,
+      method: req.method,
+      timestamp: new Date().toISOString(),
+    });
 
     // Skip middleware for static assets, system paths, and auth transition pages
     // CRITICAL: /auth-success must bypass all auth checks to prevent redirect loops
@@ -61,6 +66,7 @@ export default async function middleware(req: NextRequest) {
       pathname.startsWith("/api/auth") ||
       pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js)$/)
     ) {
+      console.log("⏭️ Middleware bypass", { pathname });
       const response = NextResponse.next();
       return addSecurityHeaders(response);
     }
@@ -69,13 +75,12 @@ export default async function middleware(req: NextRequest) {
     const session = await getMiddlewareAuth(req);
     const isLoggedIn = Boolean(session?.user);
     const userRole = session?.user?.role as UserRole | undefined;
-
-    // Log security events in development
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        `🔐 Route: ${pathname} | User: ${userRole || "ANONYMOUS"} | Logged: ${isLoggedIn}`,
-      );
-    }
+    console.log("🔐 Middleware session check", {
+      pathname,
+      isLoggedIn,
+      userRole: userRole || "ANONYMOUS",
+      userId: session?.user?.id,
+    });
 
     // Handle auth pages - only redirect if session is fully established
     // CRITICAL: Don't redirect during login/registration process to avoid loops
@@ -87,11 +92,11 @@ export default async function middleware(req: NextRequest) {
       // This prevents redirect loops during the login process
       if (session?.user?.id && session?.user?.email && session?.user?.role) {
         const redirectPath = getRoleRedirectPath(userRole);
-        if (process.env.NODE_ENV === "development") {
-          console.log(
-            `👤 Logged in user on auth page, redirecting to ${redirectPath}`,
-          );
-        }
+        console.log("👤 Logged in user on auth page, redirecting", {
+          pathname,
+          redirectPath,
+          userRole,
+        });
         const response = NextResponse.redirect(new URL(redirectPath, nextUrl));
         return addSecurityHeaders(response);
       }
@@ -103,11 +108,7 @@ export default async function middleware(req: NextRequest) {
     );
 
     if (requiresAuth && !isLoggedIn) {
-      if (process.env.NODE_ENV === "development") {
-        console.log(
-          `🔒 Auth required for ${pathname} but user not logged in - redirecting to login`,
-        );
-      }
+      console.warn("🔒 Auth required but user not logged in", { pathname });
       const loginUrl = new URL("/login", nextUrl);
       // Preserve the original URL for redirect after login
       loginUrl.searchParams.set("callbackUrl", pathname + nextUrl.search);
@@ -127,11 +128,11 @@ export default async function middleware(req: NextRequest) {
         !hasMiddlewareAccess(userRole, ROUTE_ACCESS[matchingRoute])
       ) {
         // Log unauthorized access attempt
-        if (process.env.NODE_ENV === "development") {
-          console.warn(
-            `🚨 Unauthorized access attempt: ${userRole} → ${pathname}`,
-          );
-        }
+        console.warn("🚨 Unauthorized access attempt", {
+          userRole,
+          pathname,
+          matchingRoute,
+        });
 
         // Redirect to appropriate dashboard or show unauthorized
         const allowedPath =
