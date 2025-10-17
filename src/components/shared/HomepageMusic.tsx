@@ -156,7 +156,6 @@ export function HomepageMusic() {
       id="homepage-audio"
       src="/landing.mp3"
       preload="auto"
-      autoPlay
       muted
       className="hidden"
     />

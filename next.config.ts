@@ -121,11 +121,11 @@ const nextConfig: NextConfig = {
                   ].join("; ")
                 : [
                     "default-src 'self' https://www.mineduc.cl https://*.mineduc.cl https://facebook.com https://*.facebook.com https://twitter.com https://*.twitter.com https://instagram.com https://*.instagram.com https://youtube.com https://*.youtube.com",
-                    "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // Next.js requires unsafe-eval and unsafe-inline
+                    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://*.vercel.live", // Next.js requires unsafe-eval and unsafe-inline, Vercel Live for feedback widget
                     "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
                     "img-src 'self' data: https://res.cloudinary.com https://*.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl https://facebook.com https://*.facebook.com https://twitter.com https://*.twitter.com https://instagram.com https://*.instagram.com https://youtube.com https://*.youtube.com",
                     "font-src 'self' data:",
-                    "connect-src 'self' https://api.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl https://industrious-manatee-7.convex.cloud",
+                    "connect-src 'self' https://api.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl https://industrious-manatee-7.convex.cloud https://vercel.live https://*.vercel.live",
                     "media-src 'self' https://res.cloudinary.com",
                     "object-src 'none'",
                     "base-uri 'self'",
