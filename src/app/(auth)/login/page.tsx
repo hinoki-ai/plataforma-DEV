@@ -2,8 +2,9 @@
 
 import { SignIn } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function LoginPage() {
+function LoginForm() {
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl");
 
@@ -30,5 +31,23 @@ export default function LoginPage() {
         />
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[100svh] items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6">
+          <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl p-6 sm:p-10 w-full max-w-md">
+            <div className="flex items-center justify-center p-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
