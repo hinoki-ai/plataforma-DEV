@@ -528,6 +528,12 @@
     position: relative;
   }
 
+  /* Centro consejo background */
+  .bg-centro-consejo {
+    --bg-image: url(/bg3.jpg);
+    position: relative;
+  }
+
   /* Mobile portrait video background */
   .mobile-portrait-video {
     display: none;
