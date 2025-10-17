@@ -5,7 +5,7 @@
 The application is experiencing CORS errors when trying to load Clerk's JavaScript:
 
 ```
-Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at 
+Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at
 https://clerk.plataforma.aramac.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js
 ```
 
@@ -57,6 +57,7 @@ After fixing the configuration:
 ## Current CSP Configuration
 
 The Content-Security-Policy has been updated to support both scenarios:
+
 - Default Clerk domains: `https://*.clerk.accounts.dev`
 - Custom domain: `https://clerk.plataforma.aramac.dev`
 
@@ -69,6 +70,7 @@ The Content-Security-Policy has been updated to support both scenarios:
 ## Technical Details
 
 The publishable key embeds the Frontend API domain. When Clerk initializes, it extracts the domain from the key and attempts to load `clerk.browser.js` from:
+
 - Custom domain: `https://[custom-domain]/npm/@clerk/clerk-js@5/dist/clerk.browser.js`
 - Default domain: `https://[app-slug].clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js`
 
