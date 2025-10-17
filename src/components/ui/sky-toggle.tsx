@@ -27,7 +27,7 @@ const SkyToggle = ({ className, size = "md" }: SkyToggleProps) => {
     setTheme(isDark ? "light" : "dark");
   };
 
-  const sizeMultiplier = size === "sm" ? 0.8 : size === "lg" ? 1.2 : 1;
+  const sizeMultiplier = size === "sm" ? 0.4 : size === "lg" ? 1.2 : 1;
 
   return (
     <StyledWrapper className={className} $sizeMultiplier={sizeMultiplier}>
@@ -89,8 +89,8 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     --stars-color: #fff;
     --clouds-color: #f3fdff;
     --back-clouds-color: #aacadf;
-    --transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
-    --circle-transition: 0.3s cubic-bezier(0, -0.02, 0.35, 1.17);
+    --transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --circle-transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .theme-switch,
@@ -279,9 +279,9 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
       4.625em -1.75em 0 0.437em var(--clouds-color),
       4em -0.625em var(--back-clouds-color),
       4.125em -2.125em 0 0.437em var(--back-clouds-color);
-    -webkit-transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
-    -o-transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
-    transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
+    -webkit-transition: var(--transition);
+    -o-transition: var(--transition);
+    transition: var(--transition);
   }
 
   .theme-switch__stars-container {

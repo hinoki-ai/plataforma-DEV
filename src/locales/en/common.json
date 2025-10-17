@@ -548,101 +548,67 @@
   "centro_consejo.feature_participation_desc": "Direct involvement in school activities and community events",
   "centro_consejo.feature_recognition": "Recognition",
   "centro_consejo.feature_recognition_desc": "Valuation of each family's contribution to educational development",
-  "centro_consejo.testimonials": {
-    "maria_gonzalez": {
-      "name": "María González",
-      "role": "Pre-K Mother",
-      "content": "The Parent Center has allowed me to be more connected to my daughter's education."
-    },
-    "carlos_rodriguez": {
-      "name": "Carlos Rodríguez",
-      "role": "Kindergarten Father",
-      "content": "Transparency in management gives us confidence in the educational project."
-    },
-    "ana_silva": {
-      "name": "Ana Silva",
-      "role": "Medium Major Mother",
-      "content": "The workshops have helped us understand child development much better."
-    },
-    "pedro_morales": {
-      "name": "Pedro Morales",
-      "role": "Preparatory Guardian",
-      "content": "The community is incredible, there's always support and collaboration between families."
-    },
-    "isabel_fernandez": {
-      "name": "Isabel Fernández",
-      "role": "Pre-K Mother",
-      "content": "Direct communication with teachers has improved a lot since I joined."
-    },
-    "roberto_jimenez": {
-      "name": "Roberto Jiménez",
-      "role": "Kindergarten Father",
-      "content": "The educational resources we share between families are invaluable."
-    },
-    "carmen_vega": {
-      "name": "Carmen Vega",
-      "role": "Preparatory Mother",
-      "content": "I feel more empowered as a mother participating in educational decisions."
-    },
-    "miguel_torres": {
-      "name": "Miguel Torres",
-      "role": "Pre-K Guardian",
-      "content": "The support network between parents is fundamental for our children's development."
-    },
-    "patricia_lopez": {
-      "name": "Patricia López",
-      "role": "Kindergarten Mother",
-      "content": "Family events have helped us create stronger bonds with the school."
-    },
-    "francisco_herrera": {
-      "name": "Francisco Herrera",
-      "role": "Preparatory Father",
-      "content": "Transparency in resource use gives us great confidence."
-    },
-    "sofia_mendoza": {
-      "name": "Sofía Mendoza",
-      "role": "Pre-K Mother",
-      "content": "Parenting workshops have transformed my way of educating at home."
-    },
-    "diego_castro": {
-      "name": "Diego Castro",
-      "role": "Kindergarten Father",
-      "content": "Participation in school activities has strengthened my relationship with my child."
-    },
-    "valentina_ruiz": {
-      "name": "Valentina Ruiz",
-      "role": "Preparatory Mother",
-      "content": "Emotional support between families is what I value most about the parent center."
-    },
-    "andres_moreno": {
-      "name": "Andrés Moreno",
-      "role": "Pre-K Guardian",
-      "content": "Collaboration between parents and teachers has significantly improved education."
-    },
-    "daniela_paredes": {
-      "name": "Daniela Paredes",
-      "role": "Kindergarten Mother",
-      "content": "The resources we share have enriched all the children's learning."
-    }
-  },
-  "centro_consejo.footer": {
-    "title": "Parent Center",
-    "description": "We work together to build a strong and committed educational community.",
-    "quick_access": "Quick Access",
-    "dashboard_link": "Parent Center Dashboard",
-    "dashboard_aria": "Go to parent center dashboard",
-    "profile_link": "My Profile",
-    "profile_aria": "View parent center profile",
-    "schedule_title": "Schedule",
-    "meetings": "Meetings: First Friday of each month",
-    "time": "Time: 7:00 PM - 9:00 PM",
-    "location": "Location: Assembly hall",
-    "school_info": "Plataforma Astral Educational Platform — RBD 20264-9 — Los Sauces Municipality",
-    "copyright": "© {year} Parent Center Plataforma Astral. All rights reserved.",
-    "part_of": "Part of",
-    "home_link_aria": "Back to Plataforma Astral main page",
-    "contact_info_aria": "Contact information"
-  },
+  "centro_consejo.testimonials.maria_gonzalez.name": "María González",
+  "centro_consejo.testimonials.maria_gonzalez.role": "Pre-K Mother",
+  "centro_consejo.testimonials.maria_gonzalez.content": "The Parent Center has allowed me to be more connected to my daughter's education.",
+  "centro_consejo.testimonials.carlos_rodriguez.name": "Carlos Rodríguez",
+  "centro_consejo.testimonials.carlos_rodriguez.role": "Kindergarten Father",
+  "centro_consejo.testimonials.carlos_rodriguez.content": "Transparency in management gives us confidence in the educational project.",
+  "centro_consejo.testimonials.ana_silva.name": "Ana Silva",
+  "centro_consejo.testimonials.ana_silva.role": "Medium Major Mother",
+  "centro_consejo.testimonials.ana_silva.content": "The workshops have helped us understand child development much better.",
+  "centro_consejo.testimonials.pedro_morales.name": "Pedro Morales",
+  "centro_consejo.testimonials.pedro_morales.role": "Preparatory Guardian",
+  "centro_consejo.testimonials.pedro_morales.content": "The community is incredible, there's always support and collaboration between families.",
+  "centro_consejo.testimonials.isabel_fernandez.name": "Isabel Fernández",
+  "centro_consejo.testimonials.isabel_fernandez.role": "Pre-K Mother",
+  "centro_consejo.testimonials.isabel_fernandez.content": "Direct communication with teachers has improved a lot since I joined.",
+  "centro_consejo.testimonials.roberto_jimenez.name": "Roberto Jiménez",
+  "centro_consejo.testimonials.roberto_jimenez.role": "Kindergarten Father",
+  "centro_consejo.testimonials.roberto_jimenez.content": "The educational resources we share between families are invaluable.",
+  "centro_consejo.testimonials.carmen_vega.name": "Carmen Vega",
+  "centro_consejo.testimonials.carmen_vega.role": "Preparatory Mother",
+  "centro_consejo.testimonials.carmen_vega.content": "I feel more empowered as a mother participating in educational decisions.",
+  "centro_consejo.testimonials.miguel_torres.name": "Miguel Torres",
+  "centro_consejo.testimonials.miguel_torres.role": "Pre-K Guardian",
+  "centro_consejo.testimonials.miguel_torres.content": "The support network between parents is fundamental for our children's development.",
+  "centro_consejo.testimonials.patricia_lopez.name": "Patricia López",
+  "centro_consejo.testimonials.patricia_lopez.role": "Kindergarten Mother",
+  "centro_consejo.testimonials.patricia_lopez.content": "Family events have helped us create stronger bonds with the school.",
+  "centro_consejo.testimonials.francisco_herrera.name": "Francisco Herrera",
+  "centro_consejo.testimonials.francisco_herrera.role": "Preparatory Father",
+  "centro_consejo.testimonials.francisco_herrera.content": "Transparency in resource use gives us great confidence.",
+  "centro_consejo.testimonials.sofia_mendoza.name": "Sofía Mendoza",
+  "centro_consejo.testimonials.sofia_mendoza.role": "Pre-K Mother",
+  "centro_consejo.testimonials.sofia_mendoza.content": "Parenting workshops have transformed my way of educating at home.",
+  "centro_consejo.testimonials.diego_castro.name": "Diego Castro",
+  "centro_consejo.testimonials.diego_castro.role": "Kindergarten Father",
+  "centro_consejo.testimonials.diego_castro.content": "Participation in school activities has strengthened my relationship with my child.",
+  "centro_consejo.testimonials.valentina_ruiz.name": "Valentina Ruiz",
+  "centro_consejo.testimonials.valentina_ruiz.role": "Preparatory Mother",
+  "centro_consejo.testimonials.valentina_ruiz.content": "Emotional support between families is what I value most about the parent center.",
+  "centro_consejo.testimonials.andres_moreno.name": "Andrés Moreno",
+  "centro_consejo.testimonials.andres_moreno.role": "Pre-K Guardian",
+  "centro_consejo.testimonials.andres_moreno.content": "Collaboration between parents and teachers has significantly improved education.",
+  "centro_consejo.testimonials.daniela_paredes.name": "Daniela Paredes",
+  "centro_consejo.testimonials.daniela_paredes.role": "Kindergarten Mother",
+  "centro_consejo.testimonials.daniela_paredes.content": "The resources we share have enriched all the children's learning.",
+  "centro_consejo.footer.title": "Parent Center",
+  "centro_consejo.footer.description": "We work together to build a strong and committed educational community.",
+  "centro_consejo.footer.quick_access": "Quick Access",
+  "centro_consejo.footer.dashboard_link": "Parent Center Dashboard",
+  "centro_consejo.footer.dashboard_aria": "Go to parent center dashboard",
+  "centro_consejo.footer.profile_link": "My Profile",
+  "centro_consejo.footer.profile_aria": "View parent center profile",
+  "centro_consejo.footer.schedule_title": "Schedule",
+  "centro_consejo.footer.meetings": "Meetings: First Friday of each month",
+  "centro_consejo.footer.time": "Time: 7:00 PM - 9:00 PM",
+  "centro_consejo.footer.location": "Location: Assembly hall",
+  "centro_consejo.footer.school_info": "Plataforma Astral Educational Platform — RBD 20264-9 — Los Sauces Municipality",
+  "centro_consejo.footer.copyright": "© {year} Parent Center Plataforma Astral. All rights reserved.",
+  "centro_consejo.footer.part_of": "Part of",
+  "centro_consejo.footer.home_link_aria": "Back to Plataforma Astral main page",
+  "centro_consejo.footer.contact_info_aria": "Contact information",
   "team.title": "Multidisciplinary Team",
   "team.description": "Our team is made up of people who care deeply about the well-being and learning of each child. Here we work together to accompany, support and guide the families of our little school.",
   "team.error_loading": "Error loading team members",

@@ -75,10 +75,23 @@ export const authOptions: NextAuthConfig = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.warn(
+            "⚠️ Credentials authorize called without email or password",
+            {
+              hasEmail: Boolean(credentials?.email),
+              hasPassword: Boolean(credentials?.password),
+              timestamp: new Date().toISOString(),
+            },
+          );
           return null;
         }
 
         logger.info("Authentication attempt", { email: credentials.email });
+        console.log("🧾 Credentials authorize() invoked", {
+          email: credentials.email,
+          passwordLength: (credentials.password as string).length,
+          timestamp: new Date().toISOString(),
+        });
 
         // Use Prisma authentication in Node.js runtime
         try {
@@ -89,12 +102,23 @@ export const authOptions: NextAuthConfig = {
 
           if (!user) {
             logger.warn("Authentication failed", { email: credentials.email });
+            console.warn(
+              "❌ authenticateUser() returned null inside authorize()",
+              {
+                email: credentials.email,
+              },
+            );
             return null;
           }
 
           logger.info("Authentication successful", {
             email: credentials.email,
             role: user.role,
+          });
+          console.log("✅ Credentials authorize() success", {
+            email: credentials.email,
+            role: user.role,
+            userId: user.id,
           });
           return {
             id: user.id,
@@ -104,6 +128,10 @@ export const authOptions: NextAuthConfig = {
           };
         } catch (error) {
           logger.error("Authentication error", {
+            email: credentials.email,
+            error,
+          });
+          console.error("💥 authorize() threw while calling authenticateUser", {
             email: credentials.email,
             error,
           });
@@ -122,6 +150,10 @@ export const authOptions: NextAuthConfig = {
   ],
   callbacks: {
     async redirect({ url, baseUrl }) {
+      console.log("🔀 NextAuth redirect callback", {
+        url,
+        baseUrl,
+      });
       // Always redirect successful login to auth-success for proper role-based routing
       // This handles both direct callback URLs and explicit redirectTo parameters
       if (
@@ -138,12 +170,11 @@ export const authOptions: NextAuthConfig = {
     },
     async signIn({ user, account, profile, email, credentials }: any) {
       try {
-        if (process.env.NODE_ENV === "development") {
-          console.log("🔐 Sign in callback triggered:", {
-            provider: account?.provider,
-            email: user?.email,
-          });
-        }
+        console.log("🔐 Sign in callback triggered", {
+          provider: account?.provider,
+          email: user?.email,
+          hasCredentials: Boolean(credentials),
+        });
 
         // For OAuth providers (Google only now), handle parent authentication
         if (account?.provider === "google") {
@@ -154,12 +185,10 @@ export const authOptions: NextAuthConfig = {
             // If user exists as teacher/admin (non-PARENT role), prevent OAuth login
             // Teachers and admins must use credentials login only
             if (existingUser.role !== "PARENT") {
-              if (process.env.NODE_ENV === "development") {
-                console.log(
-                  "❌ OAuth blocked for non-parent user:",
-                  existingUser.role,
-                );
-              }
+              console.warn("❌ OAuth blocked for non-parent user", {
+                role: existingUser.role,
+                email: user?.email,
+              });
               return false;
             }
 
@@ -175,14 +204,12 @@ export const authOptions: NextAuthConfig = {
         }
 
         // For credentials login, user object is already populated by the authorize function
-        if (process.env.NODE_ENV === "development") {
-          console.log(
-            "✅ Sign in successful for user:",
-            user?.email,
-            "role:",
-            user?.role,
-          );
-        }
+        console.log("✅ Sign in callback returning true", {
+          email: user?.email,
+          role: user?.role,
+          isOAuthUser: user?.isOAuthUser,
+          needsRegistration: user?.needsRegistration,
+        });
         return true;
       } catch (error) {
         console.error("❌ Sign in callback error:", error);
@@ -191,6 +218,11 @@ export const authOptions: NextAuthConfig = {
     },
 
     async jwt({ token, user, account }: any) {
+      console.log("🔑 JWT callback start", {
+        hasUser: Boolean(user),
+        tokenEmail: token?.email,
+        provider: account?.provider,
+      });
       // Persist user data to token on sign in
       if (user) {
         token.role = user.role;
@@ -199,16 +231,13 @@ export const authOptions: NextAuthConfig = {
         token.name = user.name;
         token.needsRegistration = user.needsRegistration;
         token.isOAuthUser = user.isOAuthUser;
-        if (process.env.NODE_ENV === "development") {
-          console.log(
-            "🔑 JWT Callback - User role:",
-            user.role,
-            "Token role:",
-            token.role,
-            "User ID:",
-            user.id,
-          );
-        }
+        console.log("🔑 JWT callback populated token", {
+          role: token.role,
+          id: token.id,
+          email: token.email,
+          isOAuthUser: token.isOAuthUser,
+          needsRegistration: token.needsRegistration,
+        });
       }
 
       // Ensure token always has these properties - critical for production
@@ -221,7 +250,7 @@ export const authOptions: NextAuthConfig = {
             token.role = userFromDb.role;
             token.id = userFromDb.id;
             token.name = userFromDb.name;
-            console.log("✅ Restored token data from database:", {
+            console.log("✅ Restored token data from database", {
               role: userFromDb.role,
               id: userFromDb.id,
             });
@@ -249,6 +278,11 @@ export const authOptions: NextAuthConfig = {
     },
 
     async session({ session, token }: any) {
+      console.log("📋 Session callback start", {
+        hasToken: Boolean(token),
+        tokenRole: token?.role,
+        tokenEmail: token?.email,
+      });
       // Send properties to the client
       if (token) {
         session.user.id = token.id as string;
@@ -261,14 +295,12 @@ export const authOptions: NextAuthConfig = {
           session.user.email = token.email as string;
         }
 
-        if (process.env.NODE_ENV === "development") {
-          console.log(
-            "📋 Session Callback - Token role:",
-            token.role,
-            "Session role:",
-            session.user.role,
-          );
-        }
+        console.log("📋 Session callback populated session", {
+          sessionEmail: session.user.email,
+          sessionRole: session.user.role,
+          sessionId: session.user.id,
+          needsRegistration: session.user.needsRegistration,
+        });
 
         // Validate session has all required data before returning
         if (!session.user.id || !session.user.role || !session.user.email) {
@@ -286,14 +318,10 @@ export const authOptions: NextAuthConfig = {
   },
   events: {
     async signIn(message) {
-      if (process.env.NODE_ENV === "development") {
-        console.log("🔐 Sign in event:", message);
-      }
+      console.log("🔐 NextAuth signIn event", message);
     },
     async signOut(message) {
-      if (process.env.NODE_ENV === "development") {
-        console.log("🚪 Sign out event:", message);
-      }
+      console.log("🚪 NextAuth signOut event", message);
     },
   },
 };

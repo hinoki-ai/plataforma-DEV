@@ -31,10 +31,27 @@ export async function authenticateUser(
   password: string,
 ): Promise<User | null> {
   try {
+    console.log("🔍 authenticateUser() called", {
+      email,
+      passwordLength: password?.length ?? 0,
+      timestamp: new Date().toISOString(),
+    });
     const client = getConvexClient();
 
     // Get user by email
     const user = await client.query(api.users.getUserByEmail, { email });
+
+    if (!user) {
+      console.warn("👤 No user found for email", { email });
+    } else {
+      console.log("👤 User record fetched", {
+        email: user.email,
+        hasPassword: Boolean(user.password),
+        isActive: user.isActive,
+        role: user.role,
+        userId: user._id,
+      });
+    }
 
     if (!user || !user.password) {
       return null;
@@ -42,8 +59,17 @@ export async function authenticateUser(
 
     // Verify password
     const isValidPassword = await bcryptjs.compare(password, user.password);
+    console.log("🧪 Password comparison result", {
+      email,
+      isValidPassword,
+    });
 
     if (!isValidPassword || !user.isActive) {
+      console.warn("🚫 Authentication rejected", {
+        email,
+        isValidPassword,
+        isActive: user.isActive,
+      });
       return null;
     }
 
@@ -62,10 +88,23 @@ export async function authenticateUser(
       } catch (error) {
         // If no parent profile exists, they need registration
         needsRegistration = true;
+        console.warn("📝 Parent registration lookup failed", {
+          email,
+          message:
+            error instanceof Error
+              ? error.message
+              : "Unknown registration error",
+        });
       }
     }
 
     // Return user without password
+    console.log("✅ authenticateUser() success", {
+      email,
+      role: user.role,
+      needsRegistration,
+      isOAuthUser: user.isOAuthUser,
+    });
     return {
       _id: user._id,
       id: user._id,
@@ -78,7 +117,10 @@ export async function authenticateUser(
       isOAuthUser: user.isOAuthUser,
     };
   } catch (error) {
-    console.error("Authentication error:", error);
+    console.error("💥 authenticateUser() threw", {
+      email,
+      error,
+    });
     return null;
   }
 }
