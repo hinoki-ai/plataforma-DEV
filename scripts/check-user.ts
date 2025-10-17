@@ -14,8 +14,11 @@ if (!CONVEX_URL) {
 const client = new ConvexHttpClient(CONVEX_URL);
 
 async function checkUser() {
-  const email = "agustin@astral.cl";
-  const passwordToTest = "59163476a";
+  const emailArg = process.argv[2];
+  const passwordArg = process.argv[3];
+
+  const email = emailArg || "agustin@astral.cl";
+  const passwordToTest = passwordArg || "59163476a";
 
   console.log(`\n🔍 Checking user: ${email}\n`);
 
