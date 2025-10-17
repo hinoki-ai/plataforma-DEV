@@ -3,7 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ui/mode-toggle";
@@ -79,7 +80,7 @@ export default function Navigation() {
       }
 
       // Use client-side signOut which is more reliable
-      await signOut({ callbackUrl: "/" });
+      await signOut();
 
       // Use Next.js router for navigation
       router.push("/");

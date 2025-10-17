@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from "next-themes";
@@ -66,9 +67,7 @@ export default function LoginButton() {
   const isHydrated = useHydrationSafe();
 
   // ⚡ Performance: Optimize session hook with better configuration
-  const { data: session, status } = useSession({
-    required: false,
-  });
+  const { data: session, status } = useSession();
 
   const { theme, setTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
@@ -105,10 +104,7 @@ export default function LoginButton() {
   const handleLogout = useCallback(async () => {
     setIsLoggingOut(true);
     try {
-      await signOut({
-        callbackUrl: "/",
-        redirect: true,
-      });
+      await signOut();
     } catch (error) {
       console.error("Logout error:", error);
       router.push("/");

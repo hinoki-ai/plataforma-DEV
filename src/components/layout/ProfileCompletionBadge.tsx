@@ -13,13 +13,12 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/language/LanguageContext";
-import type { User } from "next-auth";
+import type { SessionUser } from "@/lib/auth-client";
 import type { UserRole } from "@/lib/prisma-compat-types";
 
 // Extended user type with additional fields from our database
-interface ExtendedUser extends Omit<User, "role"> {
-  phone?: string;
-  role?: UserRole;
+interface ExtendedUser extends Omit<SessionUser, "role"> {
+  role: UserRole;
   isActive?: boolean;
   emailVerified?: Date;
 }
@@ -43,9 +42,10 @@ export function ProfileCompletionBadge({
   }
 
   // Check if profile is complete
-  const isProfileComplete = checkProfileCompletion(
-    session.user as ExtendedUser,
-  );
+  const isProfileComplete = checkProfileCompletion({
+    ...(session.user as SessionUser),
+    role: session.user.role as UserRole,
+  } as ExtendedUser);
 
   // Don't show if profile is already complete
   if (isProfileComplete) {

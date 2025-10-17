@@ -13,7 +13,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signOut } from "@/lib/auth-client";
 import { usePathname, useRouter } from "next/navigation";
 import { NavigationIcons, ThemeIcons } from "@/components/icons/hero-icons";
 import {
@@ -365,10 +366,7 @@ export function EnhancedSidebar({
   // Logout handler
   const handleLogout = useCallback(async () => {
     try {
-      await signOut({
-        callbackUrl: "/",
-        redirect: true,
-      });
+      await signOut();
     } catch (error) {
       console.error("Error during logout:", error);
       router.push("/");
