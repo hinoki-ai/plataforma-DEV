@@ -7,7 +7,6 @@ const PUBLIC_ROUTES = [
   "/registro",
   "/auth-success",
   "/centro-consejo",
-  "/fotos-videos",
 ];
 
 const PROTECTED_PREFIXES = ["/master", "/admin", "/profesor", "/parent"];

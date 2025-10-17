@@ -257,10 +257,7 @@ export default function CentroConsejoPage() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-responsive-desktop"
-      style={{ "--bg-image": "url(/bg3.jpg)" } as React.CSSProperties}
-    >
+    <div className="min-h-screen bg-responsive-desktop bg-centro-consejo">
       <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
         <Header />
         {/* Hero Section */}
@@ -946,26 +943,20 @@ export default function CentroConsejoPage() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      href="/centro-consejo/dashboard"
+                      href="/login"
                       className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t(
-                        "centro_consejo.footer.dashboard_aria",
-                        "common",
-                      )}
+                      aria-label="Acceder a la plataforma"
                     >
-                      {t("centro_consejo.footer.dashboard_link", "common")}
+                      Acceder a la Plataforma
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/centro-consejo/profile"
+                      href="/"
                       className="text-gray-300 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
-                      aria-label={t(
-                        "centro_consejo.footer.profile_aria",
-                        "common",
-                      )}
+                      aria-label="Volver al inicio"
                     >
-                      {t("centro_consejo.footer.profile_link", "common")}
+                      Volver al Inicio
                     </Link>
                   </li>
                 </ul>

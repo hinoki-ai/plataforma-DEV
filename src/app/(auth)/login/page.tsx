@@ -14,7 +14,7 @@ function LoginForm() {
         <SignIn
           path="/login"
           routing="path"
-          signUpUrl="/registro"
+          signUpUrl="/registro-padre"
           afterSignInUrl={callbackUrl ?? "/auth-success"}
           afterSignUpUrl={callbackUrl ?? "/auth-success"}
           appearance={{
