@@ -77,24 +77,25 @@ const developerContacts = [
 const numberFormatter = new Intl.NumberFormat("es-CL");
 
 interface PricingCalculatorPageProps {
-  searchParams: {
+  searchParams: Promise<{
     plan?: string;
     billing?: string;
     students?: string;
-  };
+  }>;
 }
 
-export default function PricingCalculatorPage({
+export default async function PricingCalculatorPage({
   searchParams,
 }: PricingCalculatorPageProps) {
-  const planFromParams = searchParams.plan
-    ? findPricingPlan(searchParams.plan)
+  const resolvedSearchParams = await searchParams;
+  const planFromParams = resolvedSearchParams.plan
+    ? findPricingPlan(resolvedSearchParams.plan)
     : undefined;
   const fallbackPlan = pricingPlans[1] ?? pricingPlans[0];
   const selectedPlan = planFromParams ?? fallbackPlan;
 
-  const initialBilling: BillingCycle = isValidBillingCycle(searchParams.billing)
-    ? (searchParams.billing as BillingCycle)
+  const initialBilling: BillingCycle = isValidBillingCycle(resolvedSearchParams.billing)
+    ? (resolvedSearchParams.billing as BillingCycle)
     : "monthly";
   const [billingCycle, setBillingCycle] =
     useState<BillingCycle>(initialBilling);
@@ -109,8 +110,8 @@ export default function PricingCalculatorPage({
   };
 
   const initialStudents = (() => {
-    const parsed = searchParams.students
-      ? Number.parseInt(searchParams.students, 10)
+    const parsed = resolvedSearchParams.students
+      ? Number.parseInt(resolvedSearchParams.students, 10)
       : NaN;
     if (Number.isNaN(parsed)) {
       return selectedPlan.minStudents;
