@@ -10,53 +10,55 @@ export const metadata: Metadata = {
 
 export default function ProgramasPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-8 text-foreground">
-            Nuestros Programas Educativos
-          </h1>
-          <p className="text-lg text-center text-muted-foreground mb-12">
-            Descubre los programas diseñados para potenciar el talento y el
-            desarrollo integral de cada estudiante.
-          </p>
+    <div className="min-h-screen bg-responsive-desktop bg-programas">
+      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
+        <Header />
+        <main className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-4xl font-bold text-center mb-8 text-white">
+              Nuestros Programas Educativos
+            </h1>
+            <p className="text-lg text-center text-white/90 mb-12">
+              Descubre los programas diseñados para potenciar el talento y el
+              desarrollo integral de cada estudiante.
+            </p>
 
-          {/* Program content will go here */}
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {/* Placeholder for program cards */}
-            <div className="bg-card p-6 rounded-lg border shadow-sm">
-              <h3 className="text-xl font-semibold mb-4">
-                Programa de Desarrollo
-              </h3>
-              <p className="text-muted-foreground">
-                Programa integral para el desarrollo académico y personal de los
-                estudiantes.
-              </p>
-            </div>
+            {/* Program content will go here */}
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {/* Placeholder for program cards */}
+              <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl p-6">
+                <h3 className="text-xl font-semibold mb-4 text-white">
+                  Programa de Desarrollo
+                </h3>
+                <p className="text-gray-300">
+                  Programa integral para el desarrollo académico y personal de
+                  los estudiantes.
+                </p>
+              </div>
 
-            <div className="bg-card p-6 rounded-lg border shadow-sm">
-              <h3 className="text-xl font-semibold mb-4">
-                Programa de Innovación
-              </h3>
-              <p className="text-muted-foreground">
-                Fomentando la creatividad y el pensamiento crítico en el
-                aprendizaje.
-              </p>
-            </div>
+              <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl p-6">
+                <h3 className="text-xl font-semibold mb-4 text-white">
+                  Programa de Innovación
+                </h3>
+                <p className="text-gray-300">
+                  Fomentando la creatividad y el pensamiento crítico en el
+                  aprendizaje.
+                </p>
+              </div>
 
-            <div className="bg-card p-6 rounded-lg border shadow-sm">
-              <h3 className="text-xl font-semibold mb-4">
-                Programa de Liderazgo
-              </h3>
-              <p className="text-muted-foreground">
-                Desarrollando habilidades de liderazgo y trabajo en equipo.
-              </p>
+              <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl p-6">
+                <h3 className="text-xl font-semibold mb-4 text-white">
+                  Programa de Liderazgo
+                </h3>
+                <p className="text-gray-300">
+                  Desarrollando habilidades de liderazgo y trabajo en equipo.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
-      <MinEducFooter />
+        </main>
+        <MinEducFooter />
+      </div>
     </div>
   );
 }

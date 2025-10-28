@@ -68,3 +68,6 @@ verify-prod-password.mjs
 scripts/fix-*-password.ts
 scripts/reset-password.ts
 scripts/*password*
+
+# clerk configuration (can include secrets)
+/.clerk/

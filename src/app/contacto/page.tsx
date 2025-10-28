@@ -19,200 +19,208 @@ export const metadata: Metadata = {
 
 export default function ContactoPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto px-4 py-16">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-8 text-foreground">
-            Contacto
-          </h1>
-          <p className="text-lg text-center text-muted-foreground mb-12">
-            Estamos aquí para ayudarte. No dudes en ponerte en contacto con
-            nosotros.
-          </p>
+    <div className="min-h-screen bg-responsive-desktop bg-contacto">
+      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
+        <Header />
+        <main className="container mx-auto px-4 py-16">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-4xl font-bold text-center mb-8 text-white">
+              Contacto
+            </h1>
+            <p className="text-lg text-center text-white/90 mb-12">
+              Estamos aquí para ayudarte. No dudes en ponerte en contacto con
+              nosotros.
+            </p>
 
-          <div className="grid gap-8 lg:grid-cols-2">
-            {/* Contact Information */}
-            <div className="space-y-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5" />
-                    Ubicación
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">
-                    Región de Valparaíso, Viña Del Mar
-                    <br />
-                    Avenida Libertad #777
-                  </CardDescription>
-                </CardContent>
-              </Card>
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* Contact Information */}
+              <div className="space-y-8">
+                <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-white">
+                      <MapPin className="h-5 w-5" />
+                      Ubicación
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base text-gray-300">
+                      Región de Valparaíso, Viña Del Mar
+                      <br />
+                      Avenida Libertad #777
+                    </CardDescription>
+                  </CardContent>
+                </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Phone className="h-5 w-5" />
-                    Teléfonos de Contacto
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="font-medium">Loreto Gallegos Estay</p>
-                      <p className="text-muted-foreground font-mono">
-                        +569 3743 6196
-                      </p>
+                <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-white">
+                      <Phone className="h-5 w-5" />
+                      Teléfonos de Contacto
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="font-medium text-white">
+                          Loreto Gallegos Estay
+                        </p>
+                        <p className="text-gray-300 font-mono">
+                          +569 3743 6196
+                        </p>
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">
+                          Agustin Arancibia Mac-Guire
+                        </p>
+                        <p className="text-gray-300 font-mono">
+                          +569 8889 6773
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">Agustin Arancibia Mac-Guire</p>
-                      <p className="text-muted-foreground font-mono">
-                        +569 8889 6773
-                      </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-white">
+                      <Mail className="h-5 w-5" />
+                      Correo Electrónico
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-base text-gray-300">
+                      <a
+                        href="mailto:contacto@plataformaastral.cl"
+                        className="text-primary hover:underline"
+                      >
+                        contacto@plataformaastral.cl
+                      </a>
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+
+                <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-white">
+                      <Clock className="h-5 w-5" />
+                      Horario de Atención
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-1 text-sm text-gray-300">
+                      <p>Lunes a Viernes: 8:00 - 18:00</p>
+                      <p>Sábado: 9:00 - 13:00</p>
+                      <p>Domingo: Cerrado</p>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
 
-              <Card>
+              {/* Contact Form */}
+              <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Mail className="h-5 w-5" />
-                    Correo Electrónico
+                  <CardTitle className="text-white">
+                    Envíanos un mensaje
                   </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">
-                    <a
-                      href="mailto:contacto@plataformaastral.cl"
-                      className="text-primary hover:underline"
-                    >
-                      contacto@plataformaastral.cl
-                    </a>
+                  <CardDescription className="text-gray-300">
+                    Completa el formulario y nos pondremos en contacto contigo
+                    lo antes posible.
                   </CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
-                    Horario de Atención
-                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-1 text-sm">
-                    <p>Lunes a Viernes: 8:00 - 18:00</p>
-                    <p>Sábado: 9:00 - 13:00</p>
-                    <p>Domingo: Cerrado</p>
-                  </div>
+                  <form className="space-y-4">
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div>
+                        <label
+                          htmlFor="firstName"
+                          className="block text-sm font-medium mb-1 text-white"
+                        >
+                          Nombre
+                        </label>
+                        <input
+                          type="text"
+                          id="firstName"
+                          name="firstName"
+                          className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="lastName"
+                          className="block text-sm font-medium mb-1 text-white"
+                        >
+                          Apellido
+                        </label>
+                        <input
+                          type="text"
+                          id="lastName"
+                          name="lastName"
+                          className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium mb-1 text-white"
+                      >
+                        Correo electrónico
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="subject"
+                        className="block text-sm font-medium mb-1 text-white"
+                      >
+                        Asunto
+                      </label>
+                      <input
+                        type="text"
+                        id="subject"
+                        name="subject"
+                        className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="message"
+                        className="block text-sm font-medium mb-1 text-white"
+                      >
+                        Mensaje
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={5}
+                        className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-800 text-white resize-none"
+                        required
+                      ></textarea>
+                    </div>
+
+                    <Button type="submit" className="w-full">
+                      Enviar mensaje
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
             </div>
-
-            {/* Contact Form */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Envíanos un mensaje</CardTitle>
-                <CardDescription>
-                  Completa el formulario y nos pondremos en contacto contigo lo
-                  antes posible.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-4">
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div>
-                      <label
-                        htmlFor="firstName"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Nombre
-                      </label>
-                      <input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        className="w-full px-3 py-2 border border-input rounded-md bg-background"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="lastName"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Apellido
-                      </label>
-                      <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        className="w-full px-3 py-2 border border-input rounded-md bg-background"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Correo electrónico
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="w-full px-3 py-2 border border-input rounded-md bg-background"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="subject"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Asunto
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      className="w-full px-3 py-2 border border-input rounded-md bg-background"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Mensaje
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={5}
-                      className="w-full px-3 py-2 border border-input rounded-md bg-background resize-none"
-                      required
-                    ></textarea>
-                  </div>
-
-                  <Button type="submit" className="w-full">
-                    Enviar mensaje
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
           </div>
-        </div>
-      </main>
-      <MinEducFooter />
+        </main>
+        <MinEducFooter />
+      </div>
     </div>
   );
 }
