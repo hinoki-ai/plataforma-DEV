@@ -25,21 +25,21 @@ export const seedDatabase = mutation({
 
     const now = Date.now();
 
-    // Password: master123, admin123, profesor123, parent123
-    // Pre-hashed with bcrypt (10 rounds) - CORRECTED HASHES
+    // Password: 59163476a, admin123, profesor123, parent123
+    // Pre-hashed with bcrypt (10 rounds) - UPDATED HASHES
     const hashedMasterPassword =
-      "$2b$10$.CMNqsxLIY3X9LAunrPvaOG1GIGmvwNi70Ksth1hHOlMrqQyp9UOy";
+      "$2b$10$DIdRzGR5r9lckpG7X5jr9OIQHiFMYGXLcGnVyBDnRwAu.pnAwZMg6";
     const hashedAdminPassword =
-      "$2b$10$07JuDiQUuQj9AQYD7k7KSeNbPVSx0n6cA8N17biZ95Qroq3owdtRm";
+      "$2b$10$rcuVz6SAAsmXGpqtEfyMAu4qp9qh9O/7rgF/j8E8PBZIBA6lA2yse";
     const hashedProfesorPassword =
-      "$2b$10$cd7.dEqS/9KNbYaG7DSgmeKUXOBvKN4qNzNXHK1TGdYaRf26xqtAu";
+      "$2b$10$5HeL15fadPfphQwoFo5v3uL2D.KvFhDIC84G9FZEHYa9IV7zVnllW";
     const hashedParentPassword =
-      "$2b$10$F1C0aQWCrE59er8wB0p94OThHCBMPrpxRA3esWSW0UuPS/Aa0FLZS";
+      "$2b$10$PztmJfNsa4ziz3T7AkfK8egkjSsM9A0qmH16EKGbriaImmqz7N1za";
 
     // Create Master User (Supreme Access)
     const masterId = await ctx.db.insert("users", {
-      name: "Master Administrator",
-      email: "master@plataforma-astral.com",
+      name: "Agustin",
+      email: "agustin@astral.cl",
       password: hashedMasterPassword,
       role: "MASTER",
       isActive: true,
