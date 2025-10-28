@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
@@ -84,17 +84,32 @@ interface PricingCalculatorPageProps {
   }>;
 }
 
-export default async function PricingCalculatorPage({
+export default function PricingCalculatorPage({
   searchParams,
 }: PricingCalculatorPageProps) {
-  const resolvedSearchParams = await searchParams;
+  const [resolvedSearchParams, setResolvedSearchParams] = useState<{
+    plan?: string;
+    billing?: string;
+    students?: string;
+  }>({});
+
+  useEffect(() => {
+    const resolveParams = async () => {
+      const params = await searchParams;
+      setResolvedSearchParams(params);
+    };
+    resolveParams();
+  }, [searchParams]);
+
   const planFromParams = resolvedSearchParams.plan
     ? findPricingPlan(resolvedSearchParams.plan)
     : undefined;
   const fallbackPlan = pricingPlans[1] ?? pricingPlans[0];
   const selectedPlan = planFromParams ?? fallbackPlan;
 
-  const initialBilling: BillingCycle = isValidBillingCycle(resolvedSearchParams.billing)
+  const initialBilling: BillingCycle = isValidBillingCycle(
+    resolvedSearchParams.billing,
+  )
     ? (resolvedSearchParams.billing as BillingCycle)
     : "monthly";
   const [billingCycle, setBillingCycle] =
