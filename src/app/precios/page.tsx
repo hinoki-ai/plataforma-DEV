@@ -26,7 +26,6 @@ const plans = pricingPlans;
 
 const featuresList = featureLabels;
 
-
 export default function PreciosPage() {
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
@@ -503,16 +502,26 @@ export default function PreciosPage() {
           <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-gray-300 text-sm">
-                © {new Date().getFullYear()} Plataforma Astral. Todos los derechos reservados.
+                © {new Date().getFullYear()} Plataforma Astral. Todos los
+                derechos reservados.
               </div>
               <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400">
-                <a href="/terminos" className="hover:text-primary transition-colors">
+                <a
+                  href="/terminos"
+                  className="hover:text-primary transition-colors"
+                >
                   Términos y Condiciones
                 </a>
-                <a href="/privacidad" className="hover:text-primary transition-colors">
+                <a
+                  href="/privacidad"
+                  className="hover:text-primary transition-colors"
+                >
                   Política de Privacidad
                 </a>
-                <a href="/contacto" className="hover:text-primary transition-colors">
+                <a
+                  href="/contacto"
+                  className="hover:text-primary transition-colors"
+                >
                   Contacto
                 </a>
               </div>

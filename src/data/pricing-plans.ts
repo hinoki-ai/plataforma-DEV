@@ -139,28 +139,29 @@ export const pricingPlans: PricingPlan[] = [
   },
 ];
 
-export const featureLabels: Array<{ key: keyof PlanFeatures; label: string }> = [
-  { key: "platform", label: "Acceso a plataforma educativa" },
-  { key: "basicMaterials", label: "Materiales de estudio" },
-  { key: "academicTracking", label: "Seguimiento académico" },
-  { key: "courses", label: "Cursos/asignaturas" },
-  { key: "storage", label: "Almacenamiento" },
-  { key: "meetings", label: "Reuniones virtuales/mes" },
-  { key: "users", label: "Usuarios administrativos" },
-  { key: "support", label: "Soporte técnico" },
-  { key: "sla", label: "SLA de disponibilidad" },
-  { key: "training", label: "Capacitación del personal" },
-  { key: "advancedReports", label: "Reportes avanzados" },
-  { key: "integrations", label: "Integraciones (SIGE, etc.)" },
-  { key: "api", label: "API y webhooks" },
-  { key: "dedicatedManager", label: "Gerente de cuenta" },
-];
+export const featureLabels: Array<{ key: keyof PlanFeatures; label: string }> =
+  [
+    { key: "platform", label: "Acceso a plataforma educativa" },
+    { key: "basicMaterials", label: "Materiales de estudio" },
+    { key: "academicTracking", label: "Seguimiento académico" },
+    { key: "courses", label: "Cursos/asignaturas" },
+    { key: "storage", label: "Almacenamiento" },
+    { key: "meetings", label: "Reuniones virtuales/mes" },
+    { key: "users", label: "Usuarios administrativos" },
+    { key: "support", label: "Soporte técnico" },
+    { key: "sla", label: "SLA de disponibilidad" },
+    { key: "training", label: "Capacitación del personal" },
+    { key: "advancedReports", label: "Reportes avanzados" },
+    { key: "integrations", label: "Integraciones (SIGE, etc.)" },
+    { key: "api", label: "API y webhooks" },
+    { key: "dedicatedManager", label: "Gerente de cuenta" },
+  ];
 
 export const findPricingPlan = (planId: string) =>
   pricingPlans.find((plan) => plan.id === planId);
 
 export const isValidBillingCycle = (
-  value: string | null | undefined
+  value: string | null | undefined,
 ): value is BillingCycle =>
   value === "monthly" || value === "annual" || value === "biannual";
 
@@ -170,7 +171,7 @@ export const formatCLP = (amount: number) =>
 export const calculateBillingPrice = (
   pricePerStudent: number,
   students: number,
-  billingCycle: BillingCycle
+  billingCycle: BillingCycle,
 ) => {
   const discount = billingCycleDiscount[billingCycle];
   const base = pricePerStudent * students;

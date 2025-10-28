@@ -96,7 +96,8 @@ export default function PricingCalculatorPage({
   const initialBilling: BillingCycle = isValidBillingCycle(searchParams.billing)
     ? (searchParams.billing as BillingCycle)
     : "monthly";
-  const [billingCycle, setBillingCycle] = useState<BillingCycle>(initialBilling);
+  const [billingCycle, setBillingCycle] =
+    useState<BillingCycle>(initialBilling);
 
   const clampStudents = (value: number) => {
     const min = selectedPlan.minStudents;
@@ -141,13 +142,13 @@ export default function PricingCalculatorPage({
       : "+"
   } estudiantes`;
 
-  const cycleOptions = (Object.keys(billingMetadata) as Array<BillingCycle>).map(
-    (value) => ({
-      value,
-      label: billingMetadata[value].label,
-      description: billingMetadata[value].description,
-    }),
-  );
+  const cycleOptions = (
+    Object.keys(billingMetadata) as Array<BillingCycle>
+  ).map((value) => ({
+    value,
+    label: billingMetadata[value].label,
+    description: billingMetadata[value].description,
+  }));
 
   const studentsFormatted = numberFormatter.format(students);
   const periodLabel =
@@ -226,13 +227,15 @@ export default function PricingCalculatorPage({
               </Button>
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm text-primary">
-                  <Sparkles className="w-4 h-4" /> Captación prioritaria para tu colegio
+                  <Sparkles className="w-4 h-4" /> Captación prioritaria para tu
+                  colegio
                 </div>
                 <h1 className="mt-3 text-4xl md:text-5xl font-bold">
                   Calculadora de {selectedPlan.name}
                 </h1>
                 <p className="mt-2 text-lg text-gray-200 max-w-2xl">
-                  Ajusta la cantidad de estudiantes y descubre la inversión real. Estamos listos para activar tu plan en minutos.
+                  Ajusta la cantidad de estudiantes y descubre la inversión
+                  real. Estamos listos para activar tu plan en minutos.
                 </p>
               </div>
             </div>
@@ -257,7 +260,9 @@ export default function PricingCalculatorPage({
                       </CardDescription>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm text-gray-400">Valor por estudiante</div>
+                      <div className="text-sm text-gray-400">
+                        Valor por estudiante
+                      </div>
                       <div className="text-2xl font-bold text-primary">
                         {formatCLP(selectedPlan.pricePerStudent)}
                       </div>
@@ -291,7 +296,9 @@ export default function PricingCalculatorPage({
                           min={selectedPlan.minStudents}
                           max={selectedPlan.maxStudents ?? undefined}
                           value={students}
-                          onChange={(event) => handleStudentInput(event.target.value)}
+                          onChange={(event) =>
+                            handleStudentInput(event.target.value)
+                          }
                           className="w-32 bg-gray-800 border-gray-700 text-lg font-semibold text-white"
                         />
                         <div className="flex items-center gap-2">
@@ -313,7 +320,9 @@ export default function PricingCalculatorPage({
                             +10
                           </Button>
                         </div>
-                        <span className="text-sm text-gray-400">{studentsLabel}</span>
+                        <span className="text-sm text-gray-400">
+                          {studentsLabel}
+                        </span>
                       </div>
                       <Slider
                         value={[students]}
@@ -332,7 +341,9 @@ export default function PricingCalculatorPage({
                   <div className="flex items-center gap-3">
                     <Calculator className="w-6 h-6 text-primary" />
                     <div>
-                      <CardTitle className="text-2xl">Tu inversión estimada</CardTitle>
+                      <CardTitle className="text-2xl">
+                        Tu inversión estimada
+                      </CardTitle>
                       <CardDescription className="text-gray-300">
                         Calculamos valores en CLP con IVA no incluido
                       </CardDescription>
@@ -342,7 +353,9 @@ export default function PricingCalculatorPage({
                     {cycleOptions.map((option) => (
                       <Button
                         key={option.value}
-                        variant={billingCycle === option.value ? "default" : "outline"}
+                        variant={
+                          billingCycle === option.value ? "default" : "outline"
+                        }
                         className="justify-start flex-col items-start gap-1 py-3 px-4"
                         onClick={() => setBillingCycle(option.value)}
                       >
@@ -367,7 +380,8 @@ export default function PricingCalculatorPage({
                     </p>
                     {discountPercentage > 0 && savingsMonthly > 0 && (
                       <p className="mt-2 text-sm text-green-400">
-                        Ahorro mensual: {formatCLP(savingsMonthly)} ({Math.round(discountPercentage * 100)}% menos)
+                        Ahorro mensual: {formatCLP(savingsMonthly)} (
+                        {Math.round(discountPercentage * 100)}% menos)
                       </p>
                     )}
                   </div>
@@ -394,7 +408,8 @@ export default function PricingCalculatorPage({
                       ¿Listo para activarlo?
                     </p>
                     <p className="text-sm text-gray-200 mt-1">
-                      Compartiremos esta simulación de inmediato con el equipo para iniciar la implementación sin demoras.
+                      Compartiremos esta simulación de inmediato con el equipo
+                      para iniciar la implementación sin demoras.
                     </p>
                     <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                       <Button asChild className="flex-1">
@@ -425,7 +440,8 @@ export default function PricingCalculatorPage({
                   Contacta directo al equipo de desarrollo
                 </CardTitle>
                 <CardDescription className="text-gray-300 text-base">
-                  Estamos en modo reacción inmediata. Escríbenos y comencemos hoy mismo.
+                  Estamos en modo reacción inmediata. Escríbenos y comencemos
+                  hoy mismo.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -443,7 +459,9 @@ export default function PricingCalculatorPage({
                           <div className="text-lg font-semibold text-white">
                             {contact.name}
                           </div>
-                          <div className="text-sm text-gray-400">{contact.role}</div>
+                          <div className="text-sm text-gray-400">
+                            {contact.role}
+                          </div>
                         </div>
                       </div>
                       <div className="mt-4 space-y-3 text-sm text-gray-300">
