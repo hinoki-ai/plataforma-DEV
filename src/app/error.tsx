@@ -11,69 +11,23 @@ export default function Error({
 }) {
   return (
     <DonutBackground>
-      <div
-        style={{
-          maxWidth: "28rem",
-          padding: "2rem",
-          textAlign: "center",
-          color: "#ff4444",
-          background: "rgba(11, 11, 11, 0.85)",
-          borderRadius: "1rem",
-          backdropFilter: "blur(8px)",
-          boxShadow: "0 0 40px rgba(255, 68, 68, 0.2)",
-          border: "1px solid rgba(255, 68, 68, 0.3)",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-            marginBottom: "1rem",
-            textShadow: "0 0 20px rgba(255, 68, 68, 0.5)",
-          }}
-        >
+      <div className="w-full max-w-sm mx-auto rounded-3xl border border-red-500/25 bg-black/82 px-6 py-8 text-center text-red-500 shadow-[0_0_32px_rgba(255,68,68,0.2)] backdrop-blur-md sm:max-w-md sm:px-8 sm:py-10">
+        <h1 className="text-3xl font-bold mb-4 text-red-400 drop-shadow-[0_0_16px_rgba(255,68,68,0.42)] sm:text-4xl">
           ¡Ups! Algo salió mal
         </h1>
-        <p
-          style={{
-            marginBottom: "2rem",
-            opacity: 0.8,
-            color: "#ffaaaa",
-            wordBreak: "break-word",
-          }}
-        >
+        <p className="mb-8 text-sm leading-relaxed text-red-300/90 sm:text-base break-words">
           {error?.message || "Ha ocurrido un error inesperado"}
         </p>
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
           <button
             onClick={reset}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "#ff4444",
-              color: "#0b0b0b",
-              borderRadius: "0.5rem",
-              border: "none",
-              cursor: "pointer",
-              fontWeight: "600",
-              boxShadow: "0 0 20px rgba(255, 68, 68, 0.3)",
-              transition: "all 0.3s ease",
-            }}
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-transparent bg-red-500 px-5 text-sm font-semibold text-black shadow-[0_0_18px_rgba(255,68,68,0.3)] transition-transform duration-200 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:h-11"
           >
             Intentar nuevamente
           </button>
           <a
             href="/"
-            style={{
-              display: "inline-block",
-              padding: "0.75rem 1.5rem",
-              background: "rgba(255, 68, 68, 0.2)",
-              color: "#ff4444",
-              borderRadius: "0.5rem",
-              textDecoration: "none",
-              fontWeight: "600",
-              border: "1px solid rgba(255, 68, 68, 0.3)",
-              transition: "all 0.3s ease",
-            }}
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-red-500/35 bg-red-500/10 px-5 text-sm font-semibold text-red-400 backdrop-blur transition-transform duration-200 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:h-11"
           >
             Volver al inicio
           </a>
