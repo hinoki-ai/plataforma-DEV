@@ -9,11 +9,6 @@ import path from "path";
 // });
 
 const nextConfig: NextConfig = {
-  // ESLint configuration - disable during build to prevent deployment failures
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   // TypeScript configuration - skip type checking during build (done separately)
   typescript: {
     ignoreBuildErrors: false,
