@@ -36,10 +36,8 @@ const nextConfig: NextConfig = {
     return `build-${Date.now()}`;
   },
 
-  // experimental: {
-  //   // Enable React 19 Compiler for maximum performance (requires React 19 and babel-plugin-react-compiler)
-  //   reactCompiler: true,
-  // },
+  // React Compiler is now stable in Next.js 16
+  reactCompiler: true,
 
   // Development optimizations
   ...(process.env.NODE_ENV === "development" && {
@@ -152,14 +150,20 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    domains: ["localhost", "res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
     formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  // experimental: {
-  //   typedRoutes: true,
-  // },
 };
 
 // Temporarily exporting config directly without bundle analyzer
