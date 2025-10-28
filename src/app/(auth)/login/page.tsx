@@ -9,13 +9,9 @@ function LoginForm() {
   const callbackUrl = params.get("callbackUrl");
 
   return (
-    <div className="public-page-shell bg-responsive-desktop">
-      <div className="public-page-content public-page-content--narrow space-y-6">
-        <div className="mx-auto w-fit rounded-full border border-white/50 bg-white/60 px-4 py-1 text-sm font-medium text-slate-700 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/45 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-100">
-          Plataforma Astral · Apoderados
-        </div>
-
-        <div className="glass-panel w-full max-w-md mx-auto p-6 sm:p-10 text-slate-900 dark:text-slate-100">
+    <div className="public-page-shell public-page-shell--plain">
+      <div className="public-page-content public-page-content--narrow">
+        <div className="glass-panel w-full max-w-md mx-auto p-6 sm:p-10 text-slate-900 dark:text-slate-100 flex flex-col items-center justify-center min-h-[400px]">
           <SignIn
             path="/login"
             routing="path"
@@ -88,9 +84,9 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="public-page-shell bg-responsive-desktop">
+        <div className="public-page-shell public-page-shell--plain">
           <div className="public-page-content public-page-content--narrow">
-            <div className="glass-panel w-full max-w-md mx-auto p-6 sm:p-10 text-slate-900 dark:text-slate-100">
+            <div className="glass-panel w-full max-w-md mx-auto p-6 sm:p-10 text-slate-900 dark:text-slate-100 flex flex-col items-center justify-center min-h-[400px]">
               <div className="flex items-center justify-center p-8">
                 <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
               </div>
