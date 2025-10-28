@@ -33,8 +33,6 @@ function LoginForm() {
                 colorBorder: "rgba(15, 23, 42, 0.12)",
                 borderRadius: "12px",
                 colorTextOnPrimaryBackground: "oklch(1 0 0)",
-                colorInputTextDisabled: "oklch(0.4091 0 0)",
-                colorInputPlaceholder: "oklch(0.4091 0 0)",
                 colorDanger: "oklch(0.577 0.245 27.325)",
                 colorSuccess: "oklch(0.577 0.245 27.325)",
                 colorWarning: "oklch(0.7076 0.1975 46.4558)",
