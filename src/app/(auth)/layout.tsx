@@ -8,7 +8,7 @@ export default function AuthLayout({
   return (
     <div className="h-screen bg-background overflow-hidden md:overflow-hidden">
       <Header />
-      <div className="flex items-center justify-center p-4 h-screen overflow-y-auto md:overflow-hidden bg-[url('/bg12.jpg')] bg-cover bg-center">
+      <div className="flex items-center justify-center p-4 h-screen overflow-y-auto md:overflow-hidden">
         <div className="w-full max-w-sm relative px-4 sm:px-6 flex flex-col items-center -top-5">
           <div className="text-center mb-4 relative w-full -top-[20px]">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-2xl transition-all duration-700 ease-out leading-tight px-2 flex flex-col items-center">
