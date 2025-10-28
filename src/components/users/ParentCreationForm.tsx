@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/card";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { cn } from "@/lib/utils";
 
 // Password strength validation
 const passwordSchema = z
@@ -71,6 +72,7 @@ interface ParentCreationFormProps {
   isLoading?: boolean;
   title?: string;
   description?: string;
+  className?: string;
 }
 
 const gradeOptions = [
@@ -105,6 +107,7 @@ export function ParentCreationForm({
   isLoading = false,
   title = "Crear Usuario Padre",
   description = "Registra un nuevo usuario padre con información del estudiante",
+  className,
 }: ParentCreationFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { t } = useLanguage();
@@ -136,7 +139,7 @@ export function ParentCreationForm({
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className={cn("w-full max-w-4xl mx-auto", className)}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <UserPlus className="h-5 w-5" />

@@ -53,6 +53,12 @@ function ParentRegistrationContent() {
     };
   } | null>(null);
 
+  const successBadgeRaw = t("parent_registration.success_badge", "common");
+  const successBadgeText =
+    successBadgeRaw !== "parent_registration.success_badge"
+      ? successBadgeRaw
+      : t("parent_registration.success_title", "common");
+
   const handleRegister = async (data: ParentFormData) => {
     setIsRegistering(true);
     try {
@@ -95,38 +101,46 @@ function ParentRegistrationContent() {
 
   if (registrationComplete && registrationData) {
     return (
-      <PageTransition skeletonType="page" duration={700}>
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
-          <Card className="w-full max-w-2xl mx-4">
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-4">
-                <CheckCircle className="h-16 w-16 text-green-500" />
+      <PageTransition
+        skeletonType="page"
+        duration={700}
+        className="public-page-shell bg-responsive-desktop bg-home-page"
+      >
+        <div className="public-page-content public-page-content--narrow space-y-6">
+          <div className="mx-auto w-fit rounded-full border border-white/50 bg-white/60 px-4 py-1 text-sm font-medium text-slate-700 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/45 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-100">
+            {successBadgeText}
+          </div>
+
+          <Card className="glass-panel mx-auto w-full max-w-2xl text-slate-900 dark:text-slate-100">
+            <CardHeader className="space-y-4 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-500 dark:bg-emerald-400/20 dark:text-emerald-200">
+                <CheckCircle className="h-10 w-10" />
               </div>
-              <CardTitle className="text-2xl text-green-700">
+              <CardTitle className="text-3xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-300">
                 {t("parent_registration.success_title", "common")}
               </CardTitle>
-              <CardDescription className="text-lg">
+              <CardDescription className="text-base text-slate-600 dark:text-slate-200">
                 {t("parent_registration.success_description", "common")}
               </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-6">
-              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                <h3 className="font-semibold text-green-800 mb-2">
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-50/80 p-5 text-left shadow-sm dark:border-emerald-400/30 dark:bg-emerald-500/10">
+                <h3 className="mb-2 font-semibold text-emerald-700 dark:text-emerald-200">
                   {t("parent_registration.next_steps_title", "common")}
                 </h3>
-                <ul className="text-sm text-green-700 space-y-1">
+                <ul className="space-y-2 text-sm text-emerald-700 dark:text-emerald-100">
                   <li>• {t("parent_registration.next_step_1", "common")}</li>
                   <li>• {t("parent_registration.next_step_2", "common")}</li>
                   <li>• {t("parent_registration.next_step_3", "common")}</li>
                 </ul>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h3 className="font-semibold text-blue-800 mb-2">
+              <div className="rounded-xl border border-sky-500/30 bg-sky-50/80 p-5 shadow-sm dark:border-sky-400/30 dark:bg-sky-500/10">
+                <h3 className="mb-2 font-semibold text-sky-700 dark:text-sky-200">
                   {t("parent_registration.registered_info_title", "common")}
                 </h3>
-                <div className="text-sm text-blue-700 space-y-1">
+                <div className="space-y-1.5 text-sm text-sky-700 dark:text-sky-100">
                   <p>
                     <strong>
                       {t("parent_registration.registered_name", "common")}:
@@ -164,18 +178,25 @@ function ParentRegistrationContent() {
                 </div>
               </div>
 
-              <div className="text-center space-y-4">
-                <p className="text-muted-foreground">
+              <div className="space-y-4 text-center">
+                <p className="text-sm text-slate-600 dark:text-slate-200">
                   {t("parent_registration.contact_question", "common")}
                 </p>
 
-                <div className="flex gap-3 justify-center">
-                  <Button asChild variant="outline">
+                <div className="flex justify-center gap-3">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="rounded-full border-white/60 bg-white/70 px-6 text-slate-700 shadow-sm transition hover:bg-white/80 dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-900/70"
+                  >
                     <Link href="/">
                       {t("parent_registration.go_home", "common")}
                     </Link>
                   </Button>
-                  <Button asChild>
+                  <Button
+                    asChild
+                    className="rounded-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 px-6 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700"
+                  >
                     <Link href="/auth/login">
                       {t("parent_registration.go_login", "common")}
                     </Link>
@@ -190,27 +211,31 @@ function ParentRegistrationContent() {
   }
 
   return (
-    <PageTransition skeletonType="page" duration={700}>
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 py-8">
-        <div className="container mx-auto px-4">
-          <div className="mb-8">
+    <PageTransition
+      skeletonType="page"
+      duration={700}
+      className="public-page-shell bg-responsive-desktop bg-home-page"
+    >
+      <div className="public-page-content">
+        <div className="mx-auto w-full max-w-5xl space-y-8 px-3 sm:px-6">
+          <div className="flex flex-col items-center gap-6 text-center">
             <Button
-              variant="ghost"
+              variant="outline"
               onClick={() => router.push("/")}
-              className="mb-4"
+              className="self-start rounded-full border-white/60 bg-white/65 px-5 py-2 text-slate-700 shadow-sm transition hover:bg-white/80 dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-900/70"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               {t("parent_registration.back_home", "common")}
             </Button>
 
-            <div className="text-center">
-              <div className="flex justify-center mb-4">
-                <UserPlus className="h-12 w-12 text-primary" />
-              </div>
-              <h1 className="text-3xl font-bold mb-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-white/60 text-primary shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/45 dark:border-white/15 dark:bg-slate-900/60 dark:text-primary-200">
+              <UserPlus className="h-7 w-7" />
+            </div>
+            <div className="space-y-3">
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
                 {t("parent_registration.title", "common")}
               </h1>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-200">
                 {t("parent_registration.subtitle", "common")}
               </p>
             </div>
@@ -222,66 +247,50 @@ function ParentRegistrationContent() {
             isLoading={isRegistering}
             title={t("parent_registration.form_title", "common")}
             description={t("parent_registration.form_description", "common")}
+            className="glass-panel"
           />
 
-          {/* Additional Information */}
-          <Card className="mt-8 max-w-4xl mx-auto">
-            <CardHeader>
-              <CardTitle className="text-lg">
+          <Card className="glass-panel mx-auto mt-8 w-full max-w-4xl text-slate-900 dark:text-slate-100">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-xl font-semibold text-slate-900 dark:text-white">
                 {t("parent_registration.verification_title", "common")}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base text-slate-600 dark:text-slate-200">
                 {t("parent_registration.verification_subtitle", "common")}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-3">
+            <CardContent className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-3 text-left">
                   <h4 className="font-semibold text-primary">
                     {t("parent_registration.registration_section", "common")}
                   </h4>
-                  <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>
-                      • {t("parent_registration.registration_step_1", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.registration_step_2", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.registration_step_3", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.registration_step_4", "common")}
-                    </li>
+                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-200">
+                    <li>• {t("parent_registration.registration_step_1", "common")}</li>
+                    <li>• {t("parent_registration.registration_step_2", "common")}</li>
+                    <li>• {t("parent_registration.registration_step_3", "common")}</li>
+                    <li>• {t("parent_registration.registration_step_4", "common")}</li>
                   </ul>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 text-left">
                   <h4 className="font-semibold text-primary">
                     {t("parent_registration.verification_section", "common")}
                   </h4>
-                  <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>
-                      • {t("parent_registration.verification_step_1", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.verification_step_2", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.verification_step_3", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.verification_step_4", "common")}
-                    </li>
+                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-200">
+                    <li>• {t("parent_registration.verification_step_1", "common")}</li>
+                    <li>• {t("parent_registration.verification_step_2", "common")}</li>
+                    <li>• {t("parent_registration.verification_step_3", "common")}</li>
+                    <li>• {t("parent_registration.verification_step_4", "common")}</li>
                   </ul>
                 </div>
               </div>
 
-              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mt-6">
-                <h4 className="font-semibold text-yellow-800 mb-2">
+              <div className="rounded-xl border border-amber-400/40 bg-amber-50/80 p-5 text-left shadow-sm dark:border-amber-300/35 dark:bg-amber-500/10">
+                <h4 className="mb-2 font-semibold text-amber-700 dark:text-amber-200">
                   ⚠️ {t("parent_registration.important_title", "common")}
                 </h4>
-                <p className="text-sm text-yellow-700">
+                <p className="text-sm text-amber-700 dark:text-amber-100">
                   {t("parent_registration.important_message", "common")}
                 </p>
               </div>
