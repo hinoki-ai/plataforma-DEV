@@ -38,10 +38,10 @@ export default function Header() {
 
   // Public navigation links
   const publicNavLinks = [
-    { href: "#programas", label: "Programas" },
-    { href: "#testimonios", label: "Testimonios" },
-    { href: "#precios", label: "Precios" },
-    { href: "#contacto", label: "Contacto" },
+    { href: "/programas", label: "Programas" },
+    { href: "/testimonios", label: "Testimonios" },
+    { href: "/precios", label: "Precios" },
+    { href: "/contacto", label: "Contacto" },
   ];
 
   // Show loading skeleton until mounted to prevent hydration mismatch

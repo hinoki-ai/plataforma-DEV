@@ -602,7 +602,7 @@
 
   /* Home page background */
   .bg-home-page {
-    --bg-image: url(/bg17.jpg);
+    --bg-image: url(/bg6.jpg);
     position: relative;
   }
 
@@ -635,11 +635,11 @@
     }
   }
 
-  /* Landscape mode: use bg17 image for mobile devices */
+  /* Landscape mode: use bg6 image for mobile devices */
   @media (max-width: 768px) and (orientation: landscape) {
     .bg-home-page {
       position: relative;
-      background-image: url(/bg17.jpg);
+      background-image: url(/bg6.jpg);
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -896,8 +896,8 @@
       rgba(248, 250, 252, 0.74)
     );
     box-shadow: 0 32px 80px -28px rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(26px);
     -webkit-backdrop-filter: blur(26px);
+    backdrop-filter: blur(26px);
     transition:
       box-shadow 0.35s ease,
       border-color 0.35s ease,
