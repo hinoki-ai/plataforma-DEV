@@ -266,10 +266,18 @@ function ParentRegistrationContent() {
                     {t("parent_registration.registration_section", "common")}
                   </h4>
                   <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-200">
-                    <li>• {t("parent_registration.registration_step_1", "common")}</li>
-                    <li>• {t("parent_registration.registration_step_2", "common")}</li>
-                    <li>• {t("parent_registration.registration_step_3", "common")}</li>
-                    <li>• {t("parent_registration.registration_step_4", "common")}</li>
+                    <li>
+                      • {t("parent_registration.registration_step_1", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.registration_step_2", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.registration_step_3", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.registration_step_4", "common")}
+                    </li>
                   </ul>
                 </div>
 
@@ -278,10 +286,18 @@ function ParentRegistrationContent() {
                     {t("parent_registration.verification_section", "common")}
                   </h4>
                   <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-200">
-                    <li>• {t("parent_registration.verification_step_1", "common")}</li>
-                    <li>• {t("parent_registration.verification_step_2", "common")}</li>
-                    <li>• {t("parent_registration.verification_step_3", "common")}</li>
-                    <li>• {t("parent_registration.verification_step_4", "common")}</li>
+                    <li>
+                      • {t("parent_registration.verification_step_1", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.verification_step_2", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.verification_step_3", "common")}
+                    </li>
+                    <li>
+                      • {t("parent_registration.verification_step_4", "common")}
+                    </li>
                   </ul>
                 </div>
               </div>
