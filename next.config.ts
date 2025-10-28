@@ -32,7 +32,8 @@ const nextConfig: NextConfig = {
   },
 
   // React Compiler is now stable in Next.js 16
-  reactCompiler: true,
+  // Temporarily disabled due to missing babel-plugin-react-compiler
+  // reactCompiler: true,
 
   // Turbopack configuration for Next.js 16
   turbopack: {
