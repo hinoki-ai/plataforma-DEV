@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -237,10 +238,10 @@ export function RoleAwareNavigation({
               )}
               asChild
             >
-              <a href={action.href} className="flex items-center gap-1">
+              <Link href={action.href} className="flex items-center gap-1">
                 <action.icon className="h-3 w-3" />
                 {!compact && <span>{action.label}</span>}
-              </a>
+              </Link>
             </Button>
           ))}
         </div>
@@ -329,13 +330,13 @@ export function RoleAwareBreadcrumb({
               {item.label}
             </span>
           ) : (
-            <a
+            <Link
               href={item.href}
               className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
             >
               {item.icon && <item.icon className="inline h-4 w-4 mr-1" />}
               {item.label}
-            </a>
+            </Link>
           )}
         </React.Fragment>
       ))}
