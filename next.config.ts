@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
   // React Compiler is now stable in Next.js 16
   reactCompiler: true,
 
+  // Turbopack configuration for Next.js 16
+  turbopack: {
+    // Empty config to silence the warning
+  },
+
   // Development optimizations
   ...(process.env.NODE_ENV === "development" && {
     onDemandEntries: {
