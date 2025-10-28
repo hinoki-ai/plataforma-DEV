@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@clerk/backend": "^2.4.1",
-    "@clerk/nextjs": "^6.24.0",
+    "@clerk/nextjs": "^6.34.0",
     "@clerk/themes": "^2.2.55",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.1.1",
@@ -70,8 +70,8 @@
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.61.0",
     "sonner": "^2.0.6",
-    "svix": "^1.69.0",
     "styled-components": "^6.1.19",
+    "svix": "^1.69.0",
     "tailwind-merge": "^3.3.1",
     "tsx": "^4.20.3",
     "uuid": "^11.1.0",
