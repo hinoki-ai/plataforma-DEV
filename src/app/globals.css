@@ -602,7 +602,7 @@
 
   /* Home page background */
   .bg-home-page {
-    --bg-image: url(/bg7.jpg);
+    --bg-image: url(/bg17.jpg);
     position: relative;
   }
 
@@ -619,17 +619,17 @@
   }
 
   .bg-testimonios {
-    --bg-image: url(/bg7.jpg);
+    --bg-image: url(/bg1.jpg);
     position: relative;
   }
 
   .bg-precios {
-    --bg-image: url(/bg8.png);
+    --bg-image: url(/bg7.jpg);
     position: relative;
   }
 
   .bg-contacto {
-    --bg-image: url(/bg9.png);
+    --bg-image: url(/bg11.jpg);
     position: relative;
   }
 
