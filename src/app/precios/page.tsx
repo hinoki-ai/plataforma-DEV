@@ -34,9 +34,9 @@ export default function PreciosPage() {
             <Card className="relative">
               <CardHeader>
                 <CardTitle className="text-2xl">Plan Básico</CardTitle>
-                <CardDescription>Para estudiantes individuales</CardDescription>
+                <CardDescription>Hasta 50 estudiantes</CardDescription>
                 <div className="text-3xl font-bold text-primary">
-                  $9.990<span className="text-sm font-normal">/mes</span>
+                  $2.000<span className="text-sm font-normal">/mes</span>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -50,7 +50,7 @@ export default function PreciosPage() {
               </CardContent>
             </Card>
 
-            {/* Plan Profesional */}
+            {/* Plan Avanzado */}
             <Card className="relative border-primary">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
@@ -58,21 +58,19 @@ export default function PreciosPage() {
                 </span>
               </div>
               <CardHeader>
-                <CardTitle className="text-2xl">Plan Profesional</CardTitle>
-                <CardDescription>
-                  Para familias y grupos pequeños
-                </CardDescription>
+                <CardTitle className="text-2xl">Plan Avanzado</CardTitle>
+                <CardDescription>Hasta 350 estudiantes</CardDescription>
                 <div className="text-3xl font-bold text-primary">
-                  $19.990<span className="text-sm font-normal">/mes</span>
+                  $1.750<span className="text-sm font-normal">/mes</span>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-2 text-sm">
                   <li>✓ Todo lo del Plan Básico</li>
-                  <li>✓ Hasta 5 estudiantes</li>
                   <li>✓ Materiales avanzados</li>
                   <li>✓ Reuniones virtuales</li>
                   <li>✓ Soporte prioritario</li>
+                  <li>✓ Análisis de rendimiento</li>
                 </ul>
                 <Button className="w-full" variant="default">
                   Seleccionar Plan
@@ -84,21 +82,18 @@ export default function PreciosPage() {
             <Card className="relative">
               <CardHeader>
                 <CardTitle className="text-2xl">Plan Institucional</CardTitle>
-                <CardDescription>Para escuelas y colegios</CardDescription>
+                <CardDescription>Hasta 1.000 estudiantes</CardDescription>
                 <div className="text-3xl font-bold text-primary">
-                  Contactar
-                  <span className="text-sm font-normal block">
-                    Personalizado
-                  </span>
+                  $1.500<span className="text-sm font-normal">/mes</span>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-2 text-sm">
                   <li>✓ Solución completa</li>
-                  <li>✓ Estudiantes ilimitados</li>
                   <li>✓ Integración con sistemas existentes</li>
                   <li>✓ Soporte técnico dedicado</li>
                   <li>✓ Capacitación del personal</li>
+                  <li>✓ Reportes avanzados</li>
                 </ul>
                 <Button className="w-full" variant="outline">
                   Contactar Ventas

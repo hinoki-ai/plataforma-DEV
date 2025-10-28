@@ -799,6 +799,15 @@
     isolation: isolate;
   }
 
+  .public-page-shell--plain {
+    background: transparent;
+  }
+
+  .public-page-shell--plain::before,
+  .public-page-shell--plain::after {
+    content: none;
+  }
+
   .public-page-shell::before {
     content: "";
     position: absolute;
