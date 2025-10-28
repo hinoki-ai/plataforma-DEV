@@ -111,7 +111,7 @@ export default function Header() {
                     key={link.href}
                     variant="ghost"
                     size="sm"
-                    className="text-sm font-medium hover:bg-muted/50 transition-colors"
+                    className="text-base font-medium hover:bg-muted/50 transition-colors"
                     asChild
                   >
                     <Link href={link.href}>{link.label}</Link>
