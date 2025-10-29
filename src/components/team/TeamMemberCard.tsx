@@ -153,7 +153,7 @@ export function TeamMemberCard({
    */
   const memberWithRole = {
     ...member,
-    role: member.role || "Miembro del Equipo",
+    role: member.role || t("team.member.role.default", "common"),
   };
 
   /**
@@ -308,7 +308,7 @@ export function TeamMemberCard({
                     }
                   >
                     <Mail className="w-4 h-4 mr-2" />
-                    Contactar
+                    {t("team.contact", "common")}
                   </Button>
                 )}
                 {formattedMember.phone && (
@@ -319,7 +319,7 @@ export function TeamMemberCard({
                     onClick={() => window.open(`tel:${formattedMember.phone}`)}
                   >
                     <Phone className="w-4 h-4 mr-2" />
-                    Llamar
+                    {t("team.call", "common")}
                   </Button>
                 )}
               </div>
@@ -365,7 +365,9 @@ export function TeamMemberCard({
                   variant={formattedMember.isActive ? "default" : "secondary"}
                   className={formattedMember.isActive ? "bg-green-500" : ""}
                 >
-                  {formattedMember.isActive ? "Activo" : "Inactivo"}
+                  {formattedMember.isActive
+                    ? t("common.active", "common")
+                    : t("common.inactive", "common")}
                 </Badge>
               </div>
             </div>
@@ -555,6 +557,7 @@ export function TeamMemberList({
 }: TeamMemberListProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { t } = useLanguage();
 
   // Auto-detect variant
   const detectedVariant: Exclude<TeamMemberCardVariant, "auto"> =
@@ -599,8 +602,8 @@ export function TeamMemberList({
   if (members.length === 0) {
     const defaultMessage =
       detectedVariant === "public"
-        ? "Pronto actualizaremos la información de nuestro equipo multidisciplinario."
-        : "No hay miembros del equipo registrados";
+        ? t("team.empty.public", "common")
+        : t("team.empty.admin", "common");
 
     return (
       <AdaptiveCard

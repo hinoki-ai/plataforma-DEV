@@ -1,5 +1,6 @@
 {
   "common.loading": "Loading...",
+  "common.completed": "Completed",
   "common.error": "Error",
   "common.success": "Success",
   "common.warning": "Warning",
@@ -1227,6 +1228,11 @@
   "meeting.request.error": "Error sending request",
   "meeting.approve.success": "Request approved successfully",
   "meeting.reject.success": "Request rejected",
+  "meeting.view_details": "View Details",
+  "meeting.assigned_teacher": "Assigned Teacher",
+  "meeting.confirm": "Confirm",
+  "meeting.complete": "Complete",
+  "meeting.reschedule": "Reschedule",
 
   "command.palette.title": "Command Palette",
   "command.palette.description": "Search for a command to run...",
@@ -1501,5 +1507,10 @@
 
   "institution.current_institution": "Current Institution:",
   "navigation.current_config": "Current Configuration:",
-  "dashboard.enabled_features": "Enabled Features"
+  "dashboard.enabled_features": "Enabled Features",
+  "team.contact": "Contact",
+  "team.call": "Call",
+  "team.member.role.default": "Team Member",
+  "team.empty.public": "We will soon update our multidisciplinary team information.",
+  "team.empty.admin": "No team members registered"
 }

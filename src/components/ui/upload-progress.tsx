@@ -100,7 +100,7 @@ export function UploadProgress({
       t("upload.bytes", "common"),
       t("upload.kb", "common"),
       t("upload.mb", "common"),
-      t("upload.gb", "common")
+      t("upload.gb", "common"),
     ];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
@@ -119,8 +119,10 @@ export function UploadProgress({
 
   const getStatusText = (state: UploadResult) => {
     if (state.error) return state.error;
-    if (state.progress === 100 && state.success) return t("upload.success_message", "common");
-    if (state.progress === 100 && !state.success) return t("upload.error_message", "common");
+    if (state.progress === 100 && state.success)
+      return t("upload.success_message", "common");
+    if (state.progress === 100 && !state.success)
+      return t("upload.error_message", "common");
     return `${Math.round(state.progress)}%`;
   };
 
@@ -130,7 +132,9 @@ export function UploadProgress({
       {isUploading && (
         <div className="mb-4">
           <div className="flex justify-between mb-2">
-            <span className="text-sm font-medium">{t("upload.progress", "common")}</span>
+            <span className="text-sm font-medium">
+              {t("upload.progress", "common")}
+            </span>
             <span className="text-sm text-muted-foreground">
               {Math.round(overallProgress)}%
             </span>
@@ -191,8 +195,9 @@ export function UploadProgress({
         <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
           <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
           <p className="text-sm font-medium text-green-700">
-            {uploadState.filter((s) => s.success).length} {t("common.of", "common")}{" "}
-            {uploadState.length} {t("upload.files_uploaded_success", "common")}
+            {uploadState.filter((s) => s.success).length}{" "}
+            {t("common.of", "common")} {uploadState.length}{" "}
+            {t("upload.files_uploaded_success", "common")}
           </p>
         </div>
       )}

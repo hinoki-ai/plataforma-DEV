@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Phone, Mail, User } from "lucide-react";
 import { Meeting, MeetingStatus } from "../../lib/prisma-compat-types";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { StatusBadge } from "@/components/ui/status-badge";
+
+// i18n
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface MeetingCardProps {
   meeting: Meeting & { teacher?: { name: string; email: string } };
@@ -37,6 +40,8 @@ export function MeetingCard({
   onViewDetails,
   isAdmin = false,
 }: MeetingCardProps) {
+  const { t, language } = useLanguage();
+
   const handleStatusChange = (newStatus: MeetingStatus) => {
     if (onStatusChange) {
       onStatusChange(meeting.id, newStatus);
@@ -81,7 +86,7 @@ export function MeetingCard({
             <Calendar className="h-4 w-4 text-gray-500" />
             <span>
               {format(new Date(meeting.scheduledDate), "dd MMM yyyy", {
-                locale: es,
+                locale: language === "es" ? es : enUS,
               })}
             </span>
           </div>
@@ -98,7 +103,9 @@ export function MeetingCard({
         {/* Teacher Info (for admin view) */}
         {isAdmin && meeting.teacher && (
           <div className="text-sm text-gray-600">
-            <span className="font-medium">Profesor asignado:</span>{" "}
+            <span className="font-medium">
+              {t("meeting.assigned_teacher", "common")}:
+            </span>{" "}
             {meeting.teacher.name}
           </div>
         )}
@@ -118,7 +125,7 @@ export function MeetingCard({
             onClick={() => onViewDetails?.(meeting.id)}
             className="flex-1"
           >
-            Ver Detalles
+            {t("meeting.view_details", "common")}
           </Button>
 
           {(meeting.status === "SCHEDULED" || meeting.status === "PENDING") &&
@@ -129,7 +136,7 @@ export function MeetingCard({
                 onClick={() => handleStatusChange("CONFIRMED" as MeetingStatus)}
                 className="flex-1"
               >
-                Confirmar
+                {t("meeting.confirm", "common")}
               </Button>
             )}
 
@@ -140,7 +147,7 @@ export function MeetingCard({
               onClick={() => handleStatusChange("COMPLETED" as MeetingStatus)}
               className="flex-1"
             >
-              Completar
+              {t("meeting.complete", "common")}
             </Button>
           )}
 
@@ -151,7 +158,7 @@ export function MeetingCard({
               onClick={() => onReschedule(meeting.id)}
               className="flex-1"
             >
-              Reprogramar
+              {t("meeting.reschedule", "common")}
             </Button>
           )}
         </div>

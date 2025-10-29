@@ -7,6 +7,7 @@ import { Button, buttonVariants } from "./button";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export type ButtonContext = "public" | "auth" | "auto";
 
@@ -115,6 +116,7 @@ const AdaptiveButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
   ) => {
     const pathname = usePathname();
     const { data: session } = useSession();
+    const { t } = useLanguage();
 
     // Auto-detect context based on route and session
     const detectedContext: Exclude<ButtonContext, "auto"> =
@@ -184,7 +186,7 @@ const AdaptiveButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
         {loading ? (
           <div className="flex items-center gap-2">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-            <span>Cargando...</span>
+            <span>{t("common.loading", "common")}</span>
           </div>
         ) : success ? (
           <div className="flex items-center gap-2">
@@ -201,7 +203,7 @@ const AdaptiveButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            <span>Completado</span>
+            <span>{t("common.completed", "common")}</span>
           </div>
         ) : (
           children
