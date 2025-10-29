@@ -1,3 +1,14 @@
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
 const eslintConfig = [
   {
     ignores: [
@@ -12,7 +23,7 @@ const eslintConfig = [
       "node_modules/**/*",
     ],
   },
-  {
+  ...compat.config({
     extends: ["next/core-web-vitals", "next/typescript"],
     rules: {
       // Temporarily disable overly strict rules to focus on critical issues
@@ -32,7 +43,7 @@ const eslintConfig = [
       // Disable inline style warnings (dynamic CSS variables are necessary)
       "@next/next/inline-script-id": "off",
     },
-  },
+  }),
 ];
 
 export default eslintConfig;
