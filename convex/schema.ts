@@ -83,6 +83,7 @@ export default defineSchema({
       v.literal("HIGH_SCHOOL"),
       v.literal("TECHNICAL_INSTITUTE"),
       v.literal("TECHNICAL_CENTER"),
+      v.literal("COLLEGE"),
       v.literal("UNIVERSITY"),
     ),
     supportedLevels: v.optional(v.any()), // JSON array
