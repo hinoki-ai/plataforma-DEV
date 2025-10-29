@@ -21,6 +21,7 @@ import {
   DynamicPersonalization,
   PersonalizationSkeleton,
 } from "@/components/home/DynamicPersonalization";
+import MinEducFooter from "@/components/layout/MinEducFooter";
 
 export function HomePage() {
   // Layout and responsive state
@@ -43,7 +44,7 @@ export function HomePage() {
       >
         <source src="/heromobile.mp4" type="video/mp4" />
       </video>
-      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
+      <div className="min-h-screen bg-linear-to-b from-black/30 via-black/20 to-black/40">
         <Header />
         <section className={layout.spacing.section(isDesktopForced)}>
           <div className={`${layout.container(isDesktopForced)} text-center`}>
@@ -214,16 +215,7 @@ export function HomePage() {
           <DynamicPersonalization />
         </Suspense>
 
-        <footer className="bg-gray-900 border-t border-gray-800">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="text-gray-300 text-sm">
-                © {new Date().getFullYear()} Plataforma Astral. Todos los
-                derechos reservados.
-              </div>
-            </div>
-          </div>
-        </footer>
+        <MinEducFooter />
 
         {/* Desktop Toggle - only shows on mobile */}
         <DesktopToggle />

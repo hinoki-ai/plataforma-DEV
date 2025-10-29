@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function ContactoPage() {
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
-      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
+      <div className="min-h-screen bg-linear-to-b from-black/30 via-black/20 to-black/40">
         <Header />
         <main className="container mx-auto px-4 py-16">
           <div className="max-w-6xl mx-auto">
@@ -55,47 +55,50 @@ export default function ContactoPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-white">
                       <Phone className="h-5 w-5" />
-                      Teléfonos de Contacto
+                      Información de Contacto
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-2">
+                    <div className="space-y-6">
                       <div>
-                        <p className="font-medium text-white">
-                          Loreto Gallegos Estay
-                        </p>
-                        <p className="text-gray-300 font-mono">
-                          +569 3743 6196
-                        </p>
+                        <h4 className="font-medium text-white mb-3 flex items-center gap-2">
+                          <Phone className="h-4 w-4" />
+                          Teléfonos de Contacto
+                        </h4>
+                        <div className="space-y-2 ml-6">
+                          <div>
+                            <p className="font-medium text-white">
+                              Loreto Gallegos Estay
+                            </p>
+                            <p className="text-gray-300 font-mono">
+                              +569 3743 6196
+                            </p>
+                          </div>
+                          <div>
+                            <p className="font-medium text-white">
+                              Agustin Arancibia Mac-Guire
+                            </p>
+                            <p className="text-gray-300 font-mono">
+                              +569 8889 6773
+                            </p>
+                          </div>
+                        </div>
                       </div>
                       <div>
-                        <p className="font-medium text-white">
-                          Agustin Arancibia Mac-Guire
-                        </p>
-                        <p className="text-gray-300 font-mono">
-                          +569 8889 6773
-                        </p>
+                        <h4 className="font-medium text-white mb-2 flex items-center gap-2">
+                          <Mail className="h-4 w-4" />
+                          Correo Electrónico
+                        </h4>
+                        <div className="ml-6">
+                          <a
+                            href="mailto:contacto@plataformaastral.cl"
+                            className="text-primary hover:underline"
+                          >
+                            contacto@plataformaastral.cl
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-white">
-                      <Mail className="h-5 w-5" />
-                      Correo Electrónico
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base text-gray-300">
-                      <a
-                        href="mailto:contacto@plataformaastral.cl"
-                        className="text-primary hover:underline"
-                      >
-                        contacto@plataformaastral.cl
-                      </a>
-                    </CardDescription>
                   </CardContent>
                 </Card>
 
