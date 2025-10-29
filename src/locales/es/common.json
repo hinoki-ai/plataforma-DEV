@@ -1,5 +1,6 @@
 {
   "common.loading": "Cargando...",
+  "common.completed": "Completado",
   "common.error": "Error",
   "common.success": "Éxito",
   "common.warning": "Advertencia",
@@ -1126,6 +1127,11 @@
   "meeting.request.error": "Error al enviar la solicitud",
   "meeting.approve.success": "Solicitud aprobada exitosamente",
   "meeting.reject.success": "Solicitud rechazada",
+  "meeting.view_details": "Ver Detalles",
+  "meeting.assigned_teacher": "Profesor asignado",
+  "meeting.confirm": "Confirmar",
+  "meeting.complete": "Completar",
+  "meeting.reschedule": "Reprogramar",
 
   "command.palette.title": "Paleta de Comandos",
   "command.palette.description": "Busca un comando para ejecutar...",
@@ -1503,5 +1509,10 @@
   "console.session_missing_role": "Sesión sin rol de usuario, redirigiendo a login",
   "console.session_timeout": "Tiempo de espera agotado al cargar sesión, verificando estado de autenticación",
   "console.accessibility_load_error": "Error al cargar configuración de accesibilidad",
-  "console.accessibility_save_error": "Error al guardar configuración de accesibilidad"
+  "console.accessibility_save_error": "Error al guardar configuración de accesibilidad",
+  "team.contact": "Contactar",
+  "team.call": "Llamar",
+  "team.member.role.default": "Miembro del Equipo",
+  "team.empty.public": "Pronto actualizaremos la información de nuestro equipo multidisciplinario.",
+  "team.empty.admin": "No hay miembros del equipo registrados"
 }

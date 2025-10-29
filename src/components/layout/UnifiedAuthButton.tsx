@@ -97,6 +97,7 @@ const getInitials = (name?: string | null): string => {
  */
 export default function UnifiedAuthButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPublicSettingsOpen, setIsPublicSettingsOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const isHydrated = useHydrationSafe();
 
@@ -161,7 +162,10 @@ export default function UnifiedAuthButton() {
         </Button>
 
         {/* Settings Gear Button - Hidden on mobile since it's in the menu */}
-        <DropdownMenu>
+        <DropdownMenu
+          open={isPublicSettingsOpen}
+          onOpenChange={setIsPublicSettingsOpen}
+        >
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -194,7 +198,9 @@ export default function UnifiedAuthButton() {
                 <span className="text-sm font-medium">
                   {t("ui.language.label", "common")}
                 </span>
-                <LanguageToggle size="sm" />
+                <div onClick={(e) => e.stopPropagation()}>
+                  <LanguageToggle size="sm" />
+                </div>
               </div>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -326,7 +332,9 @@ export default function UnifiedAuthButton() {
               <span className="text-sm font-medium">
                 {t("ui.language.label", "common")}
               </span>
-              <LanguageToggle size="sm" />
+              <div onClick={(e) => e.stopPropagation()}>
+                <LanguageToggle size="sm" />
+              </div>
             </div>
           </DropdownMenuGroup>
 

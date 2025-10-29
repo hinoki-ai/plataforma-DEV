@@ -125,9 +125,9 @@ function VotingDashboardComponent({ className = "" }: VotingDashboardProps) {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-    if (days > 0) return `${days} días`;
-    if (hours > 0) return `${hours} horas`;
-    return "Menos de 1 hora";
+    if (days > 0) return `${days} ${t("parent.voting.time.days", "parent")}`;
+    if (hours > 0) return `${hours} ${t("parent.voting.time.hours", "parent")}`;
+    return t("parent.voting.time.less_than_hour", "parent");
   };
 
   if (status === "loading" || isLoading) {
