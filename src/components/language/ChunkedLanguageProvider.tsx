@@ -222,8 +222,25 @@ const getStoredLanguage = (): Language | null => {
   // Always return null on server to prevent hydration mismatch
   if (typeof window === "undefined") return null;
   try {
+    // First check localStorage (preferred, faster)
     const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    return stored === "es" || stored === "en" ? (stored as Language) : null;
+    if (stored === "es" || stored === "en") {
+      return stored as Language;
+    }
+    
+    // Fallback to cookie (for server-side sync)
+    const cookieName = "aramac-language-preference";
+    const cookies = document.cookie.split(";");
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === cookieName && (value === "es" || value === "en")) {
+        // Sync to localStorage for faster future access
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, value);
+        return value as Language;
+      }
+    }
+    
+    return null;
   } catch {
     return null;
   }
@@ -232,8 +249,24 @@ const getStoredLanguage = (): Language | null => {
 const setStoredLanguage = (language: Language): void => {
   if (typeof window === "undefined") return;
   try {
+    // Set localStorage for fast client-side access
     localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-  } catch {}
+    
+    // Also set cookie for server-side middleware synchronization
+    // Match exact attributes used in middleware/i18n.ts
+    const cookieName = "aramac-language-preference";
+    const maxAge = 60 * 60 * 24 * 365; // 1 year (matches middleware)
+    const expires = new Date(Date.now() + maxAge * 1000).toUTCString();
+    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+    const sameSite = "; SameSite=Lax"; // matches middleware sameSite: "lax"
+    const path = "; Path=/"; // matches middleware path: "/"
+    document.cookie = `${cookieName}=${language}${path}; Max-Age=${maxAge}; Expires=${expires}${secure}${sameSite}`;
+  } catch (error) {
+    // Silently fail - language state will still work with localStorage
+    if (process.env.NODE_ENV === "development") {
+      console.warn("Failed to persist language preference:", error);
+    }
+  }
 };
 
 // Divine Parsing Oracle Context

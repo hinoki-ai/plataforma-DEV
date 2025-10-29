@@ -384,7 +384,7 @@ export function AdvancedSettingsDropdown({
             {isDesktopForced && (
               <div className="text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20 p-2 rounded border border-blue-200 dark:border-blue-800">
                 <div className="flex items-start gap-2">
-                  <Monitor className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                  <Monitor className="h-3 w-3 mt-0.5 shrink-0" />
                   <div>
                     <div className="font-semibold mb-1">
                       Vista de Escritorio Activa

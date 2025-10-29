@@ -1472,6 +1472,7 @@
   "accessibility.audio_settings": "Configuración de Audio",
   "accessibility.sound_enabled": "Sonido Habilitado",
   "accessibility.enable_sounds": "Habilitar sonidos de interfaz",
+  "sound.music": "Música",
   "accessibility.voice_commands": "Comandos de Voz",
   "accessibility.enable_voice_commands": "Habilitar comandos de voz",
   "accessibility.reset_settings": "Restablecer Configuración",

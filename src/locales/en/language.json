@@ -2,5 +2,10 @@
   "language.spanish": "Spanish",
   "language.english": "English",
   "language.toggle": "Switch language",
-  "language.current": "Current language"
+  "language.current": "Current language",
+  "language.label": "Language",
+  "language.switchTo": "Switch to other language",
+  "language.ariaSwitchSpanish": "Switch to Spanish",
+  "language.ariaSwitchEnglish": "Switch to English",
+  "language.changedTo": "Language changed to"
 }

@@ -8,17 +8,37 @@ import commonES from "@/locales/es/common.json";
 import commonEN from "@/locales/en/common.json";
 import profesorES from "@/locales/es/profesor.json";
 import profesorEN from "@/locales/en/profesor.json";
+import adminES from "@/locales/es/admin.json";
+import adminEN from "@/locales/en/admin.json";
+import parentES from "@/locales/es/parent.json";
+import parentEN from "@/locales/en/parent.json";
+import dashboardES from "@/locales/es/dashboard.json";
+import dashboardEN from "@/locales/en/dashboard.json";
+import navigationES from "@/locales/es/navigation.json";
+import navigationEN from "@/locales/en/navigation.json";
+import languageES from "@/locales/es/language.json";
+import languageEN from "@/locales/en/language.json";
 
-type TranslationNamespace = "common" | "profesor";
+type TranslationNamespace = "common" | "profesor" | "admin" | "parent" | "dashboard" | "navigation" | "language";
 
 const translations = {
   es: {
     common: commonES,
     profesor: profesorES,
+    admin: adminES,
+    parent: parentES,
+    dashboard: dashboardES,
+    navigation: navigationES,
+    language: languageES,
   },
   en: {
     common: commonEN,
     profesor: profesorEN,
+    admin: adminEN,
+    parent: parentEN,
+    dashboard: dashboardEN,
+    navigation: navigationEN,
+    language: languageEN,
   },
 } as const;
 

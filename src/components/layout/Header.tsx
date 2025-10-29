@@ -9,12 +9,11 @@ import { AdaptiveButton } from "@/components/ui/adaptive-button";
 import { ChevronLeft, Menu, X } from "lucide-react";
 import { useAppContext } from "@/components/providers/ContextProvider";
 import { cn } from "@/lib/utils";
-import LoginButton from "./LoginButton";
+import UnifiedAuthButton from "./UnifiedAuthButton";
 import ProfileCompletionBadge from "./ProfileCompletionBadge";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { SettingsHamburger } from "@/components/ui/settings-hamburger";
 import { useHydrationSafe } from "./hooks/useHydrationSafe";
-import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -90,13 +89,8 @@ export default function Header() {
             )}
           </div>
 
-          {/* Right: Navigation and Login */}
+          {/* Right: Navigation and Unified Auth Button */}
           <div className="flex items-center space-x-2">
-            {/* Advanced Settings Dropdown - Authenticated users only */}
-            {isAuthenticatedRoute && (
-              <AdvancedSettingsDropdown isCollapsed={true} />
-            )}
-
             {/* Profile Completion Badge - Authenticated users only */}
             {isAuthenticatedRoute && <ProfileCompletionBadge />}
 
@@ -117,10 +111,9 @@ export default function Header() {
               </div>
             )}
 
-            {/* Desktop: Login Button and Settings Hamburger */}
-            <div className="hidden md:flex items-center space-x-2">
-              <LoginButton />
-              <SettingsHamburger size="sm" />
+            {/* UNIFIED AUTH BUTTON - GOLD STANDARD - Morphs between states */}
+            <div className="hidden md:flex">
+              <UnifiedAuthButton />
             </div>
 
             {/* Mobile Menu Button - Public pages only */}
@@ -189,19 +182,21 @@ export default function Header() {
                   </div>
                 </div>
 
-                {/* Settings Controls Section */}
-                <div className="px-6 py-6 border-t border-border">
-                  <p className="text-sm text-muted-foreground mb-4 text-center">
-                    Configuración
-                  </p>
-                  <div className="flex items-center justify-center">
-                    <SettingsHamburger size="md" />
+                {/* Settings Controls Section - Only when not authenticated */}
+                {!isAuthenticatedRoute && (
+                  <div className="px-6 py-6 border-t border-border">
+                    <p className="text-sm text-muted-foreground mb-4 text-center">
+                      Configuración
+                    </p>
+                    <div className="flex items-center justify-center">
+                      <SettingsHamburger size="md" />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Authentication Section */}
                 <div className="px-6 py-6 border-t border-border">
-                  <LoginButton />
+                  <UnifiedAuthButton />
                 </div>
               </div>
             </div>
