@@ -1,6 +1,10 @@
 /**
  * User Queries and Mutations
  * Handles user authentication and management
+ *
+ * ⚠️ DEPRECATED: User management has been migrated to Clerk
+ * This file is kept for backward compatibility and data migration purposes.
+ * New user operations should use the Clerk API directly.
  */
 
 import { v } from "convex/values";
@@ -603,6 +607,26 @@ export const deleteUser = mutation({
   args: { id: v.id("users") },
   handler: async (ctx, { id }) => {
     await ctx.db.delete(id);
+  },
+});
+
+/**
+ * Remove Clerk ID from user (emergency recovery)
+ */
+export const removeClerkId = mutation({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await ctx.db.patch(userId, {
+      clerkId: undefined,
+      updatedAt: Date.now(),
+    });
+
+    return await ctx.db.get(userId);
   },
 });
 

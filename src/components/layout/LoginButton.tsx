@@ -1,14 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { useSession } from "next-auth/react";
-import { signOut } from "@/lib/auth-client";
+import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 import { useLanguage } from "@/components/language/LanguageContext";
-import { UserRole } from "@/lib/prisma-compat-types";
 
 import {
   User,
