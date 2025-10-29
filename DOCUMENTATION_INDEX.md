@@ -2,7 +2,7 @@
 
 **Educational Management System**  
 **Version**: 0.1.0  
-**Last Updated**: October 14, 2025  
+**Last Updated**: October 29, 2025  
 **Status**: Production Ready ✅
 
 ---
@@ -27,6 +27,29 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 - **[docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)** - Complete API endpoint reference
 - **[docs/FRONTEND.md](./docs/FRONTEND.md)** - Frontend development patterns and components
 - **[docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md)** - Environment configuration and deployment
+
+#### Documentation Directory Structure (`docs/`)
+
+The `docs/` directory contains detailed technical documentation organized as follows:
+
+**Architecture & Design**
+- `ARCHITECTURE.md` - System architecture overview
+- `API_DOCUMENTATION.md` - Complete API endpoint documentation
+- `FRONTEND.md` - Frontend patterns and components
+
+**Authentication & Security**
+- `AUTHENTICATION_COMPLETE_GUIDE.md` - Complete auth system documentation
+- `ROLE_SYSTEM.md` - Role-based access control (RBAC)
+- `protected-paths.md` - List of protected routes
+- `EMERGENCY_ACCESS_PROCEDURES.md` - Emergency access protocols
+- `TROUBLESHOOTING_AUTH.md` - Auth troubleshooting guide
+
+**Configuration & Environment**
+- `ENVIRONMENT.md` - Environment configuration guide
+
+**Features & Functionality**
+- `VOTING_SYSTEM.md` - Centro Consejo voting system
+- `ANIMATION_GUIDE.md` - UI animation patterns
 
 ### 🔐 Authentication & Security
 
@@ -147,7 +170,7 @@ npm run verify-deployment  # Verify deployment readiness
 
 - **Architecture**: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 - **API Reference**: [docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)
-- **Authentication**: [docs/AUTHENTICATION_SYSTEM_DOCS.md](./docs/AUTHENTICATION_SYSTEM_DOCS.md)
+- **Authentication**: [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)
 
 ### Development Resources
 
@@ -164,10 +187,11 @@ npm run verify-deployment  # Verify deployment readiness
 
 ## 📈 Recent Updates
 
-- ✅ **October 29, 2025**: Documentation consolidation and cleanup
-  - Consolidated scattered authentication docs into single comprehensive guide
-  - Archived outdated fix documentation
-  - Streamlined main README.md for better navigation
+- ✅ **October 29, 2025**: Major documentation consolidation completed
+  - Removed duplicate authentication documentation (kept comprehensive guide)
+  - Merged docs/README.md into main documentation index
+  - Cleaned up archived outdated troubleshooting documentation
+  - Updated all cross-references to consolidated documentation
 - ✅ **October 2025**: Next.js 16 upgrade and system refactoring
 - ✅ **Authentication**: Full NextAuth.js v5 integration with Convex
 - ✅ **Real-time Features**: Convex-powered live updates and notifications

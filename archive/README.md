@@ -14,7 +14,7 @@ Historical authentication testing documentation:
 
 - **AUTH_TEST_CREDENTIALS.md** - Test credentials used for authentication testing
 
-**Why archived**: Authentication issues resolved. Current comprehensive auth documentation is in `docs/AUTHENTICATION_SYSTEM_DOCS.md`.
+**Why archived**: Authentication issues resolved. Current comprehensive auth documentation is in `docs/AUTHENTICATION_COMPLETE_GUIDE.md`.
 
 ---
 

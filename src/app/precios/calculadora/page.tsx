@@ -368,14 +368,11 @@ export default function PricingCalculatorPage({
                         variant={
                           billingCycle === option.value ? "default" : "outline"
                         }
-                        className="justify-center flex-col items-center gap-1 py-3 px-4"
+                        className="justify-center py-3 px-4"
                         onClick={() => setBillingCycle(option.value)}
                       >
                         <span className="text-sm font-semibold">
                           {option.label}
-                        </span>
-                        <span className="text-[11px] text-gray-200/80">
-                          {option.description}
                         </span>
                       </Button>
                     ))}
