@@ -99,8 +99,10 @@ export const seedDatabase = mutation({
     // Create School Info - Real Institution
     await ctx.db.insert("institutionInfo", {
       name: "Escuela Especial de Lenguaje Manitos Pintadas",
-      mission: "Queremos que cada niño y niña crezca feliz, aprenda y se desarrolle en un ambiente de respeto y cariño. Buscamos que todos puedan aprender, convivir y prepararse para la vida, valorando siempre la alegría y la sencillez.",
-      vision: "Soñamos con ser una escuelita reconocida por su trabajo en equipo, donde cada estudiante es valorado y apoyado. Queremos que nuestros estudiantes sean personas responsables, creativas y alegres, preparadas para aportar a su comunidad y al mundo.",
+      mission:
+        "Queremos que cada niño y niña crezca feliz, aprenda y se desarrolle en un ambiente de respeto y cariño. Buscamos que todos puedan aprender, convivir y prepararse para la vida, valorando siempre la alegría y la sencillez.",
+      vision:
+        "Soñamos con ser una escuelita reconocida por su trabajo en equipo, donde cada estudiante es valorado y apoyado. Queremos que nuestros estudiantes sean personas responsables, creativas y alegres, preparadas para aportar a su comunidad y al mundo.",
       address: "Anibal Pinto Nº 160, Los Sauces, Chile",
       phone: "+56 45 278 3486",
       email: "contacto@manitospintadas.cl",
@@ -190,8 +192,10 @@ export const seedInstitutions = mutation({
     const institutions = [
       {
         name: "Jardín Infantil Los Pequeños Soñadores",
-        mission: "Brindar educación preescolar de calidad que fomente el desarrollo integral de los niños en un ambiente seguro y amoroso.",
-        vision: "Ser un referente en educación inicial que prepare a los niños para una transición exitosa hacia la educación básica.",
+        mission:
+          "Brindar educación preescolar de calidad que fomente el desarrollo integral de los niños en un ambiente seguro y amoroso.",
+        vision:
+          "Ser un referente en educación inicial que prepare a los niños para una transición exitosa hacia la educación básica.",
         address: "Av. Providencia 1234, Santiago, Región Metropolitana",
         phone: "+56 2 2345 6789",
         email: "contacto@pequenosssoadores.cl",
@@ -200,8 +204,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Colegio San Francisco de Asís",
-        mission: "Formar integralmente a los estudiantes desde la educación básica, promoviendo valores cristianos y excelencia académica.",
-        vision: "Ser una institución educativa líder que forme ciudadanos comprometidos con su comunidad y el desarrollo del país.",
+        mission:
+          "Formar integralmente a los estudiantes desde la educación básica, promoviendo valores cristianos y excelencia académica.",
+        vision:
+          "Ser una institución educativa líder que forme ciudadanos comprometidos con su comunidad y el desarrollo del país.",
         address: "Calle San Francisco 567, Viña del Mar, Región de Valparaíso",
         phone: "+56 32 2345 6789",
         email: "info@sanfrancisco.cl",
@@ -210,8 +216,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Liceo Nacional José Manuel Balmaceda",
-        mission: "Proporcionar educación secundaria de calidad que prepare a los jóvenes para la educación superior y el mundo laboral.",
-        vision: "Formar líderes éticos y competentes que contribuyan al progreso de Chile.",
+        mission:
+          "Proporcionar educación secundaria de calidad que prepare a los jóvenes para la educación superior y el mundo laboral.",
+        vision:
+          "Formar líderes éticos y competentes que contribuyan al progreso de Chile.",
         address: "Av. Balmaceda 890, Concepción, Región del Biobío",
         phone: "+56 41 2345 6789",
         email: "liceobalmaceda@liceos.cl",
@@ -220,8 +228,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Escuela Básica República de Chile",
-        mission: "Ofrecer educación básica inclusiva que promueva el aprendizaje significativo y el desarrollo de habilidades para la vida.",
-        vision: "Ser una escuela modelo que garantice educación de calidad para todos los niños de la comunidad.",
+        mission:
+          "Ofrecer educación básica inclusiva que promueva el aprendizaje significativo y el desarrollo de habilidades para la vida.",
+        vision:
+          "Ser una escuela modelo que garantice educación de calidad para todos los niños de la comunidad.",
         address: "Calle República 1122, La Serena, Región de Coquimbo",
         phone: "+56 51 2345 6789",
         email: "contacto@escuelarepublica.cl",
@@ -230,8 +240,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Centro de Formación Técnica INACAP Santiago",
-        mission: "Entregar formación técnica de excelencia que responda a las necesidades del mercado laboral nacional e internacional.",
-        vision: "Ser el referente en formación técnica profesional que impulse el desarrollo económico y social de Chile.",
+        mission:
+          "Entregar formación técnica de excelencia que responda a las necesidades del mercado laboral nacional e internacional.",
+        vision:
+          "Ser el referente en formación técnica profesional que impulse el desarrollo económico y social de Chile.",
         address: "Av. Vitacura 12901, Santiago, Región Metropolitana",
         phone: "+56 2 3456 7890",
         email: "admisión@inacap.cl",
@@ -240,8 +252,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Jardín Infantil Mi Primer Paso",
-        mission: "Acompañar el desarrollo temprano de los niños a través de experiencias educativas lúdicas y significativas.",
-        vision: "Crear las bases sólidas para que cada niño alcance su máximo potencial desde sus primeros años.",
+        mission:
+          "Acompañar el desarrollo temprano de los niños a través de experiencias educativas lúdicas y significativas.",
+        vision:
+          "Crear las bases sólidas para que cada niño alcance su máximo potencial desde sus primeros años.",
         address: "Calle Los Aromos 456, Temuco, Región de La Araucanía",
         phone: "+56 45 2345 6789",
         email: "info@primerpaso.cl",
@@ -250,8 +264,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Colegio Santa María de Los Ángeles",
-        mission: "Educar con valores cristianos, promoviendo el desarrollo académico, espiritual y social de nuestros estudiantes.",
-        vision: "Formar personas íntegras que sean luz en la sociedad y contribuyan al bien común.",
+        mission:
+          "Educar con valores cristianos, promoviendo el desarrollo académico, espiritual y social de nuestros estudiantes.",
+        vision:
+          "Formar personas íntegras que sean luz en la sociedad y contribuyan al bien común.",
         address: "Av. Los Ángeles 789, Los Ángeles, Región del Biobío",
         phone: "+56 43 2345 6789",
         email: "colegio@santamaria.cl",
@@ -260,8 +276,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Liceo Politécnico Arturo Prat",
-        mission: "Proporcionar educación técnico-profesional que combine formación académica con preparación laboral especializada.",
-        vision: "Ser un liceo técnico líder que forme profesionales competentes y emprendedores.",
+        mission:
+          "Proporcionar educación técnico-profesional que combine formación académica con preparación laboral especializada.",
+        vision:
+          "Ser un liceo técnico líder que forme profesionales competentes y emprendedores.",
         address: "Calle Prat 1011, Iquique, Región de Tarapacá",
         phone: "+56 57 2345 6789",
         email: "liceoprat@liceos.cl",
@@ -270,9 +288,12 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Escuela Básica Gabriela Mistral",
-        mission: "Fomentar el aprendizaje significativo y el desarrollo de competencias que permitan a los estudiantes enfrentar los desafíos del siglo XXI.",
-        vision: "Ser una institución educativa innovadora que inspire y motive a sus estudiantes a ser ciudadanos activos y responsables.",
-        address: "Av. Mistral 1213, Rancagua, Región del Libertador Bernardo O'Higgins",
+        mission:
+          "Fomentar el aprendizaje significativo y el desarrollo de competencias que permitan a los estudiantes enfrentar los desafíos del siglo XXI.",
+        vision:
+          "Ser una institución educativa innovadora que inspire y motive a sus estudiantes a ser ciudadanos activos y responsables.",
+        address:
+          "Av. Mistral 1213, Rancagua, Región del Libertador Bernardo O'Higgins",
         phone: "+56 72 2345 6789",
         email: "escuela@gabrielamistral.cl",
         website: "https://www.gabrielamistral.cl",
@@ -280,8 +301,10 @@ export const seedInstitutions = mutation({
       },
       {
         name: "Centro de Formación Técnica DUOC UC",
-        mission: "Ofrecer formación técnica superior de calidad que integre teoría y práctica para formar profesionales competentes.",
-        vision: "Ser el centro de formación técnica más innovador y conectado con el mundo laboral chileno.",
+        mission:
+          "Ofrecer formación técnica superior de calidad que integre teoría y práctica para formar profesionales competentes.",
+        vision:
+          "Ser el centro de formación técnica más innovador y conectado con el mundo laboral chileno.",
         address: "Av. Plaza 680, Santiago, Región Metropolitana",
         phone: "+56 2 4567 8901",
         email: "admision@duoc.cl",
@@ -291,8 +314,12 @@ export const seedInstitutions = mutation({
     ];
 
     // Check existing institutions to avoid duplicates
-    const existingInstitutions = await ctx.db.query("institutionInfo").collect();
-    const existingNames = new Set(existingInstitutions.map(inst => inst.name));
+    const existingInstitutions = await ctx.db
+      .query("institutionInfo")
+      .collect();
+    const existingNames = new Set(
+      existingInstitutions.map((inst) => inst.name),
+    );
 
     let createdCount = 0;
     const results = [];
@@ -310,7 +337,9 @@ export const seedInstitutions = mutation({
           updatedAt: now,
           isActive: true,
         });
-        results.push(`Created: ${institution.name} (${institution.institutionType})`);
+        results.push(
+          `Created: ${institution.name} (${institution.institutionType})`,
+        );
         createdCount++;
       } catch (error) {
         results.push(`Failed: ${institution.name} - ${error}`);
@@ -325,7 +354,6 @@ export const seedInstitutions = mutation({
     };
   },
 });
-
 
 export const clearDatabase = mutation({
   args: { confirm: v.boolean(), safetyCode: v.optional(v.string()) },

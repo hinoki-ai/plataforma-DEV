@@ -1,5 +1,6 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { createI18nMiddleware } from "./middleware/i18n";
 
 const PUBLIC_ROUTES = [
   "/",
@@ -26,8 +27,17 @@ function addSecurityHeaders(response: NextResponse) {
   return response;
 }
 
+const i18nMiddleware = createI18nMiddleware();
+
 export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
+
+  // Handle i18n routing first
+  const i18nResponse = i18nMiddleware(req);
+  if (i18nResponse) {
+    // If i18n middleware returns a response, use it
+    return addSecurityHeaders(i18nResponse);
+  }
 
   if (pathname.startsWith("/_next") || pathname.startsWith("/api")) {
     return addSecurityHeaders(NextResponse.next());

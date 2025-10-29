@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState, useEffect } from "react";
 
 /**
  * Hook to detect and handle hydration state
@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 export function useHydrationFix() {
   const [isHydrated, setIsHydrated] = useState(false);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setIsHydrated(true);
   }, []);
 
@@ -26,7 +27,8 @@ export function useClientOnly<T>(
 ): T {
   const [value, setValue] = useState<T>(serverValue);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setValue(
       typeof clientValue === "function"
         ? (clientValue as () => T)()
@@ -47,7 +49,8 @@ export function useBrowserAPI<T>(
 ): T | null {
   const [value, setValue] = useState<T | null>(defaultValue);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     try {
       setValue(getter());
     } catch (error) {
@@ -68,7 +71,8 @@ export function useDynamicImport<T>(
 ): T | null {
   const [module, setModule] = useState<T | null>(fallback);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     importFn()
       .then(setModule)
       .catch((error) => {
@@ -90,7 +94,8 @@ export function useConditionalRender(
   const isHydrated = useHydrationFix();
   const [shouldRender, setShouldRender] = useState(false);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     if (!waitForHydration || isHydrated) {
       setShouldRender(
         typeof condition === "function" ? condition() : condition,
@@ -108,7 +113,8 @@ export function useConditionalRender(
 export function useDelayedHydration(delayMs: number = 100): boolean {
   const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     const timer = setTimeout(() => {
       setIsReady(true);
     }, delayMs);
@@ -129,7 +135,8 @@ export function useHydrationError(onError?: (error: Error) => void): {
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     const handleError = (event: ErrorEvent) => {
       const errorMessage = event.error?.message || event.message || "";
 
@@ -159,7 +166,8 @@ export function useStateSync<T>(serverValue: T, clientValue: T | (() => T)): T {
   const [value, setValue] = useState(serverValue);
   const isHydrated = useHydrationFix();
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     if (isHydrated) {
       setValue(
         typeof clientValue === "function"

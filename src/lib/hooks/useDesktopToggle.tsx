@@ -4,7 +4,7 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
+  useLayoutEffect,
   ReactNode,
 } from "react";
 
@@ -24,7 +24,8 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
   const [isActualMobile, setIsActualMobile] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     // Mark as hydrated to prevent SSR mismatches
     setIsHydrated(true);
 

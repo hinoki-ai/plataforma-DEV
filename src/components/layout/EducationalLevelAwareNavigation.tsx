@@ -270,7 +270,9 @@ export function EducationalLevelAwareNavigation({
 
       {/* Educational Level Info */}
       <div className="mt-6 p-3 rounded border border-gray-200 bg-gray-50">
-        <div className="text-xs text-gray-600 mb-1">{t("navigation.current_config")}</div>
+        <div className="text-xs text-gray-600 mb-1">
+          {t("navigation.current_config")}
+        </div>
         <div className="text-sm font-medium text-gray-900">
           {currentInfo.levels.length} Niveles • ISCED{" "}
           {Math.min(...currentInfo.levels.map((l) => l.isced))}-

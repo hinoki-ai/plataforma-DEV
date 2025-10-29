@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Card,
   CardContent,
@@ -61,6 +62,7 @@ export function ParentMeetingTracker({
   teacherId,
 }: ParentMeetingTrackerProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const { t } = useLanguage();
   const [meetingNumber, setMeetingNumber] = useState<number>(1);
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<Set<Id<"students">>>(
@@ -123,12 +125,12 @@ export function ParentMeetingTracker({
 
   const handleBulkSave = async () => {
     if (!selectedDate) {
-      toast.error("Debe seleccionar una fecha");
+      toast.error(t("grade.select_date", "common"));
       return;
     }
 
     if (attendanceData.size === 0) {
-      toast.error("Debe registrar al menos un estudiante");
+      toast.error(t("grade.select_student", "common"));
       return;
     }
 
@@ -160,7 +162,7 @@ export function ParentMeetingTracker({
         registeredBy: teacherId,
       });
 
-      toast.success("Asistencia de reunión registrada exitosamente");
+      toast.success(t("meeting.attendance_registered", "common"));
       setAttendanceData(new Map());
       setIsRecordDialogOpen(false);
     } catch (error: any) {
@@ -180,7 +182,7 @@ export function ParentMeetingTracker({
       });
       return newData;
     });
-    toast.success("Todos marcados como presentes");
+    toast.success(t("meeting.all_present", "common"));
   };
 
   if (course === undefined || meetingAttendance === undefined) {

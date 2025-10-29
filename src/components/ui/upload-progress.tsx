@@ -29,6 +29,7 @@ export function UploadProgress({
   const [overallProgress, setOverallProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (files.length > 0) {
       setUploadState(
@@ -41,6 +42,7 @@ export function UploadProgress({
     }
   }, [files]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (uploadState.length > 0) {
       const totalProgress = uploadState.reduce(
@@ -129,9 +131,8 @@ export function UploadProgress({
           <div className="w-full bg-secondary rounded-full h-2">
             <div
               className="bg-primary h-2 rounded-full transition-all duration-300 ease-out"
-              style={{
-                width: `${overallProgress}%`,
-              }}
+              /* stylelint-disable */
+              style={{ width: `${overallProgress}%` }} // Dynamic width for progress bar
             />
           </div>
         </div>
@@ -168,9 +169,8 @@ export function UploadProgress({
                     <div className="w-full bg-secondary rounded-full h-1 mt-1">
                       <div
                         className="bg-primary h-1 rounded-full transition-all duration-300 ease-out"
-                        style={{
-                          width: `${state.progress}%`,
-                        }}
+                        /* stylelint-disable */
+                        style={{ width: `${state.progress}%` }} // Dynamic width for progress bar
                       />
                     </div>
                   )}

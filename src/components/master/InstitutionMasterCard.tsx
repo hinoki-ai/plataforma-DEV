@@ -65,9 +65,9 @@ export function InstitutionMasterCard({
     try {
       // Simulate master-level reconfiguration
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      toast.success("🏛️ MASTER: Configuración educativa actualizada");
+      toast.success(t("master.config_updated", "common"));
     } catch (error) {
-      toast.error("Error en configuración master");
+      toast.error(t("master.config_error", "common"));
     } finally {
       setIsConfiguring(false);
     }
@@ -78,8 +78,7 @@ export function InstitutionMasterCard({
       label: "Configurar Sistema Educativo",
       icon: Settings,
       description: "Control supremo de niveles educativos",
-      action: () =>
-        toast.info("🏛️ MASTER: Accediendo a configuración educativa"),
+      action: () => toast.info(t("master.accessing_config", "common")),
       color:
         "bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700",
     },

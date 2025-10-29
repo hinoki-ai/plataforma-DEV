@@ -5,12 +5,12 @@
  */
 
 export type EducationalInstitutionType =
-  | "PRESCHOOL"           // Educación Parvularia
-  | "BASIC_SCHOOL"        // Educación Básica
-  | "HIGH_SCHOOL"         // Educación Media
+  | "PRESCHOOL" // Educación Parvularia
+  | "BASIC_SCHOOL" // Educación Básica
+  | "HIGH_SCHOOL" // Educación Media
   | "TECHNICAL_INSTITUTE" // Institutos Profesionales
-  | "TECHNICAL_CENTER"    // Centros de Formación Técnica
-  | "UNIVERSITY";         // Universidades
+  | "TECHNICAL_CENTER" // Centros de Formación Técnica
+  | "UNIVERSITY"; // Universidades
 
 export type ISCEDLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -106,7 +106,8 @@ export const EDUCATIONAL_LEVELS: EducationalLevel[] = [
       "5° Básico",
       "6° Básico",
     ],
-    description: "Enseñanza fundamental: lenguaje, matemáticas, ciencias naturales",
+    description:
+      "Enseñanza fundamental: lenguaje, matemáticas, ciencias naturales",
     duration: "6 años",
   },
 
@@ -119,7 +120,8 @@ export const EDUCATIONAL_LEVELS: EducationalLevel[] = [
     isced: 2,
     institutionTypes: ["BASIC_SCHOOL"],
     grades: ["7° Básico", "8° Básico"],
-    description: "Consolidación de conocimientos y preparación para enseñanza media",
+    description:
+      "Consolidación de conocimientos y preparación para enseñanza media",
     duration: "2 años",
   },
 
@@ -143,7 +145,8 @@ export const EDUCATIONAL_LEVELS: EducationalLevel[] = [
     isced: 3,
     institutionTypes: ["HIGH_SCHOOL"],
     grades: ["1° Medio TP", "2° Medio TP", "3° Medio TP", "4° Medio TP"],
-    description: "Formación técnica especializada para inserción laboral inmediata",
+    description:
+      "Formación técnica especializada para inserción laboral inmediata",
     duration: "4 años",
   },
 
@@ -371,16 +374,51 @@ export function shouldShowFeature(
 ): boolean {
   const featureMatrix: Record<string, EducationalInstitutionType[]> = {
     parent_meetings: ["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL"],
-    academic_planning: ["BASIC_SCHOOL", "HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-    grading_system: ["BASIC_SCHOOL", "HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+    academic_planning: [
+      "BASIC_SCHOOL",
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    grading_system: [
+      "BASIC_SCHOOL",
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
     daycare_features: ["PRESCHOOL"],
     university_features: ["UNIVERSITY"],
-    technical_training: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-    thesis_management: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+    technical_training: [
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    thesis_management: [
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
     play_based_learning: ["PRESCHOOL"],
-    career_guidance: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-    research_projects: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-    laboratory_access: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+    career_guidance: [
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    research_projects: [
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    laboratory_access: [
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
     certification_programs: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],
     postgraduate_programs: ["UNIVERSITY"],
     technical_specialization: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],

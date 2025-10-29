@@ -102,7 +102,9 @@ export function useEducationalSystem() {
     } catch (error) {
       console.error("Error updating institution type:", error);
       const errorMessage =
-        error instanceof Error ? error.message : t("educational_system.config_error");
+        error instanceof Error
+          ? error.message
+          : t("educational_system.config_error");
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -122,16 +124,51 @@ export function useEducationalSystem() {
     // Feature matrix - could be moved to settings
     const featureMatrix: Record<string, string[]> = {
       parent_meetings: ["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL"],
-      academic_planning: ["BASIC_SCHOOL", "HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-      grading_system: ["BASIC_SCHOOL", "HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      academic_planning: [
+        "BASIC_SCHOOL",
+        "HIGH_SCHOOL",
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ],
+      grading_system: [
+        "BASIC_SCHOOL",
+        "HIGH_SCHOOL",
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ],
       daycare_features: ["PRESCHOOL"],
       university_features: ["UNIVERSITY"],
-      technical_training: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-      thesis_management: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      technical_training: [
+        "HIGH_SCHOOL",
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ],
+      thesis_management: [
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ],
       play_based_learning: ["PRESCHOOL"],
-      career_guidance: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-      research_projects: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
-      laboratory_access: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      career_guidance: [
+        "HIGH_SCHOOL",
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ],
+      research_projects: [
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ],
+      laboratory_access: [
+        "HIGH_SCHOOL",
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ],
       certification_programs: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],
       postgraduate_programs: ["UNIVERSITY"],
       technical_specialization: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],
