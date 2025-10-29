@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { CheckCircle, XCircle, AlertCircle, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export interface UploadProgressProps {
   files: File[];
@@ -28,6 +29,7 @@ export function UploadProgress({
   const [uploadState, setUploadState] = useState<UploadResult[]>([]);
   const [overallProgress, setOverallProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (files.length > 0) {
@@ -92,9 +94,14 @@ export function UploadProgress({
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
+    if (bytes === 0) return "0 " + t("upload.bytes", "common");
     const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const sizes = [
+      t("upload.bytes", "common"),
+      t("upload.kb", "common"),
+      t("upload.mb", "common"),
+      t("upload.gb", "common")
+    ];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
@@ -112,8 +119,8 @@ export function UploadProgress({
 
   const getStatusText = (state: UploadResult) => {
     if (state.error) return state.error;
-    if (state.progress === 100 && state.success) return "Subido exitosamente";
-    if (state.progress === 100 && !state.success) return "Error al subir";
+    if (state.progress === 100 && state.success) return t("upload.success_message", "common");
+    if (state.progress === 100 && !state.success) return t("upload.error_message", "common");
     return `${Math.round(state.progress)}%`;
   };
 
@@ -123,7 +130,7 @@ export function UploadProgress({
       {isUploading && (
         <div className="mb-4">
           <div className="flex justify-between mb-2">
-            <span className="text-sm font-medium">Progreso general</span>
+            <span className="text-sm font-medium">{t("upload.progress", "common")}</span>
             <span className="text-sm text-muted-foreground">
               {Math.round(overallProgress)}%
             </span>
@@ -184,8 +191,8 @@ export function UploadProgress({
         <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
           <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
           <p className="text-sm font-medium text-green-700">
-            {uploadState.filter((s) => s.success).length} de{" "}
-            {uploadState.length} archivos subidos exitosamente
+            {uploadState.filter((s) => s.success).length} {t("common.of", "common")}{" "}
+            {uploadState.length} {t("upload.files_uploaded_success", "common")}
           </p>
         </div>
       )}

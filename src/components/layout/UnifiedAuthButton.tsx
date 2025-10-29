@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
-import { useLanguage } from "@/components/language/LanguageContext";
 import { useAppContext } from "@/components/providers/ContextProvider";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
@@ -20,9 +19,6 @@ import {
   Menu,
   Home,
   Building,
-  Moon,
-  Sun,
-  Globe,
   Crown,
   Users as UsersIcon,
   Eye,
@@ -41,15 +37,42 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { AdvancedButton } from "@/components/master/SmartSettingsButton";
+import SkyToggle from "@/components/ui/sky-toggle";
+import SoundToggle from "@/components/ui/sound-toggle";
+import { LanguageToggle } from "@/components/language/LanguageToggle";
 
 // ⚡ Performance: Move static config outside component to prevent recreation
 const ROLE_CONFIG = {
-  MASTER: { icon: Crown, color: "text-yellow-500", name: "Desarrollador" },
-  ADMIN: { icon: Shield, color: "text-red-500", name: "Administrador" },
-  PROFESOR: { icon: BookOpen, color: "text-blue-500", name: "Profesor" },
-  PARENT: { icon: UsersIcon, color: "text-green-500", name: "Padre/Apoderado" },
-  PUBLIC: { icon: Eye, color: "text-gray-500", name: "Público" },
-  default: { icon: Building, color: "text-gray-500", name: "Usuario" },
+  MASTER: {
+    icon: Crown,
+    color: "text-yellow-500",
+    nameKey: "user.role.master" as const,
+  },
+  ADMIN: {
+    icon: Shield,
+    color: "text-red-500",
+    nameKey: "user.role.admin" as const,
+  },
+  PROFESOR: {
+    icon: BookOpen,
+    color: "text-blue-500",
+    nameKey: "user.role.profesor" as const,
+  },
+  PARENT: {
+    icon: UsersIcon,
+    color: "text-green-500",
+    nameKey: "user.role.parent" as const,
+  },
+  PUBLIC: {
+    icon: Eye,
+    color: "text-gray-500",
+    nameKey: "user.role.public" as const,
+  },
+  default: {
+    icon: Building,
+    color: "text-gray-500",
+    nameKey: "user.role.default" as const,
+  },
 } as const;
 
 // ⚡ Performance: Extract initials function to prevent recreation
@@ -80,24 +103,12 @@ export default function UnifiedAuthButton() {
   // ⚡ Performance: Optimize session hook with better configuration
   const { data: session, status } = useSession();
 
-  const { theme, setTheme } = useTheme();
-  const { language, setLanguage } = useLanguage();
   const router = useRouter();
   const { isAuthRoute } = useAppContext();
   const { t } = useDivineParsing(["common"]);
 
   const isAuthenticated = !!session?.user && status === "authenticated";
   const isAuthenticatedRoute = isHydrated && isAuthRoute;
-
-  // ⚡ Performance: Memoize theme toggle function
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-
-  // ⚡ Performance: Memoize language toggle function
-  const toggleLanguage = () => {
-    setLanguage(language === "es" ? "en" : "es");
-  };
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -122,7 +133,7 @@ export default function UnifiedAuthButton() {
       initials: getInitials(session?.user?.name),
       icon: config.icon,
       color: config.color,
-      name: config.name,
+      name: t(config.nameKey, "common"),
     };
   })();
 
@@ -146,7 +157,7 @@ export default function UnifiedAuthButton() {
           className="text-sm font-medium hover:bg-muted/50 transition-colors"
           onClick={() => router.push("/login")}
         >
-          Portal Escolar
+          {t("nav.portal.escolar", "navigation")}
         </Button>
 
         {/* Settings Gear Button - Hidden on mobile since it's in the menu */}
@@ -156,33 +167,35 @@ export default function UnifiedAuthButton() {
               variant="ghost"
               size="icon"
               className="hidden md:flex w-8 h-8 hover:bg-muted/50 transition-colors"
-              title="Configuración"
+              title={t("ui.settings.label", "common")}
             >
               <Settings2 className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuLabel>Configuración</DropdownMenuLabel>
+          <DropdownMenuContent align="end" className="w-72">
+            <DropdownMenuLabel>
+              {t("ui.settings.label", "common")}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                onClick={toggleTheme}
-                className="cursor-pointer"
-              >
-                {theme === "dark" ? (
-                  <Moon className="mr-2 h-4 w-4" />
-                ) : (
-                  <Sun className="mr-2 h-4 w-4" />
-                )}
-                <span>Modo {theme === "dark" ? "Claro" : "Oscuro"}</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={toggleLanguage}
-                className="cursor-pointer"
-              >
-                <Globe className="mr-2 h-4 w-4" />
-                <span>{language === "es" ? "English" : "Español"}</span>
-              </DropdownMenuItem>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-medium">
+                  {t("ui.theme.label", "common")}
+                </span>
+                <SkyToggle size="sm" />
+              </div>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-medium">
+                  {t("ui.sound.label", "common")}
+                </span>
+                <SoundToggle size="sm" />
+              </div>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-medium">
+                  {t("ui.language.label", "common")}
+                </span>
+                <LanguageToggle size="sm" />
+              </div>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -240,7 +253,7 @@ export default function UnifiedAuthButton() {
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-64" align="end" sideOffset={8}>
+        <DropdownMenuContent className="w-72" align="end" sideOffset={8}>
           <DropdownMenuLabel className="font-normal">
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10">
@@ -283,13 +296,13 @@ export default function UnifiedAuthButton() {
             <DropdownMenuItem asChild>
               <Link href="/dashboard" className="cursor-pointer">
                 <Calendar className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
+                <span>{t("nav.dashboard", "navigation")}</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/" className="cursor-pointer">
                 <Home className="mr-2 h-4 w-4" />
-                <span>Inicio</span>
+                <span>{t("nav.home", "navigation")}</span>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
@@ -297,22 +310,24 @@ export default function UnifiedAuthButton() {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
-              {theme === "dark" ? (
-                <Moon className="mr-2 h-4 w-4" />
-              ) : (
-                <Sun className="mr-2 h-4 w-4" />
-              )}
-              <span>Modo {theme === "dark" ? "Claro" : "Oscuro"}</span>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={toggleLanguage}
-              className="cursor-pointer"
-            >
-              <Globe className="mr-2 h-4 w-4" />
-              <span>{language === "es" ? "English" : "Español"}</span>
-            </DropdownMenuItem>
+            <div className="flex items-center justify-between py-2">
+              <span className="text-sm font-medium">
+                {t("ui.theme.label", "common")}
+              </span>
+              <SkyToggle size="sm" />
+            </div>
+            <div className="flex items-center justify-between py-2">
+              <span className="text-sm font-medium">
+                {t("ui.sound.label", "common")}
+              </span>
+              <SoundToggle size="sm" />
+            </div>
+            <div className="flex items-center justify-between py-2">
+              <span className="text-sm font-medium">
+                {t("ui.language.label", "common")}
+              </span>
+              <LanguageToggle size="sm" />
+            </div>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
@@ -323,7 +338,11 @@ export default function UnifiedAuthButton() {
             className="text-red-600 focus:text-red-600 cursor-pointer"
           >
             <LogOut className="mr-2 h-4 w-4" />
-            <span>{isLoggingOut ? "Cerrando sesión..." : "Cerrar sesión"}</span>
+            <span>
+              {isLoggingOut
+                ? t("nav.logout.loading", "navigation")
+                : t("nav.logout", "navigation")}
+            </span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
