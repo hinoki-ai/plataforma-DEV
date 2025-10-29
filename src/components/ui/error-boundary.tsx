@@ -122,10 +122,10 @@ export class ErrorBoundary extends Component<Props, State> {
               <p>
                 Escríbenos a:{" "}
                 <a
-                  href="mailto:soporte@plataforma-astral.com"
+                  href="mailto:astral@gmail.com"
                   className="text-primary hover:underline"
                 >
-                  soporte@plataforma-astral.com
+                  astral@gmail.com
                 </a>
               </p>
             </div>

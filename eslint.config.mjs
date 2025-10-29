@@ -1,8 +1,4 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import nextConfig from "eslint-config-next";
 
 const eslintConfig = [
   {
@@ -18,8 +14,8 @@ const eslintConfig = [
       "node_modules/**/*",
     ],
   },
+  nextConfig,
   {
-    extends: ["next/core-web-vitals"],
     rules: {
       // Temporarily disable overly strict rules to focus on critical issues
       "@typescript-eslint/no-explicit-any": "off",

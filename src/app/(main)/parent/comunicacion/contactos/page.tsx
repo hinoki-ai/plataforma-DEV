@@ -226,7 +226,7 @@ export default function ContactosPage() {
                     {/* Schedule */}
                     {contact.schedule && (
                       <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                        <Clock className="h-4 w-4 mt-0.5 shrink-0" />
                         <span>{contact.schedule}</span>
                       </div>
                     )}
@@ -362,10 +362,10 @@ export default function ContactosPage() {
                   <div className="flex items-center gap-2 text-blue-800">
                     <Mail className="h-4 w-4" />
                     <a
-                      href="mailto:contacto@plataformaastral.cl"
+                      href="mailto:astral@gmail.com"
                       className="hover:underline"
                     >
-                      contacto@plataformaastral.cl
+                      astral@gmail.com
                     </a>
                   </div>
                 </div>

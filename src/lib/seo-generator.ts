@@ -394,7 +394,7 @@ export function getPageStructuredData(page: string) {
         description:
           "Jardín infantil enfocado en el desarrollo integral de niños y niñas a través de metodologías innovadoras.",
         telephone: "+56 2 1234 5678",
-        email: "contacto@plataforma-astral.com",
+        email: "astral@gmail.com",
       });
 
     case "team":

@@ -40,7 +40,7 @@ export default function DpaPage() {
                       <br />
                       Región de Valparaíso, Chile
                       <br />
-                      contacto@plataformaastral.cl
+                      astral@gmail.com
                     </p>
                   </div>
                   <div>

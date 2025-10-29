@@ -204,5 +204,5 @@ export const whatsAppTemplates = {
     `🎂 *¡Feliz Cumpleaños!*\n\nHola ${name},\n\nDesde Plataforma Institucional Astral te deseamos un feliz cumpleaños.\n\n🎉 Que este día esté lleno de alegría y bendiciones.\n\n¡Felicidades!`,
 
   emergency: (message: string) =>
-    `🚨 *COMUNICADO URGENTE*\n\n${message}\n\nPor favor, contacta a la institución lo antes posible.\n\n📞 Teléfono: +569XXXXXXXX\n📧 Email: contacto@plataforma-astral.com`,
+    `🚨 *COMUNICADO URGENTE*\n\n${message}\n\nPor favor, contacta a la institución lo antes posible.\n\n📞 Teléfono: +569XXXXXXXX\n📧 Email: astral@gmail.com`,
 };
