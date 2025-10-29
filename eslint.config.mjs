@@ -23,8 +23,8 @@ const eslintConfig = [
       "node_modules/**/*",
     ],
   },
-  ...compat.config({
-    extends: ["next/core-web-vitals"],
+  ...compat.extends("next/core-web-vitals"),
+  {
     rules: {
       // Temporarily disable overly strict rules to focus on critical issues
       "@typescript-eslint/no-explicit-any": "off",
@@ -43,7 +43,7 @@ const eslintConfig = [
       // Disable inline style warnings (dynamic CSS variables are necessary)
       "@next/next/inline-script-id": "off",
     },
-  }),
+  },
 ];
 
 export default eslintConfig;
