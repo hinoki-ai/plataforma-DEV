@@ -131,6 +131,7 @@ export function UploadProgress({
           <div className="w-full bg-secondary rounded-full h-2">
             <div
               className="bg-primary h-2 rounded-full transition-all duration-300 ease-out"
+              // eslint-disable-next-line react/style-prop-object
               style={{ width: `${overallProgress}%` }}
             />
           </div>
@@ -168,6 +169,7 @@ export function UploadProgress({
                     <div className="w-full bg-secondary rounded-full h-1 mt-1">
                       <div
                         className="bg-primary h-1 rounded-full transition-all duration-300 ease-out"
+                        // eslint-disable-next-line react/style-prop-object
                         style={{ width: `${state.progress}%` }}
                       />
                     </div>

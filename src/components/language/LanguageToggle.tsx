@@ -1,17 +1,8 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  memo,
-  forwardRef,
-} from "react";
-import { Button } from "@/components/ui/button";
+import React, { useCallback, memo, useState, useEffect } from "react";
+import styled from "styled-components";
 import { useLanguage } from "./LanguageContext";
-import { Globe, Check } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
 
 interface LanguageOption {
   code: "es" | "en";
@@ -21,154 +12,92 @@ interface LanguageOption {
   ariaLabel: string;
 }
 
-// Memoized language options for performance
-const languageOptions: LanguageOption[] = [
-  {
-    code: "es",
-    name: "Spanish",
-    nativeName: "Español",
-    flag: "🇪🇸",
-    ariaLabel: "Cambiar a español",
-  },
-  {
-    code: "en",
-    name: "English",
-    nativeName: "English",
-    flag: "🇺🇸",
-    ariaLabel: "Switch to English",
-  },
-];
+interface LanguageToggleProps {
+  className?: string;
+  size?: "sm" | "md" | "lg";
+}
 
-const LanguageToggle = memo(() => {
-  const { language, setLanguage, t, isLoading } = useLanguage();
-  const [isOpen, setIsOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const listboxRef = useRef<HTMLDivElement>(null);
-  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
+const LanguageToggle = memo(({ className, size = "md" }: LanguageToggleProps) => {
+  const { language, setLanguage, isLoading, t } = useLanguage();
+  const [mounted, setMounted] = useState(false);
+
+  // Only set mounted after component has mounted to prevent hydration issues
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Use setTimeout to avoid cascading renders
+      const timeoutId = setTimeout(() => setMounted(true), 0);
+      return () => clearTimeout(timeoutId);
+    }
+  }, []);
+
+  const languageOptions: LanguageOption[] = [
+    {
+      code: "es",
+      name: "Spanish",
+      nativeName: t("language.spanish", "language"),
+      flag: "🇪🇸",
+      ariaLabel: t("language.ariaSwitchSpanish", "language") || "Cambiar a español",
+    },
+    {
+      code: "en",
+      name: "English",
+      nativeName: t("language.english", "language"),
+      flag: "🇺🇸",
+      ariaLabel: t("language.ariaSwitchEnglish", "language") || "Switch to English",
+    },
+  ];
 
   const currentLanguage = languageOptions.find(
     (lang) => lang.code === language,
   );
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-        setFocusedIndex(-1);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleLanguageChange = useCallback(
-    (newLanguage: "es" | "en") => {
-      if (newLanguage === language) return;
-      setLanguage(newLanguage);
-      setIsOpen(false);
-      setFocusedIndex(-1);
-      const announcement = `Language changed to ${languageOptions.find((lang) => lang.code === newLanguage)?.nativeName}`;
-      const liveRegion = document.getElementById("sr-announcement");
-      if (liveRegion) liveRegion.textContent = announcement;
-    },
-    [language, setLanguage],
+  const nextLanguage = languageOptions.find(
+    (lang) => lang.code !== language,
   );
 
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (!isOpen) return;
-      switch (event.key) {
-        case "Escape":
-          event.preventDefault();
-          setIsOpen(false);
-          setFocusedIndex(-1);
-          buttonRef.current?.focus();
-          break;
-        case "ArrowDown":
-          event.preventDefault();
-          setFocusedIndex((prev) =>
-            prev < languageOptions.length - 1 ? prev + 1 : 0,
-          );
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          setFocusedIndex((prev) =>
-            prev > 0 ? prev - 1 : languageOptions.length - 1,
-          );
-          break;
-        case "Home":
-          event.preventDefault();
-          setFocusedIndex(0);
-          break;
-        case "End":
-          event.preventDefault();
-          setFocusedIndex(languageOptions.length - 1);
-          break;
-        case "Enter":
-        case " ":
-          event.preventDefault();
-          if (focusedIndex >= 0) {
-            handleLanguageChange(languageOptions[focusedIndex].code);
-          }
-          break;
-        case "Tab":
-          setIsOpen(false);
-          setFocusedIndex(-1);
-          break;
-      }
-    },
-    [isOpen, focusedIndex, handleLanguageChange],
-  );
+  const handleToggle = useCallback(async () => {
+    if (nextLanguage && !isLoading) {
+      try {
+        await setLanguage(nextLanguage.code);
 
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+        // Announce language change for screen readers
+        const announcement = `${t("language.changedTo", "language")} ${nextLanguage.nativeName}`;
+        const liveRegion = document.getElementById("sr-announcement");
+        if (liveRegion) liveRegion.textContent = announcement;
 
-  useEffect(() => {
-    if (isOpen && listboxRef.current) {
-      const firstOption = listboxRef.current.querySelector(
-        '[role="option"]',
-      ) as HTMLElement;
-      if (firstOption) {
-        firstOption.focus();
-        // Use setTimeout to avoid synchronous setState in effect
-        setTimeout(() => {
-          setFocusedIndex(0);
-        }, 0);
+        // Also update HTML lang attribute immediately for better SEO
+        if (typeof document !== "undefined") {
+          document.documentElement.lang = nextLanguage.code === "es" ? "es-CL" : "en-US";
+        }
+      } catch (error) {
+        // Silently handle errors - the language state should still update
+        if (process.env.NODE_ENV === "development") {
+          console.warn("Language toggle error:", error);
+        }
       }
     }
-  }, [isOpen]);
+  }, [nextLanguage, setLanguage, isLoading, t]);
 
-  const handleToggle = useCallback(() => {
-    setIsOpen((prev) => !prev);
-    setFocusedIndex(-1);
-  }, []);
-
-  const handleOptionClick = useCallback(
-    (option: LanguageOption) => {
-      handleLanguageChange(option.code);
-    },
-    [handleLanguageChange],
-  );
-
-  const handleOptionKeyDown = useCallback(
-    (event: React.KeyboardEvent, option: LanguageOption) => {
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        handleLanguageChange(option.code);
+        handleToggle();
       }
     },
-    [handleLanguageChange],
+    [handleToggle],
   );
+
+  if (!mounted) {
+    return null;
+  }
+
+  const isEnglish = language === "en";
+  const sizeMultiplier = size === "sm" ? 0.4 : size === "lg" ? 1.2 : 1;
 
   return (
     <>
+      {/* Screen reader announcements */}
       <div
         id="sr-announcement"
         aria-live="polite"
@@ -176,122 +105,329 @@ const LanguageToggle = memo(() => {
         className="sr-only"
       />
 
-      <div className="relative" ref={dropdownRef}>
-        <Button
-          ref={buttonRef}
-          variant="outline"
-          size="sm"
-          onClick={handleToggle}
-          disabled={isLoading}
-          aria-label={t("language.toggle", "language")}
-          aria-expanded={isOpen}
-          aria-haspopup="listbox"
-          aria-controls="language-listbox"
-          aria-describedby="language-description"
-          className="relative flex items-center gap-2 bg-background/95 backdrop-blur-sm hover:bg-background border-border hover:shadow-md transition-all duration-200 ease-in-out min-w-[100px] h-9 disabled:opacity-50"
-        >
-          <Globe className="w-4 h-4" aria-hidden="true" />
-          <span className="text-base" aria-hidden="true">
-            {currentLanguage?.flag}
-          </span>
-          <span className="text-sm font-medium">
-            {currentLanguage?.code.toUpperCase()}
-          </span>
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="ml-auto"
-            aria-hidden="true"
-          >
-            <svg
-              className="w-3 h-3"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </motion.div>
-        </Button>
-
-        <div id="language-description" className="sr-only">
-          Language selector. Use arrow keys to navigate options, Enter to
-          select, and Escape to close.
-        </div>
-
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -5 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -5 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-              className="absolute top-full mt-1 right-0 w-44 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden"
-            >
-              <div
-                role="listbox"
-                id="language-listbox"
-                aria-label="Language options"
-                aria-activedescendant={
-                  focusedIndex >= 0 ? `language-option-${focusedIndex}` : ""
-                }
-                ref={listboxRef}
-                className="max-h-60 overflow-auto"
-              >
-                {languageOptions.map((option, index) => {
-                  const isSelected = language === option.code;
-                  const isFocused = focusedIndex === index;
-                  return (
-                    <div
-                      key={option.code}
-                      id={`language-option-${index}`}
-                      role="option"
-                      {...(isSelected && { "aria-selected": "true" })}
-                      onClick={() => handleOptionClick(option)}
-                      onKeyDown={(e) => handleOptionKeyDown(e, option)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset rounded-md cursor-pointer ${
-                        isSelected
-                          ? "bg-primary/10 text-primary shadow-sm"
-                          : "hover:bg-accent/50"
-                      } ${isFocused ? "bg-accent" : ""}`}
-                      aria-label={option.ariaLabel}
-                      tabIndex={isFocused ? 0 : -1}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg" aria-hidden="true" role="img">
-                          {option.flag}
-                        </span>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-medium leading-tight">
-                            {option.nativeName}
-                          </span>
-                          <span className="text-xs text-muted-foreground leading-tight">
-                            {option.name}
-                          </span>
-                        </div>
-                      </div>
-                      {isSelected && (
-                        <Check
-                          className="w-4 h-4 text-primary shrink-0"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </div>
-                  );
-                })}
+      <StyledWrapper className={className} $sizeMultiplier={sizeMultiplier}>
+        <label className="language-switch">
+          <input
+            type="checkbox"
+            className="language-switch__checkbox"
+            checked={isEnglish}
+            onChange={handleToggle}
+            onKeyDown={handleKeyDown}
+            disabled={isLoading}
+            aria-label={nextLanguage?.ariaLabel || t("language.switchTo", "language")}
+          />
+          <div className="language-switch__container">
+            {/* Language Flags Background */}
+            <div className="language-switch__flags-background">
+              <div className="language-switch__flag language-switch__flag--es">
+                {languageOptions.find(l => l.code === "es")?.flag}
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              <div className="language-switch__flag language-switch__flag--en">
+                {languageOptions.find(l => l.code === "en")?.flag}
+              </div>
+            </div>
+
+            {/* Language Code Display */}
+            <div className="language-switch__text">
+              <span className="language-switch__code language-switch__code--es">
+                ES
+              </span>
+              <span className="language-switch__code language-switch__code--en">
+                EN
+              </span>
+            </div>
+
+            {/* Circle Container with Flag */}
+            <div className="language-switch__circle-container">
+              <div className="language-switch__flag-container">
+                <div className="language-switch__current-flag">
+                  <span className="language-switch__flag-icon" role="img" aria-label={`${currentLanguage?.name} flag`}>
+                    {currentLanguage?.flag}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+      </StyledWrapper>
     </>
   );
 });
+
+const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
+  .language-switch {
+    --toggle-size: ${(props) => 30 * props.$sizeMultiplier}px;
+    --container-width: 5.625em;
+    --container-height: 2.5em;
+    --container-radius: 6.25em;
+    --container-es-bg: #dc2626;
+    --container-en-bg: #2563eb;
+    --circle-container-diameter: 3.375em;
+    --flag-diameter: 2.125em;
+    --flag-bg: #ffffff;
+    --transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --circle-transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --text-color: #ffffff;
+  }
+
+  .language-switch,
+  .language-switch *,
+  .language-switch *::before,
+  .language-switch *::after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: var(--toggle-size);
+  }
+
+  .language-switch__container {
+    width: var(--container-width);
+    height: var(--container-height);
+    background-color: var(--container-es-bg);
+    border-radius: var(--container-radius);
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-box-shadow:
+      0em -0.062em 0.062em rgba(0, 0, 0, 0.25),
+      0em 0.062em 0.125em rgba(255, 255, 255, 0.94);
+    box-shadow:
+      0em -0.062em 0.062em rgba(0, 0, 0, 0.25),
+      0em 0.062em 0.125em rgba(255, 255, 255, 0.94);
+    -webkit-transition: var(--transition);
+    -o-transition: var(--transition);
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .language-switch__container::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    -webkit-box-shadow:
+      0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset,
+      0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
+    box-shadow:
+      0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset,
+      0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
+    border-radius: var(--container-radius);
+  }
+
+  .language-switch__checkbox {
+    display: none;
+  }
+
+  .language-switch__checkbox:disabled + .language-switch__container {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .language-switch__flags-background {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 0.5em;
+    z-index: 0;
+  }
+
+  .language-switch__flag {
+    font-size: 1.5em;
+    opacity: 0.3;
+    transition: var(--transition);
+    filter: grayscale(0.5);
+  }
+
+  .language-switch__flag--es {
+    transform: translateX(0);
+  }
+
+  .language-switch__flag--en {
+    transform: translateX(0);
+  }
+
+  .language-switch__text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 0.5em;
+    z-index: 1;
+    font-weight: 600;
+    color: var(--text-color);
+    text-shadow: 0 0.062em 0.125em rgba(0, 0, 0, 0.3);
+  }
+
+  .language-switch__code {
+    font-size: 0.9em;
+    opacity: 0.8;
+    transition: var(--transition);
+    letter-spacing: 0.05em;
+  }
+
+  .language-switch__code--es {
+    transform: translateX(0);
+  }
+
+  .language-switch__code--en {
+    transform: translateX(0);
+  }
+
+  .language-switch__circle-container {
+    width: var(--circle-container-diameter);
+    height: var(--circle-container-diameter);
+    background-color: rgba(255, 255, 255, 0.1);
+    position: absolute;
+    --circle-offset: calc(
+      (var(--circle-container-diameter) - var(--container-height)) / 2 * -1
+    );
+    left: var(--circle-offset);
+    top: var(--circle-offset);
+    border-radius: var(--container-radius);
+    -webkit-box-shadow:
+      inset 0 0 0 3.375em rgba(255, 255, 255, 0.1),
+      inset 0 0 0 3.375em rgba(255, 255, 255, 0.1),
+      0 0 0 0.625em rgba(255, 255, 255, 0.1),
+      0 0 0 1.25em rgba(255, 255, 255, 0.1);
+    box-shadow:
+      inset 0 0 0 3.375em rgba(255, 255, 255, 0.1),
+      inset 0 0 0 3.375em rgba(255, 255, 255, 0.1),
+      0 0 0 0.625em rgba(255, 255, 255, 0.1),
+      0 0 0 1.25em rgba(255, 255, 255, 0.1);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-transition: var(--circle-transition);
+    -o-transition: var(--circle-transition);
+    transition: var(--circle-transition);
+    pointer-events: none;
+  }
+
+  .language-switch__flag-container {
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+    width: var(--flag-diameter);
+    height: var(--flag-diameter);
+    margin: auto;
+    border-radius: var(--container-radius);
+    background-color: var(--flag-bg);
+    -webkit-box-shadow:
+      0.062em 0.062em 0.062em 0em rgba(255, 255, 255, 0.61) inset,
+      0em -0.062em 0.062em 0em rgba(0, 0, 0, 0.2) inset;
+    box-shadow:
+      0.062em 0.062em 0.062em 0em rgba(255, 255, 255, 0.61) inset,
+      0em -0.062em 0.062em 0em rgba(0, 0, 0, 0.2) inset;
+    -webkit-filter: drop-shadow(0.062em 0.125em 0.125em rgba(0, 0, 0, 0.25))
+      drop-shadow(0em 0.062em 0.125em rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0.062em 0.125em 0.125em rgba(0, 0, 0, 0.25))
+      drop-shadow(0em 0.062em 0.125em rgba(0, 0, 0, 0.25));
+    overflow: visible;
+    -webkit-transition: var(--transition);
+    -o-transition: var(--transition);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .language-switch__current-flag {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+
+  .language-switch__flag-icon {
+    font-size: 1.2em;
+    line-height: 1;
+    transition: var(--transition);
+  }
+
+  /* English State (checked) */
+  .language-switch__checkbox:checked + .language-switch__container {
+    background-color: var(--container-en-bg);
+  }
+
+  .language-switch__checkbox:checked
+    + .language-switch__container
+    .language-switch__circle-container {
+    left: calc(
+      100% - var(--circle-offset) - var(--circle-container-diameter)
+    );
+  }
+
+  .language-switch__checkbox:checked
+    + .language-switch__container
+    .language-switch__flag--es {
+    opacity: 0.2;
+    filter: grayscale(0.8);
+  }
+
+  .language-switch__checkbox:checked
+    + .language-switch__container
+    .language-switch__flag--en {
+    opacity: 0.5;
+    filter: grayscale(0);
+  }
+
+  .language-switch__checkbox:checked
+    + .language-switch__container
+    .language-switch__code--es {
+    opacity: 0.4;
+  }
+
+  .language-switch__checkbox:checked
+    + .language-switch__container
+    .language-switch__code--en {
+    opacity: 1;
+  }
+
+  /* Spanish State (unchecked) */
+  .language-switch__checkbox:not(:checked)
+    + .language-switch__container
+    .language-switch__flag--es {
+    opacity: 0.5;
+    filter: grayscale(0);
+  }
+
+  .language-switch__checkbox:not(:checked)
+    + .language-switch__container
+    .language-switch__flag--en {
+    opacity: 0.2;
+    filter: grayscale(0.8);
+  }
+
+  .language-switch__checkbox:not(:checked)
+    + .language-switch__container
+    .language-switch__code--es {
+    opacity: 1;
+  }
+
+  .language-switch__checkbox:not(:checked)
+    + .language-switch__container
+    .language-switch__code--en {
+    opacity: 0.4;
+  }
+
+  /* Hover Effects */
+  .language-switch__circle-container:hover {
+    left: calc(var(--circle-offset) + 0.187em);
+  }
+
+  .language-switch__checkbox:checked
+    + .language-switch__container
+    .language-switch__circle-container:hover {
+    left: calc(
+      100% - var(--circle-offset) - var(--circle-container-diameter) - 0.187em
+    );
+  }
+`;
 
 LanguageToggle.displayName = "LanguageToggle";
 

@@ -605,6 +605,7 @@
   "accessibility.audio_settings": "Audio Settings",
   "accessibility.sound_enabled": "Sound Enabled",
   "accessibility.enable_sounds": "Enable interface sounds",
+  "sound.music": "Music",
   "accessibility.voice_commands": "Voice Commands",
   "accessibility.enable_voice_commands": "Enable voice commands",
   "accessibility.reset_settings": "Reset Settings",
