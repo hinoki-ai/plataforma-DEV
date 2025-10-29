@@ -148,13 +148,22 @@ export function ParentCreationForm({
     switch (step) {
       case 1:
         // Validate parent basic info
-        return !!(values.name && values.email && values.phone && values.relationship);
+        return !!(
+          values.name &&
+          values.email &&
+          values.phone &&
+          values.relationship
+        );
       case 2:
         // Validate password creation
-        return !!(values.password && passwordSchema.safeParse(values.password).success);
+        return !!(
+          values.password && passwordSchema.safeParse(values.password).success
+        );
       case 3:
         // Validate password confirmation
-        return !!(values.confirmPassword && values.password === values.confirmPassword);
+        return !!(
+          values.confirmPassword && values.password === values.confirmPassword
+        );
       case 4:
         // Validate student info
         return !!(values.studentName && values.studentGrade);
@@ -165,14 +174,14 @@ export function ParentCreationForm({
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, 4));
+      setCurrentStep((prev) => Math.min(prev + 1, 4));
     } else {
       form.trigger();
     }
   };
 
   const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const handleSubmit = async (data: ParentFormValues) => {
@@ -191,14 +200,14 @@ export function ParentCreationForm({
     "Información Personal",
     "Crear Contraseña",
     "Verificar Contraseña",
-    "Datos del Estudiante"
+    "Datos del Estudiante",
   ];
 
   const stepDescriptions = [
     "Tus datos básicos de contacto",
     "Crea una contraseña segura",
     "Confirma tu contraseña",
-    "Información de tu estudiante"
+    "Información de tu estudiante",
   ];
 
   const StepIndicator = () => (
@@ -219,9 +228,7 @@ export function ParentCreationForm({
             <div
               className={cn(
                 "w-12 h-1 mx-2 transition-all duration-300 rounded-full",
-                currentStep > step
-                  ? "bg-primary shadow-sm"
-                  : "bg-muted",
+                currentStep > step ? "bg-primary shadow-sm" : "bg-muted",
               )}
             />
           )}
@@ -374,8 +381,9 @@ export function ParentCreationForm({
                         </div>
                       </FormControl>
                       <FormDescription>
-                        La contraseña debe tener al menos 8 caracteres, incluyendo
-                        mayúsculas, minúsculas, números y caracteres especiales
+                        La contraseña debe tener al menos 8 caracteres,
+                        incluyendo mayúsculas, minúsculas, números y caracteres
+                        especiales
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

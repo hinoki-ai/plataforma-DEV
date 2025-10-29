@@ -516,7 +516,7 @@ export function GradeEntryForm({
                       ? "bg-yellow-500"
                       : "bg-red-500",
               )}
-              // eslint-disable-next-line react/style-prop-object
+               
               style={{ width: `${gradePercentage}%` }} // Dynamic width for progress bar
             />
           </div>

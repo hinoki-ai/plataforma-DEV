@@ -24,7 +24,7 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
   const [isActualMobile, setIsActualMobile] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
+   
   useLayoutEffect(() => {
     // Mark as hydrated to prevent SSR mismatches
     setIsHydrated(true);
