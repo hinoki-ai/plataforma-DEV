@@ -51,11 +51,14 @@ export function PlanningDashboard({
         >
           {t("planning.dashboard.title", "common")}
         </h1>
-        <Link href="/profesor/planificaciones/crear">
-          <Button className={isDesktopForced ? "h-12 px-8 text-base" : ""}>
+        <Button
+          asChild
+          className={isDesktopForced ? "h-12 px-8 text-base" : ""}
+        >
+          <Link href="/profesor/planificaciones/crear">
             {t("planning.dashboard.new_button", "common")}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       <PlanningDocumentSearch />
@@ -76,13 +79,14 @@ export function PlanningDashboard({
               >
                 {t("planning.dashboard.empty.description", "common")}
               </p>
-              <Link href="/profesor/planificaciones/crear">
-                <Button
-                  className={isDesktopForced ? "h-12 px-8 text-base" : ""}
-                >
+              <Button
+                asChild
+                className={isDesktopForced ? "h-12 px-8 text-base" : ""}
+              >
+                <Link href="/profesor/planificaciones/crear">
                   {t("planning.dashboard.empty.create_button", "common")}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -140,31 +144,32 @@ export function PlanningDashboard({
                   </div>
 
                   <div className="flex gap-2 pt-4 mt-auto">
-                    <Link
-                      href={`/profesor/planificaciones/${document.id}`}
-                      className="flex-1"
-                      aria-label={`${t("planning.dashboard.view_details", "common")} ${document.title}`}
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="w-full md:text-sm md:h-10 flex-1"
                     >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full md:text-sm md:h-10"
+                      <Link
+                        href={`/profesor/planificaciones/${document.id}`}
+                        aria-label={`${t("planning.dashboard.view_details", "common")} ${document.title}`}
                       >
                         {t("planning.dashboard.view_button", "common")}
-                      </Button>
-                    </Link>
-                    <Link
-                      href={`/profesor/planificaciones/${document.id}/editar`}
-                      aria-label={`${t("planning.dashboard.edit_label", "common")} ${document.title}`}
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="md:text-sm md:h-10 md:px-4 hover:bg-accent hover:text-accent-foreground transition-colors"
                     >
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="md:text-sm md:h-10 md:px-4 hover:bg-accent hover:text-accent-foreground transition-colors"
+                      <Link
+                        href={`/profesor/planificaciones/${document.id}/editar`}
+                        aria-label={`${t("planning.dashboard.edit_label", "common")} ${document.title}`}
                       >
                         {t("planning.dashboard.edit_button", "common")}
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

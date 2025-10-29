@@ -115,11 +115,11 @@ export default function TerminosPage() {
                   6. Limitación de Responsabilidad
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  La plataforma se proporciona "tal cual" sin garantías de
-                  ningún tipo. No nos hacemos responsables por daños indirectos,
-                  incidentales o consecuentes que puedan surgir del uso del
-                  servicio. Mantenemos niveles de servicio garantizados según el
-                  plan contratado.
+                  La plataforma se proporciona &quot;tal cual&quot; sin
+                  garantías de ningún tipo. No nos hacemos responsables por
+                  daños indirectos, incidentales o consecuentes que puedan
+                  surgir del uso del servicio. Mantenemos niveles de servicio
+                  garantizados según el plan contratado.
                 </p>
               </div>
 

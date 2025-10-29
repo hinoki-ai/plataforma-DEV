@@ -231,7 +231,7 @@ export function usePinchGesture(
   } = options;
 
   const initialDistanceRef = useRef<number>(0);
-  const currentScaleRef = useRef<number>(1);
+  const [currentScale, setCurrentScale] = useState<number>(1);
   const [isPinching, setIsPinching] = useState(false);
 
   const getDistance = useCallback((touches: TouchList) => {
@@ -249,9 +249,9 @@ export function usePinchGesture(
 
       initialDistanceRef.current = getDistance(e.touches);
       setIsPinching(true);
-      onPinchStart?.(currentScaleRef.current);
+      onPinchStart?.(currentScale);
     },
-    [enabled, getDistance, onPinchStart],
+    [enabled, getDistance, onPinchStart, currentScale],
   );
 
   const handleTouchMove = useCallback(
@@ -265,17 +265,24 @@ export function usePinchGesture(
         minScale,
         Math.min(
           maxScale,
-          (currentDistance / initialDistanceRef.current) *
-            currentScaleRef.current,
+          (currentDistance / initialDistanceRef.current) * currentScale,
         ),
       );
 
-      const delta = scale - currentScaleRef.current;
-      currentScaleRef.current = scale;
+      const delta = scale - currentScale;
+      setCurrentScale(scale);
 
       onPinchMove?.(scale, delta);
     },
-    [enabled, isPinching, getDistance, minScale, maxScale, onPinchMove],
+    [
+      enabled,
+      isPinching,
+      getDistance,
+      minScale,
+      maxScale,
+      onPinchMove,
+      currentScale,
+    ],
   );
 
   const handleTouchEnd = useCallback(
@@ -283,9 +290,9 @@ export function usePinchGesture(
       if (!enabled || !isPinching) return;
 
       setIsPinching(false);
-      onPinchEnd?.(currentScaleRef.current);
+      onPinchEnd?.(currentScale);
     },
-    [enabled, isPinching, onPinchEnd],
+    [enabled, isPinching, onPinchEnd, currentScale],
   );
 
   useEffect(() => {
@@ -307,9 +314,9 @@ export function usePinchGesture(
 
   return {
     isPinching,
-    currentScale: currentScaleRef.current,
+    currentScale,
     resetScale: () => {
-      currentScaleRef.current = 1;
+      setCurrentScale(1);
     },
   };
 }

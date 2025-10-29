@@ -14,6 +14,12 @@ import {
 } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 import { api } from "./_generated/api";
+import {
+  hashUserPassword,
+  logUserCreation,
+  UserCreationError,
+  type BaseUserData,
+} from "../src/lib/user-creation";
 
 const ROLE_VALUES = [
   "MASTER",
@@ -336,27 +342,81 @@ export const createUser = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    const now = Date.now();
+    try {
+      const now = Date.now();
 
-    // Check if user already exists
-    const existingUser = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", args.email))
-      .first();
+      // Check if user already exists
+      const existingUser = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", args.email))
+        .first();
 
-    if (existingUser) {
-      throw new Error("User with this email already exists");
+      if (existingUser) {
+        throw UserCreationError.userAlreadyExists(args.email);
+      }
+
+      // Prepare user data with standardized processing
+      const userData = {
+        name: args.name || args.email,
+        email: args.email,
+        password: args.password,
+        phone: args.phone,
+        role: args.role,
+        image: args.image,
+        provider: args.provider,
+        isOAuthUser: args.isOAuthUser ?? false,
+        createdByAdmin: args.createdByAdmin,
+        parentRole: args.parentRole,
+        institutionId: args.institutionId,
+        status: args.status ?? "ACTIVE",
+      };
+
+      // Hash password if provided (skip for OAuth users without passwords)
+      let processedPassword = userData.password;
+      if (processedPassword && !userData.isOAuthUser) {
+        processedPassword = await hashUserPassword(processedPassword);
+      }
+
+      // Normalize role
+      const normalizedRole = normalizeRole(userData.role, "PUBLIC");
+
+      const userId = await ctx.db.insert("users", {
+        ...userData,
+        password: processedPassword,
+        role: normalizedRole,
+        isActive: true,
+        emailVerified: undefined,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      // Log successful user creation
+      logUserCreation("createUser", userData, userData.createdByAdmin, true);
+
+      return userId;
+    } catch (error) {
+      // Log failed user creation
+      logUserCreation(
+        "createUser",
+        { email: args.email, role: args.role },
+        args.createdByAdmin,
+        false,
+        error,
+      );
+
+      // Re-throw standardized errors
+      if (error instanceof UserCreationError) {
+        throw error;
+      }
+
+      // Wrap unexpected errors
+      throw new UserCreationError(
+        "Error interno al crear usuario",
+        "INTERNAL_ERROR",
+        500,
+        { originalError: error },
+      );
     }
-
-    return await ctx.db.insert("users", {
-      ...args,
-      isActive: true,
-      isOAuthUser: args.isOAuthUser ?? false,
-      status: args.status ?? "ACTIVE",
-      emailVerified: undefined,
-      createdAt: now,
-      updatedAt: now,
-    });
   },
 });
 
@@ -416,17 +476,41 @@ export const createUserAction: any = action({
     ),
   },
   handler: async (ctx, args): Promise<Id<"users">> => {
-    // Check if user already exists
-    const existingUser = await ctx.runQuery(api.users.getUserByEmail, {
-      email: args.email,
-    });
+    try {
+      // Check if user already exists
+      const existingUser = await ctx.runQuery(api.users.getUserByEmail, {
+        email: args.email,
+      });
 
-    if (existingUser) {
-      throw new Error("User with this email already exists");
+      if (existingUser) {
+        throw UserCreationError.userAlreadyExists(args.email);
+      }
+
+      // Use the internal mutation to create the user
+      return await ctx.runMutation(api.users.createUser, args);
+    } catch (error) {
+      // Log failed user creation
+      logUserCreation(
+        "createUserAction",
+        { email: args.email, role: args.role },
+        args.createdByAdmin,
+        false,
+        error,
+      );
+
+      // Re-throw standardized errors
+      if (error instanceof UserCreationError) {
+        throw error;
+      }
+
+      // Wrap unexpected errors
+      throw new UserCreationError(
+        "Error interno al crear usuario",
+        "INTERNAL_ERROR",
+        500,
+        { originalError: error },
+      );
     }
-
-    // Use the internal mutation to create the user
-    return await ctx.runMutation(api.users.createUser, args);
   },
 });
 
@@ -662,95 +746,138 @@ export const registerParentComplete = mutation({
     isOAuthUser: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    const now = Date.now();
+    try {
+      const now = Date.now();
 
-    // Check if user already exists
-    const existingUser = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", args.email))
-      .first();
-
-    if (existingUser) {
-      throw new Error("User with this email already exists");
-    }
-
-    // 1. Create user account
-    const userId = await ctx.db.insert("users", {
-      name: args.fullName,
-      email: args.email,
-      password: args.password,
-      phone: args.phone,
-      role: "PARENT",
-      parentRole: args.relationship,
-      institutionId: args.institutionId,
-      isActive: true,
-      isOAuthUser: args.isOAuthUser ?? false,
-      provider: args.provider,
-      status: "ACTIVE",
-      createdAt: now,
-      updatedAt: now,
-    });
-
-    // 2. Create parent profile
-    await ctx.db.insert("parentProfiles", {
-      userId,
-      rut: args.rut,
-      address: args.address,
-      region: args.region,
-      comuna: args.comuna,
-      relationship: args.relationship,
-      emergencyContact: args.emergencyContact,
-      emergencyPhone: args.emergencyPhone,
-      registrationComplete: true,
-      createdAt: now,
-      updatedAt: now,
-    });
-
-    // 3. Create student record
-    // Parse child name into firstName and lastName
-    const nameParts = args.childName.trim().split(" ");
-    const firstName = nameParts[0];
-    const lastName = nameParts.slice(1).join(" ") || firstName;
-
-    // Get first available teacher (or use a default admin user)
-    const teachers = await ctx.db
-      .query("users")
-      .withIndex("by_role", (q) => q.eq("role", "PROFESOR"))
-      .first();
-
-    // If no teacher exists, use first admin
-    let teacherId = teachers?._id;
-    if (!teacherId) {
-      const admin = await ctx.db
+      // Check if user already exists
+      const existingUser = await ctx.db
         .query("users")
-        .withIndex("by_role", (q) => q.eq("role", "ADMIN"))
+        .withIndex("by_email", (q) => q.eq("email", args.email))
         .first();
-      teacherId = admin?._id;
+
+      if (existingUser) {
+        throw UserCreationError.userAlreadyExists(args.email);
+      }
+
+      // Hash password using standardized function
+      const hashedPassword = await hashUserPassword(args.password);
+
+      // 1. Create user account
+      const userId = await ctx.db.insert("users", {
+        name: args.fullName,
+        email: args.email,
+        password: hashedPassword,
+        phone: args.phone,
+        role: "PARENT",
+        parentRole: args.relationship,
+        institutionId: args.institutionId,
+        isActive: true,
+        isOAuthUser: args.isOAuthUser ?? false,
+        provider: args.provider,
+        status: "ACTIVE",
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      // 2. Create parent profile
+      await ctx.db.insert("parentProfiles", {
+        userId,
+        rut: args.rut,
+        address: args.address,
+        region: args.region,
+        comuna: args.comuna,
+        relationship: args.relationship,
+        emergencyContact: args.emergencyContact,
+        emergencyPhone: args.emergencyPhone,
+        registrationComplete: true,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      // 3. Create student record
+      // Parse child name into firstName and lastName
+      const nameParts = args.childName.trim().split(" ");
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(" ") || firstName;
+
+      // Get first available teacher (or use a default admin user)
+      const teachers = await ctx.db
+        .query("users")
+        .withIndex("by_role", (q) => q.eq("role", "PROFESOR"))
+        .first();
+
+      // If no teacher exists, use first admin
+      let teacherId = teachers?._id;
+      if (!teacherId) {
+        const admin = await ctx.db
+          .query("users")
+          .withIndex("by_role", (q) => q.eq("role", "ADMIN"))
+          .first();
+        teacherId = admin?._id;
+      }
+
+      if (!teacherId) {
+        throw new Error("No teacher or admin found to assign student");
+      }
+
+      const studentId = await ctx.db.insert("students", {
+        firstName,
+        lastName,
+        birthDate: now, // Will be updated later with actual birthdate
+        grade: args.childGrade,
+        enrollmentDate: now,
+        emergencyContact: args.emergencyContact,
+        emergencyPhone: args.emergencyPhone,
+        teacherId,
+        parentId: userId,
+        isActive: true,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      // Log successful parent registration
+      logUserCreation(
+        "registerParentComplete",
+        {
+          email: args.email,
+          role: "PARENT",
+          name: args.fullName,
+        },
+        undefined,
+        true,
+      );
+
+      return {
+        userId,
+        studentId,
+        success: true,
+      };
+    } catch (error) {
+      // Log failed parent registration
+      logUserCreation(
+        "registerParentComplete",
+        {
+          email: args.email,
+          role: "PARENT",
+          name: args.fullName,
+        },
+        undefined,
+        false,
+        error,
+      );
+
+      // Re-throw standardized errors
+      if (error instanceof UserCreationError) {
+        throw error;
+      }
+
+      // Wrap unexpected errors
+      throw new UserCreationError(
+        "Error interno al registrar padre",
+        "INTERNAL_ERROR",
+        500,
+        { originalError: error },
+      );
     }
-
-    if (!teacherId) {
-      throw new Error("No teacher or admin found to assign student");
-    }
-
-    const studentId = await ctx.db.insert("students", {
-      firstName,
-      lastName,
-      birthDate: now, // Will be updated later with actual birthdate
-      grade: args.childGrade,
-      enrollmentDate: now,
-      emergencyContact: args.emergencyContact,
-      emergencyPhone: args.emergencyPhone,
-      teacherId,
-      parentId: userId,
-      isActive: true,
-      createdAt: now,
-      updatedAt: now,
-    });
-
-    return {
-      userId,
-      studentId,
-      success: true,
-    };
   },
 });

@@ -456,6 +456,12 @@ El sistema de Libro de Clases Digital está completamente implementado, probado 
 **Archivos Convex**: 6 nuevos, 1 actualizado  
 **Documentación**: 100% completa
 
+## 📚 Documentación Relacionada
+
+Para más información sobre el sistema de Libro de Clases:
+
+- **[LIBRO_DE_CLASES_GUIDE.md](./LIBRO_DE_CLASES_GUIDE.md)** - Guía completa de usuario y desarrollo del sistema
+
 ---
 
 **Desarrollado con ❤️ para la educación chilena**  

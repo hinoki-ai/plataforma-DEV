@@ -101,6 +101,7 @@ export const createVote = mutation({
     description: v.optional(v.string()),
     category: v.optional(voteCategoryValidator),
     endDate: v.number(),
+    isActive: v.optional(v.boolean()),
     isPublic: v.optional(v.boolean()),
     allowMultipleVotes: v.optional(v.boolean()),
     maxVotesPerUser: v.optional(v.number()),
@@ -144,19 +145,30 @@ export const castVote = mutation({
     userId: v.id("users"),
   },
   handler: async (ctx, { voteId, optionId, userId }) => {
-    // Check if user already voted
-    const existingResponse = await ctx.db
+    const vote = await ctx.db.get(voteId);
+    if (!vote) throw new Error("Vote not found");
+
+    // Get all existing responses for this user and vote
+    const existingResponses = await ctx.db
       .query("voteResponses")
       .withIndex("by_voteId_userId", (q) =>
         q.eq("voteId", voteId).eq("userId", userId),
       )
-      .first();
+      .collect();
 
-    const vote = await ctx.db.get(voteId);
-    if (!vote) throw new Error("Vote not found");
-
-    if (existingResponse && !vote.allowMultipleVotes) {
+    // Check if user already voted and multiple votes are not allowed
+    if (existingResponses.length > 0 && !vote.allowMultipleVotes) {
       throw new Error("User has already voted");
+    }
+
+    // Check max votes per user constraint
+    if (
+      vote.maxVotesPerUser &&
+      existingResponses.length >= vote.maxVotesPerUser
+    ) {
+      throw new Error(
+        `Maximum votes per user limit reached (${vote.maxVotesPerUser})`,
+      );
     }
 
     return await ctx.db.insert("voteResponses", {

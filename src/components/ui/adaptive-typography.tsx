@@ -174,14 +174,15 @@ const AdaptiveTypography = React.forwardRef<
 
   const Element = as || defaultElementMap[type] || "p";
 
-  return React.createElement(Element, {
-    ref,
+  const elementProps = {
     className: cn(
       adaptiveTypographyVariants({ context: detectedContext, type }),
       className,
     ),
     ...props,
-  });
+  };
+
+  return <Element ref={ref as any} {...elementProps} />;
 });
 
 AdaptiveTypography.displayName = "AdaptiveTypography";

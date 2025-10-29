@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "@/lib/server-auth";
-import { getCalendarEvents } from "@/services/queries/calendar";
+import { getCalendarEvents } from "@/services/calendar/calendar-service";
 import {
   checkRateLimit,
   getRateLimitHeaders,

@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar, BookOpen, ArrowRight } from "lucide-react";
 import { getPlanningDocuments } from "@/services/queries/planning";
-import { getUpcomingEvents } from "@/services/queries/calendar";
+import { getUpcomingEvents } from "@/services/calendar/calendar-service";
 
 export const dynamic = "force-dynamic";
 

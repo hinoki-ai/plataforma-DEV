@@ -1,6 +1,7 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useMemo } from "react";
+import { useSyncExternalStore } from "react";
 import { format as dateFnsFormat } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -25,10 +26,34 @@ export function HydratedDate({
   className,
   relative = false,
 }: HydratedDateProps) {
-  const [formattedDate, setFormattedDate] = useState<string>(placeholder);
+  const subscribe = (callback: () => void) => {
+    if (typeof window === "undefined") {
+      return () => {};
+    }
 
-   
-  useLayoutEffect(() => {
+    if (typeof queueMicrotask === "function") {
+      queueMicrotask(callback);
+    } else {
+      setTimeout(callback, 0);
+    }
+
+    return () => {};
+  };
+
+  const getClientSnapshot = () => true;
+  const getServerSnapshot = () => false;
+
+  const isHydrated = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+
+  const formattedDate = useMemo(() => {
+    if (!isHydrated) {
+      return placeholder;
+    }
+
     try {
       const dateObj =
         typeof date === "string" || typeof date === "number"
@@ -42,24 +67,24 @@ export function HydratedDate({
         );
 
         if (diffInSeconds < 60) {
-          setFormattedDate("hace un momento");
+          return "hace un momento";
         } else if (diffInSeconds < 3600) {
-          setFormattedDate(`hace ${Math.floor(diffInSeconds / 60)} minutos`);
+          return `hace ${Math.floor(diffInSeconds / 60)} minutos`;
         } else if (diffInSeconds < 86400) {
-          setFormattedDate(`hace ${Math.floor(diffInSeconds / 3600)} horas`);
+          return `hace ${Math.floor(diffInSeconds / 3600)} horas`;
         } else if (diffInSeconds < 604800) {
-          setFormattedDate(`hace ${Math.floor(diffInSeconds / 86400)} días`);
+          return `hace ${Math.floor(diffInSeconds / 86400)} días`;
         } else {
-          setFormattedDate(dateFnsFormat(dateObj, format, { locale }));
+          return dateFnsFormat(dateObj, format, { locale });
         }
       } else {
-        setFormattedDate(dateFnsFormat(dateObj, format, { locale }));
+        return dateFnsFormat(dateObj, format, { locale });
       }
     } catch (error) {
       console.error("Date formatting error:", error);
-      setFormattedDate("Invalid date");
+      return "Invalid date";
     }
-  }, [date, format, locale, relative]);
+  }, [date, format, locale, relative, isHydrated, placeholder]);
 
   return (
     <span className={className} suppressHydrationWarning>

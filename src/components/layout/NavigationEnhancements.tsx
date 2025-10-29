@@ -16,11 +16,9 @@ import {
   Star,
   Clock,
   TrendingUp,
-  Keyboard,
   Command,
   ArrowRight,
   Filter,
-  X,
   Zap,
 } from "lucide-react";
 import { NavigationIcons } from "@/components/icons/hero-icons";
@@ -59,26 +57,51 @@ export function QuickSearch({
   isOpen,
   onClose,
 }: QuickSearchProps) {
-  const [query, setQuery] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [searchState, setSearchState] = useState({
+    query: "",
+    selectedIndex: 0,
+  });
   const { t } = useDivineParsing(["common", "navigation"]);
 
+  const setSelectedIndex = useCallback(
+    (value: number | ((prev: number) => number)) => {
+      setSearchState((prev) => ({
+        query: prev.query,
+        selectedIndex:
+          typeof value === "function"
+            ? (value as (prev: number) => number)(prev.selectedIndex)
+            : value,
+      }));
+    },
+    [],
+  );
+
+  const setQuery = useCallback((value: string) => {
+    setSearchState({ query: value, selectedIndex: 0 });
+  }, []);
+
   const filteredItems = useMemo(() => {
-    if (!query) return items.slice(0, 8);
+    if (!searchState.query) return items.slice(0, 8);
 
     return items
       .filter(
         (item) =>
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.description?.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.toLowerCase().includes(query.toLowerCase()),
+          item.title.toLowerCase().includes(searchState.query.toLowerCase()) ||
+          item.description
+            ?.toLowerCase()
+            .includes(searchState.query.toLowerCase()) ||
+          item.category.toLowerCase().includes(searchState.query.toLowerCase()),
       )
       .slice(0, 8);
-  }, [items, query]);
+  }, [items, searchState.query]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!isOpen) return;
+
+      if (filteredItems.length === 0) {
+        return;
+      }
 
       switch (e.key) {
         case "ArrowDown":
@@ -93,8 +116,8 @@ export function QuickSearch({
           break;
         case "Enter":
           e.preventDefault();
-          if (filteredItems[selectedIndex]) {
-            onNavigate(filteredItems[selectedIndex].href);
+          if (filteredItems[searchState.selectedIndex]) {
+            onNavigate(filteredItems[searchState.selectedIndex].href);
             onClose();
           }
           break;
@@ -103,17 +126,20 @@ export function QuickSearch({
           break;
       }
     },
-    [isOpen, filteredItems, selectedIndex, onNavigate, onClose],
+    [
+      isOpen,
+      filteredItems,
+      searchState.selectedIndex,
+      onNavigate,
+      onClose,
+      setSelectedIndex,
+    ],
   );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
 
   if (!isOpen) return null;
 
@@ -140,7 +166,7 @@ export function QuickSearch({
               <Search className="h-4 w-4 text-muted-foreground mr-2" />
               <Input
                 placeholder={t("search.placeholder", "common")}
-                value={query}
+                value={searchState.query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="border-0 focus-visible:ring-0 shadow-none"
                 autoFocus
@@ -169,7 +195,7 @@ export function QuickSearch({
                         transition={{ delay: index * 0.05 }}
                         className={cn(
                           "w-full flex items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors",
-                          selectedIndex === index
+                          searchState.selectedIndex === index
                             ? "bg-accent text-accent-foreground"
                             : "hover:bg-muted",
                         )}
@@ -179,7 +205,7 @@ export function QuickSearch({
                         }}
                         onMouseEnter={() => setSelectedIndex(index)}
                       >
-                        <Icon className="h-4 w-4 flex-shrink-0" />
+                        <Icon className="h-4 w-4 shrink-0" />
                         <div className="flex-1">
                           <div className="text-sm font-medium">
                             {item.title}
@@ -334,7 +360,7 @@ export function SmartRecommendations({
               className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-left transition-all duration-200 hover:bg-accent hover:text-accent-foreground group"
             >
               <div className="relative">
-                <Icon className="h-4 w-4 flex-shrink-0" />
+                <Icon className="h-4 w-4 shrink-0" />
                 {usage?.frequency === "daily" && (
                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" />
                 )}
@@ -365,146 +391,6 @@ export function SmartRecommendations({
   );
 }
 
-interface KeyboardShortcutsHelperProps {
-  shortcuts: Record<string, string>;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function KeyboardShortcutsHelper({
-  shortcuts,
-  isOpen,
-  onClose,
-}: KeyboardShortcutsHelperProps) {
-  const { t } = useDivineParsing(["common", "navigation"]);
-
-  const shortcutGroups = useMemo(() => {
-    const groups: Record<string, { shortcut: string; action: string }[]> = {};
-
-    Object.entries(shortcuts).forEach(([shortcut, action]) => {
-      if (action === "close-sidebar") return;
-
-      let category = "navigation";
-      if (action.includes("admin")) category = "navigation.category.admin";
-      else if (action.includes("profesor"))
-        category = "navigation.category.professor";
-      else if (action.includes("parent"))
-        category = "navigation.category.parent";
-      else if (action.includes("settings"))
-        category = "navigation.category.settings";
-      else if (
-        action.includes("academic") ||
-        action.includes("calendario") ||
-        action.includes("planificaciones")
-      )
-        category = "navigation.category.academic";
-
-      if (!groups[category]) groups[category] = [];
-      groups[category].push({
-        shortcut,
-        action:
-          action
-            .replace(/^\/[^/]+/, "")
-            .replace(/^\//, "")
-            .replace(/-/g, " ") || "Welcome",
-      });
-    });
-
-    return groups;
-  }, [shortcuts]);
-
-  if (!isOpen) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Card className="border shadow-2xl">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <Keyboard className="h-5 w-5" />
-                <h2 className="text-lg font-semibold">Atajos de teclado</h2>
-              </div>
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-4">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Atajos generales
-                </h3>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Búsqueda rápida</span>
-                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                      Ctrl+K
-                    </kbd>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Colapsar barra lateral</span>
-                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                      Escape
-                    </kbd>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Ayuda de atajos</span>
-                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                      ?
-                    </kbd>
-                  </div>
-                </div>
-              </div>
-
-              {Object.entries(shortcutGroups).map(([category, items]) => (
-                <div key={category} className="space-y-4">
-                  <h3 className="text-sm font-medium text-muted-foreground">
-                    {category.startsWith("navigation.category.")
-                      ? category.replace("navigation.category.", "")
-                      : category}
-                  </h3>
-                  <div className="space-y-2">
-                    {items.slice(0, 6).map(({ shortcut, action }) => (
-                      <div
-                        key={shortcut}
-                        className="flex items-center justify-between"
-                      >
-                        <span className="text-sm capitalize">{action}</span>
-                        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                          {shortcut}
-                        </kbd>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 pt-6 border-t text-center text-xs text-muted-foreground">
-              <p>{t("nav.shortcuts_available")}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </motion.div>
-  );
-}
-
 interface BreadcrumbNavigationProps {
   items: Array<{
     title: string;
@@ -524,7 +410,7 @@ export function BreadcrumbNavigation({
     >
       {items.map((item, index) => (
         <React.Fragment key={item.title}>
-          {index > 0 && <ArrowRight className="h-3 w-3 flex-shrink-0" />}
+          {index > 0 && <ArrowRight className="h-3 w-3 shrink-0" />}
           {item.href && onNavigate ? (
             <button
               onClick={() => onNavigate(item.href!)}

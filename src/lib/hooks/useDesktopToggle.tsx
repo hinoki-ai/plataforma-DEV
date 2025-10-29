@@ -24,7 +24,6 @@ export function DesktopToggleProvider({ children }: { children: ReactNode }) {
   const [isActualMobile, setIsActualMobile] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
-   
   useLayoutEffect(() => {
     // Mark as hydrated to prevent SSR mismatches
     setIsHydrated(true);

@@ -4,11 +4,7 @@
  */
 
 import { format } from "date-fns";
-import {
-  chileanCalendarEvents,
-  CalendarEvent,
-  EventCategory,
-} from "@/data/calendario/chilean-calendar-2025";
+import { CalendarEvent, EventCategory } from "@/data/comprehensive-calendar";
 
 // iCalendar format constants
 const ICAL_DATE_FORMAT = "yyyyMMdd";
@@ -79,7 +75,7 @@ function generateICalEvent(event: CalendarEvent): string {
  * Generate complete iCalendar file content
  */
 export function generateICalendar(
-  events: CalendarEvent[] = chileanCalendarEvents,
+  events: CalendarEvent[] = [],
   selectedCategories?: EventCategory[],
 ): string {
   // Filter events by selected categories if provided
@@ -131,6 +127,7 @@ export function generateICalendar(
  * Download iCalendar file
  */
 export function downloadICalendar(
+  events: CalendarEvent[] = [],
   selectedCategories?: EventCategory[],
   filename: string = "calendario-escolar-2025-plataforma-astral.ics",
 ): void {
@@ -139,10 +136,7 @@ export function downloadICalendar(
     return;
   }
 
-  const icalContent = generateICalendar(
-    chileanCalendarEvents,
-    selectedCategories,
-  );
+  const icalContent = generateICalendar(events, selectedCategories);
 
   const blob = new Blob([icalContent], {
     type: "text/calendar;charset=utf-8",
@@ -165,7 +159,7 @@ export function downloadICalendar(
  * Generate calendar statistics
  */
 export function generateCalendarStats(
-  events: CalendarEvent[] = chileanCalendarEvents,
+  events: CalendarEvent[] = [],
   selectedCategories?: EventCategory[],
 ): {
   totalEvents: number;
@@ -218,12 +212,10 @@ export function generateCalendarStats(
  * Generate human-readable calendar summary
  */
 export function generateCalendarSummary(
+  events: CalendarEvent[] = [],
   selectedCategories?: EventCategory[],
 ): string {
-  const stats = generateCalendarStats(
-    chileanCalendarEvents,
-    selectedCategories,
-  );
+  const stats = generateCalendarStats(events, selectedCategories);
 
   const categoryLabels: Record<EventCategory, string> = {
     academic: "eventos académicos",

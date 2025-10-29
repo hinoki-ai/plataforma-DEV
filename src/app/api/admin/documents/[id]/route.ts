@@ -46,8 +46,9 @@ export async function GET(request: NextRequest) {
     const documents = files
       .filter((file) => file.endsWith(".pdf"))
       .map((file) => {
+        // Support both propuesta_tecnica and other document types
         const match = file.match(
-          /^(reglamento|plan|manual|protocolo)-(\d+)\.pdf$/,
+          /^(reglamento|plan|manual|protocolo|propuesta_tecnica)-(\d+)\.pdf$/,
         );
         if (!match) return null;
 

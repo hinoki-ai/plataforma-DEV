@@ -39,6 +39,7 @@ import { AttendanceRecorder } from "@/components/libro-clases/AttendanceRecorder
 import { ClassContentForm } from "@/components/libro-clases/ClassContentForm";
 import { ObservationForm } from "@/components/libro-clases/ObservationForm";
 import { GradeEntryForm } from "@/components/libro-clases/GradeEntryForm";
+import { GradesTable } from "@/components/libro-clases/GradesTable";
 import { ParentMeetingTracker } from "@/components/libro-clases/ParentMeetingTracker";
 import { Id } from "@/convex/_generated/dataModel";
 
@@ -478,27 +479,20 @@ export default function ProfesorLibroClasesPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-12 text-muted-foreground">
-                      Vaya a la pestaña "Resumen" para seleccionar un estudiante
+                      Vaya a la pestaña &quot;Resumen&quot; para seleccionar un
+                      estudiante
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
 
               <TabsContent value="grades">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Registro de Calificaciones</CardTitle>
-                    <CardDescription>
-                      Seleccione un estudiante del resumen para registrar una
-                      nota
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-12 text-muted-foreground">
-                      Vaya a la pestaña "Resumen" para seleccionar un estudiante
-                    </div>
-                  </CardContent>
-                </Card>
+                {selectedCourseId && currentUser?._id && (
+                  <GradesTable
+                    courseId={selectedCourseId}
+                    teacherId={currentUser._id}
+                  />
+                )}
               </TabsContent>
 
               <TabsContent value="meetings">

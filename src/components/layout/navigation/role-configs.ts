@@ -224,6 +224,12 @@ export const PARENT_NAVIGATION = [
         shortcut: "Alt+E",
       },
       {
+        title: "Libro de Clases",
+        href: "/parent/libro-clases",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+L",
+      },
+      {
         title: "Calendario Escolar",
         href: "/parent/calendario-escolar",
         icon: NavigationIcons.Calendar,

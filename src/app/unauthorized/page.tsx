@@ -1,16 +1,32 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useLanguage } from "@/components/language/LanguageContext";
 
 export default function UnauthorizedPage() {
-  const [isMounted, setIsMounted] = useState(false);
-  const { t } = useLanguage();
+  const subscribe = (callback: () => void) => {
+    if (typeof window === "undefined") {
+      return () => {};
+    }
 
-   
-  useLayoutEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (typeof queueMicrotask === "function") {
+      queueMicrotask(callback);
+    } else {
+      setTimeout(callback, 0);
+    }
+
+    return () => {};
+  };
+
+  const getClientSnapshot = () => true;
+  const getServerSnapshot = () => false;
+
+  const isMounted = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+  const { t } = useLanguage();
 
   // Only throw error after component has mounted (client-side)
   if (isMounted) {

@@ -1,14 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
-// Hook for client components to detect hydration
+function subscribe(callback: () => void) {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  const notify = () => callback();
+
+  if (typeof queueMicrotask === "function") {
+    queueMicrotask(notify);
+  } else {
+    setTimeout(notify, 0);
+  }
+
+  return () => {};
+}
+
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+// Hook for client components to detect hydration without triggering setState in effects
 export function useHydrationSafe() {
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  return isHydrated;
+  return useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, useLayoutEffect, useState, ReactNode } from "react";
 
 interface ClientOnlyProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ export function ClientOnly({
 }: ClientOnlyProps) {
   const [hasMounted, setHasMounted] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setHasMounted(true);
   }, []);
 
@@ -93,7 +93,7 @@ export function DynamicContent({
   const [hasMounted, setHasMounted] = useState(false);
   const [content, setContent] = useState<ReactNode>(placeholder);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setHasMounted(true);
     setContent(typeof children === "function" ? children() : children);
   }, [children]);

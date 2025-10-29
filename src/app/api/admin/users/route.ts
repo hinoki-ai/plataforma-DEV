@@ -5,7 +5,6 @@ import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { z } from "zod";
-import { hashPassword } from "@/lib/crypto";
 import {
   checkRateLimit,
   getRateLimitHeaders,
@@ -17,31 +16,15 @@ import {
   handleApiError,
   ApiErrorResponse,
 } from "@/lib/api-error";
-import bcryptjs from "bcryptjs";
+import {
+  adminUserCreationSchema,
+  hashUserPassword,
+  logUserCreation,
+  UserCreationError,
+  type AdminUserCreationData,
+} from "@/lib/user-creation";
 
 export const runtime = "nodejs";
-
-// Password strength validation
-const passwordSchema = z
-  .string()
-  .min(8, "La contraseña debe tener al menos 8 caracteres")
-  .regex(/[a-z]/, "La contraseña debe contener al menos una letra minúscula")
-  .regex(/[A-Z]/, "La contraseña debe contener al menos una letra mayúscula")
-  .regex(/[0-9]/, "La contraseña debe contener al menos un número")
-  .regex(
-    /[^a-zA-Z0-9]/,
-    "La contraseña debe contener al menos un carácter especial",
-  );
-
-// Validation schemas
-const createUserSchema = z.object({
-  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Ingrese un email válido"),
-  password: passwordSchema,
-  role: z.enum(["ADMIN", "PROFESOR", "PARENT"]),
-  isActive: z.boolean().optional().default(true),
-  institutionId: z.string().optional(),
-});
 
 // const updateUserSchema = z.object({
 //   name: z.string().min(2).optional(),
@@ -157,7 +140,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     // Sanitize input data before validation
     const sanitizedBody = sanitizeJsonInput(body);
-    const validatedData = createUserSchema.parse(sanitizedBody);
+    const validatedData = adminUserCreationSchema.parse(sanitizedBody);
 
     // Check if user has permission to create the target role
     if (!canCreateUser(session.user.role, validatedData.role)) {
@@ -220,8 +203,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Hash the provided password
-    const hashedPassword = await bcryptjs.hash(validatedData.password, 10);
+    // Hash the provided password using standardized function
+    const password = validatedData.password;
+    const hashedPassword = password
+      ? await hashUserPassword(password)
+      : undefined;
 
     const userId = await client.mutation(api.users.createUser, {
       name: validatedData.name,
@@ -231,6 +217,18 @@ export async function POST(request: NextRequest) {
       institutionId: validatedData.institutionId as any, // Type assertion for Convex ID
       createdByAdmin: session.user.id, // Track which admin created this user
     });
+
+    // Log successful user creation
+    logUserCreation(
+      "adminUserCreation",
+      {
+        email: validatedData.email,
+        role: validatedData.role,
+        name: validatedData.name,
+      },
+      session.user.id,
+      true,
+    );
 
     const user = await client.query(api.users.getUserById, { userId: userId });
 

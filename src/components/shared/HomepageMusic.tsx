@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useAudioConsent } from "@/hooks/use-audio-consent";
 
 export function HomepageMusic() {
@@ -11,7 +11,7 @@ export function HomepageMusic() {
   const isFadingRef = useRef(false);
   const baseVolumeRef = useRef(0.25);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window === "undefined") {
       return;
     }

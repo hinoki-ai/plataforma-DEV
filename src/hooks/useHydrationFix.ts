@@ -1,20 +1,37 @@
 "use client";
 
-import { useLayoutEffect, useState, useEffect } from "react";
+import {
+  useSyncExternalStore,
+  useMemo,
+  useState,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 
 /**
  * Hook to detect and handle hydration state
  * Returns true when the component has been hydrated on the client
  */
 export function useHydrationFix() {
-  const [isHydrated, setIsHydrated] = useState(false);
+  const subscribe = (callback: () => void) => {
+    if (typeof window === "undefined") {
+      return () => {};
+    }
 
-   
-  useLayoutEffect(() => {
-    setIsHydrated(true);
-  }, []);
+    // Trigger immediately on client
+    if (typeof queueMicrotask === "function") {
+      queueMicrotask(callback);
+    } else {
+      setTimeout(callback, 0);
+    }
 
-  return isHydrated;
+    return () => {};
+  };
+
+  const getClientSnapshot = () => true;
+  const getServerSnapshot = () => false;
+
+  return useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
 }
 
 /**
@@ -25,18 +42,17 @@ export function useClientOnly<T>(
   clientValue: T | (() => T),
   serverValue: T,
 ): T {
-  const [value, setValue] = useState<T>(serverValue);
+  const isHydrated = useHydrationFix();
 
-   
-  useLayoutEffect(() => {
-    setValue(
-      typeof clientValue === "function"
-        ? (clientValue as () => T)()
-        : clientValue,
-    );
-  }, [clientValue]);
+  return useMemo(() => {
+    if (!isHydrated) {
+      return serverValue;
+    }
 
-  return value;
+    return typeof clientValue === "function"
+      ? (clientValue as () => T)()
+      : clientValue;
+  }, [isHydrated, clientValue, serverValue]);
 }
 
 /**
@@ -47,19 +63,20 @@ export function useBrowserAPI<T>(
   getter: () => T,
   defaultValue: T | null = null,
 ): T | null {
-  const [value, setValue] = useState<T | null>(defaultValue);
+  const isHydrated = useHydrationFix();
 
-   
-  useLayoutEffect(() => {
+  return useMemo(() => {
+    if (!isHydrated) {
+      return defaultValue;
+    }
+
     try {
-      setValue(getter());
+      return getter();
     } catch (error) {
       console.error("Browser API access error:", error);
-      setValue(defaultValue);
+      return defaultValue;
     }
-  }, []);
-
-  return value;
+  }, [isHydrated, getter, defaultValue]);
 }
 
 /**
@@ -71,7 +88,6 @@ export function useDynamicImport<T>(
 ): T | null {
   const [module, setModule] = useState<T | null>(fallback);
 
-   
   useLayoutEffect(() => {
     importFn()
       .then(setModule)
@@ -92,18 +108,13 @@ export function useConditionalRender(
   waitForHydration: boolean = true,
 ): boolean {
   const isHydrated = useHydrationFix();
-  const [shouldRender, setShouldRender] = useState(false);
 
-   
-  useLayoutEffect(() => {
+  return useMemo(() => {
     if (!waitForHydration || isHydrated) {
-      setShouldRender(
-        typeof condition === "function" ? condition() : condition,
-      );
+      return typeof condition === "function" ? condition() : condition;
     }
+    return false;
   }, [condition, isHydrated, waitForHydration]);
-
-  return shouldRender;
 }
 
 /**
@@ -111,18 +122,19 @@ export function useConditionalRender(
  * Useful for components that need to wait for multiple hydration cycles
  */
 export function useDelayedHydration(delayMs: number = 100): boolean {
-  const [isReady, setIsReady] = useState(false);
+  const subscribe = (callback: () => void) => {
+    if (typeof window === "undefined") {
+      return () => {};
+    }
 
-   
-  useLayoutEffect(() => {
-    const timer = setTimeout(() => {
-      setIsReady(true);
-    }, delayMs);
-
+    const timer = setTimeout(callback, delayMs);
     return () => clearTimeout(timer);
-  }, [delayMs]);
+  };
 
-  return isReady;
+  const getClientSnapshot = () => true;
+  const getServerSnapshot = () => false;
+
+  return useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
 }
 
 /**
@@ -135,7 +147,6 @@ export function useHydrationError(onError?: (error: Error) => void): {
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-   
   useLayoutEffect(() => {
     const handleError = (event: ErrorEvent) => {
       const errorMessage = event.error?.message || event.message || "";
@@ -163,19 +174,15 @@ export function useHydrationError(onError?: (error: Error) => void): {
  * Hook to sync server and client state
  */
 export function useStateSync<T>(serverValue: T, clientValue: T | (() => T)): T {
-  const [value, setValue] = useState(serverValue);
   const isHydrated = useHydrationFix();
 
-   
-  useLayoutEffect(() => {
-    if (isHydrated) {
-      setValue(
-        typeof clientValue === "function"
-          ? (clientValue as () => T)()
-          : clientValue,
-      );
+  return useMemo(() => {
+    if (!isHydrated) {
+      return serverValue;
     }
-  }, [isHydrated, clientValue]);
 
-  return value;
+    return typeof clientValue === "function"
+      ? (clientValue as () => T)()
+      : clientValue;
+  }, [isHydrated, serverValue, clientValue]);
 }

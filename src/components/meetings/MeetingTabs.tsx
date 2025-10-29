@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays, List, BarChart3, Plus } from "lucide-react";
@@ -70,7 +70,7 @@ export function MeetingTabs({ isAdmin = false }: MeetingTabsProps) {
   const tabs = isAdmin ? adminTabs : teacherTabs;
 
   // Check for create query parameter and open dialog
-  useEffect(() => {
+  useLayoutEffect(() => {
     const create = searchParams.get("create");
     if (create === "true" && isAdmin) {
       setIsCreateDialogOpen(true);

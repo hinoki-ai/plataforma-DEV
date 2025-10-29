@@ -82,103 +82,51 @@ function VotacionesContent() {
       setLoading(true);
       setError(null);
 
-      // For demo purposes, using mock data since we're working with the existing system
-      const mockSessions: VotingSession[] = [
-        {
-          id: "1",
-          title: "Presupuesto Escolar 2025",
-          description:
-            "¿Cómo deberían asignarse los fondos para el próximo año escolar?",
-          category: "FINANCIAL",
-          endDate: "2024-02-15T23:59:59Z",
-          status: "active",
-          isPublic: true,
-          allowMultipleVotes: false,
-          totalVotes: 45,
-          totalOptions: 3,
-          hasVoted: false,
-          options: [
-            {
-              id: "opt1",
-              text: "Más inversión en tecnología educativa",
-              votes: 18,
-            },
-            { id: "opt2", text: "Mejorar instalaciones deportivas", votes: 15 },
-            { id: "opt3", text: "Incrementar programas artísticos", votes: 12 },
-          ],
-          creator: { name: "Dirección Escolar" },
-        },
-        {
-          id: "2",
-          title: "Horario de Clases",
-          description: "¿Qué horario preferirían para las clases de sus hijos?",
-          category: "ACADEMIC",
-          endDate: "2024-01-30T23:59:59Z",
-          status: "active",
-          isPublic: true,
-          allowMultipleVotes: true,
-          totalVotes: 67,
-          totalOptions: 4,
-          hasVoted: true,
-          userVotes: ["opt4", "opt6"],
-          options: [
-            { id: "opt4", text: "Horario continuo (8:00-14:00)", votes: 28 },
-            {
-              id: "opt5",
-              text: "Horario partido (8:00-12:00, 14:00-16:00)",
-              votes: 22,
-            },
-            { id: "opt6", text: "Horario flexible", votes: 17 },
-            { id: "opt7", text: "Mantener horario actual", votes: 15 },
-          ],
-          creator: { name: "Consejo de Padres" },
-        },
-        {
-          id: "3",
-          title: "Uniformes Escolares",
-          description: "¿Qué tipo de uniforme prefieren para el próximo año?",
-          category: "GENERAL",
-          endDate: "2024-01-20T23:59:59Z",
-          status: "closed",
-          isPublic: true,
-          allowMultipleVotes: false,
-          totalVotes: 89,
-          totalOptions: 3,
-          hasVoted: true,
-          userVotes: ["opt8"],
-          options: [
-            {
-              id: "opt8",
-              text: "Uniforme tradicional",
-              votes: 45,
-              percentage: 51,
-            },
-            { id: "opt9", text: "Uniforme moderno", votes: 32, percentage: 36 },
-            {
-              id: "opt10",
-              text: "Sin uniforme obligatorio",
-              votes: 12,
-              percentage: 13,
-            },
-          ],
-          creator: { name: "Centro de Padres" },
-        },
-      ];
+      const response = await fetch("/api/parent/votes");
+      if (!response.ok) {
+        throw new Error("Failed to fetch voting sessions");
+      }
 
-      // Calculate percentages for closed votes
-      mockSessions.forEach((session) => {
-        if (session.status === "closed" && session.totalVotes > 0) {
-          session.options.forEach((option) => {
-            option.percentage = Math.round(
-              (option.votes / session.totalVotes) * 100,
-            );
-          });
-        }
+      const result = await response.json();
+      const votes: any[] = result.data || [];
+
+      // Transform API data to match VotingSession interface
+      const sessions: VotingSession[] = votes.map((vote) => {
+        // Calculate percentages for options
+        const optionsWithPercentages = vote.options.map((opt: any) => {
+          const percentage =
+            vote.totalVotes > 0
+              ? Math.round((opt.votes / vote.totalVotes) * 100)
+              : 0;
+          return {
+            ...opt,
+            percentage: percentage,
+          };
+        });
+
+        return {
+          id: vote.id,
+          title: vote.title,
+          description: vote.description || "",
+          category: vote.category || "GENERAL",
+          endDate: vote.endDate,
+          status: vote.status,
+          isPublic: vote.isPublic,
+          allowMultipleVotes: vote.allowMultipleVotes || false,
+          totalVotes: vote.totalVotes || 0,
+          totalOptions: vote.options?.length || 0,
+          hasVoted: vote.hasVoted || false,
+          userVotes: vote.userVote ? [vote.userVote] : [],
+          options: optionsWithPercentages,
+          creator: {
+            name: "Administración Escolar",
+          },
+        };
       });
 
-      setVotingSessions(mockSessions);
-      if (mockSessions.length > 0) {
-        setSelectedSession(mockSessions[0]);
+      setVotingSessions(sessions);
+      if (sessions.length > 0) {
+        setSelectedSession(sessions[0]);
       }
     } catch (err) {
       console.error("Error fetching voting sessions:", err);
@@ -194,39 +142,36 @@ function VotacionesContent() {
       return;
     }
 
+    // If multiple votes allowed and multiple selected, cast all votes
+    // Otherwise, cast single vote for the first selected option
+    const optionToVoteFor = selectedOptions[0];
+
     setSubmitting(true);
     try {
-      // In a real implementation, this would call an API
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
-      // Update local state
-      const updatedSessions = votingSessions.map((session) => {
-        if (session.id === selectedSession.id) {
-          return {
-            ...session,
-            hasVoted: true,
-            userVotes: selectedOptions,
-            totalVotes: session.totalVotes + 1,
-            options: session.options.map((option) => ({
-              ...option,
-              votes: selectedOptions.includes(option.id)
-                ? option.votes + 1
-                : option.votes,
-            })),
-          };
-        }
-        return session;
+      const response = await fetch("/api/parent/votes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          voteId: selectedSession.id,
+          optionId: optionToVoteFor,
+        }),
       });
 
-      setVotingSessions(updatedSessions);
-      setSelectedSession(
-        updatedSessions.find((s) => s.id === selectedSession.id) || null,
-      );
-      setSelectedOptions([]);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Error al registrar el voto");
+      }
+
       toast.success("¡Voto registrado exitosamente!");
-    } catch (err) {
+
+      // Refresh voting sessions to get updated data
+      await fetchVotingSessions();
+      setSelectedOptions([]);
+    } catch (err: any) {
       console.error("Error submitting vote:", err);
-      toast.error("Error al registrar el voto");
+      toast.error(err.message || "Error al registrar el voto");
     } finally {
       setSubmitting(false);
     }

@@ -28,7 +28,6 @@ import {
   SHARED_NAVIGATION_ITEMS,
   STANDARD_SECTION_ORDER,
   ROLE_SPECIFIC_SECTIONS,
-  getKeyboardShortcuts,
   getNavigationGroupsForRole,
 } from "./navigation";
 
@@ -111,7 +110,7 @@ const renderNavigationItem = (
         aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
         onClick={handleClick}
       >
-        <item.icon className="h-4 w-4 flex-shrink-0" />
+        <item.icon className="h-4 w-4 shrink-0" />
         <span className="flex-1">{item.title}</span>
         {(item as any).shortcut && (
           <span className="ml-auto text-xs text-muted-foreground hidden lg:block">
@@ -137,7 +136,7 @@ const renderNavigationItem = (
       aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
       onClick={handleClick}
     >
-      <item.icon className="h-4 w-4 flex-shrink-0" />
+      <item.icon className="h-4 w-4 shrink-0" />
       <span className="flex-1">{item.title}</span>
       {(item as any).badge && (
         <span className="ml-auto bg-accent text-accent-foreground text-xs px-1.5 py-0.5 rounded">
@@ -176,8 +175,8 @@ export function Sidebar({
 
   // ⚡ Performance: Memoize keyboard shortcuts to prevent recreation
   const keyboardShortcuts = React.useMemo(
-    () => getKeyboardShortcuts(session?.user?.role, pathname),
-    [session?.user?.role, pathname],
+    () => ({}), // Empty shortcuts for basic sidebar
+    [],
   );
 
   // ⚡ Performance: Memoize logout handler
@@ -420,7 +419,7 @@ export function Sidebar({
                                 handleLogout,
                               )}
                             >
-                              <item.icon className="h-4 w-4 flex-shrink-0" />
+                              <item.icon className="h-4 w-4 shrink-0" />
                             </button>
                           ) : (
                             <Link
@@ -441,7 +440,7 @@ export function Sidebar({
                                 handleLogout,
                               )}
                             >
-                              <item.icon className="h-4 w-4 flex-shrink-0" />
+                              <item.icon className="h-4 w-4 shrink-0" />
                             </Link>
                           )}
                         </TooltipTrigger>

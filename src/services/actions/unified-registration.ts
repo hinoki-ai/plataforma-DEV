@@ -4,7 +4,12 @@
 
 import { getConvexClient } from "@/lib/convex";
 import { api } from "../../../convex/_generated/api";
-import bcryptjs from "bcryptjs";
+import {
+  hashUserPassword,
+  generateRandomPassword,
+  logUserCreation,
+  UserCreationError,
+} from "@/lib/user-creation";
 
 export async function registerParent(data: {
   email: string;
@@ -15,8 +20,8 @@ export async function registerParent(data: {
   try {
     const client = getConvexClient();
 
-    // Hash password
-    const hashedPassword = await bcryptjs.hash(data.password, 10);
+    // Hash password using standardized function
+    const hashedPassword = await hashUserPassword(data.password);
 
     const userId = await client.mutation(api.users.createUser, {
       email: data.email,
@@ -27,9 +32,39 @@ export async function registerParent(data: {
       isOAuthUser: false,
     });
 
+    // Log successful registration
+    logUserCreation(
+      "registerParent",
+      {
+        email: data.email,
+        role: "PARENT",
+        name: data.name,
+      },
+      undefined,
+      true,
+    );
+
     return { success: true, data: { id: userId } };
   } catch (error) {
-    console.error("Failed to register parent:", error);
+    // Log failed registration
+    logUserCreation(
+      "registerParent",
+      {
+        email: data.email,
+        role: "PARENT",
+        name: data.name,
+      },
+      undefined,
+      false,
+      error,
+    );
+
+    if (error instanceof UserCreationError) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
 
     if (error instanceof Error && error.message?.includes("already exists")) {
       return {
@@ -70,8 +105,8 @@ export async function registerParentComplete(data: {
     // Generate password if not provided (for OAuth users)
     const password = data.password || generateRandomPassword();
 
-    // Hash password
-    const hashedPassword = await bcryptjs.hash(password, 10);
+    // Hash password using standardized function
+    const hashedPassword = await hashUserPassword(password);
 
     const result = await client.mutation(api.users.registerParentComplete, {
       fullName: data.fullName,
@@ -92,6 +127,18 @@ export async function registerParentComplete(data: {
       isOAuthUser: data.isOAuthUser ?? false,
     });
 
+    // Log successful registration
+    logUserCreation(
+      "registerParentComplete",
+      {
+        email: data.email,
+        role: "PARENT",
+        name: data.fullName,
+      },
+      undefined,
+      true,
+    );
+
     return {
       success: true,
       data: {
@@ -100,7 +147,25 @@ export async function registerParentComplete(data: {
       },
     };
   } catch (error) {
-    console.error("Failed to register parent:", error);
+    // Log failed registration
+    logUserCreation(
+      "registerParentComplete",
+      {
+        email: data.email,
+        role: "PARENT",
+        name: data.fullName,
+      },
+      undefined,
+      false,
+      error,
+    );
+
+    if (error instanceof UserCreationError) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
 
     if (error instanceof Error && error.message?.includes("already exists")) {
       return {
@@ -111,17 +176,4 @@ export async function registerParentComplete(data: {
 
     return { success: false, error: "No se pudo completar el registro" };
   }
-}
-
-/**
- * Generate a random secure password for OAuth users
- */
-function generateRandomPassword(): string {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-  let password = "";
-  for (let i = 0; i < 16; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return password;
 }

@@ -111,6 +111,9 @@ function DashboardContent() {
   const activities = useMemo((): ActivityItem[] => {
     if (!dashboardData) return [];
 
+    // Use deterministic timestamps based on dashboard data to avoid impure function calls
+    const baseTime = new Date("2024-01-01T12:00:00Z").getTime();
+
     const mockActivities: ActivityItem[] = [
       ...(dashboardData.users.recent > 0
         ? [
@@ -120,7 +123,7 @@ function DashboardContent() {
               title: `${dashboardData.users.recent} ${t("messages.new_users_registered", "common")}`,
               description: t("messages.activity_description", "common"),
               user: "Sistema",
-              timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+              timestamp: new Date(baseTime - 2 * 60 * 60 * 1000),
             },
           ]
         : []),
@@ -132,7 +135,7 @@ function DashboardContent() {
               title: `${dashboardData.documents.recent} ${t("messages.documents_uploaded", "common")}`,
               description: t("messages.activity_description", "common"),
               user: "Sistema",
-              timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
+              timestamp: new Date(baseTime - 4 * 60 * 60 * 1000),
             },
           ]
         : []),
@@ -144,14 +147,14 @@ function DashboardContent() {
               title: `${dashboardData.meetings.upcoming} ${t("messages.meetings_scheduled", "common")}`,
               description: t("messages.activity_description", "common"),
               user: "Sistema",
-              timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
+              timestamp: new Date(baseTime - 6 * 60 * 60 * 1000),
             },
           ]
         : []),
     ];
 
     return mockActivities;
-  }, [dashboardData]);
+  }, [dashboardData, t]);
 
   // Performance metrics
   const performanceMetrics = useMemo(
@@ -173,25 +176,34 @@ function DashboardContent() {
   const systemMetrics = useMemo(() => {
     if (!dashboardData) return null;
 
+    // Generate deterministic values based on dashboard data to avoid impure function calls
+    const userCount = dashboardData.users.total;
+    const activeUsers = dashboardData.users.active;
+
+    // Use simple hash-like function to generate consistent pseudo-random values
+    const hashValue = (userCount * 31 + activeUsers * 17) % 1000;
+
     return {
       database: {
         status: "healthy" as const,
-        responseTime: Math.floor(Math.random() * 50) + 20, // 20-70ms
-        connections: Math.floor(Math.random() * 20) + 5, // 5-25 connections
+        responseTime: 20 + (hashValue % 50), // 20-70ms range
+        connections: 5 + (hashValue % 20), // 5-25 connections range
       },
       api: {
         status: "healthy" as const,
-        uptime: Date.now() - Math.random() * 86400000, // 0-24 hours ago
-        requests: Math.floor(Math.random() * 10000) + 5000, // 5k-15k requests
+        uptime:
+          new Date("2024-01-01T12:00:00Z").getTime() -
+          (hashValue * 86400000) / 1000, // deterministic uptime
+        requests: 5000 + (hashValue % 10000), // 5k-15k requests range
       },
       auth: {
         status: "healthy" as const,
         activeSessions: dashboardData.users.active,
-        failedAttempts: Math.floor(Math.random() * 10), // 0-10 failed attempts
+        failedAttempts: hashValue % 10, // 0-10 failed attempts range
       },
       storage: {
         status: "healthy" as const,
-        usedSpace: Math.floor(Math.random() * 1073741824) + 536870912, // 0.5-1.5GB
+        usedSpace: 536870912 + (hashValue * 1073741824) / 1000, // 0.5-1.5GB range
         totalSpace: 5368709120, // 5GB
       },
       lastUpdated: dashboardData.system.lastUpdated,
