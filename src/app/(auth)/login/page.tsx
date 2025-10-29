@@ -36,13 +36,13 @@ function LoginForm() {
                 "text-center text-2xl font-semibold leading-tight text-slate-900 dark:text-slate-50",
               headerSubtitle: "text-center text-slate-600 dark:text-slate-200",
               form: "w-full space-y-4 text-left",
-              formFieldLabel:
-                "text-slate-700 dark:text-slate-200 font-medium",
+              formFieldLabel: "text-slate-700 dark:text-slate-200 font-medium",
               formFieldInput:
                 "rounded-xl border border-slate-300/70 dark:border-slate-700/60 bg-white/85 dark:bg-slate-900/55 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 shadow-sm transition focus:border-primary/70 focus:ring-2 focus:ring-primary/40",
               formFieldInputShowPasswordButton:
                 "text-slate-500 hover:text-primary",
-              footerActionText: "text-center text-slate-600 dark:text-slate-200",
+              footerActionText:
+                "text-center text-slate-600 dark:text-slate-200",
               footerActionLink:
                 "text-primary font-semibold hover:text-primary/80",
               formButtonPrimary:
