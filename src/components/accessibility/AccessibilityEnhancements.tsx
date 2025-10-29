@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -196,11 +197,24 @@ interface AccessibilityPanelProps {
 export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
   const { settings, saveSettings, resetSettings } = useAccessibilitySettings();
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   const contrastOptions = [
-    { value: "normal", label: "Normal", description: "Contraste estándar" },
-    { value: "high", label: "Alto", description: "Contraste mejorado" },
-    { value: "higher", label: "Muy Alto", description: "Máximo contraste" },
+    {
+      value: "normal",
+      label: t("accessibility.normal", "common"),
+      description: t("accessibility.standard_contrast", "common"),
+    },
+    {
+      value: "high",
+      label: t("accessibility.high", "common"),
+      description: t("accessibility.enhanced_contrast", "common"),
+    },
+    {
+      value: "higher",
+      label: t("accessibility.higher", "common"),
+      description: t("accessibility.maximum_contrast", "common"),
+    },
   ] as const;
 
   const colorBlindOptions = [

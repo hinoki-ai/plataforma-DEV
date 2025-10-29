@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { useLanguage } from "@/components/language/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -134,6 +135,7 @@ export function GradeEntryForm({
   onCancel,
 }: GradeEntryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useLanguage();
 
   // Get course details to show available subjects
   const course = useQuery(api.courses.getCourseById, { courseId });
@@ -197,11 +199,11 @@ export function GradeEntryForm({
         teacherId,
       });
 
-      toast.success("Calificación registrada exitosamente");
+      toast.success(t("grade.registered_success", "common"));
       form.reset();
       onSuccess?.();
     } catch (error: any) {
-      toast.error(error.message || "Error al registrar calificación");
+      toast.error(error.message || t("grade.registration_error", "common"));
     } finally {
       setIsSubmitting(false);
     }
@@ -515,7 +517,8 @@ export function GradeEntryForm({
                       : "bg-red-500",
               )}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              style={{ width: `${gradePercentage}%` }}
+              /* stylelint-disable */
+              style={{ width: `${gradePercentage}%` }} // Dynamic width for progress bar
             />
           </div>
         </div>

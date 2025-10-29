@@ -92,6 +92,14 @@ function RootLayoutInner({
           id="notifications"
           role="log"
         />
+        {/* Language change announcements for screen readers */}
+        <div
+          aria-live="polite"
+          aria-atomic="true"
+          className="sr-only"
+          id="language-announcement"
+          role="status"
+        />
 
         <ErrorBoundary>
           <Providers>

@@ -65,6 +65,9 @@ import dashboardEN from "../../locales/en/dashboard.json";
 import languageES from "../../locales/es/language.json";
 import languageEN from "../../locales/en/language.json";
 
+// Import validation utilities for development
+import { logValidationResults } from "../../lib/translation-validation";
+
 // Direct translation map for reliable synchronous access
 const translations = {
   es: {
@@ -185,22 +188,35 @@ const getNamespaceForRoute = (pathname: string): string[] => {
   return [...baseNamespaces, "navigation"];
 };
 
-// Browser language detection - SSR safe
+// Browser language detection - SSR safe with proper hydration handling
 const detectBrowserLanguage = (): Language => {
   // Always return default on server to prevent hydration mismatch
   if (typeof window === "undefined") return "es";
+
   try {
+    // Check if navigator is available and has language property
+    if (!navigator || !navigator.language) return "es";
+
     const browserLang = navigator.language.toLowerCase();
     const supportedLanguages = ["es", "en"] as const;
+
+    // Exact match first
     if ((supportedLanguages as readonly string[]).includes(browserLang)) {
       return browserLang as Language;
     }
+
+    // Language code without region
     const langCode = browserLang.split("-")[0];
     if ((supportedLanguages as readonly string[]).includes(langCode)) {
       return langCode as Language;
     }
+
     return "es";
-  } catch {
+  } catch (error) {
+    // Log in development only
+    if (process.env.NODE_ENV === "development") {
+      console.warn("🕊️ Oracle: Error detecting browser language:", error);
+    }
     return "es";
   }
 };
@@ -246,17 +262,17 @@ const DivineParsingOracleProvider: React.FC<{
 }> = ({ children, initialNamespaces = ["common"], initialLanguage }) => {
   // Detect initial language synchronously to prevent hydration mismatch
   const getInitialLanguage = (): Language => {
-    // If initialLanguage is provided, use it
+    // If initialLanguage is provided, use it (highest priority)
     if (initialLanguage) return initialLanguage;
 
-    // On server, always use default
+    // On server, always use default to prevent hydration mismatch
     if (typeof window === "undefined") return "es";
 
-    // Check stored preference first
+    // On client, check stored preference first (user choice)
     const stored = getStoredLanguage();
     if (stored) return stored;
 
-    // Then check browser language
+    // Then check browser language (system preference)
     return detectBrowserLanguage();
   };
 
@@ -305,6 +321,11 @@ const DivineParsingOracleProvider: React.FC<{
         setError(null);
         setIsLoading(true);
 
+        // Run translation validation in development
+        if (process.env.NODE_ENV === "development") {
+          logValidationResults();
+        }
+
         // Check if we need to update stored language preference
         const currentStored = getStoredLanguage();
         if (currentStored !== language) {
@@ -337,6 +358,56 @@ const DivineParsingOracleProvider: React.FC<{
       initializeOracle();
     }
   }, [initialNamespaces, language, initialLang]);
+
+  // Post-hydration language synchronization
+  useEffect(() => {
+    // Only run on client after hydration
+    if (typeof window === "undefined") return;
+
+    const synchronizeLanguage = async () => {
+      try {
+        // Check if client-side detection differs from server-side initial value
+        const stored = getStoredLanguage();
+        const browser = detectBrowserLanguage();
+        const clientPreferredLang = stored || browser;
+
+        // If client preference differs from current language, update it
+        if (clientPreferredLang !== language) {
+          if (process.env.NODE_ENV === "development") {
+            console.log("🕊️ Oracle: Synchronizing language post-hydration:", {
+              current: language,
+              preferred: clientPreferredLang,
+              stored,
+              browser,
+            });
+          }
+
+          // Update language state without triggering loading
+          setLanguageState(clientPreferredLang);
+
+          // Store the preference
+          setStoredLanguage(clientPreferredLang);
+
+          // Reload translations if needed
+          if (loadedNamespaces.length > 0) {
+            const newTranslations = await invokeOracles(
+              clientPreferredLang,
+              loadedNamespaces,
+            );
+            setLoadedTranslations(newTranslations);
+          }
+        }
+      } catch (err) {
+        if (process.env.NODE_ENV === "development") {
+          console.warn("🕊️ Oracle: Post-hydration sync failed:", err);
+        }
+      }
+    };
+
+    // Small delay to ensure hydration is complete
+    const timeoutId = setTimeout(synchronizeLanguage, 100);
+    return () => clearTimeout(timeoutId);
+  }, []); // Empty dependency array - run once after mount
 
   // Language change handler
   const setLanguage = useCallback(

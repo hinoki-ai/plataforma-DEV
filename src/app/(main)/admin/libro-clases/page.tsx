@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -259,19 +259,12 @@ export default function AdminLibroClasesPage() {
 }
 
 function CourseCard({ course }: { course: any }) {
-  const [courseDetails, setCourseDetails] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const courseData = useQuery(
     api.courses.getCourseById,
     isDialogOpen ? { courseId: course._id } : "skip",
   );
-
-  useEffect(() => {
-    if (courseData) {
-      setCourseDetails(courseData);
-    }
-  }, [courseData]);
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -305,7 +298,7 @@ function CourseCard({ course }: { course: any }) {
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Estudiantes:</span>
             <span className="font-medium">
-              {courseDetails?.students?.length || 0}
+              {courseData?.students?.length || 0}
               {course.maxStudents && ` / ${course.maxStudents}`}
             </span>
           </div>
@@ -335,9 +328,7 @@ function CourseCard({ course }: { course: any }) {
               Información completa del curso y estudiantes
             </DialogDescription>
           </DialogHeader>
-          {courseDetails && (
-            <CourseManagementDashboard courses={[courseDetails]} />
-          )}
+          {courseData && <CourseManagementDashboard courses={[courseData]} />}
         </DialogContent>
       </Dialog>
     </Card>

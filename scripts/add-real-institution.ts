@@ -16,8 +16,10 @@ const client = new ConvexHttpClient(CONVEX_URL);
 
 const realInstitution = {
   name: "Escuela Especial de Lenguaje Manitos Pintadas",
-  mission: "Queremos que cada niño y niña crezca feliz, aprenda y se desarrolle en un ambiente de respeto y cariño. Buscamos que todos puedan aprender, convivir y prepararse para la vida, valorando siempre la alegría y la sencillez.",
-  vision: "Soñamos con ser una escuelita reconocida por su trabajo en equipo, donde cada estudiante es valorado y apoyado. Queremos que nuestros estudiantes sean personas responsables, creativas y alegres, preparadas para aportar a su comunidad y al mundo.",
+  mission:
+    "Queremos que cada niño y niña crezca feliz, aprenda y se desarrolle en un ambiente de respeto y cariño. Buscamos que todos puedan aprender, convivir y prepararse para la vida, valorando siempre la alegría y la sencillez.",
+  vision:
+    "Soñamos con ser una escuelita reconocida por su trabajo en equipo, donde cada estudiante es valorado y apoyado. Queremos que nuestros estudiantes sean personas responsables, creativas y alegres, preparadas para aportar a su comunidad y al mundo.",
   address: "Anibal Pinto Nº 160, Los Sauces, Chile",
   phone: "+56 45 278 3486",
   email: "contacto@manitospintadas.cl",
@@ -26,12 +28,19 @@ const realInstitution = {
 };
 
 async function addRealInstitution() {
-  console.log("🏫 Adding real institution: Escuela Especial de Lenguaje Manitos Pintadas");
+  console.log(
+    "🏫 Adding real institution: Escuela Especial de Lenguaje Manitos Pintadas",
+  );
 
   try {
     // Check if institution already exists
-    const existingInstitutions = await client.query(api.institutionInfo.getAllInstitutions, {});
-    const existingNames = existingInstitutions.map(inst => inst.name.toLowerCase());
+    const existingInstitutions = await client.query(
+      api.institutionInfo.getAllInstitutions,
+      {},
+    );
+    const existingNames = existingInstitutions.map((inst) =>
+      inst.name.toLowerCase(),
+    );
 
     if (existingNames.includes(realInstitution.name.toLowerCase())) {
       console.log("⚠️ Institution already exists in database");
@@ -39,7 +48,10 @@ async function addRealInstitution() {
     }
 
     // Create the institution
-    const result = await client.mutation(api.institutionInfo.createInstitution, realInstitution);
+    const result = await client.mutation(
+      api.institutionInfo.createInstitution,
+      realInstitution,
+    );
 
     console.log("✅ Successfully created real institution!");
     console.log(`📝 Name: ${realInstitution.name}`);
@@ -49,9 +61,11 @@ async function addRealInstitution() {
     console.log(`🌐 Website: ${realInstitution.website}`);
 
     // Verify it was created
-    const allInstitutions = await client.query(api.institutionInfo.getAllInstitutions, {});
+    const allInstitutions = await client.query(
+      api.institutionInfo.getAllInstitutions,
+      {},
+    );
     console.log(`📊 Total institutions in database: ${allInstitutions.length}`);
-
   } catch (error) {
     console.error("❌ Failed to create institution:", error);
     process.exit(1);

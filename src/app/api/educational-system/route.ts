@@ -84,9 +84,14 @@ export async function POST(request: NextRequest) {
     // Validate institution type
     if (
       !institutionType ||
-      !["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"].includes(
-        institutionType,
-      )
+      ![
+        "PRESCHOOL",
+        "BASIC_SCHOOL",
+        "HIGH_SCHOOL",
+        "TECHNICAL_INSTITUTE",
+        "TECHNICAL_CENTER",
+        "UNIVERSITY",
+      ].includes(institutionType)
     ) {
       return NextResponse.json(
         {

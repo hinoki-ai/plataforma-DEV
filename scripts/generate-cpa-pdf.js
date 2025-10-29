@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Simple PDF generation using HTML to PDF approach
 // For now, we'll create a basic HTML template and note that it needs to be converted to PDF
@@ -97,7 +97,7 @@ const propuestaTecnicaContent = `
         <div class="content">
             <div class="highlight">
                 <strong>Versión:</strong> 2.0 - Actualizada<br>
-                <strong>Fecha:</strong> ${new Date().toLocaleDateString('es-ES')}<br>
+                <strong>Fecha:</strong> ${new Date().toLocaleDateString("es-ES")}<br>
                 <strong>Estado:</strong> Lista para entrega perfecta
             </div>
         </div>
@@ -325,29 +325,35 @@ const cpaPageContent = `
 
     <div class="footer">
         <p>© ${new Date().getFullYear()} Centro de Padres Astral - Información actualizada</p>
-        <p>Documento generado para distribución digital - Versión ${new Date().toISOString().split('T')[0]}</p>
+        <p>Documento generado para distribución digital - Versión ${new Date().toISOString().split("T")[0]}</p>
     </div>
 </body>
 </html>
 `;
 
 // Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, '..', 'public', 'uploads');
+const uploadsDir = path.join(__dirname, "..", "public", "uploads");
 if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
 // Write HTML files (these can be converted to PDF using external tools)
-fs.writeFileSync(path.join(uploadsDir, 'propuesta_tecnica-1.html'), propuestaTecnicaContent);
-fs.writeFileSync(path.join(uploadsDir, 'cpa-info-updated.html'), cpaPageContent);
+fs.writeFileSync(
+  path.join(uploadsDir, "propuesta_tecnica-1.html"),
+  propuestaTecnicaContent,
+);
+fs.writeFileSync(
+  path.join(uploadsDir, "cpa-info-updated.html"),
+  cpaPageContent,
+);
 
-console.log('✅ HTML files generated successfully!');
-console.log('📁 Files created:');
-console.log('   - public/uploads/propuesta_tecnica-1.html');
-console.log('   - public/uploads/cpa-info-updated.html');
-console.log('');
-console.log('🔄 To convert to PDF, you can use:');
-console.log('   npm install -g puppeteer');
-console.log('   node scripts/convert-to-pdf.js');
-console.log('');
-console.log('💡 Or manually convert using online tools like html2pdf.com');
+console.log("✅ HTML files generated successfully!");
+console.log("📁 Files created:");
+console.log("   - public/uploads/propuesta_tecnica-1.html");
+console.log("   - public/uploads/cpa-info-updated.html");
+console.log("");
+console.log("🔄 To convert to PDF, you can use:");
+console.log("   npm install -g puppeteer");
+console.log("   node scripts/convert-to-pdf.js");
+console.log("");
+console.log("💡 Or manually convert using online tools like html2pdf.com");

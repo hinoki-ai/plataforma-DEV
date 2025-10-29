@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "./LanguageContext";
 import { Globe, Check } from "lucide-react";
@@ -14,13 +14,14 @@ interface LanguageOption {
   ariaLabel: string;
 }
 
+// Memoized language options for performance
 const languageOptions: LanguageOption[] = [
   {
     code: "es",
     name: "Spanish",
     nativeName: "Español",
     flag: "🇪🇸",
-    ariaLabel: "Switch to Spanish",
+    ariaLabel: "Cambiar a español",
   },
   {
     code: "en",
@@ -29,10 +30,52 @@ const languageOptions: LanguageOption[] = [
     flag: "🇺🇸",
     ariaLabel: "Switch to English",
   },
-];
+] as const;
 
-export function LanguageToggle() {
-  const { language, setLanguage, t } = useLanguage();
+// Memoized individual option component for better performance
+const LanguageOptionItem = memo<{
+  option: LanguageOption;
+  isSelected: boolean;
+  isFocused: boolean;
+  onClick: () => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
+}>(({ option, isSelected, isFocused, onClick, onKeyDown }) => (
+  <button
+    onClick={onClick}
+    onKeyDown={onKeyDown}
+    className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset rounded-md ${
+      isSelected
+        ? "bg-primary/10 text-primary shadow-sm"
+        : "hover:bg-accent/50"
+    } ${isFocused ? "bg-accent" : ""}`}
+    role="option"
+    aria-label={option.ariaLabel}
+    aria-selected={isSelected}
+    tabIndex={isFocused ? 0 : -1}
+  >
+    <div className="flex items-center gap-3">
+      <span className="text-lg" aria-hidden="true" role="img">
+        {option.flag}
+      </span>
+      <div className="flex flex-col">
+        <span className="text-sm font-medium leading-tight">
+          {option.nativeName}
+        </span>
+        <span className="text-xs text-muted-foreground leading-tight">
+          {option.name}
+        </span>
+      </div>
+    </div>
+    {isSelected && (
+      <Check className="w-4 h-4 text-primary flex-shrink-0" aria-hidden="true" />
+    )}
+  </button>
+));
+
+LanguageOptionItem.displayName = 'LanguageOptionItem';
+
+const LanguageToggle = memo(() => {
+  const { language, setLanguage, t, isLoading } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -170,12 +213,13 @@ export function LanguageToggle() {
           variant="outline"
           size="sm"
           onClick={handleToggle}
+          disabled={isLoading}
           aria-label={t("language.toggle", "language")}
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-controls="language-listbox"
           aria-describedby="language-description"
-          className="relative flex items-center gap-2 bg-background/95 backdrop-blur-sm hover:bg-background border-border hover:shadow-md transition-all duration-200 ease-in-out min-w-[100px] h-9"
+          className="relative flex items-center gap-2 bg-background/95 backdrop-blur-sm hover:bg-background border-border hover:shadow-md transition-all duration-200 ease-in-out min-w-[100px] h-9 disabled:opacity-50"
         >
           <Globe className="w-4 h-4" aria-hidden="true" />
           <span className="text-base" aria-hidden="true">
@@ -227,42 +271,16 @@ export function LanguageToggle() {
                 ref={listboxRef}
                 className="max-h-60 overflow-auto"
               >
-                {languageOptions.map((option, index) => {
-                  const isSelected = language === option.code;
-                  return (
-                    <button
-                      key={option.code}
-                      onClick={() => handleOptionClick(option)}
-                      onKeyDown={(e) => handleOptionKeyDown(e, option)}
-                      className={`w-full flex items-center justify-between px-3 py-2 text-left transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset ${
-                        isSelected ? "bg-primary/10 text-primary" : ""
-                      } ${focusedIndex === index ? "bg-accent" : ""}`}
-                      role="option"
-                      aria-label={option.ariaLabel}
-                      {...(isSelected
-                        ? { "aria-selected": true }
-                        : { "aria-selected": false })}
-                      tabIndex={focusedIndex === index ? 0 : -1}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-base" aria-hidden="true">
-                          {option.flag}
-                        </span>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-medium">
-                            {option.nativeName}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {option.name}
-                          </span>
-                        </div>
-                      </div>
-                      {isSelected && (
-                        <Check className="w-4 h-4" aria-hidden="true" />
-                      )}
-                    </button>
-                  );
-                })}
+                {languageOptions.map((option, index) => (
+                  <LanguageOptionItem
+                    key={option.code}
+                    option={option}
+                    isSelected={language === option.code}
+                    isFocused={focusedIndex === index}
+                    onClick={() => handleOptionClick(option)}
+                    onKeyDown={(e) => handleOptionKeyDown(e, option)}
+                  />
+                ))}
               </div>
             </motion.div>
           )}

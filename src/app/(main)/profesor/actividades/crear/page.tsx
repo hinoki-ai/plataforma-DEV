@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Card,
   CardContent,
@@ -219,7 +220,9 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="description">{t("activity.description.label", "common")}</Label>
+                  <Label htmlFor="description">
+                    {t("activity.description.label", "common")}
+                  </Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -234,7 +237,9 @@ function CrearActividadContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="type">{t("activity.type.label", "common")}</Label>
+                    <Label htmlFor="type">
+                      {t("activity.type.label", "common")}
+                    </Label>
                     <Select
                       value={formData.type}
                       onValueChange={(value) =>
@@ -255,7 +260,9 @@ function CrearActividadContent() {
                   </div>
 
                   <div>
-                    <Label htmlFor="subject">{t("activity.subject.label", "common")}</Label>
+                    <Label htmlFor="subject">
+                      {t("activity.subject.label", "common")}
+                    </Label>
                     <Select
                       value={formData.subject}
                       onValueChange={(value) =>
@@ -277,7 +284,9 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="grade">{t("activity.grade.label", "common")}</Label>
+                  <Label htmlFor="grade">
+                    {t("activity.grade.label", "common")}
+                  </Label>
                   <Select
                     value={formData.grade}
                     onValueChange={(value) => handleInputChange("grade", value)}
@@ -304,12 +313,16 @@ function CrearActividadContent() {
                   <Clock className="h-5 w-5" />
                   Horario y Duración
                 </CardTitle>
-                <CardDescription>{t("activity.scheduling", "common")}</CardDescription>
+                <CardDescription>
+                  {t("activity.scheduling", "common")}
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="scheduledDate">{t("activity.date.label", "common")}</Label>
+                    <Label htmlFor="scheduledDate">
+                      {t("activity.date.label", "common")}
+                    </Label>
                     <Input
                       id="scheduledDate"
                       type="date"
@@ -322,7 +335,9 @@ function CrearActividadContent() {
                   </div>
 
                   <div>
-                    <Label htmlFor="scheduledTime">{t("activity.time.label", "common")}</Label>
+                    <Label htmlFor="scheduledTime">
+                      {t("activity.time.label", "common")}
+                    </Label>
                     <Input
                       id="scheduledTime"
                       type="time"
@@ -337,7 +352,9 @@ function CrearActividadContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="duration">{t("activity.duration.label", "common")}</Label>
+                    <Label htmlFor="duration">
+                      {t("activity.duration.label", "common")}
+                    </Label>
                     <Input
                       id="duration"
                       type="number"
@@ -353,7 +370,9 @@ function CrearActividadContent() {
                   </div>
 
                   <div>
-                    <Label htmlFor="location">{t("activity.location.label", "common")}</Label>
+                    <Label htmlFor="location">
+                      {t("activity.location.label", "common")}
+                    </Label>
                     <Input
                       id="location"
                       value={formData.location}
@@ -370,14 +389,18 @@ function CrearActividadContent() {
             {/* Additional Details */}
             <Card>
               <CardHeader>
-                <CardTitle>{t("activity.additional_details", "common")}</CardTitle>
+                <CardTitle>
+                  {t("activity.additional_details", "common")}
+                </CardTitle>
                 <CardDescription>
                   Información complementaria (opcional)
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="objectives">{t("activity.objectives.label", "common")}</Label>
+                  <Label htmlFor="objectives">
+                    {t("activity.objectives.label", "common")}
+                  </Label>
                   <Textarea
                     id="objectives"
                     value={formData.objectives}
@@ -390,7 +413,9 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="materials">{t("activity.materials.label", "common")}</Label>
+                  <Label htmlFor="materials">
+                    {t("activity.materials.label", "common")}
+                  </Label>
                   <Textarea
                     id="materials"
                     value={formData.materials}
@@ -403,7 +428,9 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="notes">{t("activity.notes.label", "common")}</Label>
+                  <Label htmlFor="notes">
+                    {t("activity.notes.label", "common")}
+                  </Label>
                   <Textarea
                     id="notes"
                     value={formData.notes}
@@ -474,9 +501,7 @@ function CrearActividadContent() {
 
 export default function CrearActividadPage() {
   return (
-    <ErrorBoundary
-      fallback={<div>{t("activity.load_error", "common")}</div>}
-    >
+    <ErrorBoundary fallback={<div>Error al cargar la página</div>}>
       <Suspense fallback={<LoadingState />}>
         <CrearActividadContent />
       </Suspense>

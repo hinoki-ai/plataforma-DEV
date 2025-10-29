@@ -75,7 +75,8 @@ export async function GET() {
         _id: "fallback-9",
         name: "Escuela Básica Gabriela Mistral",
         institutionType: "BASIC_SCHOOL",
-        address: "Av. Mistral 1213, Rancagua, Región del Libertador Bernardo O'Higgins",
+        address:
+          "Av. Mistral 1213, Rancagua, Región del Libertador Bernardo O'Higgins",
       },
       {
         _id: "fallback-10",
@@ -94,9 +95,8 @@ export async function GET() {
     }));
 
     // Use database institutions if available, otherwise use fallbacks
-    const finalInstitutions = mappedInstitutions.length > 0
-      ? mappedInstitutions
-      : fallbackInstitutions;
+    const finalInstitutions =
+      mappedInstitutions.length > 0 ? mappedInstitutions : fallbackInstitutions;
 
     return NextResponse.json(
       { success: true, institutions: finalInstitutions },
@@ -159,7 +159,8 @@ export async function GET() {
         _id: "fallback-9",
         name: "Escuela Básica Gabriela Mistral",
         institutionType: "BASIC_SCHOOL",
-        address: "Av. Mistral 1213, Rancagua, Región del Libertador Bernardo O'Higgins",
+        address:
+          "Av. Mistral 1213, Rancagua, Región del Libertador Bernardo O'Higgins",
       },
       {
         _id: "fallback-10",

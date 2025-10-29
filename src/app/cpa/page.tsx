@@ -239,38 +239,38 @@ export default function CPAPage() {
   const getTestimonials = () => {
     const testimonialKeys = [
       // Early Childhood Education (ISCED 0)
-      "rosa_martinez",       // Sala Cuna Menor
-      "juan_perez",          // Sala Cuna Mayor
-      "maria_gonzalez",      // Nivel Medio Menor
-      "carlos_rodriguez",    // Nivel Medio Mayor
-      "ana_silva",           // NT1 Pre-Kinder
-      "pedro_morales",       // NT2 Kinder
-      "isabel_fernandez",    // NT1 Pre-Kinder
-      "roberto_jimenez",     // NT2 Kinder
+      "rosa_martinez", // Sala Cuna Menor
+      "juan_perez", // Sala Cuna Mayor
+      "maria_gonzalez", // Nivel Medio Menor
+      "carlos_rodriguez", // Nivel Medio Mayor
+      "ana_silva", // NT1 Pre-Kinder
+      "pedro_morales", // NT2 Kinder
+      "isabel_fernandez", // NT1 Pre-Kinder
+      "roberto_jimenez", // NT2 Kinder
 
       // Primary Education (ISCED 1)
-      "carmen_vega",         // 1° Básico
-      "miguel_torres",       // 2° Básico
-      "patricia_lopez",      // 3° Básico
-      "francisco_herrera",   // 4° Básico
-      "sofia_mendoza",       // 5° Básico
-      "diego_castro",        // 6° Básico
+      "carmen_vega", // 1° Básico
+      "miguel_torres", // 2° Básico
+      "patricia_lopez", // 3° Básico
+      "francisco_herrera", // 4° Básico
+      "sofia_mendoza", // 5° Básico
+      "diego_castro", // 6° Básico
 
       // Secondary Education (ISCED 2-3)
-      "valentina_ruiz",      // 7° Básico
-      "andres_moreno",       // 8° Básico
-      "daniela_paredes",     // 1° Medio
-      "luis_sanchez",        // 2° Medio HC
-      "catalina_lopez",      // 3° Medio TP
-      "fernando_garcia",     // 4° Medio HC
+      "valentina_ruiz", // 7° Básico
+      "andres_moreno", // 8° Básico
+      "daniela_paredes", // 1° Medio
+      "luis_sanchez", // 2° Medio HC
+      "catalina_lopez", // 3° Medio TP
+      "fernando_garcia", // 4° Medio HC
 
       // Higher Education (ISCED 4-8)
-      "gabriela_rojas",      // Técnico Superior
-      "ricardo_morales",     // Licenciatura
-      "antonia_vega",        // Magíster
-      "pablo_castillo",      // Doctorado
-      "elena_martinez",      // Centro de Formación Técnica
-      "carolina_silva",      // Instituto Profesional
+      "gabriela_rojas", // Técnico Superior
+      "ricardo_morales", // Licenciatura
+      "antonia_vega", // Magíster
+      "pablo_castillo", // Doctorado
+      "elena_martinez", // Centro de Formación Técnica
+      "carolina_silva", // Instituto Profesional
     ];
 
     const testimonials = testimonialKeys.map((key) => {
@@ -360,16 +360,19 @@ export default function CPAPage() {
                       <div className="relative h-full flex flex-col">
                         {/* Testimonial indicator dots */}
                         <div className="flex justify-center gap-2 mb-4">
-                          {Array.from({ length: Math.ceil(getTestimonials().length / 3) }, (_, i) => (
-                            <div
-                              key={i}
-                              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                Math.floor(currentTestimonialIndex / 3) === i
-                                  ? "bg-primary scale-125 shadow-sm"
-                                  : "bg-primary/30 hover:bg-primary/50"
-                              }`}
-                            />
-                          ))}
+                          {Array.from(
+                            { length: Math.ceil(getTestimonials().length / 3) },
+                            (_, i) => (
+                              <div
+                                key={i}
+                                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                  Math.floor(currentTestimonialIndex / 3) === i
+                                    ? "bg-primary scale-125 shadow-sm"
+                                    : "bg-primary/30 hover:bg-primary/50"
+                                }`}
+                              />
+                            ),
+                          )}
                         </div>
                         <AnimatePresence mode="wait">
                           <div className="flex flex-col gap-4 h-full justify-between">
@@ -393,7 +396,9 @@ export default function CPAPage() {
                                       <div className="flex items-start gap-4 mb-4">
                                         <div className="relative">
                                           <div className="w-12 h-12 bg-linear-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center border border-primary/20 shadow-lg">
-                                            <span className="text-2xl">{testimonial.avatar}</span>
+                                            <span className="text-2xl">
+                                              {testimonial.avatar}
+                                            </span>
                                           </div>
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -452,7 +457,10 @@ export default function CPAPage() {
               <SignupStyleGrid columns={3} gap="md">
                 {features.map((feature, index) => (
                   <motion.div key={index} variants={fadeInUp}>
-                    <SignupStyleCard variant="feature" className="h-full backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5">
+                    <SignupStyleCard
+                      variant="feature"
+                      className="h-full backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5"
+                    >
                       <div className="flex flex-col items-center text-center space-y-4">
                         <div
                           className={`p-3 bg-white/5 dark:bg-black/10 rounded-xl ${feature.color} shadow-lg`}
@@ -650,7 +658,11 @@ export default function CPAPage() {
                         icon: "🤝",
                       },
                     ].map((item, index) => (
-                      <SignupStyleCard key={index} variant="info" className="h-full">
+                      <SignupStyleCard
+                        key={index}
+                        variant="info"
+                        className="h-full"
+                      >
                         <div className="flex flex-col items-center text-center space-y-4">
                           <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                             <div className="text-3xl">{item.icon}</div>
@@ -770,7 +782,10 @@ export default function CPAPage() {
                         {t("proyecto_educativo.early_stimulation", "common")}
                       </h4>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        {t("proyecto_educativo.early_stimulation_desc", "common")}
+                        {t(
+                          "proyecto_educativo.early_stimulation_desc",
+                          "common",
+                        )}
                       </p>
                     </div>
                   </div>
@@ -802,7 +817,10 @@ export default function CPAPage() {
                     </div>
                     <div className="space-y-2">
                       <h4 className="font-bold text-foreground text-lg leading-tight">
-                        {t("proyecto_educativo.continuous_evaluation", "common")}
+                        {t(
+                          "proyecto_educativo.continuous_evaluation",
+                          "common",
+                        )}
                       </h4>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {t(
@@ -872,7 +890,11 @@ export default function CPAPage() {
                     ),
                   },
                 ].map((member, index) => (
-                  <SignupStyleCard key={index} variant="info" className="h-full">
+                  <SignupStyleCard
+                    key={index}
+                    variant="info"
+                    className="h-full"
+                  >
                     <div className="flex flex-col items-center text-center space-y-4">
                       <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                         <div className="text-3xl">{member.icon}</div>

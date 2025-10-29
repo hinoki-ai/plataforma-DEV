@@ -6,8 +6,18 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandInput,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from "@/components/ui/command";
 import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -64,12 +74,30 @@ const getGrades = (t: (key: string) => string) => [
   { value: "licenciatura_2ano", label: t("grade.licenciatura_2ano") },
   { value: "licenciatura_3ano", label: t("grade.licenciatura_3ano") },
   { value: "licenciatura_4ano", label: t("grade.licenciatura_4ano") },
-  { value: "titulo_profesional_1ano", label: t("grade.titulo_profesional_1ano") },
-  { value: "titulo_profesional_2ano", label: t("grade.titulo_profesional_2ano") },
-  { value: "titulo_profesional_3ano", label: t("grade.titulo_profesional_3ano") },
-  { value: "titulo_profesional_4ano", label: t("grade.titulo_profesional_4ano") },
-  { value: "titulo_profesional_5ano", label: t("grade.titulo_profesional_5ano") },
-  { value: "titulo_profesional_6ano", label: t("grade.titulo_profesional_6ano") },
+  {
+    value: "titulo_profesional_1ano",
+    label: t("grade.titulo_profesional_1ano"),
+  },
+  {
+    value: "titulo_profesional_2ano",
+    label: t("grade.titulo_profesional_2ano"),
+  },
+  {
+    value: "titulo_profesional_3ano",
+    label: t("grade.titulo_profesional_3ano"),
+  },
+  {
+    value: "titulo_profesional_4ano",
+    label: t("grade.titulo_profesional_4ano"),
+  },
+  {
+    value: "titulo_profesional_5ano",
+    label: t("grade.titulo_profesional_5ano"),
+  },
+  {
+    value: "titulo_profesional_6ano",
+    label: t("grade.titulo_profesional_6ano"),
+  },
   { value: "magister_1ano", label: t("grade.magister_1ano") },
   { value: "magister_2ano", label: t("grade.magister_2ano") },
   { value: "doctorado_1ano", label: t("grade.doctorado_1ano") },
@@ -560,7 +588,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     }
   }, [formData.region]);
 
-
   // Fetch institutions
   useEffect(() => {
     fetch("/api/institutions")
@@ -592,13 +619,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         case 1:
           if (!formData.fullName.trim())
             newErrors.fullName = t("validation.full_name_required");
-          if (!formData.email.trim()) newErrors.email = t("validation.email_required");
+          if (!formData.email.trim())
+            newErrors.email = t("validation.email_required");
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = t("validation.email_invalid");
           }
           if (!formData.phone.trim())
             newErrors.phone = t("validation.phone_required");
-          if (!formData.rut.trim()) newErrors.rut = t("validation.rut_required");
+          if (!formData.rut.trim())
+            newErrors.rut = t("validation.rut_required");
           if (!formData.institutionId)
             newErrors.institutionId = t("validation.institution_required");
           break;
@@ -615,13 +644,17 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         case 3:
           if (!formData.address.trim())
             newErrors.address = t("validation.address_required");
-          if (!formData.region) newErrors.region = t("validation.region_required");
-          if (!formData.comuna) newErrors.comuna = t("validation.comuna_required");
+          if (!formData.region)
+            newErrors.region = t("validation.region_required");
+          if (!formData.comuna)
+            newErrors.comuna = t("validation.comuna_required");
           break;
 
         case 4:
           if (!formData.emergencyContact.trim()) {
-            newErrors.emergencyContact = t("validation.emergency_contact_required");
+            newErrors.emergencyContact = t(
+              "validation.emergency_contact_required",
+            );
           }
           if (!formData.emergencyPhone.trim()) {
             newErrors.emergencyPhone = t("validation.emergency_phone_required");
@@ -756,7 +789,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
               <div className="space-y-4">
                 <LabelInputContainer>
-                  <Label htmlFor="fullName">{t("signup.full_name.label")}</Label>
+                  <Label htmlFor="fullName">
+                    {t("signup.full_name.label")}
+                  </Label>
                   <Input
                     id="fullName"
                     name="fullName"
@@ -765,7 +800,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     onChange={handleChange}
                     className={cn(
                       "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
-                      errors.fullName && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      errors.fullName &&
+                        "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
                   />
                   {errors.fullName && (
@@ -785,7 +821,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     disabled={isGoogleUser}
                     className={cn(
                       "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600 disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed",
-                      errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      errors.email &&
+                        "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
                   />
                   {errors.email && <ErrorMessage message={errors.email} />}
@@ -803,7 +840,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       onChange={handleChange}
                       className={cn(
                         "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
-                        errors.phone && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        errors.phone &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.phone && <ErrorMessage message={errors.phone} />}
@@ -819,7 +857,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       onChange={handleChange}
                       className={cn(
                         "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
-                        errors.rut && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        errors.rut &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.rut && <ErrorMessage message={errors.rut} />}
@@ -827,8 +866,13 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </div>
 
                 <LabelInputContainer>
-                  <Label htmlFor="institutionId">{t("signup.institution.label")}</Label>
-                  <Popover open={institutionPopoverOpen} onOpenChange={setInstitutionPopoverOpen}>
+                  <Label htmlFor="institutionId">
+                    {t("signup.institution.label")}
+                  </Label>
+                  <Popover
+                    open={institutionPopoverOpen}
+                    onOpenChange={setInstitutionPopoverOpen}
+                  >
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -836,24 +880,31 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         className={cn(
                           "w-full justify-between rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
                           !formData.institutionId && "text-muted-foreground",
-                          errors.institutionId && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                          errors.institutionId &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                         )}
                       >
                         {formData.institutionId
                           ? institutions.find(
-                              (institution) => institution._id === formData.institutionId,
+                              (institution) =>
+                                institution._id === formData.institutionId,
                             )?.name
                           : t("select.institution")}
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-full min-w-(--radix-popover-trigger-width) p-0" align="start">
+                    <PopoverContent
+                      className="w-full min-w-(--radix-popover-trigger-width) p-0"
+                      align="start"
+                    >
                       <Command>
                         <CommandInput
                           placeholder="Buscar institución..."
                           className="h-9"
                         />
-                        <CommandEmpty>{t("signup.institutions_empty")}</CommandEmpty>
+                        <CommandEmpty>
+                          {t("signup.institutions_empty")}
+                        </CommandEmpty>
                         <CommandGroup className="max-h-64 overflow-auto">
                           {institutions.map((institution) => (
                             <CommandItem
@@ -864,7 +915,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                                   ...prev,
                                   institutionId: institution._id,
                                 }));
-                                setErrors((prev) => ({ ...prev, institutionId: "" }));
+                                setErrors((prev) => ({
+                                  ...prev,
+                                  institutionId: "",
+                                }));
                                 setInstitutionPopoverOpen(false);
                               }}
                             >
@@ -905,7 +959,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
-                    <Label htmlFor="childName">{t("signup.child_name.label")}</Label>
+                    <Label htmlFor="childName">
+                      {t("signup.child_name.label")}
+                    </Label>
                     <Input
                       id="childName"
                       name="childName"
@@ -914,7 +970,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       onChange={handleChange}
                       className={cn(
                         "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
-                        errors.childName && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        errors.childName &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.childName && (
@@ -923,7 +980,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="childGrade">{t("signup.child_grade.label")}</Label>
+                    <Label htmlFor="childGrade">
+                      {t("signup.child_grade.label")}
+                    </Label>
                     <Select
                       id="childGrade"
                       name="childGrade"
@@ -945,7 +1004,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </div>
 
                 <LabelInputContainer>
-                  <Label htmlFor="relationship">{t("signup.relationship.label")}</Label>
+                  <Label htmlFor="relationship">
+                    {t("signup.relationship.label")}
+                  </Label>
                   <Select
                     id="relationship"
                     name="relationship"
@@ -1031,7 +1092,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     onChange={handleChange}
                     className={cn(
                       "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
-                      errors.address && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      errors.address &&
+                        "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
                   />
                   {errors.address && <ErrorMessage message={errors.address} />}
@@ -1065,7 +1127,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       onChange={handleChange}
                       className={cn(
                         "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
-                        errors.emergencyContact && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        errors.emergencyContact &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.emergencyContact && (
@@ -1158,7 +1221,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               )}
             </div>
           </form>
-
         </div>
       </motion.div>
     </div>

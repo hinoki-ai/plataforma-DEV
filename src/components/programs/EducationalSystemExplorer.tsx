@@ -1,6 +1,6 @@
 /**
- * 🎓 Educational System Demo Component
- * Demonstrates the comprehensive educational system functionality
+ * 🎓 Educational System Explorer Component
+ * Interactive explorer for the comprehensive educational system functionality
  */
 
 "use client";
@@ -24,7 +24,6 @@ import {
   BookOpen,
   Building2,
   Info,
-  ChevronRight,
   Globe,
   Target,
   Users,
@@ -32,7 +31,6 @@ import {
 import {
   EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
-  EDUCATIONAL_LEVELS,
   getGradesForInstitutionType,
   getSubjectsForInstitutionType,
   shouldShowFeature,
@@ -40,11 +38,11 @@ import {
 import { LevelSpecificDashboard } from "@/components/dashboard/LevelSpecificDashboard";
 import { EducationalLevelAwareNavigation } from "@/components/layout/EducationalLevelAwareNavigation";
 
-export function EducationalSystemDemo() {
+export function EducationalSystemExplorer() {
   const { t } = useLanguage();
   const [selectedType, setSelectedType] =
     useState<EducationalInstitutionType>("PRESCHOOL");
-  const [activeDemo, setActiveDemo] = useState<
+  const [activeView, setActiveView] = useState<
     "overview" | "navigation" | "dashboard"
   >("overview");
 
@@ -68,7 +66,7 @@ export function EducationalSystemDemo() {
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-xl">
             <Globe className="h-6 w-6" />
-            🎓 {t("demo.title")}
+            🎓 {t("programas.explorer.title")}
           </CardTitle>
           <CardDescription className="text-blue-100">
             {t("educational_system.description")}
@@ -79,9 +77,11 @@ export function EducationalSystemDemo() {
       {/* Institution Type Selector */}
       <Card>
         <CardHeader>
-          <CardTitle>{t("demo.select_institution_type")}</CardTitle>
+          <CardTitle>
+            {t("programas.explorer.select_institution_type")}
+          </CardTitle>
           <CardDescription>
-            {t("demo.explore_adaptation")}
+            {t("programas.explorer.explore_adaptation")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -100,7 +100,7 @@ export function EducationalSystemDemo() {
                   <div className="text-2xl">{info.icon}</div>
                   <div className="text-sm font-medium">{info.chileanName}</div>
                   <Badge variant="secondary" className="text-xs">
-                    {info.levels.length} {t("demo.levels_text")}
+                    {info.levels.length} {t("programas.explorer.levels_text")}
                   </Badge>
                 </Button>
               );
@@ -113,26 +113,32 @@ export function EducationalSystemDemo() {
       <Alert>
         <Target className="h-4 w-4" />
         <AlertDescription>
-          <strong>{t("demo.selected_institution")}:</strong>{" "}
+          <strong>{t("programas.explorer.selected_institution")}:</strong>{" "}
           {INSTITUTION_TYPE_INFO[selectedType].chileanName} •
-          <strong> {t("demo.description")}:</strong>{" "}
+          <strong> {t("programas.explorer.description")}:</strong>{" "}
           {INSTITUTION_TYPE_INFO[selectedType].description} •
-          <strong> {t("demo.levels")}:</strong>{" "}
+          <strong> {t("programas.explorer.levels")}:</strong>{" "}
           {INSTITUTION_TYPE_INFO[selectedType].levels.length} •
-          <strong> {t("demo.subjects")}:</strong>{" "}
+          <strong> {t("programas.explorer.subjects")}:</strong>{" "}
           {getSubjectsForInstitutionType(selectedType).length}
         </AlertDescription>
       </Alert>
 
-      {/* Demo Tabs */}
+      {/* Explorer Tabs */}
       <Tabs
-        value={activeDemo}
-        onValueChange={(value) => setActiveDemo(value as any)}
+        value={activeView}
+        onValueChange={(value) => setActiveView(value as any)}
       >
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="overview">{t("demo.overview")}</TabsTrigger>
-          <TabsTrigger value="navigation">{t("demo.navigation")}</TabsTrigger>
-          <TabsTrigger value="dashboard">{t("demo.dashboard")}</TabsTrigger>
+          <TabsTrigger value="overview">
+            {t("programas.explorer.overview")}
+          </TabsTrigger>
+          <TabsTrigger value="navigation">
+            {t("programas.explorer.navigation")}
+          </TabsTrigger>
+          <TabsTrigger value="dashboard">
+            {t("programas.explorer.dashboard")}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -206,7 +212,9 @@ export function EducationalSystemDemo() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">{t("demo.enabled_features")}</h4>
+                  <h4 className="font-medium mb-2">
+                    {t("programas.explorer.enabled_features")}
+                  </h4>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     {[
                       "parent_meetings",
@@ -239,7 +247,9 @@ export function EducationalSystemDemo() {
         <TabsContent value="navigation" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>{t("demo.adapted_navigation")}</CardTitle>
+              <CardTitle>
+                {t("programas.explorer.adapted_navigation")}
+              </CardTitle>
               <CardDescription>
                 La navegación se adapta automáticamente según el tipo de
                 institución

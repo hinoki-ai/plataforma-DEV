@@ -6,6 +6,7 @@ import { ThemeProvider } from "./theme-provider";
 import { DesktopToggleProvider } from "@/lib/hooks/useDesktopToggle";
 // 🕊️ DIVINE PARSING ORACLE - Now using chunked i18n system
 import { LanguageProvider } from "@/components/language/LanguageContext";
+import { LanguageHtmlUpdater } from "@/components/language/LanguageHtmlUpdater";
 import { ContextProvider } from "./providers/ContextProvider";
 import { WebVitalsProvider } from "./providers/WebVitalsProvider";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
@@ -28,6 +29,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           >
             <ContextProvider>
               <LanguageProvider>
+                <LanguageHtmlUpdater />
                 <DesktopToggleProvider>
                   <WebVitalsProvider>{children}</WebVitalsProvider>
                 </DesktopToggleProvider>

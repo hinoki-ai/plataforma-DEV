@@ -353,6 +353,16 @@ export default function ProgramasPage() {
                   asChild
                   variant="outline"
                   size="lg"
+                  className="bg-white/10 text-white border-white/20 hover:bg-white/20"
+                >
+                  <Link href="/programas/explorador">
+                    {t("programas.explorer.cta")}
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
                   className="bg-background/70"
                 >
                   <Link href="/docs">{t("programas.view_specs")}</Link>
@@ -556,7 +566,9 @@ export default function ProgramasPage() {
                           {description}
                         </CardDescription>
                         <Button variant="ghost" size="sm" asChild>
-                          <Link href={href}>{t("programas.see_in_action")}</Link>
+                          <Link href={href}>
+                            {t("programas.see_in_action")}
+                          </Link>
                         </Button>
                       </CardContent>
                     </Card>
@@ -707,7 +719,9 @@ export default function ProgramasPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild size="lg">
-                  <Link href="/contacto">{t("programas.schedule_meeting")}</Link>
+                  <Link href="/contacto">
+                    {t("programas.schedule_meeting")}
+                  </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
                   <Link href="/docs#programas">

@@ -198,7 +198,9 @@ export function EducationalInstitutionSelector({
                     </p>
                     <div className="space-y-2">
                       <div className="text-xs text-gray-500 dark:text-gray-400">
-                        <strong>{t("educational_system.levels_included")}:</strong>
+                        <strong>
+                          {t("educational_system.levels_included")}:
+                        </strong>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {info.levels.slice(0, 3).map((level) => (
@@ -212,7 +214,8 @@ export function EducationalInstitutionSelector({
                         ))}
                         {info.levels.length > 3 && (
                           <Badge variant="outline" className="text-xs">
-                            +{info.levels.length - 3} {t("educational_system.more_levels")}
+                            +{info.levels.length - 3}{" "}
+                            {t("educational_system.more_levels")}
                           </Badge>
                         )}
                       </div>
@@ -230,11 +233,19 @@ export function EducationalInstitutionSelector({
                 <AlertDescription>
                   <div className="space-y-2">
                     <p>
-                      <strong>{t("educational_system.selected_config")}:</strong>{" "}
+                      <strong>
+                        {t("educational_system.selected_config")}:
+                      </strong>{" "}
                       {INSTITUTION_TYPE_INFO[selectedType].chileanName}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {t("educational_system.config_description")} {INSTITUTION_TYPE_INFO[selectedType].levels.length} {t("educational_system.educational_levels").toLowerCase()} {t("common.and")} {getSubjectsForInstitutionType(selectedType).length} {t("educational_system.subject_areas").toLowerCase()} {t("educational_system.specific").toLowerCase()}.
+                      {t("educational_system.config_description")}{" "}
+                      {INSTITUTION_TYPE_INFO[selectedType].levels.length}{" "}
+                      {t("educational_system.educational_levels").toLowerCase()}{" "}
+                      {t("common.and")}{" "}
+                      {getSubjectsForInstitutionType(selectedType).length}{" "}
+                      {t("educational_system.subject_areas").toLowerCase()}{" "}
+                      {t("educational_system.specific").toLowerCase()}.
                     </p>
                   </div>
                 </AlertDescription>
@@ -251,7 +262,9 @@ export function EducationalInstitutionSelector({
               className="flex items-center gap-2"
             >
               <Save className="h-4 w-4" />
-              {isConfiguring ? t("educational_system.configuring") : t("educational_system.apply_config")}
+              {isConfiguring
+                ? t("educational_system.configuring")
+                : t("educational_system.apply_config")}
             </Button>
 
             {selectedType && selectedType !== currentType && (

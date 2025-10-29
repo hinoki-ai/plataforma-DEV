@@ -28,7 +28,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Validar tipo de archivo
-    if (!["reglamento", "plan", "manual", "protocolo", "propuesta_tecnica"].includes(type)) {
+    if (
+      ![
+        "reglamento",
+        "plan",
+        "manual",
+        "protocolo",
+        "propuesta_tecnica",
+      ].includes(type)
+    ) {
       return NextResponse.json(
         { error: "Tipo de documento inválido" },
         { status: 400 },
