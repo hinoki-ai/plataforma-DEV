@@ -23,7 +23,9 @@ const eslintConfig = [
       "node_modules/**/*",
     ],
   },
-  ...compat.extends("next/core-web-vitals"),
+  ...compat.config({
+    extends: ["next/core-web-vitals"],
+  }),
   {
     rules: {
       // Temporarily disable overly strict rules to focus on critical issues
