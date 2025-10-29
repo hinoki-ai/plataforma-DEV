@@ -29,8 +29,8 @@
     }
   }
 
-  /* Font optimization - Using Next.js Google Fonts integration */
-  /* Inter font is loaded via next/font/google in layout.tsx */
+  /* Font optimization - Using system fonts for better build performance */
+  /* Inter font variable is configured in layout.tsx to use system fonts */
 
   /* Smooth animations */
   @media (prefers-reduced-motion: no-preference) {
