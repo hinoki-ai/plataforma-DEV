@@ -55,8 +55,6 @@ const LanguageOptionItem = memo(function LanguageOptionItem({
   onKeyDown: (e: React.KeyboardEvent) => void;
   index: number;
 }) {
-  const ariaSelectedValue = isSelected ? "true" : "false";
-
   return (
     <div
       id={`language-option-${index}`}
@@ -69,7 +67,7 @@ const LanguageOptionItem = memo(function LanguageOptionItem({
       } ${isFocused ? "bg-accent" : ""}`}
       role="option"
       aria-label={option.ariaLabel}
-      aria-selected={ariaSelectedValue}
+      aria-selected={isSelected}
       tabIndex={isFocused ? 0 : -1}
        
     >

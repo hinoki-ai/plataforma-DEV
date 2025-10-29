@@ -58,25 +58,15 @@ export default function ProgramasExplorerPage() {
                     {t("programas.explorer.back")}
                   </Link>
                 </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                >
-                  <Link href="/contacto" className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4" />
-                    {t("programas.schedule_meeting")}
-                  </Link>
-                </Button>
               </div>
             </section>
 
             {/* Explorer Section */}
             <section className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/5 to-indigo-500/10 rounded-3xl blur-2xl -z-10"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 via-purple-500/5 to-indigo-500/10 rounded-3xl blur-2xl -z-10"></div>
 
               <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-700/50 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent dark:from-slate-700/50 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-white/50 to-transparent dark:from-slate-700/50 pointer-events-none"></div>
 
                 <div className="relative p-8 md:p-12">
                   <EducationalSystemExplorer />
@@ -85,7 +75,7 @@ export default function ProgramasExplorerPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white shadow-2xl">
+            <section className="relative overflow-hidden rounded-3xl bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 text-white shadow-2xl">
               <div className="absolute inset-0 bg-black/10"></div>
               <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
               <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
