@@ -138,7 +138,7 @@ pages: {
 - /parent/** → PARENT + ADMIN + MASTER
 
 // Public Routes:
-- /, /centro-consejo, /fotos-videos, /login, /auth-success
+- /, /cpa, /fotos-videos, /login, /auth-success
 
 // CRITICAL: /auth-success excluded from middleware checks
 if (pathname.startsWith("/auth-success")) {

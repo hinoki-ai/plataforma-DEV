@@ -1,11 +1,17 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  // NextAuth
-  NEXTAUTH_SECRET: z
+  // Clerk Authentication
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z
     .string()
-    .min(32, "NEXTAUTH_SECRET must be at least 32 characters"),
-  NEXTAUTH_URL: z.string().url("NEXTAUTH_URL must be a valid URL").optional(),
+    .min(1, "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is required"),
+  CLERK_SECRET_KEY: z.string().min(1, "CLERK_SECRET_KEY is required"),
+  CLERK_WEBHOOK_SECRET: z.string().min(1, "CLERK_WEBHOOK_SECRET is required"),
+
+  // Convex Backend
+  NEXT_PUBLIC_CONVEX_URL: z
+    .string()
+    .url("NEXT_PUBLIC_CONVEX_URL must be a valid URL"),
 
   // Cloudinary (optional in production for core functionality)
   CLOUDINARY_CLOUD_NAME: z.string().optional(),
@@ -59,8 +65,9 @@ export const isDevelopment = env.NODE_ENV === "development";
 // Helper function to get the app URL
 export const getAppUrl = () => {
   if (env.APP_URL) return env.APP_URL;
-  if (env.NEXTAUTH_URL) return env.NEXTAUTH_URL;
-  return isDevelopment ? "http://localhost:3000" : "https://your-domain.com";
+  return isDevelopment
+    ? "http://localhost:3000"
+    : "https://plataforma.aramac.dev";
 };
 
 export default env;

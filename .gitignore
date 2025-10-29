@@ -71,3 +71,4 @@ scripts/*password*
 
 # clerk configuration (can include secrets)
 /.clerk/
+.env.vercel

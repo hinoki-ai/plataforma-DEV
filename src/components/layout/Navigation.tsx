@@ -245,9 +245,9 @@ export default function Navigation() {
             <div className="absolute right-4 top-1/2 -translate-y-1/2 z-50 pointer-events-auto">
               <div className={navigation.menu.desktop(isDesktopForced)}>
                 <div className="flex items-center space-x-0">
-                  {/* Position 7: Centro y Consejo */}
+                  {/* Position 7: CPA Centro de Padres y Apoderados */}
                   <Link
-                    href="/centro-consejo"
+                    href="/cpa"
                     className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
                   >
                     {t("nav.center.council", "navigation")}
@@ -299,7 +299,7 @@ export default function Navigation() {
               ) ? (
                 <>
                   <Link
-                    href="/centro-consejo"
+                    href="/cpa"
                     className="w-full text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
                   >
                     {t("nav.center.council", "navigation")}

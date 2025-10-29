@@ -40,6 +40,7 @@ export default function Header() {
   const publicNavLinks = [
     { href: "/programas", label: "Programas" },
     { href: "/precios", label: "Planes" },
+    { href: "/centro-consejo", label: t("nav.center.council", "navigation") },
     { href: "/contacto", label: "Contacto" },
   ];
 

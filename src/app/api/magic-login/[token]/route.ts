@@ -73,7 +73,7 @@ export async function GET(
         ? "/admin"
         : user.role === "PROFESOR"
           ? "/profesor"
-          : "/centro-consejo";
+          : "/cpa";
     return NextResponse.redirect(new URL(redirectUrl, request.url));
   } catch (error) {
     // Production: Silently handle magic login errors

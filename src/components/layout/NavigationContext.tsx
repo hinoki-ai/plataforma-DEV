@@ -295,8 +295,8 @@ const baseNavigationItems: Record<UserRole, NavigationItem[]> = {
     },
     {
       id: "about",
-      title: "Centro Consejo",
-      href: "/centro-consejo",
+      title: "CPA Centro de Padres",
+      href: "/cpa",
       category: "informacion",
       description: "Sobre el centro",
     },

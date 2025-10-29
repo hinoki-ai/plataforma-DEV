@@ -627,7 +627,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         const result = await response.json();
 
         if (result.success) {
-          router.push("/centro-consejo/exito");
+          router.push("/cpa/exito");
         } else {
           setErrors({ email: result.error || "Error en el registro" });
         }
@@ -644,7 +644,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
   const handleGoogleLogin = useCallback(() => {
     setIsLoading(true);
-    void signIn({ callbackUrl: "/centro-consejo/exito" });
+    void signIn({ callbackUrl: "/cpa/exito" });
   }, []);
 
   const StepIndicator = memo(function StepIndicator() {
@@ -656,7 +656,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               className={cn(
                 "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300",
                 currentStep >= step
-                  ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-purple-600/50 scale-110"
+                  ? "bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-purple-600/50 scale-110"
                   : "bg-gray-700 text-gray-400",
               )}
             >
@@ -667,7 +667,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 className={cn(
                   "w-12 h-1 mx-2 transition-all duration-300",
                   currentStep > step
-                    ? "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
+                    ? "bg-linear-to-r from-blue-600 via-purple-600 to-pink-600"
                     : "bg-gray-700",
                 )}
               />
@@ -1021,11 +1021,11 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         transition={{ duration: 0.5 }}
         className="bg-gray-900/80 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden"
       >
-        <div className="bg-gradient-to-r from-blue-600/90 via-purple-600/90 to-pink-600/90 p-6 text-white">
+        <div className="bg-linear-to-r from-blue-600/90 via-purple-600/90 to-pink-600/90 p-6 text-white">
           <h2 className="font-bold text-2xl mb-2">
             {isGoogleUser
               ? "Completa tu Registro"
-              : "Registro Centro y Consejo"}
+              : "Registro CPA Centro de Padres y Apoderados"}
           </h2>
           <p className="text-blue-100">
             Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
@@ -1053,7 +1053,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   type="button"
                   onClick={nextStep}
                   disabled={isLoading}
-                  className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white border-0"
+                  className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white border-0"
                 >
                   Siguiente
                 </Button>
@@ -1061,7 +1061,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                  className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
                 >
                   {isLoading ? "Registrando..." : "Completar Registro"}
                 </Button>

@@ -106,7 +106,7 @@ The system uses a strict role-based access model with middleware enforcement:
 - `/admin/**` → ADMIN only
 - `/profesor/**` → PROFESOR only
 - `/parent/**` → PARENT only
-- Public routes: `/`, `/centro-consejo`, `/fotos-videos`
+- Public routes: `/`, `/cpa`, `/fotos-videos`
 
 **Key Auth Files**:
 

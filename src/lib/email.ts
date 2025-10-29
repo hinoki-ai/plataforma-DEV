@@ -122,7 +122,7 @@ export async function sendConfirmationEmail({
   try {
     const transporter = createTransport();
 
-    const verificationUrl = `${process.env.APP_URL}/centro-consejo/verificar?token=${verificationToken}`;
+    const verificationUrl = `${process.env.APP_URL}/cpa/verificar?token=${verificationToken}`;
 
     const mailOptions = {
       from: DEFAULT_FROM_EMAIL,
@@ -152,7 +152,7 @@ export async function sendWelcomeEmail({
   try {
     const transporter = createTransport();
 
-    const dashboardUrl = `${process.env.APP_URL}/centro-consejo/dashboard`;
+    const dashboardUrl = `${process.env.APP_URL}/cpa/dashboard`;
 
     const mailOptions = {
       from: DEFAULT_FROM_EMAIL,

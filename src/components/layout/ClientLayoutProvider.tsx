@@ -43,7 +43,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
   const isFullScreenPage =
     pathname?.startsWith("/public/equipo-multidisciplinario") ||
     pathname === "/equipo-multidisciplinario" ||
-    pathname === "/centro-consejo" ||
+    pathname === "/cpa" ||
     pathname?.startsWith("/fotos-videos");
 
   // Special layout for full-screen pages (no sidebar, no container constraints)

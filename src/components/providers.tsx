@@ -10,10 +10,11 @@ import { ContextProvider } from "./providers/ContextProvider";
 import { WebVitalsProvider } from "./providers/WebVitalsProvider";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { AppSessionProvider } from "@/lib/auth-client";
+import { clerkConfig } from "@/lib/clerk-config";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider {...clerkConfig}>
       <ConvexClientProvider>
         <AppSessionProvider>
           <ThemeProvider
