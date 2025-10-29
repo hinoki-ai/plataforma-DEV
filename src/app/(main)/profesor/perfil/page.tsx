@@ -207,7 +207,7 @@ export default function PerfilPage() {
       <div className="flex items-center justify-center py-6">
         <Card className="w-full max-w-xl shadow-lg border-border relative overflow-visible mx-2">
           {/* Cover image */}
-          <div className="h-32 w-full rounded-t-lg bg-gradient-to-r from-primary-200 to-secondary-200 relative">
+          <div className="h-32 w-full rounded-t-lg bg-linear-to-r from-primary-200 to-secondary-200 relative">
             {/* Floating avatar */}
             <div className="absolute left-1/2 -bottom-12 transform -translate-x-1/2 z-10">
               <div className="w-24 h-24 rounded-full border-4 border-background shadow-lg bg-primary/10 flex items-center justify-center overflow-hidden">

@@ -66,7 +66,7 @@ export function ProfileCompletionBadge({
               size="sm"
               onClick={handleClick}
               className={cn(
-                "h-8 px-2 text-xs border border-orange-300 bg-gradient-to-r from-orange-50 to-yellow-50 hover:from-orange-100 hover:to-yellow-100 text-orange-800 dark:border-orange-700 dark:from-orange-950/30 dark:to-yellow-950/30 dark:hover:from-orange-900/50 dark:hover:to-yellow-900/50 dark:text-orange-200 transition-all duration-300 hover:shadow-md hover:scale-105",
+                "h-8 px-2 text-xs border border-orange-300 bg-linear-to-r from-orange-50 to-yellow-50 hover:from-orange-100 hover:to-yellow-100 text-orange-800 dark:border-orange-700 dark:from-orange-950/30 dark:to-yellow-950/30 dark:hover:from-orange-900/50 dark:hover:to-yellow-900/50 dark:text-orange-200 transition-all duration-300 hover:shadow-md hover:scale-105",
                 "animate-pulse hover:animate-none",
                 className,
               )}
@@ -89,7 +89,7 @@ export function ProfileCompletionBadge({
           <Badge
             variant="outline"
             className={cn(
-              "cursor-pointer border-orange-300 bg-gradient-to-r from-orange-50 to-yellow-50 hover:from-orange-100 hover:to-yellow-100 text-orange-800 dark:border-orange-700 dark:from-orange-950/30 dark:to-yellow-950/30 dark:hover:from-orange-900/50 dark:hover:to-yellow-900/50 dark:text-orange-200 transition-all duration-300 hover:shadow-lg hover:scale-105",
+              "cursor-pointer border-orange-300 bg-linear-to-r from-orange-50 to-yellow-50 hover:from-orange-100 hover:to-yellow-100 text-orange-800 dark:border-orange-700 dark:from-orange-950/30 dark:to-yellow-950/30 dark:hover:from-orange-900/50 dark:hover:to-yellow-900/50 dark:text-orange-200 transition-all duration-300 hover:shadow-lg hover:scale-105",
               "animate-pulse hover:animate-none",
               className,
             )}

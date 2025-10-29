@@ -114,7 +114,7 @@ export function ContextProvider({
         case "public":
           switch (variant) {
             case "primary":
-              return `${baseClasses} bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-300`;
+              return `${baseClasses} bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-300`;
             case "secondary":
               return `${baseClasses} backdrop-blur-sm bg-white/10 hover:bg-white/20 border border-white/20 text-white shadow-2xl hover:shadow-white/10`;
             case "ghost":

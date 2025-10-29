@@ -54,7 +54,7 @@ export function MiniCalendarWidget({ events }: MiniCalendarWidgetProps) {
         ) : (
           <div className="space-y-3">
             {nextEvent && (
-              <div className="border rounded-lg p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+              <div className="border rounded-lg p-3 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h4 className="font-medium text-sm">{nextEvent.title}</h4>

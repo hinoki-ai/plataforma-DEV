@@ -17,142 +17,151 @@ interface LanguageToggleProps {
   size?: "sm" | "md" | "lg";
 }
 
-const LanguageToggle = memo(({ className, size = "md" }: LanguageToggleProps) => {
-  const { language, setLanguage, isLoading, t } = useLanguage();
-  const [mounted, setMounted] = useState(false);
+const LanguageToggle = memo(
+  ({ className, size = "md" }: LanguageToggleProps) => {
+    const { language, setLanguage, isLoading, t } = useLanguage();
+    const [mounted, setMounted] = useState(false);
 
-  // Only set mounted after component has mounted to prevent hydration issues
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Use setTimeout to avoid cascading renders
-      const timeoutId = setTimeout(() => setMounted(true), 0);
-      return () => clearTimeout(timeoutId);
-    }
-  }, []);
+    // Only set mounted after component has mounted to prevent hydration issues
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        // Use setTimeout to avoid cascading renders
+        const timeoutId = setTimeout(() => setMounted(true), 0);
+        return () => clearTimeout(timeoutId);
+      }
+    }, []);
 
-  const languageOptions: LanguageOption[] = [
-    {
-      code: "es",
-      name: "Spanish",
-      nativeName: t("language.spanish", "language"),
-      flag: "🇪🇸",
-      ariaLabel: t("language.ariaSwitchSpanish", "language") || "Cambiar a español",
-    },
-    {
-      code: "en",
-      name: "English",
-      nativeName: t("language.english", "language"),
-      flag: "🇺🇸",
-      ariaLabel: t("language.ariaSwitchEnglish", "language") || "Switch to English",
-    },
-  ];
+    const languageOptions: LanguageOption[] = [
+      {
+        code: "es",
+        name: "Spanish",
+        nativeName: t("language.spanish", "language"),
+        flag: "🇪🇸",
+        ariaLabel:
+          t("language.ariaSwitchSpanish", "language") || "Cambiar a español",
+      },
+      {
+        code: "en",
+        name: "English",
+        nativeName: t("language.english", "language"),
+        flag: "🇺🇸",
+        ariaLabel:
+          t("language.ariaSwitchEnglish", "language") || "Switch to English",
+      },
+    ];
 
-  const currentLanguage = languageOptions.find(
-    (lang) => lang.code === language,
-  );
+    const currentLanguage = languageOptions.find(
+      (lang) => lang.code === language,
+    );
 
-  const nextLanguage = languageOptions.find(
-    (lang) => lang.code !== language,
-  );
+    const nextLanguage = languageOptions.find((lang) => lang.code !== language);
 
-  const handleToggle = useCallback(async () => {
-    if (nextLanguage && !isLoading) {
-      try {
-        await setLanguage(nextLanguage.code);
+    const handleToggle = useCallback(async () => {
+      if (nextLanguage && !isLoading) {
+        try {
+          await setLanguage(nextLanguage.code);
 
-        // Announce language change for screen readers
-        const announcement = `${t("language.changedTo", "language")} ${nextLanguage.nativeName}`;
-        const liveRegion = document.getElementById("sr-announcement");
-        if (liveRegion) liveRegion.textContent = announcement;
+          // Announce language change for screen readers
+          const announcement = `${t("language.changedTo", "language")} ${nextLanguage.nativeName}`;
+          const liveRegion = document.getElementById("sr-announcement");
+          if (liveRegion) liveRegion.textContent = announcement;
 
-        // Also update HTML lang attribute immediately for better SEO
-        if (typeof document !== "undefined") {
-          document.documentElement.lang = nextLanguage.code === "es" ? "es-CL" : "en-US";
-        }
-      } catch (error) {
-        // Silently handle errors - the language state should still update
-        if (process.env.NODE_ENV === "development") {
-          console.warn("Language toggle error:", error);
+          // Also update HTML lang attribute immediately for better SEO
+          if (typeof document !== "undefined") {
+            document.documentElement.lang =
+              nextLanguage.code === "es" ? "es-CL" : "en-US";
+          }
+        } catch (error) {
+          // Silently handle errors - the language state should still update
+          if (process.env.NODE_ENV === "development") {
+            console.warn("Language toggle error:", error);
+          }
         }
       }
+    }, [nextLanguage, setLanguage, isLoading, t]);
+
+    const handleKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleToggle();
+        }
+      },
+      [handleToggle],
+    );
+
+    if (!mounted) {
+      return null;
     }
-  }, [nextLanguage, setLanguage, isLoading, t]);
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        handleToggle();
-      }
-    },
-    [handleToggle],
-  );
+    const isEnglish = language === "en";
+    const sizeMultiplier = size === "sm" ? 0.4 : size === "lg" ? 1.2 : 1;
 
-  if (!mounted) {
-    return null;
-  }
+    return (
+      <>
+        {/* Screen reader announcements */}
+        <div
+          id="sr-announcement"
+          aria-live="polite"
+          aria-atomic="true"
+          className="sr-only"
+        />
 
-  const isEnglish = language === "en";
-  const sizeMultiplier = size === "sm" ? 0.4 : size === "lg" ? 1.2 : 1;
-
-  return (
-    <>
-      {/* Screen reader announcements */}
-      <div
-        id="sr-announcement"
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      />
-
-      <StyledWrapper className={className} $sizeMultiplier={sizeMultiplier}>
-        <label className="language-switch">
-          <input
-            type="checkbox"
-            className="language-switch__checkbox"
-            checked={isEnglish}
-            onChange={handleToggle}
-            onKeyDown={handleKeyDown}
-            disabled={isLoading}
-            aria-label={nextLanguage?.ariaLabel || t("language.switchTo", "language")}
-          />
-          <div className="language-switch__container">
-            {/* Language Flags Background */}
-            <div className="language-switch__flags-background">
-              <div className="language-switch__flag language-switch__flag--es">
-                {languageOptions.find(l => l.code === "es")?.flag}
+        <StyledWrapper className={className} $sizeMultiplier={sizeMultiplier}>
+          <label className="language-switch">
+            <input
+              type="checkbox"
+              className="language-switch__checkbox"
+              checked={isEnglish}
+              onChange={handleToggle}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
+              aria-label={
+                nextLanguage?.ariaLabel || t("language.switchTo", "language")
+              }
+            />
+            <div className="language-switch__container">
+              {/* Language Flags Background */}
+              <div className="language-switch__flags-background">
+                <div className="language-switch__flag language-switch__flag--es">
+                  {languageOptions.find((l) => l.code === "es")?.flag}
+                </div>
+                <div className="language-switch__flag language-switch__flag--en">
+                  {languageOptions.find((l) => l.code === "en")?.flag}
+                </div>
               </div>
-              <div className="language-switch__flag language-switch__flag--en">
-                {languageOptions.find(l => l.code === "en")?.flag}
+
+              {/* Language Code Display */}
+              <div className="language-switch__text">
+                <span className="language-switch__code language-switch__code--es">
+                  ES
+                </span>
+                <span className="language-switch__code language-switch__code--en">
+                  EN
+                </span>
               </div>
-            </div>
 
-            {/* Language Code Display */}
-            <div className="language-switch__text">
-              <span className="language-switch__code language-switch__code--es">
-                ES
-              </span>
-              <span className="language-switch__code language-switch__code--en">
-                EN
-              </span>
-            </div>
-
-            {/* Circle Container with Flag */}
-            <div className="language-switch__circle-container">
-              <div className="language-switch__flag-container">
-                <div className="language-switch__current-flag">
-                  <span className="language-switch__flag-icon" role="img" aria-label={`${currentLanguage?.name} flag`}>
-                    {currentLanguage?.flag}
-                  </span>
+              {/* Circle Container with Flag */}
+              <div className="language-switch__circle-container">
+                <div className="language-switch__flag-container">
+                  <div className="language-switch__current-flag">
+                    <span
+                      className="language-switch__flag-icon"
+                      role="img"
+                      aria-label={`${currentLanguage?.name} flag`}
+                    >
+                      {currentLanguage?.flag}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </label>
-      </StyledWrapper>
-    </>
-  );
-});
+          </label>
+        </StyledWrapper>
+      </>
+    );
+  },
+);
 
 const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
   .language-switch {
@@ -357,9 +366,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
   .language-switch__checkbox:checked
     + .language-switch__container
     .language-switch__circle-container {
-    left: calc(
-      100% - var(--circle-offset) - var(--circle-container-diameter)
-    );
+    left: calc(100% - var(--circle-offset) - var(--circle-container-diameter));
   }
 
   .language-switch__checkbox:checked
