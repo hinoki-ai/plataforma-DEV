@@ -68,13 +68,42 @@ export function ResponsiveLayoutProvider({
 }: ResponsiveLayoutProviderProps) {
   const [viewMode, setViewMode] = useState<
     "desktop" | "tablet" | "mobile" | "auto"
-  >("auto");
+  >(() => {
+    if (typeof window === "undefined" || typeof localStorage === "undefined")
+      return "auto";
+    try {
+      const saved = localStorage.getItem("layout-preferences");
+      return saved ? JSON.parse(saved).viewMode || "auto" : "auto";
+    } catch {
+      return "auto";
+    }
+  });
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [layoutDensity, setLayoutDensity] = useState<
     "compact" | "comfortable" | "spacious"
-  >("comfortable");
+  >(() => {
+    if (typeof window === "undefined" || typeof localStorage === "undefined")
+      return "comfortable";
+    try {
+      const saved = localStorage.getItem("layout-preferences");
+      return saved
+        ? JSON.parse(saved).layoutDensity || "comfortable"
+        : "comfortable";
+    } catch {
+      return "comfortable";
+    }
+  });
   const [sidebarPosition, setSidebarPosition] = useState<"left" | "right">(
-    "left",
+    () => {
+      if (typeof window === "undefined" || typeof localStorage === "undefined")
+        return "left";
+      try {
+        const saved = localStorage.getItem("layout-preferences");
+        return saved ? JSON.parse(saved).sidebarPosition || "left" : "left";
+      } catch {
+        return "left";
+      }
+    },
   );
   const [currentBreakpoint, setCurrentBreakpoint] = useState("desktop");
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
@@ -103,24 +132,6 @@ export function ResponsiveLayoutProvider({
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Load saved preferences - hydration-safe
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof localStorage === "undefined")
-      return;
-
-    const savedPreferences = localStorage.getItem("layout-preferences");
-    if (savedPreferences) {
-      try {
-        const preferences = JSON.parse(savedPreferences);
-        setViewMode(preferences.viewMode || "auto");
-        setLayoutDensity(preferences.layoutDensity || "comfortable");
-        setSidebarPosition(preferences.sidebarPosition || "left");
-      } catch (error) {
-        console.error("Error loading layout preferences:", error);
-      }
-    }
   }, []);
 
   // Save preferences to localStorage - hydration-safe

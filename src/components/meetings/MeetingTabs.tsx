@@ -73,6 +73,7 @@ export function MeetingTabs({ isAdmin = false }: MeetingTabsProps) {
   useLayoutEffect(() => {
     const create = searchParams.get("create");
     if (create === "true" && isAdmin) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsCreateDialogOpen(true);
       // Clean up the URL by removing the query parameter
       router.replace("/admin/reuniones", { scroll: false });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -38,82 +38,75 @@ interface AuditEntry {
   severity: "low" | "medium" | "high" | "critical";
 }
 
+// Mock audit data for demonstration
+const mockAuditData: AuditEntry[] = [
+  {
+    id: "1",
+    timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+    userId: "master-1",
+    userEmail: "agustinaramac@gmail.com",
+    action: "SYSTEM_GOD_MODE_ACTIVATED",
+    resource: "system_control",
+    details: { command: "god_mode_status", result: "ACTIVE" },
+    ipAddress: "192.168.1.100",
+    userAgent: "Mozilla/5.0 (MASTER Browser)",
+    severity: "critical",
+  },
+  {
+    id: "2",
+    timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    userId: "admin-1",
+    userEmail: "admin@test.com",
+    action: "USER_ROLE_MODIFIED",
+    resource: "user_management",
+    details: {
+      targetUser: "profesor@test.com",
+      oldRole: "PROFESOR",
+      newRole: "ADMIN",
+    },
+    ipAddress: "10.0.0.50",
+    userAgent: "Chrome/91.0",
+    severity: "high",
+  },
+  {
+    id: "3",
+    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    userId: "master-1",
+    userEmail: "agustinaramac@gmail.com",
+    action: "EMERGENCY_LOCKDOWN_INITIATED",
+    resource: "security_control",
+    details: { lockdownId: "MASTER_LD_123456", affectedSystems: "ALL" },
+    ipAddress: "192.168.1.100",
+    userAgent: "Mozilla/5.0 (MASTER Browser)",
+    severity: "critical",
+  },
+  {
+    id: "4",
+    timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    userId: "profesor-1",
+    userEmail: "profesor@test.com",
+    action: "DOCUMENT_CREATED",
+    resource: "planning_documents",
+    details: {
+      documentId: "doc-123",
+      subject: "Mathematics",
+      grade: "8° Básico",
+    },
+    ipAddress: "172.16.0.25",
+    userAgent: "Firefox/89.0",
+    severity: "low",
+  },
+];
+
 export function MasterAuditLog() {
   const roleAccess = useRoleAccess();
-  const [auditLogs, setAuditLogs] = useState<AuditEntry[]>([]);
-  const [filteredLogs, setFilteredLogs] = useState<AuditEntry[]>([]);
+  const [auditLogs] = useState<AuditEntry[]>(mockAuditData);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState<string>("all");
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Mock audit data for demonstration
-  useEffect(() => {
-    const mockAuditData: AuditEntry[] = [
-      {
-        id: "1",
-        timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-        userId: "master-1",
-        userEmail: "agustinaramac@gmail.com",
-        action: "SYSTEM_GOD_MODE_ACTIVATED",
-        resource: "system_control",
-        details: { command: "god_mode_status", result: "ACTIVE" },
-        ipAddress: "192.168.1.100",
-        userAgent: "Mozilla/5.0 (MASTER Browser)",
-        severity: "critical",
-      },
-      {
-        id: "2",
-        timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-        userId: "admin-1",
-        userEmail: "admin@test.com",
-        action: "USER_ROLE_MODIFIED",
-        resource: "user_management",
-        details: {
-          targetUser: "profesor@test.com",
-          oldRole: "PROFESOR",
-          newRole: "ADMIN",
-        },
-        ipAddress: "10.0.0.50",
-        userAgent: "Chrome/91.0",
-        severity: "high",
-      },
-      {
-        id: "3",
-        timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-        userId: "master-1",
-        userEmail: "agustinaramac@gmail.com",
-        action: "EMERGENCY_LOCKDOWN_INITIATED",
-        resource: "security_control",
-        details: { lockdownId: "MASTER_LD_123456", affectedSystems: "ALL" },
-        ipAddress: "192.168.1.100",
-        userAgent: "Mozilla/5.0 (MASTER Browser)",
-        severity: "critical",
-      },
-      {
-        id: "4",
-        timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-        userId: "profesor-1",
-        userEmail: "profesor@test.com",
-        action: "DOCUMENT_CREATED",
-        resource: "planning_documents",
-        details: {
-          documentId: "doc-123",
-          subject: "Mathematics",
-          grade: "8° Básico",
-        },
-        ipAddress: "172.16.0.25",
-        userAgent: "Firefox/89.0",
-        severity: "low",
-      },
-    ];
-
-    setAuditLogs(mockAuditData);
-    setFilteredLogs(mockAuditData);
-    setIsLoading(false);
-  }, []);
+  const [isLoading] = useState(false);
 
   // Filter logs based on search term and severity
-  useEffect(() => {
+  const filteredLogs = useMemo(() => {
     let filtered = auditLogs;
 
     if (searchTerm) {
@@ -129,7 +122,7 @@ export function MasterAuditLog() {
       filtered = filtered.filter((log) => log.severity === selectedSeverity);
     }
 
-    setFilteredLogs(filtered);
+    return filtered;
   }, [auditLogs, searchTerm, selectedSeverity]);
 
   // Only render for MASTER users
@@ -181,7 +174,7 @@ export function MasterAuditLog() {
   return (
     <div className="space-y-6">
       {/* MASTER Audit Header */}
-      <Card className="border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20">
+      <Card className="border-yellow-200 bg-linear-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20">
         <CardHeader>
           <div className="flex items-center gap-3">
             <Eye className="h-8 w-8 text-yellow-600" />

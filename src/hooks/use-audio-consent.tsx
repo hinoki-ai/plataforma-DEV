@@ -27,6 +27,7 @@ export function useAudioConsent() {
       const stored = localStorage.getItem(AUDIO_CONSENT_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPreferences({
           ...DEFAULT_PREFERENCES,
           ...parsed,

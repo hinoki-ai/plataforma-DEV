@@ -31,6 +31,7 @@ export function UploadProgress({
 
   useEffect(() => {
     if (files.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUploadState(
         files.map((file) => ({
           file,
@@ -48,6 +49,7 @@ export function UploadProgress({
         0,
       );
       const averageProgress = totalProgress / uploadState.length;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOverallProgress(averageProgress);
       onProgress?.(averageProgress);
 

@@ -244,7 +244,7 @@ export function useEmailValidation(email: string) {
 
     result.isValid = true;
     return result;
-  }, [email]);
+  }, [email, t]);
 }
 
 // Enhanced form field with smart validation
@@ -321,6 +321,7 @@ export function SmartFormField({
           suggestion.toLowerCase().includes(watchedValue.toLowerCase()),
         )
         .slice(0, 5);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSuggestions(filtered);
     }
   }, [watchedValue, config.suggestions]);
@@ -366,7 +367,7 @@ export function SmartFormField({
     }
 
     return rules;
-  }, [config.validation, isRequired]);
+  }, [config.validation, isRequired, t]);
 
   if (!isVisible) return null;
 
