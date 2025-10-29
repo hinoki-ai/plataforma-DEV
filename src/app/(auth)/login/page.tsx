@@ -46,7 +46,7 @@ function LoginForm() {
               footerActionLink:
                 "text-primary font-semibold hover:text-primary/80",
               formButtonPrimary:
-                "rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none",
+                "rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none",
               socialButtonsBlockButton:
                 "rounded-xl border border-white/50 bg-white/85 text-slate-900 shadow-sm transition hover:border-white/60 hover:bg-white dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:border-white/20 dark:hover:bg-slate-900/70",
               socialButtonsProviderIcon: "text-slate-600 dark:text-slate-200",
