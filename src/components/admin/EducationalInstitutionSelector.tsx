@@ -35,6 +35,7 @@ import {
   getSubjectsForInstitutionType,
 } from "@/lib/educational-system";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface EducationalInstitutionSelectorProps {
   currentType?: EducationalInstitutionType;
@@ -45,6 +46,7 @@ export function EducationalInstitutionSelector({
   currentType,
   onTypeChange,
 }: EducationalInstitutionSelectorProps) {
+  const { t } = useLanguage();
   const [selectedType, setSelectedType] =
     useState<EducationalInstitutionType | null>(currentType || null);
   const [isConfiguring, setIsConfiguring] = useState(false);
@@ -55,7 +57,7 @@ export function EducationalInstitutionSelector({
 
   const handleSaveConfiguration = async () => {
     if (!selectedType) {
-      toast.error("Por favor selecciona un tipo de institución educativa");
+      toast.error(t("educational_system.select_institution"));
       return;
     }
 
@@ -76,15 +78,11 @@ export function EducationalInstitutionSelector({
       // Check if response is ok
       if (!response.ok) {
         if (response.status === 401) {
-          throw new Error(
-            "No tienes permisos para realizar esta acción. Inicia sesión como administrador.",
-          );
+          throw new Error(t("educational_system.permission_denied"));
         } else if (response.status === 403) {
-          throw new Error(
-            "Acceso denegado. Solo los administradores pueden cambiar la configuración institucional.",
-          );
+          throw new Error(t("educational_system.access_denied"));
         } else if (response.status >= 500) {
-          throw new Error("Error del servidor. Inténtalo de nuevo más tarde.");
+          throw new Error(t("educational_system.server_error"));
         } else {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
@@ -109,15 +107,11 @@ export function EducationalInstitutionSelector({
 
       // Handle network errors
       if (error instanceof TypeError && error.message.includes("fetch")) {
-        toast.error(
-          "Error de conexión. Verifica tu conexión a internet e inténtalo de nuevo.",
-        );
+        toast.error(t("educational_system.connection_error"));
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error(
-          "Error desconocido al guardar la configuración. Inténtalo de nuevo.",
-        );
+        toast.error(t("educational_system.unknown_error"));
       }
     } finally {
       setIsConfiguring(false);
@@ -132,7 +126,7 @@ export function EducationalInstitutionSelector({
         return <BookOpen className="h-6 w-6" />;
       case "HIGH_SCHOOL":
         return <GraduationCap className="h-6 w-6" />;
-      case "COLLEGE":
+      case "UNIVERSITY":
         return <Building2 className="h-6 w-6" />;
     }
   };
@@ -143,12 +137,10 @@ export function EducationalInstitutionSelector({
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <Settings className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            Configuración del Tipo de Institución Educativa
+            {t("educational_system.title")}
           </CardTitle>
           <CardDescription>
-            Selecciona el tipo de institución educativa para adaptar el sistema
-            a tus necesidades específicas. Esta configuración determinará qué
-            características y funcionalidades están disponibles.
+            {t("educational_system.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -187,7 +179,7 @@ export function EducationalInstitutionSelector({
                           className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
                         >
                           <Check className="h-3 w-3 mr-1" />
-                          Actual
+                          {t("educational_system.current_type")}
                         </Badge>
                       )}
                       {isSelected && !isCurrent && (
@@ -195,7 +187,7 @@ export function EducationalInstitutionSelector({
                           variant="secondary"
                           className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300"
                         >
-                          Seleccionado
+                          {t("educational_system.select_type")}
                         </Badge>
                       )}
                     </div>
@@ -206,7 +198,7 @@ export function EducationalInstitutionSelector({
                     </p>
                     <div className="space-y-2">
                       <div className="text-xs text-gray-500 dark:text-gray-400">
-                        <strong>Niveles incluidos:</strong>
+                        <strong>{t("educational_system.levels_included")}:</strong>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {info.levels.slice(0, 3).map((level) => (
@@ -220,7 +212,7 @@ export function EducationalInstitutionSelector({
                         ))}
                         {info.levels.length > 3 && (
                           <Badge variant="outline" className="text-xs">
-                            +{info.levels.length - 3} más
+                            +{info.levels.length - 3} {t("educational_system.more_levels")}
                           </Badge>
                         )}
                       </div>
@@ -238,15 +230,11 @@ export function EducationalInstitutionSelector({
                 <AlertDescription>
                   <div className="space-y-2">
                     <p>
-                      <strong>Configuración seleccionada:</strong>{" "}
+                      <strong>{t("educational_system.selected_config")}:</strong>{" "}
                       {INSTITUTION_TYPE_INFO[selectedType].chileanName}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Esta configuración habilitará{" "}
-                      {INSTITUTION_TYPE_INFO[selectedType].levels.length}{" "}
-                      niveles educativos y{" "}
-                      {getSubjectsForInstitutionType(selectedType).length} áreas
-                      de asignaturas específicas.
+                      {t("educational_system.config_description")} {INSTITUTION_TYPE_INFO[selectedType].levels.length} {t("educational_system.educational_levels").toLowerCase()} {t("common.and")} {getSubjectsForInstitutionType(selectedType).length} {t("educational_system.subject_areas").toLowerCase()} {t("educational_system.specific").toLowerCase()}.
                     </p>
                   </div>
                 </AlertDescription>
@@ -263,15 +251,14 @@ export function EducationalInstitutionSelector({
               className="flex items-center gap-2"
             >
               <Save className="h-4 w-4" />
-              {isConfiguring ? "Configurando..." : "Aplicar Configuración"}
+              {isConfiguring ? t("educational_system.configuring") : t("educational_system.apply_config")}
             </Button>
 
             {selectedType && selectedType !== currentType && (
               <Alert className="flex-1 border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950/20">
                 <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
                 <AlertDescription className="text-yellow-800 dark:text-yellow-200">
-                  Cambiar el tipo de institución modificará las funcionalidades
-                  disponibles del sistema.
+                  {t("educational_system.changes_warning")}
                 </AlertDescription>
               </Alert>
             )}
@@ -284,7 +271,7 @@ export function EducationalInstitutionSelector({
         <Card>
           <CardHeader>
             <CardTitle>
-              Detalles de Configuración:{" "}
+              {t("educational_system.config_details")}:{" "}
               {INSTITUTION_TYPE_INFO[selectedType].chileanName}
             </CardTitle>
           </CardHeader>
@@ -292,7 +279,7 @@ export function EducationalInstitutionSelector({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">
-                  Niveles Educativos
+                  {t("educational_system.educational_levels")}
                 </h4>
                 <div className="space-y-2">
                   {INSTITUTION_TYPE_INFO[selectedType].levels.map((level) => (
@@ -315,7 +302,7 @@ export function EducationalInstitutionSelector({
 
               <div>
                 <h4 className="font-medium mb-3 text-gray-900 dark:text-gray-100">
-                  Áreas de Asignaturas
+                  {t("educational_system.subject_areas")}
                 </h4>
                 <div className="flex flex-wrap gap-1">
                   {getSubjectsForInstitutionType(selectedType).map(

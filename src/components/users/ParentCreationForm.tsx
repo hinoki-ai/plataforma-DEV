@@ -46,28 +46,40 @@ const passwordSchema = z
   );
 
 // Parent creation schema with student information
-const createParentSchema = z.object({
-  // Parent information
-  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Ingrese un email válido"),
-  password: passwordSchema,
-  phone: z.string().optional(),
-  // Student information
-  studentName: z.string().min(2, "El nombre del estudiante es requerido"),
-  studentGrade: z.string().min(1, "El grado del estudiante es requerido"),
-  studentEmail: z
-    .string()
-    .email("El email del estudiante debe ser válido")
-    .optional()
-    .or(z.literal("")),
-  guardianPhone: z.string().optional(),
-  relationship: z.string().min(1, "La relación familiar es requerida"),
-});
+const createParentSchema = z
+  .object({
+    // Parent information
+    name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+    email: z.string().email("Ingrese un email válido"),
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, "Confirma la contraseña"),
+    phone: z.string().optional(),
+    // Student information
+    studentName: z.string().min(2, "El nombre del estudiante es requerido"),
+    studentGrade: z.string().min(1, "El grado del estudiante es requerido"),
+    studentEmail: z
+      .string()
+      .email("El email del estudiante debe ser válido")
+      .optional()
+      .or(z.literal("")),
+    guardianPhone: z.string().optional(),
+    relationship: z.string().min(1, "La relación familiar es requerida"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Las contraseñas no coinciden",
+        path: ["confirmPassword"],
+      });
+    }
+  });
 
-type ParentFormData = z.infer<typeof createParentSchema>;
+type ParentFormValues = z.infer<typeof createParentSchema>;
+type ParentFormOutput = Omit<ParentFormValues, "confirmPassword">;
 
 interface ParentCreationFormProps {
-  onSubmit: (data: ParentFormData) => void;
+  onSubmit: (data: ParentFormOutput) => void;
   onCancel: () => void;
   isLoading?: boolean;
   title?: string;
@@ -110,9 +122,10 @@ export function ParentCreationForm({
   className,
 }: ParentCreationFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { t } = useLanguage();
 
-  const form = useForm<ParentFormData>({
+  const form = useForm<ParentFormValues>({
     resolver: zodResolver(createParentSchema),
     defaultValues: {
       name: "",
@@ -124,17 +137,19 @@ export function ParentCreationForm({
       studentEmail: "",
       guardianPhone: "",
       relationship: "",
+      confirmPassword: "",
     },
   });
 
-  const handleSubmit = async (data: ParentFormData) => {
+  const handleSubmit = async (data: ParentFormValues) => {
     // Clean up empty optional fields
+    const { confirmPassword: _confirmPassword, ...formValues } = data;
     const cleanedData = {
-      ...data,
+      ...formValues,
       studentEmail: data.studentEmail || undefined,
       phone: data.phone || undefined,
       guardianPhone: data.guardianPhone || undefined,
-    };
+    } satisfies ParentFormOutput;
     await onSubmit(cleanedData);
   };
 
@@ -276,6 +291,47 @@ export function ParentCreationForm({
                       La contraseña debe tener al menos 8 caracteres, incluyendo
                       mayúsculas, minúsculas, números y caracteres especiales
                     </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirmar Contraseña</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirma la contraseña"
+                          {...field}
+                          className="pr-10"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          aria-label={
+                            showConfirmPassword
+                              ? "Ocultar confirmación de contraseña"
+                              : "Mostrar confirmación de contraseña"
+                          }
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

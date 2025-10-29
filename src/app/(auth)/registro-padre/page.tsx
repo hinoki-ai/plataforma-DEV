@@ -30,6 +30,19 @@ type ParentFormData = {
   relationship: string;
 };
 
+type ParentRegistrationSuccessData = {
+  name: string;
+  email: string;
+  message?: string;
+  studentInfo: {
+    studentName: string;
+    studentGrade: string;
+    relationship: string;
+    studentEmail?: string;
+    guardianPhone?: string;
+  };
+};
+
 export default function ParentRegistrationPage() {
   return (
     <AdaptiveErrorBoundary context="auth" showRetry={true} showHome={true}>
@@ -43,15 +56,8 @@ function ParentRegistrationContent() {
   const { t } = useLanguage();
   const [isRegistering, setIsRegistering] = useState(false);
   const [registrationComplete, setRegistrationComplete] = useState(false);
-  const [registrationData, setRegistrationData] = useState<{
-    name: string;
-    email: string;
-    studentInfo: {
-      studentName: string;
-      studentGrade: string;
-      relationship: string;
-    };
-  } | null>(null);
+  const [registrationData, setRegistrationData] =
+    useState<ParentRegistrationSuccessData | null>(null);
 
   const successBadgeRaw = t("parent_registration.success_badge", "common");
   const successBadgeText =
@@ -69,8 +75,19 @@ function ParentRegistrationContent() {
       });
 
       if (response.ok) {
-        const result = await response.json();
-        setRegistrationData(result);
+        const result: ParentRegistrationSuccessData = await response.json();
+        setRegistrationData({
+          name: result.name,
+          email: result.email,
+          message: result.message,
+          studentInfo: {
+            studentName: result.studentInfo.studentName,
+            studentGrade: result.studentInfo.studentGrade,
+            relationship: result.studentInfo.relationship,
+            studentEmail: result.studentInfo.studentEmail,
+            guardianPhone: result.studentInfo.guardianPhone,
+          },
+        });
         setRegistrationComplete(true);
         toast.success(
           `✅ ${t("parent_registration.success_toast", "common")}`,
@@ -165,6 +182,18 @@ function ParentRegistrationContent() {
                     </strong>{" "}
                     {registrationData.studentInfo.studentGrade}
                   </p>
+                  {registrationData.studentInfo.studentEmail && (
+                    <p>
+                      <strong>
+                        {t(
+                          "parent_registration.registered_student_email",
+                          "common",
+                        )}
+                        :
+                      </strong>{" "}
+                      {registrationData.studentInfo.studentEmail}
+                    </p>
+                  )}
                   <p>
                     <strong>
                       {t(
@@ -175,6 +204,18 @@ function ParentRegistrationContent() {
                     </strong>{" "}
                     {registrationData.studentInfo.relationship}
                   </p>
+                  {registrationData.studentInfo.guardianPhone && (
+                    <p>
+                      <strong>
+                        {t(
+                          "parent_registration.registered_guardian_phone",
+                          "common",
+                        )}
+                        :
+                      </strong>{" "}
+                      {registrationData.studentInfo.guardianPhone}
+                    </p>
+                  )}
                 </div>
               </div>
 

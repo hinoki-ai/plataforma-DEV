@@ -514,6 +514,7 @@ export function GradeEntryForm({
                       ? "bg-yellow-500"
                       : "bg-red-500",
               )}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               style={{ width: `${gradePercentage}%` }}
             />
           </div>

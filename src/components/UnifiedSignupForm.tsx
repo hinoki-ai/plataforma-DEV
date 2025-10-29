@@ -6,8 +6,13 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
+import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useSignIn } from "@clerk/nextjs";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface FormData {
   fullName: string;
@@ -26,46 +31,87 @@ interface FormData {
   institutionId: string;
 }
 
-const grades = [
-  { value: "prekinder", label: "Pre-Kinder (3-4 años)" },
-  { value: "kinder", label: "Kinder (4-5 años)" },
-  { value: "preparatoria", label: "Preparatoria (5-6 años)" },
+const getGrades = (t: (key: string) => string) => [
+  // Pre-school
+  { value: "sala_cuna_menor", label: t("grade.sala_cuna_menor") },
+  { value: "sala_cuna_mayor", label: t("grade.sala_cuna_mayor") },
+  { value: "nivel_medio_menor", label: t("grade.nivel_medio_menor") },
+  { value: "nivel_medio_mayor", label: t("grade.nivel_medio_mayor") },
+  { value: "prekinder", label: t("grade.prekinder") },
+  { value: "kinder", label: t("grade.kinder") },
+
+  // Basic School
+  { value: "primer_basico", label: t("grade.primer_basico") },
+  { value: "segundo_basico", label: t("grade.segundo_basico") },
+  { value: "tercero_basico", label: t("grade.tercero_basico") },
+  { value: "cuarto_basico", label: t("grade.cuarto_basico") },
+  { value: "quinto_basico", label: t("grade.quinto_basico") },
+  { value: "sexto_basico", label: t("grade.sexto_basico") },
+  { value: "septimo_basico", label: t("grade.septimo_basico") },
+  { value: "octavo_basico", label: t("grade.octavo_basico") },
+
+  // High School
+  { value: "primer_medio", label: t("grade.primer_medio") },
+  { value: "segundo_medio", label: t("grade.segundo_medio") },
+  { value: "tercero_medio", label: t("grade.tercero_medio") },
+  { value: "cuarto_medio", label: t("grade.cuarto_medio") },
+
+  // Higher Education
+  { value: "tecnico_1ano", label: t("grade.tecnico_1ano") },
+  { value: "tecnico_2ano", label: t("grade.tecnico_2ano") },
+  { value: "tecnico_3ano", label: t("grade.tecnico_3ano") },
+  { value: "licenciatura_1ano", label: t("grade.licenciatura_1ano") },
+  { value: "licenciatura_2ano", label: t("grade.licenciatura_2ano") },
+  { value: "licenciatura_3ano", label: t("grade.licenciatura_3ano") },
+  { value: "licenciatura_4ano", label: t("grade.licenciatura_4ano") },
+  { value: "titulo_profesional_1ano", label: t("grade.titulo_profesional_1ano") },
+  { value: "titulo_profesional_2ano", label: t("grade.titulo_profesional_2ano") },
+  { value: "titulo_profesional_3ano", label: t("grade.titulo_profesional_3ano") },
+  { value: "titulo_profesional_4ano", label: t("grade.titulo_profesional_4ano") },
+  { value: "titulo_profesional_5ano", label: t("grade.titulo_profesional_5ano") },
+  { value: "titulo_profesional_6ano", label: t("grade.titulo_profesional_6ano") },
+  { value: "magister_1ano", label: t("grade.magister_1ano") },
+  { value: "magister_2ano", label: t("grade.magister_2ano") },
+  { value: "doctorado_1ano", label: t("grade.doctorado_1ano") },
+  { value: "doctorado_2ano", label: t("grade.doctorado_2ano") },
+  { value: "doctorado_3ano", label: t("grade.doctorado_3ano") },
+  { value: "doctorado_4ano", label: t("grade.doctorado_4ano") },
 ];
 
-const relationships = [
-  { value: "padre", label: "Padre" },
-  { value: "madre", label: "Madre" },
-  { value: "apoderado", label: "Apoderado" },
-  { value: "tutor", label: "Tutor" },
-  { value: "abuelo", label: "Abuelo/a" },
-  { value: "otro", label: "Otro" },
+const getRelationships = (t: (key: string) => string) => [
+  { value: "padre", label: t("relationship.padre") },
+  { value: "madre", label: t("relationship.madre") },
+  { value: "apoderado", label: t("relationship.apoderado") },
+  { value: "tutor", label: t("relationship.tutor") },
+  { value: "abuelo", label: t("relationship.abuelo") },
+  { value: "otro", label: t("relationship.otro") },
 ];
 
-const regions = [
-  { value: "arica-parinacota", label: "Región de Arica y Parinacota" },
-  { value: "tarapaca", label: "Región de Tarapacá" },
-  { value: "antofagasta", label: "Región de Antofagasta" },
-  { value: "atacama", label: "Región de Atacama" },
-  { value: "coquimbo", label: "Región de Coquimbo" },
-  { value: "valparaiso", label: "Región de Valparaíso" },
-  { value: "metropolitana", label: "Región Metropolitana de Santiago" },
+const getRegions = (t: (key: string) => string) => [
+  { value: "arica-parinacota", label: t("region.arica-parinacota") },
+  { value: "tarapaca", label: t("region.tarapaca") },
+  { value: "antofagasta", label: t("region.antofagasta") },
+  { value: "atacama", label: t("region.atacama") },
+  { value: "coquimbo", label: t("region.coquimbo") },
+  { value: "valparaiso", label: t("region.valparaiso") },
+  { value: "metropolitana", label: t("region.metropolitana") },
   {
     value: "ohiggins",
-    label: "Región del Libertador General Bernardo O'Higgins",
+    label: t("region.ohiggins"),
   },
-  { value: "maule", label: "Región del Maule" },
-  { value: "nuble", label: "Región de Ñuble" },
-  { value: "biobio", label: "Región del Biobío" },
-  { value: "araucania", label: "Región de La Araucanía" },
-  { value: "los-rios", label: "Región de Los Ríos" },
-  { value: "los-lagos", label: "Región de Los Lagos" },
+  { value: "maule", label: t("region.maule") },
+  { value: "nuble", label: t("region.nuble") },
+  { value: "biobio", label: t("region.biobio") },
+  { value: "araucania", label: t("region.araucania") },
+  { value: "los-rios", label: t("region.los-rios") },
+  { value: "los-lagos", label: t("region.los-lagos") },
   {
     value: "aysen",
-    label: "Región de Aysén del General Carlos Ibáñez del Campo",
+    label: t("region.aysen"),
   },
   {
     value: "magallanes",
-    label: "Región de Magallanes y de la Antártica Chilena",
+    label: t("region.magallanes"),
   },
 ];
 
@@ -282,10 +328,11 @@ const comunasByRegion: Record<string, string[]> = {
   ],
   nuble: [
     "Bulnes",
-    "Cobquecura",
-    "Coelemu",
     "Chillán",
     "Chillán Viejo",
+    "Cobquecura",
+    "Coelemu",
+    "Coihueco",
     "El Carmen",
     "Ninhue",
     "Ñiquén",
@@ -293,6 +340,7 @@ const comunasByRegion: Record<string, string[]> = {
     "Pinto",
     "Portezuelo",
     "Quillón",
+    "Quirihue",
     "Ránquil",
     "San Carlos",
     "San Fabián",
@@ -459,6 +507,8 @@ const stepDescriptions = [
 
 export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const { data: session } = useSession();
+  const { signIn: clerkSignIn } = useSignIn();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -483,7 +533,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const [institutions, setInstitutions] = useState<
     Array<{ _id: string; name: string }>
   >([]);
-  const [isGoogleConfigured, setIsGoogleConfigured] = useState(false);
+  const [institutionPopoverOpen, setInstitutionPopoverOpen] = useState(false);
   const router = useRouter();
 
   // Pre-fill form data for Google users
@@ -510,13 +560,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     }
   }, [formData.region]);
 
-  // Check Google OAuth configuration
-  useEffect(() => {
-    fetch("/api/auth/oauth-status")
-      .then((res) => res.json())
-      .then((data) => setIsGoogleConfigured(data.google.enabled))
-      .catch(() => setIsGoogleConfigured(false));
-  }, []);
 
   // Fetch institutions
   useEffect(() => {
@@ -548,41 +591,40 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
       switch (step) {
         case 1:
           if (!formData.fullName.trim())
-            newErrors.fullName = "El nombre completo es requerido";
-          if (!formData.email.trim()) newErrors.email = "El email es requerido";
+            newErrors.fullName = t("validation.full_name_required");
+          if (!formData.email.trim()) newErrors.email = t("validation.email_required");
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = "El email no es válido";
+            newErrors.email = t("validation.email_invalid");
           }
           if (!formData.phone.trim())
-            newErrors.phone = "El teléfono es requerido";
-          if (!formData.rut.trim()) newErrors.rut = "El RUT es requerido";
+            newErrors.phone = t("validation.phone_required");
+          if (!formData.rut.trim()) newErrors.rut = t("validation.rut_required");
           if (!formData.institutionId)
-            newErrors.institutionId = "La institución es requerida";
+            newErrors.institutionId = t("validation.institution_required");
           break;
 
         case 2:
           if (!formData.childName.trim())
-            newErrors.childName = "El nombre del niño/a es requerido";
+            newErrors.childName = t("validation.child_name_required");
           if (!formData.childGrade)
-            newErrors.childGrade = "El grado es requerido";
+            newErrors.childGrade = t("validation.grade_required");
           if (!formData.relationship)
-            newErrors.relationship = "La relación es requerida";
+            newErrors.relationship = t("validation.relationship_required");
           break;
 
         case 3:
           if (!formData.address.trim())
-            newErrors.address = "La dirección es requerida";
-          if (!formData.region) newErrors.region = "La región es requerida";
-          if (!formData.comuna) newErrors.comuna = "La comuna es requerida";
+            newErrors.address = t("validation.address_required");
+          if (!formData.region) newErrors.region = t("validation.region_required");
+          if (!formData.comuna) newErrors.comuna = t("validation.comuna_required");
           break;
 
         case 4:
           if (!formData.emergencyContact.trim()) {
-            newErrors.emergencyContact =
-              "El contacto de emergencia es requerido";
+            newErrors.emergencyContact = t("validation.emergency_contact_required");
           }
           if (!formData.emergencyPhone.trim()) {
-            newErrors.emergencyPhone = "El teléfono de emergencia es requerido";
+            newErrors.emergencyPhone = t("validation.emergency_phone_required");
           }
           break;
       }
@@ -644,8 +686,14 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
   const handleGoogleLogin = useCallback(() => {
     setIsLoading(true);
-    void signIn({ callbackUrl: "/cpa/exito" });
-  }, []);
+    if (clerkSignIn) {
+      void clerkSignIn.authenticateWithRedirect({
+        strategy: "oauth_google",
+        redirectUrl: "/cpa/exito",
+        redirectUrlComplete: "/cpa/exito",
+      });
+    }
+  }, [clerkSignIn]);
 
   const StepIndicator = memo(function StepIndicator() {
     return (
@@ -654,10 +702,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           <div key={step} className="flex items-center">
             <div
               className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300",
+                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 border-2",
                 currentStep >= step
-                  ? "bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-purple-600/50 scale-110"
-                  : "bg-gray-700 text-gray-400",
+                  ? "bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30 scale-110 border-blue-400"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600",
               )}
             >
               {step}
@@ -665,10 +713,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             {step < 4 && (
               <div
                 className={cn(
-                  "w-12 h-1 mx-2 transition-all duration-300",
+                  "w-12 h-1 mx-2 transition-all duration-300 rounded-full",
                   currentStep > step
-                    ? "bg-linear-to-r from-blue-600 via-purple-600 to-pink-600"
-                    : "bg-gray-700",
+                    ? "bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 shadow-sm"
+                    : "bg-gray-200 dark:bg-gray-700",
                 )}
               />
             )}
@@ -698,17 +746,17 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           {currentStep === 1 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   {stepTitles[0]}
                 </h3>
-                <p className="text-sm text-gray-400 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   {stepDescriptions[0]}
                 </p>
               </div>
 
               <div className="space-y-4">
                 <LabelInputContainer>
-                  <Label htmlFor="fullName">Nombre Completo *</Label>
+                  <Label htmlFor="fullName">{t("signup.full_name.label")}</Label>
                   <Input
                     id="fullName"
                     name="fullName"
@@ -716,8 +764,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     value={formData.fullName}
                     onChange={handleChange}
                     className={cn(
-                      "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
-                      errors.fullName && "border-red-500",
+                      "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                      errors.fullName && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
                   />
                   {errors.fullName && (
@@ -726,7 +774,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </LabelInputContainer>
 
                 <LabelInputContainer>
-                  <Label htmlFor="email">Correo Electrónico *</Label>
+                  <Label htmlFor="email">{t("signup.email.label")}</Label>
                   <Input
                     id="email"
                     name="email"
@@ -736,8 +784,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     onChange={handleChange}
                     disabled={isGoogleUser}
                     className={cn(
-                      "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
-                      errors.email && "border-red-500",
+                      "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600 disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed",
+                      errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
                   />
                   {errors.email && <ErrorMessage message={errors.email} />}
@@ -745,7 +793,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
-                    <Label htmlFor="phone">Teléfono *</Label>
+                    <Label htmlFor="phone">{t("signup.phone.label")}</Label>
                     <Input
                       id="phone"
                       name="phone"
@@ -754,15 +802,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.phone}
                       onChange={handleChange}
                       className={cn(
-                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
-                        errors.phone && "border-red-500",
+                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        errors.phone && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.phone && <ErrorMessage message={errors.phone} />}
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="rut">RUT *</Label>
+                    <Label htmlFor="rut">{t("signup.rut.label")}</Label>
                     <Input
                       id="rut"
                       name="rut"
@@ -770,8 +818,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.rut}
                       onChange={handleChange}
                       className={cn(
-                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
-                        errors.rut && "border-red-500",
+                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        errors.rut && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.rut && <ErrorMessage message={errors.rut} />}
@@ -779,21 +827,62 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </div>
 
                 <LabelInputContainer>
-                  <Label htmlFor="institutionId">Institución Educativa *</Label>
-                  <Select
-                    id="institutionId"
-                    name="institutionId"
-                    value={formData.institutionId}
-                    onChange={handleChange}
-                    error={errors.institutionId}
-                  >
-                    <option value="">Selecciona tu institución</option>
-                    {institutions.map((institution) => (
-                      <option key={institution._id} value={institution._id}>
-                        {institution.name}
-                      </option>
-                    ))}
-                  </Select>
+                  <Label htmlFor="institutionId">{t("signup.institution.label")}</Label>
+                  <Popover open={institutionPopoverOpen} onOpenChange={setInstitutionPopoverOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                          !formData.institutionId && "text-muted-foreground",
+                          errors.institutionId && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      >
+                        {formData.institutionId
+                          ? institutions.find(
+                              (institution) => institution._id === formData.institutionId,
+                            )?.name
+                          : t("select.institution")}
+                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full min-w-(--radix-popover-trigger-width) p-0" align="start">
+                      <Command>
+                        <CommandInput
+                          placeholder="Buscar institución..."
+                          className="h-9"
+                        />
+                        <CommandEmpty>{t("signup.institutions_empty")}</CommandEmpty>
+                        <CommandGroup className="max-h-64 overflow-auto">
+                          {institutions.map((institution) => (
+                            <CommandItem
+                              value={institution.name}
+                              key={institution._id}
+                              onSelect={() => {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  institutionId: institution._id,
+                                }));
+                                setErrors((prev) => ({ ...prev, institutionId: "" }));
+                                setInstitutionPopoverOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  institution._id === formData.institutionId
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {institution.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   {errors.institutionId && (
                     <ErrorMessage message={errors.institutionId} />
                   )}
@@ -805,10 +894,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           {currentStep === 2 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   {stepTitles[1]}
                 </h3>
-                <p className="text-sm text-gray-400 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   {stepDescriptions[1]}
                 </p>
               </div>
@@ -816,7 +905,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
-                    <Label htmlFor="childName">Nombre del Niño/a *</Label>
+                    <Label htmlFor="childName">{t("signup.child_name.label")}</Label>
                     <Input
                       id="childName"
                       name="childName"
@@ -824,8 +913,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.childName}
                       onChange={handleChange}
                       className={cn(
-                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
-                        errors.childName && "border-red-500",
+                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        errors.childName && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.childName && (
@@ -834,7 +923,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="childGrade">Grado *</Label>
+                    <Label htmlFor="childGrade">{t("signup.child_grade.label")}</Label>
                     <Select
                       id="childGrade"
                       name="childGrade"
@@ -842,8 +931,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       onChange={handleChange}
                       error={errors.childGrade}
                     >
-                      <option value="">Selecciona un grado</option>
-                      {grades.map((grade) => (
+                      <option value="">{t("select.grade")}</option>
+                      {getGrades(t).map((grade) => (
                         <option key={grade.value} value={grade.value}>
                           {grade.label}
                         </option>
@@ -856,7 +945,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </div>
 
                 <LabelInputContainer>
-                  <Label htmlFor="relationship">Relación con el niño/a *</Label>
+                  <Label htmlFor="relationship">{t("signup.relationship.label")}</Label>
                   <Select
                     id="relationship"
                     name="relationship"
@@ -864,8 +953,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     onChange={handleChange}
                     error={errors.relationship}
                   >
-                    <option value="">Selecciona relación</option>
-                    {relationships.map((rel) => (
+                    <option value="">{t("select.relationship")}</option>
+                    {getRelationships(t).map((rel) => (
                       <option key={rel.value} value={rel.value}>
                         {rel.label}
                       </option>
@@ -882,10 +971,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           {currentStep === 3 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   {stepTitles[2]}
                 </h3>
-                <p className="text-sm text-gray-400 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   {stepDescriptions[2]}
                 </p>
               </div>
@@ -893,7 +982,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
-                    <Label htmlFor="region">Región *</Label>
+                    <Label htmlFor="region">{t("signup.region.label")}</Label>
                     <Select
                       id="region"
                       name="region"
@@ -901,8 +990,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       onChange={handleChange}
                       error={errors.region}
                     >
-                      <option value="">Selecciona región</option>
-                      {regions.map((region) => (
+                      <option value="">{t("select.region")}</option>
+                      {getRegions(t).map((region) => (
                         <option key={region.value} value={region.value}>
                           {region.label}
                         </option>
@@ -912,7 +1001,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="comuna">Comuna *</Label>
+                    <Label htmlFor="comuna">{t("signup.comuna.label")}</Label>
                     <Select
                       id="comuna"
                       name="comuna"
@@ -921,7 +1010,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       error={errors.comuna}
                       disabled={!formData.region}
                     >
-                      <option value="">Selecciona comuna</option>
+                      <option value="">{t("select.comuna")}</option>
                       {comunas.map((comuna) => (
                         <option key={comuna} value={comuna}>
                           {comuna}
@@ -933,7 +1022,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </div>
 
                 <LabelInputContainer>
-                  <Label htmlFor="address">Dirección Completa *</Label>
+                  <Label htmlFor="address">{t("signup.address.label")}</Label>
                   <Input
                     id="address"
                     name="address"
@@ -941,8 +1030,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     value={formData.address}
                     onChange={handleChange}
                     className={cn(
-                      "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
-                      errors.address && "border-red-500",
+                      "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                      errors.address && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
                   />
                   {errors.address && <ErrorMessage message={errors.address} />}
@@ -954,10 +1043,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           {currentStep === 4 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   {stepTitles[3]}
                 </h3>
-                <p className="text-sm text-gray-400 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   {stepDescriptions[3]}
                 </p>
               </div>
@@ -975,8 +1064,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.emergencyContact}
                       onChange={handleChange}
                       className={cn(
-                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
-                        errors.emergencyContact && "border-red-500",
+                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        errors.emergencyContact && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.emergencyContact && (
@@ -996,7 +1085,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.emergencyPhone}
                       onChange={handleChange}
                       className={cn(
-                        "bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500",
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl",
                         errors.emergencyPhone && "border-red-500",
                       )}
                     />
@@ -1019,15 +1108,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-gray-900/80 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden"
+        className="glass-panel shadow-2xl overflow-hidden"
       >
-        <div className="bg-linear-to-r from-blue-600/90 via-purple-600/90 to-pink-600/90 p-6 text-white">
-          <h2 className="font-bold text-2xl mb-2">
+        <div className="bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 p-6 text-white rounded-t-xl shadow-lg">
+          <h2 className="font-bold text-2xl mb-2 drop-shadow-sm">
             {isGoogleUser
               ? "Completa tu Registro"
               : "Registro CPA Centro de Padres y Apoderados"}
           </h2>
-          <p className="text-blue-100">
+          <p className="text-white/95 font-medium drop-shadow-sm">
             Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
           </p>
         </div>
@@ -1038,12 +1127,13 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {renderStep()}
 
-            <div className="flex justify-between items-center pt-6 border-t border-gray-700/50">
+            <div className="flex justify-between items-center pt-6 border-t border-border">
               <Button
                 type="button"
                 onClick={prevStep}
                 disabled={currentStep === 1 || isLoading}
-                className="bg-gray-700 hover:bg-gray-600 text-gray-200 transition-colors border border-gray-600"
+                variant="outline"
+                className="rounded-xl border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Anterior
               </Button>
@@ -1053,7 +1143,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   type="button"
                   onClick={nextStep}
                   disabled={isLoading}
-                  className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white border-0"
+                  className="bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Siguiente
                 </Button>
@@ -1061,7 +1151,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                  className="bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? "Registrando..." : "Completar Registro"}
                 </Button>
@@ -1069,52 +1159,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             </div>
           </form>
 
-          {/* OAuth Section - Only show for non-Google users */}
-          {!isGoogleUser && (
-            <div className="mt-8 space-y-4">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-600" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="bg-gray-900/80 px-4 text-gray-400">
-                    O continúa con
-                  </span>
-                </div>
-              </div>
-
-              <Button
-                type="button"
-                onClick={handleGoogleLogin}
-                disabled={isLoading || !isGoogleConfigured}
-                className="relative group flex space-x-3 items-center justify-center px-6 w-full text-gray-200 rounded-lg h-12 font-medium shadow-lg bg-gray-800 border border-gray-600 hover:bg-gray-700 hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 24 24">
-                  <path
-                    fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  />
-                </svg>
-                <span className="text-base font-semibold">
-                  {!isGoogleConfigured
-                    ? "Google (No disponible)"
-                    : "Registrarse con Google"}
-                </span>
-              </Button>
-            </div>
-          )}
         </div>
       </motion.div>
     </div>
@@ -1145,11 +1189,8 @@ const Select = memo(function Select({
     <select
       {...props}
       className={cn(
-        "block w-full px-3 py-2 border rounded-md text-sm",
-        "placeholder:text-gray-500 focus:outline-none focus:ring-2",
-        "focus:ring-blue-500 focus:border-transparent transition-colors",
-        "bg-gray-800 border-gray-600 text-gray-100 disabled:bg-gray-700 disabled:cursor-not-allowed",
-        error && "border-red-500",
+        "block w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:border-blue-500 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600 disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed",
+        error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
       )}
     >
       {children}
@@ -1163,7 +1204,8 @@ const ErrorMessage = memo(function ErrorMessage({
   message: string;
 }) {
   return (
-    <p className="text-red-400 text-xs mt-1 animate-in fade-in duration-200">
+    <p className="text-red-600 dark:text-red-400 text-sm mt-1 font-medium animate-in fade-in duration-200 flex items-center gap-1">
+      <span className="text-red-500">⚠</span>
       {message}
     </p>
   );

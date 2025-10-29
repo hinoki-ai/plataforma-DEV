@@ -79,24 +79,20 @@ const DEFAULT_SETTINGS: AccessibilitySettings = {
 };
 
 export function useAccessibilitySettings() {
-  const [settings, setSettings] =
-    useState<AccessibilitySettings>(DEFAULT_SETTINGS);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load settings from localStorage
-  useEffect(() => {
+  const [settings, setSettings] = useState<AccessibilitySettings>(() => {
+    // Load settings from localStorage during initialization
     try {
       const saved = localStorage.getItem("accessibility-settings");
       if (saved) {
         const parsed = JSON.parse(saved);
-        setSettings({ ...DEFAULT_SETTINGS, ...parsed });
+        return { ...DEFAULT_SETTINGS, ...parsed };
       }
-      setIsLoaded(true);
     } catch (error) {
       console.error("Failed to load accessibility settings:", error);
-      setIsLoaded(true);
     }
-  }, []);
+    return DEFAULT_SETTINGS;
+  });
+  const [isLoaded, setIsLoaded] = useState(true);
 
   // Save settings to localStorage
   const saveSettings = useCallback(

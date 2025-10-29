@@ -18,7 +18,7 @@ import { useLanguage } from "@/components/language/LanguageContext";
 interface DocumentUpload {
   id: string;
   name: string;
-  type: "reglamento" | "plan" | "manual" | "protocolo";
+  type: "reglamento" | "plan" | "manual" | "protocolo" | "propuesta_tecnica";
   number: number;
   url: string;
   uploadDate: string;
@@ -47,6 +47,11 @@ const getDocumentCategories = (
     label: t("documents.category.protocolos", "common"),
     count: 9,
   },
+  {
+    type: "propuesta_tecnica" as const,
+    label: "Propuesta Técnica",
+    count: 2,
+  },
 ];
 
 export default function AdminDocumentosPage() {
@@ -63,7 +68,7 @@ export default function AdminDocumentosPage() {
 
   const handleFileUpload = async (
     file: File,
-    type: "reglamento" | "plan" | "manual" | "protocolo",
+    type: "reglamento" | "plan" | "manual" | "protocolo" | "propuesta_tecnica",
     number: number,
   ) => {
     if (session?.user?.role !== "ADMIN") {

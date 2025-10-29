@@ -81,7 +81,9 @@ export default defineSchema({
       v.literal("PRESCHOOL"),
       v.literal("BASIC_SCHOOL"),
       v.literal("HIGH_SCHOOL"),
-      v.literal("COLLEGE"),
+      v.literal("TECHNICAL_INSTITUTE"),
+      v.literal("TECHNICAL_CENTER"),
+      v.literal("UNIVERSITY"),
     ),
     supportedLevels: v.optional(v.any()), // JSON array
     customGrades: v.optional(v.any()), // JSON array

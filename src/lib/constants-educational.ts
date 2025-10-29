@@ -46,7 +46,24 @@ export function getGradesForCurrentInstitution(
   type?: EducationalInstitutionType,
 ): string[] {
   if (!type) return [...GRADES]; // Fallback to legacy
-  return getGradesForInstitutionType(type);
+
+  // Return appropriate grades based on institution type
+  switch (type) {
+    case "PRESCHOOL":
+      return [...PRESCHOOL_GRADES];
+    case "BASIC_SCHOOL":
+      return [...BASIC_SCHOOL_GRADES];
+    case "HIGH_SCHOOL":
+      return [...HIGH_SCHOOL_GRADES];
+    case "TECHNICAL_INSTITUTE":
+      return [...TECHNICAL_INSTITUTE_GRADES];
+    case "TECHNICAL_CENTER":
+      return [...TECHNICAL_CENTER_GRADES];
+    case "UNIVERSITY":
+      return [...UNIVERSITY_GRADES];
+    default:
+      return [...GRADES]; // Fallback
+  }
 }
 
 // Extended subjects by institution type
@@ -131,13 +148,31 @@ export const HIGH_SCHOOL_GRADES = [
   "4° Medio TP",
 ] as const;
 
-export const COLLEGE_GRADES = [
-  "1° Año",
-  "2° Año",
-  "3° Año",
-  "4° Año",
-  "5° Año",
-  "6° Año",
+export const TECHNICAL_INSTITUTE_GRADES = [
+  "1° Año Técnico",
+  "2° Año Técnico",
+  "3° Año Técnico",
+  "Técnico de Nivel Superior",
+] as const;
+
+export const TECHNICAL_CENTER_GRADES = [
+  "1° Año CFT",
+  "2° Año CFT",
+  "3° Año CFT",
+  "Certificación Técnica",
+] as const;
+
+export const UNIVERSITY_GRADES = [
+  "1° Año Licenciatura",
+  "2° Año Licenciatura",
+  "3° Año Licenciatura",
+  "4° Año Licenciatura",
+  "1° Año Título Profesional",
+  "2° Año Título Profesional",
+  "3° Año Título Profesional",
+  "4° Año Título Profesional",
+  "5° Año Título Profesional",
+  "6° Año Título Profesional",
   // Graduate levels
   "Magíster 1° Año",
   "Magíster 2° Año",

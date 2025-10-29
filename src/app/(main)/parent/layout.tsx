@@ -19,6 +19,7 @@ export default function ParentLayout({
     null,
   );
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (status === "loading") return; // Still loading
 
@@ -66,6 +67,7 @@ export default function ParentLayout({
   }, [session, status, router, isChecking, hasRedirected]);
 
   // Set up a timeout to prevent indefinite loading
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (status === "loading" && !loadingTimeout) {
       const timeout = setTimeout(() => {

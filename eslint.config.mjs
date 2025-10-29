@@ -14,7 +14,7 @@ const eslintConfig = [
       "node_modules/**/*",
     ],
   },
-  nextConfig,
+  ...nextConfig,
   {
     rules: {
       // Temporarily disable overly strict rules to focus on critical issues

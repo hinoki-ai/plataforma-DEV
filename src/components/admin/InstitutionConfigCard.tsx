@@ -28,6 +28,7 @@ import {
   EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
 } from "@/lib/educational-system";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface InstitutionConfigCardProps {
   currentType: EducationalInstitutionType;
@@ -38,6 +39,7 @@ export function InstitutionConfigCard({
   currentType,
   onConfigureClick,
 }: InstitutionConfigCardProps) {
+  const { t } = useLanguage();
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
   const getInstitutionIcon = (type: EducationalInstitutionType) => {
@@ -48,13 +50,13 @@ export function InstitutionConfigCard({
         return <BookOpen className="h-8 w-8" />;
       case "HIGH_SCHOOL":
         return <GraduationCap className="h-8 w-8" />;
-      case "COLLEGE":
+      case "UNIVERSITY":
         return <Building2 className="h-8 w-8" />;
     }
   };
 
   return (
-    <Card className="border-l-4 border-l-blue-500 dark:border-l-blue-400 bg-gradient-to-r from-blue-50/50 to-white dark:from-blue-950/20 dark:to-card">
+    <Card className="border-l-4 border-l-blue-500 dark:border-l-blue-400 bg-linear-to-r from-blue-50/50 to-white dark:from-blue-950/20 dark:to-card">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -66,7 +68,7 @@ export function InstitutionConfigCard({
                 {currentInfo.icon} {currentInfo.chileanName}
               </CardTitle>
               <CardDescription className="text-base">
-                Configuración actual del sistema educativo
+                {t("educational_system.current_config")}
               </CardDescription>
             </div>
           </div>
@@ -76,7 +78,7 @@ export function InstitutionConfigCard({
             variant="outline"
           >
             <Cog className="h-4 w-4" />
-            Configurar
+            {t("educational_system.configure")}
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
@@ -86,7 +88,7 @@ export function InstitutionConfigCard({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
-              Tipo de Institución
+              {t("educational_system.institution_type")}
             </h4>
             <Badge className={currentInfo.color} variant="secondary">
               {currentInfo.name}
@@ -98,26 +100,26 @@ export function InstitutionConfigCard({
 
           <div>
             <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
-              Niveles Disponibles
+              {t("educational_system.levels_available")}
             </h4>
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {currentInfo.levels.length}
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Niveles educativos configurados
+              {t("educational_system.levels_configured")}
             </p>
           </div>
 
           <div>
             <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
-              Rango de Edades
+              {t("educational_system.age_range")}
             </h4>
             <div className="text-sm text-gray-900 dark:text-gray-100">
               {currentInfo.levels[0]?.ages} -{" "}
               {currentInfo.levels[currentInfo.levels.length - 1]?.ages}
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Cobertura educativa completa
+              {t("educational_system.complete_coverage")}
             </p>
           </div>
         </div>
