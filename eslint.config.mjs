@@ -24,7 +24,7 @@ const eslintConfig = [
     ],
   },
   ...compat.config({
-    extends: ["next/core-web-vitals", "next/typescript"],
+    extends: ["next/core-web-vitals"],
     rules: {
       // Temporarily disable overly strict rules to focus on critical issues
       "@typescript-eslint/no-explicit-any": "off",

@@ -6,8 +6,8 @@ export default function LegalFooter() {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-gray-300 text-sm">
-            © {new Date().getFullYear()} Plataforma Astral. Todos los
-            derechos reservados.
+            © {new Date().getFullYear()} Plataforma Astral. Todos los derechos
+            reservados.
           </div>
           <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400">
             <a

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
+import LegalFooter from "@/components/layout/LegalFooter";
 
 export const metadata: Metadata = {
   title: "Términos y Condiciones | Plataforma Astral",
@@ -165,6 +166,7 @@ export default function TerminosPage() {
           </div>
         </main>
         <MinEducFooter />
+        <LegalFooter />
       </div>
     </div>
   );
