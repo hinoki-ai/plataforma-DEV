@@ -1,4 +1,4 @@
-export type BillingCycle = "monthly" | "annual" | "biannual";
+export type BillingCycle = "semestral" | "annual" | "biannual";
 
 type PlanFeatureValue = boolean | number | string | null;
 
@@ -31,7 +31,7 @@ export interface PricingPlan {
 }
 
 export const billingCycleDiscount: Record<BillingCycle, number> = {
-  monthly: 0,
+  semestral: 0,
   annual: 0.15,
   biannual: 0.25,
 };
@@ -163,7 +163,7 @@ export const findPricingPlan = (planId: string) =>
 export const isValidBillingCycle = (
   value: string | null | undefined,
 ): value is BillingCycle =>
-  value === "monthly" || value === "annual" || value === "biannual";
+  value === "semestral" || value === "annual" || value === "biannual";
 
 export const formatCLP = (amount: number) =>
   `$${amount.toLocaleString("es-CL")}`;

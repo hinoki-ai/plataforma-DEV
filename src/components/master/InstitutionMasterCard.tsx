@@ -108,7 +108,7 @@ export function InstitutionMasterCard({
   ];
 
   return (
-    <Card className="border-2 border-gold-300 dark:border-gold-700 bg-gradient-to-br from-gold-50 via-white to-blue-50 dark:from-gold-950/20 dark:via-card dark:to-blue-950/20">
+    <Card className="border-2 border-gold-300 dark:border-gold-700 bg-linear-to-br from-gold-50 via-white to-blue-50 dark:from-gold-950/20 dark:via-card dark:to-blue-950/20">
       <CardHeader className="border-b border-gold-200 dark:border-gold-700">
         <CardTitle className="flex items-center gap-3 text-gold-800 dark:text-gold-200">
           🏛️ MASTER - Configuración Educativa Suprema
@@ -203,7 +203,7 @@ export function InstitutionMasterCard({
             <Button
               onClick={handleMasterReconfiguration}
               disabled={isConfiguring}
-              className="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 dark:from-gold-600 dark:to-gold-700 dark:hover:from-gold-700 dark:hover:to-gold-800 text-white"
+              className="w-full bg-linear-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 dark:from-gold-600 dark:to-gold-700 dark:hover:from-gold-700 dark:hover:to-gold-800 text-white"
               size="lg"
             >
               <Crown className="h-5 w-5 mr-2" />

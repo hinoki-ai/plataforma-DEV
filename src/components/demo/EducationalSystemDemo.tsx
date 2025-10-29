@@ -62,7 +62,7 @@ export function EducationalSystemDemo() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+      <Card className="bg-linear-to-r from-blue-600 to-indigo-600 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-xl">
             <Globe className="h-6 w-6" />

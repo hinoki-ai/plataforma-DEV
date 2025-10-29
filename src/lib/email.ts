@@ -44,6 +44,15 @@ function parseRecipientList(value?: string | null): string[] {
     .filter((email) => email.length > 0);
 }
 
+function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function getContactRecipients(): string[] {
   const sources = [
     process.env.CONTACT_FORM_RECIPIENTS,
@@ -146,23 +155,61 @@ export async function sendWelcomeEmail({
     const dashboardUrl = `${process.env.APP_URL}/centro-consejo/dashboard`;
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
+      from: DEFAULT_FROM_EMAIL,
       to,
       subject: "¡Bienvenido al Centro de Padres Plataforma Astral!",
       html: getWelcomeEmailTemplate({ name, dashboardUrl }),
       text: getWelcomeEmailText({ name, dashboardUrl }),
     };
 
-    if (process.env.NODE_ENV === "development") {
-      // Development logging - these will be removed in production builds
-      return true;
-    }
-
-    const result = await (transporter as any).sendMail(mailOptions);
-    // Production logging handled by system logger
+    await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
-    // Error handling - return false for failed email sending
+    console.error("Error sending welcome email:", error);
+    return false;
+  }
+}
+
+interface ContactEmailPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export async function sendContactEmail(
+  payload: ContactEmailPayload,
+): Promise<boolean> {
+  try {
+    const transporter = createTransport();
+    const recipients = getContactRecipients();
+    const submittedAt = new Date();
+
+    const normalizedSubject = payload.subject.replace(/\s+/g, " ").trim();
+    const fullName = `${payload.firstName} ${payload.lastName}`.trim();
+
+    const mailOptions: SendMailOptions = {
+      from: DEFAULT_FROM_EMAIL,
+      to: recipients,
+      replyTo: payload.email,
+      subject: `[Contacto] ${normalizedSubject}`,
+      html: getContactEmailTemplate({
+        ...payload,
+        fullName,
+        submittedAt,
+      }),
+      text: getContactEmailText({
+        ...payload,
+        fullName,
+        submittedAt,
+      }),
+    };
+
+    await dispatchMail(transporter, mailOptions);
+    return true;
+  } catch (error) {
+    console.error("Error sending contact email:", error);
     return false;
   }
 }
@@ -194,23 +241,35 @@ export async function sendMeetingRequestNotification(
 ): Promise<boolean> {
   try {
     const transporter = createTransport();
-    const client = getConvexClient();
+    let recipients: string[] = [];
 
-    const staff = await client.query(api.users.getStaffUsers, {});
+    try {
+      const client = getConvexClient();
+      const staff = await client.query(api.users.getStaffUsers, {});
+      recipients = staff
+        .map((staffMember) => staffMember.email)
+        .filter((email): email is string => Boolean(email?.length));
+    } catch (convexError) {
+      console.warn(
+        "Unable to fetch staff recipients from Convex, falling back to contact recipients:",
+        convexError,
+      );
+    }
+
+    if (!recipients.length) {
+      recipients = getContactRecipients();
+    }
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
-      to: staff.map((s) => s.email).filter(Boolean),
+      from: DEFAULT_FROM_EMAIL,
+      to: recipients,
+      replyTo: data.parentEmail,
       subject: `Nueva Solicitud de Reunión - ${data.studentName}`,
       html: getMeetingRequestEmailTemplate(data),
       text: getMeetingRequestEmailText(data),
     };
 
-    if (process.env.NODE_ENV === "development") {
-      return true;
-    }
-
-    await (transporter as any).sendMail(mailOptions);
+    await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
     console.error("Error sending meeting request notification:", error);
@@ -225,18 +284,14 @@ export async function sendMeetingConfirmation(
     const transporter = createTransport();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
+      from: DEFAULT_FROM_EMAIL,
       to: data.to,
       subject: `Confirmación de Reunión - ${data.meetingTitle}`,
       html: getMeetingConfirmationEmailTemplate(data),
       text: getMeetingConfirmationEmailText(data),
     };
 
-    if (process.env.NODE_ENV === "development") {
-      return true;
-    }
-
-    await (transporter as any).sendMail(mailOptions);
+    await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
     console.error("Error sending meeting confirmation:", error);
@@ -255,7 +310,7 @@ export async function sendMeetingStatusUpdate(
     const transporter = createTransport();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
+      from: DEFAULT_FROM_EMAIL,
       to,
       subject: `Actualización de Reunión - ${meetingTitle}`,
       html: getMeetingStatusUpdateTemplate({
@@ -272,11 +327,7 @@ export async function sendMeetingStatusUpdate(
       }),
     };
 
-    if (process.env.NODE_ENV === "development") {
-      return true;
-    }
-
-    await (transporter as any).sendMail(mailOptions);
+    await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
     console.error("Error sending meeting status update:", error);
@@ -460,6 +511,103 @@ Visita tu dashboard: ${dashboardUrl}
 Saludos cordiales,
 Plataforma Educativa Astral
 Centro de Padres y Consejo Escolar
+  `;
+}
+
+function getContactEmailTemplate({
+  fullName,
+  email,
+  subject,
+  message,
+  submittedAt,
+}: ContactEmailPayload & { fullName: string; submittedAt: Date }) {
+  const formattedDate = submittedAt.toLocaleString("es-CL");
+  const sanitizedMessage = escapeHtml(message).replace(/\r?\n/g, "<br />");
+
+  return `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Nueva consulta de contacto</title>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #1f2933; margin: 0; padding: 0; background-color: #f8fafc; }
+        .container { max-width: 640px; margin: 0 auto; padding: 24px; }
+        .card { background: #ffffff; border-radius: 16px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #312e81 0%, #1d4ed8 100%); color: #ffffff; padding: 32px; }
+        .header h1 { margin: 0 0 8px 0; font-size: 24px; }
+        .content { padding: 32px; }
+        .meta { display: grid; gap: 12px; margin-bottom: 24px; }
+        .meta-item { display: flex; gap: 8px; }
+        .meta-label { font-weight: 600; color: #1f2937; min-width: 120px; }
+        .message { background: #f4f5f7; border-radius: 12px; padding: 20px; white-space: pre-wrap; }
+        .footer { padding: 24px 32px 32px; color: #4b5563; font-size: 14px; border-top: 1px solid #e5e7eb; }
+        a { color: #2563eb; text-decoration: none; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="card">
+          <div class="header">
+            <h1>Nueva consulta de contacto</h1>
+            <p>Se recibió un mensaje desde el formulario público</p>
+          </div>
+          <div class="content">
+            <div class="meta">
+              <div class="meta-item">
+                <span class="meta-label">Nombre:</span>
+                <span>${escapeHtml(fullName)}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Correo:</span>
+                <span><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Asunto:</span>
+                <span>${escapeHtml(subject)}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Enviado:</span>
+                <span>${escapeHtml(formattedDate)}</span>
+              </div>
+            </div>
+            <div class="message">${sanitizedMessage}</div>
+          </div>
+          <div class="footer">
+            <p>Responder directamente a este correo contestará a <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>.</p>
+            <p>Este mensaje fue generado por el formulario de contacto en ${process.env.APP_URL || "Plataforma Astral"}.</p>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+function getContactEmailText({
+  fullName,
+  email,
+  subject,
+  message,
+  submittedAt,
+}: ContactEmailPayload & { fullName: string; submittedAt: Date }) {
+  const formattedDate = submittedAt.toLocaleString("es-CL");
+
+  return `
+NUEVA CONSULTA DE CONTACTO
+
+Nombre: ${fullName}
+Correo: ${email}
+Asunto: ${subject}
+Enviado: ${formattedDate}
+
+Mensaje:
+${message}
+
+Responder a este correo contestará directamente a ${email}.
+
+Formulario público de Plataforma Astral (${process.env.APP_URL || "URL no configurada"})
   `;
 }
 

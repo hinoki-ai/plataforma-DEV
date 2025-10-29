@@ -1,14 +1,8 @@
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ContactForm } from "@/components/contact/ContactForm";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -132,92 +126,7 @@ export default function ContactoPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <form className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <div>
-                        <label
-                          htmlFor="firstName"
-                          className="block text-sm font-medium mb-1 text-foreground"
-                        >
-                          Nombre
-                        </label>
-                        <input
-                          type="text"
-                          id="firstName"
-                          name="firstName"
-                          className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="lastName"
-                          className="block text-sm font-medium mb-1 text-foreground"
-                        >
-                          Apellido
-                        </label>
-                        <input
-                          type="text"
-                          id="lastName"
-                          name="lastName"
-                          className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium mb-1 text-foreground"
-                      >
-                        Correo electrónico
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="subject"
-                        className="block text-sm font-medium mb-1 text-foreground"
-                      >
-                        Asunto
-                      </label>
-                      <input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                        className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="message"
-                        className="block text-sm font-medium mb-1 text-foreground"
-                      >
-                        Mensaje
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={5}
-                        className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground resize-none"
-                        required
-                      ></textarea>
-                    </div>
-
-                    <Button type="submit" className="w-full">
-                      Enviar mensaje
-                    </Button>
-                  </form>
+                  <ContactForm />
                 </CardContent>
               </Card>
             </div>

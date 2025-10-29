@@ -38,10 +38,10 @@ const billingMetadata: Record<
   BillingCycle,
   { label: string; description: string; months: number }
 > = {
-  monthly: {
-    label: "Mensual",
-    description: "Flexibilidad mes a mes",
-    months: 1,
+  semestral: {
+    label: "Semestral",
+    description: "Contrato 6 meses",
+    months: 6,
   },
   annual: {
     label: "Anual",
@@ -111,7 +111,7 @@ export default function PricingCalculatorPage({
     resolvedSearchParams.billing,
   )
     ? (resolvedSearchParams.billing as BillingCycle)
-    : "monthly";
+    : "semestral";
   const [billingCycle, setBillingCycle] =
     useState<BillingCycle>(initialBilling);
 
@@ -138,15 +138,15 @@ export default function PricingCalculatorPage({
 
   const billingInfo = billingMetadata[billingCycle];
   const discountPercentage = billingCycleDiscount[billingCycle];
-  const monthlyBase = selectedPlan.pricePerStudent * students;
-  const monthlyTotal = calculateBillingPrice(
+  const basePrice = selectedPlan.pricePerStudent * students;
+  const periodPrice = calculateBillingPrice(
     selectedPlan.pricePerStudent,
     students,
     billingCycle,
   );
-  const periodTotal = monthlyTotal * billingInfo.months;
-  const savingsMonthly = monthlyBase - monthlyTotal;
-  const savingsPeriod = savingsMonthly * billingInfo.months;
+  const periodTotal = periodPrice * billingInfo.months;
+  const savingsPeriodPrice = basePrice - periodPrice;
+  const savingsPeriod = savingsPeriodPrice * billingInfo.months;
 
   const sliderUpperBound = selectedPlan.maxStudents
     ? selectedPlan.maxStudents
@@ -175,7 +175,7 @@ export default function PricingCalculatorPage({
   const whatsappMessage = encodeURIComponent(
     `Hola equipo Astral, necesito activar ${selectedPlan.name} para ${studentsFormatted} estudiantes. ` +
       `Ciclo de facturación: ${billingInfo.label}. ` +
-      `Valor mensual estimado: ${formatCLP(monthlyTotal)}. ` +
+      `Valor mensual estimado: ${formatCLP(Math.round(periodPrice / billingInfo.months))}. ` +
       `Total del período (${periodLabel}): ${formatCLP(periodTotal)}. ` +
       "Hablemos ahora mismo para confirmarlo.",
   );
@@ -187,7 +187,7 @@ export default function PricingCalculatorPage({
     `Hola equipo Astral,%0A%0A` +
       `Quiero avanzar con ${selectedPlan.name} para ${studentsFormatted} estudiantes.%0A` +
       `Ciclo de facturación: ${billingInfo.label}.%0A` +
-      `Valor mensual estimado: ${formatCLP(monthlyTotal)}.%0A` +
+      `Valor mensual estimado: ${formatCLP(Math.round(periodPrice / billingInfo.months))}.%0A` +
       `Total del período (${periodLabel}): ${formatCLP(periodTotal)}.%0A%0A` +
       "Por favor contáctenme hoy para activarlo.%0A%0AGracias!",
   );
@@ -231,7 +231,7 @@ export default function PricingCalculatorPage({
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-precios">
-      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
+      <div className="min-h-screen bg-linear-to-b from-black/30 via-black/20 to-black/40">
         <Header />
         <main className="container mx-auto px-4 pt-10 pb-16">
           <div className="max-w-6xl mx-auto space-y-8">
@@ -242,10 +242,6 @@ export default function PricingCalculatorPage({
                 </Link>
               </Button>
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm text-primary">
-                  <Sparkles className="w-4 h-4" /> Captación prioritaria para tu
-                  colegio
-                </div>
                 <h1 className="mt-3 text-4xl md:text-5xl font-bold">
                   Calculadora de {selectedPlan.name}
                 </h1>
@@ -372,7 +368,7 @@ export default function PricingCalculatorPage({
                         variant={
                           billingCycle === option.value ? "default" : "outline"
                         }
-                        className="justify-start flex-col items-start gap-1 py-3 px-4"
+                        className="justify-center flex-col items-center gap-1 py-3 px-4"
                         onClick={() => setBillingCycle(option.value)}
                       >
                         <span className="text-sm font-semibold">
@@ -387,16 +383,16 @@ export default function PricingCalculatorPage({
                 </CardHeader>
                 <CardContent className="space-y-5">
                   <div className="rounded-2xl border border-gray-800 bg-black/40 p-5">
-                    <div className="text-sm text-gray-300">Pago mensual</div>
+                    <div className="text-sm text-gray-300">Pago semestral</div>
                     <div className="mt-2 text-4xl font-bold text-primary">
-                      {formatCLP(monthlyTotal)}
+                      {formatCLP(periodPrice)}
                     </div>
                     <p className="mt-2 text-sm text-gray-400">
                       {studentsFormatted} estudiantes • {billingInfo.label}
                     </p>
-                    {discountPercentage > 0 && savingsMonthly > 0 && (
+                    {discountPercentage > 0 && savingsPeriodPrice > 0 && (
                       <p className="mt-2 text-sm text-green-400">
-                        Ahorro mensual: {formatCLP(savingsMonthly)} (
+                        Ahorro por período: {formatCLP(savingsPeriodPrice)} (
                         {Math.round(discountPercentage * 100)}% menos)
                       </p>
                     )}
