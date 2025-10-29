@@ -48,6 +48,7 @@ export function usePageTransition(options: UsePageTransitionOptions = {}) {
 
   useLayoutEffect(() => {
     // Mark as mounted for hydration safety
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState((prev) => ({ ...prev, mounted: true }));
 
     if (!autoLoad) return;

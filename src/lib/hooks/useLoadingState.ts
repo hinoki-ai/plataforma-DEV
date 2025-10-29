@@ -67,6 +67,7 @@ export function useLoadingState(
     error: null,
     lastUpdated: initialLoading ? new Date() : null,
   });
+  const [loadingCount, setLoadingCount] = useState(initialLoading ? 1 : 0);
 
   // Track active operations to prevent race conditions
   const activeOperations = useRef<
@@ -138,6 +139,7 @@ export function useLoadingState(
         // Wait for minimum loading time before updating state
         const minTimeTimeoutId = setTimeout(() => {
           updateLoadingState(error);
+          setLoadingCount((prev) => Math.max(0, prev - 1));
         }, remainingMinTime);
 
         // Update operation with new timeout
@@ -147,9 +149,10 @@ export function useLoadingState(
         });
       } else {
         updateLoadingState(error);
+        setLoadingCount((prev) => Math.max(0, prev - 1));
       }
     },
-    [minLoadingTime],
+    [minLoadingTime, updateLoadingState, setLoadingCount],
   );
 
   /**
@@ -190,26 +193,34 @@ export function useLoadingState(
         lastUpdated: startTime,
       }));
 
+      // Update loading count
+      setLoadingCount((prev) => prev + 1);
+
       return id;
     },
-    [maxLoadingTime],
+    [maxLoadingTime, stopLoading, setLoadingState, setLoadingCount],
   );
 
   /**
    * Stop all loading operations
    */
-  const stopAllLoading = useCallback((error?: string) => {
-    // Clear all timeouts
-    activeOperations.current.forEach((operation) => {
-      if (operation.timeoutId) clearTimeout(operation.timeoutId);
-      if (operation.minTimeTimeoutId) clearTimeout(operation.minTimeTimeoutId);
-    });
+  const stopAllLoading = useCallback(
+    (error?: string) => {
+      // Clear all timeouts
+      activeOperations.current.forEach((operation) => {
+        if (operation.timeoutId) clearTimeout(operation.timeoutId);
+        if (operation.minTimeTimeoutId)
+          clearTimeout(operation.minTimeTimeoutId);
+      });
 
-    // Clear operations map
-    activeOperations.current.clear();
+      // Clear operations map
+      activeOperations.current.clear();
 
-    updateLoadingState(error);
-  }, []);
+      updateLoadingState(error);
+      setLoadingCount(0);
+    },
+    [updateLoadingState, setLoadingCount],
+  );
 
   /**
    * Reset loading state completely
@@ -234,11 +245,11 @@ export function useLoadingState(
       error: null,
       lastUpdated: null,
     });
+    setLoadingCount(0);
   }, []);
 
   // Computed values
   const isAnyLoading = loadingState.isLoading;
-  const loadingCount = activeOperations.current.size;
 
   return {
     loadingState,

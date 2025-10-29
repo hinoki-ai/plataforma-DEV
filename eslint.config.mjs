@@ -5,6 +5,7 @@ const eslintConfig = [
     ignores: [
       // Ignore generated files
       "src/generated/**/*",
+      "convex/_generated/**/*",
       "**/*.d.ts",
       // Ignore build outputs
       ".next/**/*",

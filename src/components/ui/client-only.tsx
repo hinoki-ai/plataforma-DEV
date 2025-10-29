@@ -20,6 +20,7 @@ export function ClientOnly({
   const [hasMounted, setHasMounted] = useState(false);
 
   useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHasMounted(true);
   }, []);
 
@@ -94,6 +95,7 @@ export function DynamicContent({
   const [content, setContent] = useState<ReactNode>(placeholder);
 
   useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHasMounted(true);
     setContent(typeof children === "function" ? children() : children);
   }, [children]);

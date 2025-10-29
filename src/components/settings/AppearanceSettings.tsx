@@ -21,6 +21,7 @@ export function AppearanceSettings() {
   const [mounted, setMounted] = useState(false);
 
   useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

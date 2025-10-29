@@ -175,13 +175,17 @@ export function EnhancedDebugPanel() {
   }, [addLog]);
 
   useEffect(() => {
-    // Auto-start monitoring
-    startMonitoring();
+    // Auto-start monitoring - initialization is appropriate here
+    // Only start if not already monitoring to avoid cascading renders
+    if (!isMonitoring) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      startMonitoring();
+    }
 
     return () => {
       debugMonitor.destroy();
     };
-  }, [startMonitoring]);
+  }, [startMonitoring, isMonitoring]);
 
   const getBadgeVariant = (type: DebugLog["type"]) => {
     switch (type) {

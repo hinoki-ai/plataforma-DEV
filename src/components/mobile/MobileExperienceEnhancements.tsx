@@ -497,7 +497,7 @@ export function MobileSearch({
       setShowSuggestions(false);
       setIsOpen(false);
     },
-    [onSearch],
+    [onSearch, setQuery, setShowSuggestions, setIsOpen],
   );
 
   return (
