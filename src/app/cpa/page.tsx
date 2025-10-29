@@ -94,7 +94,7 @@ const testimonialAvatars = {
   daniela_paredes: "👩‍👧‍👦",
 };
 
-export default function CentroConsejoPage() {
+export default function CPAPage() {
   const { t } = useDivineParsing(["common"]);
   const { isDesktopForced } = useResponsiveMode();
   const [mounted, setMounted] = useState(false);
