@@ -46,15 +46,20 @@ const LanguageOptionItem = memo(function LanguageOptionItem({
   isFocused,
   onClick,
   onKeyDown,
+  index,
 }: {
   option: LanguageOption;
   isSelected: boolean;
   isFocused: boolean;
   onClick: () => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
+  index: number;
 }) {
+  const ariaSelectedValue = isSelected ? "true" : "false";
+
   return (
     <div
+      id={`language-option-${index}`}
       onClick={onClick}
       onKeyDown={onKeyDown}
       className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset rounded-md cursor-pointer ${
@@ -64,8 +69,9 @@ const LanguageOptionItem = memo(function LanguageOptionItem({
       } ${isFocused ? "bg-accent" : ""}`}
       role="option"
       aria-label={option.ariaLabel}
-      aria-selected={isSelected}
+      aria-selected={ariaSelectedValue}
       tabIndex={isFocused ? 0 : -1}
+      // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
     >
       <div className="flex items-center gap-3">
         <span className="text-lg" aria-hidden="true" role="img">
@@ -284,13 +290,10 @@ const LanguageToggle = memo(() => {
                 role="listbox"
                 id="language-listbox"
                 aria-label="Language options"
-                aria-activedescendant={
-                  focusedIndex >= 0
-                    ? `language-option-${focusedIndex}`
-                    : undefined
-                }
+                aria-activedescendant={focusedIndex >= 0 ? `language-option-${focusedIndex}` : ""}
                 ref={listboxRef}
                 className="max-h-60 overflow-auto"
+                // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
               >
                 {languageOptions.map((option, index) => (
                   <LanguageOptionItem
@@ -300,6 +303,7 @@ const LanguageToggle = memo(() => {
                     isFocused={focusedIndex === index}
                     onClick={() => handleOptionClick(option)}
                     onKeyDown={(e) => handleOptionKeyDown(e, option)}
+                    index={index}
                   />
                 ))}
               </div>

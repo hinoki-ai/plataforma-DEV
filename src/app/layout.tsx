@@ -1,7 +1,6 @@
 import React from "react";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { homeMetadata, organizationSchema } from "@/lib/seo";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
@@ -10,19 +9,11 @@ import { HomepageMusic } from "@/components/shared/HomepageMusic";
 import { AudioConsentBanner } from "@/components/shared/AudioConsentBanner";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
+// Using system fonts instead of Google Fonts to avoid network dependencies during build
+const inter = {
   variable: "--font-inter",
-  fallback: [
-    "system-ui",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    "Segoe UI",
-    "Roboto",
-    "sans-serif",
-  ],
-});
+  className: "font-sans",
+};
 
 // Apple touch icon configured via Next.js metadata API
 

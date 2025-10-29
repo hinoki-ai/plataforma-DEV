@@ -169,6 +169,7 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Static redirects (middleware-free)
       {
         source: "/dashboard",
         destination: "/admin",
@@ -184,6 +185,8 @@ const nextConfig: NextConfig = {
         destination: "https://www.mineduc.cl",
         permanent: true,
       },
+      // Add auth redirects here instead of middleware
+      // Note: These would need to be handled differently since redirects can't check auth state
     ];
   },
   async headers() {
