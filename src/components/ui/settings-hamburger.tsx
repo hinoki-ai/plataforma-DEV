@@ -17,7 +17,7 @@ interface SettingsHamburgerProps {
 
 export const SettingsHamburger = ({
   className,
-  size = "sm"
+  size = "sm",
 }: SettingsHamburgerProps) => {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +30,7 @@ export const SettingsHamburger = ({
     [...Array(3)].map(() => ({
       x: Math.random() * 40 - 20,
       y: Math.random() * 40 - 20,
-    }))
+    })),
   )[0];
 
   // Close dropdown when clicking outside
@@ -151,10 +151,9 @@ export const SettingsHamburger = ({
           className={cn(
             "relative flex items-center justify-center bg-transparent border-none transition-all duration-300 overflow-hidden hover:bg-transparent",
             getSizeClasses(),
-            className
+            className,
           )}
         >
-
           {/* Sparkle effects */}
           <AnimatePresence>
             {(isHovered || isOpen) && (
@@ -226,7 +225,8 @@ export const SettingsHamburger = ({
             exit="exit"
             className="absolute top-full mt-2 right-0 w-72 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
             style={{
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+              boxShadow:
+                "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
             }}
             id="settings-menu"
             role="menu"
@@ -274,7 +274,7 @@ export const SettingsHamburger = ({
                   whileHover={{
                     scale: 1.05,
                     rotate: [0, -3, 3, 0],
-                    filter: "drop-shadow(0 0 8px rgba(147, 197, 253, 0.3))"
+                    filter: "drop-shadow(0 0 8px rgba(147, 197, 253, 0.3))",
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -299,7 +299,7 @@ export const SettingsHamburger = ({
                   whileHover={{
                     scale: 1.05,
                     rotate: [0, -3, 3, 0],
-                    filter: "drop-shadow(0 0 8px rgba(52, 211, 153, 0.3))"
+                    filter: "drop-shadow(0 0 8px rgba(52, 211, 153, 0.3))",
                   }}
                   transition={{ duration: 0.3 }}
                 >

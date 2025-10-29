@@ -165,7 +165,10 @@ export default function UnifiedAuthButton() {
             <DropdownMenuLabel>Configuración</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={toggleTheme}
+                className="cursor-pointer"
+              >
                 {theme === "dark" ? (
                   <Moon className="mr-2 h-4 w-4" />
                 ) : (
@@ -173,7 +176,10 @@ export default function UnifiedAuthButton() {
                 )}
                 <span>Modo {theme === "dark" ? "Claro" : "Oscuro"}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={toggleLanguage} className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={toggleLanguage}
+                className="cursor-pointer"
+              >
                 <Globe className="mr-2 h-4 w-4" />
                 <span>{language === "es" ? "English" : "Español"}</span>
               </DropdownMenuItem>
@@ -300,7 +306,10 @@ export default function UnifiedAuthButton() {
               <span>Modo {theme === "dark" ? "Claro" : "Oscuro"}</span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={toggleLanguage} className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={toggleLanguage}
+              className="cursor-pointer"
+            >
               <Globe className="mr-2 h-4 w-4" />
               <span>{language === "es" ? "English" : "Español"}</span>
             </DropdownMenuItem>

@@ -108,7 +108,7 @@ export function DynamicVideoSection() {
             </div>
           ) : (
             <div className="aspect-video bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center rounded-xl border border-primary/20 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent animate-pulse" />
               <div className="text-center z-10">
                 <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
                   <FileIcons.Video className="w-8 h-8 text-primary" />

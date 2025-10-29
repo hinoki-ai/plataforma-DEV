@@ -19,7 +19,14 @@ import navigationEN from "@/locales/en/navigation.json";
 import languageES from "@/locales/es/language.json";
 import languageEN from "@/locales/en/language.json";
 
-type TranslationNamespace = "common" | "profesor" | "admin" | "parent" | "dashboard" | "navigation" | "language";
+type TranslationNamespace =
+  | "common"
+  | "profesor"
+  | "admin"
+  | "parent"
+  | "dashboard"
+  | "navigation"
+  | "language";
 
 const translations = {
   es: {

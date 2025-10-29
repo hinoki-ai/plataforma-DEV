@@ -236,7 +236,7 @@ function ParentRegistrationContent() {
                   </Button>
                   <Button
                     asChild
-                    className="rounded-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 px-6 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700"
+                    className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-6 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700"
                   >
                     <Link href="/auth/login">
                       {t("parent_registration.go_login", "common")}

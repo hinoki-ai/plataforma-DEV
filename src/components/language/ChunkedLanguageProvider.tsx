@@ -227,7 +227,7 @@ const getStoredLanguage = (): Language | null => {
     if (stored === "es" || stored === "en") {
       return stored as Language;
     }
-    
+
     // Fallback to cookie (for server-side sync)
     const cookieName = "aramac-language-preference";
     const cookies = document.cookie.split(";");
@@ -239,7 +239,7 @@ const getStoredLanguage = (): Language | null => {
         return value as Language;
       }
     }
-    
+
     return null;
   } catch {
     return null;
@@ -251,7 +251,7 @@ const setStoredLanguage = (language: Language): void => {
   try {
     // Set localStorage for fast client-side access
     localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-    
+
     // Also set cookie for server-side middleware synchronization
     // Match exact attributes used in middleware/i18n.ts
     const cookieName = "aramac-language-preference";
