@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
+import LegalFooter from "@/components/layout/LegalFooter";
 
 export const metadata: Metadata = {
   title: "Política de Privacidad | Plataforma Astral",
@@ -206,6 +207,7 @@ export default function PrivacidadPage() {
           </div>
         </main>
         <MinEducFooter />
+        <LegalFooter />
       </div>
     </div>
   );
