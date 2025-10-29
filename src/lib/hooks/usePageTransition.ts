@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 
 export interface UsePageTransitionOptions {
   /**
@@ -46,7 +46,7 @@ export function usePageTransition(options: UsePageTransitionOptions = {}) {
     progress: 0,
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Mark as mounted for hydration safety
     setState((prev) => ({ ...prev, mounted: true }));
 

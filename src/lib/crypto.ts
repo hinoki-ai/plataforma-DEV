@@ -146,10 +146,10 @@ export function generateSecureToken(): string {
   // Node.js environment using Web Crypto API if available
   if (
     typeof globalThis !== "undefined" &&
-    (globalThis as unknown as { crypto?: Crypto }).crypto?.getRandomValues
+    (globalThis as unknown as { crypto?: any }).crypto?.getRandomValues
   ) {
     const array = new Uint8Array(32);
-    (globalThis as unknown as { crypto: Crypto }).crypto.getRandomValues(array);
+    (globalThis as unknown as { crypto: any }).crypto.getRandomValues(array);
     return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
       "",
     );
