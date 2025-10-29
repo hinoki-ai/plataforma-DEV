@@ -24,7 +24,7 @@ This directory contains detailed technical documentation. For a complete documen
 
 ### Authentication & Security
 
-- **[AUTHENTICATION_SYSTEM_DOCS.md](./AUTHENTICATION_SYSTEM_DOCS.md)** - Complete auth system documentation
+- **[AUTHENTICATION_COMPLETE_GUIDE.md](./AUTHENTICATION_COMPLETE_GUIDE.md)** - Complete auth system documentation
 - **[ROLE_SYSTEM.md](./ROLE_SYSTEM.md)** - Role-based access control (RBAC)
 - **[protected-paths.md](./protected-paths.md)** - List of protected routes
 - **[EMERGENCY_ACCESS_PROCEDURES.md](./EMERGENCY_ACCESS_PROCEDURES.md)** - Emergency access protocols

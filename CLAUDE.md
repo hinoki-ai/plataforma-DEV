@@ -14,8 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Documentation Reference
 
 - `docs/TROUBLESHOOTING_AUTH.md` - Authentication troubleshooting
-- `docs/AUTHENTICATION_SYSTEM_DOCS.md` - Full system architecture
-- `docs/DEPLOYMENT_GUIDE.md` - Deployment procedures
+- `docs/AUTHENTICATION_COMPLETE_GUIDE.md` - Full system architecture
+- `DEPLOYMENT.md` - Deployment procedures
 - `START_HERE.md` - Quick start guide
 - `DOCUMENTATION_INDEX.md` - Complete documentation index
 

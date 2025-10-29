@@ -1,5 +1,3 @@
-import { readFileSync } from "fs";
-import { join } from "path";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -54,10 +52,64 @@ function markdownToHtml(markdown: string): string {
     .replace(/^(.+?)(<br\/>|$)/gm, "<p>$1</p>");
 }
 
+// Static content for the docs page
+const staticMarkdown = `# Technical Documentation
+
+**Plataforma Astral Educational Management System**  
+**Last Updated**: October 13, 2025  
+**Status**: Production ready with full Convex integration ✅
+
+---
+
+## 📚 Documentation Index
+
+### Core Systems
+- **[Architecture](ARCHITECTURE.md)** - System design and data flow
+- **[Authentication](AUTHENTICATION_COMPLETE_GUIDE.md)** - Login, roles, and security
+- **[Frontend](FRONTEND.md)** - UI components and user experience
+- **[API Documentation](API_DOCUMENTATION.md)** - Backend endpoints and integration
+
+### Specialized Features
+- **[Voting System](VOTING_SYSTEM.md)** - Democratic decision-making tools
+- **[Role System](ROLE_SYSTEM.md)** - User permissions and access control
+- **[Animation Guide](ANIMATION_GUIDE.md)** - Motion design and interactions
+
+### Operations & Troubleshooting
+- **[Environment Setup](ENVIRONMENT.md)** - Development and deployment configs
+- **[Troubleshooting](TROUBLESHOOTING_AUTH.md)** - Common issues and solutions
+- **[Emergency Procedures](EMERGENCY_ACCESS_PROCEDURES.md)** - Critical system recovery
+
+---
+
+## 🚀 Quick Start
+
+1. **Development**: \`npm run dev\` - Start local development server
+2. **Build**: \`npm run build\` - Create production build
+3. **Deploy**: \`npm run deploy\` - Full automated deployment
+
+## 📖 Key Features
+
+- **Multi-role Authentication** - Admin, Teacher, Parent, and Master roles
+- **Real-time Collaboration** - Live updates with Convex backend
+- **Responsive Design** - Mobile-first educational platform
+- **Comprehensive APIs** - REST and GraphQL endpoints
+- **Advanced Security** - Role-based access control and encryption
+
+## 🔧 Technology Stack
+
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Backend**: Convex (real-time database and functions)
+- **Authentication**: Clerk (OAuth + custom flows)
+- **Deployment**: Vercel (frontend), Convex Cloud (backend)
+- **Monitoring**: Custom analytics and error tracking
+
+---
+
+*For detailed information, please refer to the specific documentation files linked above.*
+`;
+
 export default function DocsPage() {
-  const filePath = join(process.cwd(), "docs", "README.md");
-  const markdown = readFileSync(filePath, "utf-8");
-  const htmlContent = markdownToHtml(markdown);
+  const htmlContent = markdownToHtml(staticMarkdown);
 
   return (
     <div className="min-h-screen bg-background">
@@ -78,17 +130,14 @@ export default function DocsPage() {
         <footer className="mt-12 pt-8 border-t border-border">
           <div className="text-sm text-muted-foreground">
             <p>
-              File:{" "}
-              <code className="bg-muted px-2 py-1 rounded">docs/README.md</code>
-            </p>
-            <p className="mt-2">
+              For complete documentation, visit the{" "}
               <a
-                href="https://github.com/hinoki-ai/plataforma-DEV/blob/main/docs/README.md"
+                href="https://github.com/hinoki-ai/plataforma-DEV/tree/main/docs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800 underline"
               >
-                View on GitHub →
+                docs folder on GitHub
               </a>
             </p>
           </div>
