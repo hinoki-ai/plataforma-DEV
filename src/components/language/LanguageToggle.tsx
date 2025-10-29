@@ -71,7 +71,7 @@ const LanguageOptionItem = memo(function LanguageOptionItem({
       aria-label={option.ariaLabel}
       aria-selected={ariaSelectedValue}
       tabIndex={isFocused ? 0 : -1}
-      // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
+       
     >
       <div className="flex items-center gap-3">
         <span className="text-lg" aria-hidden="true" role="img">
@@ -290,10 +290,12 @@ const LanguageToggle = memo(() => {
                 role="listbox"
                 id="language-listbox"
                 aria-label="Language options"
-                aria-activedescendant={focusedIndex >= 0 ? `language-option-${focusedIndex}` : ""}
+                aria-activedescendant={
+                  focusedIndex >= 0 ? `language-option-${focusedIndex}` : ""
+                }
                 ref={listboxRef}
                 className="max-h-60 overflow-auto"
-                // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
+                 
               >
                 {languageOptions.map((option, index) => (
                   <LanguageOptionItem

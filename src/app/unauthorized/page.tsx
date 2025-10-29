@@ -7,7 +7,7 @@ export default function UnauthorizedPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { t } = useLanguage();
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
+   
   useLayoutEffect(() => {
     setIsMounted(true);
   }, []);

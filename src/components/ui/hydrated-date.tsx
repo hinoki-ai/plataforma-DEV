@@ -27,7 +27,7 @@ export function HydratedDate({
 }: HydratedDateProps) {
   const [formattedDate, setFormattedDate] = useState<string>(placeholder);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
+   
   useLayoutEffect(() => {
     try {
       const dateObj =
