@@ -33,11 +33,13 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 The `docs/` directory contains detailed technical documentation organized as follows:
 
 **Architecture & Design**
+
 - `ARCHITECTURE.md` - System architecture overview
 - `API_DOCUMENTATION.md` - Complete API endpoint documentation
 - `FRONTEND.md` - Frontend patterns and components
 
 **Authentication & Security**
+
 - `AUTHENTICATION_COMPLETE_GUIDE.md` - Complete auth system documentation
 - `ROLE_SYSTEM.md` - Role-based access control (RBAC)
 - `protected-paths.md` - List of protected routes
@@ -45,9 +47,11 @@ The `docs/` directory contains detailed technical documentation organized as fol
 - `TROUBLESHOOTING_AUTH.md` - Auth troubleshooting guide
 
 **Configuration & Environment**
+
 - `ENVIRONMENT.md` - Environment configuration guide
 
 **Features & Functionality**
+
 - `VOTING_SYSTEM.md` - Centro Consejo voting system
 - `ANIMATION_GUIDE.md` - UI animation patterns
 
