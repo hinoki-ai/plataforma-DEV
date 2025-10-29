@@ -63,7 +63,7 @@ export function EducationalSystemExplorer() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white shadow-2xl">
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 text-white shadow-2xl">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute -top-10 -right-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
         <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
@@ -109,22 +109,22 @@ export function EducationalSystemExplorer() {
               >
                 <div className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-300 ${
                   isSelected
-                    ? "bg-gradient-to-r from-blue-500/50 to-purple-500/50"
-                    : "bg-gradient-to-r from-slate-200/20 to-slate-300/20 group-hover:from-blue-400/30 group-hover:to-purple-400/30"
+                    ? "bg-linear-to-r from-blue-500/50 to-purple-500/50"
+                    : "bg-linear-to-r from-slate-200/20 to-slate-300/20 group-hover:from-blue-400/30 group-hover:to-purple-400/30"
                 }`}></div>
 
                 <Card className={`relative border-0 shadow-xl transition-all duration-300 overflow-hidden ${
                   isSelected
-                    ? "bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-blue-500/25"
+                    ? "bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-blue-500/25"
                     : "bg-white dark:bg-slate-800 hover:shadow-2xl hover:shadow-blue-500/10"
                 }`}>
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                   <CardContent className="p-6 text-center space-y-4 relative z-10">
                     <div className={`inline-flex p-4 rounded-2xl transition-all duration-300 ${
                       isSelected
                         ? "bg-white/20 text-white"
-                        : "bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-600 dark:text-blue-400 group-hover:scale-110"
+                        : "bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-600 dark:text-blue-400 group-hover:scale-110"
                     }`}>
                       <span className="text-3xl">{info.icon}</span>
                     </div>
@@ -152,7 +152,7 @@ export function EducationalSystemExplorer() {
       </div>
 
       {/* Current Selection Info */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg">
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg">
         <div className="absolute inset-0 bg-black/10"></div>
 
         <Alert className="border-0 bg-transparent text-white shadow-none">
@@ -214,7 +214,7 @@ export function EducationalSystemExplorer() {
         <TabsContent value="overview" className="space-y-8 mt-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Educational Levels */}
-            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border-blue-200 dark:border-blue-800 shadow-xl">
+            <Card className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border-blue-200 dark:border-blue-800 shadow-xl">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-3 text-xl">
                   <div className="p-2 bg-blue-600 rounded-xl text-white">
@@ -230,7 +230,7 @@ export function EducationalSystemExplorer() {
                       key={level.id}
                       className="group relative overflow-hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                       <div className="relative flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -257,7 +257,7 @@ export function EducationalSystemExplorer() {
             </Card>
 
             {/* Subjects and Features */}
-            <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 border-emerald-200 dark:border-emerald-800 shadow-xl">
+            <Card className="bg-linear-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 border-emerald-200 dark:border-emerald-800 shadow-xl">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-3 text-xl">
                   <div className="p-2 bg-emerald-600 rounded-xl text-white">
@@ -320,7 +320,7 @@ export function EducationalSystemExplorer() {
                           }`}
                         >
                           <div
-                            className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                            className={`w-3 h-3 rounded-full shrink-0 ${
                               enabled ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"
                             }`}
                           />
@@ -347,7 +347,7 @@ export function EducationalSystemExplorer() {
         </TabsContent>
 
         <TabsContent value="navigation" className="space-y-8 mt-8">
-          <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 border-purple-200 dark:border-purple-800 shadow-xl">
+          <Card className="bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 border-purple-200 dark:border-purple-800 shadow-xl">
             <CardHeader className="pb-6">
               <CardTitle className="flex items-center gap-3 text-xl">
                 <div className="p-2 bg-purple-600 rounded-xl text-white">
@@ -371,7 +371,7 @@ export function EducationalSystemExplorer() {
         </TabsContent>
 
         <TabsContent value="dashboard" className="space-y-8 mt-8">
-          <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/50 dark:to-red-950/50 rounded-2xl p-6 border border-orange-200 dark:border-orange-800">
+          <div className="bg-linear-to-br from-orange-50 to-red-50 dark:from-orange-950/50 dark:to-red-950/50 rounded-2xl p-6 border border-orange-200 dark:border-orange-800">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-orange-600 rounded-xl text-white">
                 <BarChart3 className="h-5 w-5" />
@@ -393,7 +393,7 @@ export function EducationalSystemExplorer() {
       </Tabs>
 
       {/* Implementation Status */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-green-500 via-emerald-500 to-teal-500 text-white shadow-2xl">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute -top-10 -right-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
         <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
@@ -471,7 +471,7 @@ export function EducationalSystemExplorer() {
                       </div>
                       <div className="text-sm text-green-100">{item.status}</div>
                     </div>
-                    <div className={`w-3 h-3 rounded-full ${item.color} flex-shrink-0`} />
+                    <div className={`w-3 h-3 rounded-full ${item.color} shrink-0`} />
                   </div>
                 </div>
               ))}
