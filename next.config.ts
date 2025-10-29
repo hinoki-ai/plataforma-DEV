@@ -157,6 +157,22 @@ const nextConfig: NextConfig = {
     return config;
   },
 
+  // Turbopack configuration for Next.js 16 compatibility
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
+    resolve: {
+      alias: {
+        "next-auth/react": path.resolve(__dirname, "src/lib/auth-client.tsx"),
+        "next-auth": path.resolve(__dirname, "src/lib/auth-server.ts"),
+      },
+    },
+  },
+
   async redirects() {
     return [
       {
