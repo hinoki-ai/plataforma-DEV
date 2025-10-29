@@ -165,12 +165,6 @@ const nextConfig: NextConfig = {
         as: "*.js",
       },
     },
-    resolve: {
-      alias: {
-        "next-auth/react": path.resolve(__dirname, "src/lib/auth-client.tsx"),
-        "next-auth": path.resolve(__dirname, "src/lib/auth-server.ts"),
-      },
-    },
   },
 
   async redirects() {
