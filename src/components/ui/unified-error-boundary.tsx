@@ -385,7 +385,7 @@ class UnifiedErrorUI extends React.Component<{
       return (
         <div className="flex flex-col items-center justify-center p-4 text-center">
           <div
-            className={`w-8 h-8 bg-gradient-to-br ${theme.bgGradient} rounded-full flex items-center justify-center mb-2`}
+            className={`w-8 h-8 bg-linear-to-br ${theme.bgGradient} rounded-full flex items-center justify-center mb-2`}
           >
             <IconComponent className={`w-4 h-4 ${theme.iconColor}`} />
           </div>
@@ -403,14 +403,14 @@ class UnifiedErrorUI extends React.Component<{
           <CardContent className="text-center p-6">
             {/* Icon */}
             <div
-              className={`w-12 h-12 bg-gradient-to-br ${theme.bgGradient} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}
+              className={`w-12 h-12 bg-linear-to-br ${theme.bgGradient} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}
             >
               <IconComponent className={`w-6 h-6 ${theme.iconColor}`} />
             </div>
 
             {/* Title */}
             <h3
-              className={`text-lg font-bold bg-gradient-to-r ${theme.gradient} bg-clip-text text-transparent mb-2`}
+              className={`text-lg font-bold bg-linear-to-r ${theme.gradient} bg-clip-text text-transparent mb-2`}
             >
               {errorTitle}
             </h3>
@@ -426,7 +426,7 @@ class UnifiedErrorUI extends React.Component<{
                 <Button
                   onClick={onRetry}
                   size="sm"
-                  className={`bg-gradient-to-r ${theme.gradient} hover:opacity-90`}
+                  className={`bg-linear-to-r ${theme.gradient} hover:opacity-90`}
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Reintentar
@@ -491,14 +491,14 @@ class UnifiedErrorUI extends React.Component<{
           <CardHeader className="text-center pb-4">
             {/* Icon */}
             <div
-              className={`w-20 h-20 bg-gradient-to-br ${theme.bgGradient} rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl`}
+              className={`w-20 h-20 bg-linear-to-br ${theme.bgGradient} rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl`}
             >
               <IconComponent className={`w-10 h-10 ${theme.iconColor}`} />
             </div>
 
             {/* Title */}
             <CardTitle
-              className={`text-2xl font-bold bg-gradient-to-r ${theme.gradient} bg-clip-text text-transparent mb-2`}
+              className={`text-2xl font-bold bg-linear-to-r ${theme.gradient} bg-clip-text text-transparent mb-2`}
             >
               {errorTitle}
             </CardTitle>
@@ -530,7 +530,7 @@ class UnifiedErrorUI extends React.Component<{
               {enableRetry && retryCount < 3 && (
                 <Button
                   onClick={onRetry}
-                  className={`bg-gradient-to-r ${theme.gradient} hover:opacity-90`}
+                  className={`bg-linear-to-r ${theme.gradient} hover:opacity-90`}
                 >
                   <RefreshCw className="w-5 h-5 mr-2" />
                   Reintentar
@@ -564,7 +564,7 @@ class UnifiedErrorUI extends React.Component<{
                     <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">
                       Message
                     </div>
-                    <div className="font-mono text-sm text-red-600 dark:text-red-400 break-words">
+                    <div className="font-mono text-sm text-red-600 dark:text-red-400 wrap-break-word">
                       {error.message}
                     </div>
                   </div>

@@ -112,7 +112,7 @@ export function StudentCard({
     <AnimatedCard
       animationType="grid-entrance"
       animationDelay={animationDelay}
-      className="bg-gradient-to-br from-blue-50 to-indigo-50"
+      className="bg-linear-to-br from-blue-50 to-indigo-50"
     >
       <div className="flex items-center space-x-4">
         <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
@@ -138,7 +138,7 @@ export function AchievementCard({
     <AnimatedCard
       animationType="scale-in"
       animationDelay={animationDelay}
-      className="bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200"
+      className="bg-linear-to-br from-yellow-50 to-orange-50 border-yellow-200"
     >
       <div className="text-center">
         <div className="text-4xl mb-2">{achievement.icon || "🏆"}</div>
@@ -164,7 +164,7 @@ export function NotificationCard({
     <AnimatedCard
       animationType="slide-in"
       animationDelay={animationDelay}
-      className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200"
+      className="bg-linear-to-r from-green-50 to-emerald-50 border-green-200"
     >
       <div className="flex items-start space-x-3">
         <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm animate-bell-ring">
@@ -197,7 +197,7 @@ export function CalendarEventCard({
     <AnimatedCard
       animationType="grid-entrance"
       animationDelay={animationDelay}
-      className="bg-gradient-to-br from-purple-50 to-pink-50"
+      className="bg-linear-to-br from-purple-50 to-pink-50"
     >
       <div className="flex items-center justify-between">
         <div>

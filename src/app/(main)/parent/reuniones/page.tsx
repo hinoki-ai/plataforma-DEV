@@ -38,7 +38,7 @@ export default async function ParentReunionesPage() {
     <PageTransition skeletonType="page" duration={700}>
       <div className="min-h-screen bg-background">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-b border-border">
+        <div className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-b border-border">
           <div className="container mx-auto px-4 py-8 sm:py-12">
             <div className="text-center space-y-4">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">

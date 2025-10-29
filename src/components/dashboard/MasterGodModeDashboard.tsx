@@ -132,7 +132,7 @@ export function MasterGodModeDashboard() {
   return (
     <div className="space-y-6">
       {/* MASTER God Mode Header */}
-      <Card className="border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20">
+      <Card className="border-yellow-200 bg-linear-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div>

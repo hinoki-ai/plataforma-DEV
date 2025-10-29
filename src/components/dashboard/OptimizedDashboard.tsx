@@ -240,7 +240,7 @@ export function OptimizedDashboard({ className }: OptimizedDashboardProps) {
     <div className={`space-y-6 ${className}`}>
       {/* Header Section */}
       <div
-        className={`bg-gradient-to-r ${config.color} rounded-lg p-6 text-white`}
+        className={`bg-linear-to-r ${config.color} rounded-lg p-6 text-white`}
       >
         <div className="flex items-center gap-4">
           <div className="p-3 bg-white/20 rounded-lg">
@@ -435,7 +435,7 @@ function AlertsCard({ alerts }: AlertsCardProps) {
               key={index}
               className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg"
             >
-              <AlertCircle className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+              <AlertCircle className="h-4 w-4 text-yellow-500 shrink-0" />
               <div className="flex-1">
                 <p className="text-sm font-medium">{alert.title || "Alerta"}</p>
                 <p className="text-xs text-muted-foreground">
@@ -471,7 +471,7 @@ function RecentActivityCard({ activity }: RecentActivityCardProps) {
           <div className="space-y-3">
             {activity.slice(0, 5).map((item, index) => (
               <div key={index} className="flex items-center gap-3">
-                <div className="h-2 w-2 bg-blue-500 rounded-full flex-shrink-0" />
+                <div className="h-2 w-2 bg-blue-500 rounded-full shrink-0" />
                 <div className="flex-1">
                   <p className="text-sm">{item.description || "Actividad"}</p>
                   <p className="text-xs text-muted-foreground">
