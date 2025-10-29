@@ -1,4 +1,8 @@
-import nodemailer from "nodemailer";
+import nodemailer, {
+  type SendMailOptions,
+  type SentMessageInfo,
+  type Transporter,
+} from "nodemailer";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 
@@ -25,6 +29,76 @@ const createTransport = () => {
   });
 };
 
+const DEFAULT_FROM_EMAIL =
+  process.env.EMAIL_FROM || "noreply@plataforma-astral.com";
+const isDevelopment = process.env.NODE_ENV === "development";
+
+function parseRecipientList(value?: string | null): string[] {
+  if (!value) {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter((email) => email.length > 0);
+}
+
+function getContactRecipients(): string[] {
+  const sources = [
+    process.env.CONTACT_FORM_RECIPIENTS,
+    process.env.SCHOOL_EMAIL,
+    process.env.EMAIL_FROM,
+  ];
+
+  const recipients = new Set<string>();
+
+  for (const source of sources) {
+    for (const email of parseRecipientList(source)) {
+      recipients.add(email);
+    }
+  }
+
+  if (!recipients.size) {
+    throw new Error(
+      "Contact email recipients are not configured. Set CONTACT_FORM_RECIPIENTS, SCHOOL_EMAIL or EMAIL_FROM.",
+    );
+  }
+
+  return [...recipients];
+}
+
+function logDevelopmentPreview(info: SentMessageInfo) {
+  if (!isDevelopment) {
+    return;
+  }
+
+  const rawMessage = (info as any)?.message;
+
+  if (typeof rawMessage === "string") {
+    console.info("📨 Email preview (development)\n%s", rawMessage);
+    return;
+  }
+
+  if (rawMessage && Buffer.isBuffer(rawMessage)) {
+    console.info("📨 Email preview (development)\n%s", rawMessage.toString());
+    return;
+  }
+
+  console.info("📨 Email dispatched (development)", {
+    messageId: info.messageId,
+    envelope: info.envelope,
+  });
+}
+
+async function dispatchMail(
+  transporter: Transporter,
+  mailOptions: SendMailOptions,
+): Promise<void> {
+  const info = await transporter.sendMail(mailOptions);
+  logDevelopmentPreview(info);
+}
+
 interface SendConfirmationEmailParams {
   to: string;
   name: string;
@@ -42,24 +116,17 @@ export async function sendConfirmationEmail({
     const verificationUrl = `${process.env.APP_URL}/centro-consejo/verificar?token=${verificationToken}`;
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@plataforma-astral.com",
+      from: DEFAULT_FROM_EMAIL,
       to,
       subject: "Confirma tu registro - Centro de Padres Plataforma Astral",
       html: getConfirmationEmailTemplate({ name, verificationUrl }),
       text: getConfirmationEmailText({ name, verificationUrl }),
     };
 
-    if (process.env.NODE_ENV === "development") {
-      // Development logging - these will be removed in production builds
-      return true;
-    }
-
-    const result = await (transporter as any).sendMail(mailOptions);
-    // Production logging handled by system logger
+    await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
-    // Error handling - return false for failed email sending
-    return false;
+    console.error("Error sending confirmation email:", error);
     return false;
   }
 }

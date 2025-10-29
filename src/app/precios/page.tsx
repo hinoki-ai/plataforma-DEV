@@ -41,10 +41,10 @@ export default function PreciosPage() {
           <div className="max-w-7xl mx-auto">
             {/* Header Section */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
                 Planes y Precios
               </h1>
-              <p className="text-xl text-gray-200 mb-6">
+              <p className="text-xl text-muted-foreground mb-6">
                 Precios transparentes por estudiante. Sin costos ocultos.
               </p>
 
@@ -78,7 +78,7 @@ export default function PreciosPage() {
                   </span>
                 </Button>
               </div>
-              <p className="text-sm text-gray-300">
+              <p className="text-sm text-muted-foreground">
                 * Precios en Pesos Chilenos (CLP) + IVA • Factura electrónica
                 (SII)
               </p>
@@ -89,7 +89,7 @@ export default function PreciosPage() {
               {plans.map((plan) => (
                 <Card
                   key={plan.id}
-                  className="relative backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl flex flex-col h-full"
+                  className="relative backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl flex flex-col h-full"
                 >
                   {plan.badge && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
@@ -105,17 +105,17 @@ export default function PreciosPage() {
                     </div>
                   )}
                   <CardHeader className="text-center">
-                    <CardTitle className="text-2xl text-white min-h-[4rem] flex items-center justify-center text-center">
+                    <CardTitle className="text-2xl text-foreground min-h-[4rem] flex items-center justify-center text-center">
                       {plan.name}
                     </CardTitle>
-                    <CardDescription className="text-gray-300 text-base">
+                    <CardDescription className="text-muted-foreground text-base">
                       {plan.description}
                     </CardDescription>
                     <div className="pt-4">
                       <div className="text-3xl font-bold text-primary">
                         {formatCLP(plan.pricePerStudent)}
                       </div>
-                      <div className="text-sm text-gray-400 mt-1">
+                      <div className="text-sm text-muted-foreground mt-1">
                         por estudiante/mes
                       </div>
                       {billingCycle !== "monthly" && (
@@ -125,7 +125,7 @@ export default function PreciosPage() {
                         </div>
                       )}
                     </div>
-                    <div className="text-xs text-gray-400 mt-2 border-t border-gray-700 pt-2">
+                    <div className="text-xs text-muted-foreground mt-2 border-t border-border pt-2">
                       Ejemplo: {plan.maxStudents || "1.500"} estudiantes ={" "}
                       {formatCLP(
                         calculateBillingPrice(
@@ -138,7 +138,7 @@ export default function PreciosPage() {
                     </div>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
-                    <ul className="space-y-2 text-sm text-gray-300 mb-4">
+                    <ul className="space-y-2 text-sm text-muted-foreground mb-4">
                       <li>✓ {plan.features.courses} cursos</li>
                       <li>✓ {plan.features.storage} almacenamiento</li>
                       <li>✓ {plan.features.meetings} reuniones/mes</li>
