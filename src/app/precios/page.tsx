@@ -28,7 +28,7 @@ const featuresList = featureLabels;
 
 export default function PreciosPage() {
   const router = useRouter();
-  const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");
   const [showContactForm, setShowContactForm] = useState(false);
 
   const getDiscount = (cycle: BillingCycle) => billingCycleDiscount[cycle];
@@ -51,11 +51,11 @@ export default function PreciosPage() {
               {/* Billing Cycle Toggle */}
               <div className="flex justify-center gap-2 mb-4">
                 <Button
-                  onClick={() => setBillingCycle("monthly")}
-                  variant={billingCycle === "monthly" ? "default" : "outline"}
+                  onClick={() => setBillingCycle("semestral")}
+                  variant={billingCycle === "semestral" ? "default" : "outline"}
                   className="min-w-[120px]"
                 >
-                  Mensual
+                  Semestral
                 </Button>
                 <Button
                   onClick={() => setBillingCycle("annual")}
@@ -118,7 +118,7 @@ export default function PreciosPage() {
                       <div className="text-sm text-muted-foreground mt-1">
                         por estudiante/mes
                       </div>
-                      {billingCycle !== "monthly" && (
+                      {billingCycle !== "semestral" && (
                         <div className="text-xs text-green-400 mt-1">
                           Ahorro de {getDiscount(billingCycle) * 100}% en plan{" "}
                           {billingCycle === "annual" ? "anual" : "bianual"}
@@ -162,21 +162,21 @@ export default function PreciosPage() {
             </div>
 
             {/* Comparison Table */}
-            <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl p-6 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6 text-center">
+            <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-6 mb-12">
+              <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
                 Comparación Detallada de Planes
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="text-left py-4 px-4 text-gray-300 font-semibold">
+                    <tr className="border-b border-border">
+                      <th className="text-left py-4 px-4 text-muted-foreground font-semibold">
                         Característica
                       </th>
                       {plans.map((plan) => (
                         <th
                           key={plan.id}
-                          className="text-center py-4 px-4 text-white font-semibold"
+                          className="text-center py-4 px-4 text-foreground font-semibold"
                         >
                           {plan.name.replace("Plan ", "")}
                         </th>
@@ -187,11 +187,11 @@ export default function PreciosPage() {
                     {featuresList.map((feature, idx) => (
                       <tr
                         key={feature.key}
-                        className={`border-b border-gray-700/50 ${
-                          idx % 2 === 0 ? "bg-gray-800/30" : ""
+                        className={`border-b border-border/50 ${
+                          idx % 2 === 0 ? "bg-muted/30" : ""
                         }`}
                       >
-                        <td className="py-3 px-4 text-gray-300">
+                        <td className="py-3 px-4 text-muted-foreground">
                           {feature.label}
                         </td>
                         {plans.map((plan) => {
@@ -208,7 +208,7 @@ export default function PreciosPage() {
                                   <X className="w-5 h-5 text-gray-600 mx-auto" />
                                 )
                               ) : (
-                                <span className="text-gray-200">{value}</span>
+                                <span className="text-foreground">{value}</span>
                               )}
                             </td>
                           );
@@ -222,9 +222,9 @@ export default function PreciosPage() {
 
             {/* Contact Form Section */}
             {showContactForm && (
-              <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl p-8 mb-12">
+              <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
                 <div className="max-w-2xl mx-auto">
-                  <h2 className="text-3xl font-bold text-white mb-6 text-center">
+                  <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
                     Solicita tu Demo Gratuita
                   </h2>
                   <form className="space-y-4">
@@ -232,7 +232,7 @@ export default function PreciosPage() {
                       <div>
                         <label
                           htmlFor="nombre"
-                          className="block text-sm font-medium text-gray-300 mb-2"
+                          className="block text-sm font-medium text-foreground mb-2"
                         >
                           Nombre Completo *
                         </label>
@@ -240,13 +240,13 @@ export default function PreciosPage() {
                           id="nombre"
                           type="text"
                           required
-                          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary"
+                          className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
                         />
                       </div>
                       <div>
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium text-gray-300 mb-2"
+                          className="block text-sm font-medium text-foreground mb-2"
                         >
                           Email *
                         </label>
@@ -254,7 +254,7 @@ export default function PreciosPage() {
                           id="email"
                           type="email"
                           required
-                          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary"
+                          className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
                         />
                       </div>
                     </div>
@@ -262,7 +262,7 @@ export default function PreciosPage() {
                       <div>
                         <label
                           htmlFor="establecimiento"
-                          className="block text-sm font-medium text-gray-300 mb-2"
+                          className="block text-sm font-medium text-foreground mb-2"
                         >
                           Establecimiento *
                         </label>
@@ -270,13 +270,13 @@ export default function PreciosPage() {
                           id="establecimiento"
                           type="text"
                           required
-                          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary"
+                          className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
                         />
                       </div>
                       <div>
                         <label
                           htmlFor="comuna"
-                          className="block text-sm font-medium text-gray-300 mb-2"
+                          className="block text-sm font-medium text-foreground mb-2"
                         >
                           Comuna *
                         </label>
@@ -284,7 +284,7 @@ export default function PreciosPage() {
                           id="comuna"
                           type="text"
                           required
-                          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary"
+                          className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
                         />
                       </div>
                     </div>
@@ -292,7 +292,7 @@ export default function PreciosPage() {
                       <div>
                         <label
                           htmlFor="matricula"
-                          className="block text-sm font-medium text-gray-300 mb-2"
+                          className="block text-sm font-medium text-foreground mb-2"
                         >
                           Matrícula (N° estudiantes) *
                         </label>
@@ -301,13 +301,13 @@ export default function PreciosPage() {
                           type="number"
                           required
                           min="1"
-                          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary"
+                          className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
                         />
                       </div>
                       <div>
                         <label
                           htmlFor="telefono"
-                          className="block text-sm font-medium text-gray-300 mb-2"
+                          className="block text-sm font-medium text-foreground mb-2"
                         >
                           Teléfono / WhatsApp *
                         </label>
@@ -316,21 +316,21 @@ export default function PreciosPage() {
                           type="tel"
                           required
                           placeholder="+56 9 xxxx xxxx"
-                          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary"
+                          className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
                         />
                       </div>
                     </div>
                     <div>
                       <label
                         htmlFor="mensaje"
-                        className="block text-sm font-medium text-gray-300 mb-2"
+                        className="block text-sm font-medium text-foreground mb-2"
                       >
                         Mensaje (opcional)
                       </label>
                       <textarea
                         id="mensaje"
                         rows={3}
-                        className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary"
+                        className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
                       ></textarea>
                     </div>
                     <div className="flex gap-4">
@@ -350,7 +350,7 @@ export default function PreciosPage() {
                       </Button>
                     </div>
                   </form>
-                  <p className="text-xs text-gray-400 mt-4 text-center">
+                  <p className="text-xs text-muted-foreground mt-4 text-center">
                     Al enviar este formulario, aceptas nuestra Política de
                     Privacidad y el tratamiento de tus datos según la Ley 19.628
                   </p>
@@ -371,37 +371,37 @@ export default function PreciosPage() {
             )}
 
             {/* Security & Compliance Section */}
-            <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6 text-center">
+            <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
+              <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
                 Seguridad y Cumplimiento
               </h2>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <Server className="w-12 h-12 text-primary mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     Datos en Chile
                   </h3>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-sm text-muted-foreground">
                     Servidores ubicados en Chile. Cumplimiento total con
                     regulaciones locales.
                   </p>
                 </div>
                 <div className="text-center">
                   <Lock className="w-12 h-12 text-primary mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     Ley 19.628
                   </h3>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-sm text-muted-foreground">
                     Protección de datos personales. Cifrado end-to-end y backups
                     diarios automáticos.
                   </p>
                 </div>
                 <div className="text-center">
                   <Shield className="w-12 h-12 text-primary mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     Certificaciones
                   </h3>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-sm text-muted-foreground">
                     ISO 27001 en proceso. Auditorías de seguridad trimestrales.
                   </p>
                 </div>
@@ -409,64 +409,64 @@ export default function PreciosPage() {
             </div>
 
             {/* FAQ Section */}
-            <div className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl p-8 mb-6">
-              <h2 className="text-3xl font-bold text-white mb-6 text-center">
+            <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-6">
+              <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
                 Preguntas Frecuentes
               </h2>
               <div className="space-y-6 max-w-4xl mx-auto">
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     ¿El precio incluye IVA?
                   </h3>
-                  <p className="text-gray-300">
+                  <p className="text-muted-foreground">
                     No, los precios mostrados son netos. Se añade 19% de IVA en
                     la factura electrónica emitida por el SII.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
-                    ¿Cómo se calcula el cobro mensual?
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    ¿Cómo se calcula el cobro semestral?
                   </h3>
-                  <p className="text-gray-300">
-                    El precio es por estudiante activo por mes. Ejemplo: 100
-                    estudiantes × CLP $35 = CLP $3.500/mes + IVA. Se cobra el
-                    día 1 de cada mes.
+                  <p className="text-muted-foreground">
+                    El precio es por estudiante activo por semestre. Ejemplo:
+                    100 estudiantes × CLP $35 = CLP $3.500/semestre + IVA. Se
+                    cobra el día 1 de cada semestre.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     ¿Qué incluye la prueba gratuita?
                   </h3>
-                  <p className="text-gray-300">
+                  <p className="text-muted-foreground">
                     14 días de acceso completo al plan que elijas, sin
                     restricciones. Incluye demo guiada por nuestro equipo y
                     soporte completo. No se requiere tarjeta de crédito.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     ¿Puedo cambiar de plan después?
                   </h3>
-                  <p className="text-gray-300">
+                  <p className="text-muted-foreground">
                     Sí, puedes cambiar de plan en cualquier momento. Los cambios
                     se aplican en el siguiente ciclo de facturación.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     ¿Qué pasa con mis datos si cancelo?
                   </h3>
-                  <p className="text-gray-300">
+                  <p className="text-muted-foreground">
                     Puedes exportar todos tus datos en cualquier momento.
                     Después de la cancelación, guardamos tus datos por 90 días
                     según Ley 19.628, luego se eliminan permanentemente.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     ¿Qué horarios tiene el soporte técnico?
                   </h3>
-                  <p className="text-gray-300">
+                  <p className="text-muted-foreground">
                     Lunes a viernes de 9:00 a 18:00 hrs (Chile Continental).
                     Planes Premium incluyen soporte 24/7 con tiempo de respuesta
                     garantizado.
@@ -476,6 +476,45 @@ export default function PreciosPage() {
             </div>
           </div>
         </main>
+
+        {/* Legal Links Section */}
+        <div className="bg-gray-900 border-t border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 py-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="text-gray-300 text-sm">
+                © {new Date().getFullYear()} Plataforma Astral. Todos los
+                derechos reservados.
+              </div>
+              <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400">
+                <a
+                  href="/terminos"
+                  className="hover:text-primary transition-colors underline"
+                >
+                  Términos y Condiciones
+                </a>
+                <a
+                  href="/privacidad"
+                  className="hover:text-primary transition-colors underline"
+                >
+                  Política de Privacidad
+                </a>
+                <a
+                  href="/dpa"
+                  className="hover:text-primary transition-colors underline"
+                >
+                  Acuerdo de Procesamiento de Datos (DPA)
+                </a>
+                <a
+                  href="/contacto"
+                  className="hover:text-primary transition-colors underline"
+                >
+                  Contacto
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <MinEducFooter />
       </div>
     </div>

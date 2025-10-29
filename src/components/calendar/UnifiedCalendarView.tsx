@@ -606,13 +606,13 @@ export default function UnifiedCalendarView({
         {/* Calendar Header */}
         <div
           className={cn(
-            "bg-gradient-to-r px-4 sm:px-6 py-3 sm:py-4 relative overflow-hidden transition-all duration-700 ease-in-out",
+            "bg-linear-to-r px-4 sm:px-6 py-3 sm:py-4 relative overflow-hidden transition-all duration-700 ease-in-out",
             getMonthGradient(safeCurrentMonth),
           )}
         >
           {/* Subtle overlay pattern for depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/10 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-b from-white/10 via-transparent to-black/10 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent pointer-events-none" />
           <div className="relative z-10 flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Button
@@ -821,8 +821,8 @@ export default function UnifiedCalendarView({
             variant={context}
             className={cn(
               context === "public"
-                ? "bg-gradient-to-r from-gray-900/90 to-gray-800/90 border-gray-600/50"
-                : "bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20",
+                ? "bg-linear-to-r from-gray-900/90 to-gray-800/90 border-gray-600/50"
+                : "bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20",
             )}
           >
             <AdaptiveCardContent className="p-6">
