@@ -71,8 +71,8 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
 
   if (!isHydrated) {
     return (
-      <AdaptiveButton variant="ghost" size="icon" className="w-8 h-8" disabled>
-        <Settings2 className="h-4 w-4" />
+      <AdaptiveButton variant="ghost" size="icon" className="w-9 h-9" disabled>
+        <Settings2 className="h-[1.1rem] w-[1.1rem]" />
       </AdaptiveButton>
     );
   }
@@ -84,13 +84,13 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
           variant="ghost"
           size="icon"
           className={cn(
-            "w-8 h-8 relative transition-all duration-200",
+            "w-9 h-9 relative transition-all duration-200",
             className,
           )}
           title="Configuración Avanzada"
           enhancement="minimal"
         >
-          <Settings2 className="h-4 w-4" />
+          <Settings2 className="h-[1.1rem] w-[1.1rem]" />
           {(isDesktopForced || showDevPanel) && (
             <span className="absolute top-0 right-0 h-2 w-2 bg-primary rounded-full animate-pulse" />
           )}
