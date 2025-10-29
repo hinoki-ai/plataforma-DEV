@@ -1,315 +1,409 @@
-# Sistema de Votaciones - Plataforma Astral
-
-## 📋 Resumen Ejecutivo
-
-El Sistema de Votaciones es una plataforma integral para la gestión democrática de decisiones en el Centro de Padres de la Plataforma Educativa Astral. Permite a los administradores crear, gestionar y monitorear votaciones, mientras que los padres pueden participar de manera segura y transparente.
-
-## 🎯 Características Principales
-
-### Características para Administradores
-
-- ✅ **Gestión Completa de Votaciones**: Crear, editar, eliminar y monitorear votaciones
-- ✅ **Categorización Avanzada**: 10 categorías predefinidas (Académico, Financiero, etc.)
-- ✅ **Configuración Flexible**: Múltiples opciones de configuración por votación
-- ✅ **Analytics en Tiempo Real**: Estadísticas detalladas y resultados visuales
-- ✅ **Control de Acceso**: Gestión de permisos y autenticación
-- ✅ **Interfaz Intuitiva**: Dashboard moderno con filtros y búsqueda
-
-### Características para Padres
-
-- ✅ **Votación Segura**: Autenticación requerida, una votación por usuario
-- ✅ **Resultados Transparentes**: Visualización en tiempo real de resultados
-- ✅ **Interfaz Responsiva**: Funciona en móviles, tablets y desktop
-- ✅ **Notificaciones**: Feedback inmediato sobre el estado del voto
-- ✅ **Historial Personal**: Ver votaciones anteriores y resultados
-
-## 🏗️ Arquitectura del Sistema
-
-### Base de Datos
-
-```sql
--- Tabla principal de votaciones
-votes (
-  id, title, description, category, end_date,
-  is_active, is_public, allow_multiple_votes,
-  max_votes_per_user, require_authentication,
-  created_by, created_at, updated_at
-)
-
--- Opciones de votación
-vote_options (
-  id, text, vote_id, created_at
-)
-
--- Respuestas de usuarios
-vote_responses (
-  id, vote_id, option_id, user_id, created_at
-)
-```
-
-### API Endpoints
-
-#### Administradores
-
-- `GET /api/admin/votes` - Listar todas las votaciones con estadísticas
-- `POST /api/admin/votes` - Crear nueva votación
-- `PUT /api/admin/votes` - Actualizar votación existente
-- `DELETE /api/admin/votes` - Eliminar votación
-
-#### Padres
-
-- `GET /api/parent/votes` - Obtener votaciones disponibles
-- `POST /api/parent/votes` - Enviar voto
-
-### Seguridad
-
-- 🔐 **Autenticación**: NextAuth con roles de usuario
-- 🛡️ **Autorización**: Verificación de roles (ADMIN/PARENT)
-- 🔒 **Validación**: Zod schemas para validación de datos
-- 🚫 **Prevención de Fraude**: Una votación por usuario por encuesta
-- ⏰ **Límites de Tiempo**: Votaciones con fechas de cierre automático
-
-## 📊 Categorías de Votación
-
-| Categoría          | Descripción                          | Color    |
-| ------------------ | ------------------------------------ | -------- |
-| **GENERAL**        | Votaciones generales del centro      | Gris     |
-| **ACADEMIC**       | Decisiones académicas y curriculares | Azul     |
-| **ADMINISTRATIVE** | Gestión administrativa               | Púrpura  |
-| **SOCIAL**         | Actividades sociales y eventos       | Verde    |
-| **FINANCIAL**      | Decisiones financieras y presupuesto | Amarillo |
-| **INFRASTRUCTURE** | Mejoras de infraestructura           | Naranja  |
-| **CURRICULUM**     | Cambios en el currículum             | Índigo   |
-| **EVENTS**         | Eventos y celebraciones              | Rosa     |
-| **POLICIES**       | Políticas y reglamentos              | Rojo     |
-| **OTHER**          | Otras categorías                     | Gris     |
-
-## ⚙️ Configuraciones de Votación
-
-### Configuraciones Básicas
-
-- **Título**: Nombre de la votación (requerido)
-- **Descripción**: Explicación detallada (opcional)
-- **Categoría**: Clasificación temática
-- **Fecha de Cierre**: Cuándo termina la votación
-- **Estado**: Activa/Inactiva
-
-### Configuraciones Avanzadas
-
-- **Pública/Privada**: Control de visibilidad
-- **Múltiples Votos**: Permitir votar por varias opciones
-- **Límite de Votos**: Máximo número de votos por usuario
-- **Autenticación**: Requerir login para votar
-
-## 🎨 Interfaz de Usuario
-
-### Dashboard de Administración
-
-- 📈 **Estadísticas en Tiempo Real**: Total votaciones, activas, cerradas, votos
-- 🔍 **Búsqueda y Filtros**: Por estado, categoría, texto
-- ➕ **Creación Intuitiva**: Formulario dinámico con validación
-- 📊 **Vista de Resultados**: Gráficos y porcentajes
-- ⚡ **Acciones Rápidas**: Editar, eliminar, duplicar
-
-### Interfaz de Padres
-
-- 🗳️ **Votación Simple**: Un clic para votar
-- 📊 **Resultados Visuales**: Barras de progreso y porcentajes
-- ⏰ **Contador Regresivo**: Tiempo restante para votar
-- ✅ **Confirmación**: Feedback inmediato del voto
-- 📱 **Responsive**: Optimizado para móviles
-
-## 🚀 Instalación y Configuración
-
-### 1. Migración de Base de Datos
-
-```bash
-# Generar migración
-npx prisma migrate dev --name enhance_voting_system
-
-# Aplicar migración
-npx prisma migrate deploy
-```
-
-### 2. Crear Datos de Prueba
-
-```bash
-# Ejecutar script de muestra
-npx tsx scripts/create-sample-votes.ts
-```
-
-### 3. Verificar Configuración
-
-- ✅ Base de datos conectada
-- ✅ Usuarios admin creados
-- ✅ Permisos configurados
-- ✅ API endpoints funcionando
-
-## 📱 Uso del Sistema
-
-### Guía para Administradores
-
-#### Crear Nueva Votación
-
-1. Ir a `/admin/votaciones`
-2. Hacer clic en "Nueva Votación"
-3. Completar formulario:
-   - Título y descripción
-   - Seleccionar categoría
-   - Establecer fecha de cierre
-   - Configurar opciones avanzadas
-   - Agregar opciones de voto (mínimo 2, máximo 10)
-4. Hacer clic en "Crear"
-
-#### Gestionar Votaciones Existentes
-
-- **Editar**: Hacer clic en el ícono de editar
-- **Eliminar**: Hacer clic en el ícono de eliminar (confirmación requerida)
-- **Filtrar**: Usar filtros por estado o búsqueda por texto
-- **Ver Resultados**: Los resultados se muestran en tiempo real
-
-### Guía para Padres
-
-#### Participar en Votaciones
-
-1. Ir a `/parent` (dashboard de padres)
-2. Ver sección "Votaciones del Centro de Padres"
-3. Seleccionar votación activa
-4. Revisar opciones y descripción
-5. Hacer clic en "Votar" en la opción deseada
-6. Confirmar voto
-
-#### Ver Resultados
-
-- Los resultados se actualizan automáticamente
-- Ver porcentajes y número de votos
-- Identificar opción seleccionada (marcada con ✓)
-
-## 🔧 Configuración Avanzada
-
-### Variables de Entorno
-
-```env
-# Base de datos
-CONVEX_URL="[Convex deployment URL]"
-
-# Autenticación
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key"
-
-# Roles de usuario
-DEFAULT_ADMIN_EMAIL="admin@plataforma-astral.com"
-DEFAULT_ADMIN_PASSWORD="admin123"
-```
-
-### Personalización
-
-- **Categorías**: Modificar enum `VoteCategory` en schema
-- **Colores**: Actualizar función `getCategoryColor()` en componentes
-- **Límites**: Ajustar validaciones en schemas Zod
-- **UI**: Personalizar componentes en `/components/parent/` y `/components/admin/`
-
-## 📈 Analytics y Reportes
-
-### Métricas Disponibles
-
-- **Total de Votaciones**: Por categoría y estado
-- **Participación**: Número de votos por votación
-- **Tendencias**: Votaciones más populares
-- **Tiempo**: Duración promedio de votaciones
-- **Usuarios**: Participación por usuario
-
-### Exportación de Datos
-
-- 📊 **Resultados CSV**: Exportar resultados por votación
-- 📋 **Reportes PDF**: Generar reportes completos
-- 📈 **Gráficos**: Visualizaciones interactivas
-- 📱 **Notificaciones**: Alertas automáticas
-
-## 🔒 Seguridad y Privacidad
-
-### Medidas de Seguridad
-
-- **Autenticación**: NextAuth con múltiples proveedores
-- **Autorización**: Roles granulares (ADMIN, PARENT)
-- **Validación**: Zod schemas para todos los inputs
-- **Auditoría**: Logs de todas las acciones
-- **Rate Limiting**: Protección contra spam
-
-### Privacidad
-
-- **Anonimato**: Los votos individuales son privados
-- **Transparencia**: Solo resultados agregados son públicos
-- **Consentimiento**: Usuarios deben aceptar términos
-- **Retención**: Datos se eliminan según políticas
-
-## 🐛 Solución de Problemas
-
-### Problemas Comunes
-
-#### Error: "No autorizado"
-
-- Verificar que el usuario esté logueado
-- Confirmar que tenga el rol correcto (ADMIN/PARENT)
-- Revisar configuración de NextAuth
-
-#### Error: "Ya has votado"
-
-- Verificar constraint único en base de datos
-- Revisar lógica de validación en API
-- Limpiar cache del navegador
-
-#### Error: "Votación no encontrada"
-
-- Verificar que la votación exista en base de datos
-- Confirmar que esté activa y pública
-- Revisar permisos de usuario
-
-### Logs y Debugging
-
-```bash
-# Ver logs de la aplicación
-npm run dev
-
-# Verificar base de datos
-npx prisma studio
-
-# Ejecutar tests
-npm run test
-```
-
-## 🚀 Roadmap y Mejoras Futuras
-
-### Próximas Características
-
-- 📧 **Notificaciones por Email**: Alertas automáticas
-- 📱 **App Móvil**: Aplicación nativa para votaciones
-- 🔗 **Integración con Calendario**: Votaciones programadas
-- 📊 **Analytics Avanzados**: Machine learning para predicciones
-- 🌐 **API Pública**: Integración con sistemas externos
-
-### Mejoras Técnicas
-
-- ⚡ **Performance**: Caching y optimización
-- 🔄 **Real-time**: WebSockets para actualizaciones
-- 📱 **PWA**: Progressive Web App
-- 🌍 **Internacionalización**: Múltiples idiomas
-- ♿ **Accesibilidad**: WCAG 2.1 compliance
-
-## 📞 Soporte
-
-### Contacto
-
-- **Email**: <soporte@plataforma-astral.com>
-- **Teléfono**: (45) 278 3486
-- **Horarios**: Lunes a Viernes 8:00 - 17:00
-
-### Documentación Adicional
-
-- [Guía de Usuario](USER_GUIDE.md)
-- [API Documentation](API_DOCS.md)
-- [Troubleshooting](TROUBLESHOOTING.md)
+# Voting System - Complete Guide for AI Assistants
+
+**Plataforma Astral - Centro Consejo Voting Platform**  
+**Status**: Production Ready ✅  
+**Last Updated**: January 2025
 
 ---
 
-Desarrollado con ❤️ para la Plataforma Educativa Astral
+## 🎯 System Overview
+
+The Voting System is a comprehensive platform for democratic decision-making in the Parent Center. It allows administrators to create, manage, and monitor votes, while parents participate securely and transparently.
+
+### Key Features
+
+**For Administrators:**
+
+- Complete vote management (create, edit, delete, monitor)
+- Advanced categorization (10 predefined categories)
+- Real-time analytics and statistics
+- Flexible configuration options
+
+**For Parents:**
+
+- Secure voting with authentication required
+- Real-time result visualization
+- Mobile-responsive interface
+- One vote per user enforcement (configurable)
+
+---
+
+## 🏗️ Architecture
+
+### Database Schema (Convex)
+
+```typescript
+// Convex schema models
+votes: {
+  _id: Id<"votes">
+  title: string
+  description?: string
+  category: VoteCategory
+  endDate: number  // Unix timestamp
+  isActive: boolean
+  isPublic: boolean
+  allowMultipleVotes: boolean
+  maxVotesPerUser?: number
+  requireAuthentication: boolean
+  createdBy: Id<"users">
+  createdAt: number
+  updatedAt: number
+}
+
+voteOptions: {
+  _id: Id<"voteOptions">
+  voteId: Id<"votes">
+  text: string
+  createdAt: number
+}
+
+voteResponses: {
+  _id: Id<"voteResponses">
+  voteId: Id<"votes">
+  optionId: Id<"voteOptions">
+  userId: Id<"users">
+  createdAt: number
+}
+```
+
+### Convex Functions (`convex/votes.ts`)
+
+**Key Functions:**
+
+- `createVote` - Create new vote with options
+- `getVotes` - List votes with optional filters
+- `getVoteById` - Get vote with options and vote counts
+- `castVote` - Record a vote response (enforces constraints)
+- `deleteVote` - Delete vote and all related data
+- `getUserVoteResponse` - Check if user has voted
+- `getVoteResults` - Calculate vote statistics
+
+### API Routes
+
+**Admin Routes** (`src/app/api/admin/votes/`):
+
+- `GET /api/admin/votes` - List all votes (query: `?isActive=true&category=GENERAL`)
+- `POST /api/admin/votes` - Create new vote
+- `DELETE /api/admin/votes/[id]` - Delete vote
+
+**Parent Routes** (`src/app/api/parent/votes/`):
+
+- `GET /api/parent/votes` - List public active votes with user voting status
+- `POST /api/parent/votes` - Cast a vote (body: `{ voteId, optionId }`)
+
+**Critical Implementation Pattern:**
+
+```typescript
+// ✅ CORRECT: Initialize Convex client per-request
+export async function GET(request: NextRequest) {
+  const convex = getConvexClient(); // Per-request initialization
+  // ... handler logic
+}
+
+export const runtime = "nodejs"; // Required for API routes
+```
+
+### Security & Authorization
+
+- **Authentication**: NextAuth.js with Clerk integration
+- **Authorization**: Role-based (ADMIN for admin routes, PARENT for parent routes)
+- **Validation**: Zod schemas for all inputs
+- **Constraints**: Enforced at both Convex and API layers
+
+---
+
+## 🔒 Voting Constraints
+
+### Constraint Enforcement
+
+1. **Duplicate Prevention** (`allowMultipleVotes: false`)
+   - First vote succeeds
+   - Second vote returns `409 Conflict`: "You have already voted in this poll"
+
+2. **Multiple Votes** (`allowMultipleVotes: true`)
+   - User can vote multiple times
+   - Combined with `maxVotesPerUser` if set
+
+3. **Max Votes Limit** (`maxVotesPerUser: number`)
+   - Enforces maximum votes per user
+   - Returns `409 Conflict`: "Maximum votes per user limit reached (X)"
+
+4. **Expiration** (`endDate`)
+   - Checked at API layer (not Convex)
+   - Expired votes show status: `"closed"`
+   - Voting on expired vote returns `403 Forbidden`
+
+5. **Public/Private** (`isPublic: boolean`)
+   - Private votes hidden from `GET /api/parent/votes`
+   - Attempting to vote on private vote returns `403 Forbidden`
+
+6. **Active/Inactive** (`isActive: boolean`)
+   - Inactive votes hidden from `GET /api/parent/votes`
+   - Attempting to vote on inactive vote returns `403 Forbidden`
+
+### Error Handling
+
+**HTTP Status Codes:**
+
+- `401 Unauthorized` - No authentication
+- `403 Forbidden` - Wrong role or forbidden vote (expired, inactive, private)
+- `404 Not Found` - Invalid vote/option IDs
+- `409 Conflict` - Already voted or max votes reached
+- `400 Bad Request` - Missing/invalid fields
+
+---
+
+## 📊 Vote Categories
+
+```typescript
+enum VoteCategory {
+  GENERAL = "GENERAL", // Gray
+  ACADEMIC = "ACADEMIC", // Blue
+  ADMINISTRATIVE = "ADMINISTRATIVE", // Purple
+  SOCIAL = "SOCIAL", // Green
+  FINANCIAL = "FINANCIAL", // Yellow
+  INFRASTRUCTURE = "INFRASTRUCTURE", // Orange
+  CURRICULUM = "CURRICULUM", // Indigo
+  EVENTS = "EVENTS", // Pink
+  POLICIES = "POLICIES", // Red
+  OTHER = "OTHER", // Gray
+}
+```
+
+---
+
+## 🔧 Development Patterns
+
+### Creating a Vote (Admin)
+
+```typescript
+// API Request
+POST /api/admin/votes
+{
+  "title": "New School Policy",
+  "description": "Description here",
+  "category": "POLICIES",
+  "endDate": 1735689600000, // Unix timestamp
+  "isActive": true,
+  "isPublic": true,
+  "allowMultipleVotes": false,
+  "requireAuthentication": true,
+  "options": [
+    { "text": "Option 1" },
+    { "text": "Option 2" }
+  ]
+}
+
+// Response
+{
+  "success": true,
+  "data": { "id": "vote-id-123" }
+}
+```
+
+### Casting a Vote (Parent)
+
+```typescript
+// API Request
+POST /api/parent/votes
+{
+  "voteId": "vote-id-123",
+  "optionId": "option-id-456"
+}
+
+// Response
+{
+  "success": true,
+  "message": "Vote cast successfully",
+  "data": { "id": "response-id-789" }
+}
+```
+
+### Querying Votes
+
+```typescript
+// Get all active votes for admin
+GET /api/admin/votes?isActive=true
+
+// Get votes by category
+GET /api/admin/votes?category=FINANCIAL
+
+// Get public active votes for parent
+GET /api/parent/votes
+// Returns votes with user voting status included
+```
+
+---
+
+## 🧪 Testing
+
+### Test Scripts
+
+**Convex Function Tests:**
+
+```bash
+npx tsx scripts/test-voting-system.ts
+```
+
+Tests:
+
+- Vote creation and retrieval
+- Constraint enforcement (duplicate, maxVotes)
+- Vote deletion
+- Result calculations
+
+**API Endpoint Tests:**
+
+```bash
+# Requires dev server running
+npm run dev
+
+# In another terminal
+npx tsx scripts/test-voting-api-comprehensive.ts
+```
+
+Tests:
+
+- Authentication/authorization
+- All HTTP status codes (401, 403, 404, 409, 400)
+- Query filters
+- Constraint validation
+
+### Test Coverage Checklist
+
+- ✅ Vote creation (admin)
+- ✅ Vote retrieval with filters
+- ✅ Vote casting (parent)
+- ✅ Duplicate prevention
+- ✅ Max votes constraint
+- ✅ Expiration handling
+- ✅ Public/private filtering
+- ✅ Active/inactive filtering
+- ✅ Error handling (all status codes)
+
+---
+
+## 🐛 Common Issues & Solutions
+
+### Issue: "Module not found: @/convex/\_generated/api"
+
+**Solution**: Initialize Convex client per-request, not at module level:
+
+```typescript
+// ❌ WRONG
+const convex = getConvexClient(); // At module level
+
+// ✅ CORRECT
+export async function GET(request: NextRequest) {
+  const convex = getConvexClient(); // Inside handler
+}
+```
+
+Also add: `export const runtime = "nodejs";`
+
+### Issue: Type errors with Convex Id types
+
+**Solution**: Import and cast properly:
+
+```typescript
+import type { Id } from "@/convex/_generated/dataModel";
+
+await convex.mutation(api.votes.deleteVote, {
+  id: voteId as Id<"votes">,
+});
+```
+
+### Issue: Vote constraints not enforced
+
+**Solution**: Constraints are enforced at both layers:
+
+- Convex layer: `castVote` function checks `allowMultipleVotes` and `maxVotesPerUser`
+- API layer: Checks expiration, `isPublic`, `isActive`
+
+### Issue: 500 errors on API routes
+
+**Solution:**
+
+1. Ensure `NEXT_PUBLIC_CONVEX_URL` is set
+2. Check Convex backend is running/deployed
+3. Verify Convex functions are deployed: `npx convex deploy`
+4. Ensure runtime is specified: `export const runtime = "nodejs";`
+
+---
+
+## 📁 File Locations
+
+**Backend:**
+
+- `convex/votes.ts` - Convex functions
+- `convex/schema.ts` - Database schema
+
+**API Routes:**
+
+- `src/app/api/admin/votes/route.ts` - Admin endpoints
+- `src/app/api/admin/votes/[id]/route.ts` - Admin vote operations
+- `src/app/api/parent/votes/route.ts` - Parent endpoints
+
+**Frontend Components:**
+
+- `src/components/admin/voting/` - Admin voting UI
+- `src/components/parent/voting/` - Parent voting UI
+
+**Utilities:**
+
+- `src/lib/voting-utils.ts` - Vote calculation helpers
+
+---
+
+## 🚀 Deployment
+
+### Prerequisites
+
+```bash
+# Environment variables required
+NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
+CLERK_SECRET_KEY=...
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=...
+```
+
+### Deployment Steps
+
+```bash
+# Deploy Convex backend
+npx convex deploy
+
+# Deploy Next.js frontend
+vercel --prod
+```
+
+### Verification
+
+1. Test admin vote creation: `POST /api/admin/votes`
+2. Test parent vote retrieval: `GET /api/parent/votes`
+3. Test vote casting: `POST /api/parent/votes`
+4. Verify constraints work correctly
+
+---
+
+## 📚 Related Documentation
+
+- **Authentication**: `docs/AUTHENTICATION_COMPLETE_GUIDE.md`
+- **API Reference**: `docs/API_DOCUMENTATION.md`
+- **Testing**: `docs/TESTING_GUIDE.md`
+- **Environment Setup**: `docs/ENVIRONMENT.md`
+
+---
+
+## 🎯 Key Takeaways for AI Assistants
+
+1. **Always initialize Convex client per-request** in API routes
+2. **Constraints are enforced at both Convex and API layers** - API layer checks expiration/public/active, Convex checks multiple votes and max votes
+3. **Error handling** uses specific HTTP status codes (401, 403, 404, 409, 400)
+4. **Type safety** requires proper `Id<"votes">` casting for Convex operations
+5. **Test coverage** includes both Convex functions and API endpoints separately
+6. **Production deployment** requires both Convex and Next.js deployment
+
+---
+
+**Maintained by**: Development Team  
+**For questions**: Refer to API documentation or troubleshooting guides

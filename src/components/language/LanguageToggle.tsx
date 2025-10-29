@@ -37,61 +37,7 @@ const languageOptions: LanguageOption[] = [
     flag: "🇺🇸",
     ariaLabel: "Switch to English",
   },
-] as const;
-
-// Memoized individual option component for better performance
-const LanguageOptionItem = memo(function LanguageOptionItem({
-  option,
-  isSelected,
-  isFocused,
-  onClick,
-  onKeyDown,
-  index,
-}: {
-  option: LanguageOption;
-  isSelected: boolean;
-  isFocused: boolean;
-  onClick: () => void;
-  onKeyDown: (e: React.KeyboardEvent) => void;
-  index: number;
-}) {
-  return (
-    <div
-      id={`language-option-${index}`}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset rounded-md cursor-pointer ${
-        isSelected
-          ? "bg-primary/10 text-primary shadow-sm"
-          : "hover:bg-accent/50"
-      } ${isFocused ? "bg-accent" : ""}`}
-      role="option"
-      aria-label={option.ariaLabel}
-      aria-selected={isSelected}
-      tabIndex={isFocused ? 0 : -1}
-       
-    >
-      <div className="flex items-center gap-3">
-        <span className="text-lg" aria-hidden="true" role="img">
-          {option.flag}
-        </span>
-        <div className="flex flex-col">
-          <span className="text-sm font-medium leading-tight">
-            {option.nativeName}
-          </span>
-          <span className="text-xs text-muted-foreground leading-tight">
-            {option.name}
-          </span>
-        </div>
-      </div>
-      {isSelected && (
-        <Check className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
-      )}
-    </div>
-  );
-});
-
-LanguageOptionItem.displayName = "LanguageOptionItem";
+];
 
 const LanguageToggle = memo(() => {
   const { language, setLanguage, t, isLoading } = useLanguage();
@@ -191,7 +137,10 @@ const LanguageToggle = memo(() => {
       ) as HTMLElement;
       if (firstOption) {
         firstOption.focus();
-        setFocusedIndex(0);
+        // Use setTimeout to avoid synchronous setState in effect
+        setTimeout(() => {
+          setFocusedIndex(0);
+        }, 0);
       }
     }
   }, [isOpen]);
@@ -293,19 +242,48 @@ const LanguageToggle = memo(() => {
                 }
                 ref={listboxRef}
                 className="max-h-60 overflow-auto"
-                 
               >
-                {languageOptions.map((option, index) => (
-                  <LanguageOptionItem
-                    key={option.code}
-                    option={option}
-                    isSelected={language === option.code}
-                    isFocused={focusedIndex === index}
-                    onClick={() => handleOptionClick(option)}
-                    onKeyDown={(e) => handleOptionKeyDown(e, option)}
-                    index={index}
-                  />
-                ))}
+                {languageOptions.map((option, index) => {
+                  const isSelected = language === option.code;
+                  const isFocused = focusedIndex === index;
+                  return (
+                    <div
+                      key={option.code}
+                      id={`language-option-${index}`}
+                      role="option"
+                      {...(isSelected && { "aria-selected": "true" })}
+                      onClick={() => handleOptionClick(option)}
+                      onKeyDown={(e) => handleOptionKeyDown(e, option)}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset rounded-md cursor-pointer ${
+                        isSelected
+                          ? "bg-primary/10 text-primary shadow-sm"
+                          : "hover:bg-accent/50"
+                      } ${isFocused ? "bg-accent" : ""}`}
+                      aria-label={option.ariaLabel}
+                      tabIndex={isFocused ? 0 : -1}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg" aria-hidden="true" role="img">
+                          {option.flag}
+                        </span>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium leading-tight">
+                            {option.nativeName}
+                          </span>
+                          <span className="text-xs text-muted-foreground leading-tight">
+                            {option.name}
+                          </span>
+                        </div>
+                      </div>
+                      {isSelected && (
+                        <Check
+                          className="w-4 h-4 text-primary shrink-0"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </motion.div>
           )}

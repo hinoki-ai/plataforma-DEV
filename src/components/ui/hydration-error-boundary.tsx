@@ -1,6 +1,13 @@
 "use client";
 
-import { Component, ErrorInfo, ReactNode, useState, useEffect } from "react";
+import {
+  Component,
+  ErrorInfo,
+  ReactNode,
+  useState,
+  useEffect,
+  useSyncExternalStore,
+} from "react";
 import { AlertTriangle, RefreshCw, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
@@ -281,13 +288,24 @@ export class HydrationErrorBoundary extends Component<Props, State> {
 
 // Hook for client components to detect hydration
 export function useHydrationSafe() {
-  const [isHydrated, setIsHydrated] = useState(false);
+  const subscribe = (callback: () => void) => {
+    if (typeof window === "undefined") {
+      return () => {};
+    }
 
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+    if (typeof queueMicrotask === "function") {
+      queueMicrotask(callback);
+    } else {
+      setTimeout(callback, 0);
+    }
 
-  return isHydrated;
+    return () => {};
+  };
+
+  const getClientSnapshot = () => true;
+  const getServerSnapshot = () => false;
+
+  return useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
 }
 
 // HOC for wrapping components that might have hydration issues

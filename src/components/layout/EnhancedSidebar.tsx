@@ -20,7 +20,6 @@ import { NavigationIcons, ThemeIcons } from "@/components/icons/hero-icons";
 import {
   QuickSearch,
   SmartRecommendations,
-  KeyboardShortcutsHelper,
   BreadcrumbNavigation,
   navigationUtils,
 } from "./NavigationEnhancements";
@@ -90,6 +89,22 @@ const getEnhancedNavigation = (
         shortcut: "Alt+P",
         category: t("nav.main.categories.academic"),
         description: t("nav.planning"),
+      },
+      {
+        title: "Libro de Clases",
+        href: "/admin/libro-clases",
+        icon: NavigationIcons.Planning,
+        shortcut: "Alt+L",
+        category: t("nav.main.categories.academic"),
+        description: "Gestión del libro de clases",
+      },
+      {
+        title: "Gestión de Estudiantes",
+        href: "/admin/libro-clases/estudiantes",
+        icon: NavigationIcons.Profile,
+        shortcut: "Alt+G",
+        category: t("nav.main.categories.academic"),
+        description: "Administrar estudiantes por curso",
       },
       {
         title: t("nav.calendar"),
@@ -190,6 +205,14 @@ const getEnhancedNavigation = (
         description: t("nav.pme"),
       },
       {
+        title: "Mis Estudiantes",
+        href: "/admin/libro-clases/estudiantes",
+        icon: NavigationIcons.Profile,
+        shortcut: "Alt+E",
+        category: t("nav.main.categories.academic"),
+        description: "Ver estudiantes de mis cursos",
+      },
+      {
         title: t("nav.parent.meetings"),
         href: "/profesor/reuniones",
         icon: NavigationIcons.Team,
@@ -238,6 +261,14 @@ const getEnhancedNavigation = (
         shortcut: "Alt+E",
         category: t("nav.main.categories.information"),
         description: t("nav.students"),
+      },
+      {
+        title: "Cursos de Mis Hijos",
+        href: "/admin/libro-clases/estudiantes",
+        icon: NavigationIcons.Planning,
+        shortcut: "Alt+U",
+        category: t("nav.main.categories.information"),
+        description: "Ver cursos y compañeros de mis hijos",
       },
       {
         title: t("nav.calendar"),
@@ -324,31 +355,23 @@ export function EnhancedSidebar({
   const dragControls = useDragControls();
   const { t } = useLanguage();
 
+  const userRole = session?.user?.role ?? null;
+
   // State management
   const [quickSearchOpen, setQuickSearchOpen] = useState(false);
-  const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
+  const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
   const [usageData, setUsageData] = useState(() =>
     navigationUtils.getUsageData(),
   );
 
   // Get navigation items for current role
   const navigationItems = useMemo(() => {
-    if (!session?.user?.role) return [];
+    if (!userRole) return [];
     const navigation = getEnhancedNavigation(t);
-    const items =
-      navigation[session.user.role as keyof typeof navigation] || [];
+    const items = navigation[userRole as keyof typeof navigation] || [];
     return items.map((item) => ({ ...item })) as NavigationItem[];
-  }, [session?.user?.role, t]);
-
-  // Get keyboard shortcuts for current role
-  const keyboardShortcuts = useMemo(() => {
-    const shortcuts = getKeyboardShortcuts(t);
-    const roleShortcuts = session?.user?.role
-      ? shortcuts[session.user.role as keyof typeof shortcuts] || {}
-      : {};
-    return { ...shortcuts.BASE, ...roleShortcuts };
-  }, [session?.user?.role, t]);
+  }, [userRole, t]);
 
   // Handle navigation with usage tracking
   const handleNavigate = useCallback(
@@ -413,6 +436,7 @@ export function EnhancedSidebar({
       }
 
       // Handle Alt+ shortcuts
+      const keyboardShortcuts = getKeyboardShortcuts(t);
       const shortcut = Object.keys(keyboardShortcuts).find((key) => {
         const [modifier, char] = key.split("+");
         if (modifier === "Alt") {
@@ -425,14 +449,15 @@ export function EnhancedSidebar({
         event.preventDefault();
         const action =
           keyboardShortcuts[shortcut as keyof typeof keyboardShortcuts];
-        if (typeof action === "string" && action.startsWith("/")) {
-          handleNavigate(action);
+        if (action && typeof action === "string") {
+          if ((action as string).startsWith("/")) {
+            handleNavigate(action);
+          }
         }
       }
     },
     [
       session,
-      keyboardShortcuts,
       quickSearchOpen,
       shortcutsHelpOpen,
       isMobile,
@@ -440,6 +465,7 @@ export function EnhancedSidebar({
       onClose,
       onToggle,
       handleNavigate,
+      t,
     ],
   );
 
@@ -555,21 +581,6 @@ export function EnhancedSidebar({
                 </Tooltip>
 
                 {/* Shortcuts Help Button */}
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => setShortcutsHelpOpen(true)}
-                    >
-                      <HelpCircle className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Atajos de teclado (?)</p>
-                  </TooltipContent>
-                </Tooltip>
               </>
             )}
 
@@ -675,7 +686,7 @@ export function EnhancedSidebar({
                     )}
                     aria-current={isActive ? "page" : undefined}
                   >
-                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <Icon className="h-4 w-4 shrink-0" />
                     <span className="flex-1">{item.title}</span>
                     {item.badge && (
                       <Badge variant="secondary" className="text-xs">
@@ -753,7 +764,7 @@ export function EnhancedSidebar({
           {session?.user?.role === "MASTER" && (
             <div className="space-y-4 border-t border-blue-200 dark:border-blue-800 pt-6">
               {/* Master Header */}
-              <div className="px-3 py-3 bg-gradient-to-r from-purple-50 via-blue-50 to-indigo-50 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-indigo-950/30 rounded-xl border border-purple-200 dark:border-purple-800">
+              <div className="px-3 py-3 bg-linear-to-r from-purple-50 via-blue-50 to-indigo-50 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-indigo-950/30 rounded-xl border border-purple-200 dark:border-purple-800">
                 <div className="flex items-center gap-2 mb-2">
                   <Crown className="h-4 w-4 text-purple-600" />
                   <h3 className="text-sm font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider">
@@ -1150,14 +1161,6 @@ export function EnhancedSidebar({
             onNavigate={handleNavigate}
             isOpen={quickSearchOpen}
             onClose={() => setQuickSearchOpen(false)}
-          />
-        )}
-
-        {shortcutsHelpOpen && (
-          <KeyboardShortcutsHelper
-            shortcuts={keyboardShortcuts}
-            isOpen={shortcutsHelpOpen}
-            onClose={() => setShortcutsHelpOpen(false)}
           />
         )}
       </AnimatePresence>

@@ -107,40 +107,54 @@ export function EducationalSystemExplorer() {
                 }`}
                 onClick={() => setSelectedType(typedType)}
               >
-                <div className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-300 ${
-                  isSelected
-                    ? "bg-linear-to-r from-blue-500/50 to-purple-500/50"
-                    : "bg-linear-to-r from-slate-200/20 to-slate-300/20 group-hover:from-blue-400/30 group-hover:to-purple-400/30"
-                }`}></div>
+                <div
+                  className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-300 ${
+                    isSelected
+                      ? "bg-linear-to-r from-blue-500/50 to-purple-500/50"
+                      : "bg-linear-to-r from-slate-200/20 to-slate-300/20 group-hover:from-blue-400/30 group-hover:to-purple-400/30"
+                  }`}
+                ></div>
 
-                <Card className={`relative border-0 shadow-xl transition-all duration-300 overflow-hidden ${
-                  isSelected
-                    ? "bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-blue-500/25"
-                    : "bg-white dark:bg-slate-800 hover:shadow-2xl hover:shadow-blue-500/10"
-                }`}>
+                <Card
+                  className={`relative border-0 shadow-xl transition-all duration-300 overflow-hidden ${
+                    isSelected
+                      ? "bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-blue-500/25"
+                      : "bg-white dark:bg-slate-800 hover:shadow-2xl hover:shadow-blue-500/10"
+                  }`}
+                >
                   <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                   <CardContent className="p-6 text-center space-y-4 relative z-10">
-                    <div className={`inline-flex p-4 rounded-2xl transition-all duration-300 ${
-                      isSelected
-                        ? "bg-white/20 text-white"
-                        : "bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-600 dark:text-blue-400 group-hover:scale-110"
-                    }`}>
+                    <div
+                      className={`inline-flex p-4 rounded-2xl transition-all duration-300 ${
+                        isSelected
+                          ? "bg-white/20 text-white"
+                          : "bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-600 dark:text-blue-400 group-hover:scale-110"
+                      }`}
+                    >
                       <span className="text-3xl">{info.icon}</span>
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className={`font-bold text-lg transition-colors duration-300 ${
-                        isSelected ? "text-white" : "text-slate-800 dark:text-white"
-                      }`}>
+                      <h3
+                        className={`font-bold text-lg transition-colors duration-300 ${
+                          isSelected
+                            ? "text-white"
+                            : "text-slate-800 dark:text-white"
+                        }`}
+                      >
                         {info.chileanName}
                       </h3>
-                      <Badge variant={isSelected ? "secondary" : "outline"} className={`transition-all duration-300 ${
-                        isSelected
-                          ? "bg-white/20 text-white border-white/30"
-                          : "group-hover:bg-blue-50 group-hover:border-blue-200"
-                      }`}>
-                        {info.levels.length} {t("programas.explorer.levels_text")}
+                      <Badge
+                        variant={isSelected ? "secondary" : "outline"}
+                        className={`transition-all duration-300 ${
+                          isSelected
+                            ? "bg-white/20 text-white border-white/30"
+                            : "group-hover:bg-blue-50 group-hover:border-blue-200"
+                        }`}
+                      >
+                        {info.levels.length}{" "}
+                        {t("programas.explorer.levels_text")}
                       </Badge>
                     </div>
                   </CardContent>
@@ -164,19 +178,27 @@ export function EducationalSystemExplorer() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                 <div>
                   <span className="font-semibold text-white">Institución:</span>{" "}
-                  <span className="text-white/90">{INSTITUTION_TYPE_INFO[selectedType].chileanName}</span>
+                  <span className="text-white/90">
+                    {INSTITUTION_TYPE_INFO[selectedType].chileanName}
+                  </span>
                 </div>
                 <div>
                   <span className="font-semibold text-white">Descripción:</span>{" "}
-                  <span className="text-white/90">{INSTITUTION_TYPE_INFO[selectedType].description}</span>
+                  <span className="text-white/90">
+                    {INSTITUTION_TYPE_INFO[selectedType].description}
+                  </span>
                 </div>
                 <div>
                   <span className="font-semibold text-white">Niveles:</span>{" "}
-                  <span className="text-white/90">{INSTITUTION_TYPE_INFO[selectedType].levels.length}</span>
+                  <span className="text-white/90">
+                    {INSTITUTION_TYPE_INFO[selectedType].levels.length}
+                  </span>
                 </div>
                 <div>
                   <span className="font-semibold text-white">Asignaturas:</span>{" "}
-                  <span className="text-white/90">{getSubjectsForInstitutionType(selectedType).length}</span>
+                  <span className="text-white/90">
+                    {getSubjectsForInstitutionType(selectedType).length}
+                  </span>
                 </div>
               </div>
             </AlertDescription>
@@ -225,33 +247,38 @@ export function EducationalSystemExplorer() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {INSTITUTION_TYPE_INFO[selectedType].levels.map((level, index) => (
-                    <div
-                      key={level.id}
-                      className="group relative overflow-hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700"
-                    >
-                      <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  {INSTITUTION_TYPE_INFO[selectedType].levels.map(
+                    (level, index) => (
+                      <div
+                        key={level.id}
+                        className="group relative overflow-hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700"
+                      >
+                        <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                      <div className="relative flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 text-sm font-bold">
-                            {index + 1}
-                          </div>
-                          <div>
-                            <div className="font-semibold text-slate-800 dark:text-white">
-                              {level.chileanName}
+                        <div className="relative flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 text-sm font-bold">
+                              {index + 1}
                             </div>
-                            <div className="text-sm text-slate-600 dark:text-slate-400">
-                              {level.ages} • ISCED {level.isced}
+                            <div>
+                              <div className="font-semibold text-slate-800 dark:text-white">
+                                {level.chileanName}
+                              </div>
+                              <div className="text-sm text-slate-600 dark:text-slate-400">
+                                {level.ages} • ISCED {level.isced}
+                              </div>
                             </div>
                           </div>
+                          <Badge
+                            variant="outline"
+                            className="bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/50 dark:border-blue-700 dark:text-blue-300"
+                          >
+                            {level.grades?.length || 0} grados
+                          </Badge>
                         </div>
-                        <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/50 dark:border-blue-700 dark:text-blue-300">
-                          {level.grades?.length || 0} grados
-                        </Badge>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -272,7 +299,10 @@ export function EducationalSystemExplorer() {
                     <h4 className="font-semibold text-slate-800 dark:text-white">
                       Asignaturas
                     </h4>
-                    <Badge variant="outline" className="bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/50 dark:border-emerald-700 dark:text-emerald-300">
+                    <Badge
+                      variant="outline"
+                      className="bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/50 dark:border-emerald-700 dark:text-emerald-300"
+                    >
                       {getSubjectsForInstitutionType(selectedType).length} total
                     </Badge>
                   </div>
@@ -289,8 +319,13 @@ export function EducationalSystemExplorer() {
                         </Badge>
                       ))}
                     {getSubjectsForInstitutionType(selectedType).length > 8 && (
-                      <Badge variant="outline" className="border-emerald-300 text-emerald-600 dark:border-emerald-600 dark:text-emerald-400">
-                        +{getSubjectsForInstitutionType(selectedType).length - 8} más
+                      <Badge
+                        variant="outline"
+                        className="border-emerald-300 text-emerald-600 dark:border-emerald-600 dark:text-emerald-400"
+                      >
+                        +
+                        {getSubjectsForInstitutionType(selectedType).length - 8}{" "}
+                        más
                       </Badge>
                     )}
                   </div>
@@ -321,18 +356,25 @@ export function EducationalSystemExplorer() {
                         >
                           <div
                             className={`w-3 h-3 rounded-full shrink-0 ${
-                              enabled ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"
+                              enabled
+                                ? "bg-emerald-500"
+                                : "bg-slate-300 dark:bg-slate-600"
                             }`}
                           />
-                          <span className={`text-sm capitalize ${
-                            enabled
-                              ? "text-emerald-800 dark:text-emerald-200 font-medium"
-                              : "text-slate-600 dark:text-slate-400"
-                          }`}>
+                          <span
+                            className={`text-sm capitalize ${
+                              enabled
+                                ? "text-emerald-800 dark:text-emerald-200 font-medium"
+                                : "text-slate-600 dark:text-slate-400"
+                            }`}
+                          >
                             {feature.split("_").join(" ")}
                           </span>
                           {enabled && (
-                            <Badge variant="outline" className="ml-auto bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-600 text-xs">
+                            <Badge
+                              variant="outline"
+                              className="ml-auto bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-600 text-xs"
+                            >
                               Activo
                             </Badge>
                           )}
@@ -356,7 +398,8 @@ export function EducationalSystemExplorer() {
                 {t("programas.explorer.adapted_navigation")}
               </CardTitle>
               <CardDescription className="text-lg text-slate-600 dark:text-slate-300">
-                La navegación se adapta automáticamente según el tipo de institución
+                La navegación se adapta automáticamente según el tipo de
+                institución
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -381,12 +424,18 @@ export function EducationalSystemExplorer() {
                   Dashboard Interactivo
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Vista previa del panel de control adaptado para {INSTITUTION_TYPE_INFO[selectedType].chileanName.toLowerCase()}
+                  Vista previa del panel de control adaptado para{" "}
+                  {INSTITUTION_TYPE_INFO[
+                    selectedType
+                  ].chileanName.toLowerCase()}
                 </p>
               </div>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm">
-              <LevelSpecificDashboard currentType={selectedType} userRole="ADMIN" />
+              <LevelSpecificDashboard
+                currentType={selectedType}
+                userRole="ADMIN"
+              />
             </div>
           </div>
         </TabsContent>
@@ -469,9 +518,13 @@ export function EducationalSystemExplorer() {
                       <div className="font-semibold text-white group-hover:scale-105 transition-transform duration-200">
                         {item.label}
                       </div>
-                      <div className="text-sm text-green-100">{item.status}</div>
+                      <div className="text-sm text-green-100">
+                        {item.status}
+                      </div>
                     </div>
-                    <div className={`w-3 h-3 rounded-full ${item.color} shrink-0`} />
+                    <div
+                      className={`w-3 h-3 rounded-full ${item.color} shrink-0`}
+                    />
                   </div>
                 </div>
               ))}
@@ -485,9 +538,9 @@ export function EducationalSystemExplorer() {
                     Sistema Completado
                   </h4>
                   <p className="text-green-100 leading-relaxed">
-                    El sistema educativo comprensivo está listo para usar. Soporta desde Educación
-                    Parvularia hasta Educación Superior con estándares chilenos e
-                    internacionales ISCED.
+                    El sistema educativo comprensivo está listo para usar.
+                    Soporta desde Educación Parvularia hasta Educación Superior
+                    con estándares chilenos e internacionales ISCED.
                   </p>
                 </div>
               </div>

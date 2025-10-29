@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -8,7 +8,7 @@ export function DarkModeToggle() {
   const [theme, setTheme] = useState("light");
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setMounted(true);
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);

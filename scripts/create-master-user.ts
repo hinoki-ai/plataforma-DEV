@@ -6,7 +6,7 @@
 
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api";
-import { hashPassword } from "../src/lib/crypto";
+import { hashUserPassword, logUserCreation } from "../src/lib/user-creation";
 
 async function createMasterUser() {
   console.log("🔑 Creating master user...");
@@ -21,8 +21,8 @@ async function createMasterUser() {
     const masterEmail = "master@plataforma-astral.com";
     const masterPassword = "master123";
 
-    // Hash the password
-    const masterPasswordHash = await hashPassword(masterPassword);
+    // Hash the password using standardized function
+    const masterPasswordHash = await hashUserPassword(masterPassword);
 
     try {
       // Try to create the master user
@@ -33,6 +33,18 @@ async function createMasterUser() {
         role: "MASTER",
         isActive: true,
       });
+
+      // Log successful creation
+      logUserCreation(
+        "createMasterUserScript",
+        {
+          email: masterEmail,
+          role: "MASTER",
+          name: "Master Administrator",
+        },
+        "system",
+        true,
+      );
 
       console.log("✅ Master user created:");
       console.log(`📧 Email: ${masterEmail}`);

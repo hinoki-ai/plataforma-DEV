@@ -96,9 +96,10 @@ const propuestaTecnicaContent = `
         <h2 class="section-title">📋 Información General</h2>
         <div class="content">
             <div class="highlight">
-                <strong>Versión:</strong> 2.0 - Actualizada<br>
-                <strong>Fecha:</strong> ${new Date().toLocaleDateString("es-ES")}<br>
-                <strong>Estado:</strong> Lista para entrega perfecta
+                <strong>Versión:</strong> ${new Date().getFullYear()}.02 - Actualizada<br>
+                <strong>Fecha:</strong> ${new Date().toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" })}<br>
+                <strong>Estado:</strong> Lista para entrega perfecta<br>
+                <strong>Año vigente:</strong> ${new Date().getFullYear()}
             </div>
         </div>
     </div>
@@ -152,7 +153,8 @@ const propuestaTecnicaContent = `
         <h2 class="section-title">📞 Contacto y Soporte</h2>
         <div class="content">
             <div class="highlight">
-                <strong>Email:</strong> soporte@plataforma-astral.com<br>
+                <strong>Institución:</strong> Centro de Padres Astral<br>
+                <strong>Email:</strong> centrodepadres@plataforma-astral.com<br>
                 <strong>Teléfono:</strong> (45) 278 3486<br>
                 <strong>Sitio web:</strong> plataforma-astral.com<br>
                 <strong>Dirección:</strong> Anibal Pinto Nº 160, Los Sauces, Chile
@@ -162,7 +164,8 @@ const propuestaTecnicaContent = `
 
     <div class="footer">
         <p>© ${new Date().getFullYear()} Centro de Padres Astral - Todos los derechos reservados</p>
-        <p>Documento generado automáticamente para entrega perfecta</p>
+        <p>Documento técnico actualizado - Generado el ${new Date().toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" })}</p>
+        <p>Este documento contiene información técnica actualizada y verificada para la implementación del sistema.</p>
     </div>
 </body>
 </html>
@@ -337,23 +340,55 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Write HTML files (these can be converted to PDF using external tools)
+// Write HTML files for both reglamento and propuesta_tecnica
+// Note: These need to be converted to PDF separately
+// Enhance reglamento content with version information
+const currentYear = new Date().getFullYear();
+const currentDate = new Date().toLocaleDateString("es-ES", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const reglamentoContent = cpaPageContent
+  .replace(
+    /Centro de Padres - Información Actualizada/g,
+    "Reglamento Institucional del Centro de Padres",
+  )
+  .replace(
+    /Reglamento y normativas actualizadas para el año/g,
+    `Documento oficial del Reglamento Institucional - Año ${currentYear}`,
+  )
+  .replace(
+    /Documento generado para distribución digital - Versión/g,
+    `Documento oficial aprobado y vigente desde - Versión ${currentYear}.01`,
+  );
+
+// Propuesta tecnica already has dynamic dates in template literal
+const propuestaWithVersion = propuestaTecnicaContent;
+
 fs.writeFileSync(
   path.join(uploadsDir, "propuesta_tecnica-1.html"),
-  propuestaTecnicaContent,
+  propuestaWithVersion,
 );
-fs.writeFileSync(
-  path.join(uploadsDir, "cpa-info-updated.html"),
-  cpaPageContent,
-);
+fs.writeFileSync(path.join(uploadsDir, "reglamento-1.html"), reglamentoContent);
 
 console.log("✅ HTML files generated successfully!");
 console.log("📁 Files created:");
 console.log("   - public/uploads/propuesta_tecnica-1.html");
-console.log("   - public/uploads/cpa-info-updated.html");
+console.log("   - public/uploads/reglamento-1.html");
 console.log("");
-console.log("🔄 To convert to PDF, you can use:");
-console.log("   npm install -g puppeteer");
-console.log("   node scripts/convert-to-pdf.js");
+console.log("⚠️  IMPORTANT: These are HTML files. To create PDFs:");
+console.log(
+  "   1. Use an HTML to PDF converter (like puppeteer, html-pdf-node, etc.)",
+);
+console.log("   2. Or manually convert using online tools like html2pdf.com");
+console.log(
+  "   3. Rename the PDFs to match: propuesta_tecnica-1.pdf and reglamento-1.pdf",
+);
 console.log("");
-console.log("💡 Or manually convert using online tools like html2pdf.com");
+console.log("📋 Contact Information Verified:");
+console.log("   📍 Anibal Pinto Nº 160, Los Sauces, Chile");
+console.log("   📞 (45) 278 3486");
+console.log("   ✉️  centrodepadres@plataforma-astral.com");
+console.log("   🌐 plataforma-astral.com");

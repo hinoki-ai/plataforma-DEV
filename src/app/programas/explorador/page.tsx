@@ -109,7 +109,10 @@ export default function ProgramasExplorerPage() {
                     size="lg"
                     className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:shadow-lg transition-all duration-300"
                   >
-                    <Link href="/docs#programas" className="flex items-center gap-2">
+                    <Link
+                      href="/docs#programas"
+                      className="flex items-center gap-2"
+                    >
                       {t("programas.view_specs")}
                     </Link>
                   </Button>

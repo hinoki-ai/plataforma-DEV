@@ -59,14 +59,6 @@ export const CalendarComponents = {
       displayName: "AdminCalendarView",
     },
   ),
-
-  CalendarView: createDynamicComponent(
-    () => import("@/components/calendar/CalendarView"),
-    {
-      loading: () => <CalendarSkeleton />,
-      displayName: "CalendarView",
-    },
-  ),
 };
 
 // ⚡ Performance: Dashboard components - role-based lazy loading
@@ -174,7 +166,6 @@ export const preloadComponents = {
   calendar: () => {
     // Preload calendar components when user hovers over calendar navigation
     import("@/components/calendar/UnifiedCalendarView");
-    import("@/components/calendar/CalendarView");
   },
 
   dashboard: () => {

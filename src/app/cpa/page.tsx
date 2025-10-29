@@ -137,6 +137,15 @@ export default function CPAPage() {
     useState<VideoCapsule>(videoCapsule);
   const [isSaving, setIsSaving] = useState(false);
 
+  // PDF documents state - dynamically loaded from API
+  const [pdfDocuments, setPdfDocuments] = useState<{
+    reglamento: string;
+    propuesta_tecnica: string;
+  }>({
+    reglamento: "/uploads/reglamento-1.pdf", // Fallback to default
+    propuesta_tecnica: "/uploads/propuesta_tecnica-1.pdf", // Fallback to default
+  });
+
   const features = [
     {
       icon: UsersRound,
@@ -210,6 +219,32 @@ export default function CPAPage() {
 
   useEffect(() => {
     loadVideoCapsule();
+  }, []);
+
+  // Load CPA PDF documents dynamically
+  const loadCPADocuments = async () => {
+    try {
+      const response = await fetch("/api/cpa/documents");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.documents) {
+          setPdfDocuments({
+            reglamento:
+              data.documents.reglamento?.url || "/uploads/reglamento-1.pdf",
+            propuesta_tecnica:
+              data.documents.propuesta_tecnica?.url ||
+              "/uploads/propuesta_tecnica-1.pdf",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error loading CPA documents:", error);
+      // Keep fallback URLs if API fails
+    }
+  };
+
+  useEffect(() => {
+    loadCPADocuments();
   }, []);
 
   const handleSave = async () => {
@@ -534,7 +569,7 @@ export default function CPAPage() {
                   </div>
 
                   <a
-                    href="/uploads/reglamento-1.pdf"
+                    href={pdfDocuments.reglamento}
                     download
                     className="inline-flex items-center px-6 py-3 bg-linear-to-r from-primary to-purple-600 text-primary-foreground rounded-full font-medium hover:from-primary/90 hover:to-purple-600/90 transition-all duration-300 shadow-lg"
                   >
@@ -587,7 +622,7 @@ export default function CPAPage() {
                   </div>
 
                   <a
-                    href="/uploads/propuesta_tecnica-1.pdf"
+                    href={pdfDocuments.propuesta_tecnica}
                     download
                     className="inline-flex items-center px-6 py-3 bg-linear-to-r from-blue-600 to-purple-600 text-primary-foreground rounded-full font-medium hover:from-blue-600/90 hover:to-purple-600/90 transition-all duration-300 shadow-lg"
                   >

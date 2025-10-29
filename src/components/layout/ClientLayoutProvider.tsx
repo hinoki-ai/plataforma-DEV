@@ -23,13 +23,11 @@ interface ClientLayoutProviderProps {
 function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
   const isHydrated = useHydrationSafe();
   const { data: session, status } = useSession();
+  // Sidebar state management
   const pathname = usePathname();
 
-  // Sidebar state management
-  const { isSidebarCollapsed, setIsSidebarCollapsed } = useSidebarState(
-    isHydrated,
-    pathname,
-  );
+  const { isSidebarCollapsed, setIsSidebarCollapsed } =
+    useSidebarState(isHydrated);
 
   // Mobile gesture handling
   const { onTouchStart, onTouchMove, onTouchEnd } = useSidebarGestures({

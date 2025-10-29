@@ -202,7 +202,7 @@ npx convex deploy
 
 ### Essential Reading
 
-- **[MIGRATION.md](./MIGRATION.md)** - Complete Convex migration guide
+- **[archive/MIGRATION.md](./archive/MIGRATION.md)** - Historical: Prisma to Convex migration guide (migration complete)
 - **[CLAUDE.md](./CLAUDE.md)** - Guide for AI assistants working on this project
 - **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment procedures & environments
 - **[README.md](./README.md)** - Project overview
@@ -302,7 +302,7 @@ await createMeeting({ title, date, userId });
 ### Project-Specific
 
 - Read [CLAUDE.md](./CLAUDE.md) for development patterns
-- Check [MIGRATION.md](./MIGRATION.md) for Convex patterns
+- Check [archive/MIGRATION.md](./archive/MIGRATION.md) for historical Convex migration patterns
 - Review existing code in `src/services/` for examples
 
 ---
@@ -343,15 +343,15 @@ await createMeeting({ title, date, userId });
 
 1. **Complete Setup** - Follow [First Time Setup](#-first-time-setup-10-minutes) above
 2. **Explore Codebase** - Read [CLAUDE.md](./CLAUDE.md) for patterns
-3. **See Migration Status** - Review [MIGRATION.md](./MIGRATION.md)
-4. **Start Developing** - Pick a task from the migration guide or create new features
+3. **See Historical Migration** - Review [archive/MIGRATION.md](./archive/MIGRATION.md) (migration complete)
+4. **Start Developing** - Pick a task from the docs or create new features
 
 ---
 
 ## 📞 Getting Help
 
 - **Documentation Issues**: Check [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)
-- **Migration Questions**: See [MIGRATION.md](./MIGRATION.md)
+- **Historical Migration Reference**: See [archive/MIGRATION.md](./archive/MIGRATION.md)
 - **Convex Support**: Visit [Convex Discord](https://convex.dev/community)
 - **Code Patterns**: Reference [CLAUDE.md](./CLAUDE.md)
 

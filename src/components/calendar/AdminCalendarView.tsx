@@ -55,7 +55,7 @@ import {
   bulkCreateCalendarEvents,
   massUpdateCalendarEvents,
   massDeleteCalendarEvents,
-} from "@/services/actions/calendar";
+} from "@/services/calendar/calendar-service";
 import { EventCategory } from "@/services/calendar/types";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/language/LanguageContext";

@@ -1,43 +1,56 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export function useSidebarState(isHydrated: boolean, pathname?: string) {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+const STORAGE_KEY = "sidebar-collapsed";
 
-  // Initialize sidebar state after hydration to prevent mismatch
-  useEffect(() => {
-    if (isHydrated && typeof window !== "undefined") {
-      const saved = localStorage.getItem("sidebar-collapsed");
-      if (saved) {
-        setIsSidebarCollapsed(JSON.parse(saved));
-      }
+function readPersistedState() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw !== null) {
+      return JSON.parse(raw) as boolean;
     }
-  }, [isHydrated]);
+  } catch (error) {
+    console.warn("Failed to read sidebar state from storage", error);
+  }
 
-  // Persist sidebar state - only after hydration
+  return window.innerWidth < 768;
+}
+
+export function useSidebarState(isHydrated: boolean) {
+  const [manualState, setManualState] = useState<boolean>(() =>
+    readPersistedState(),
+  );
+
   useEffect(() => {
-    if (isHydrated && typeof window !== "undefined") {
-      localStorage.setItem(
-        "sidebar-collapsed",
-        JSON.stringify(isSidebarCollapsed),
+    if (!isHydrated || typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(manualState));
+    } catch (error) {
+      console.warn("Failed to persist sidebar state", error);
+    }
+  }, [manualState, isHydrated]);
+
+  const setIsSidebarCollapsed = useCallback(
+    (value: boolean | ((prev: boolean) => boolean)) => {
+      setManualState((prev) =>
+        typeof value === "function"
+          ? (value as (prev: boolean) => boolean)(prev)
+          : value,
       );
-    }
-  }, [isSidebarCollapsed, isHydrated]);
-
-  // Auto-collapse sidebar on mobile when navigating - only after hydration
-  useEffect(() => {
-    if (
-      isHydrated &&
-      typeof window !== "undefined" &&
-      window.innerWidth < 768
-    ) {
-      setIsSidebarCollapsed(true);
-    }
-  }, [pathname, isHydrated]);
+    },
+    [],
+  );
 
   return {
-    isSidebarCollapsed,
+    isSidebarCollapsed: manualState,
     setIsSidebarCollapsed,
   };
 }

@@ -136,6 +136,64 @@ export const getActiveCourses = query({
   },
 });
 
+/**
+ * Get courses for a parent (where their children are enrolled)
+ */
+export const getCoursesForParent = query({
+  args: {
+    parentId: v.id("users"),
+    academicYear: v.optional(v.number()),
+    isActive: v.optional(v.boolean()),
+  },
+  handler: async (ctx, { parentId, academicYear, isActive }) => {
+    // Get all students for this parent
+    const students = await ctx.db
+      .query("students")
+      .withIndex("by_parentId", (q) => q.eq("parentId", parentId))
+      .collect();
+
+    if (students.length === 0) {
+      return [];
+    }
+
+    // Get all enrollments for these students
+    const studentIds = students.map((s) => s._id);
+    const enrollments = await ctx.db.query("courseStudents").collect();
+
+    // Filter enrollments for these students
+    const relevantEnrollments = enrollments.filter(
+      (e) => studentIds.includes(e.studentId) && e.isActive,
+    );
+
+    // Get unique course IDs
+    const courseIds = Array.from(
+      new Set(relevantEnrollments.map((e) => e.courseId)),
+    );
+
+    // Get course details and filter valid courses
+    const courses = await Promise.all(
+      courseIds.map((courseId) => ctx.db.get(courseId)),
+    );
+
+    // Filter valid courses and apply filters
+    let filteredCourses = courses.filter((c): c is NonNullable<typeof c> => {
+      if (!c) return false;
+      if (academicYear !== undefined && c.academicYear !== academicYear)
+        return false;
+      if (isActive !== undefined && c.isActive !== isActive) return false;
+      return true;
+    });
+
+    // Sort by academic year (descending) and then by grade
+    return filteredCourses.sort((a, b) => {
+      if (a.academicYear !== b.academicYear) {
+        return b.academicYear - a.academicYear;
+      }
+      return a.grade.localeCompare(b.grade);
+    });
+  },
+});
+
 // ==================== MUTATIONS ====================
 
 /**
@@ -383,6 +441,57 @@ export const bulkEnrollStudents = mutation({
           createdAt: Date.now(),
         });
         results.push({ studentId, enrollmentId, success: true });
+      } catch (error: any) {
+        errors.push({ studentId, error: error.message });
+      }
+    }
+
+    return { results, errors };
+  },
+});
+
+/**
+ * Bulk remove students from a course
+ */
+export const bulkRemoveStudents = mutation({
+  args: {
+    courseId: v.id("courses"),
+    studentIds: v.array(v.id("students")),
+  },
+  handler: async (ctx, { courseId, studentIds }) => {
+    const course = await ctx.db.get(courseId);
+    if (!course) {
+      throw new Error("Course not found");
+    }
+
+    const results = [];
+    const errors = [];
+
+    for (const studentId of studentIds) {
+      try {
+        const enrollments = await ctx.db
+          .query("courseStudents")
+          .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+          .collect();
+
+        const enrollment = enrollments.find(
+          (e) => e.studentId === studentId && e.isActive,
+        );
+
+        if (!enrollment) {
+          errors.push({
+            studentId,
+            error: "Student not enrolled in this course",
+          });
+          continue;
+        }
+
+        // Soft delete: deactivate enrollment
+        await ctx.db.patch(enrollment._id, {
+          isActive: false,
+        });
+
+        results.push({ studentId, success: true });
       } catch (error: any) {
         errors.push({ studentId, error: error.message });
       }

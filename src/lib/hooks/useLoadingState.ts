@@ -80,50 +80,37 @@ export function useLoadingState(
     >
   >(new Map());
 
+  // Counter for generating unique operation IDs
+  const operationIdCounter = useRef(0);
+
   // Auto-reset error timeout
   const errorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /**
-   * Start a loading operation
+   * Update loading state based on active operations
    */
-  const startLoading = useCallback(
-    (operationId?: string): string => {
-      const id = operationId || `operation_${Date.now()}_${Math.random()}`;
-      const startTime = new Date();
+  const updateLoadingState = useCallback(
+    (error?: string) => {
+      const hasActiveOperations = activeOperations.current.size > 0;
 
-      // Clear any existing error timeout
-      if (errorTimeoutRef.current) {
-        clearTimeout(errorTimeoutRef.current);
-      }
-
-      // Set up timeout for maximum loading time
-      const timeoutId = setTimeout(() => {
-        console.warn(
-          `Loading operation ${id} exceeded maximum time (${maxLoadingTime}ms)`,
-        );
-        stopLoading(
-          id,
-          "La operación tardó demasiado tiempo. Inténtelo de nuevo.",
-        );
-      }, maxLoadingTime);
-
-      // Store operation data
-      activeOperations.current.set(id, {
-        startTime,
-        timeoutId,
-      });
-
-      // Update loading state
       setLoadingState((prev) => ({
         ...prev,
-        isLoading: true,
-        error: null,
-        lastUpdated: startTime,
+        isLoading: hasActiveOperations,
+        error: error || null,
+        lastUpdated: hasActiveOperations ? prev.lastUpdated : new Date(),
       }));
 
-      return id;
+      // Auto-reset error after timeout if there's an error
+      if (error && errorResetTime > 0) {
+        errorTimeoutRef.current = setTimeout(() => {
+          setLoadingState((prev) => ({
+            ...prev,
+            error: null,
+          }));
+        }, errorResetTime);
+      }
     },
-    [maxLoadingTime],
+    [errorResetTime],
   );
 
   /**
@@ -166,6 +153,49 @@ export function useLoadingState(
   );
 
   /**
+   * Start a loading operation
+   */
+  const startLoading = useCallback(
+    (operationId?: string): string => {
+      const id = operationId || `operation_${operationIdCounter.current++}`;
+      const startTime = new Date();
+
+      // Clear any existing error timeout
+      if (errorTimeoutRef.current) {
+        clearTimeout(errorTimeoutRef.current);
+      }
+
+      // Set up timeout for maximum loading time
+      const timeoutId = setTimeout(() => {
+        console.warn(
+          `Loading operation ${id} exceeded maximum time (${maxLoadingTime}ms)`,
+        );
+        stopLoading(
+          id,
+          "La operación tardó demasiado tiempo. Inténtelo de nuevo.",
+        );
+      }, maxLoadingTime);
+
+      // Store operation data
+      activeOperations.current.set(id, {
+        startTime,
+        timeoutId,
+      });
+
+      // Update loading state
+      setLoadingState((prev) => ({
+        ...prev,
+        isLoading: true,
+        error: null,
+        lastUpdated: startTime,
+      }));
+
+      return id;
+    },
+    [maxLoadingTime],
+  );
+
+  /**
    * Stop all loading operations
    */
   const stopAllLoading = useCallback((error?: string) => {
@@ -205,33 +235,6 @@ export function useLoadingState(
       lastUpdated: null,
     });
   }, []);
-
-  /**
-   * Update loading state based on active operations
-   */
-  const updateLoadingState = useCallback(
-    (error?: string) => {
-      const hasActiveOperations = activeOperations.current.size > 0;
-
-      setLoadingState((prev) => ({
-        ...prev,
-        isLoading: hasActiveOperations,
-        error: error || null,
-        lastUpdated: hasActiveOperations ? prev.lastUpdated : new Date(),
-      }));
-
-      // Auto-reset error after timeout if there's an error
-      if (error && errorResetTime > 0) {
-        errorTimeoutRef.current = setTimeout(() => {
-          setLoadingState((prev) => ({
-            ...prev,
-            error: null,
-          }));
-        }, errorResetTime);
-      }
-    },
-    [errorResetTime],
-  );
 
   // Computed values
   const isAnyLoading = loadingState.isLoading;

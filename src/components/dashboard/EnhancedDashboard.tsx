@@ -70,38 +70,43 @@ interface WidgetProps {
 
 // Smart Notifications Widget
 function SmartNotificationsWidget({ widget }: WidgetProps) {
-  const [notifications] = useState<NotificationItem[]>([
-    {
-      id: "1",
-      type: "info",
-      title: "Nueva reunión programada",
-      message: "Reunión con profesor de matemáticas el 15 de enero",
-      timestamp: new Date(),
-      priority: "medium",
-      read: false,
-      category: "meetings",
-    },
-    {
-      id: "2",
-      type: "success",
-      title: "Calificación actualizada",
-      message: "Tu hijo/a ha mejorado en ciencias naturales",
-      timestamp: new Date(Date.now() - 3600000),
-      priority: "low",
-      read: true,
-      category: "grades",
-    },
-    {
-      id: "3",
-      type: "warning",
-      title: "Documento pendiente",
-      message: "Autorización para salida pedagógica requerida",
-      timestamp: new Date(Date.now() - 7200000),
-      priority: "high",
-      read: false,
-      category: "documents",
-    },
-  ]);
+  const notifications = useMemo<NotificationItem[]>(() => {
+    // Use deterministic timestamps for mock data
+    const baseTime = new Date("2024-01-01T12:00:00Z").getTime();
+
+    return [
+      {
+        id: "1",
+        type: "info",
+        title: "Nueva reunión programada",
+        message: "Reunión con profesor de matemáticas el 15 de enero",
+        timestamp: new Date(baseTime - 1800000),
+        priority: "medium",
+        read: false,
+        category: "meetings",
+      },
+      {
+        id: "2",
+        type: "success",
+        title: "Calificación actualizada",
+        message: "Tu hijo/a ha mejorado en ciencias naturales",
+        timestamp: new Date(baseTime - 3600000),
+        priority: "low",
+        read: true,
+        category: "grades",
+      },
+      {
+        id: "3",
+        type: "warning",
+        title: "Documento pendiente",
+        message: "Autorización para salida pedagógica requerida",
+        timestamp: new Date(baseTime - 7200000),
+        priority: "high",
+        read: false,
+        category: "documents",
+      },
+    ];
+  }, []);
 
   const groupedNotifications = useMemo(() => {
     const groups = notifications.reduce(
@@ -240,7 +245,7 @@ function ProgressTrendingWidget({ widget }: WidgetProps) {
                 initial={{ width: 0 }}
                 animate={{ width: `${subject.current}%` }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="absolute top-0 left-0 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                className="absolute top-0 left-0 h-2 bg-linear-to-r from-blue-500 to-purple-500 rounded-full"
               />
             </div>
             <div className="text-xs text-muted-foreground">
@@ -365,7 +370,7 @@ function MultiChildWidget({ widget }: WidgetProps) {
             transition={{ duration: 0.2 }}
           >
             <div className="text-center space-y-3">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto">
+              <div className="w-16 h-16 bg-linear-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto">
                 {children[selectedChild].avatar}
               </div>
               <div>

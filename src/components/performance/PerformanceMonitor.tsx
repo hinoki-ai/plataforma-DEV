@@ -44,8 +44,8 @@ export function PerformanceMonitor({
   });
 
   const [isMonitoring, setIsMonitoring] = useState(false);
+  const [renderCount, setRenderCount] = useState(0);
   const startTimeRef = useRef<number>(0);
-  const renderCountRef = useRef<number>(0);
 
   useEffect(() => {
     // Track initial load time
@@ -70,7 +70,7 @@ export function PerformanceMonitor({
       }));
     }
 
-    renderCountRef.current += 1;
+    setRenderCount((prev) => prev + 1);
   });
 
   const startMonitoring = () => {
@@ -217,9 +217,7 @@ export function PerformanceMonitor({
 
             <div className="flex items-center justify-between">
               <span className="text-sm">Renders del componente</span>
-              <span className="text-sm font-medium">
-                {renderCountRef.current}
-              </span>
+              <span className="text-sm font-medium">{renderCount}</span>
             </div>
           </div>
         )}

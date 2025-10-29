@@ -171,10 +171,10 @@ const globalSettings: GlobalSetting[] = [
 
 function SettingsOverviewCard() {
   const categories = ["system", "security", "database", "email", "ui"];
-  const categoryStats = categories.map((cat) => ({
+  const categoryStats = categories.map((cat, index) => ({
     name: cat,
     count: globalSettings.filter((s) => s.category === cat).length,
-    modified: Math.floor(Math.random() * 5), // Mock data
+    modified: (index + 1) % 5, // Mock data - deterministic value based on index
   }));
 
   return (

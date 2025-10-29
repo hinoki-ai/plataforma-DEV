@@ -52,19 +52,28 @@ export const getStudentGrades = query({
     ),
   },
   handler: async (ctx, { studentId, courseId, subject, period }) => {
-    let grades = await ctx.db
-      .query("classGrades")
-      .withIndex("by_studentId_subject", (q) => q.eq("studentId", studentId))
-      .collect();
+    let grades;
+
+    // Use the most selective index based on available filters
+    if (subject) {
+      // Use by_studentId_subject index for student + subject filtering
+      grades = await ctx.db
+        .query("classGrades")
+        .withIndex("by_studentId_subject", (q) =>
+          q.eq("studentId", studentId).eq("subject", subject),
+        )
+        .collect();
+    } else {
+      // Use by_studentId_subject index with just studentId (will return all subjects for student)
+      grades = await ctx.db
+        .query("classGrades")
+        .withIndex("by_studentId_subject", (q) => q.eq("studentId", studentId))
+        .collect();
+    }
 
     // Filter by course if provided
     if (courseId) {
       grades = grades.filter((g) => g.courseId === courseId);
-    }
-
-    // Filter by subject if provided
-    if (subject) {
-      grades = grades.filter((g) => g.subject === subject);
     }
 
     // Filter by period if provided
@@ -154,15 +163,17 @@ export const calculatePeriodAverage = query({
     ),
   },
   handler: async (ctx, { studentId, courseId, subject, period }) => {
+    // Use the by_studentId_subject index with both studentId and subject for efficiency
     const grades = await ctx.db
       .query("classGrades")
-      .withIndex("by_studentId_subject", (q) => q.eq("studentId", studentId))
+      .withIndex("by_studentId_subject", (q) =>
+        q.eq("studentId", studentId).eq("subject", subject),
+      )
       .collect();
 
-    // Filter by course, subject, and period
+    // Filter by course and period
     const relevantGrades = grades.filter(
-      (g) =>
-        g.courseId === courseId && g.subject === subject && g.period === period,
+      (g) => g.courseId === courseId && g.period === period,
     );
 
     if (relevantGrades.length === 0) {
@@ -287,6 +298,176 @@ export const getSubjectAverages = query({
         const avgA = a!.weightedAverage ?? a!.average;
         const avgB = b!.weightedAverage ?? b!.average;
         return avgB - avgA; // Sort descending
+      });
+  },
+});
+
+/**
+ * Get comprehensive grade overview for all students in a course
+ * Returns students with their grades organized by subject and period
+ */
+export const getCourseGradeOverview = query({
+  args: {
+    courseId: v.id("courses"),
+    period: v.union(
+      v.literal("PRIMER_SEMESTRE"),
+      v.literal("SEGUNDO_SEMESTRE"),
+      v.literal("ANUAL"),
+    ),
+  },
+  handler: async (ctx, { courseId, period }) => {
+    // Get course details to know subjects
+    const course = await ctx.db.get(courseId);
+    if (!course) {
+      throw new Error("Course not found");
+    }
+
+    // Get all students in the course
+    const courseStudents = await ctx.db
+      .query("courseStudents")
+      .withIndex("by_courseId_isActive", (q) =>
+        q.eq("courseId", courseId).eq("isActive", true),
+      )
+      .collect();
+
+    // Get all grades for this course and period
+    const allGrades = await ctx.db
+      .query("classGrades")
+      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .collect();
+
+    const periodGrades = allGrades.filter((g) => g.period === period);
+
+    // Group grades by student and subject
+    const studentSubjectGrades = new Map<
+      Id<"students">,
+      Map<string, typeof periodGrades>
+    >();
+
+    for (const grade of periodGrades) {
+      if (!studentSubjectGrades.has(grade.studentId)) {
+        studentSubjectGrades.set(grade.studentId, new Map());
+      }
+      const subjectMap = studentSubjectGrades.get(grade.studentId)!;
+      if (!subjectMap.has(grade.subject)) {
+        subjectMap.set(grade.subject, []);
+      }
+      subjectMap.get(grade.subject)!.push(grade);
+    }
+
+    // Calculate subject averages for each student
+    const result = await Promise.all(
+      courseStudents.map(async (enrollment) => {
+        const student = await ctx.db.get(enrollment.studentId);
+        if (!student) return null;
+
+        const studentGrades = studentSubjectGrades.get(enrollment.studentId);
+        const subjectAverages: Record<
+          string,
+          {
+            average: number;
+            weightedAverage: number | null;
+            count: number;
+            passing: boolean;
+            grades: typeof periodGrades;
+          }
+        > = {};
+
+        let overallSum = 0;
+        let overallCount = 0;
+        let overallWeightedSum = 0;
+        let overallTotalWeight = 0;
+        let hasOverallWeights = false;
+
+        // Calculate averages for each subject
+        for (const subject of course.subjects) {
+          const subjectGrades = studentGrades?.get(subject) || [];
+
+          if (subjectGrades.length === 0) {
+            subjectAverages[subject] = {
+              average: 0,
+              weightedAverage: null,
+              count: 0,
+              passing: false,
+              grades: [],
+            };
+            continue;
+          }
+
+          const sum = subjectGrades.reduce((acc, g) => acc + g.grade, 0);
+          const average = sum / subjectGrades.length;
+
+          // Calculate weighted average for subject
+          let weightedSum = 0;
+          let totalWeight = 0;
+          let hasWeights = false;
+
+          for (const grade of subjectGrades) {
+            if (grade.percentage !== undefined) {
+              weightedSum += grade.grade * (grade.percentage / 100);
+              totalWeight += grade.percentage / 100;
+              hasWeights = true;
+            }
+          }
+
+          const weightedAverage =
+            hasWeights && totalWeight > 0 ? weightedSum / totalWeight : null;
+
+          subjectAverages[subject] = {
+            average: Math.round(average * 100) / 100,
+            weightedAverage: weightedAverage
+              ? Math.round(weightedAverage * 100) / 100
+              : null,
+            count: subjectGrades.length,
+            passing: average >= PASSING_GRADE,
+            grades: subjectGrades,
+          };
+
+          // Add to overall calculation
+          overallSum += sum;
+          overallCount += subjectGrades.length;
+
+          if (hasWeights) {
+            overallWeightedSum += weightedSum;
+            overallTotalWeight += totalWeight;
+            hasOverallWeights = true;
+          }
+        }
+
+        // Calculate overall average
+        const overallAverage = overallCount > 0 ? overallSum / overallCount : 0;
+        const overallWeightedAverage =
+          hasOverallWeights && overallTotalWeight > 0
+            ? overallWeightedSum / overallTotalWeight
+            : null;
+
+        return {
+          studentId: enrollment.studentId,
+          student: {
+            firstName: student.firstName,
+            lastName: student.lastName,
+            grade: student.grade,
+          },
+          subjectAverages,
+          overallAverage: Math.round(overallAverage * 100) / 100,
+          overallWeightedAverage: overallWeightedAverage
+            ? Math.round(overallWeightedAverage * 100) / 100
+            : null,
+          totalGrades: overallCount,
+          passingSubjects: Object.values(subjectAverages).filter(
+            (subj) => subj.passing,
+          ).length,
+          totalSubjects: course.subjects.length,
+        };
+      }),
+    );
+
+    return result
+      .filter((r) => r !== null)
+      .sort((a, b) => {
+        const avgA = a!.overallWeightedAverage ?? a!.overallAverage;
+        const avgB = b!.overallWeightedAverage ?? b!.overallAverage;
+        return avgB - avgA; // Sort descending by average
       });
   },
 });
@@ -497,6 +678,13 @@ export const bulkCreateGrades = mutation({
     const course = await ctx.db.get(args.courseId);
     if (!course) {
       throw new Error("Course not found");
+    }
+
+    // Validate subject is in course subjects
+    if (!course.subjects.includes(args.subject)) {
+      throw new Error(
+        `Subject ${args.subject} is not part of this course's subjects`,
+      );
     }
 
     const teacher = await ctx.db.get(args.teacherId);

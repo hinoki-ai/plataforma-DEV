@@ -3,8 +3,8 @@
  */
 
 import { ConvexHttpClient } from "convex/browser";
-import bcryptjs from "bcryptjs";
 import { api } from "../convex/_generated/api";
+import { hashUserPassword, logUserCreation } from "../src/lib/user-creation";
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL!;
 
@@ -56,7 +56,7 @@ async function createAdminAccount() {
     }
 
     console.log("🔨 Creating admin account...");
-    const hashedPassword = await bcryptjs.hash(ADMIN_ACCOUNT.password, 10);
+    const hashedPassword = await hashUserPassword(ADMIN_ACCOUNT.password);
 
     const userId = await client.mutation(api.users.createUser, {
       email: ADMIN_ACCOUNT.email,
@@ -64,6 +64,18 @@ async function createAdminAccount() {
       name: ADMIN_ACCOUNT.name,
       role: ADMIN_ACCOUNT.role,
     });
+
+    // Log successful creation
+    logUserCreation(
+      "createAdminLoretoScript",
+      {
+        email: ADMIN_ACCOUNT.email,
+        role: ADMIN_ACCOUNT.role,
+        name: ADMIN_ACCOUNT.name,
+      },
+      "system",
+      true,
+    );
 
     console.log("✅ Admin account created successfully!");
     console.log(`   User ID: ${userId}`);

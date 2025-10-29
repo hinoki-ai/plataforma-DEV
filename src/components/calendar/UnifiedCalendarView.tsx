@@ -48,13 +48,13 @@ import { useAppContext } from "@/components/providers/ContextProvider";
 import { useLanguage } from "@/components/language/LanguageContext";
 
 import {
-  getCalendarEventsClient,
-  getCurrentMonthEventsClient,
-  getUpcomingEventsClient,
-  getCalendarStatisticsClient,
-  getCalendarEventsGroupedByDateClient,
-} from "@/services/calendar/calendar-client";
-import { exportCalendarEventsInFormat } from "@/services/actions/calendar";
+  getCalendarEvents,
+  getUpcomingEvents,
+  getCalendarStatistics,
+  exportCalendarEventsInFormat,
+  getCurrentMonthEvents,
+  getCalendarEventsGroupedByDate,
+} from "@/services/calendar/calendar-service";
 import { useSession } from "next-auth/react";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 import {
@@ -201,11 +201,11 @@ export default function UnifiedCalendarView({
         statsResult,
         groupedResult,
       ] = await Promise.all([
-        getCalendarEventsClient(query),
-        getCurrentMonthEventsClient(),
-        getUpcomingEventsClient(10),
-        getCalendarStatisticsClient(),
-        getCalendarEventsGroupedByDateClient(query),
+        getCalendarEvents(query),
+        getCurrentMonthEvents(),
+        getUpcomingEvents(10),
+        getCalendarStatistics(),
+        getCalendarEventsGroupedByDate(query),
       ]);
 
       if (groupedResult.success && groupedResult.data) {
@@ -214,20 +214,34 @@ export default function UnifiedCalendarView({
 
       setMonthEvents(
         monthEventsResult.success && monthEventsResult.data
-          ? monthEventsResult.data
+          ? monthEventsResult.data.map((event) => ({
+              ...event,
+              id: event._id,
+              startDate: new Date(event.startDate),
+              endDate: new Date(event.endDate),
+              createdAt: new Date(event.createdAt),
+              updatedAt: new Date(event.updatedAt),
+            }))
           : [],
       );
       setUpcomingEvents(
         upcomingResult.success && upcomingResult.data
-          ? upcomingResult.data
+          ? upcomingResult.data.map((event) => ({
+              ...event,
+              id: event._id,
+              startDate: new Date(event.startDate),
+              endDate: new Date(event.endDate),
+              createdAt: new Date(event.createdAt),
+              updatedAt: new Date(event.updatedAt),
+            }))
           : [],
       );
       setGroupedEvents(
         groupedResult.success && groupedResult.data ? groupedResult.data : {},
       );
 
-      if (statsResult.success && statsResult.data) {
-        setStatistics(statsResult.data);
+      if (statsResult) {
+        setStatistics(statsResult);
       }
     } catch (error) {
       console.error("Error loading calendar data:", error);
@@ -241,7 +255,7 @@ export default function UnifiedCalendarView({
   const handleRefresh = async () => {
     setIsLoading(true);
     try {
-      const result = await getCalendarEventsGroupedByDateClient({
+      const result = await getCalendarEventsGroupedByDate({
         categories: selectedCategories,
         ...(searchTerm && { search: searchTerm }),
       });

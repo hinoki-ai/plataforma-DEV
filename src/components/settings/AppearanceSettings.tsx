@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useTheme } from "next-themes";
 import {
   Card,
@@ -20,7 +20,7 @@ export function AppearanceSettings() {
   const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 

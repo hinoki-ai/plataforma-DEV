@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -14,27 +14,19 @@ import ProfileCompletionBadge from "./ProfileCompletionBadge";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import SkyToggle from "@/components/ui/sky-toggle";
 import SoundToggle from "@/components/ui/sound-toggle";
+import { useHydrationSafe } from "./hooks/useHydrationSafe";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const { data: session } = useSession();
   const pathname = usePathname();
   const { context, isPublicRoute, isAuthRoute } = useAppContext();
   const { t } = useDivineParsing(["common", "navigation"]);
 
-  // Handle client-side mounting to prevent hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const isClient = useHydrationSafe();
 
   // Determine if we're in authenticated context (use context-aware logic)
-  const isAuthenticatedRoute = mounted && isAuthRoute;
-
-  // Reset mobile menu state on route changes to prevent stuck states
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
+  const isAuthenticatedRoute = isClient && isAuthRoute;
 
   // Public navigation links
   const publicNavLinks = [
@@ -45,7 +37,7 @@ export default function Header() {
   ];
 
   // Show loading skeleton until mounted to prevent hydration mismatch
-  if (!mounted) {
+  if (!isClient) {
     return (
       <header className="bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
@@ -181,9 +173,13 @@ export default function Header() {
                         size="lg"
                         className="justify-start text-base font-medium hover:bg-muted/50 transition-colors"
                         asChild
-                        onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <Link href={link.href}>{link.label}</Link>
+                        <Link
+                          href={link.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
                       </Button>
                     ))}
                   </div>

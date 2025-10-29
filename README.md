@@ -54,7 +54,7 @@ Plataforma Astral is a comprehensive educational management platform that provid
 
 - **Frontend**: Next.js 15 + React 19 + TypeScript
 - **Backend**: Convex (serverless real-time database)
-- **Authentication**: NextAuth.js v5 with role-based access
+- **Authentication**: Clerk with role-based access
 - **UI**: Tailwind CSS + shadcn/ui components
 - **Deployment**: Vercel (frontend) + Convex (backend)
 

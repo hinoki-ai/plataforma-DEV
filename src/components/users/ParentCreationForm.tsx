@@ -33,17 +33,8 @@ import { Eye, EyeOff, UserPlus, ChevronRight, ChevronLeft } from "lucide-react";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { cn } from "@/lib/utils";
 
-// Password strength validation
-const passwordSchema = z
-  .string()
-  .min(8, "La contraseña debe tener al menos 8 caracteres")
-  .regex(/[a-z]/, "La contraseña debe contener al menos una letra minúscula")
-  .regex(/[A-Z]/, "La contraseña debe contener al menos una letra mayúscula")
-  .regex(/[0-9]/, "La contraseña debe contener al menos un número")
-  .regex(
-    /[^a-zA-Z0-9]/,
-    "La contraseña debe contener al menos un carácter especial",
-  );
+// Import standardized password schema
+import { passwordSchema } from "@/lib/user-creation";
 
 // Parent creation schema with student information
 const createParentSchema = z
@@ -112,6 +103,37 @@ const relationshipOptions = [
   "Tío/a",
   "Otro Familiar",
 ];
+
+interface StepIndicatorProps {
+  currentStep: number;
+}
+
+const StepIndicator = ({ currentStep }: StepIndicatorProps) => (
+  <div className="flex items-center justify-center mb-8">
+    {[1, 2, 3, 4].map((step) => (
+      <div key={step} className="flex items-center">
+        <div
+          className={cn(
+            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 border-2",
+            currentStep >= step
+              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-110 border-primary"
+              : "bg-muted text-muted-foreground border-muted-foreground/30",
+          )}
+        >
+          {step}
+        </div>
+        {step < 4 && (
+          <div
+            className={cn(
+              "w-12 h-1 mx-2 transition-all duration-300 rounded-full",
+              currentStep > step ? "bg-primary shadow-sm" : "bg-muted",
+            )}
+          />
+        )}
+      </div>
+    ))}
+  </div>
+);
 
 export function ParentCreationForm({
   onSubmit,
@@ -210,33 +232,6 @@ export function ParentCreationForm({
     "Información de tu estudiante",
   ];
 
-  const StepIndicator = () => (
-    <div className="flex items-center justify-center mb-8">
-      {[1, 2, 3, 4].map((step) => (
-        <div key={step} className="flex items-center">
-          <div
-            className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 border-2",
-              currentStep >= step
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-110 border-primary"
-                : "bg-muted text-muted-foreground border-muted-foreground/30",
-            )}
-          >
-            {step}
-          </div>
-          {step < 4 && (
-            <div
-              className={cn(
-                "w-12 h-1 mx-2 transition-all duration-300 rounded-full",
-                currentStep > step ? "bg-primary shadow-sm" : "bg-muted",
-              )}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-
   return (
     <Card className={cn("w-full max-w-4xl mx-auto", className)}>
       <CardHeader>
@@ -256,7 +251,7 @@ export function ParentCreationForm({
       </CardHeader>
 
       <CardContent>
-        <StepIndicator />
+        <StepIndicator currentStep={currentStep} />
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}

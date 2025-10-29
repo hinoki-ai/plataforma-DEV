@@ -2,35 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 import { z } from "zod";
-import bcryptjs from "bcryptjs";
+import {
+  parentRegistrationSchema,
+  hashUserPassword,
+  logUserCreation,
+  UserCreationError,
+  type ParentRegistrationData,
+} from "@/lib/user-creation";
 
 export const runtime = "nodejs";
 
-// Parent self-registration schema
-const registerParentSchema = z.object({
-  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Ingrese un email válido"),
-  password: z
-    .string()
-    .min(8, "La contraseña debe tener al menos 8 caracteres")
-    .regex(/[a-z]/, "La contraseña debe contener al menos una letra minúscula")
-    .regex(/[A-Z]/, "La contraseña debe contener al menos una letra mayúscula")
-    .regex(/[0-9]/, "La contraseña debe contener al menos un número")
-    .regex(
-      /[^a-zA-Z0-9]/,
-      "La contraseña debe contener al menos un carácter especial",
-    ),
-  phone: z.string().optional(),
-  guardianPhone: z.string().optional(),
-  // Student information for verification
-  studentName: z.string().min(2, "El nombre del estudiante es requerido"),
-  studentGrade: z.string().min(1, "El grado del estudiante es requerido"),
-  studentEmail: z
-    .string()
-    .email("El email del estudiante debe ser válido")
-    .optional(),
-  relationship: z.string().min(1, "La relación familiar es requerida"),
-});
+// Parent self-registration schema (extended from standardized schema)
+const registerParentSchema = parentRegistrationSchema;
 
 // POST /api/auth/register-parent - Parent self-registration
 export async function POST(request: NextRequest) {
@@ -59,8 +42,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash the provided password
-    const hashedPassword = await bcryptjs.hash(validatedData.password, 10);
+    // Hash the provided password using standardized function
+    const hashedPassword = await hashUserPassword(validatedData.password);
 
     // Create parent user
     const userId = await client.mutation(api.users.createUser, {
@@ -78,6 +61,18 @@ export async function POST(request: NextRequest) {
     // Get default admin/teacher for assignment
     const admins = await client.query(api.users.getUsers, { role: "ADMIN" });
     const firstAdmin = admins[0];
+
+    // Log successful parent registration
+    logUserCreation(
+      "parentSelfRegistration",
+      {
+        email: validatedData.email,
+        role: "PARENT",
+        name: validatedData.name,
+      },
+      undefined,
+      true,
+    );
 
     // Create a verification meeting record with student information
     await client.mutation(api.meetings.createMeeting, {

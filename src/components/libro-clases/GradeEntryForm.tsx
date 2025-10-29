@@ -516,8 +516,7 @@ export function GradeEntryForm({
                       ? "bg-yellow-500"
                       : "bg-red-500",
               )}
-               
-              style={{ width: `${gradePercentage}%` }} // Dynamic width for progress bar
+              style={{ width: `${gradePercentage}%` }}
             />
           </div>
         </div>

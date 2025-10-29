@@ -26,18 +26,7 @@ import {
 } from "@/components/ui/form";
 import { User } from "@/lib/types";
 import { useLanguage } from "@/components/language/LanguageContext";
-
-// Password strength validation
-const passwordSchema = z
-  .string()
-  .min(8, "La contraseña debe tener al menos 8 caracteres")
-  .regex(/[a-z]/, "La contraseña debe contener al menos una letra minúscula")
-  .regex(/[A-Z]/, "La contraseña debe contener al menos una letra mayúscula")
-  .regex(/[0-9]/, "La contraseña debe contener al menos un número")
-  .regex(
-    /[^a-zA-Z0-9]/,
-    "La contraseña debe contener al menos un carácter especial",
-  );
+import { passwordSchema } from "@/lib/user-creation";
 
 // Function to create schema with translated messages
 const createUserSchema = (t: (key: string, namespace?: string) => string) =>
