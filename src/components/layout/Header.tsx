@@ -39,7 +39,7 @@ export default function Header() {
   // Public navigation links
   const publicNavLinks = [
     { href: "/programas", label: "Programas" },
-    { href: "/precios", label: "Precios" },
+    { href: "/precios", label: "Planes" },
     { href: "/contacto", label: "Contacto" },
   ];
 
