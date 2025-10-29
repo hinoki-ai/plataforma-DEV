@@ -9,6 +9,7 @@ import {
   INSTITUTION_TYPE_INFO,
 } from "@/lib/educational-system";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface EducationalSystemState {
   currentType: EducationalInstitutionType;
@@ -18,6 +19,7 @@ interface EducationalSystemState {
 }
 
 export function useEducationalSystem() {
+  const { t } = useLanguage();
   const [state, setState] = useState<EducationalSystemState>({
     currentType: "PRESCHOOL",
     isLoading: true,
@@ -45,7 +47,7 @@ export function useEducationalSystem() {
           error: null,
         });
       } else {
-        throw new Error(data.error || "Failed to load configuration");
+        throw new Error(data.error || t("educational_system.config_failed"));
       }
     } catch (error) {
       console.error("Error loading educational configuration:", error);
@@ -55,7 +57,7 @@ export function useEducationalSystem() {
         error:
           error instanceof Error
             ? error.message
-            : "Error loading configuration",
+            : t("educational_system.config_failed"),
       }));
 
       // Use default fallback
@@ -95,19 +97,19 @@ export function useEducationalSystem() {
 
         return { success: true };
       } else {
-        throw new Error(data.error || "Failed to update configuration");
+        throw new Error(data.error || t("educational_system.config_error"));
       }
     } catch (error) {
       console.error("Error updating institution type:", error);
       const errorMessage =
-        error instanceof Error ? error.message : "Error updating configuration";
+        error instanceof Error ? error.message : t("educational_system.config_error");
       setState((prev) => ({
         ...prev,
         isLoading: false,
         error: errorMessage,
       }));
 
-      toast.error("Error al actualizar configuración");
+      toast.error(t("educational_system.config_error"));
       return { success: false, error: errorMessage };
     }
   };
@@ -120,15 +122,19 @@ export function useEducationalSystem() {
     // Feature matrix - could be moved to settings
     const featureMatrix: Record<string, string[]> = {
       parent_meetings: ["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL"],
-      academic_planning: ["BASIC_SCHOOL", "HIGH_SCHOOL", "COLLEGE"],
-      grading_system: ["BASIC_SCHOOL", "HIGH_SCHOOL", "COLLEGE"],
+      academic_planning: ["BASIC_SCHOOL", "HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      grading_system: ["BASIC_SCHOOL", "HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
       daycare_features: ["PRESCHOOL"],
-      university_features: ["COLLEGE"],
-      technical_training: ["HIGH_SCHOOL", "COLLEGE"],
-      thesis_management: ["COLLEGE"],
+      university_features: ["UNIVERSITY"],
+      technical_training: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      thesis_management: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
       play_based_learning: ["PRESCHOOL"],
-      career_guidance: ["HIGH_SCHOOL", "COLLEGE"],
-      research_projects: ["COLLEGE"],
+      career_guidance: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      research_projects: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      laboratory_access: ["HIGH_SCHOOL", "TECHNICAL_INSTITUTE", "TECHNICAL_CENTER", "UNIVERSITY"],
+      certification_programs: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],
+      postgraduate_programs: ["UNIVERSITY"],
+      technical_specialization: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],
     };
 
     return featureMatrix[feature]?.includes(state.currentType) ?? true;

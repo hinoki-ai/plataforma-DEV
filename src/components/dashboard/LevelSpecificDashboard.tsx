@@ -6,6 +6,7 @@
 "use client";
 
 import React from "react";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Card,
   CardContent,
@@ -58,6 +59,7 @@ export function LevelSpecificDashboard({
   currentType,
   userRole,
 }: LevelSpecificDashboardProps) {
+  const { t } = useLanguage();
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
   const getDashboardCards = (): DashboardCard[] => {
@@ -207,7 +209,7 @@ export function LevelSpecificDashboard({
         );
         break;
 
-      case "COLLEGE":
+      case "UNIVERSITY":
         baseCards.push(
           {
             title: "Carreras Activas",
@@ -317,7 +319,7 @@ export function LevelSpecificDashboard({
       {/* Level-specific features info */}
       <Card>
         <CardHeader>
-          <CardTitle>Características Habilitadas</CardTitle>
+          <CardTitle>{t("dashboard.enabled_features")}</CardTitle>
           <CardDescription>
             Funcionalidades disponibles para {currentInfo.chileanName}
           </CardDescription>

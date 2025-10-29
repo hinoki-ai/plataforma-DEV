@@ -1,6 +1,9 @@
+"use client";
+
 import { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
+import { useLanguage } from "@/components/language/LanguageContext";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import LegalFooter from "@/components/layout/LegalFooter";
 import { Badge } from "@/components/ui/badge";
@@ -23,9 +26,11 @@ import {
   Lightbulb,
   MessageSquare,
   Rocket,
+  Settings,
   ShieldCheck,
   Sparkles,
   Users,
+  Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -35,11 +40,8 @@ import {
   type EducationalInstitutionType,
 } from "@/lib/educational-system";
 
-export const metadata: Metadata = {
-  title: "Programas Educativos | Plataforma Astral",
-  description:
-    "Conoce cómo nuestros paneles administrativos, docentes y de familias impulsan la gestión educativa desde NT1 hasta educación superior.",
-};
+// Note: Metadata removed because this is now a client component for i18n support
+// If metadata is needed, consider using a layout or moving to a server component with different i18n approach
 
 const heroHighlights = [
   {
@@ -100,7 +102,27 @@ const institutionProgramDetails: Record<
       "Reportes de progreso y asistencia disponibles para equipos directivos y familias.",
     ],
   },
-  COLLEGE: {
+  TECHNICAL_INSTITUTE: {
+    icon: Wrench,
+    tagline:
+      "Formación técnica especializada con certificación profesional y práctica laboral.",
+    modules: [
+      "Planes de estudio modulares con especializaciones técnicas.",
+      "Gestión de prácticas profesionales y certificaciones técnicas.",
+      "Coordinación docente especializada y evaluación técnica.",
+    ],
+  },
+  TECHNICAL_CENTER: {
+    icon: Settings,
+    tagline:
+      "Centros de formación técnica con certificación SENCE y empleabilidad inmediata.",
+    modules: [
+      "Programas técnicos certificados con seguimiento de competencias.",
+      "Gestión de prácticas laborales y certificaciones estatales.",
+      "Coordinación técnica y evaluación de habilidades prácticas.",
+    ],
+  },
+  UNIVERSITY: {
     icon: GraduationCap,
     tagline:
       "Diplomados, programas técnicos y universitarios con trazabilidad académica y administrativa.",
@@ -302,6 +324,8 @@ const impactHighlights = [
 ];
 
 export default function ProgramasPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-responsive-desktop bg-programas">
       <div className="min-h-screen bg-linear-to-b from-black/30 via-black/20 to-black/40 flex flex-col">
@@ -323,7 +347,7 @@ export default function ProgramasPage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild size="lg">
-                  <Link href="/contacto">Solicitar una demo personalizada</Link>
+                  <Link href="/contacto">{t("programas.request_demo")}</Link>
                 </Button>
                 <Button
                   asChild
@@ -331,7 +355,7 @@ export default function ProgramasPage() {
                   size="lg"
                   className="bg-background/70"
                 >
-                  <Link href="/docs">Ver fichas de implementación</Link>
+                  <Link href="/docs">{t("programas.view_specs")}</Link>
                 </Button>
               </div>
               <div className="grid gap-4 sm:grid-cols-3 pt-6">
@@ -532,7 +556,7 @@ export default function ProgramasPage() {
                           {description}
                         </CardDescription>
                         <Button variant="ghost" size="sm" asChild>
-                          <Link href={href}>Ver en acción</Link>
+                          <Link href={href}>{t("programas.see_in_action")}</Link>
                         </Button>
                       </CardContent>
                     </Card>
@@ -683,7 +707,7 @@ export default function ProgramasPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild size="lg">
-                  <Link href="/contacto">Agendar reunión</Link>
+                  <Link href="/contacto">{t("programas.schedule_meeting")}</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
                   <Link href="/docs#programas">

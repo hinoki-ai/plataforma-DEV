@@ -50,8 +50,15 @@ const subjects = [
 ];
 
 const grades = [
-  "Pre-Kínder",
-  "Kínder",
+  // Pre-school
+  "Sala Cuna Menor (3-12 meses)",
+  "Sala Cuna Mayor (1-2 años)",
+  "Nivel Medio Menor (2-3 años)",
+  "Nivel Medio Mayor (3-4 años)",
+  "Pre-Kinder",
+  "Kinder",
+
+  // Basic School
   "1° Básico",
   "2° Básico",
   "3° Básico",
@@ -60,10 +67,42 @@ const grades = [
   "6° Básico",
   "7° Básico",
   "8° Básico",
+
+  // High School
   "1° Medio",
   "2° Medio",
   "3° Medio",
   "4° Medio",
+  "1° Medio TP",
+  "2° Medio TP",
+  "3° Medio TP",
+  "4° Medio TP",
+
+  // Higher Education
+  "1° Año Técnico",
+  "2° Año Técnico",
+  "3° Año Técnico",
+  "Técnico de Nivel Superior",
+  "1° Año CFT",
+  "2° Año CFT",
+  "3° Año CFT",
+  "Certificación Técnica",
+  "1° Año Licenciatura",
+  "2° Año Licenciatura",
+  "3° Año Licenciatura",
+  "4° Año Licenciatura",
+  "1° Año Título Profesional",
+  "2° Año Título Profesional",
+  "3° Año Título Profesional",
+  "4° Año Título Profesional",
+  "5° Año Título Profesional",
+  "6° Año Título Profesional",
+  "Magíster 1° Año",
+  "Magíster 2° Año",
+  "Doctorado 1° Año",
+  "Doctorado 2° Año",
+  "Doctorado 3° Año",
+  "Doctorado 4° Año",
 ];
 
 function CrearActividadContent() {
@@ -162,7 +201,7 @@ function CrearActividadContent() {
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Información Principal</CardTitle>
+                <CardTitle>{t("activity.main_info", "common")}</CardTitle>
                 <CardDescription>
                   Detalles básicos de la actividad
                 </CardDescription>
@@ -180,7 +219,7 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="description">Descripción *</Label>
+                  <Label htmlFor="description">{t("activity.description.label", "common")}</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -195,7 +234,7 @@ function CrearActividadContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="type">Tipo de Actividad *</Label>
+                    <Label htmlFor="type">{t("activity.type.label", "common")}</Label>
                     <Select
                       value={formData.type}
                       onValueChange={(value) =>
@@ -216,7 +255,7 @@ function CrearActividadContent() {
                   </div>
 
                   <div>
-                    <Label htmlFor="subject">Materia *</Label>
+                    <Label htmlFor="subject">{t("activity.subject.label", "common")}</Label>
                     <Select
                       value={formData.subject}
                       onValueChange={(value) =>
@@ -238,7 +277,7 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="grade">Grado/Curso *</Label>
+                  <Label htmlFor="grade">{t("activity.grade.label", "common")}</Label>
                   <Select
                     value={formData.grade}
                     onValueChange={(value) => handleInputChange("grade", value)}
@@ -265,12 +304,12 @@ function CrearActividadContent() {
                   <Clock className="h-5 w-5" />
                   Horario y Duración
                 </CardTitle>
-                <CardDescription>Programación de la actividad</CardDescription>
+                <CardDescription>{t("activity.scheduling", "common")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="scheduledDate">Fecha *</Label>
+                    <Label htmlFor="scheduledDate">{t("activity.date.label", "common")}</Label>
                     <Input
                       id="scheduledDate"
                       type="date"
@@ -283,7 +322,7 @@ function CrearActividadContent() {
                   </div>
 
                   <div>
-                    <Label htmlFor="scheduledTime">Hora *</Label>
+                    <Label htmlFor="scheduledTime">{t("activity.time.label", "common")}</Label>
                     <Input
                       id="scheduledTime"
                       type="time"
@@ -298,7 +337,7 @@ function CrearActividadContent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="duration">Duración (minutos) *</Label>
+                    <Label htmlFor="duration">{t("activity.duration.label", "common")}</Label>
                     <Input
                       id="duration"
                       type="number"
@@ -314,7 +353,7 @@ function CrearActividadContent() {
                   </div>
 
                   <div>
-                    <Label htmlFor="location">Ubicación</Label>
+                    <Label htmlFor="location">{t("activity.location.label", "common")}</Label>
                     <Input
                       id="location"
                       value={formData.location}
@@ -331,14 +370,14 @@ function CrearActividadContent() {
             {/* Additional Details */}
             <Card>
               <CardHeader>
-                <CardTitle>Detalles Adicionales</CardTitle>
+                <CardTitle>{t("activity.additional_details", "common")}</CardTitle>
                 <CardDescription>
                   Información complementaria (opcional)
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="objectives">Objetivos</Label>
+                  <Label htmlFor="objectives">{t("activity.objectives.label", "common")}</Label>
                   <Textarea
                     id="objectives"
                     value={formData.objectives}
@@ -351,7 +390,7 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="materials">Materiales Necesarios</Label>
+                  <Label htmlFor="materials">{t("activity.materials.label", "common")}</Label>
                   <Textarea
                     id="materials"
                     value={formData.materials}
@@ -364,7 +403,7 @@ function CrearActividadContent() {
                 </div>
 
                 <div>
-                  <Label htmlFor="notes">Notas Adicionales</Label>
+                  <Label htmlFor="notes">{t("activity.notes.label", "common")}</Label>
                   <Textarea
                     id="notes"
                     value={formData.notes}
@@ -436,7 +475,7 @@ function CrearActividadContent() {
 export default function CrearActividadPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar la página de crear actividad</div>}
+      fallback={<div>{t("activity.load_error", "common")}</div>}
     >
       <Suspense fallback={<LoadingState />}>
         <CrearActividadContent />

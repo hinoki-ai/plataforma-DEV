@@ -8,6 +8,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLanguage } from "@/components/language/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -52,6 +53,7 @@ export function EducationalLevelAwareNavigation({
   userRole,
   className,
 }: EducationalLevelAwareNavigationProps) {
+  const { t } = useLanguage();
   const pathname = usePathname();
 
   // Base navigation items - filtered by educational level
@@ -65,7 +67,9 @@ export function EducationalLevelAwareNavigation({
           "PRESCHOOL",
           "BASIC_SCHOOL",
           "HIGH_SCHOOL",
-          "COLLEGE",
+          "TECHNICAL_INSTITUTE",
+          "TECHNICAL_CENTER",
+          "UNIVERSITY",
         ],
       },
       {
@@ -168,25 +172,25 @@ export function EducationalLevelAwareNavigation({
         );
         break;
 
-      case "COLLEGE":
+      case "UNIVERSITY":
         baseItems.push(
           {
             label: "Investigación",
             href: "/investigacion",
             icon: FileText,
-            institutionTypes: ["COLLEGE"],
+            institutionTypes: ["UNIVERSITY"],
           },
           {
             label: "Tesis y Proyectos",
             href: "/tesis-proyectos",
             icon: GraduationCap,
-            institutionTypes: ["COLLEGE"],
+            institutionTypes: ["UNIVERSITY"],
           },
           {
             label: "Biblioteca Digital",
             href: "/biblioteca-digital",
             icon: BookOpen,
-            institutionTypes: ["COLLEGE"],
+            institutionTypes: ["UNIVERSITY"],
           },
         );
         break;
@@ -219,7 +223,7 @@ export function EducationalLevelAwareNavigation({
   return (
     <nav className={cn("space-y-2", className)}>
       {/* Institution Type Badge */}
-      <div className="mb-4 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
+      <div className="mb-4 p-3 rounded-lg bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-200">
         <div className="flex items-center gap-2 mb-2">
           <div className="text-2xl">{currentInfo.icon}</div>
           <div>
@@ -266,7 +270,7 @@ export function EducationalLevelAwareNavigation({
 
       {/* Educational Level Info */}
       <div className="mt-6 p-3 rounded border border-gray-200 bg-gray-50">
-        <div className="text-xs text-gray-600 mb-1">Configuración Actual:</div>
+        <div className="text-xs text-gray-600 mb-1">{t("navigation.current_config")}</div>
         <div className="text-sm font-medium text-gray-900">
           {currentInfo.levels.length} Niveles • ISCED{" "}
           {Math.min(...currentInfo.levels.map((l) => l.isced))}-

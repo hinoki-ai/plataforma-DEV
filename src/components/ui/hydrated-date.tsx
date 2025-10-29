@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { format as dateFnsFormat } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -26,11 +26,9 @@ export function HydratedDate({
   relative = false,
 }: HydratedDateProps) {
   const [formattedDate, setFormattedDate] = useState<string>(placeholder);
-  const [isHydrated, setIsHydrated] = useState(false);
 
-  useEffect(() => {
-    setIsHydrated(true);
-
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     try {
       const dateObj =
         typeof date === "string" || typeof date === "number"

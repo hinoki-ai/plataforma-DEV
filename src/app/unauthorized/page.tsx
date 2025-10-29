@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useLanguage } from "@/components/language/LanguageContext";
 
 export default function UnauthorizedPage() {
   const [isMounted, setIsMounted] = useState(false);
   const { t } = useLanguage();
 
-  useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setIsMounted(true);
   }, []);
 

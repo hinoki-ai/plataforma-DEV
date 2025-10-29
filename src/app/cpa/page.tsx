@@ -79,21 +79,41 @@ const staggerChildren: Variants = {
 
 // Testimonial avatars mapping
 const testimonialAvatars = {
+  // Early Childhood Education
+  rosa_martinez: "👶",
+  juan_perez: "👨‍👶",
   maria_gonzalez: "👩‍👧",
   carlos_rodriguez: "👨‍👦",
+
+  // Preschool Education
   ana_silva: "👩‍👧‍👦",
   pedro_morales: "👨‍👧",
   isabel_fernandez: "👩‍👦",
   roberto_jimenez: "👨‍👧‍👦",
+
+  // Primary Education
   carmen_vega: "👩‍👧‍👧",
   miguel_torres: "👨‍👦‍👦",
   patricia_lopez: "👩‍👧‍👦",
   francisco_herrera: "👨‍👧",
   sofia_mendoza: "👩‍👦",
   diego_castro: "👨‍👧‍👦",
+
+  // Secondary Education
   valentina_ruiz: "👩‍👧‍👧",
   andres_moreno: "👨‍👦‍👦",
   daniela_paredes: "👩‍👧‍👦",
+  luis_sanchez: "👨‍🎓",
+  catalina_lopez: "👩‍💼",
+  fernando_garcia: "👨‍🎓",
+
+  // Higher Education
+  gabriela_rojas: "👩‍🔧",
+  ricardo_morales: "👨‍🏫",
+  antonia_vega: "👩‍🎓",
+  pablo_castillo: "👨‍🔬",
+  elena_martinez: "👩‍🏭",
+  carolina_silva: "👩‍💻",
 };
 
 export default function CPAPage() {
@@ -218,21 +238,39 @@ export default function CPAPage() {
   // Get testimonials from translations
   const getTestimonials = () => {
     const testimonialKeys = [
-      "maria_gonzalez",
-      "carlos_rodriguez",
-      "ana_silva",
-      "pedro_morales",
-      "isabel_fernandez",
-      "roberto_jimenez",
-      "carmen_vega",
-      "miguel_torres",
-      "patricia_lopez",
-      "francisco_herrera",
-      "sofia_mendoza",
-      "diego_castro",
-      "valentina_ruiz",
-      "andres_moreno",
-      "daniela_paredes",
+      // Early Childhood Education (ISCED 0)
+      "rosa_martinez",       // Sala Cuna Menor
+      "juan_perez",          // Sala Cuna Mayor
+      "maria_gonzalez",      // Nivel Medio Menor
+      "carlos_rodriguez",    // Nivel Medio Mayor
+      "ana_silva",           // NT1 Pre-Kinder
+      "pedro_morales",       // NT2 Kinder
+      "isabel_fernandez",    // NT1 Pre-Kinder
+      "roberto_jimenez",     // NT2 Kinder
+
+      // Primary Education (ISCED 1)
+      "carmen_vega",         // 1° Básico
+      "miguel_torres",       // 2° Básico
+      "patricia_lopez",      // 3° Básico
+      "francisco_herrera",   // 4° Básico
+      "sofia_mendoza",       // 5° Básico
+      "diego_castro",        // 6° Básico
+
+      // Secondary Education (ISCED 2-3)
+      "valentina_ruiz",      // 7° Básico
+      "andres_moreno",       // 8° Básico
+      "daniela_paredes",     // 1° Medio
+      "luis_sanchez",        // 2° Medio HC
+      "catalina_lopez",      // 3° Medio TP
+      "fernando_garcia",     // 4° Medio HC
+
+      // Higher Education (ISCED 4-8)
+      "gabriela_rojas",      // Técnico Superior
+      "ricardo_morales",     // Licenciatura
+      "antonia_vega",        // Magíster
+      "pablo_castillo",      // Doctorado
+      "elena_martinez",      // Centro de Formación Técnica
+      "carolina_silva",      // Instituto Profesional
     ];
 
     const testimonials = testimonialKeys.map((key) => {
@@ -270,7 +308,7 @@ export default function CPAPage() {
         <Header />
         {/* Hero Section */}
         <section className="relative overflow-hidden">
-          <div className="relative z-10 px-4 py-12 sm:px-6 sm:py-16 lg:py-24">
+          <div className="relative z-10 px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
             <div className={`${layout.container(isDesktopForced)} text-center`}>
               <motion.div
                 initial="initial"
@@ -320,8 +358,21 @@ export default function CPAPage() {
                     >
                       {/* Testimonials container matching form height */}
                       <div className="relative h-full flex flex-col">
+                        {/* Testimonial indicator dots */}
+                        <div className="flex justify-center gap-2 mb-4">
+                          {Array.from({ length: Math.ceil(getTestimonials().length / 3) }, (_, i) => (
+                            <div
+                              key={i}
+                              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                Math.floor(currentTestimonialIndex / 3) === i
+                                  ? "bg-primary scale-125 shadow-sm"
+                                  : "bg-primary/30 hover:bg-primary/50"
+                              }`}
+                            />
+                          ))}
+                        </div>
                         <AnimatePresence mode="wait">
-                          <div className="flex flex-col gap-3 h-full justify-between">
+                          <div className="flex flex-col gap-4 h-full justify-between">
                             {getCurrentTestimonials().map(
                               (testimonial, index) => (
                                 <motion.div
@@ -336,24 +387,43 @@ export default function CPAPage() {
                                   }}
                                   className="flex-1 flex"
                                 >
-                                  <SignupStyleCard className="w-full">
-                                    <div className="flex items-center gap-3 mb-4">
-                                      <div className="text-3xl">
-                                        {testimonial.avatar}
+                                  <div className="group w-full">
+                                    <SignupStyleCard className="w-full h-full backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5 hover:border-primary/30 transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] cursor-pointer">
+                                      {/* Header with avatar and name/role */}
+                                      <div className="flex items-start gap-4 mb-4">
+                                        <div className="relative">
+                                          <div className="w-12 h-12 bg-linear-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center border border-primary/20 shadow-lg">
+                                            <span className="text-2xl">{testimonial.avatar}</span>
+                                          </div>
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <h4 className="font-bold text-foreground text-lg leading-tight truncate">
+                                            {testimonial.name}
+                                          </h4>
+                                          <p className="text-sm text-muted-foreground/80 font-medium">
+                                            {testimonial.role}
+                                          </p>
+                                          {/* Star rating */}
+                                          <div className="flex items-center gap-1 mt-1">
+                                            {[...Array(5)].map((_, i) => (
+                                              <svg
+                                                key={i}
+                                                className="w-4 h-4 text-yellow-400 fill-current"
+                                                viewBox="0 0 20 20"
+                                              >
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                              </svg>
+                                            ))}
+                                          </div>
+                                        </div>
                                       </div>
-                                      <div className="flex-1">
-                                        <h4 className="font-semibold text-foreground text-lg leading-tight">
-                                          {testimonial.name}
-                                        </h4>
-                                        <p className="text-base text-muted-foreground">
-                                          {testimonial.role}
-                                        </p>
-                                      </div>
-                                    </div>
-                                    <p className="text-foreground leading-relaxed text-lg line-clamp-4">
-                                      &ldquo;{testimonial.content}&rdquo;
-                                    </p>
-                                  </SignupStyleCard>
+
+                                      {/* Content */}
+                                      <p className="text-foreground/90 leading-relaxed text-base pl-2 border-l-2 border-primary/20 group-hover:border-primary/40 transition-colors duration-300">
+                                        {testimonial.content}
+                                      </p>
+                                    </SignupStyleCard>
+                                  </div>
                                 </motion.div>
                               ),
                             )}
@@ -382,18 +452,18 @@ export default function CPAPage() {
               <SignupStyleGrid columns={3} gap="md">
                 {features.map((feature, index) => (
                   <motion.div key={index} variants={fadeInUp}>
-                    <SignupStyleCard variant="feature">
-                      <div className="flex items-center gap-3 mb-4">
+                    <SignupStyleCard variant="feature" className="h-full backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5">
+                      <div className="flex flex-col items-center text-center space-y-4">
                         <div
-                          className={`p-2 bg-white/20 rounded-lg ${feature.color}`}
+                          className={`p-3 bg-white/5 dark:bg-black/10 rounded-xl ${feature.color} shadow-lg`}
                         >
-                          <feature.icon className="w-6 h-6" />
+                          <feature.icon className="w-8 h-8" />
                         </div>
-                        <div>
-                          <h4 className="font-semibold text-foreground mb-2">
+                        <div className="space-y-2">
+                          <h4 className="font-bold text-foreground text-lg leading-tight">
                             {feature.title}
                           </h4>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground leading-relaxed">
                             {feature.description}
                           </p>
                         </div>
@@ -421,7 +491,7 @@ export default function CPAPage() {
               icon={<FileIcons.Document className="w-8 h-8 text-foreground" />}
               variant="info"
             >
-              <div className="bg-linear-to-br from-muted/50 to-muted/30 p-6 rounded-xl border border-primary/20 relative overflow-hidden">
+              <div className="bg-black/5 dark:bg-black/10 p-6 rounded-xl border border-white/10 dark:border-white/5 relative overflow-hidden backdrop-blur-sm">
                 {/* Background pattern */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-16 translate-x-16" />
                 <div className="relative z-10">
@@ -467,6 +537,59 @@ export default function CPAPage() {
               </div>
             </SignupStylePanel>
 
+            {/* Propuesta Técnica Panel */}
+            <SignupStylePanel
+              title="Propuesta Técnica"
+              subtitle="Documento técnico detallado con información actualizada y mejorada para una entrega perfecta"
+              icon={<FileIcons.Document className="w-8 h-8 text-foreground" />}
+              variant="info"
+            >
+              <div className="bg-black/5 dark:bg-black/10 p-6 rounded-xl border border-white/10 dark:border-white/5 relative overflow-hidden backdrop-blur-sm">
+                {/* Background pattern */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -translate-y-16 translate-x-16" />
+                <div className="relative z-10">
+                  <h3 className="text-lg font-semibold mb-3 text-foreground">
+                    Documento Técnico Completo
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 shrink-0" />
+                      <p className="text-sm text-muted-foreground">
+                        Especificaciones técnicas actualizadas
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 shrink-0" />
+                      <p className="text-sm text-muted-foreground">
+                        Metodología de implementación
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-green-600 rounded-full mt-2 shrink-0" />
+                      <p className="text-sm text-muted-foreground">
+                        Requisitos y dependencias
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 shrink-0" />
+                      <p className="text-sm text-muted-foreground">
+                        Plan de entrega optimizado
+                      </p>
+                    </div>
+                  </div>
+
+                  <a
+                    href="/uploads/propuesta_tecnica-1.pdf"
+                    download
+                    className="inline-flex items-center px-6 py-3 bg-linear-to-r from-blue-600 to-purple-600 text-primary-foreground rounded-full font-medium hover:from-blue-600/90 hover:to-purple-600/90 transition-all duration-300 shadow-lg"
+                  >
+                    <FileIcons.Attachment className="w-5 h-5 mr-2" />
+                    Descargar Propuesta Técnica
+                  </a>
+                </div>
+              </div>
+            </SignupStylePanel>
+
             {/* Philosophical Foundation */}
             <SignupStyleSection
               title={t("proyecto_educativo.philosophy_title", "common")}
@@ -474,7 +597,7 @@ export default function CPAPage() {
             >
               <SignupStylePanel variant="info">
                 <div className="space-y-6">
-                  <div className="bg-linear-to-r from-primary/5 to-purple-500/5 p-6 rounded-xl">
+                  <div className="bg-black/5 dark:bg-black/10 p-6 rounded-xl border border-white/5 dark:border-white/5 backdrop-blur-sm">
                     <p className="text-lg leading-relaxed text-foreground">
                       {t("proyecto_educativo.philosophy_description", "common")}
                     </p>
@@ -527,14 +650,16 @@ export default function CPAPage() {
                         icon: "🤝",
                       },
                     ].map((item, index) => (
-                      <SignupStyleCard key={index} variant="info">
-                        <div className="flex items-start gap-3">
-                          <div className="text-2xl">{item.icon}</div>
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-1">
+                      <SignupStyleCard key={index} variant="info" className="h-full">
+                        <div className="flex flex-col items-center text-center space-y-4">
+                          <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                            <div className="text-3xl">{item.icon}</div>
+                          </div>
+                          <div className="space-y-2">
+                            <h4 className="font-bold text-foreground text-lg leading-tight">
                               {item.title}
                             </h4>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-muted-foreground leading-relaxed">
                               {item.description}
                             </p>
                           </div>
@@ -555,7 +680,7 @@ export default function CPAPage() {
                 <SignupStylePanel variant="action">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 p-4 bg-linear-to-r from-white/5 to-white/10 rounded-xl">
-                      <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
                         🎯
                       </div>
                       <h3 className="font-semibold text-lg text-foreground">
@@ -593,7 +718,7 @@ export default function CPAPage() {
                 <SignupStylePanel variant="action">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 p-4 bg-linear-to-r from-white/5 to-white/10 rounded-xl">
-                      <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
                         📝
                       </div>
                       <h3 className="font-semibold text-lg text-foreground">
@@ -635,37 +760,58 @@ export default function CPAPage() {
               title={t("proyecto_educativo.methodology_title", "common")}
             >
               <SignupStyleGrid columns={3} gap="md">
-                <SignupStyleCard variant="info">
-                  <h4 className="font-semibold mb-2 text-foreground">
-                    {t("proyecto_educativo.early_stimulation", "common")}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    {t("proyecto_educativo.early_stimulation_desc", "common")}
-                  </p>
+                <SignupStyleCard variant="info" className="h-full">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                      <div className="text-3xl">🌱</div>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-foreground text-lg leading-tight">
+                        {t("proyecto_educativo.early_stimulation", "common")}
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {t("proyecto_educativo.early_stimulation_desc", "common")}
+                      </p>
+                    </div>
+                  </div>
                 </SignupStyleCard>
 
-                <SignupStyleCard variant="info">
-                  <h4 className="font-semibold mb-2 text-foreground">
-                    {t("proyecto_educativo.individual_attention", "common")}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    {t(
-                      "proyecto_educativo.individual_attention_desc",
-                      "common",
-                    )}
-                  </p>
+                <SignupStyleCard variant="info" className="h-full">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                      <div className="text-3xl">👤</div>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-foreground text-lg leading-tight">
+                        {t("proyecto_educativo.individual_attention", "common")}
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {t(
+                          "proyecto_educativo.individual_attention_desc",
+                          "common",
+                        )}
+                      </p>
+                    </div>
+                  </div>
                 </SignupStyleCard>
 
-                <SignupStyleCard variant="info">
-                  <h4 className="font-semibold mb-2 text-foreground">
-                    {t("proyecto_educativo.continuous_evaluation", "common")}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    {t(
-                      "proyecto_educativo.continuous_evaluation_desc",
-                      "common",
-                    )}
-                  </p>
+                <SignupStyleCard variant="info" className="h-full">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                      <div className="text-3xl">📊</div>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-foreground text-lg leading-tight">
+                        {t("proyecto_educativo.continuous_evaluation", "common")}
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {t(
+                          "proyecto_educativo.continuous_evaluation_desc",
+                          "common",
+                        )}
+                      </p>
+                    </div>
+                  </div>
                 </SignupStyleCard>
               </SignupStyleGrid>
             </SignupStyleSection>
@@ -726,24 +872,23 @@ export default function CPAPage() {
                     ),
                   },
                 ].map((member, index) => (
-                  <SignupStyleCard key={index} variant="info">
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-2xl">
-                        {member.icon}
+                  <SignupStyleCard key={index} variant="info" className="h-full">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                        <div className="text-3xl">{member.icon}</div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground">
+                      <div className="space-y-2">
+                        <h4 className="font-bold text-foreground text-lg leading-tight">
                           {member.title}
                         </h4>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground font-medium">
                           {member.subtitle}
+                        </p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {member.description}
                         </p>
                       </div>
                     </div>
-
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {member.description}
-                    </p>
                   </SignupStyleCard>
                 ))}
               </SignupStyleGrid>

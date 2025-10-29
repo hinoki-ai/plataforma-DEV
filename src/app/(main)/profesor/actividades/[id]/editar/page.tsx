@@ -50,8 +50,15 @@ const subjects = [
 ];
 
 const grades = [
-  "Pre-Kínder",
-  "Kínder",
+  // Pre-school
+  "Sala Cuna Menor (3-12 meses)",
+  "Sala Cuna Mayor (1-2 años)",
+  "Nivel Medio Menor (2-3 años)",
+  "Nivel Medio Mayor (3-4 años)",
+  "Pre-Kinder",
+  "Kinder",
+
+  // Basic School
   "1° Básico",
   "2° Básico",
   "3° Básico",
@@ -60,10 +67,42 @@ const grades = [
   "6° Básico",
   "7° Básico",
   "8° Básico",
+
+  // High School
   "1° Medio",
   "2° Medio",
   "3° Medio",
   "4° Medio",
+  "1° Medio TP",
+  "2° Medio TP",
+  "3° Medio TP",
+  "4° Medio TP",
+
+  // Higher Education
+  "1° Año Técnico",
+  "2° Año Técnico",
+  "3° Año Técnico",
+  "Técnico de Nivel Superior",
+  "1° Año CFT",
+  "2° Año CFT",
+  "3° Año CFT",
+  "Certificación Técnica",
+  "1° Año Licenciatura",
+  "2° Año Licenciatura",
+  "3° Año Licenciatura",
+  "4° Año Licenciatura",
+  "1° Año Título Profesional",
+  "2° Año Título Profesional",
+  "3° Año Título Profesional",
+  "4° Año Título Profesional",
+  "5° Año Título Profesional",
+  "6° Año Título Profesional",
+  "Magíster 1° Año",
+  "Magíster 2° Año",
+  "Doctorado 1° Año",
+  "Doctorado 2° Año",
+  "Doctorado 3° Año",
+  "Doctorado 4° Año",
 ];
 
 function EditarActividadContent() {

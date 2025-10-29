@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Card,
   CardContent,
@@ -40,6 +41,7 @@ import { LevelSpecificDashboard } from "@/components/dashboard/LevelSpecificDash
 import { EducationalLevelAwareNavigation } from "@/components/layout/EducationalLevelAwareNavigation";
 
 export function EducationalSystemDemo() {
+  const { t } = useLanguage();
   const [selectedType, setSelectedType] =
     useState<EducationalInstitutionType>("PRESCHOOL");
   const [activeDemo, setActiveDemo] = useState<
@@ -54,7 +56,7 @@ export function EducationalSystemDemo() {
         return <BookOpen className="h-5 w-5" />;
       case "HIGH_SCHOOL":
         return <GraduationCap className="h-5 w-5" />;
-      case "COLLEGE":
+      case "UNIVERSITY":
         return <Building2 className="h-5 w-5" />;
     }
   };
@@ -66,11 +68,10 @@ export function EducationalSystemDemo() {
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-xl">
             <Globe className="h-6 w-6" />
-            🎓 Sistema Educativo Comprensivo
+            🎓 {t("demo.title")}
           </CardTitle>
           <CardDescription className="text-blue-100">
-            Sistema adaptable desde Educación Parvularia hasta Educación
-            Superior
+            {t("educational_system.description")}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -78,9 +79,9 @@ export function EducationalSystemDemo() {
       {/* Institution Type Selector */}
       <Card>
         <CardHeader>
-          <CardTitle>Seleccionar Tipo de Institución</CardTitle>
+          <CardTitle>{t("demo.select_institution_type")}</CardTitle>
           <CardDescription>
-            Explora cómo el sistema se adapta a diferentes niveles educativos
+            {t("demo.explore_adaptation")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -99,7 +100,7 @@ export function EducationalSystemDemo() {
                   <div className="text-2xl">{info.icon}</div>
                   <div className="text-sm font-medium">{info.chileanName}</div>
                   <Badge variant="secondary" className="text-xs">
-                    {info.levels.length} niveles
+                    {info.levels.length} {t("demo.levels_text")}
                   </Badge>
                 </Button>
               );
@@ -112,13 +113,13 @@ export function EducationalSystemDemo() {
       <Alert>
         <Target className="h-4 w-4" />
         <AlertDescription>
-          <strong>Institución seleccionada:</strong>{" "}
+          <strong>{t("demo.selected_institution")}:</strong>{" "}
           {INSTITUTION_TYPE_INFO[selectedType].chileanName} •
-          <strong> Descripción:</strong>{" "}
+          <strong> {t("demo.description")}:</strong>{" "}
           {INSTITUTION_TYPE_INFO[selectedType].description} •
-          <strong> Niveles:</strong>{" "}
+          <strong> {t("demo.levels")}:</strong>{" "}
           {INSTITUTION_TYPE_INFO[selectedType].levels.length} •
-          <strong> Asignaturas:</strong>{" "}
+          <strong> {t("demo.subjects")}:</strong>{" "}
           {getSubjectsForInstitutionType(selectedType).length}
         </AlertDescription>
       </Alert>
@@ -129,9 +130,9 @@ export function EducationalSystemDemo() {
         onValueChange={(value) => setActiveDemo(value as any)}
       >
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="overview">Visión General</TabsTrigger>
-          <TabsTrigger value="navigation">Navegación</TabsTrigger>
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="overview">{t("demo.overview")}</TabsTrigger>
+          <TabsTrigger value="navigation">{t("demo.navigation")}</TabsTrigger>
+          <TabsTrigger value="dashboard">{t("demo.dashboard")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -141,7 +142,7 @@ export function EducationalSystemDemo() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
-                  Niveles Educativos
+                  {t("educational_system.educational_levels")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -205,7 +206,7 @@ export function EducationalSystemDemo() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Funciones Habilitadas</h4>
+                  <h4 className="font-medium mb-2">{t("demo.enabled_features")}</h4>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     {[
                       "parent_meetings",
@@ -238,7 +239,7 @@ export function EducationalSystemDemo() {
         <TabsContent value="navigation" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Navegación Adaptada</CardTitle>
+              <CardTitle>{t("demo.adapted_navigation")}</CardTitle>
               <CardDescription>
                 La navegación se adapta automáticamente según el tipo de
                 institución

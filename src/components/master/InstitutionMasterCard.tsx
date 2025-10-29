@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Card,
   CardContent,
@@ -42,6 +43,7 @@ interface InstitutionMasterCardProps {
 export function InstitutionMasterCard({
   currentType = "PRESCHOOL",
 }: InstitutionMasterCardProps) {
+  const { t } = useLanguage();
   const [isConfiguring, setIsConfiguring] = useState(false);
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
@@ -53,7 +55,7 @@ export function InstitutionMasterCard({
         return <BookOpen className="h-6 w-6" />;
       case "HIGH_SCHOOL":
         return <GraduationCap className="h-6 w-6" />;
-      case "COLLEGE":
+      case "UNIVERSITY":
         return <Building2 className="h-6 w-6" />;
     }
   };
@@ -127,7 +129,7 @@ export function InstitutionMasterCard({
               <AlertDescription>
                 <div className="flex items-center justify-between w-full">
                   <div>
-                    <strong>Institución Actual:</strong>{" "}
+                    <strong>{t("institution.current_institution")}</strong>{" "}
                     {currentInfo.chileanName}
                     <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       {currentInfo.levels.length} niveles educativos • ISCED{" "}

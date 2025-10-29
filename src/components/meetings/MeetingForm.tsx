@@ -79,7 +79,7 @@ interface MeetingFormProps {
 }
 
 const grades = [
-  "Pre-kinder",
+  "Pre-Kinder",
   "Kinder",
   "1º Básico",
   "2º Básico",

@@ -21,9 +21,11 @@ const registerParentSchema = z.object({
       "La contraseña debe contener al menos un carácter especial",
     ),
   phone: z.string().optional(),
+  guardianPhone: z.string().optional(),
   // Student information for verification
   studentName: z.string().min(2, "El nombre del estudiante es requerido"),
   studentGrade: z.string().min(1, "El grado del estudiante es requerido"),
+  studentEmail: z.string().email("El email del estudiante debe ser válido").optional(),
   relationship: z.string().min(1, "La relación familiar es requerida"),
 });
 
@@ -32,6 +34,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validatedData = registerParentSchema.parse(body);
+
+    const primaryGuardianPhone =
+      (validatedData.guardianPhone ?? validatedData.phone ?? "").trim();
+    const studentEmail = validatedData.studentEmail || undefined;
 
     const client = getConvexClient();
 
@@ -57,6 +63,7 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
       phone: validatedData.phone,
       role: "PARENT",
+      parentRole: validatedData.relationship,
       status: "PENDING", // Parent accounts start as pending until verified
     });
 
@@ -74,13 +81,15 @@ export async function POST(request: NextRequest) {
       studentGrade: validatedData.studentGrade,
       guardianName: validatedData.name,
       guardianEmail: validatedData.email,
-      guardianPhone: validatedData.phone || "",
+      guardianPhone: primaryGuardianPhone,
       scheduledDate: Date.now(), // Set to current date for pending verification
       scheduledTime: "09:00", // Default time
       assignedTo: firstAdmin?._id || userId, // Assign to admin or self if no admin exists
       type: "PARENT_TEACHER",
       parentRequested: true,
-      reason: `Auto-registro de padre - Relación: ${validatedData.relationship} (Requiere verificación)`,
+      reason:
+        `Auto-registro de padre - Relación: ${validatedData.relationship} (Requiere verificación)` +
+        (studentEmail ? ` | Email estudiante: ${studentEmail}` : ""),
     });
 
     return NextResponse.json({
@@ -96,6 +105,8 @@ export async function POST(request: NextRequest) {
         studentName: validatedData.studentName,
         studentGrade: validatedData.studentGrade,
         relationship: validatedData.relationship,
+        studentEmail,
+        guardianPhone: primaryGuardianPhone || undefined,
       },
     });
   } catch (error) {

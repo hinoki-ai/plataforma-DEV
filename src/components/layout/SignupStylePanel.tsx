@@ -97,7 +97,7 @@ export function SignupStyleCard({
   const getCardClass = () => {
     switch (variant) {
       case "feature":
-        return "border-primary/40 bg-primary/10";
+        return "border-primary/40 bg-card/95";
       case "info":
         return "border-blue-400/40 bg-blue-500/10";
       case "action":
