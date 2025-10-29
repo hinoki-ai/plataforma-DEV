@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Settings, X, Sparkles } from "lucide-react";
 import { LanguageToggle } from "@/components/language/LanguageToggle";
@@ -26,12 +26,12 @@ export const SettingsHamburger = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   // Generate stable random positions for sparkles to avoid React purity violations
-  const sparklePositions = useMemo(() =>
+  const sparklePositions = useState(() =>
     [...Array(3)].map(() => ({
       x: Math.random() * 40 - 20,
       y: Math.random() * 40 - 20,
-    })), []
-  );
+    }))
+  )[0];
 
   // Close dropdown when clicking outside
   useEffect(() => {
