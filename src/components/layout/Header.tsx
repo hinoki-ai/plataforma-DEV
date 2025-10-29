@@ -12,8 +12,7 @@ import { cn } from "@/lib/utils";
 import LoginButton from "./LoginButton";
 import ProfileCompletionBadge from "./ProfileCompletionBadge";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
-import SkyToggle from "@/components/ui/sky-toggle";
-import SoundToggle from "@/components/ui/sound-toggle";
+import { SettingsHamburger } from "@/components/ui/settings-hamburger";
 import { useHydrationSafe } from "./hooks/useHydrationSafe";
 import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
 
@@ -118,11 +117,10 @@ export default function Header() {
               </div>
             )}
 
-            {/* Desktop: Login Button and Toggles */}
+            {/* Desktop: Login Button and Settings Hamburger */}
             <div className="hidden md:flex items-center space-x-2">
               <LoginButton />
-              <SoundToggle size="sm" />
-              <SkyToggle size="sm" />
+              <SettingsHamburger size="sm" />
             </div>
 
             {/* Mobile Menu Button - Public pages only */}
@@ -194,11 +192,10 @@ export default function Header() {
                 {/* Settings Controls Section */}
                 <div className="px-6 py-6 border-t border-border">
                   <p className="text-sm text-muted-foreground mb-4 text-center">
-                    Controles
+                    Configuración
                   </p>
-                  <div className="flex items-center justify-center space-x-6">
-                    <SoundToggle size="md" />
-                    <SkyToggle size="md" />
+                  <div className="flex items-center justify-center">
+                    <SettingsHamburger size="md" />
                   </div>
                 </div>
 
