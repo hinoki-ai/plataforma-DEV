@@ -309,6 +309,70 @@ export default function ContactosPage() {
             </Card>
           )}
 
+          {/* General Contact Information */}
+          <Card className="mt-6 border-blue-200 bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-blue-900 flex items-center gap-2">
+                <Phone className="h-5 w-5" />
+                Información de Contacto
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Phone Contacts */}
+                <div>
+                  <h3 className="font-semibold text-blue-900 mb-3">
+                    Teléfonos de Contacto
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-blue-800">
+                      <Phone className="h-4 w-4" />
+                      <div>
+                        <p className="font-medium">Loreto Gallegos Estay</p>
+                        <a
+                          href="tel:+56937436196"
+                          className="text-sm hover:underline"
+                        >
+                          +569 3743 6196
+                        </a>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-blue-800">
+                      <Phone className="h-4 w-4" />
+                      <div>
+                        <p className="font-medium">
+                          Agustin Arancibia Mac-Guire
+                        </p>
+                        <a
+                          href="tel:+56988896773"
+                          className="text-sm hover:underline"
+                        >
+                          +569 8889 6773
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Email Contact */}
+                <div className="border-t border-blue-200 pt-4">
+                  <h3 className="font-semibold text-blue-900 mb-3">
+                    Correo Electrónico
+                  </h3>
+                  <div className="flex items-center gap-2 text-blue-800">
+                    <Mail className="h-4 w-4" />
+                    <a
+                      href="mailto:contacto@plataformaastral.cl"
+                      className="hover:underline"
+                    >
+                      contacto@plataformaastral.cl
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Emergency Contact */}
           <Card className="mt-6 border-red-200 bg-red-50">
             <CardHeader>

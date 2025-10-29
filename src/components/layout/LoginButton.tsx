@@ -142,7 +142,7 @@ export default function LoginButton() {
         <Button
           variant="ghost"
           size="sm"
-          className="text-sm font-medium hover:bg-muted/50 transition-colors"
+          className="text-base font-medium hover:bg-muted/50 transition-colors"
           onClick={() => router.push("/login")}
         >
           Portal Escolar

@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function ProgramasPage() {
   return (
     <div className="min-h-screen bg-responsive-desktop bg-programas">
-      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
+      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40 flex flex-col">
         <Header />
-        <main className="container mx-auto px-4 py-16">
+        <main className="container mx-auto px-4 py-16 flex-1">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold text-center mb-8 text-white">
               Nuestros Programas Educativos

@@ -1,5 +1,104 @@
+import fs from "fs";
 import type { NextConfig } from "next";
 import path from "path";
+
+const isDevelopment = process.env.NODE_ENV === "development";
+
+function loadClerkKeylessEnv() {
+  const missingPublishable =
+    !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.trim().length === 0;
+  const missingSecret =
+    !process.env.CLERK_SECRET_KEY ||
+    process.env.CLERK_SECRET_KEY.trim().length === 0;
+
+  if (!missingPublishable && !missingSecret) {
+    return;
+  }
+
+  const keylessPath = path.join(__dirname, ".clerk", ".tmp", "keyless.json");
+
+  if (!fs.existsSync(keylessPath)) {
+    if (isDevelopment) {
+      console.warn(
+        "[Clerk] NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY or CLERK_SECRET_KEY is missing. Generate credentials with `npx clerk dev` or claim the keyless instance shown the first time the dev server runs.",
+      );
+    }
+    return;
+  }
+
+  try {
+    const raw = fs.readFileSync(keylessPath, "utf8");
+    const data = JSON.parse(raw) as {
+      publishableKey?: string;
+      secretKey?: string;
+    };
+
+    if (missingPublishable && data.publishableKey) {
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = data.publishableKey;
+    }
+
+    if (missingSecret && data.secretKey) {
+      process.env.CLERK_SECRET_KEY = data.secretKey;
+    }
+  } catch (error) {
+    if (isDevelopment) {
+      console.warn(
+        `[Clerk] Failed to hydrate missing credentials from ${keylessPath}:`,
+        error,
+      );
+    }
+  }
+}
+
+loadClerkKeylessEnv();
+
+const clerkAssetHosts = [
+  "https://*.clerk.accounts.dev",
+  "https://*.clerkstage.dev",
+  "https://*.clerk.dev",
+  "https://clerk.plataforma.aramac.dev",
+];
+
+const clerkApiHosts = [
+  "https://api.clerk.com",
+  "https://api.clerkstage.com",
+  "https://api.clerk.dev",
+];
+
+const clerkImageHosts = ["https://img.clerk.com"];
+
+function parseConvexOrigin() {
+  const url = process.env.NEXT_PUBLIC_CONVEX_URL;
+  if (!url) return { http: undefined, ws: undefined };
+
+  try {
+    const parsed = new URL(url);
+    const httpOrigin = `${parsed.protocol}//${parsed.host}`;
+    const wsOrigin =
+      parsed.protocol === "https:"
+        ? `wss://${parsed.host}`
+        : parsed.protocol === "http:"
+          ? `ws://${parsed.host}`
+          : undefined;
+    return { http: httpOrigin, ws: wsOrigin };
+  } catch (error) {
+    if (isDevelopment) {
+      console.warn(
+        `[Convex] Invalid NEXT_PUBLIC_CONVEX_URL: ${url}. Update your .env.local file.`,
+        error,
+      );
+    }
+    return { http: undefined, ws: undefined };
+  }
+}
+
+const convexOrigins = parseConvexOrigin();
+
+function directive(name: string, sources: (string | undefined)[]) {
+  const filtered = sources.filter(Boolean);
+  return `${name} ${filtered.join(" ")}`;
+}
 // Temporarily disabled bundle analyzer to troubleshoot build issues
 // import bundleAnalyzer from "@next/bundle-analyzer";
 
@@ -41,7 +140,7 @@ const nextConfig: NextConfig = {
   },
 
   // Development optimizations
-  ...(process.env.NODE_ENV === "development" && {
+  ...(isDevelopment && {
     onDemandEntries: {
       maxInactiveAge: 60 * 1000, // Increased from 25s to 60s for stability
       pagesBufferLength: 5, // Increased from 2 to 5 for better buffering
@@ -115,36 +214,158 @@ const nextConfig: NextConfig = {
           // Content Security Policy (relaxed for development)
           {
             key: "Content-Security-Policy",
-            value:
-              process.env.NODE_ENV === "development"
-                ? [
-                    "default-src 'self' 'unsafe-eval' 'unsafe-inline' data: blob: ws: wss: localhost:* *.local",
-                    "script-src 'self' 'unsafe-eval' 'unsafe-inline' localhost:* *.local",
-                    "style-src 'self' 'unsafe-inline' localhost:* *.local",
-                    "img-src 'self' data: blob: localhost:* *.local https://res.cloudinary.com https://*.cloudinary.com",
-                    "font-src 'self' data: localhost:* *.local",
-                    "connect-src 'self' ws: wss: localhost:* *.local https://api.cloudinary.com https://industrious-manatee-7.convex.cloud",
-                    "media-src 'self' data: blob: localhost:* *.local https://res.cloudinary.com",
-                    "object-src 'none'",
-                    "base-uri 'self'",
-                    "form-action 'self'",
-                  ].join("; ")
-                : [
-                    "default-src 'self' https://www.mineduc.cl https://*.mineduc.cl https://facebook.com https://*.facebook.com https://twitter.com https://*.twitter.com https://instagram.com https://*.instagram.com https://youtube.com https://*.youtube.com",
-                    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://*.vercel.live https://*.clerk.accounts.dev https://clerk.plataforma.aramac.dev", // Next.js requires unsafe-eval and unsafe-inline, Vercel Live for feedback widget, Clerk for authentication
-                    "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
-                    "img-src 'self' data: https://res.cloudinary.com https://*.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl https://facebook.com https://*.facebook.com https://twitter.com https://*.twitter.com https://instagram.com https://*.instagram.com https://youtube.com https://*.youtube.com https://img.clerk.com",
-                    "font-src 'self' data:",
-                    "connect-src 'self' https://api.cloudinary.com https://www.mineduc.cl https://*.mineduc.cl https://industrious-manatee-7.convex.cloud wss://industrious-manatee-7.convex.cloud https://vercel.live https://*.vercel.live https://*.clerk.accounts.dev https://clerk.plataforma.aramac.dev https://api.clerk.com",
-                    "media-src 'self' https://res.cloudinary.com",
-                    "object-src 'none'",
-                    "base-uri 'self'",
-                    "form-action 'self' https://www.mineduc.cl https://*.mineduc.cl",
-                    "frame-src 'self' https://vercel.live https://*.vercel.live https://*.clerk.accounts.dev https://clerk.plataforma.aramac.dev",
-                    "worker-src 'self' blob:",
-                    "frame-ancestors 'none'",
-                    "upgrade-insecure-requests",
-                  ].join("; "),
+            value: isDevelopment
+              ? [
+                  directive("default-src", [
+                    "'self'",
+                    "'unsafe-eval'",
+                    "'unsafe-inline'",
+                    "data:",
+                    "blob:",
+                    "ws:",
+                    "wss:",
+                    "localhost:*",
+                    "*.local",
+                  ]),
+                  directive("script-src", [
+                    "'self'",
+                    "'unsafe-eval'",
+                    "'unsafe-inline'",
+                    "localhost:*",
+                    "*.local",
+                    ...clerkAssetHosts,
+                  ]),
+                  directive("style-src", [
+                    "'self'",
+                    "'unsafe-inline'",
+                    "localhost:*",
+                    "*.local",
+                  ]),
+                  directive("img-src", [
+                    "'self'",
+                    "data:",
+                    "blob:",
+                    "localhost:*",
+                    "*.local",
+                    "https://res.cloudinary.com",
+                    "https://*.cloudinary.com",
+                    ...clerkAssetHosts,
+                    ...clerkImageHosts,
+                  ]),
+                  directive("font-src", [
+                    "'self'",
+                    "data:",
+                    "localhost:*",
+                    "*.local",
+                  ]),
+                  directive("connect-src", [
+                    "'self'",
+                    "ws:",
+                    "wss:",
+                    "localhost:*",
+                    "*.local",
+                    "https://api.cloudinary.com",
+                    convexOrigins.http,
+                    ...clerkAssetHosts,
+                    ...clerkApiHosts,
+                  ]),
+                  directive("media-src", [
+                    "'self'",
+                    "data:",
+                    "blob:",
+                    "localhost:*",
+                    "*.local",
+                    "https://res.cloudinary.com",
+                  ]),
+                  directive("frame-src", [
+                    "'self'",
+                    "localhost:*",
+                    "*.local",
+                    ...clerkAssetHosts,
+                  ]),
+                  directive("object-src", ["'none'"]),
+                  directive("base-uri", ["'self'"]),
+                  directive("form-action", ["'self'"]),
+                ].join("; ")
+              : [
+                  directive("default-src", [
+                    "'self'",
+                    "https://www.mineduc.cl",
+                    "https://*.mineduc.cl",
+                    "https://facebook.com",
+                    "https://*.facebook.com",
+                    "https://twitter.com",
+                    "https://*.twitter.com",
+                    "https://instagram.com",
+                    "https://*.instagram.com",
+                    "https://youtube.com",
+                    "https://*.youtube.com",
+                  ]),
+                  directive("script-src", [
+                    "'self'",
+                    "'unsafe-eval'",
+                    "'unsafe-inline'",
+                    "https://vercel.live",
+                    "https://*.vercel.live",
+                    "https://*.clerk.accounts.dev",
+                    "https://clerk.plataforma.aramac.dev",
+                  ]),
+                  directive("style-src", ["'self'", "'unsafe-inline'"]),
+                  directive("img-src", [
+                    "'self'",
+                    "data:",
+                    "https://res.cloudinary.com",
+                    "https://*.cloudinary.com",
+                    "https://www.mineduc.cl",
+                    "https://*.mineduc.cl",
+                    "https://facebook.com",
+                    "https://*.facebook.com",
+                    "https://twitter.com",
+                    "https://*.twitter.com",
+                    "https://instagram.com",
+                    "https://*.instagram.com",
+                    "https://youtube.com",
+                    "https://*.youtube.com",
+                    "https://img.clerk.com",
+                  ]),
+                  directive("font-src", ["'self'", "data:"]),
+                  directive("connect-src", [
+                    "'self'",
+                    "https://api.cloudinary.com",
+                    "https://www.mineduc.cl",
+                    "https://*.mineduc.cl",
+                    "https://industrious-manatee-7.convex.cloud",
+                    "wss://industrious-manatee-7.convex.cloud",
+                    convexOrigins.http,
+                    convexOrigins.ws,
+                    "https://vercel.live",
+                    "https://*.vercel.live",
+                    "https://*.clerk.accounts.dev",
+                    "https://clerk.plataforma.aramac.dev",
+                    "https://api.clerk.com",
+                  ]),
+                  directive("media-src", [
+                    "'self'",
+                    "https://res.cloudinary.com",
+                  ]),
+                  directive("object-src", ["'none'"]),
+                  directive("base-uri", ["'self'"]),
+                  directive("form-action", [
+                    "'self'",
+                    "https://www.mineduc.cl",
+                    "https://*.mineduc.cl",
+                  ]),
+                  directive("frame-src", [
+                    "'self'",
+                    "https://vercel.live",
+                    "https://*.vercel.live",
+                    "https://*.clerk.accounts.dev",
+                    "https://clerk.plataforma.aramac.dev",
+                  ]),
+                  directive("worker-src", ["'self'", "blob:"]),
+                  directive("frame-ancestors", ["'none'"]),
+                  "upgrade-insecure-requests",
+                ].join("; "),
           },
         ],
       },

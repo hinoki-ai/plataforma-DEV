@@ -307,15 +307,23 @@ export function MasterDashboard() {
       context="MASTER_DASHBOARD"
     >
       {/* Quick Actions */}
-      <MasterActionCard
-        title="Quick Actions - Administrative Tools"
-        description="Advanced tools for system administrators"
-        actions={quickActions}
-        columns={4}
-      />
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold mb-4">
+          Quick Actions - Administrative Tools
+        </h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          Advanced tools for system administrators
+        </p>
+        <MasterActionCard
+          title=""
+          description=""
+          actions={quickActions}
+          columns={4}
+        />
+      </div>
 
       {/* System Overview */}
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <SystemHealthCard />
         <LocalMasterStatsCard />
         <SecurityAlertsCard />

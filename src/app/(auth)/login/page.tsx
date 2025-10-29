@@ -3,6 +3,9 @@
 import { SignIn } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { UserPlus } from "lucide-react";
 
 function LoginForm() {
   const params = useSearchParams();
@@ -55,6 +58,28 @@ function LoginForm() {
               },
             }}
           />
+
+          {/* New Parent Registration Button */}
+          <div className="mt-6 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+            <div className="text-center">
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                ¿Eres padre o apoderado nuevo?
+              </p>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full rounded-xl border border-white/50 bg-white/85 text-slate-900 shadow-sm transition hover:border-white/60 hover:bg-white dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:border-white/20 dark:hover:bg-slate-900/70"
+              >
+                <Link
+                  href="/registro-padre"
+                  className="flex items-center justify-center gap-2"
+                >
+                  <UserPlus className="h-4 w-4" />
+                  Registrarse como Apoderado
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
