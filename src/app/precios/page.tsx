@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/layout/Header";
+import MinEducFooter from "@/components/layout/MinEducFooter";
 import {
   Card,
   CardContent,
@@ -475,16 +476,7 @@ export default function PreciosPage() {
             </div>
           </div>
         </main>
-        <footer className="bg-gray-900 border-t border-gray-800">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="text-gray-300 text-sm">
-                © {new Date().getFullYear()} Plataforma Astral. Todos los
-                derechos reservados.
-              </div>
-            </div>
-          </div>
-        </footer>
+        <MinEducFooter />
       </div>
     </div>
   );

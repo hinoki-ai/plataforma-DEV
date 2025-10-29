@@ -22,8 +22,6 @@ const inter = Inter({
     "Roboto",
     "sans-serif",
   ],
-  preload: true,
-  adjustFontFallback: true,
 });
 
 // Apple touch icon configured via Next.js metadata API
