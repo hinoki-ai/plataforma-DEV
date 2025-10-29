@@ -347,7 +347,9 @@ export default function ProgramasPage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild size="lg">
-                  <Link href="/contacto">{t("programas.request_demo")}</Link>
+                  <Link href="/contacto">
+                    {t("programas.request_presentation")}
+                  </Link>
                 </Button>
                 <Button
                   asChild

@@ -23,7 +23,7 @@ export default function ProgramasExplorerPage() {
             <section className="text-center space-y-6">
               <div className="flex justify-center">
                 <Badge className="bg-white/10 text-white backdrop-blur">
-                  Programas
+                  {t("programas.explorer.title")}
                 </Badge>
               </div>
               <h1 className="text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl md:text-5xl">
@@ -33,14 +33,21 @@ export default function ProgramasExplorerPage() {
                 {t("programas.explorer.page_subheading")}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <Button asChild variant="outline" size="lg" className="bg-background/70">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="bg-background/70"
+                >
                   <Link href="/programas" className="flex items-center gap-2">
                     <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                    Programas
+                    {t("programas.explorer.back")}
                   </Link>
                 </Button>
                 <Button asChild size="lg">
-                  <Link href="/contacto">{t("programas.schedule_meeting")}</Link>
+                  <Link href="/contacto">
+                    {t("programas.schedule_meeting")}
+                  </Link>
                 </Button>
               </div>
             </section>
@@ -58,7 +65,10 @@ export default function ProgramasExplorerPage() {
             </section>
 
             <section className="relative overflow-hidden rounded-3xl border border-border/60 backdrop-blur-xl bg-card/80 shadow-2xl">
-              <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-primary/10 to-transparent" aria-hidden="true" />
+              <div
+                className="absolute inset-0 bg-linear-to-br from-primary/20 via-primary/10 to-transparent"
+                aria-hidden="true"
+              />
               <div className="relative p-10 md:p-14 grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
                 <div className="space-y-5">
                   <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-4 py-1 text-primary font-medium">
@@ -71,10 +81,19 @@ export default function ProgramasExplorerPage() {
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end">
                   <Button asChild size="lg">
-                    <Link href="/contacto">{t("programas.schedule_meeting")}</Link>
+                    <Link href="/contacto">
+                      {t("programas.schedule_meeting")}
+                    </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="bg-background/70">
-                    <Link href="/docs#programas">{t("programas.view_specs")}</Link>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="bg-background/70"
+                  >
+                    <Link href="/docs#programas">
+                      {t("programas.view_specs")}
+                    </Link>
                   </Button>
                 </div>
               </div>

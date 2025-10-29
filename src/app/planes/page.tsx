@@ -442,7 +442,7 @@ export default function PreciosPage() {
                   </h3>
                   <p className="text-muted-foreground">
                     14 días de acceso completo al plan que elijas, sin
-                    restricciones. Incluye demo guiada por nuestro equipo y
+                    restricciones. Incluye recorrido guiado por nuestro equipo y
                     soporte completo. No se requiere tarjeta de crédito.
                   </p>
                 </div>

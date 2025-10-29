@@ -516,9 +516,7 @@ export function GradeEntryForm({
                       ? "bg-yellow-500"
                       : "bg-red-500",
               )}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              /* stylelint-disable */
-              style={{ width: `${gradePercentage}%` }} // Dynamic width for progress bar
+              style={{ width: `${gradePercentage}%` }}
             />
           </div>
         </div>
