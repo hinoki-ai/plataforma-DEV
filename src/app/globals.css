@@ -622,7 +622,7 @@
   }
 
   /* Centro consejo background */
-  .bg-centro-consejo {
+  .bg-cpa {
     --bg-image: url(/bg3.jpg);
     position: relative;
   }

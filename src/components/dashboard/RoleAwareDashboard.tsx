@@ -249,10 +249,10 @@ const quickActions: Record<UserRole, QuickAction[]> = {
     },
     {
       id: "contact",
-      title: "Centro Consejo",
+      title: "CPA Centro de Padres",
       description: "Información del centro",
       icon: MessageSquare,
-      href: "/centro-consejo",
+      href: "/cpa",
     },
   ],
 };

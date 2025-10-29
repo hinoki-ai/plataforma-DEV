@@ -1,13 +1,7 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const PUBLIC_ROUTES = [
-  "/",
-  "/login",
-  "/registro",
-  "/auth-success",
-  "/centro-consejo",
-];
+const PUBLIC_ROUTES = ["/", "/login", "/registro", "/auth-success", "/cpa"];
 
 const PROTECTED_PREFIXES = ["/master", "/admin", "/profesor", "/parent"];
 

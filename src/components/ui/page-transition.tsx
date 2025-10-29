@@ -28,7 +28,7 @@ export type SkeletonType =
   | "fotos-videos"
   | "equipo-multidisciplinario"
   | "reserva"
-  | "centro-consejo"
+  | "cpa"
   | "homepage"
   | "custom";
 
@@ -169,7 +169,7 @@ function SkeletonRenderer({
     case "reserva":
       return <ReservaSkeleton isDesktopForced={isDesktopForced} />;
 
-    case "centro-consejo":
+    case "cpa":
       return <CentroConsejoSkeleton isDesktopForced={isDesktopForced} />;
 
     case "homepage":

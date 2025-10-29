@@ -33,7 +33,7 @@ export function useAuthSync() {
       const isAdminPath = pathname?.startsWith("/admin");
       const isProfesorPath = pathname?.startsWith("/profesor");
       const isParentPath = pathname?.startsWith("/parent");
-      const isCentroConsejoPath = pathname?.startsWith("/centro-consejo");
+      const isCpaPath = pathname?.startsWith("/cpa");
       const userRole = session.user.role;
 
       // Ensure session is fully loaded before redirecting
@@ -63,12 +63,7 @@ export function useAuthSync() {
           }
           break;
         default:
-          if (
-            isAdminPath ||
-            isProfesorPath ||
-            isParentPath ||
-            isCentroConsejoPath
-          ) {
+          if (isAdminPath || isProfesorPath || isParentPath || isCpaPath) {
             shouldRedirect = true;
             redirectPath = "/";
           }
@@ -83,7 +78,7 @@ export function useAuthSync() {
         "/admin",
         "/profesor",
         "/parent",
-        "/centro-consejo/dashboard",
+        "/cpa/dashboard",
       ];
       const isProtectedPath = protectedPaths.some((path) =>
         pathname?.startsWith(path),

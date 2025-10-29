@@ -204,8 +204,8 @@ export function DashboardActions({
             primary: true,
           },
           {
-            label: "Centro Consejo",
-            href: "/centro-consejo",
+            label: "CPA Centro de Padres",
+            href: "/cpa",
             icon: Vote,
             description: "Información del Centro de Padres",
           },
