@@ -38,12 +38,7 @@ interface DivineParsingOracleContextType {
   isOracleActive: (namespace: string) => boolean;
 
   // Performance monitoring
-  getTranslationStats: () => {
-    totalKeys: number;
-    loadedNamespaces: number;
-    cacheHitRate: number;
-    loadTime: number;
-  };
+  getTranslationStats: () => TranslationStats;
 
   // Error handling
   error: string | null;
@@ -255,6 +250,29 @@ interface PerformanceMetrics {
   namespaceLoadTimes: Record<string, number>;
 }
 
+interface TranslationStats {
+  totalKeys: number;
+  loadedNamespaces: number;
+  cacheSize: number;
+  cacheHitRate: number;
+  loadTime: number;
+}
+
+// Translation result cache for performance optimization
+const translationCache = new Map<string, string>();
+
+const clearTranslationCache = () => {
+  translationCache.clear();
+};
+
+const getCacheKey = (
+  key: string,
+  namespace: string,
+  language: Language,
+): string => {
+  return `${language}:${namespace}:${key}`;
+};
+
 const DivineParsingOracleProvider: React.FC<{
   children: React.ReactNode;
   initialNamespaces?: string[];
@@ -382,6 +400,9 @@ const DivineParsingOracleProvider: React.FC<{
             });
           }
 
+          // Clear cache for the language change
+          clearTranslationCache();
+
           // Update language state without triggering loading
           setLanguageState(clientPreferredLang);
 
@@ -415,6 +436,9 @@ const DivineParsingOracleProvider: React.FC<{
       try {
         setError(null);
         setIsLoading(true);
+
+        // Clear translation cache when language changes
+        clearTranslationCache();
 
         setLanguageState(newLanguage);
         setStoredLanguage(newLanguage);
@@ -566,11 +590,53 @@ const DivineParsingOracleProvider: React.FC<{
     return current;
   };
 
-  // Translation function - uses direct synchronous lookup for reliability
+  // Helper functions for translation fallback chains
+  const isValidTranslation = (value: any): value is string => {
+    return typeof value === "string" && value.trim().length > 0;
+  };
+
+  const transformKeyFormat = (key: string): string => {
+    // snake_case to camelCase
+    if (key.includes("_")) {
+      return key
+        .toLowerCase()
+        .replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+    }
+    // camelCase to snake_case
+    return key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+  };
+
+  const formatMissingKey = (key: string): string => {
+    // Convert snake_case or camelCase to readable format
+    return key
+      .replace(/_/g, " ")
+      .replace(/([A-Z])/g, " $1")
+      .toLowerCase()
+      .replace(/\b\w/g, (l) => l.toUpperCase())
+      .trim();
+  };
+
+  // Enhanced translation function with robust fallback chains and caching
   const t = useMemo(() => {
     return (key: string, namespace: string = "common"): string => {
+      // Create cache key outside try block for error handling
+      const cacheKey = getCacheKey(key, namespace, language);
+
       try {
-        // Direct synchronous lookup from translations object
+        // Check cache first for performance
+        const cachedResult = translationCache.get(cacheKey);
+        if (cachedResult !== undefined) {
+          return cachedResult;
+        }
+        // Fallback chain priority:
+        // 1. Direct translations object lookup (fastest)
+        // 2. Registry lookup (compatibility)
+        // 3. Alternative namespace lookup
+        // 4. Opposite language lookup (for missing translations)
+        // 5. Common namespace fallback
+        // 6. Key transformation and final fallback
+
+        // 1. Direct synchronous lookup from translations object
         const langTranslations =
           translations[language as keyof typeof translations];
         if (langTranslations) {
@@ -580,53 +646,138 @@ const DivineParsingOracleProvider: React.FC<{
             namespaceTranslations &&
             typeof namespaceTranslations === "object"
           ) {
-            // First try flat key lookup (backward compatibility)
+            // Try flat key lookup (backward compatibility)
             const flatValue = (namespaceTranslations as any)[key];
-            if (
-              flatValue !== undefined &&
-              flatValue !== null &&
-              typeof flatValue === "string"
-            ) {
+            if (isValidTranslation(flatValue)) {
+              translationCache.set(cacheKey, flatValue);
               return flatValue;
             }
 
-            // Try nested path lookup (for keys like "centro_consejo.testimonials.maria_gonzalez.name")
+            // Try nested path lookup
             const nestedValue = getNestedValue(namespaceTranslations, key);
-            if (
-              nestedValue !== undefined &&
-              nestedValue !== null &&
-              typeof nestedValue === "string"
-            ) {
+            if (isValidTranslation(nestedValue)) {
+              translationCache.set(cacheKey, nestedValue);
               return nestedValue;
             }
           }
         }
 
-        // Fallback to registry for compatibility
+        // 2. Fallback to registry for compatibility
         const registryKey = `${language}-${namespace}`;
         const registryTranslations = translationRegistry[registryKey];
         if (registryTranslations) {
-          // Try flat lookup
-          const flatValue = registryTranslations[key];
-          if (flatValue !== undefined && flatValue !== null) {
-            return flatValue;
+          const registryValue = registryTranslations[key];
+          if (isValidTranslation(registryValue)) {
+            translationCache.set(cacheKey, registryValue);
+            return registryValue;
           }
 
-          // Try nested lookup
-          const nestedValue = getNestedValue(registryTranslations, key);
-          if (
-            nestedValue !== undefined &&
-            nestedValue !== null &&
-            typeof nestedValue === "string"
-          ) {
-            return nestedValue;
+          const nestedRegistryValue = getNestedValue(registryTranslations, key);
+          if (isValidTranslation(nestedRegistryValue)) {
+            translationCache.set(cacheKey, nestedRegistryValue);
+            return nestedRegistryValue;
           }
         }
 
-        // Final fallback - return the key itself
-        return key;
+        // 3. Try alternative namespace lookup (common namespace often has shared keys)
+        if (namespace !== "common") {
+          const commonTranslations =
+            translations[language as keyof typeof translations]?.common;
+          if (commonTranslations) {
+            const commonValue = (commonTranslations as any)[key];
+            if (isValidTranslation(commonValue)) {
+              translationCache.set(cacheKey, commonValue);
+              return commonValue;
+            }
+          }
+        }
+
+        // 4. Try opposite language as fallback for missing translations
+        const oppositeLang = language === "es" ? "en" : "es";
+        const oppositeTranslations =
+          translations[oppositeLang as keyof typeof translations];
+        if (oppositeTranslations) {
+          const oppositeNamespaceTranslations =
+            oppositeTranslations[
+              namespace as keyof typeof oppositeTranslations
+            ];
+          if (oppositeNamespaceTranslations) {
+            const oppositeValue = (oppositeNamespaceTranslations as any)[key];
+            if (isValidTranslation(oppositeValue)) {
+              // Log fallback usage in development
+              if (process.env.NODE_ENV === "development") {
+                console.warn(
+                  `🕊️ Oracle: Using ${oppositeLang} fallback for key "${key}" in namespace "${namespace}" (${language} missing)`,
+                );
+              }
+              translationCache.set(cacheKey, oppositeValue);
+              return oppositeValue;
+            }
+          }
+        }
+
+        // 5. Try common namespace in opposite language
+        if (namespace !== "common") {
+          const oppositeCommon =
+            translations[oppositeLang as keyof typeof translations]?.common;
+          if (oppositeCommon) {
+            const oppositeCommonValue = (oppositeCommon as any)[key];
+            if (isValidTranslation(oppositeCommonValue)) {
+              if (process.env.NODE_ENV === "development") {
+                console.warn(
+                  `🕊️ Oracle: Using ${oppositeLang} common fallback for key "${key}" in namespace "${namespace}"`,
+                );
+              }
+              translationCache.set(cacheKey, oppositeCommonValue);
+              return oppositeCommonValue;
+            }
+          }
+        }
+
+        // 6. Key transformation fallbacks
+        // Try converting snake_case to camelCase or vice versa
+        const transformedKey = transformKeyFormat(key);
+        if (transformedKey !== key) {
+          // Try transformed key in current language and namespace
+          const langTranslations =
+            translations[language as keyof typeof translations];
+          const namespaceTranslations =
+            langTranslations?.[namespace as keyof typeof langTranslations];
+          const transformedValue = getNestedValue(
+            namespaceTranslations || {},
+            transformedKey,
+          );
+          if (isValidTranslation(transformedValue)) {
+            translationCache.set(cacheKey, transformedValue);
+            return transformedValue;
+          }
+        }
+
+        // 7. Development warning for missing keys
+        if (process.env.NODE_ENV === "development") {
+          console.warn(
+            `🕊️ Oracle: Missing translation key "${key}" in namespace "${namespace}" for language "${language}"`,
+          );
+        }
+
+        // 8. Final fallback - return a formatted version of the key
+        const finalResult = formatMissingKey(key);
+
+        // Cache the result for future lookups
+        translationCache.set(cacheKey, finalResult);
+        return finalResult;
       } catch (error) {
-        return key;
+        // Log error in development
+        if (process.env.NODE_ENV === "development") {
+          console.error(
+            `🕊️ Oracle: Translation error for key "${key}":`,
+            error,
+          );
+        }
+        const errorResult = formatMissingKey(key);
+        // Cache error results too to avoid repeated errors
+        translationCache.set(cacheKey, errorResult);
+        return errorResult;
       }
     };
   }, [language]);
@@ -658,6 +809,7 @@ const DivineParsingOracleProvider: React.FC<{
     return {
       totalKeys,
       loadedNamespaces: loadedNamespaces.length,
+      cacheSize: translationCache.size,
       cacheHitRate:
         performanceMetrics.totalRequests > 0
           ? (performanceMetrics.cacheHits / performanceMetrics.totalRequests) *

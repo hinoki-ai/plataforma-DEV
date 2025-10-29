@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback, memo } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  memo,
+  forwardRef,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "./LanguageContext";
 import { Globe, Check } from "lucide-react";
@@ -33,46 +40,54 @@ const languageOptions: LanguageOption[] = [
 ] as const;
 
 // Memoized individual option component for better performance
-const LanguageOptionItem = memo<{
+const LanguageOptionItem = memo(function LanguageOptionItem({
+  option,
+  isSelected,
+  isFocused,
+  onClick,
+  onKeyDown,
+}: {
   option: LanguageOption;
   isSelected: boolean;
   isFocused: boolean;
   onClick: () => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
-}>(({ option, isSelected, isFocused, onClick, onKeyDown }) => (
-  <button
-    onClick={onClick}
-    onKeyDown={onKeyDown}
-    className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset rounded-md ${
-      isSelected
-        ? "bg-primary/10 text-primary shadow-sm"
-        : "hover:bg-accent/50"
-    } ${isFocused ? "bg-accent" : ""}`}
-    role="option"
-    aria-label={option.ariaLabel}
-    aria-selected={isSelected}
-    tabIndex={isFocused ? 0 : -1}
-  >
-    <div className="flex items-center gap-3">
-      <span className="text-lg" aria-hidden="true" role="img">
-        {option.flag}
-      </span>
-      <div className="flex flex-col">
-        <span className="text-sm font-medium leading-tight">
-          {option.nativeName}
+}) {
+  return (
+    <div
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:ring-inset rounded-md cursor-pointer ${
+        isSelected
+          ? "bg-primary/10 text-primary shadow-sm"
+          : "hover:bg-accent/50"
+      } ${isFocused ? "bg-accent" : ""}`}
+      role="option"
+      aria-label={option.ariaLabel}
+      aria-selected={isSelected}
+      tabIndex={isFocused ? 0 : -1}
+    >
+      <div className="flex items-center gap-3">
+        <span className="text-lg" aria-hidden="true" role="img">
+          {option.flag}
         </span>
-        <span className="text-xs text-muted-foreground leading-tight">
-          {option.name}
-        </span>
+        <div className="flex flex-col">
+          <span className="text-sm font-medium leading-tight">
+            {option.nativeName}
+          </span>
+          <span className="text-xs text-muted-foreground leading-tight">
+            {option.name}
+          </span>
+        </div>
       </div>
+      {isSelected && (
+        <Check className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+      )}
     </div>
-    {isSelected && (
-      <Check className="w-4 h-4 text-primary flex-shrink-0" aria-hidden="true" />
-    )}
-  </button>
-));
+  );
+});
 
-LanguageOptionItem.displayName = 'LanguageOptionItem';
+LanguageOptionItem.displayName = "LanguageOptionItem";
 
 const LanguageToggle = memo(() => {
   const { language, setLanguage, t, isLoading } = useLanguage();
@@ -81,6 +96,7 @@ const LanguageToggle = memo(() => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
+  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const currentLanguage = languageOptions.find(
     (lang) => lang.code === language,
@@ -268,6 +284,11 @@ const LanguageToggle = memo(() => {
                 role="listbox"
                 id="language-listbox"
                 aria-label="Language options"
+                aria-activedescendant={
+                  focusedIndex >= 0
+                    ? `language-option-${focusedIndex}`
+                    : undefined
+                }
                 ref={listboxRef}
                 className="max-h-60 overflow-auto"
               >
@@ -288,4 +309,8 @@ const LanguageToggle = memo(() => {
       </div>
     </>
   );
-}
+});
+
+LanguageToggle.displayName = "LanguageToggle";
+
+export { LanguageToggle };

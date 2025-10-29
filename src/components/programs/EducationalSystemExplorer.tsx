@@ -233,7 +233,7 @@ export function EducationalSystemExplorer() {
                           <div
                             className={`w-2 h-2 rounded-full ${enabled ? "bg-green-500" : "bg-gray-300"}`}
                           />
-                          {feature.replace("_", " ")}
+                          {feature.split("_").join(" ")}
                         </div>
                       );
                     })}

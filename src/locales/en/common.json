@@ -1445,6 +1445,7 @@
   "programas.explorer.page_heading": "See the platform running in production",
   "programas.explorer.page_subheading": "Configure levels, navigation, and dashboards exactly as we do for live institutions.",
   "programas.explorer.cta": "Explore the platform",
+  "programas.explorer.back": "Back to Programs",
   "programas.explorer.contact_title": "Ready to launch with real data?",
   "programas.explorer.contact_subtitle": "Schedule a session to map critical modules and the rollout plan.",
 
@@ -1461,7 +1462,7 @@
   "signup.comuna.label": "Comuna *",
   "signup.address.label": "Complete Address *",
 
-  "programas.request_demo": "Request a tailored presentation",
+  "programas.request_presentation": "Request a tailored presentation",
   "programas.view_specs": "View implementation sheets",
   "programas.see_in_action": "See in action",
   "programas.schedule_meeting": "Schedule meeting",

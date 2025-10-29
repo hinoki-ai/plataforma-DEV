@@ -1345,6 +1345,7 @@
   "programas.explorer.page_heading": "Explora la plataforma educativa en producción",
   "programas.explorer.page_subheading": "Configura niveles, navegación y tableros tal como lo hacemos con instituciones reales.",
   "programas.explorer.cta": "Explorar la plataforma",
+  "programas.explorer.back": "Volver a Programas",
   "programas.explorer.contact_title": "¿Listo para lanzar con datos reales?",
   "programas.explorer.contact_subtitle": "Agenda una sesión para mapear módulos críticos y plan de despliegue.",
 
@@ -1361,7 +1362,7 @@
   "signup.comuna.label": "Comuna *",
   "signup.address.label": "Dirección Completa *",
 
-  "programas.request_demo": "Solicitar una presentación personalizada",
+  "programas.request_presentation": "Solicitar una presentación personalizada",
   "programas.view_specs": "Ver fichas de implementación",
   "programas.see_in_action": "Ver en acción",
   "programas.schedule_meeting": "Agendar reunión",
