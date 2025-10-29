@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { DesktopToggle } from "@/components/ui/desktop-toggle";
 import Header from "@/components/layout/Header";
-import MinEducFooter from "@/components/layout/MinEducFooter";
 import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
 import { layout, typography } from "@/lib/responsive-utils";
 import { useLanguage } from "@/components/language/LanguageContext";
@@ -215,39 +214,12 @@ export function HomePage() {
           <DynamicPersonalization />
         </Suspense>
 
-        <MinEducFooter />
-
-        {/* Footer with proper contrast and accessibility */}
-        <footer
-          className="bg-gray-900/95 backdrop-blur-sm text-white py-12"
-          role="contentinfo"
-          aria-label="Información de contacto y enlaces"
-        >
-          <div className={layout.container(isDesktopForced)}>
-            <div className="text-center">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold mb-4 text-white">
-                  Región de Valparaíso, Viña Del Mar
-                </h3>
-                <p className="text-gray-300 mb-4">Avenida Libertad #777</p>
-              </div>
-
-              <div className="mb-6">
-                <h4 className="text-lg font-semibold mb-4 text-white">
-                  Contact Phones
-                </h4>
-                <div className="space-y-2 text-gray-300">
-                  <p>Loreto Gallegos Estay</p>
-                  <p className="font-mono">+569 3743 6196</p>
-                  <p>Agustin Arancibia Mac-Guire</p>
-                  <p className="font-mono">+569 8889 6773</p>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-700 mt-8 pt-8">
-                <p className="text-gray-300 pb-3">
-                  © 2023 Plataforma Astral. All rights reserved.
-                </p>
+        <footer className="bg-gray-900 border-t border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="text-gray-300 text-sm">
+                © {new Date().getFullYear()} Plataforma Astral. Todos los
+                derechos reservados.
               </div>
             </div>
           </div>

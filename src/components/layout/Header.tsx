@@ -39,7 +39,6 @@ export default function Header() {
   // Public navigation links
   const publicNavLinks = [
     { href: "/programas", label: "Programas" },
-    { href: "/testimonios", label: "Testimonios" },
     { href: "/precios", label: "Precios" },
     { href: "/contacto", label: "Contacto" },
   ];
@@ -47,7 +46,7 @@ export default function Header() {
   // Show loading skeleton until mounted to prevent hydration mismatch
   if (!mounted) {
     return (
-      <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
+      <header className="bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
@@ -63,7 +62,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
+    <header className="bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           {/* Left: Logo/Branding */}

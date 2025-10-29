@@ -1,7 +1,6 @@
 "use client";
 
 import Header from "@/components/layout/Header";
-import MinEducFooter from "@/components/layout/MinEducFooter";
 import {
   Card,
   CardContent,
@@ -35,7 +34,7 @@ export default function PreciosPage() {
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-precios">
-      <div className="min-h-screen bg-gradient-to-b from-black/30 via-black/20 to-black/40">
+      <div className="min-h-screen bg-linear-to-b from-black/30 via-black/20 to-black/40">
         <Header />
         <main className="container mx-auto px-4 pt-12 pb-12">
           <div className="max-w-7xl mx-auto">
@@ -96,7 +95,7 @@ export default function PreciosPage() {
                       <span
                         className={`${
                           plan.badge === "Premium"
-                            ? "bg-gradient-to-r from-purple-500 to-pink-500"
+                            ? "bg-linear-to-r from-purple-500 to-pink-500"
                             : "bg-primary"
                         } text-white px-3 py-1 rounded-full text-sm font-medium`}
                       >
@@ -474,56 +473,14 @@ export default function PreciosPage() {
                 </div>
               </div>
             </div>
-
-            {/* Legal Links */}
-            <div className="text-center text-sm text-gray-400 space-x-4">
-              <a href="/terminos" className="hover:text-primary underline">
-                Términos y Condiciones
-              </a>
-              <span>•</span>
-              <a href="/privacidad" className="hover:text-primary underline">
-                Política de Privacidad
-              </a>
-              <span>•</span>
-              <a href="/dpa" className="hover:text-primary underline">
-                Acuerdo de Procesamiento de Datos (DPA)
-              </a>
-              <span>•</span>
-              <a href="/contacto" className="hover:text-primary underline">
-                Contacto
-              </a>
-            </div>
           </div>
         </main>
-        <MinEducFooter />
-
-        {/* Simple Professional Footer */}
         <footer className="bg-gray-900 border-t border-gray-800">
           <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-gray-300 text-sm">
                 © {new Date().getFullYear()} Plataforma Astral. Todos los
                 derechos reservados.
-              </div>
-              <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400">
-                <a
-                  href="/terminos"
-                  className="hover:text-primary transition-colors"
-                >
-                  Términos y Condiciones
-                </a>
-                <a
-                  href="/privacidad"
-                  className="hover:text-primary transition-colors"
-                >
-                  Política de Privacidad
-                </a>
-                <a
-                  href="/contacto"
-                  className="hover:text-primary transition-colors"
-                >
-                  Contacto
-                </a>
               </div>
             </div>
           </div>

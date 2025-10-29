@@ -30,12 +30,11 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 
 ### 🔐 Authentication & Security
 
-- **[docs/AUTHENTICATION_SYSTEM_DOCS.md](./docs/AUTHENTICATION_SYSTEM_DOCS.md)** - Complete authentication system documentation
+- **[docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)** - Complete authentication system guide (consolidated)
 - **[docs/ROLE_SYSTEM.md](./docs/ROLE_SYSTEM.md)** - Role-based access control (RBAC) system
 - **[docs/protected-paths.md](./docs/protected-paths.md)** - Protected routes and access control
 - **[docs/EMERGENCY_ACCESS_PROCEDURES.md](./docs/EMERGENCY_ACCESS_PROCEDURES.md)** - Emergency access protocols
 - **[docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)** - Authentication troubleshooting guide
-- **[AUTH_TEST_PLAN.md](./AUTH_TEST_PLAN.md)** - Authentication testing procedures
 
 ### 🚢 Deployment & Operations
 
@@ -52,16 +51,16 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 
 ## 🛠️ Technology Stack
 
-| Component          | Technology           | Version       |
-| ------------------ | -------------------- | ------------- |
-| **Frontend**       | Next.js              | 15.5.2        |
-| **Backend**        | Convex               | 1.27.4        |
-| **Language**       | TypeScript           | 5.x           |
-| **Styling**        | Tailwind CSS         | 4.x           |
-| **UI Components**  | Radix UI + shadcn/ui | Latest        |
-| **Authentication** | NextAuth.js          | 5.0.0-beta.29 |
-| **Database**       | Convex               | Real-time     |
-| **Testing**        | Vitest               | Latest        |
+| Component          | Technology           | Version   |
+| ------------------ | -------------------- | --------- |
+| **Frontend**       | Next.js              | 16.0.1    |
+| **Backend**        | Convex               | 1.27.4    |
+| **Language**       | TypeScript           | 5.9.2     |
+| **Styling**        | Tailwind CSS         | 4.x       |
+| **UI Components**  | Radix UI + shadcn/ui | Latest    |
+| **Authentication** | NextAuth.js          | 5.0.0     |
+| **Database**       | Convex               | Real-time |
+| **Testing**        | Vitest               | Latest    |
 
 ---
 
@@ -165,7 +164,11 @@ npm run verify-deployment  # Verify deployment readiness
 
 ## 📈 Recent Updates
 
-- ✅ **October 2025**: Complete system refactoring and documentation consolidation
+- ✅ **October 29, 2025**: Documentation consolidation and cleanup
+  - Consolidated scattered authentication docs into single comprehensive guide
+  - Archived outdated fix documentation
+  - Streamlined main README.md for better navigation
+- ✅ **October 2025**: Next.js 16 upgrade and system refactoring
 - ✅ **Authentication**: Full NextAuth.js v5 integration with Convex
 - ✅ **Real-time Features**: Convex-powered live updates and notifications
 - ✅ **Role System**: Comprehensive RBAC implementation

@@ -618,11 +618,6 @@
     position: relative;
   }
 
-  .bg-testimonios {
-    --bg-image: url(/bg1.jpg);
-    position: relative;
-  }
-
   .bg-precios {
     --bg-image: url(/bg7.jpg);
     position: relative;
