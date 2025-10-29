@@ -31,6 +31,12 @@ export function DynamicPersonalization() {
             {t("home.explore.parent.center", "common")}
           </Link>
           <Link
+            href="/programas"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            {t("home.explore.programs", "common")}
+          </Link>
+          <Link
             href="/login"
             className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400"
           >
