@@ -154,8 +154,8 @@ export default function UnifiedAuthButton() {
         {/* Portal Escolar Button */}
         <Button
           variant="ghost"
-          size="sm"
-          className="text-sm font-medium hover:bg-muted/50 transition-colors"
+          size="default"
+          className="text-base font-medium hover:bg-muted/50 transition-colors"
           onClick={() => router.push("/login")}
         >
           {t("nav.portal.escolar", "navigation")}
@@ -170,10 +170,10 @@ export default function UnifiedAuthButton() {
             <Button
               variant="ghost"
               size="icon"
-              className="hidden md:flex w-8 h-8 hover:bg-muted/50 transition-colors"
+              className="hidden md:flex w-9 h-9 hover:bg-muted/50 transition-colors"
               title={t("ui.settings.label", "common")}
             >
-              <Settings2 className="h-4 w-4" />
+              <Settings2 className="h-[1.1rem] w-[1.1rem]" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-72">
