@@ -203,19 +203,19 @@ export function DashboardWelcome({
     if (context === "public") {
       switch (time) {
         case "morning":
-          return "bg-gradient-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20";
+          return "bg-linear-to-br from-blue-900/20 via-indigo-900/20 to-purple-900/20";
         case "afternoon":
-          return "bg-gradient-to-br from-orange-900/20 via-yellow-900/20 to-red-900/20";
+          return "bg-linear-to-br from-orange-900/20 via-yellow-900/20 to-red-900/20";
         case "evening":
-          return "bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-indigo-900/20";
+          return "bg-linear-to-br from-purple-900/20 via-pink-900/20 to-indigo-900/20";
         case "night":
         case "early-morning":
-          return "bg-gradient-to-br from-gray-900/30 via-blue-900/20 to-indigo-900/20";
+          return "bg-linear-to-br from-gray-900/30 via-blue-900/20 to-indigo-900/20";
         default:
-          return "bg-gradient-to-br from-gray-900/20 to-gray-800/20";
+          return "bg-linear-to-br from-gray-900/20 to-gray-800/20";
       }
     } else {
-      return "bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20";
+      return "bg-linear-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20";
     }
   };
 

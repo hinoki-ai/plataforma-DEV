@@ -131,7 +131,7 @@ export class AdaptiveErrorBoundary extends Component<Props, State> {
       const containerClass = cn(
         "min-h-[400px] flex items-center justify-center p-6",
         isPublicContext
-          ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
+          ? "bg-linear-to-br from-gray-900 via-gray-800 to-gray-900"
           : "bg-background",
         className,
       );

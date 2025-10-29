@@ -118,7 +118,7 @@ export default function AdminDashboard() {
       >
         <div className="space-y-8">
           {/* Educational Institution Configuration - Priority Section */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
             {isLoadingConfig ? (
               <div className="animate-pulse">
                 <div className="h-6 w-64 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>

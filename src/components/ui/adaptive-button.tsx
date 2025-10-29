@@ -24,7 +24,7 @@ const adaptiveButtonVariants = cva("transition-all duration-200 ease-out", {
     enhancement: {
       none: "",
       gradient:
-        "bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-2xl transform hover:scale-[1.02] active:scale-[0.98]",
+        "bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white border-0 shadow-lg hover:shadow-2xl transform hover:scale-[1.02] active:scale-[0.98]",
       glow: "shadow-lg hover:shadow-2xl ring-2 ring-primary/20 hover:ring-primary/40 transition-all duration-200",
       minimal: "hover:bg-muted/30 transition-colors duration-200",
     },
