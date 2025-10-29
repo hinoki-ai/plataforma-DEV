@@ -77,7 +77,7 @@ export const FILE_UPLOAD = {
 export const SCHOOL_CONFIG = {
   RBD: process.env.SCHOOL_RBD || "XXXXXXX",
   PHONE: process.env.SCHOOL_PHONE || "+569XXXXXXXX",
-  EMAIL: process.env.SCHOOL_EMAIL || "contacto@plataforma-astral.com",
+  EMAIL: process.env.SCHOOL_EMAIL || "astral@gmail.com",
   ADDRESS: process.env.SCHOOL_ADDRESS || "Dirección de la escuela",
   WEBSITE: process.env.SCHOOL_WEBSITE || "https://plataforma-astral.com",
 } as const;

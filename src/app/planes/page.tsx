@@ -42,9 +42,11 @@ export default function PreciosPage() {
           <div className="max-w-7xl mx-auto">
             {/* Header Section */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-                Planes y Precios
-              </h1>
+              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block mb-4">
+                <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out md:text-5xl">
+                  Planes y Precios
+                </h1>
+              </div>
               <p className="text-xl text-muted-foreground mb-6">
                 Precios transparentes por estudiante. Sin costos ocultos.
               </p>

@@ -29,8 +29,7 @@ const createTransport = () => {
   });
 };
 
-const DEFAULT_FROM_EMAIL =
-  process.env.EMAIL_FROM || "noreply@plataforma-astral.com";
+const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || "astral@gmail.com";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 function parseRecipientList(value?: string | null): string[] {

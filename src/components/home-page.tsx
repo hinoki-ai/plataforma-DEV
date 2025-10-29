@@ -48,13 +48,15 @@ export function HomePage() {
         <Header />
         <section className={layout.spacing.section(isDesktopForced)}>
           <div className={`${layout.container(isDesktopForced)} text-center`}>
-            <h1
-              className={`${typography.hero(isDesktopForced)} font-bold text-white mb-6`}
-            >
-              {t("home.welcome.title", "common")}
-            </h1>
+            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block mb-6">
+              <h1
+                className={`${typography.hero(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out`}
+              >
+                {t("home.welcome.title", "common")}
+              </h1>
+            </div>
             <p
-              className={`${typography.body(isDesktopForced)} text-white mb-8 max-w-4xl mx-auto leading-relaxed text-center`}
+              className={`${typography.body(isDesktopForced)} text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed text-center`}
             >
               {t("home.welcome.description", "common")}
             </p>
@@ -71,27 +73,27 @@ export function HomePage() {
                   : "grid grid-cols-1 md:grid-cols-2 gap-8"
               }
             >
-              <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+              <Card className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <CardTitle className="text-white">
+                  <CardTitle className="text-foreground">
                     {t("home.mission.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300">
+                  <CardDescription className="text-muted-foreground">
                     {t("home.mission.description", "common")}
                   </CardDescription>
                 </CardContent>
               </Card>
 
-              <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+              <Card className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <CardTitle className="text-white">
+                  <CardTitle className="text-foreground">
                     {t("home.vision.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300">
+                  <CardDescription className="text-muted-foreground">
                     {t("home.vision.description", "common")}
                   </CardDescription>
                 </CardContent>
@@ -105,12 +107,12 @@ export function HomePage() {
           <div className={layout.container(isDesktopForced)}>
             <div className="text-center mb-12">
               <h2
-                className={`${typography.heading(isDesktopForced)} font-bold text-white mb-4`}
+                className={`${typography.heading(isDesktopForced)} font-bold text-foreground mb-4`}
               >
                 {t("home.features.title", "common")}
               </h2>
               <p
-                className={`${typography.body(isDesktopForced)} text-white/90 max-w-2xl mx-auto`}
+                className={`${typography.body(isDesktopForced)} text-muted-foreground max-w-2xl mx-auto`}
               >
                 {t("home.features.description", "common")}
               </p>
@@ -123,11 +125,11 @@ export function HomePage() {
                   : "grid grid-cols-1 md:grid-cols-3 gap-8 grid-staggered"
               }
             >
-              <Card className="text-center backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+              <Card className="text-center backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg
-                      className="w-8 h-8 text-white"
+                      className="w-8 h-8 text-primary"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -140,22 +142,22 @@ export function HomePage() {
                       />
                     </svg>
                   </div>
-                  <CardTitle className="text-white">
+                  <CardTitle className="text-foreground">
                     {t("home.excellence.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300">
+                  <CardDescription className="text-muted-foreground">
                     {t("home.excellence.description", "common")}
                   </CardDescription>
                 </CardContent>
               </Card>
 
-              <Card className="text-center backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+              <Card className="text-center backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg
-                      className="w-8 h-8 text-white"
+                      className="w-8 h-8 text-primary"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -168,22 +170,22 @@ export function HomePage() {
                       />
                     </svg>
                   </div>
-                  <CardTitle className="text-white">
+                  <CardTitle className="text-foreground">
                     {t("home.team.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300">
+                  <CardDescription className="text-muted-foreground">
                     {t("home.team.description", "common")}
                   </CardDescription>
                 </CardContent>
               </Card>
 
-              <Card className="text-center backdrop-blur-xl bg-gray-900/80 border border-gray-700/50 rounded-2xl shadow-2xl">
+              <Card className="text-center backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
                 <CardHeader>
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg
-                      className="w-8 h-8 text-white"
+                      className="w-8 h-8 text-primary"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -196,12 +198,12 @@ export function HomePage() {
                       />
                     </svg>
                   </div>
-                  <CardTitle className="text-white">
+                  <CardTitle className="text-foreground">
                     {t("home.innovation.title", "common")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300">
+                  <CardDescription className="text-muted-foreground">
                     {t("home.innovation.description", "common")}
                   </CardDescription>
                 </CardContent>

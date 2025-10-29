@@ -606,6 +606,30 @@ export const getStaffUsers = query({
 });
 
 /**
+ * Get users by role
+ */
+export const getUsersByRole = query({
+  args: {
+    role: v.union(
+      v.literal("MASTER"),
+      v.literal("ADMIN"),
+      v.literal("PROFESOR"),
+      v.literal("PARENT"),
+      v.literal("PUBLIC"),
+    ),
+  },
+  handler: async (ctx, { role }) => {
+    const users = await ctx.db
+      .query("users")
+      .withIndex("by_role", (q) => q.eq("role", role))
+      .collect();
+
+    // Return only active users
+    return users.filter((u) => u.isActive);
+  },
+});
+
+/**
  * Register parent with complete profile and student information
  * This creates: User account + Parent Profile + Student record
  */

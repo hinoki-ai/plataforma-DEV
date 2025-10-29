@@ -6,6 +6,8 @@ import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import { typography, layout } from "@/lib/responsive-utils";
 import { motion, AnimatePresence, Variants } from "motion/react";
 import Header from "@/components/layout/Header";
+import MinEducFooter from "@/components/layout/MinEducFooter";
+import LegalFooter from "@/components/layout/LegalFooter";
 
 import {
   Users,
@@ -276,16 +278,22 @@ export default function CPAPage() {
                 variants={staggerChildren}
                 className="max-w-4xl mx-auto"
               >
-                <motion.h1
+                <motion.div
                   variants={fadeInUp}
-                  className={`${typography.heading(isDesktopForced)} font-bold text-white dark:text-foreground mb-6 transition-all duration-700 ease-out ${
+                  className={`mb-6 transition-all duration-700 ease-out ${
                     mounted
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-4"
                   }`}
                 >
-                  {t("cpa.title", "common")}
-                </motion.h1>
+                  <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                    <h1
+                      className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out`}
+                    >
+                      {t("cpa.title", "common")}
+                    </h1>
+                  </div>
+                </motion.div>
 
                 {/* Signup Form Section */}
                 <motion.div
@@ -334,15 +342,15 @@ export default function CPAPage() {
                                         {testimonial.avatar}
                                       </div>
                                       <div className="flex-1">
-                                        <h4 className="font-semibold text-white dark:text-foreground text-lg leading-tight">
+                                        <h4 className="font-semibold text-foreground text-lg leading-tight">
                                           {testimonial.name}
                                         </h4>
-                                        <p className="text-base text-gray-300 dark:text-muted-foreground">
+                                        <p className="text-base text-muted-foreground">
                                           {testimonial.role}
                                         </p>
                                       </div>
                                     </div>
-                                    <p className="text-white dark:text-foreground leading-relaxed text-lg line-clamp-4">
+                                    <p className="text-foreground leading-relaxed text-lg line-clamp-4">
                                       &ldquo;{testimonial.content}&rdquo;
                                     </p>
                                   </SignupStyleCard>
@@ -382,10 +390,10 @@ export default function CPAPage() {
                           <feature.icon className="w-6 h-6" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-white dark:text-foreground mb-2">
+                          <h4 className="font-semibold text-foreground mb-2">
                             {feature.title}
                           </h4>
-                          <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                          <p className="text-sm text-muted-foreground">
                             {feature.description}
                           </p>
                         </div>
@@ -410,40 +418,38 @@ export default function CPAPage() {
             <SignupStylePanel
               title={t("proyecto_educativo.regulation_title", "common")}
               subtitle={t("proyecto_educativo.regulation_subtitle", "common")}
-              icon={
-                <FileIcons.Document className="w-8 h-8 text-white dark:text-foreground" />
-              }
+              icon={<FileIcons.Document className="w-8 h-8 text-foreground" />}
               variant="info"
             >
               <div className="bg-linear-to-br from-muted/50 to-muted/30 p-6 rounded-xl border border-primary/20 relative overflow-hidden">
                 {/* Background pattern */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-16 translate-x-16" />
                 <div className="relative z-10">
-                  <h3 className="text-lg font-semibold mb-3 text-white dark:text-foreground">
+                  <h3 className="text-lg font-semibold mb-3 text-foreground">
                     {t("proyecto_educativo.document_content_title", "common")}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0" />
-                      <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {t("proyecto_educativo.document_item_1", "common")}
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-white dark:bg-foreground rounded-full mt-2 shrink-0" />
-                      <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {t("proyecto_educativo.document_item_2", "common")}
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-white dark:bg-foreground rounded-full mt-2 shrink-0" />
-                      <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {t("proyecto_educativo.document_item_3", "common")}
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-white dark:bg-foreground rounded-full mt-2 shrink-0" />
-                      <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {t("proyecto_educativo.document_item_4", "common")}
                       </p>
                     </div>
@@ -469,7 +475,7 @@ export default function CPAPage() {
               <SignupStylePanel variant="info">
                 <div className="space-y-6">
                   <div className="bg-linear-to-r from-primary/5 to-purple-500/5 p-6 rounded-xl">
-                    <p className="text-lg leading-relaxed text-white dark:text-foreground">
+                    <p className="text-lg leading-relaxed text-foreground">
                       {t("proyecto_educativo.philosophy_description", "common")}
                     </p>
                   </div>
@@ -525,10 +531,10 @@ export default function CPAPage() {
                         <div className="flex items-start gap-3">
                           <div className="text-2xl">{item.icon}</div>
                           <div>
-                            <h4 className="font-semibold text-white dark:text-foreground mb-1">
+                            <h4 className="font-semibold text-foreground mb-1">
                               {item.title}
                             </h4>
-                            <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                            <p className="text-sm text-muted-foreground">
                               {item.description}
                             </p>
                           </div>
@@ -552,7 +558,7 @@ export default function CPAPage() {
                       <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center shrink-0">
                         🎯
                       </div>
-                      <h3 className="font-semibold text-lg text-white dark:text-foreground">
+                      <h3 className="font-semibold text-lg text-foreground">
                         {t("proyecto_educativo.general_objectives", "common")}
                       </h3>
                     </div>
@@ -572,13 +578,11 @@ export default function CPAPage() {
                         >
                           <div className="flex items-start gap-3">
                             <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-xs font-medium text-white dark:text-foreground">
+                              <span className="text-xs font-medium text-foreground">
                                 {index + 1}
                               </span>
                             </div>
-                            <p className="text-sm text-white dark:text-foreground">
-                              {item}
-                            </p>
+                            <p className="text-sm text-foreground">{item}</p>
                           </div>
                         </SignupStyleCard>
                       ))}
@@ -592,7 +596,7 @@ export default function CPAPage() {
                       <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center shrink-0">
                         📝
                       </div>
-                      <h3 className="font-semibold text-lg text-white dark:text-foreground">
+                      <h3 className="font-semibold text-lg text-foreground">
                         {t("proyecto_educativo.specific_objectives", "common")}
                       </h3>
                     </div>
@@ -612,13 +616,11 @@ export default function CPAPage() {
                         >
                           <div className="flex items-start gap-3">
                             <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-xs font-medium text-white dark:text-foreground">
+                              <span className="text-xs font-medium text-foreground">
                                 {index + 1}
                               </span>
                             </div>
-                            <p className="text-sm text-white dark:text-foreground">
-                              {item}
-                            </p>
+                            <p className="text-sm text-foreground">{item}</p>
                           </div>
                         </SignupStyleCard>
                       ))}
@@ -634,19 +636,19 @@ export default function CPAPage() {
             >
               <SignupStyleGrid columns={3} gap="md">
                 <SignupStyleCard variant="info">
-                  <h4 className="font-semibold mb-2 text-white dark:text-foreground">
+                  <h4 className="font-semibold mb-2 text-foreground">
                     {t("proyecto_educativo.early_stimulation", "common")}
                   </h4>
-                  <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {t("proyecto_educativo.early_stimulation_desc", "common")}
                   </p>
                 </SignupStyleCard>
 
                 <SignupStyleCard variant="info">
-                  <h4 className="font-semibold mb-2 text-white dark:text-foreground">
+                  <h4 className="font-semibold mb-2 text-foreground">
                     {t("proyecto_educativo.individual_attention", "common")}
                   </h4>
-                  <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {t(
                       "proyecto_educativo.individual_attention_desc",
                       "common",
@@ -655,10 +657,10 @@ export default function CPAPage() {
                 </SignupStyleCard>
 
                 <SignupStyleCard variant="info">
-                  <h4 className="font-semibold mb-2 text-white dark:text-foreground">
+                  <h4 className="font-semibold mb-2 text-foreground">
                     {t("proyecto_educativo.continuous_evaluation", "common")}
                   </h4>
-                  <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {t(
                       "proyecto_educativo.continuous_evaluation_desc",
                       "common",
@@ -730,16 +732,16 @@ export default function CPAPage() {
                         {member.icon}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white dark:text-foreground">
+                        <h4 className="font-semibold text-foreground">
                           {member.title}
                         </h4>
-                        <p className="text-sm text-gray-300 dark:text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                           {member.subtitle}
                         </p>
                       </div>
                     </div>
 
-                    <p className="text-sm text-gray-300 dark:text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {member.description}
                     </p>
                   </SignupStyleCard>
@@ -747,8 +749,8 @@ export default function CPAPage() {
               </SignupStyleGrid>
 
               <SignupStyleCard variant="info" className="mt-6">
-                <p className="text-center text-sm text-gray-300 dark:text-muted-foreground">
-                  <strong className="text-white dark:text-foreground">
+                <p className="text-center text-sm text-muted-foreground">
+                  <strong className="text-foreground">
                     {t("proyecto_educativo.collaborative_work_note", "common")}
                   </strong>{" "}
                   {t("proyecto_educativo.team_meetings", "common")}
@@ -854,7 +856,7 @@ export default function CPAPage() {
 
         {/* Footer with proper contrast and accessibility */}
         <footer
-          className={`bg-gray-900/95 dark:bg-background/95 backdrop-blur-sm text-white dark:text-foreground py-12 transition-all duration-700 ease-out delay-1000 ${
+          className={`bg-card/90 backdrop-blur-sm text-foreground py-12 transition-all duration-700 ease-out delay-1000 ${
             mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
           role="contentinfo"
@@ -869,13 +871,13 @@ export default function CPAPage() {
               }
             >
               <div>
-                <h3 className="text-xl font-bold mb-4 text-white dark:text-foreground">
+                <h3 className="text-xl font-bold mb-4 text-foreground">
                   {t("centro_consejo.footer.title", "common")}
                 </h3>
-                <p className="text-gray-300 dark:text-muted-foreground mb-4">
+                <p className="text-muted-foreground mb-4">
                   {t("centro_consejo.footer.description", "common")}
                 </p>
-                <div className="space-y-2 text-gray-300 dark:text-muted-foreground">
+                <div className="space-y-2 text-muted-foreground">
                   <p>📍 Anibal Pinto Nº 160, Los Sauces, Chile</p>
                   <p>📞 (45) 278 3486</p>
                   <p>✉️ centrodepadres@plataforma-astral.com</p>
@@ -883,14 +885,14 @@ export default function CPAPage() {
               </div>
 
               <div>
-                <h4 className="text-lg font-semibold mb-4 text-white dark:text-foreground">
+                <h4 className="text-lg font-semibold mb-4 text-foreground">
                   {t("centro_consejo.footer.quick_access", "common")}
                 </h4>
                 <ul className="space-y-2">
                   <li>
                     <Link
                       href="/login"
-                      className="text-gray-300 dark:text-muted-foreground hover:text-white dark:hover:text-foreground transition duration-200 focus:outline-none focus:ring-2 focus:ring-white dark:focus:ring-foreground focus:ring-offset-2 focus:ring-offset-gray-900 dark:focus:ring-offset-background rounded"
+                      className="text-muted-foreground hover:text-foreground transition duration-200 focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background rounded"
                       aria-label="Acceder a la plataforma"
                     >
                       Acceder a la Plataforma
@@ -899,7 +901,7 @@ export default function CPAPage() {
                   <li>
                     <Link
                       href="/"
-                      className="text-gray-300 dark:text-muted-foreground hover:text-white dark:hover:text-foreground transition duration-200 focus:outline-none focus:ring-2 focus:ring-white dark:focus:ring-foreground focus:ring-offset-2 focus:ring-offset-gray-900 dark:focus:ring-offset-background rounded"
+                      className="text-muted-foreground hover:text-foreground transition duration-200 focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background rounded"
                       aria-label="Volver al inicio"
                     >
                       Volver al Inicio
@@ -909,10 +911,10 @@ export default function CPAPage() {
               </div>
 
               <div>
-                <h4 className="text-lg font-semibold mb-4 text-white dark:text-foreground">
+                <h4 className="text-lg font-semibold mb-4 text-foreground">
                   {t("centro_consejo.footer.schedule_title", "common")}
                 </h4>
-                <ul className="space-y-2 text-gray-300 dark:text-muted-foreground">
+                <ul className="space-y-2 text-muted-foreground">
                   <li>{t("centro_consejo.footer.meetings", "common")}</li>
                   <li>{t("centro_consejo.footer.time", "common")}</li>
                   <li>{t("centro_consejo.footer.location", "common")}</li>
@@ -920,21 +922,21 @@ export default function CPAPage() {
               </div>
             </div>
 
-            <div className="border-t border-gray-700 dark:border-border mt-8 pt-8 text-center">
-              <p className="text-gray-300 dark:text-muted-foreground pb-3">
+            <div className="border-t border-border mt-8 pt-8 text-center">
+              <p className="text-muted-foreground pb-3">
                 {t("centro_consejo.footer.school_info", "common")}
               </p>
-              <p className="text-gray-300 dark:text-muted-foreground pb-3">
+              <p className="text-muted-foreground pb-3">
                 {t("centro_consejo.footer.copyright", "common").replace(
                   "{year}",
                   new Date().getFullYear().toString(),
                 )}
               </p>
-              <p className="text-gray-300 dark:text-muted-foreground">
+              <p className="text-muted-foreground">
                 {t("centro_consejo.footer.part_of", "common")}{" "}
                 <Link
                   href="/"
-                  className="text-gray-300 dark:text-muted-foreground hover:text-white dark:hover:text-foreground transition duration-200 underline focus:outline-none focus:ring-2 focus:ring-white dark:focus:ring-foreground focus:ring-offset-2 focus:ring-offset-gray-900 dark:focus:ring-offset-background rounded"
+                  className="text-muted-foreground hover:text-foreground transition duration-200 underline focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background rounded"
                   aria-label={t(
                     "centro_consejo.footer.home_link_aria",
                     "common",
@@ -946,6 +948,8 @@ export default function CPAPage() {
             </div>
           </div>
         </footer>
+        <MinEducFooter />
+        <LegalFooter />
       </div>
     </div>
   );

@@ -647,6 +647,11 @@
     position: relative;
   }
 
+  .bg-planes {
+    --bg-image: url(/bg7.jpg);
+    position: relative;
+  }
+
   .bg-contacto {
     --bg-image: url(/bg11.jpg);
     position: relative;
