@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { hasPermission, Permissions, canCreateUser } from "@/lib/authorization";
-import { getConvexClient } from "@/lib/convex";
-import { api } from "@/convex/_generated/api";
-import type { Id } from "@/convex/_generated/dataModel";
 import { z } from "zod";
 import {
   checkRateLimit,
@@ -18,11 +15,17 @@ import {
 } from "@/lib/api-error";
 import {
   adminUserCreationSchema,
-  hashUserPassword,
   logUserCreation,
   UserCreationError,
   type AdminUserCreationData,
 } from "@/lib/user-creation";
+import {
+  createClerkUser,
+  getClerkUsers,
+  getClerkUserByEmail,
+  getClerkUserCountByRole,
+  type CreateClerkUserData,
+} from "@/services/actions/clerk-users";
 
 export const runtime = "nodejs";
 
@@ -63,28 +66,26 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const client = getConvexClient();
-    const allUsers = await client.query(api.users.getUsers, {});
+    const allUsers = await getClerkUsers();
 
     // Map to match expected structure
     const users = allUsers
+      .filter((u) => u.isActive) // Only show active users
       .map((u) => ({
-        id: u._id,
+        id: u.id,
         name: u.name,
         email: u.email,
         role: u.role,
-        createdAt: u.createdAt,
-        updatedAt: u.updatedAt,
+        createdAt: u.createdAt.getTime(),
+        updatedAt: u.updatedAt.getTime(),
       }))
       .sort((a, b) => b.createdAt - a.createdAt);
 
     // Get admin creation stats for the current admin
-    const admins = allUsers.filter(
-      (u) => u.role === "ADMIN" && u.createdByAdmin === session.user.id,
-    );
-
-    const adminsCreated = admins.length;
-    const maxAdminsAllowed = 1;
+    // Note: Clerk doesn't track who created users, so we'll use a simpler approach
+    const adminUsers = await getClerkUsers("ADMIN");
+    const adminsCreated = adminUsers.length;
+    const maxAdminsAllowed = 5; // Allow more admins in Clerk-based system
 
     const data = {
       users,
@@ -154,13 +155,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const client = getConvexClient();
-
     // Check if email already exists
-    const existingUser = await client.query(api.users.getUserByEmail, {
-      email: validatedData.email,
-    });
-
+    const existingUser = await getClerkUserByEmail(validatedData.email);
     if (existingUser) {
       return handleApiError(
         new ApiErrorResponse(
@@ -174,27 +170,22 @@ export async function POST(request: NextRequest) {
 
     // Check admin creation limits
     if (validatedData.role === "ADMIN") {
-      // Count how many admins this admin has already created
-      const allUsers = await client.query(api.users.getUsers, {
-        role: "ADMIN",
-      });
-      const adminCount = allUsers.filter(
-        (u) => u.createdByAdmin === session.user.id,
-      ).length;
+      const adminUsers = await getClerkUsers("ADMIN");
+      const adminCount = adminUsers.length;
 
-      // Limit to 1 secondary admin per main admin
-      if (adminCount >= 1) {
+      // Allow up to 5 admins in Clerk-based system
+      if (adminCount >= 5) {
         return handleApiError(
           new ApiErrorResponse(
-            "Límite de administradores alcanzado. Solo puedes crear 1 administrador secundario.",
+            "Límite de administradores alcanzado. Máximo 5 administradores permitidos.",
             403,
             "ADMIN_LIMIT_EXCEEDED",
             {
               currentAdminsCreated: adminCount,
-              maxAllowed: 1,
+              maxAllowed: 5,
               contactInfo: {
                 email: "support@plataforma-astral.com",
-                message: "Solicita ampliación de slots de administrador",
+                message: "Contacta al soporte para más información",
               },
             },
           ),
@@ -203,63 +194,70 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Hash the provided password using standardized function
-    const password = validatedData.password;
-    const hashedPassword = password
-      ? await hashUserPassword(password)
-      : undefined;
-
-    const userId = await client.mutation(api.users.createUser, {
-      name: validatedData.name,
-      email: validatedData.email,
-      password: hashedPassword,
-      role: validatedData.role,
-      institutionId: validatedData.institutionId as any, // Type assertion for Convex ID
-      createdByAdmin: session.user.id, // Track which admin created this user
-    });
-
-    // Log successful user creation
-    logUserCreation(
-      "adminUserCreation",
-      {
-        email: validatedData.email,
-        role: validatedData.role,
+    try {
+      // Create user in Clerk
+      const clerkUserData: CreateClerkUserData = {
         name: validatedData.name,
-      },
-      session.user.id,
-      true,
-    );
+        email: validatedData.email,
+        password: validatedData.password,
+        role: validatedData.role,
+        isActive: true,
+        skipPasswordRequirement: !validatedData.password, // Allow passwordless for OAuth users
+      };
 
-    const user = await client.query(api.users.getUserById, { userId: userId });
+      const user = await createClerkUser(clerkUserData);
 
-    // Map to expected structure
-    const userData = {
-      id: user!._id,
-      name: user!.name,
-      email: user!.email,
-      role: user!.role,
-      createdAt: user!.createdAt,
-      updatedAt: user!.updatedAt,
-    };
+      // Log successful user creation
+      logUserCreation(
+        "adminUserCreation",
+        {
+          email: validatedData.email,
+          role: validatedData.role,
+          name: validatedData.name,
+        },
+        session.user.id,
+        true,
+      );
 
-    // Get updated admin creation stats after creating the user
-    const allUsers = await client.query(api.users.getUsers, { role: "ADMIN" });
-    const adminsCreated = allUsers.filter(
-      (u) => u.createdByAdmin === session.user.id,
-    ).length;
-    const maxAdminsAllowed = 1;
+      // Map to expected structure
+      const userData = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt.getTime(),
+        updatedAt: user.updatedAt.getTime(),
+      };
 
-    const data = {
-      ...userData,
-      adminLimits: {
-        currentAdminsCreated: adminsCreated,
-        maxAdminsAllowed,
-        canCreateMoreAdmins: adminsCreated < maxAdminsAllowed,
-        remainingAdminSlots: Math.max(0, maxAdminsAllowed - adminsCreated),
-      },
-    };
+      // Get updated admin creation stats after creating the user
+      const adminUsers = await getClerkUsers("ADMIN");
+      const adminsCreated = adminUsers.length;
+      const maxAdminsAllowed = 5;
 
-    return createSuccessResponse(data, 201);
+      const data = {
+        ...userData,
+        adminLimits: {
+          currentAdminsCreated: adminsCreated,
+          maxAdminsAllowed,
+          canCreateMoreAdmins: adminsCreated < maxAdminsAllowed,
+          remainingAdminSlots: Math.max(0, maxAdminsAllowed - adminsCreated),
+        },
+      };
+
+      return createSuccessResponse(data, 201);
+    } catch (error) {
+      // Log failed user creation
+      logUserCreation(
+        "createUserClerk",
+        { email: validatedData.email, role: validatedData.role },
+        session.user.id,
+        false,
+        error,
+      );
+
+      // Re-throw the error to be handled by outer catch block
+      throw error;
+    }
   } catch (error) {
     if (error instanceof z.ZodError) {
       return handleApiError(

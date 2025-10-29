@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { hasPermission, Permissions } from "@/lib/authorization";
-import { getConvexClient } from "@/lib/convex";
-import { api } from "@/convex/_generated/api";
 import { z } from "zod";
-import { hashPassword } from "@/lib/crypto";
+import {
+  getClerkUserById,
+  updateClerkUser,
+  deleteClerkUser,
+  type UpdateClerkUserData,
+} from "@/services/actions/clerk-users";
+import { hashUserPassword } from "@/lib/user-creation";
+import { clerkClient } from "@clerk/nextjs/server";
 
 export const runtime = "nodejs";
 
@@ -32,10 +37,7 @@ export async function GET(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const client = getConvexClient();
-    const user = await client.query(api.users.getUserById, {
-      userId: id as any,
-    });
+    const user = await getClerkUserById(id);
 
     if (!user) {
       return NextResponse.json(
@@ -44,7 +46,21 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(user);
+    // Map to expected structure
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
+      image: user.image,
+      provider: user.provider,
+      isOAuthUser: user.isOAuthUser,
+      createdAt: user.createdAt.getTime(),
+      updatedAt: user.updatedAt.getTime(),
+    };
+
+    return NextResponse.json(userData);
   } catch (error) {
     console.error("Error fetching user:", error);
     return NextResponse.json(
@@ -82,15 +98,29 @@ export async function PUT(
       );
     }
 
-    const client = getConvexClient();
-    const user = await client.mutation(api.users.updateUser, {
-      id: id as any,
-      ...validatedData,
-    });
+    const updateData: UpdateClerkUserData = {
+      name: validatedData.name,
+      role: validatedData.role,
+      isActive: validatedData.isActive,
+    };
 
-    // Audit logging removed - using simple error-handler
+    const user = await updateClerkUser(id, updateData);
 
-    return NextResponse.json(user);
+    // Map to expected structure
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
+      image: user.image,
+      provider: user.provider,
+      isOAuthUser: user.isOAuthUser,
+      createdAt: user.createdAt.getTime(),
+      updatedAt: user.updatedAt.getTime(),
+    };
+
+    return NextResponse.json(userData);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -128,10 +158,7 @@ export async function DELETE(
       );
     }
 
-    const client = getConvexClient();
-    const user = await client.query(api.users.getUserById, {
-      userId: id as any,
-    });
+    const user = await getClerkUserById(id);
 
     if (!user) {
       return NextResponse.json(
@@ -140,10 +167,7 @@ export async function DELETE(
       );
     }
 
-    await client.mutation(api.users.deleteUser, { id: id as any });
-
-    // Create audit log
-    // Audit logging removed - using simple error-handler
+    await deleteClerkUser(id);
 
     return NextResponse.json({ message: "Usuario eliminado exitosamente" });
   } catch (error) {
@@ -171,16 +195,11 @@ export async function POST(
     const body = await request.json();
     const { password } = resetPasswordSchema.parse(body);
 
-    const hashedPassword = await hashPassword(password);
-
-    const client = getConvexClient();
-    await client.mutation(api.users.updateUser, {
-      id: id as any,
-      password: hashedPassword,
+    // Use Clerk to update password
+    const client = await clerkClient();
+    await client.users.updateUser(id, {
+      password,
     });
-
-    // Create audit log
-    // Audit logging removed - using simple error-handler
 
     return NextResponse.json({
       message: "Contraseña restablecida exitosamente",

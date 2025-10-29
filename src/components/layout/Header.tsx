@@ -15,6 +15,7 @@ import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import SkyToggle from "@/components/ui/sky-toggle";
 import SoundToggle from "@/components/ui/sound-toggle";
 import { useHydrationSafe } from "./hooks/useHydrationSafe";
+import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -92,6 +93,11 @@ export default function Header() {
 
           {/* Right: Navigation and Login */}
           <div className="flex items-center space-x-2">
+            {/* Advanced Settings Dropdown - Authenticated users only */}
+            {isAuthenticatedRoute && (
+              <AdvancedSettingsDropdown isCollapsed={true} />
+            )}
+
             {/* Profile Completion Badge - Authenticated users only */}
             {isAuthenticatedRoute && <ProfileCompletionBadge />}
 

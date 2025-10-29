@@ -22,11 +22,15 @@ http.route({
         await ctx.runMutation(internal.users.syncFromClerk, {
           data: event.data as unknown,
         });
+        console.log(
+          `Processed ${event.type} for user ${(event.data as any)?.id}`,
+        );
         break;
       case "user.deleted":
         await ctx.runMutation(internal.users.disableUserFromClerk, {
           clerkId: (event.data as any).id,
         });
+        console.log(`Processed user deletion for ${(event.data as any)?.id}`);
         break;
       default:
         console.log("Unhandled Clerk webhook event", event.type);

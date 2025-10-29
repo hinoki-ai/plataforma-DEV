@@ -257,7 +257,7 @@ export default function Navigation() {
                   {!session ? (
                     <Link
                       href="/login"
-                      className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200"
+                      className="text-sm font-medium hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 px-3 py-2 rounded-md transition-all duration-200 cursor-pointer"
                       prefetch={false}
                     >
                       {t("nav.school.portal", "navigation")}
@@ -309,7 +309,7 @@ export default function Navigation() {
               {!session ? (
                 <Link
                   href="/login"
-                  className="w-full text-sm font-medium transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left"
+                  className="w-full text-sm font-medium transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 justify-start px-3 py-2 rounded-md text-left cursor-pointer"
                   prefetch={false}
                 >
                   Portal Escolar
