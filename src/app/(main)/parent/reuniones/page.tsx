@@ -61,7 +61,7 @@ export default async function ParentReunionesPage() {
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Mantén una comunicación efectiva con los profesores de tu
-                hijo/a. Visualiza las reuniones programadas y solicita nuevas
+                estudiante. Visualiza las reuniones programadas y solicita nuevas
                 citas cuando sea necesario.
               </p>
             </div>

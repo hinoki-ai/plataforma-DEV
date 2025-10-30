@@ -215,7 +215,7 @@ export default function ParentLibroClasesPage() {
                       No hay cursos disponibles
                     </h3>
                     <p className="text-muted-foreground">
-                      No se encontraron cursos activos para sus hijos
+                      No se encontraron cursos activos para sus estudiantes
                     </p>
                   </CardContent>
                 </Card>
@@ -305,9 +305,9 @@ export default function ParentLibroClasesPage() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Mis Hijos en este Curso</CardTitle>
+                      <CardTitle>Mis Estudiantes en este Curso</CardTitle>
                       <CardDescription>
-                        Lista de sus hijos inscritos en este curso
+                        Lista de sus estudiantes inscritos en este curso
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -344,7 +344,7 @@ export default function ParentLibroClasesPage() {
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                          Ninguno de sus hijos está inscrito en este curso
+                          Ninguno de sus estudiantes está inscrito en este curso
                         </div>
                       )}
                     </CardContent>
@@ -380,7 +380,7 @@ export default function ParentLibroClasesPage() {
                         <Eye className="h-4 w-4" />
                         <span className="text-sm">
                           Vista de solo lectura - Puede ver las calificaciones
-                          de sus hijos
+                          de sus estudiantes
                         </span>
                       </div>
                     </CardContent>

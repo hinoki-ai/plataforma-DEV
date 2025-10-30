@@ -38,6 +38,7 @@ interface FormData {
   childPhone: string;
   childGrade: string;
   relationship: string;
+  customRelationship: string;
   address: string;
   region: string;
   comuna: string;
@@ -562,6 +563,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     childPhone: "",
     childGrade: "",
     relationship: "",
+    customRelationship: "",
     address: "",
     region: "",
     comuna: "",
@@ -674,6 +676,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.childPhone = "Teléfono del estudiante es requerido";
           if (!formData.relationship)
             newErrors.relationship = t("validation.relationship_required");
+          if (formData.relationship === "otro" && !formData.customRelationship.trim())
+            newErrors.customRelationship = t("validation.custom_relationship_required");
           break;
 
         case 3:
@@ -761,7 +765,13 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         const form = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
           // Skip confirmPassword as it's not needed in the API
-          if (key !== "confirmPassword") {
+          // For relationship, use customRelationship if "otro" is selected
+          if (key === "relationship") {
+            const relationshipValue = value === "otro" && formData.customRelationship.trim()
+              ? formData.customRelationship.trim()
+              : value;
+            form.append(key, relationshipValue);
+          } else if (key !== "confirmPassword" && key !== "customRelationship") {
             form.append(key, value);
           }
         });
@@ -943,8 +953,12 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               </div>
 
               <div className="space-y-6">
-                {/* Names Section */}
-                <div className="grid md:grid-cols-2 gap-4">
+                {/* Personal Information Section */}
+                <div className="space-y-4">
+                  <h4 className="text-md font-medium text-foreground">
+                    {t("signup.personal_section.title")}
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="fullName">
                       {t("signup.full_name.label")}
@@ -986,10 +1000,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       <ErrorMessage message={errors.childName} />
                     )}
                   </LabelInputContainer>
+                  </div>
                 </div>
 
-                {/* RUTs Section */}
-                <div className="grid md:grid-cols-2 gap-4">
+                {/* Identification Section */}
+                <div className="space-y-4">
+                  <h4 className="text-md font-medium text-foreground">
+                    {t("signup.identification_section.title")}
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="rut">{t("signup.rut.label")}</Label>
                     <Input
@@ -1027,10 +1046,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       <ErrorMessage message={errors.childRUT} />
                     )}
                   </LabelInputContainer>
+                  </div>
                 </div>
 
-                {/* Phones Section */}
-                <div className="grid md:grid-cols-2 gap-4">
+                {/* Contact Information Section */}
+                <div className="space-y-4">
+                  <h4 className="text-md font-medium text-foreground">
+                    {t("signup.contact_section.title")}
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="phone">{t("signup.phone.label")}</Label>
                     <Input
@@ -1070,6 +1094,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       <ErrorMessage message={errors.childPhone} />
                     )}
                   </LabelInputContainer>
+                  </div>
                 </div>
 
                 {/* Relationship */}
@@ -1095,6 +1120,30 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     <ErrorMessage message={errors.relationship} />
                   )}
                 </LabelInputContainer>
+
+                {/* Custom Relationship - only shown when "otro" is selected */}
+                {formData.relationship === "otro" && (
+                  <LabelInputContainer>
+                    <Label htmlFor="customRelationship">
+                      {t("signup.custom_relationship.label")}
+                    </Label>
+                    <Input
+                      id="customRelationship"
+                      name="customRelationship"
+                      placeholder={t("signup.custom_relationship.placeholder")}
+                      value={formData.customRelationship}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.customRelationship &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.customRelationship && (
+                      <ErrorMessage message={errors.customRelationship} />
+                    )}
+                  </LabelInputContainer>
+                )}
               </div>
             </div>
           )}

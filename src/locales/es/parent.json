@@ -1,7 +1,7 @@
 {
   "parent.title": "Portal de Padres",
   "parent.dashboard": "Panel de Padres",
-  "parent.children": "Mis Hijos",
+  "parent.children": "Mis Estudiantes",
   "parent.grades": "Calificaciones",
   "parent.attendance": "Asistencia",
   "parent.communication": "Comunicación",
@@ -70,7 +70,7 @@
   "parent.students.address_note": "Consulte dirección específica con secretaría",
 
   "parent.communication.title": "Comunicación",
-  "parent.communication.description": "Mantente informado sobre el progreso y actividades de tu hijo/a.",
+  "parent.communication.description": "Mantente informado sobre el progreso y actividades de tu estudiante.",
   "parent.communication.recent_messages": "Mensajes Recientes",
   "parent.communication.messages_desc": "Comunicaciones del establecimiento y profesores",
   "parent.communication.quick_actions": "Acciones Rápidas",

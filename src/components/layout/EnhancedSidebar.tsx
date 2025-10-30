@@ -263,12 +263,12 @@ const getEnhancedNavigation = (
         description: t("nav.students"),
       },
       {
-        title: "Cursos de Mis Hijos",
+        title: "Cursos de Mis Estudiantes",
         href: "/admin/libro-clases/estudiantes",
         icon: NavigationIcons.Planning,
         shortcut: "Alt+U",
         category: t("nav.main.categories.information"),
-        description: "Ver cursos y compañeros de mis hijos",
+        description: "Ver cursos y compañeros de mis estudiantes",
       },
       {
         title: t("nav.calendar"),

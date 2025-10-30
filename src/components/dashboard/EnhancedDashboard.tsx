@@ -89,7 +89,7 @@ function SmartNotificationsWidget({ widget }: WidgetProps) {
         id: "2",
         type: "success",
         title: "Calificación actualizada",
-        message: "Tu hijo/a ha mejorado en ciencias naturales",
+        message: "Tu estudiante ha mejorado en ciencias naturales",
         timestamp: new Date(baseTime - 3600000),
         priority: "low",
         read: true,

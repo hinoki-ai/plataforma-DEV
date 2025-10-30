@@ -96,7 +96,7 @@ export default async function RecursosPage() {
     {
       id: 1,
       title: "Apoyo Emocional en Casa",
-      description: "Estrategias para acompañar emocionalmente a tu hijo/a",
+      description: "Estrategias para acompañar emocionalmente a tu estudiante",
       icon: Heart,
       topics: [
         "Gestión emocional",
@@ -127,7 +127,7 @@ export default async function RecursosPage() {
           Recursos Educativos
         </h1>
         <p className="text-muted-foreground">
-          Materiales y herramientas para apoyar el aprendizaje de tu hijo/a en
+          Materiales y herramientas para apoyar el aprendizaje de tu estudiante en
           casa.
         </p>
       </div>

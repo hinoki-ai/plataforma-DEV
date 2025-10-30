@@ -148,13 +148,13 @@ const ROLE_CONFIGS = {
   },
   PARENT: {
     title: "Portal de Padres",
-    subtitle: "Seguimiento de mis hijos",
+    subtitle: "Seguimiento de mis estudiantes",
     color: "from-orange-500 to-red-500",
     icon: User,
     primaryActions: [
       {
         id: "children",
-        title: "Mis Hijos",
+        title: "Mis Estudiantes",
         href: "/parent/hijos",
         icon: Users,
       },
