@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+
+// Force dynamic rendering to prevent static generation issues with authentication
+export const dynamic = "force-dynamic";
 import { useSession } from "next-auth/react";
 import { FileText, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
