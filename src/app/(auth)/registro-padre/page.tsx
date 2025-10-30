@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ParentCreationForm } from "@/components/users/ParentCreationForm";
+import { UnifiedSignupForm } from "@/components/UnifiedSignupForm";
 import { PageTransition } from "@/components/ui/page-transition";
 import {
   Card,
@@ -18,23 +18,12 @@ import { toast } from "sonner";
 import { AdaptiveErrorBoundary } from "@/components/ui/adaptive-error-boundary";
 import { useLanguage } from "@/components/language/LanguageContext";
 
-type ParentFormData = {
-  name: string;
-  email: string;
-  password: string;
-  phone?: string;
-  studentName: string;
-  studentGrade: string;
-  studentEmail?: string;
-  guardianPhone?: string;
-  relationship: string;
-};
-
 type ParentRegistrationSuccessData = {
   name: string;
   email: string;
   message?: string;
-  studentInfo: {
+  success?: boolean;
+  studentInfo?: {
     studentName: string;
     studentGrade: string;
     relationship: string;
@@ -54,67 +43,32 @@ export default function ParentRegistrationPage() {
 function ParentRegistrationContent() {
   const router = useRouter();
   const { t } = useLanguage();
-  const [isRegistering, setIsRegistering] = useState(false);
   const [registrationComplete, setRegistrationComplete] = useState(false);
   const [registrationData, setRegistrationData] =
     useState<ParentRegistrationSuccessData | null>(null);
+
+  // Check for success query parameter or success state
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("success") === "true") {
+      // If redirected from CPA success page, show success
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRegistrationComplete(true);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRegistrationData({
+        name: urlParams.get("name") || "",
+        email: urlParams.get("email") || "",
+        message: "Registro completado exitosamente",
+        success: true,
+      });
+    }
+  }, []);
 
   const successBadgeRaw = t("parent_registration.success_badge", "common");
   const successBadgeText =
     successBadgeRaw !== "parent_registration.success_badge"
       ? successBadgeRaw
       : t("parent_registration.success_title", "common");
-
-  const handleRegister = async (data: ParentFormData) => {
-    setIsRegistering(true);
-    try {
-      const response = await fetch("/api/auth/register-parent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        const result: ParentRegistrationSuccessData = await response.json();
-        setRegistrationData({
-          name: result.name,
-          email: result.email,
-          message: result.message,
-          studentInfo: {
-            studentName: result.studentInfo.studentName,
-            studentGrade: result.studentInfo.studentGrade,
-            relationship: result.studentInfo.relationship,
-            studentEmail: result.studentInfo.studentEmail,
-            guardianPhone: result.studentInfo.guardianPhone,
-          },
-        });
-        setRegistrationComplete(true);
-        toast.success(
-          `✅ ${t("parent_registration.success_toast", "common")}`,
-          {
-            description: t("parent_registration.success_toast_desc", "common"),
-          },
-        );
-      } else {
-        const error = await response.json();
-        toast.error(`❌ ${t("parent_registration.error_toast", "common")}`, {
-          description:
-            error.error || t("parent_registration.error_toast_desc", "common"),
-        });
-      }
-    } catch (error) {
-      console.error("Error registering parent:", error);
-      toast.error(`❌ ${t("parent_registration.error_toast", "common")}`, {
-        description: t("parent_registration.error_retry", "common"),
-      });
-    } finally {
-      setIsRegistering(false);
-    }
-  };
-
-  const handleCancel = () => {
-    router.push("/");
-  };
 
   if (registrationComplete && registrationData) {
     return (
@@ -153,71 +107,73 @@ function ParentRegistrationContent() {
                 </ul>
               </div>
 
-              <div className="rounded-xl border border-sky-500/30 bg-sky-50/80 p-5 shadow-sm dark:border-sky-400/30 dark:bg-sky-500/10">
-                <h3 className="mb-2 font-semibold text-sky-700 dark:text-sky-200">
-                  {t("parent_registration.registered_info_title", "common")}
-                </h3>
-                <div className="space-y-1.5 text-sm text-sky-700 dark:text-sky-100">
-                  <p>
-                    <strong>
-                      {t("parent_registration.registered_name", "common")}:
-                    </strong>{" "}
-                    {registrationData.name}
-                  </p>
-                  <p>
-                    <strong>
-                      {t("parent_registration.registered_email", "common")}:
-                    </strong>{" "}
-                    {registrationData.email}
-                  </p>
-                  <p>
-                    <strong>
-                      {t("parent_registration.registered_student", "common")}:
-                    </strong>{" "}
-                    {registrationData.studentInfo.studentName}
-                  </p>
-                  <p>
-                    <strong>
-                      {t("parent_registration.registered_grade", "common")}:
-                    </strong>{" "}
-                    {registrationData.studentInfo.studentGrade}
-                  </p>
-                  {registrationData.studentInfo.studentEmail && (
+              {registrationData.studentInfo && (
+                <div className="rounded-xl border border-sky-500/30 bg-sky-50/80 p-5 shadow-sm dark:border-sky-400/30 dark:bg-sky-500/10">
+                  <h3 className="mb-2 font-semibold text-sky-700 dark:text-sky-200">
+                    {t("parent_registration.registered_info_title", "common")}
+                  </h3>
+                  <div className="space-y-1.5 text-sm text-sky-700 dark:text-sky-100">
+                    <p>
+                      <strong>
+                        {t("parent_registration.registered_name", "common")}:
+                      </strong>{" "}
+                      {registrationData.name}
+                    </p>
+                    <p>
+                      <strong>
+                        {t("parent_registration.registered_email", "common")}:
+                      </strong>{" "}
+                      {registrationData.email}
+                    </p>
+                    <p>
+                      <strong>
+                        {t("parent_registration.registered_student", "common")}:
+                      </strong>{" "}
+                      {registrationData.studentInfo.studentName}
+                    </p>
+                    <p>
+                      <strong>
+                        {t("parent_registration.registered_grade", "common")}:
+                      </strong>{" "}
+                      {registrationData.studentInfo.studentGrade}
+                    </p>
+                    {registrationData.studentInfo.studentEmail && (
+                      <p>
+                        <strong>
+                          {t(
+                            "parent_registration.registered_student_email",
+                            "common",
+                          )}
+                          :
+                        </strong>{" "}
+                        {registrationData.studentInfo.studentEmail}
+                      </p>
+                    )}
                     <p>
                       <strong>
                         {t(
-                          "parent_registration.registered_student_email",
+                          "parent_registration.registered_relationship",
                           "common",
                         )}
                         :
                       </strong>{" "}
-                      {registrationData.studentInfo.studentEmail}
+                      {registrationData.studentInfo.relationship}
                     </p>
-                  )}
-                  <p>
-                    <strong>
-                      {t(
-                        "parent_registration.registered_relationship",
-                        "common",
-                      )}
-                      :
-                    </strong>{" "}
-                    {registrationData.studentInfo.relationship}
-                  </p>
-                  {registrationData.studentInfo.guardianPhone && (
-                    <p>
-                      <strong>
-                        {t(
-                          "parent_registration.registered_guardian_phone",
-                          "common",
-                        )}
-                        :
-                      </strong>{" "}
-                      {registrationData.studentInfo.guardianPhone}
-                    </p>
-                  )}
+                    {registrationData.studentInfo.guardianPhone && (
+                      <p>
+                        <strong>
+                          {t(
+                            "parent_registration.registered_guardian_phone",
+                            "common",
+                          )}
+                          :
+                        </strong>{" "}
+                        {registrationData.studentInfo.guardianPhone}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="space-y-4 text-center">
                 <p className="text-sm text-slate-600 dark:text-slate-200">
@@ -282,77 +238,9 @@ function ParentRegistrationContent() {
             </div>
           </div>
 
-          <ParentCreationForm
-            onSubmit={handleRegister}
-            onCancel={handleCancel}
-            isLoading={isRegistering}
-            title={t("parent_registration.form_title", "common")}
-            description={t("parent_registration.form_description", "common")}
-            className="glass-panel"
-          />
-
-          <Card className="glass-panel mx-auto mt-8 w-full max-w-4xl text-slate-900 dark:text-slate-100">
-            <CardHeader className="space-y-2">
-              <CardTitle className="text-xl font-semibold text-slate-900 dark:text-white">
-                {t("parent_registration.verification_title", "common")}
-              </CardTitle>
-              <CardDescription className="text-base text-slate-600 dark:text-slate-200">
-                {t("parent_registration.verification_subtitle", "common")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-3 text-left">
-                  <h4 className="font-semibold text-primary">
-                    {t("parent_registration.registration_section", "common")}
-                  </h4>
-                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-200">
-                    <li>
-                      • {t("parent_registration.registration_step_1", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.registration_step_2", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.registration_step_3", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.registration_step_4", "common")}
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="space-y-3 text-left">
-                  <h4 className="font-semibold text-primary">
-                    {t("parent_registration.verification_section", "common")}
-                  </h4>
-                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-200">
-                    <li>
-                      • {t("parent_registration.verification_step_1", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.verification_step_2", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.verification_step_3", "common")}
-                    </li>
-                    <li>
-                      • {t("parent_registration.verification_step_4", "common")}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-amber-400/40 bg-amber-50/80 p-5 text-left shadow-sm dark:border-amber-300/35 dark:bg-amber-500/10">
-                <h4 className="mb-2 font-semibold text-amber-700 dark:text-amber-200">
-                  ⚠️ {t("parent_registration.important_title", "common")}
-                </h4>
-                <p className="text-sm text-amber-700 dark:text-amber-100">
-                  {t("parent_registration.important_message", "common")}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="w-full flex justify-center">
+            <UnifiedSignupForm />
+          </div>
         </div>
       </div>
     </PageTransition>

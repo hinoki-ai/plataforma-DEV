@@ -23,6 +23,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useSignIn } from "@clerk/nextjs";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { UserPlus } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface FormData {
   fullName: string;
@@ -737,8 +739,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               className={cn(
                 "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 border-2",
                 currentStep >= step
-                  ? "bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30 scale-110 border-blue-400"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600",
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-110 border-primary"
+                  : "bg-muted text-muted-foreground border-muted-foreground/30",
               )}
             >
               {step}
@@ -747,9 +749,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               <div
                 className={cn(
                   "w-12 h-1 mx-2 transition-all duration-300 rounded-full",
-                  currentStep > step
-                    ? "bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 shadow-sm"
-                    : "bg-gray-200 dark:bg-gray-700",
+                  currentStep > step ? "bg-primary shadow-sm" : "bg-muted",
                 )}
               />
             )}
@@ -799,7 +799,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     value={formData.fullName}
                     onChange={handleChange}
                     className={cn(
-                      "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                      "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                       errors.fullName &&
                         "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
@@ -820,7 +820,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     onChange={handleChange}
                     disabled={isGoogleUser}
                     className={cn(
-                      "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600 disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed",
+                      "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-muted disabled:cursor-not-allowed",
                       errors.email &&
                         "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
@@ -839,7 +839,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.phone}
                       onChange={handleChange}
                       className={cn(
-                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.phone &&
                           "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
@@ -856,7 +856,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.rut}
                       onChange={handleChange}
                       className={cn(
-                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.rut &&
                           "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
@@ -878,7 +878,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-full justify-between rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                          "w-full justify-between rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                           !formData.institutionId && "text-muted-foreground",
                           errors.institutionId &&
                             "border-red-500 focus:border-red-500 focus:ring-red-500/20",
@@ -969,7 +969,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.childName}
                       onChange={handleChange}
                       className={cn(
-                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.childName &&
                           "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
@@ -1091,7 +1091,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     value={formData.address}
                     onChange={handleChange}
                     className={cn(
-                      "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                      "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                       errors.address &&
                         "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                     )}
@@ -1126,7 +1126,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.emergencyContact}
                       onChange={handleChange}
                       className={cn(
-                        "border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-xl transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600",
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.emergencyContact &&
                           "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
@@ -1148,8 +1148,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       value={formData.emergencyPhone}
                       onChange={handleChange}
                       className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl",
-                        errors.emergencyPhone && "border-red-500",
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.emergencyPhone &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
                     />
                     {errors.emergencyPhone && (
@@ -1166,28 +1167,42 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="glass-panel shadow-2xl overflow-hidden"
-      >
-        <div className="bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 p-6 text-white rounded-t-xl shadow-lg">
-          <h2 className="font-bold text-2xl mb-2 drop-shadow-sm">
+    <div className="w-full max-w-5xl mx-auto space-y-8 px-3 sm:px-6">
+      <div className="flex flex-col items-center gap-6 text-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-white/60 text-primary shadow-sm backdrop-blur supports-backdrop-filter:bg-white/45 dark:border-white/15 dark:bg-slate-900/60 dark:text-primary-200">
+          <UserPlus className="h-7 w-7" />
+        </div>
+        <div className="space-y-3">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
             {isGoogleUser
               ? "Completa tu Registro"
               : "Registro CPA Centro de Padres y Apoderados"}
-          </h2>
-          <p className="text-white/95 font-medium drop-shadow-sm">
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-200">
             Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
           </p>
+          <p className="text-sm text-slate-500 dark:text-slate-300">
+            {stepDescriptions[currentStep - 1]}
+          </p>
         </div>
+      </div>
 
-        <div className="p-8">
+      <Card className="glass-panel mx-auto w-full max-w-2xl text-slate-900 dark:text-slate-100">
+        <CardHeader>
+          <div className="text-center">
+            <p className="text-sm font-medium text-primary">
+              Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {stepDescriptions[currentStep - 1]}
+            </p>
+          </div>
+        </CardHeader>
+
+        <CardContent>
           <StepIndicator />
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 mt-6">
             {renderStep()}
 
             <div className="flex justify-between items-center pt-6 border-t border-border">
@@ -1196,7 +1211,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 onClick={prevStep}
                 disabled={currentStep === 1 || isLoading}
                 variant="outline"
-                className="rounded-xl border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-full border-white/60 bg-white/70 px-6 text-slate-700 shadow-sm transition hover:bg-white/80 dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-900/70 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Anterior
               </Button>
@@ -1206,7 +1221,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   type="button"
                   onClick={nextStep}
                   disabled={isLoading}
-                  className="bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-6 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Siguiente
                 </Button>
@@ -1214,15 +1229,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-8 py-3 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? "Registrando..." : "Completar Registro"}
                 </Button>
               )}
             </div>
           </form>
-        </div>
-      </motion.div>
+        </CardContent>
+      </Card>
     </div>
   );
 });
@@ -1251,7 +1266,7 @@ const Select = memo(function Select({
     <select
       {...props}
       className={cn(
-        "block w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:border-blue-500 focus:ring-blue-500/20 hover:border-gray-300 dark:hover:border-gray-600 disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed",
+        "block w-full px-3 py-2 border border-input bg-background text-foreground rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:border-primary focus:ring-primary/20 disabled:bg-muted disabled:cursor-not-allowed",
         error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
       )}
     >

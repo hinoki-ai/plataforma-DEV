@@ -3,6 +3,7 @@
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import LegalFooter from "@/components/layout/LegalFooter";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Card,
   CardContent,
@@ -28,6 +29,7 @@ const plans = pricingPlans;
 const featuresList = featureLabels;
 
 export default function PreciosPage() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");
   const [showContactForm, setShowContactForm] = useState(false);
@@ -44,11 +46,11 @@ export default function PreciosPage() {
             <div className="text-center mb-8">
               <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block mb-4">
                 <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out md:text-5xl">
-                  Planes y Precios
+                  {t("planes.hero.title")}
                 </h1>
               </div>
               <p className="text-xl text-muted-foreground mb-6">
-                Precios transparentes por estudiante. Sin costos ocultos.
+                {t("planes.hero.subtitle")}
               </p>
 
               {/* Billing Cycle Toggle */}
@@ -58,16 +60,16 @@ export default function PreciosPage() {
                   variant={billingCycle === "semestral" ? "default" : "outline"}
                   className="min-w-[120px]"
                 >
-                  Semestral
+                  {t("planes.billing.semestral")}
                 </Button>
                 <Button
                   onClick={() => setBillingCycle("annual")}
                   variant={billingCycle === "annual" ? "default" : "outline"}
                   className="min-w-[120px] relative"
                 >
-                  Anual
+                  {t("planes.billing.annual")}
                   <span className="absolute -top-2 -right-2 bg-green-700 text-white text-xs px-2 py-0.5 rounded-full">
-                    -15%
+                    {t("planes.billing.discount_annual")}
                   </span>
                 </Button>
                 <Button
@@ -75,15 +77,14 @@ export default function PreciosPage() {
                   variant={billingCycle === "biannual" ? "default" : "outline"}
                   className="min-w-[120px] relative"
                 >
-                  Bianual
+                  {t("planes.billing.biannual")}
                   <span className="absolute -top-2 -right-2 bg-green-700 text-white text-xs px-2 py-0.5 rounded-full">
-                    -25%
+                    {t("planes.billing.discount_biannual")}
                   </span>
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
-                * Precios en Pesos Chilenos (CLP) + IVA • Factura electrónica
-                (SII)
+                {t("planes.billing.billing_info")}
               </p>
             </div>
 
@@ -119,25 +120,40 @@ export default function PreciosPage() {
                         {formatCLP(plan.pricePerStudent)}
                       </div>
                       <div className="text-sm text-muted-foreground mt-1">
-                        por estudiante/mes
+                        {t("planes.billing.per_student_per_month")}
                       </div>
                       {billingCycle !== "semestral" && (
                         <div className="text-xs text-green-400 mt-1">
-                          Ahorro de {getDiscount(billingCycle) * 100}% en plan{" "}
-                          {billingCycle === "annual" ? "anual" : "bianual"}
+                          {t("planes.billing.savings")
+                            .replace(
+                              "{discount}",
+                              (getDiscount(billingCycle) * 100).toString(),
+                            )
+                            .replace(
+                              "{cycle}",
+                              billingCycle === "annual"
+                                ? t("planes.billing.annual")
+                                : t("planes.billing.biannual"),
+                            )}
                         </div>
                       )}
                     </div>
                     <div className="text-xs text-muted-foreground mt-2 border-t border-border pt-2">
-                      Ejemplo: {plan.maxStudents || "1.500"} estudiantes ={" "}
-                      {formatCLP(
-                        calculateBillingPrice(
-                          plan.pricePerStudent,
-                          plan.maxStudents || 1500,
-                          billingCycle,
-                        ),
-                      )}
-                      /mes
+                      {t("planes.billing.example")
+                        .replace(
+                          "{students}",
+                          (plan.maxStudents || "1.500").toString(),
+                        )
+                        .replace(
+                          "{price}",
+                          formatCLP(
+                            calculateBillingPrice(
+                              plan.pricePerStudent,
+                              plan.maxStudents || 1500,
+                              billingCycle,
+                            ),
+                          ),
+                        )}
                     </div>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
@@ -157,7 +173,7 @@ export default function PreciosPage() {
                         )
                       }
                     >
-                      Seleccionar Plan
+                      {t("planes.pricing.select_plan")}
                     </Button>
                   </CardContent>
                 </Card>
@@ -167,14 +183,14 @@ export default function PreciosPage() {
             {/* Comparison Table */}
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-6 mb-12">
               <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-                Comparación Detallada de Planes
+                {t("planes.comparison.title")}
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border">
                       <th className="text-left py-4 px-4 text-muted-foreground font-semibold">
-                        Característica
+                        {t("planes.comparison.feature")}
                       </th>
                       {plans.map((plan) => (
                         <th
@@ -228,7 +244,7 @@ export default function PreciosPage() {
               <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
                 <div className="max-w-2xl mx-auto">
                   <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-                    Solicita tu Demo Gratuita
+                    {t("planes.contact.title")}
                   </h2>
                   <form className="space-y-4">
                     <div className="grid md:grid-cols-2 gap-4">
@@ -237,7 +253,7 @@ export default function PreciosPage() {
                           htmlFor="nombre"
                           className="block text-sm font-medium text-foreground mb-2"
                         >
-                          Nombre Completo *
+                          {t("planes.contact.form.full_name")}
                         </label>
                         <input
                           id="nombre"
@@ -251,7 +267,7 @@ export default function PreciosPage() {
                           htmlFor="email"
                           className="block text-sm font-medium text-foreground mb-2"
                         >
-                          Email *
+                          {t("planes.contact.form.email")}
                         </label>
                         <input
                           id="email"
@@ -267,7 +283,7 @@ export default function PreciosPage() {
                           htmlFor="establecimiento"
                           className="block text-sm font-medium text-foreground mb-2"
                         >
-                          Establecimiento *
+                          {t("planes.contact.form.institution")}
                         </label>
                         <input
                           id="establecimiento"
@@ -281,7 +297,7 @@ export default function PreciosPage() {
                           htmlFor="comuna"
                           className="block text-sm font-medium text-foreground mb-2"
                         >
-                          Comuna *
+                          {t("planes.contact.form.commune")}
                         </label>
                         <input
                           id="comuna"
@@ -297,7 +313,7 @@ export default function PreciosPage() {
                           htmlFor="matricula"
                           className="block text-sm font-medium text-foreground mb-2"
                         >
-                          Matrícula (N° estudiantes) *
+                          {t("planes.contact.form.students")}
                         </label>
                         <input
                           id="matricula"
@@ -312,7 +328,7 @@ export default function PreciosPage() {
                           htmlFor="telefono"
                           className="block text-sm font-medium text-foreground mb-2"
                         >
-                          Teléfono / WhatsApp *
+                          {t("planes.contact.form.phone")}
                         </label>
                         <input
                           id="telefono"
@@ -328,7 +344,7 @@ export default function PreciosPage() {
                         htmlFor="mensaje"
                         className="block text-sm font-medium text-foreground mb-2"
                       >
-                        Mensaje (opcional)
+                        {t("planes.contact.form.message")}
                       </label>
                       <textarea
                         id="mensaje"
@@ -338,7 +354,7 @@ export default function PreciosPage() {
                     </div>
                     <div className="flex gap-4">
                       <Button type="submit" className="flex-1">
-                        Solicitar Demo
+                        {t("planes.contact.form.submit")}
                       </Button>
                       <Button
                         type="button"
@@ -349,13 +365,12 @@ export default function PreciosPage() {
                         }
                       >
                         <Phone className="w-4 h-4" />
-                        WhatsApp
+                        {t("planes.contact.form.whatsapp")}
                       </Button>
                     </div>
                   </form>
                   <p className="text-xs text-muted-foreground mt-4 text-center">
-                    Al enviar este formulario, aceptas nuestra Política de
-                    Privacidad y el tratamiento de tus datos según la Ley 19.628
+                    {t("planes.contact.form.privacy")}
                   </p>
                 </div>
               </div>
@@ -368,7 +383,7 @@ export default function PreciosPage() {
                   onClick={() => setShowContactForm(true)}
                   className="text-lg px-8"
                 >
-                  Contactar a Ventas
+                  {t("planes.contact.contact_sales")}
                 </Button>
               </div>
             )}
@@ -376,36 +391,34 @@ export default function PreciosPage() {
             {/* Security & Compliance Section */}
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
               <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-                Seguridad y Cumplimiento
+                {t("planes.security.title")}
               </h2>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <Server className="w-12 h-12 text-primary mx-auto mb-3" />
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    Datos en Chile
+                    {t("planes.security.data_in_chile.title")}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Servidores ubicados en Chile. Cumplimiento total con
-                    regulaciones locales.
+                    {t("planes.security.data_in_chile.description")}
                   </p>
                 </div>
                 <div className="text-center">
                   <Lock className="w-12 h-12 text-primary mx-auto mb-3" />
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    Ley 19.628
+                    {t("planes.security.law_19628.title")}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Protección de datos personales. Cifrado end-to-end y backups
-                    diarios automáticos.
+                    {t("planes.security.law_19628.description")}
                   </p>
                 </div>
                 <div className="text-center">
                   <Shield className="w-12 h-12 text-primary mx-auto mb-3" />
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    Certificaciones
+                    {t("planes.security.certifications.title")}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    ISO 27001 en proceso. Auditorías de seguridad trimestrales.
+                    {t("planes.security.certifications.description")}
                   </p>
                 </div>
               </div>
@@ -414,65 +427,55 @@ export default function PreciosPage() {
             {/* FAQ Section */}
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-6">
               <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-                Preguntas Frecuentes
+                {t("planes.faq.title")}
               </h2>
               <div className="space-y-6 max-w-4xl mx-auto">
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    ¿El precio incluye IVA?
+                    {t("planes.faq.iva_question")}
                   </h3>
                   <p className="text-muted-foreground">
-                    No, los precios mostrados son netos. Se añade 19% de IVA en
-                    la factura electrónica emitida por el SII.
+                    {t("planes.faq.iva_answer")}
                   </p>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    ¿Cómo se calcula el cobro semestral?
+                    {t("planes.faq.semestral_calculation")}
                   </h3>
                   <p className="text-muted-foreground">
-                    El precio es por estudiante activo por semestre. Ejemplo:
-                    100 estudiantes × CLP $35 = CLP $3.500/semestre + IVA. Se
-                    cobra el día 1 de cada semestre.
+                    {t("planes.faq.semestral_answer")}
                   </p>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    ¿Qué incluye la prueba gratuita?
+                    {t("planes.faq.free_trial")}
                   </h3>
                   <p className="text-muted-foreground">
-                    14 días de acceso completo al plan que elijas, sin
-                    restricciones. Incluye recorrido guiado por nuestro equipo y
-                    soporte completo. No se requiere tarjeta de crédito.
+                    {t("planes.faq.free_trial_answer")}
                   </p>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    ¿Puedo cambiar de plan después?
+                    {t("planes.faq.plan_change")}
                   </h3>
                   <p className="text-muted-foreground">
-                    Sí, puedes cambiar de plan en cualquier momento. Los cambios
-                    se aplican en el siguiente ciclo de facturación.
+                    {t("planes.faq.plan_change_answer")}
                   </p>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    ¿Qué pasa con mis datos si cancelo?
+                    {t("planes.faq.data_after_cancel")}
                   </h3>
                   <p className="text-muted-foreground">
-                    Puedes exportar todos tus datos en cualquier momento.
-                    Después de la cancelación, guardamos tus datos por 90 días
-                    según Ley 19.628, luego se eliminan permanentemente.
+                    {t("planes.faq.data_after_cancel_answer")}
                   </p>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-2">
-                    ¿Qué horarios tiene el soporte técnico?
+                    {t("planes.faq.support_hours")}
                   </h3>
                   <p className="text-muted-foreground">
-                    Lunes a viernes de 9:00 a 18:00 hrs (Chile Continental).
-                    Planes Premium incluyen soporte 24/7 con tiempo de respuesta
-                    garantizado.
+                    {t("planes.faq.support_hours_answer")}
                   </p>
                 </div>
               </div>

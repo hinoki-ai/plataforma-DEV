@@ -336,13 +336,11 @@ export default function ProgramasPage() {
               <div className="space-y-4">
                 <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
                   <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out md:text-5xl">
-                    Programas educativos basados en datos reales y colaboración
+                    {t("programas.hero.title")}
                   </h1>
                 </div>
                 <p className="text-lg md:text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed">
-                  Activamos experiencias formativas integrales con módulos de
-                  gestión, planificación y comunicación que conectan a
-                  administración, docentes y familias.
+                  {t("programas.hero.description")}
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -380,10 +378,14 @@ export default function ProgramasPage() {
                       <Icon className="h-6 w-6" aria-hidden="true" />
                     </div>
                     <h3 className="text-base font-semibold text-foreground">
-                      {title}
+                      {t(
+                        `programas.hero_highlights.${title === "Gobernanza por rol" ? "governance" : title === "Calendario centralizado" ? "calendar" : "coverage"}.title`,
+                      )}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      {description}
+                      {t(
+                        `programas.hero_highlights.${title === "Gobernanza por rol" ? "governance" : title === "Calendario centralizado" ? "calendar" : "coverage"}.description`,
+                      )}
                     </p>
                   </div>
                 ))}
@@ -393,12 +395,10 @@ export default function ProgramasPage() {
             <section className="space-y-8">
               <div className="text-center space-y-3">
                 <h2 className="text-3xl font-semibold text-foreground">
-                  Trayectorias educativas por nivel institucional
+                  {t("programas.institution_programs.title")}
                 </h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Configuramos el ecosistema digital a partir de los cuatro
-                  tipos de establecimiento definidos por MINEDUC, personalizando
-                  planificaciones, calendario y comunicación según cada tramo.
+                  {t("programas.institution_programs.subtitle")}
                 </p>
               </div>
               <div className="grid gap-6 md:grid-cols-2">
@@ -468,7 +468,9 @@ export default function ProgramasPage() {
                         {subjects.length > 0 && (
                           <div className="pt-2 border-t border-border/40">
                             <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">
-                              Enfoque curricular
+                              {t(
+                                "programas.institution_programs.curricular_focus",
+                              )}
                             </p>
                             <div className="flex flex-wrap gap-2">
                               {subjects.map((subject) => (
@@ -492,12 +494,10 @@ export default function ProgramasPage() {
             <section className="space-y-8">
               <div className="text-center space-y-3">
                 <h2 className="text-3xl font-semibold text-foreground">
-                  Dashboards diseñados para cada rol
+                  {t("programas.role_dashboards.title")}
                 </h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  RoleAwareDashboard adapta navegación, métricas y accesos para
-                  administración, docentes y familias, manteniendo una
-                  experiencia coherente en toda la plataforma.
+                  {t("programas.role_dashboards.subtitle")}
                 </p>
               </div>
               <div className="grid gap-6 md:grid-cols-3">
@@ -540,12 +540,10 @@ export default function ProgramasPage() {
             <section className="space-y-8">
               <div className="text-center space-y-3">
                 <h2 className="text-3xl font-semibold text-foreground">
-                  Módulos transversales de la plataforma
+                  {t("programas.platform_modules.title")}
                 </h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Cada programa combina herramientas académicas, administrativas
-                  y de participación para mantener a toda la comunidad
-                  sincronizada.
+                  {t("programas.platform_modules.subtitle")}
                 </p>
               </div>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -569,7 +567,7 @@ export default function ProgramasPage() {
                         </CardDescription>
                         <Button variant="ghost" size="sm" asChild>
                           <Link href={href}>
-                            {t("programas.see_in_action")}
+                            {t("programas.platform_modules.see_in_action")}
                           </Link>
                         </Button>
                       </CardContent>
@@ -582,11 +580,10 @@ export default function ProgramasPage() {
             <section className="space-y-8">
               <div className="text-center space-y-3">
                 <h2 className="text-3xl font-semibold text-foreground">
-                  Así desplegamos cada programa
+                  {t("programas.implementation_phases.title")}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl mx-auto">
-                  Un roadmap práctico que asegura adopción y resultados medibles
-                  desde el primer trimestre.
+                  {t("programas.implementation_phases.subtitle")}
                 </p>
               </div>
               <div className="grid gap-6 lg:grid-cols-4 md:grid-cols-2">
@@ -632,11 +629,10 @@ export default function ProgramasPage() {
             <section className="space-y-8">
               <div className="text-center space-y-3">
                 <h2 className="text-3xl font-semibold text-foreground">
-                  Acompañamiento y soporte continuo
+                  {t("programas.support.title")}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl mx-auto">
-                  Nuestro equipo se integra a la institución para garantizar
-                  operación diaria, soporte y mejora continua.
+                  {t("programas.support.subtitle")}
                 </p>
               </div>
               <div className="grid gap-6 md:grid-cols-3">
@@ -677,14 +673,13 @@ export default function ProgramasPage() {
               <div className="relative grid gap-8 lg:grid-cols-[1.2fr,1fr] p-10 md:p-14">
                 <div className="space-y-6">
                   <Badge className="bg-primary text-primary-foreground uppercase tracking-wide">
-                    Impacto medible
+                    {t("programas.impact.badge")}
                   </Badge>
                   <h2 className="text-3xl font-semibold text-foreground">
-                    Gestión integral con información en contexto
+                    {t("programas.impact.title")}
                   </h2>
                   <p className="text-muted-foreground text-lg">
-                    Toda la comunidad utiliza los mismos datos, sincronizados
-                    por rol y alimentados en tiempo real por nuestros módulos.
+                    {t("programas.impact.description")}
                   </p>
                   <ul className="space-y-3 text-sm text-muted-foreground">
                     {impactHighlights.map((item) => (
@@ -713,11 +708,10 @@ export default function ProgramasPage() {
 
             <section className="text-center space-y-6">
               <h2 className="text-3xl font-semibold text-foreground">
-                Construyamos la próxima etapa de tu proyecto educativo
+                {t("programas.cta.title")}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Agenda una conversación para mapear necesidades y definir el
-                plan de roll-out por niveles y roles.
+                {t("programas.cta.description")}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild size="lg">
@@ -727,7 +721,7 @@ export default function ProgramasPage() {
                 </Button>
                 <Button asChild variant="outline" size="lg">
                   <Link href="/docs#programas">
-                    Descargar ficha de programas
+                    {t("programas.cta.download_specs")}
                   </Link>
                 </Button>
               </div>

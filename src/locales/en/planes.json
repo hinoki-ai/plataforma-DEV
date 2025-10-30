@@ -1,0 +1,70 @@
+{
+  "hero": {
+    "title": "Plans and Pricing",
+    "subtitle": "Transparent pricing per student. No hidden costs."
+  },
+  "billing": {
+    "semestral": "Semestral",
+    "annual": "Annual",
+    "biannual": "Biannual",
+    "discount_annual": "-15%",
+    "discount_biannual": "-25%",
+    "billing_info": "* Prices in Chilean Pesos (CLP) + VAT • Electronic invoice (SII)",
+    "per_student_per_month": "per student/month",
+    "savings": "Save {discount}% on {cycle} plan",
+    "example": "Example: {students} students = {price}/month"
+  },
+  "pricing": {
+    "select_plan": "Select Plan"
+  },
+  "comparison": {
+    "title": "Detailed Plan Comparison",
+    "feature": "Feature"
+  },
+  "contact": {
+    "title": "Request Your Free Demo",
+    "contact_sales": "Contact Sales",
+    "form": {
+      "full_name": "Full Name *",
+      "email": "Email *",
+      "institution": "Institution *",
+      "commune": "Commune *",
+      "students": "Enrollment (Number of students) *",
+      "phone": "Phone / WhatsApp *",
+      "message": "Message (optional)",
+      "submit": "Request Demo",
+      "whatsapp": "WhatsApp",
+      "privacy": "By submitting this form, you accept our Privacy Policy and the treatment of your data according to Law 19.628"
+    }
+  },
+  "security": {
+    "title": "Security and Compliance",
+    "data_in_chile": {
+      "title": "Data in Chile",
+      "description": "Servers located in Chile. Full compliance with local regulations."
+    },
+    "law_19628": {
+      "title": "Law 19.628",
+      "description": "Personal data protection. End-to-end encryption and automatic daily backups."
+    },
+    "certifications": {
+      "title": "Certifications",
+      "description": "ISO 27001 in progress. Quarterly security audits."
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "iva_question": "Does the price include VAT?",
+    "iva_answer": "No, the prices shown are net. 19% VAT is added to the electronic invoice issued by the SII.",
+    "semestral_calculation": "How is the semestral billing calculated?",
+    "semestral_answer": "The price is per active student per semester. Example: 100 students × CLP $35 = CLP $3,500/semester + VAT. Billed on the 1st of each semester.",
+    "free_trial": "What does the free trial include?",
+    "free_trial_answer": "14 days of full access to the plan you choose, without restrictions. Includes guided tour by our team and complete support. No credit card required.",
+    "plan_change": "Can I change plans later?",
+    "plan_change_answer": "Yes, you can change plans at any time. Changes apply to the next billing cycle.",
+    "data_after_cancel": "What happens to my data if I cancel?",
+    "data_after_cancel_answer": "You can export all your data at any time. After cancellation, we keep your data for 90 days according to Law 19.628, then it is permanently deleted.",
+    "support_hours": "What are the technical support hours?",
+    "support_hours_answer": "Monday to Friday from 9:00 to 18:00 hrs (Chile Continental). Premium plans include 24/7 support with guaranteed response time."
+  }
+}
