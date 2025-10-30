@@ -838,7 +838,7 @@
   "cfmg.feature_recognition": "Recognition",
   "cfmg.feature_recognition_desc": "Valuation of each family's contribution to educational development",
 
-  "cpma.title": "CPMA and CFMG",
+  "cpma.title": "CFMG",
   "cpma.subtitle": "Why join the CFMG?",
   "cpma.description": "Discover the benefits of being an active part of our educational community",
   "cpma.feature_community": "Active Community",
@@ -1585,6 +1585,32 @@
   "signup.region.label": "Region *",
   "signup.comuna.label": "Comuna *",
   "signup.address.label": "Complete Address *",
+
+  "signup.step1.title": "Account and Security",
+  "signup.step1.description": "Enter your email and create a secure password",
+  "signup.step2.title": "Personal Information",
+  "signup.step2.description": "Your basic contact information and your child's information",
+  "signup.step3.title": "Location",
+  "signup.step3.description": "Your address, location and educational institution",
+  "signup.step4.title": "Emergency Contact",
+  "signup.step4.description": "Person to contact in case of emergency",
+
+  "signup.child_rut.label": "Student RUT",
+  "signup.child_phone.label": "Student Phone",
+  "signup.location_section.title": "Location and Address",
+  "signup.institution_section.title": "Educational Institution",
+
+  "signup.emergency_contact_primary.label": "Primary Contact Name *",
+  "signup.emergency_phone_primary.label": "Primary Emergency Phone *",
+  "signup.emergency_contact_secondary.label": "Secondary Contact Name",
+  "signup.emergency_phone_secondary.label": "Secondary Emergency Phone",
+  "signup.emergency_contact_tertiary.label": "Tertiary Contact Name",
+  "signup.emergency_phone_tertiary.label": "Tertiary Emergency Phone",
+
+  "signup.server_error": "Internal server error. Please try again.",
+
+  "signup.registering": "Registering...",
+  "signup.complete_registration": "Complete Registration",
 
   "programas.request_presentation": "Request a tailored presentation",
   "programas.view_specs": "View implementation sheets",
