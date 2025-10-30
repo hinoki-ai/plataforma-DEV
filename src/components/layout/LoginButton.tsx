@@ -40,12 +40,28 @@ import { cn } from "@/lib/utils";
 
 // ⚡ Performance: Move static config outside component to prevent recreation
 const ROLE_CONFIG = {
-  MASTER: { icon: Crown, color: "text-yellow-500", name: "Desarrollador" },
-  ADMIN: { icon: Shield, color: "text-red-500", name: "Administrador" },
-  PROFESOR: { icon: BookOpen, color: "text-blue-500", name: "Profesor" },
-  PARENT: { icon: UsersIcon, color: "text-green-500", name: "Padre/Apoderado" },
-  PUBLIC: { icon: Eye, color: "text-gray-500", name: "Público" },
-  default: { icon: Building, color: "text-gray-500", name: "Usuario" },
+  MASTER: {
+    icon: Crown,
+    color: "text-yellow-500",
+    translationKey: "user.role.master",
+  },
+  ADMIN: { icon: Shield, color: "text-red-500", translationKey: "user.role.admin" },
+  PROFESOR: {
+    icon: BookOpen,
+    color: "text-blue-500",
+    translationKey: "user.role.profesor",
+  },
+  PARENT: {
+    icon: UsersIcon,
+    color: "text-green-500",
+    translationKey: "user.role.parent",
+  },
+  PUBLIC: { icon: Eye, color: "text-gray-500", translationKey: "user.role.public" },
+  default: {
+    icon: Building,
+    color: "text-gray-500",
+    translationKey: "user.role.default",
+  },
 } as const;
 
 // ⚡ Performance: Extract initials function to prevent recreation
@@ -68,7 +84,7 @@ export default function LoginButton() {
   const { data: session, status } = useSession();
 
   const { theme, setTheme } = useTheme();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -121,7 +137,7 @@ export default function LoginButton() {
       initials: getInitials(session?.user?.name),
       icon: config.icon,
       color: config.color,
-      name: config.name,
+      nameKey: config.translationKey,
     };
   }, [session?.user?.role, session?.user?.name]);
 
@@ -143,7 +159,7 @@ export default function LoginButton() {
           className="text-base font-medium hover:bg-muted/50 transition-colors"
           onClick={() => router.push("/login")}
         >
-          Portal Escolar
+          {t("auth.portal_title", "common")}
         </Button>
       </div>
     );
@@ -163,10 +179,10 @@ export default function LoginButton() {
               "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             )}
           >
-            <Avatar className="h-8 w-8 border-2 border-border">
+              <Avatar className="h-8 w-8 border-2 border-border">
               <AvatarImage
                 src={session.user.image || undefined}
-                alt={session.user.name || "Usuario"}
+                  alt={session.user.name || t("user.role.default", "common")}
               />
               <AvatarFallback
                 className={cn(
@@ -181,7 +197,7 @@ export default function LoginButton() {
 
             <div className="hidden md:flex flex-col items-start">
               <span className="text-xs font-medium text-muted-foreground">
-                {roleData.name}
+                {t(roleData.nameKey, "common")}
               </span>
               <span className="text-sm font-semibold text-foreground">
                 {session.user.name?.split(" ")[0]}
@@ -203,7 +219,7 @@ export default function LoginButton() {
               <Avatar className="h-10 w-10">
                 <AvatarImage
                   src={session.user.image || undefined}
-                  alt={session.user.name || "Usuario"}
+                  alt={session.user.name || t("user.role.default", "common")}
                 />
                 <AvatarFallback
                   className={cn(
@@ -226,7 +242,7 @@ export default function LoginButton() {
                 <div className="flex items-center space-x-1">
                   <RoleIcon className={cn("h-3 w-3", roleData.color)} />
                   <span className={cn("text-xs font-medium", roleData.color)}>
-                    {roleData.name}
+                    {t(roleData.nameKey, "common")}
                   </span>
                 </div>
               </div>
@@ -242,7 +258,7 @@ export default function LoginButton() {
                 <DropdownMenuTrigger asChild>
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
+                    <span>{t("nav.dashboard", "navigation")}</span>
                     <ChevronDown className="ml-auto h-4 w-4" />
                   </DropdownMenuItem>
                 </DropdownMenuTrigger>
@@ -259,7 +275,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <Crown className="mr-2 h-4 w-4" />
-                    <span>Master Dashboard</span>
+                    <span>{t("master.dashboard.title", "common")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -269,7 +285,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <Shield className="mr-2 h-4 w-4" />
-                    <span>Admin Dashboard</span>
+                    <span>{t("admin.dashboard", "admin")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -279,7 +295,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <BookOpen className="mr-2 h-4 w-4" />
-                    <span>Profesor Dashboard</span>
+                    <span>{t("profesor.dashboard", "profesor")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -289,7 +305,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <User className="mr-2 h-4 w-4" />
-                    <span>Apoderado Dashboard</span>
+                    <span>{t("parent.dashboard", "parent")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -299,7 +315,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <Home className="mr-2 h-4 w-4" />
-                    <span>Inicio</span>
+                    <span>{t("nav.home", "navigation")}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -311,7 +327,7 @@ export default function LoginButton() {
                 <DropdownMenuTrigger asChild>
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
+                    <span>{t("nav.dashboard", "navigation")}</span>
                     <ChevronDown className="ml-auto h-4 w-4" />
                   </DropdownMenuItem>
                 </DropdownMenuTrigger>
@@ -328,7 +344,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <Shield className="mr-2 h-4 w-4" />
-                    <span>Admin Dashboard</span>
+                    <span>{t("admin.dashboard", "admin")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -338,7 +354,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <BookOpen className="mr-2 h-4 w-4" />
-                    <span>Profesor Dashboard</span>
+                    <span>{t("profesor.dashboard", "profesor")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -348,7 +364,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <User className="mr-2 h-4 w-4" />
-                    <span>Apoderado Dashboard</span>
+                    <span>{t("parent.dashboard", "parent")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -358,7 +374,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <Home className="mr-2 h-4 w-4" />
-                    <span>Inicio</span>
+                    <span>{t("nav.home", "navigation")}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -370,7 +386,7 @@ export default function LoginButton() {
                 <DropdownMenuTrigger asChild>
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
+                    <span>{t("nav.dashboard", "navigation")}</span>
                     <ChevronDown className="ml-auto h-4 w-4" />
                   </DropdownMenuItem>
                 </DropdownMenuTrigger>
@@ -387,7 +403,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <BookOpen className="mr-2 h-4 w-4" />
-                    <span>Profesor Dashboard</span>
+                    <span>{t("profesor.dashboard", "profesor")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -397,7 +413,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <User className="mr-2 h-4 w-4" />
-                    <span>Apoderado Dashboard</span>
+                    <span>{t("parent.dashboard", "parent")}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -407,7 +423,7 @@ export default function LoginButton() {
                     className="cursor-pointer"
                   >
                     <Home className="mr-2 h-4 w-4" />
-                    <span>Inicio</span>
+                    <span>{t("nav.home", "navigation")}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -419,13 +435,13 @@ export default function LoginButton() {
                 <DropdownMenuItem asChild>
                   <Link href="/parent" className="cursor-pointer">
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>Apoderado Dashboard</span>
+                    <span>{t("parent.dashboard", "parent")}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/" className="cursor-pointer">
                     <Menu className="mr-2 h-4 w-4" />
-                    <span>Inicio</span>
+                    <span>{t("nav.home", "navigation")}</span>
                   </Link>
                 </DropdownMenuItem>
               </>
@@ -442,7 +458,12 @@ export default function LoginButton() {
                 <Sun className="mr-2 h-4 w-4" />
               )}
               <span>
-                Modo {isHydrated && theme === "dark" ? "Oscuro" : "Claro"}
+                {t(
+                  isHydrated && theme === "dark"
+                    ? "appearance.theme_dark"
+                    : "appearance.theme_light",
+                  "common",
+                )}
               </span>
             </DropdownMenuItem>
 
@@ -451,7 +472,12 @@ export default function LoginButton() {
               className="cursor-pointer"
             >
               <Globe className="mr-2 h-4 w-4" />
-              <span>{language === "es" ? "Español" : "English"}</span>
+              <span>
+                {t(
+                  language === "es" ? "language.spanish" : "language.english",
+                  "language",
+                )}
+              </span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
@@ -463,7 +489,11 @@ export default function LoginButton() {
             className="text-red-600 focus:text-red-600 cursor-pointer"
           >
             <LogOut className="mr-2 h-4 w-4" />
-            <span>{isLoggingOut ? "Cerrando sesión..." : "Cerrar sesión"}</span>
+            <span>
+              {isLoggingOut
+                ? t("nav.logout.loading", "navigation")
+                : t("nav.logout", "navigation")}
+            </span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

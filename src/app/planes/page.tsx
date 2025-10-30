@@ -46,6 +46,8 @@ const staggerChildren: Variants = {
 
 export default function PreciosPage() {
   const { t } = useDivineParsing(["common", "planes"]);
+  const tp = (key: string) =>
+    t(key.startsWith("planes.") ? key.slice(7) : key, "planes");
   const { isDesktopForced } = useDesktopToggle();
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");
@@ -79,13 +81,13 @@ export default function PreciosPage() {
                   <h1
                     className={`${typography.hero(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out`}
                   >
-                    {t("planes.hero.title")}
+                    {tp("planes.hero.title")}
                   </h1>
                 </div>
               </motion.div>
             </motion.div>
             <p className="text-xl text-muted-foreground mb-6">
-              {t("planes.hero.subtitle")}
+              {tp("planes.hero.subtitle")}
             </p>
 
             {/* Billing Cycle Toggle */}
@@ -95,16 +97,16 @@ export default function PreciosPage() {
                 variant={billingCycle === "semestral" ? "default" : "outline"}
                 className="min-w-[120px]"
               >
-                {t("planes.billing.semestral")}
+                {tp("planes.billing.semestral")}
               </Button>
               <Button
                 onClick={() => setBillingCycle("annual")}
                 variant={billingCycle === "annual" ? "default" : "outline"}
                 className="min-w-[120px] relative"
               >
-                {t("planes.billing.annual")}
+                {tp("planes.billing.annual")}
                 <span className="absolute -top-2 -right-2 bg-green-700 text-white text-xs px-2 py-0.5 rounded-full">
-                  {t("planes.billing.discount_annual")}
+                  {tp("planes.billing.discount_annual")}
                 </span>
               </Button>
               <Button
@@ -112,14 +114,14 @@ export default function PreciosPage() {
                 variant={billingCycle === "biannual" ? "default" : "outline"}
                 className="min-w-[120px] relative"
               >
-                {t("planes.billing.biannual")}
+                {tp("planes.billing.biannual")}
                 <span className="absolute -top-2 -right-2 bg-green-700 text-white text-xs px-2 py-0.5 rounded-full">
-                  {t("planes.billing.discount_biannual")}
+                  {tp("planes.billing.discount_biannual")}
                 </span>
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
-              {t("planes.billing.billing_info")}
+              {tp("planes.billing.billing_info")}
             </p>
           </div>
 
@@ -155,11 +157,11 @@ export default function PreciosPage() {
                       {formatCLP(plan.pricePerStudent)}
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">
-                      {t("planes.billing.per_student_per_month")}
+                      {tp("planes.billing.per_student_per_month")}
                     </div>
                     {billingCycle !== "semestral" && (
                       <div className="text-xs text-green-400 mt-1">
-                        {t("planes.billing.savings")
+                        {tp("planes.billing.savings")
                           .replace(
                             "{discount}",
                             (getDiscount(billingCycle) * 100).toString(),
@@ -167,14 +169,14 @@ export default function PreciosPage() {
                           .replace(
                             "{cycle}",
                             billingCycle === "annual"
-                              ? t("planes.billing.annual")
-                              : t("planes.billing.biannual"),
+                              ? tp("planes.billing.annual")
+                              : tp("planes.billing.biannual"),
                           )}
                       </div>
                     )}
                   </div>
                   <div className="text-xs text-muted-foreground mt-2 border-t border-border pt-2">
-                    {t("planes.billing.example")
+                    {tp("planes.billing.example")
                       .replace(
                         "{students}",
                         (plan.maxStudents || "1.500").toString(),
@@ -208,7 +210,7 @@ export default function PreciosPage() {
                       )
                     }
                   >
-                    {t("planes.pricing.select_plan")}
+                    {tp("planes.pricing.select_plan")}
                   </Button>
                 </CardContent>
               </Card>
@@ -218,14 +220,14 @@ export default function PreciosPage() {
           {/* Comparison Table */}
           <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-6 mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-              {t("planes.comparison.title")}
+              {tp("planes.comparison.title")}
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border">
                     <th className="text-left py-4 px-4 text-muted-foreground font-semibold">
-                      {t("planes.comparison.feature")}
+                      {tp("planes.comparison.feature")}
                     </th>
                     {plans.map((plan) => (
                       <th
@@ -279,7 +281,7 @@ export default function PreciosPage() {
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
               <div className="max-w-2xl mx-auto">
                 <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-                  {t("planes.contact.title")}
+                  {tp("planes.contact.title")}
                 </h2>
                 <form className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
@@ -288,7 +290,7 @@ export default function PreciosPage() {
                         htmlFor="nombre"
                         className="block text-sm font-medium text-foreground mb-2"
                       >
-                        {t("planes.contact.form.full_name")}
+                        {tp("planes.contact.form.full_name")}
                       </label>
                       <input
                         id="nombre"
@@ -302,7 +304,7 @@ export default function PreciosPage() {
                         htmlFor="email"
                         className="block text-sm font-medium text-foreground mb-2"
                       >
-                        {t("planes.contact.form.email")}
+                        {tp("planes.contact.form.email")}
                       </label>
                       <input
                         id="email"
@@ -318,7 +320,7 @@ export default function PreciosPage() {
                         htmlFor="establecimiento"
                         className="block text-sm font-medium text-foreground mb-2"
                       >
-                        {t("planes.contact.form.institution")}
+                        {tp("planes.contact.form.institution")}
                       </label>
                       <input
                         id="establecimiento"
@@ -332,7 +334,7 @@ export default function PreciosPage() {
                         htmlFor="comuna"
                         className="block text-sm font-medium text-foreground mb-2"
                       >
-                        {t("planes.contact.form.commune")}
+                        {tp("planes.contact.form.commune")}
                       </label>
                       <input
                         id="comuna"
@@ -348,7 +350,7 @@ export default function PreciosPage() {
                         htmlFor="matricula"
                         className="block text-sm font-medium text-foreground mb-2"
                       >
-                        {t("planes.contact.form.students")}
+                        {tp("planes.contact.form.students")}
                       </label>
                       <input
                         id="matricula"
@@ -363,7 +365,7 @@ export default function PreciosPage() {
                         htmlFor="telefono"
                         className="block text-sm font-medium text-foreground mb-2"
                       >
-                        {t("planes.contact.form.phone")}
+                        {tp("planes.contact.form.phone")}
                       </label>
                       <input
                         id="telefono"
@@ -379,7 +381,7 @@ export default function PreciosPage() {
                       htmlFor="mensaje"
                       className="block text-sm font-medium text-foreground mb-2"
                     >
-                      {t("planes.contact.form.message")}
+                      {tp("planes.contact.form.message")}
                     </label>
                     <textarea
                       id="mensaje"
@@ -389,7 +391,7 @@ export default function PreciosPage() {
                   </div>
                   <div className="flex gap-4">
                     <Button type="submit" className="flex-1">
-                      {t("planes.contact.form.submit")}
+                      {tp("planes.contact.form.submit")}
                     </Button>
                     <Button
                       type="button"
@@ -400,12 +402,12 @@ export default function PreciosPage() {
                       }
                     >
                       <Phone className="w-4 h-4" />
-                      {t("planes.contact.form.whatsapp")}
+                      {tp("planes.contact.form.whatsapp")}
                     </Button>
                   </div>
                 </form>
                 <p className="text-xs text-muted-foreground mt-4 text-center">
-                  {t("planes.contact.form.privacy")}
+                  {tp("planes.contact.form.privacy")}
                 </p>
               </div>
             </div>
@@ -418,7 +420,7 @@ export default function PreciosPage() {
                 onClick={() => setShowContactForm(true)}
                 className="text-lg px-8"
               >
-                {t("planes.contact.contact_sales")}
+                {tp("planes.contact.contact_sales")}
               </Button>
             </div>
           )}
@@ -426,34 +428,34 @@ export default function PreciosPage() {
           {/* Security & Compliance Section */}
           <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-              {t("planes.security.title")}
+              {tp("planes.security.title")}
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
                 <Server className="w-12 h-12 text-primary mx-auto mb-3" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.security.data_in_chile.title")}
+                  {tp("planes.security.data_in_chile.title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {t("planes.security.data_in_chile.description")}
+                  {tp("planes.security.data_in_chile.description")}
                 </p>
               </div>
               <div className="text-center">
                 <Lock className="w-12 h-12 text-primary mx-auto mb-3" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.security.law_19628.title")}
+                  {tp("planes.security.law_19628.title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {t("planes.security.law_19628.description")}
+                  {tp("planes.security.law_19628.description")}
                 </p>
               </div>
               <div className="text-center">
                 <Shield className="w-12 h-12 text-primary mx-auto mb-3" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.security.certifications.title")}
+                  {tp("planes.security.certifications.title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {t("planes.security.certifications.description")}
+                  {tp("planes.security.certifications.description")}
                 </p>
               </div>
             </div>
@@ -462,55 +464,55 @@ export default function PreciosPage() {
           {/* FAQ Section */}
           <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-6">
             <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-              {t("planes.faq.title")}
+              {tp("planes.faq.title")}
             </h2>
             <div className="space-y-6 max-w-4xl mx-auto">
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.faq.iva_question")}
+                  {tp("planes.faq.iva_question")}
                 </h3>
                 <p className="text-muted-foreground">
-                  {t("planes.faq.iva_answer")}
+                  {tp("planes.faq.iva_answer")}
                 </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.faq.semestral_calculation")}
+                  {tp("planes.faq.semestral_calculation")}
                 </h3>
                 <p className="text-muted-foreground">
-                  {t("planes.faq.semestral_answer")}
+                  {tp("planes.faq.semestral_answer")}
                 </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.faq.free_trial")}
+                  {tp("planes.faq.free_trial")}
                 </h3>
                 <p className="text-muted-foreground">
-                  {t("planes.faq.free_trial_answer")}
+                  {tp("planes.faq.free_trial_answer")}
                 </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.faq.plan_change")}
+                  {tp("planes.faq.plan_change")}
                 </h3>
                 <p className="text-muted-foreground">
-                  {t("planes.faq.plan_change_answer")}
+                  {tp("planes.faq.plan_change_answer")}
                 </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.faq.data_after_cancel")}
+                  {tp("planes.faq.data_after_cancel")}
                 </h3>
                 <p className="text-muted-foreground">
-                  {t("planes.faq.data_after_cancel_answer")}
+                  {tp("planes.faq.data_after_cancel_answer")}
                 </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {t("planes.faq.support_hours")}
+                  {tp("planes.faq.support_hours")}
                 </h3>
                 <p className="text-muted-foreground">
-                  {t("planes.faq.support_hours_answer")}
+                  {tp("planes.faq.support_hours_answer")}
                 </p>
               </div>
             </div>
