@@ -1,3 +1,5 @@
+"use client";
+
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
