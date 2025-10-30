@@ -387,11 +387,6 @@ export default function CPMAPage() {
           <SignupStyleSection>
             <div className="max-w-7xl mx-auto">
               <div className="grid lg:grid-cols-2 gap-8 items-start">
-                {/* Signup Form */}
-                <div className="space-y-6">
-                  <UnifiedSignupForm />
-                </div>
-
                 {/* Testimonials */}
                 <div className="space-y-6">
                   <div className="text-center lg:text-left">
@@ -411,19 +406,26 @@ export default function CPMAPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
-                        <SignupStyleCard variant="info" className="backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5">
+                        <SignupStyleCard
+                          variant="info"
+                          className="backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5"
+                        >
                           <div className="flex flex-col space-y-4">
                             <div className="flex items-center space-x-4">
                               <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-2xl shadow-lg">
                                 {testimonial.avatar}
                               </div>
                               <div>
-                                <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                                <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                                <h4 className="font-semibold text-foreground">
+                                  {testimonial.name}
+                                </h4>
+                                <p className="text-sm text-muted-foreground">
+                                  {testimonial.role}
+                                </p>
                               </div>
                             </div>
                             <p className="text-foreground leading-relaxed italic">
-                              "{testimonial.content}"
+                              &ldquo;{testimonial.content}&rdquo;
                             </p>
                           </div>
                         </SignupStyleCard>
@@ -436,6 +438,11 @@ export default function CPMAPage() {
                       {t("centro_consejo.testimonials_rotating", "common")}
                     </p>
                   </div>
+                </div>
+
+                {/* Signup Form */}
+                <div className="space-y-6">
+                  <UnifiedSignupForm />
                 </div>
               </div>
             </div>
