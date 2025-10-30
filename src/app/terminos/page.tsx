@@ -5,12 +5,18 @@ import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+// Import translations statically for array access
+import terminosES from "@/locales/es/terminos.json";
+import terminosEN from "@/locales/en/terminos.json";
 
 // Note: Metadata cannot be used in client components, so we'll use a different approach
 // The metadata will be handled by the layout or we can create a wrapper component
 
 export default function TerminosPage() {
-  const { t } = useDivineParsing(["terminos"]);
+  const { t, language } = useDivineParsing(["terminos"]);
+  const terminosTranslations = (
+    language === "es" ? terminosES : terminosEN
+  ) as any;
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
@@ -47,7 +53,7 @@ export default function TerminosPage() {
                 {t("section_2.content", "terminos")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                {terminosES["section_2.features"].map(
+                {terminosTranslations["section_2.features"].map(
                   (feature: string, index: number) => (
                     <li key={index}>{feature}</li>
                   ),
@@ -63,7 +69,7 @@ export default function TerminosPage() {
                 {t("section_3.content", "terminos")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                {terminosES["section_3.restrictions"].map(
+                {terminosTranslations["section_3.restrictions"].map(
                   (restriction: string, index: number) => (
                     <li key={index}>{restriction}</li>
                   ),
