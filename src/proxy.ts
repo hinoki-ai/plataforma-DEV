@@ -1,6 +1,48 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { createI18nMiddleware } from "./middleware/i18n";
+// Inline i18n handling (replaces middleware usage)
+const LOCALES = ["es", "en"] as const;
+type Locale = (typeof LOCALES)[number];
+const DEFAULT_LOCALE: Locale = "es";
+const LOCALE_COOKIE = "aramac-language-preference";
+
+function getLocaleFromRequest(req: Request): Locale {
+  try {
+    // 1) Cookie preference
+    // @ts-expect-error - next Request has cookies()
+    const cookieLocale = req.cookies?.get?.(LOCALE_COOKIE)?.value;
+    if (cookieLocale && (LOCALES as readonly string[]).includes(cookieLocale)) {
+      return cookieLocale as Locale;
+    }
+
+    // 2) Accept-Language header
+    const acceptLanguage = req.headers.get("accept-language");
+    if (acceptLanguage) {
+      const languages = acceptLanguage.split(",").map((lang) => {
+        const [locale] = lang.trim().split(";");
+        return locale.split("-")[0];
+      });
+      for (const lang of languages) {
+        if ((LOCALES as readonly string[]).includes(lang)) {
+          return lang as Locale;
+        }
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return DEFAULT_LOCALE;
+}
+
+function setLocaleCookie(response: NextResponse, locale: Locale) {
+  response.cookies.set(LOCALE_COOKIE, locale, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+}
 
 // Routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -20,20 +62,17 @@ const isProtectedRoute = createRouteMatcher([
   "/parent(.*)",
 ]);
 
-const i18nMiddleware = createI18nMiddleware();
-
 export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
 
-  // Handle i18n routing first (language detection and cookies)
-  const i18nResponse = i18nMiddleware(req);
-  if (i18nResponse) {
-    return i18nResponse;
-  }
+  // Handle i18n first (detect and persist cookie; no URL prefixing)
+  const locale = getLocaleFromRequest(req);
+  const res = NextResponse.next();
+  setLocaleCookie(res, locale);
 
   // Skip middleware for static assets and API routes
   if (pathname.startsWith("/_next") || pathname.startsWith("/api")) {
-    return NextResponse.next();
+    return res;
   }
 
   // If it's a protected route and user is not authenticated, redirect to login
@@ -53,7 +92,7 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   // Public routes and authenticated users → allow access
-  return NextResponse.next();
+  return res;
 });
 
 export const config = {
