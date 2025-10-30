@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 // Removed direct import of server function to use API route instead
-import { PlanningDashboard } from "@/components/planning/PlanningDashboard";
+import { HeavyComponents } from "@/lib/dynamic-imports";
 import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
@@ -136,7 +136,7 @@ function PlanificacionesContent({ searchParams }: Props) {
       skeletonProps={{ columns: 4, rows: 2 }}
       duration={700}
     >
-      <PlanningDashboard
+      <HeavyComponents.PlanningDashboard
         documents={documents || []}
         searchParams={searchParams}
       />

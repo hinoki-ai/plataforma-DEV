@@ -52,6 +52,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { t } = useLanguage();
+  const { announce } = useAriaLive();
 
   const userSchema = createUserSchema(t);
 
@@ -80,8 +81,20 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
 
   const handleSubmit = async (data: UserFormData) => {
     setIsSubmitting(true);
+    announce(user ? "Actualizando usuario..." : "Creando usuario...", "polite");
     try {
       await onSubmit(data);
+      announce(
+        user
+          ? "Usuario actualizado exitosamente"
+          : "Usuario creado exitosamente",
+        "polite",
+      );
+    } catch (error) {
+      announce(
+        "Error al guardar el usuario. Por favor intenta nuevamente.",
+        "assertive",
+      );
     } finally {
       setIsSubmitting(false);
     }

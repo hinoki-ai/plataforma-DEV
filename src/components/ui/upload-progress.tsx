@@ -140,7 +140,6 @@ export function UploadProgress({
             </span>
           </div>
           <div className="w-full bg-secondary rounded-full h-2">
-            {/* eslint-disable-next-line */}
             <div
               className="bg-primary h-2 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${overallProgress}%` }}
@@ -178,7 +177,6 @@ export function UploadProgress({
                   </div>
                   {state.progress < 100 && !state.error && (
                     <div className="w-full bg-secondary rounded-full h-1 mt-1">
-                      {/* eslint-disable-next-line */}
                       <div
                         className="bg-primary h-1 rounded-full transition-all duration-300 ease-out"
                         style={{ width: `${state.progress}%` }}

@@ -95,7 +95,7 @@ export default function AdminPlanificacionesPage() {
             {t("admin.planificaciones.description", "common")}
           </p>
         </div>
-        <PlanningDashboard
+        <HeavyComponents.PlanningDashboard
           documents={documents || []}
           searchParams={{
             q: searchParams.get("q") || undefined,
