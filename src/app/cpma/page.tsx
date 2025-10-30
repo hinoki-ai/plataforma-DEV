@@ -367,13 +367,13 @@ export default function CPMAPage() {
                   <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out">
                     {t("cpma.signup_title", "common")}
                   </p>
+                  <p className="text-center text-base leading-relaxed text-gray-600 dark:text-gray-400 mt-4 transition-all duration-700 ease-out">
+                    {t("cpma.signup_subtitle", "common")}
+                  </p>
                 </div>
               </motion.div>
             </motion.div>
           </div>
-          <p className="text-lg text-center text-foreground/90 mb-12">
-            {t("cpma.signup_subtitle", "common")}
-          </p>
         </div>
       </section>
 

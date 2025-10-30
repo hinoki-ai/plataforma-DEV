@@ -5,7 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "./theme-provider";
 import { DesktopToggleProvider } from "@/lib/hooks/useDesktopToggle";
 // 🕊️ DIVINE PARSING ORACLE - Now using chunked i18n system
-import { LanguageProvider } from "@/components/language/LanguageContext";
+import { DivineParsingOracleProvider } from "@/components/language/ChunkedLanguageProvider";
 import { LanguageHtmlUpdater } from "@/components/language/LanguageHtmlUpdater";
 import { ContextProvider } from "./providers/ContextProvider";
 import { WebVitalsProvider } from "./providers/WebVitalsProvider";
