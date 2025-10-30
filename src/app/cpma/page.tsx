@@ -7,7 +7,7 @@ import { typography, layout } from "@/lib/responsive-utils";
 import { motion, AnimatePresence, Variants } from "motion/react";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
-import LegalFooter from "@/components/layout/LegalFooter";
+import CompactFooter from "@/components/layout/CompactFooter";
 
 import {
   Users,
@@ -949,99 +949,8 @@ export default function CPMAPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Footer with proper contrast and accessibility */}
-      <footer
-        className={`bg-card/90 backdrop-blur-sm text-foreground py-12 transition-all duration-700 ease-out delay-1000 ${
-          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
-        role="contentinfo"
-        aria-label={t("centro_consejo.footer.contact_info_aria", "common")}
-      >
-        <div className={layout.container(isDesktopForced)}>
-          <div
-            className={
-              isDesktopForced
-                ? "grid grid-cols-3 gap-8"
-                : "grid grid-cols-1 md:grid-cols-3 gap-8"
-            }
-          >
-            <div>
-              <h3 className="text-xl font-bold mb-4 text-foreground">
-                {t("centro_consejo.footer.title", "common")}
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                {t("centro_consejo.footer.description", "common")}
-              </p>
-              <div className="space-y-2 text-muted-foreground">
-                <p>{t("centro_consejo.footer.address", "common")}</p>
-                <p>{t("centro_consejo.footer.phone", "common")}</p>
-                <p>{t("centro_consejo.footer.email", "common")}</p>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold mb-4 text-foreground">
-                {t("centro_consejo.footer.quick_access", "common")}
-              </h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/login"
-                    className="text-muted-foreground hover:text-foreground transition duration-200 focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background rounded"
-                    aria-label={t("centro_consejo.footer.login_aria", "common")}
-                  >
-                    {t("centro_consejo.footer.login_link", "common")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/"
-                    className="text-muted-foreground hover:text-foreground transition duration-200 focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background rounded"
-                    aria-label={t("centro_consejo.footer.home_aria", "common")}
-                  >
-                    {t("centro_consejo.footer.home_link", "common")}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold mb-4 text-foreground">
-                {t("centro_consejo.footer.schedule_title", "common")}
-              </h4>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>{t("centro_consejo.footer.meetings", "common")}</li>
-                <li>{t("centro_consejo.footer.time", "common")}</li>
-                <li>{t("centro_consejo.footer.location", "common")}</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-border mt-8 pt-8 text-center">
-            <p className="text-muted-foreground pb-3">
-              {t("centro_consejo.footer.school_info", "common")}
-            </p>
-            <p className="text-muted-foreground pb-3">
-              {t("centro_consejo.footer.copyright", "common").replace(
-                "{year}",
-                new Date().getFullYear().toString(),
-              )}
-            </p>
-            <p className="text-muted-foreground">
-              {t("centro_consejo.footer.part_of", "common")}{" "}
-              <Link
-                href="/"
-                className="text-muted-foreground hover:text-foreground transition duration-200 underline focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background rounded"
-                aria-label={t("centro_consejo.footer.home_link_aria", "common")}
-              >
-                {t("school.full_name", "common")}
-              </Link>
-            </p>
-          </div>
-        </div>
-      </footer>
       <MinEducFooter />
-      <LegalFooter />
+      <CompactFooter />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { useLanguage } from "@/components/language/LanguageContext";
 import MinEducFooter from "@/components/layout/MinEducFooter";
-import LegalFooter from "@/components/layout/LegalFooter";
+import CompactFooter from "@/components/layout/CompactFooter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -726,7 +726,7 @@ export default function ProgramasPage() {
         </div>
       </main>
       <MinEducFooter />
-      <LegalFooter />
+      <CompactFooter />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
-import LegalFooter from "@/components/layout/LegalFooter";
+import CompactFooter from "@/components/layout/CompactFooter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
@@ -134,7 +134,7 @@ export default function ContactoContent() {
         </div>
       </main>
       <MinEducFooter />
-      <LegalFooter />
+      <CompactFooter />
     </div>
   );
 }
