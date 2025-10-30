@@ -194,9 +194,10 @@ export function GradeEntryForm({
   };
 
   const gradeStatus = getGradeStatus(watchedGrade);
-  const gradePercentage = watchedMaxGrade
-    ? (watchedGrade / watchedMaxGrade) * 100
-    : 0;
+  const gradePercentage =
+    watchedMaxGrade && watchedMaxGrade > 0
+      ? Math.min((watchedGrade / watchedMaxGrade) * 100, 100)
+      : 0;
 
   const onSubmit = async (data: GradeFormData) => {
     setIsSubmitting(true);
@@ -217,7 +218,17 @@ export function GradeEntryForm({
       });
 
       toast.success(t("grade.registered_success", "common"));
-      form.reset();
+      form.reset({
+        date: new Date(),
+        subject: "",
+        evaluationType: "PRUEBA",
+        evaluationName: "",
+        grade: 4.0,
+        maxGrade: 7.0,
+        percentage: undefined,
+        period: "PRIMER_SEMESTRE",
+        comments: "",
+      });
       onSuccess?.();
     } catch (error: any) {
       toast.error(error.message || t("grade.registration_error", "common"));
@@ -460,7 +471,12 @@ export function GradeEntryForm({
                     min={MIN_GRADE}
                     max={MAX_GRADE}
                     {...field}
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value);
+                      if (!isNaN(value)) {
+                        field.onChange(value);
+                      }
+                    }}
                     onKeyDown={(e) => handleKeyDown(e, "grade")}
                   />
                 </FormControl>
@@ -485,7 +501,12 @@ export function GradeEntryForm({
                     min={MIN_GRADE}
                     max={MAX_GRADE}
                     {...field}
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value);
+                      if (!isNaN(value)) {
+                        field.onChange(value);
+                      }
+                    }}
                     onKeyDown={(e) => handleKeyDown(e, "maxGrade")}
                   />
                 </FormControl>
@@ -532,24 +553,25 @@ export function GradeEntryForm({
             <span>Rendimiento</span>
             <span className="font-medium">{gradePercentage.toFixed(0)}%</span>
           </div>
-          <div className="h-2 bg-muted rounded-full overflow-hidden">
+          <div className="h-3 bg-muted rounded-full overflow-hidden border">
             <div
               className={cn(
-                "h-full progress-bar-fill",
+                "h-full transition-all duration-300 ease-out rounded-full",
                 watchedGrade >= 6.0
-                  ? "bg-green-500"
+                  ? "bg-linear-to-r from-green-400 to-green-600 shadow-sm"
                   : watchedGrade >= 5.0
-                    ? "bg-blue-500"
+                    ? "bg-linear-to-r from-blue-400 to-blue-600 shadow-sm"
                     : watchedGrade >= PASSING_GRADE
-                      ? "bg-yellow-500"
-                      : "bg-red-500",
+                      ? "bg-linear-to-r from-yellow-400 to-yellow-600 shadow-sm"
+                      : "bg-linear-to-r from-red-400 to-red-600 shadow-sm",
               )}
-              style={
-                {
-                  "--progress-width": `${gradePercentage}%`,
-                } as React.CSSProperties
-              }
+              style={{ width: `${gradePercentage}%` }}
             />
+          </div>
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>{MIN_GRADE.toFixed(1)}</span>
+            <span>{PASSING_GRADE.toFixed(1)} (aprobación)</span>
+            <span>{MAX_GRADE.toFixed(1)}</span>
           </div>
         </div>
 
