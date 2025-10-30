@@ -1,14 +1,17 @@
+"use client";
+
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
-export const metadata: Metadata = {
-  title: "Términos y Condiciones | Plataforma Astral",
-  description: "Términos y condiciones de uso de la Plataforma Astral",
-};
+// Note: Metadata cannot be used in client components, so we'll use a different approach
+// The metadata will be handled by the layout or we can create a wrapper component
 
 export default function TerminosPage() {
+  const { t } = useDivineParsing(["terminos"]);
+
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
       <Header />
@@ -17,149 +20,109 @@ export default function TerminosPage() {
           <div className="text-center mb-8">
             <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
               <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out">
-                Términos y Condiciones
+                {t("hero.title", "terminos")}
               </h1>
             </div>
           </div>
           <p className="text-lg text-center text-foreground/90 mb-12">
-            Última actualización: {new Date().toLocaleDateString("es-CL")}
+            {t("hero.last_updated", "terminos")}: {new Date().toLocaleDateString()}
           </p>
 
           <div className="space-y-8 text-foreground">
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                1. Aceptación de los Términos
+                {t("section_1.title", "terminos")}
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Al acceder y utilizar la Plataforma Astral, aceptas estar sujeto
-                a estos términos y condiciones de uso. Si no estás de acuerdo
-                con alguna parte de estos términos, no podrás acceder al
-                servicio.
+                {t("section_1.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                2. Descripción del Servicio
+                {t("section_2.title", "terminos")}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Plataforma Astral es una solución SaaS educativa que proporciona
-                herramientas integrales de gestión para instituciones
-                educativas, incluyendo:
+                {t("section_2.content", "terminos")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                <li>Gestión de usuarios y autenticación</li>
-                <li>Planificación educativa y seguimiento</li>
-                <li>Comunicación entre profesores, padres y administradores</li>
-                <li>Gestión de documentos y recursos educativos</li>
-                <li>Reportes y análisis de rendimiento</li>
+                {t("section_2.features", "terminos").map((feature: string, index: number) => (
+                  <li key={index}>{feature}</li>
+                ))}
               </ul>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">3. Uso Aceptable</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("section_3.title", "terminos")}</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Te comprometes a utilizar la plataforma únicamente para fines
-                educativos y legales. No está permitido:
+                {t("section_3.content", "terminos")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                <li>
-                  Utilizar el servicio para actividades ilegales o fraudulentas
-                </li>
-                <li>
-                  Compartir credenciales de acceso con terceros no autorizados
-                </li>
-                <li>Intentar acceder a sistemas o datos sin autorización</li>
-                <li>
-                  Subir contenido que viole derechos de propiedad intelectual
-                </li>
-                <li>
-                  Interferir con el funcionamiento normal de la plataforma
-                </li>
+                {t("section_3.restrictions", "terminos").map((restriction: string, index: number) => (
+                  <li key={index}>{restriction}</li>
+                ))}
               </ul>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                4. Propiedad Intelectual
+                {t("section_4.title", "terminos")}
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                La Plataforma Astral y todo su contenido, características y
-                funcionalidad son propiedad de Plataforma Astral y están
-                protegidos por leyes de derechos de autor y propiedad
-                intelectual. Los usuarios mantienen los derechos sobre el
-                contenido que suban, pero otorgan a la plataforma una licencia
-                limitada para procesar y almacenar dicho contenido.
+                {t("section_4.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                5. Privacidad y Protección de Datos
+                {t("section_5.title", "terminos")}
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                El tratamiento de datos personales se rige por la Ley 19.628
-                sobre Protección de Datos Personales de Chile y nuestro Acuerdo
-                de Procesamiento de Datos. Nos comprometemos a proteger la
-                privacidad y seguridad de toda la información proporcionada por
-                nuestros usuarios.
+                {t("section_5.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                6. Limitación de Responsabilidad
+                {t("section_6.title", "terminos")}
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                La plataforma se proporciona &quot;tal cual&quot; sin garantías
-                de ningún tipo. No nos hacemos responsables por daños
-                indirectos, incidentales o consecuentes que puedan surgir del
-                uso del servicio. Mantenemos niveles de servicio garantizados
-                según el plan contratado.
+                {t("section_6.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                7. Modificaciones del Servicio
+                {t("section_7.title", "terminos")}
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Nos reservamos el derecho de modificar, suspender o discontinuar
-                cualquier aspecto del servicio en cualquier momento. Los
-                usuarios serán notificados con anticipación de cambios
-                significativos que puedan afectar su uso del servicio.
+                {t("section_7.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">8. Terminación</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("section_8.title", "terminos")}</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Podemos terminar o suspender tu acceso al servicio
-                inmediatamente, sin previo aviso, por cualquier violación de
-                estos términos. Los usuarios pueden cancelar su cuenta en
-                cualquier momento desde la configuración de su perfil.
+                {t("section_8.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">9. Ley Aplicable</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("section_9.title", "terminos")}</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Estos términos se rigen por las leyes de la República de Chile.
-                Cualquier disputa será resuelta en los tribunales competentes de
-                Santiago de Chile.
+                {t("section_9.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">10. Contacto</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("section_10.title", "terminos")}</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Si tienes preguntas sobre estos términos y condiciones, puedes
-                contactarnos a través de:
+                {t("section_10.content", "terminos")}
               </p>
               <div className="mt-4 text-muted-foreground">
-                <p>📧 astral@gmail.com</p>
-                <p>📞 +56 9 3743 6196 (Loreto Gallegos)</p>
-                <p>📞 +56 9 8889 6773 (Agustín Arancibia)</p>
+                <p>{t("section_10.contact_email", "terminos")}</p>
+                <p>{t("section_10.contact_phone_1", "terminos")}</p>
+                <p>{t("section_10.contact_phone_2", "terminos")}</p>
               </div>
             </div>
           </div>

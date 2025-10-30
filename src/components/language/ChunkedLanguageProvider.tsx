@@ -69,6 +69,12 @@ import planesEN from "../../locales/en/planes.json";
 // Import validation utilities for development
 import { logValidationResults } from "../../lib/translation-validation";
 
+// Import page-specific translations
+import dpaES from "../../locales/es/dpa.json";
+import dpaEN from "../../locales/en/dpa.json";
+import terminosES from "../../locales/es/terminos.json";
+import terminosEN from "../../locales/en/terminos.json";
+
 // Direct translation map for reliable synchronous access
 const translations = {
   es: {
@@ -82,6 +88,8 @@ const translations = {
     programas: programasES,
     contacto: contactoES,
     planes: planesES,
+    dpa: dpaES,
+    terminos: terminosES,
   },
   en: {
     common: commonEN,
@@ -94,6 +102,8 @@ const translations = {
     programas: programasEN,
     contact: contactEN,
     planes: planesEN,
+    dpa: dpaEN,
+    terminos: terminosEN,
   },
 } as const;
 
@@ -119,6 +129,10 @@ const translationRegistry: Record<string, TranslationStrings> = {
   "en-contact": contactEN,
   "es-planes": planesES,
   "en-planes": planesEN,
+  "es-dpa": dpaES,
+  "en-dpa": dpaEN,
+  "es-terminos": terminosES,
+  "en-terminos": terminosEN,
 };
 
 // Registry is populated with all translation files

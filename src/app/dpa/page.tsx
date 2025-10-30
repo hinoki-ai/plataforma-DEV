@@ -1,34 +1,33 @@
+"use client";
+
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
-
-export const metadata: Metadata = {
-  title: "Acuerdo de Procesamiento de Datos (DPA) | Plataforma Astral",
-  description:
-    "Acuerdo de Procesamiento de Datos personales conforme a la Ley 19.628",
-};
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function DpaPage() {
+  const { t } = useDivineParsing(["dpa"]);
+
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
       <Header />
       <main className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-center mb-8 text-foreground">
-            Acuerdo de Procesamiento de Datos (DPA)
+            {t("hero.title", "dpa")}
           </h1>
           <p className="text-lg text-center text-foreground/90 mb-12">
-            Última actualización: {new Date().toLocaleDateString("es-CL")}
+            {t("hero.last_updated", "dpa")}: {new Date().toLocaleDateString()}
           </p>
 
           <div className="space-y-8 text-foreground">
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">1. Partes del Acuerdo</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("section_1.title", "dpa")}</h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    Responsable del Tratamiento:
+                    {t("section_1.data_controller", "dpa")}:
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Plataforma Astral SpA

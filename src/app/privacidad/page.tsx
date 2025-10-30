@@ -1,15 +1,13 @@
+"use client";
+
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
-
-export const metadata: Metadata = {
-  title: "Política de Privacidad | Plataforma Astral",
-  description:
-    "Política de privacidad y protección de datos de la Plataforma Astral",
-};
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export default function PrivacidadPage() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
       <Header />
@@ -18,56 +16,51 @@ export default function PrivacidadPage() {
           <div className="text-center mb-8">
             <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
               <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out">
-                Política de Privacidad
+                {t("privacidad.title")}
               </h1>
             </div>
           </div>
           <p className="text-lg text-center text-foreground/90 mb-12">
-            Última actualización: {new Date().toLocaleDateString("es-CL")}
+            {t("privacidad.last_updated")}: {new Date().toLocaleDateString("es-CL")}
           </p>
 
           <div className="space-y-8 text-foreground">
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                1. Información General
+                {t("privacidad.section_1.title")}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Plataforma Astral respeta tu privacidad y se compromete a
-                proteger tus datos personales de acuerdo con la Ley 19.628 sobre
-                Protección de Datos Personales de Chile.
+                {t("privacidad.section_1.content_1")}
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Esta política explica cómo recopilamos, usamos, almacenamos y
-                protegemos tu información.
+                {t("privacidad.section_1.content_2")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                2. Datos que Recopilamos
+                {t("privacidad.section_2.title")}
               </h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    Información proporcionada directamente:
+                    {t("privacidad.section_2.direct_info_title")}
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    <li>Nombre completo y datos de contacto</li>
-                    <li>Información institucional (escuela, cargo)</li>
-                    <li>
-                      Datos de estudiantes (con autorización de padres/tutores)
-                    </li>
-                    <li>Contenido educativo y documentos subidos</li>
+                    <li>{t("privacidad.section_2.direct_info_1")}</li>
+                    <li>{t("privacidad.section_2.direct_info_2")}</li>
+                    <li>{t("privacidad.section_2.direct_info_3")}</li>
+                    <li>{t("privacidad.section_2.direct_info_4")}</li>
                   </ul>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    Información técnica:
+                    {t("privacidad.section_2.technical_info_title")}
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    <li>Dirección IP y datos de navegación</li>
-                    <li>Logs de acceso y uso del sistema</li>
-                    <li>Información del dispositivo y navegador</li>
+                    <li>{t("privacidad.section_2.technical_info_1")}</li>
+                    <li>{t("privacidad.section_2.technical_info_2")}</li>
+                    <li>{t("privacidad.section_2.technical_info_3")}</li>
                   </ul>
                 </div>
               </div>

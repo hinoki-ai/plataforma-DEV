@@ -1,6 +1,7 @@
 "use client";
 
 import { DonutBackground } from "@/components/ui/donut-background";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // Global error must include html and body tags per Next.js App Router requirements
 // This is the only place where html/body tags are allowed outside of layout.tsx
@@ -11,8 +12,35 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // For global error, we need to get the language from localStorage since we can't use hooks normally
+  const getLanguage = () => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("aramac-language-preference") || "es";
+    }
+    return "es";
+  };
+
+  const language = getLanguage();
+  const t = (key: string, namespace?: string) => {
+    // Simple translation function for global error
+    const translations = {
+      es: {
+        "error.global_title": "Error Global",
+        "error.global_message": "Ha ocurrido un error crítico",
+        "error.retry": "Intentar nuevamente"
+      },
+      en: {
+        "error.global_title": "Global Error",
+        "error.global_message": "A critical error has occurred",
+        "error.retry": "Try Again"
+      }
+    };
+
+    return translations[language as keyof typeof translations]?.[key as keyof typeof translations.es] || key;
+  };
+
   return (
-    <html lang="es-CL" suppressHydrationWarning>
+    <html lang={`${language}-CL`} suppressHydrationWarning>
       <body
         style={{
           margin: 0,
@@ -42,7 +70,7 @@ export default function GlobalError({
                 textShadow: "0 0 20px rgba(255, 136, 0, 0.5)",
               }}
             >
-              Error Global
+              {t("error.global_title")}
             </h1>
             <p
               style={{
@@ -52,7 +80,7 @@ export default function GlobalError({
                 wordBreak: "break-word",
               }}
             >
-              {error?.message || "Ha ocurrido un error crítico"}
+              {error?.message || t("error.global_message")}
             </p>
             <button
               onClick={reset}
@@ -68,7 +96,7 @@ export default function GlobalError({
                 transition: "all 0.3s ease",
               }}
             >
-              Intentar nuevamente
+              {t("error.retry")}
             </button>
           </div>
         </DonutBackground>

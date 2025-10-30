@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { UserPlus, Mail, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 function LoginForm() {
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl");
   const { signIn, isLoaded } = useSignIn();
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +46,7 @@ function LoginForm() {
       <div className="mb-8 w-full max-w-md">
         <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-4 mx-auto text-center -mt-24">
           <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
-            Portal Escolar
+            {t("auth.portal_title")}
           </h1>
         </div>
       </div>
@@ -57,7 +59,7 @@ function LoginForm() {
               htmlFor="email"
               className="text-left block text-foreground font-medium"
             >
-              Correo electrónico
+              {t("auth.email.label")}
             </Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -78,7 +80,7 @@ function LoginForm() {
               htmlFor="password"
               className="text-left block text-foreground font-medium"
             >
-              Contraseña
+              {t("auth.password.label")}
             </Label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -99,7 +101,7 @@ function LoginForm() {
             disabled={isLoading}
             className="w-full rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none"
           >
-            {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+            {isLoading ? t("auth.signing_in_button") : t("auth.sign_in_button")}
           </Button>
         </form>
 
@@ -107,7 +109,7 @@ function LoginForm() {
         <div className="w-full border-t border-border pt-6 mt-6">
           <div className="text-center">
             <p className="mb-4 text-sm text-muted-foreground">
-              ¿Eres padre o apoderado nuevo?
+              {t("auth.new_parent_question")}
             </p>
             <Button asChild variant="outline" className="w-full rounded-xl">
               <Link
@@ -115,7 +117,7 @@ function LoginForm() {
                 className="flex items-center justify-center gap-2"
               >
                 <UserPlus className="h-4 w-4" />
-                Registrarse como Apoderado
+                {t("auth.register_as_parent")}
               </Link>
             </Button>
           </div>
@@ -134,7 +136,7 @@ export default function LoginPage() {
           <div className="mb-8 w-full max-w-md">
             <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-4 mx-auto text-center -mt-24">
               <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
-                Portal Escolar
+                {t("auth.portal_title")}
               </h1>
             </div>
           </div>

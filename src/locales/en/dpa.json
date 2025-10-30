@@ -1,0 +1,111 @@
+{
+  "page.title": "Data Processing Agreement (DPA) | Astral Platform",
+  "page.description": "Data Processing Agreement in accordance with Law 19.628",
+  "hero.title": "Data Processing Agreement (DPA)",
+  "hero.last_updated": "Last updated",
+
+  "section_1.title": "1. Parties to the Agreement",
+  "section_1.data_controller": "Data Controller",
+  "section_1.data_processor": "Data Processor",
+  "section_1.controller_content": "Plataforma Astral SpA\nAvenida Libertad #777\nViña del Mar\nValparaíso Region\nChile\nastral@gmail.com",
+  "section_1.processor_content": "The educational institutions that use our services and their authorized legal representatives.",
+
+  "section_2.title": "2. Purpose of the Agreement",
+  "section_2.content": "This Agreement establishes the conditions under which Plataforma Astral processes personal data on behalf of educational institutions, complying with Law 19.628 on Personal Data Protection and complementary regulations applicable in Chile.",
+
+  "section_3.title": "3. Definitions",
+  "section_3.personal_data": "Personal Data",
+  "section_3.personal_data_desc": "Any information relating to identified or identifiable natural persons.",
+  "section_3.processing": "Processing",
+  "section_3.processing_desc": "Operations performed on personal data, including collection, storage, use, circulation and deletion.",
+  "section_3.sensitive_data": "Sensitive Data",
+  "section_3.sensitive_data_desc": "Information that reveals racial origin, political opinions, religious, philosophical or moral convictions, union affiliation, information regarding health, sexual life, genetic or biometric data.",
+  "section_3.security_measures": "Security Measures",
+  "section_3.security_measures_desc": "Technical, organizational and legal procedures designed to protect personal data against loss, alteration, unauthorized access or unauthorized processing.",
+
+  "section_4.title": "4. Categories of Processed Data",
+  "section_4.user_data": "System User Data",
+  "section_4.user_data_items": [
+    "Full name, RUN/RUT, date of birth",
+    "Contact information (email, phone)",
+    "Institutional information and role",
+    "Authentication and access data"
+  ],
+  "section_4.student_data": "Student Data",
+  "section_4.student_data_items": [
+    "Academic information and performance",
+    "Health data (only with specific consent)",
+    "Family information and guardians",
+    "Attendance and school participation"
+  ],
+
+  "section_5.title": "5. Purposes of Processing",
+  "section_5.intro": "Data is processed solely for:",
+  "section_5.purposes": [
+    "Manage access and use of the educational platform",
+    "Facilitate communication between educational community",
+    "Generate academic and administrative reports",
+    "Comply with legal and regulatory obligations",
+    "Ensure system security and integrity",
+    "Improve the quality of educational services"
+  ],
+
+  "section_6.title": "6. Controller's Obligations",
+  "section_6.intro": "Plataforma Astral undertakes to:",
+  "section_6.obligations": [
+    "Process data only according to documented instructions",
+    "Implement appropriate technical and organizational security measures",
+    "Immediately notify any security breach",
+    "Assist the processor in responding to ARCO rights requests",
+    "Delete or return data upon service termination",
+    "Allow audits and compliance reviews"
+  ],
+
+  "section_7.title": "7. Processor's Obligations",
+  "section_7.intro": "The educational institution undertakes to:",
+  "section_7.obligations": [
+    "Provide clear instructions on data processing",
+    "Obtain necessary consents before transferring data",
+    "Notify changes that may affect data security",
+    "Cooperate in the implementation of security measures",
+    "Inform about applicable legal requirements"
+  ],
+
+  "section_8.title": "8. Security Measures",
+  "section_8.technical_title": "Technical Measures",
+  "section_8.technical_measures": [
+    "Data encryption in transit and at rest",
+    "Role-based access controls",
+    "Multi-factor authentication",
+    "Continuous security monitoring",
+    "Encrypted backups"
+  ],
+  "section_8.organizational_title": "Organizational Measures",
+  "section_8.organizational_measures": [
+    "Staff trained in data protection",
+    "Documented security policies",
+    "Periodic risk assessments",
+    "Incident response procedures"
+  ],
+
+  "section_9.title": "9. International Data Transfers",
+  "section_9.content": "Data is processed and stored exclusively on servers located in Chile. No international transfers of personal data are made without the express consent of the data subject and adequate safeguards in accordance with applicable legislation.",
+
+  "section_10.title": "10. Duration and Termination",
+  "section_10.content": "This agreement remains in effect as long as the contractual relationship between Plataforma Astral and the educational institution lasts. Upon termination of service, data will be deleted or returned according to the processor's instructions, unless there is a legal obligation to retain it.",
+
+  "section_11.title": "11. Liability and Indemnification",
+  "section_11.content": "Each party shall be responsible for the violations it commits under this agreement. In case of claims by third parties for improper data processing, the parties will cooperate to resolve the situation and cover associated costs as appropriate.",
+
+  "section_12.title": "12. Applicable Law and Jurisdiction",
+  "section_12.content": "This agreement is governed by Chilean legislation, particularly Law 19.628 on Personal Data Protection. Any dispute will be resolved in the competent courts of Santiago, Chile.",
+
+  "section_13.title": "13. Modifications",
+  "section_13.content": "Any modification to this agreement must be made in writing and have the approval of both parties. Significant changes will be notified with at least 30 days' notice.",
+
+  "section_14.title": "14. Data Protection Contact",
+  "section_14.intro": "For inquiries related to personal data processing:",
+  "section_14.contact_email": "📧 dpo@plataformaastral.cl",
+  "section_14.contact_phone": "📞 +56 9 3743 6196 (Data Protection Officer)",
+  "section_14.contact_address": "📍 Avenida Libertad #777, Viña del Mar, Valparaíso Region"
+}
