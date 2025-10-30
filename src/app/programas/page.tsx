@@ -8,6 +8,8 @@ import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { motion, Variants } from "motion/react";
 import {
   Card,
   CardContent,
@@ -278,8 +280,22 @@ const getTranslationArray = (t: any, key: string): string[] => {
   }
 };
 
+const fadeInUp: Variants = {
+  initial: { opacity: 0, y: 60 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerChildren: Variants = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
 export default function ProgramasPage() {
   const { t } = useLanguage();
+  const [mounted] = useState(true);
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-programas flex flex-col">
@@ -288,11 +304,27 @@ export default function ProgramasPage() {
         <div className="max-w-6xl mx-auto space-y-16">
           <section className="text-center space-y-6">
             <div className="space-y-4">
-              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
-                <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out md:text-5xl">
-                  {t("programas.hero.title")}
-                </h1>
-              </div>
+              <motion.div
+                initial="initial"
+                animate="animate"
+                variants={staggerChildren}
+                className="max-w-4xl mx-auto"
+              >
+                <motion.div
+                  variants={fadeInUp}
+                  className={`transition-all duration-700 ease-out ${
+                    mounted
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-4"
+                  }`}
+                >
+                  <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                    <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out md:text-5xl">
+                      {t("programas.hero.title")}
+                    </h1>
+                  </div>
+                </motion.div>
+              </motion.div>
               <p className="text-lg md:text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed">
                 {t("programas.hero.description")}
               </p>

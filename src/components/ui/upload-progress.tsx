@@ -141,8 +141,12 @@ export function UploadProgress({
           </div>
           <div className="w-full bg-secondary rounded-full h-2">
             <div
-              className="bg-primary h-2 rounded-full transition-all duration-300 ease-out"
-              style={{ width: `${overallProgress}%` }}
+              className="bg-primary h-2 rounded-full progress-bar-fill"
+              style={
+                {
+                  "--progress-width": `${overallProgress}%`,
+                } as React.CSSProperties
+              }
             />
           </div>
         </div>
@@ -178,8 +182,12 @@ export function UploadProgress({
                   {state.progress < 100 && !state.error && (
                     <div className="w-full bg-secondary rounded-full h-1 mt-1">
                       <div
-                        className="bg-primary h-1 rounded-full transition-all duration-300 ease-out"
-                        style={{ width: `${state.progress}%` }}
+                        className="bg-primary h-1 rounded-full progress-bar-fill"
+                        style={
+                          {
+                            "--progress-width": `${state.progress}%`,
+                          } as React.CSSProperties
+                        }
                       />
                     </div>
                   )}

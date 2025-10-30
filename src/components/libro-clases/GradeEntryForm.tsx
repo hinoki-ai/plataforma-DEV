@@ -535,7 +535,7 @@ export function GradeEntryForm({
           <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div
               className={cn(
-                "h-full transition-all duration-300",
+                "h-full progress-bar-fill",
                 watchedGrade >= 6.0
                   ? "bg-green-500"
                   : watchedGrade >= 5.0
@@ -544,7 +544,11 @@ export function GradeEntryForm({
                       ? "bg-yellow-500"
                       : "bg-red-500",
               )}
-              style={{ width: `${gradePercentage}%` }}
+              style={
+                {
+                  "--progress-width": `${gradePercentage}%`,
+                } as React.CSSProperties
+              }
             />
           </div>
         </div>
