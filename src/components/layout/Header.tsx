@@ -29,10 +29,10 @@ export default function Header() {
 
   // Public navigation links
   const publicNavLinks = [
+    { href: "/contacto", label: t("nav.contact", "navigation") },
     { href: "/programas", label: t("nav.programs", "navigation") },
     { href: "/planes", label: t("nav.plans", "navigation") },
     { href: "/cpma", label: t("cpma.title", "common") },
-    { href: "/contacto", label: t("nav.contact", "navigation") },
   ];
 
   // Show loading skeleton until mounted to prevent hydration mismatch

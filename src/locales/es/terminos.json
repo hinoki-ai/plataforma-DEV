@@ -1,0 +1,53 @@
+{
+  "page.title": "Términos y Condiciones | Plataforma Astral",
+  "page.description": "Términos y condiciones de uso de la Plataforma Astral",
+  "hero.title": "Términos y Condiciones",
+  "hero.last_updated": "Última actualización",
+
+  "section_1.title": "1. Aceptación de los Términos",
+  "section_1.content": "Al acceder y utilizar la Plataforma Astral, aceptas estar sujeto a estos términos y condiciones de uso. Si no estás de acuerdo con alguna parte de estos términos, no podrás acceder al servicio.",
+
+  "section_2.title": "2. Descripción del Servicio",
+  "section_2.content": "Plataforma Astral es una solución SaaS educativa que proporciona herramientas integrales de gestión para instituciones educativas, incluyendo:",
+  "section_2.features": [
+    "Gestión de usuarios y autenticación",
+    "Planificación educativa y seguimiento",
+    "Comunicación entre profesores, padres y administradores",
+    "Gestión de documentos y recursos educativos",
+    "Reportes y análisis de rendimiento"
+  ],
+
+  "section_3.title": "3. Uso Aceptable",
+  "section_3.content": "Te comprometes a utilizar la plataforma únicamente para fines educativos y legales. No está permitido:",
+  "section_3.restrictions": [
+    "Utilizar el servicio para actividades ilegales o fraudulentas",
+    "Compartir credenciales de acceso con terceros no autorizados",
+    "Intentar acceder a sistemas o datos sin autorización",
+    "Subir contenido que viole derechos de propiedad intelectual",
+    "Interferir con el funcionamiento normal de la plataforma"
+  ],
+
+  "section_4.title": "4. Propiedad Intelectual",
+  "section_4.content": "La Plataforma Astral y todo su contenido, características y funcionalidad son propiedad de Plataforma Astral y están protegidos por leyes de derechos de autor y propiedad intelectual. Los usuarios mantienen los derechos sobre el contenido que suban, pero otorgan a la plataforma una licencia limitada para procesar y almacenar dicho contenido.",
+
+  "section_5.title": "5. Privacidad y Protección de Datos",
+  "section_5.content": "El tratamiento de datos personales se rige por la Ley 19.628 sobre Protección de Datos Personales de Chile y nuestro Acuerdo de Procesamiento de Datos. Nos comprometemos a proteger la privacidad y seguridad de toda la información proporcionada por nuestros usuarios.",
+
+  "section_6.title": "6. Limitación de Responsabilidad",
+  "section_6.content": "La plataforma se proporciona \"tal cual\" sin garantías de ningún tipo. No nos hacemos responsables por daños indirectos, incidentales o consecuentes que puedan surgir del uso del servicio. Mantenemos niveles de servicio garantizados según el plan contratado.",
+
+  "section_7.title": "7. Modificaciones del Servicio",
+  "section_7.content": "Nos reservamos el derecho de modificar, suspender o discontinuar cualquier aspecto del servicio en cualquier momento. Los usuarios serán notificados con anticipación de cambios significativos que puedan afectar su uso del servicio.",
+
+  "section_8.title": "8. Terminación",
+  "section_8.content": "Podemos terminar o suspender tu acceso al servicio inmediatamente, sin previo aviso, por cualquier violación de estos términos. Los usuarios pueden cancelar su cuenta en cualquier momento desde la configuración de su perfil.",
+
+  "section_9.title": "9. Ley Aplicable",
+  "section_9.content": "Estos términos se rigen por las leyes de la República de Chile. Cualquier disputa será resuelta en los tribunales competentes de Santiago de Chile.",
+
+  "section_10.title": "10. Contacto",
+  "section_10.content": "Si tienes preguntas sobre estos términos y condiciones, puedes contactarnos a través de:",
+  "section_10.contact_email": "📧 astral@gmail.com",
+  "section_10.contact_phone_1": "📞 +56 9 3743 6196 (Loreto Gallegos)",
+  "section_10.contact_phone_2": "📞 +56 9 8889 6773 (Agustín Arancibia)"
+}

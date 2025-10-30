@@ -98,6 +98,11 @@
   "auth.login_error": "Login error. Please try again.",
   "auth.register": "Register",
   "auth.back": "Back",
+  "auth.portal_title": "School Portal",
+  "auth.signing_in_button": "Signing in...",
+  "auth.sign_in_button": "Sign In",
+  "auth.new_parent_question": "Are you a new parent or guardian?",
+  "auth.register_as_parent": "Register as Parent",
   "user.name.label": "Full Name",
   "user.name.placeholder": "Enter full name",
   "user.email.placeholder": "user@institution.edu",
@@ -862,8 +867,9 @@
   "cpma.technical_item_3": "Requirements and dependencies",
   "cpma.technical_item_4": "Optimized delivery plan",
   "cpma.technical_download_button": "Download Technical Proposal",
-  "cpma.signup_title": "Join the CFMG Community",
-  "cpma.signup_subtitle": "Become part of our parent community and stay connected with your child's education",
+
+  "cpma.signup_title": "Join Our Parent Community",
+  "cpma.signup_subtitle": "Become part of our active parent network and contribute to our children's education",
 
   "centro_consejo.testimonials.rosa_martinez.name": "Rosa Martínez",
   "centro_consejo.testimonials.rosa_martinez.role": "Infant Nursery Parent",
@@ -1522,6 +1528,52 @@
   "centro_registration.verification_step_4": "Your account is activated",
   "centro_registration.important_title": "Important",
   "centro_registration.important_message": "You can only register if you represent a valid educational center. The information provided will be verified by administrative staff.",
+
+  "privacidad.title": "Privacy Policy",
+  "privacidad.last_updated": "Last updated",
+  "privacidad.section_1.title": "1. General Information",
+  "privacidad.section_1.content_1": "Plataforma Astral respects your privacy and is committed to protecting your personal data in accordance with Law 19.628 on Personal Data Protection of Chile.",
+  "privacidad.section_1.content_2": "This policy explains how we collect, use, store and protect your information.",
+
+  "privacidad.section_2.title": "2. Data We Collect",
+  "privacidad.section_2.direct_info_title": "Information provided directly:",
+  "privacidad.section_2.direct_info_1": "Full name and contact details",
+  "privacidad.section_2.direct_info_2": "Institutional information (school, position)",
+  "privacidad.section_2.direct_info_3": "Student data (with authorization from parents/guardians)",
+  "privacidad.section_2.direct_info_4": "Educational content and uploaded documents",
+  "privacidad.section_2.technical_info_title": "Technical information:",
+  "privacidad.section_2.technical_info_1": "IP address and browsing data",
+  "privacidad.section_2.technical_info_2": "Access logs and system usage",
+  "privacidad.section_2.technical_info_3": "Device and browser information",
+
+  "privacidad.section_3.title": "3. Use of Information",
+  "privacidad.section_3.purpose_1": "Provide and maintain our educational services",
+  "privacidad.section_3.purpose_2": "Communicate important information about your account and our services",
+  "privacidad.section_3.purpose_3": "Improve and personalize your experience on the platform",
+  "privacidad.section_3.purpose_4": "Comply with legal and regulatory obligations",
+
+  "privacidad.section_4.title": "4. Sharing Information",
+  "privacidad.section_4.content": "We do not sell, rent or share your personal information with third parties, except when necessary to provide our services or when required by law.",
+
+  "privacidad.section_5.title": "5. Data Security",
+  "privacidad.section_5.content": "We implement appropriate technical and administrative security measures to protect your information against unauthorized access, alteration, disclosure or destruction.",
+
+  "privacidad.section_6.title": "6. Your Rights",
+  "privacidad.section_6.right_1": "Access your personal data",
+  "privacidad.section_6.right_2": "Rectify inaccurate or incomplete information",
+  "privacidad.section_6.right_3": "Request the deletion of your data",
+  "privacidad.section_6.right_4": "Object to the processing of your data",
+  "privacidad.section_6.contact": "To exercise these rights, contact our privacy team.",
+
+  "privacidad.section_7.title": "7. Cookies and Similar Technologies",
+  "privacidad.section_7.content": "We use cookies and similar technologies to improve your experience, analyze site usage and personalize content.",
+
+  "privacidad.section_8.title": "8. Changes to this Policy",
+  "privacidad.section_8.content": "We may update this privacy policy periodically. We will notify you of significant changes.",
+
+  "privacidad.section_9.title": "9. Contact",
+  "privacidad.section_9.content": "If you have questions about this privacy policy, contact us at:",
+  "privacidad.section_9.email": "privacy@plataforma-astral.com",
 
   "footer.mineduc": "Ministry of Education",
   "footer.government": "GOVERNMENT",

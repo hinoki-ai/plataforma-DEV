@@ -383,9 +383,7 @@ export default function CPMAPage() {
             subtitle={t("cpma.signup_subtitle", "common")}
           >
             <div className="max-w-4xl mx-auto">
-              <SignupStylePanel variant="action">
-                <UnifiedSignupForm />
-              </SignupStylePanel>
+              <UnifiedSignupForm />
             </div>
           </SignupStyleSection>
         </div>

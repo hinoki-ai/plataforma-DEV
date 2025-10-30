@@ -1,6 +1,11 @@
+"use client";
+
 import { DonutBackground } from "@/components/ui/donut-background";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export default function NotFound() {
+  const { t } = useLanguage();
+
   return (
     <DonutBackground>
       <div
@@ -33,10 +38,10 @@ export default function NotFound() {
             color: "#00ff41",
           }}
         >
-          Página no encontrada
+          {t("error.404.title", "common")}
         </h2>
         <p style={{ marginBottom: "2rem", opacity: 0.8, color: "#9affa6" }}>
-          Lo sentimos, la página que buscas no existe.
+          {t("error.404.description", "common")}
         </p>
         <a
           href="/"
@@ -52,7 +57,7 @@ export default function NotFound() {
             transition: "all 0.3s ease",
           }}
         >
-          Volver al inicio
+          {t("error.404.home", "common")}
         </a>
       </div>
     </DonutBackground>
