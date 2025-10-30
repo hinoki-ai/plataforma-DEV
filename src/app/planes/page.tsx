@@ -45,7 +45,7 @@ const staggerChildren: Variants = {
 };
 
 export default function PreciosPage() {
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["common", "planes"]);
   const { isDesktopForced } = useDesktopToggle();
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");

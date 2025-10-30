@@ -294,7 +294,7 @@ const staggerChildren: Variants = {
 };
 
 export default function ProgramasPage() {
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["common", "programas"]);
   const [mounted] = useState(true);
 
   return (
