@@ -177,27 +177,14 @@ export default function UnifiedAuthButton() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-72">
-            <DropdownMenuLabel>
-              {t("ui.settings.label", "common")}
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">
-                  {t("ui.theme.label", "common")}
-                </span>
+              <div className="flex items-center justify-center py-2">
                 <SkyToggle size="sm" />
               </div>
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">
-                  {t("ui.sound.label", "common")}
-                </span>
+              <div className="flex items-center justify-center py-2">
                 <SoundToggle size="sm" />
               </div>
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium">
-                  {t("ui.language.label", "common")}
-                </span>
+              <div className="flex items-center justify-center py-2">
                 <div onClick={(e) => e.stopPropagation()}>
                   <LanguageToggle size="sm" />
                 </div>
@@ -316,22 +303,13 @@ export default function UnifiedAuthButton() {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            <div className="flex items-center justify-between py-2">
-              <span className="text-sm font-medium">
-                {t("ui.theme.label", "common")}
-              </span>
+            <div className="flex items-center justify-center py-2">
               <SkyToggle size="sm" />
             </div>
-            <div className="flex items-center justify-between py-2">
-              <span className="text-sm font-medium">
-                {t("ui.sound.label", "common")}
-              </span>
+            <div className="flex items-center justify-center py-2">
               <SoundToggle size="sm" />
             </div>
-            <div className="flex items-center justify-between py-2">
-              <span className="text-sm font-medium">
-                {t("ui.language.label", "common")}
-              </span>
+            <div className="flex items-center justify-center py-2">
               <div onClick={(e) => e.stopPropagation()}>
                 <LanguageToggle size="sm" />
               </div>

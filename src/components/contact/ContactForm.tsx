@@ -11,8 +11,10 @@ import {
   contactFormSchema,
   type ContactFormValues,
 } from "@/lib/validation/contact";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 export function ContactForm() {
+  const { t } = useLanguage();
   const {
     register,
     handleSubmit,
@@ -54,35 +56,26 @@ export function ContactForm() {
             }
           });
 
-          toast.error("Revisa los datos del formulario");
+          toast.error(t("form.error.validation", "contacto"));
           return;
         }
 
-        toast.error(
-          result?.error ||
-            "No pudimos enviar tu mensaje en este momento. Inténtalo nuevamente más tarde.",
-        );
+        toast.error(result?.error || t("form.error.api", "contacto"));
         return;
       }
 
       if (!result?.success) {
-        toast.error(
-          result?.error ||
-            "No pudimos enviar tu mensaje en este momento. Inténtalo nuevamente más tarde.",
-        );
+        toast.error(result?.error || t("form.error.api", "contacto"));
         return;
       }
 
-      toast.success("Mensaje enviado", {
-        description:
-          "Gracias por escribirnos. Nos pondremos en contacto contigo pronto.",
+      toast.success(t("form.success.title", "contacto"), {
+        description: t("form.success.description", "contacto"),
       });
       reset();
     } catch (error) {
       console.error("Error submitting contact form:", error);
-      toast.error(
-        "Ocurrió un error inesperado al enviar tu mensaje. Por favor, vuelve a intentarlo.",
-      );
+      toast.error(t("form.error.general", "contacto"));
     }
   });
 
@@ -91,13 +84,13 @@ export function ContactForm() {
       <div className="grid gap-4 md:grid-cols-2">
         <div>
           <Label htmlFor="firstName" className="text-foreground">
-            Nombre
+            {t("form.firstName.label", "contacto")}
           </Label>
           <Input
             id="firstName"
             {...register("firstName")}
             aria-invalid={Boolean(errors.firstName)}
-            placeholder="Tu nombre"
+            placeholder={t("form.firstName.placeholder", "contacto")}
             disabled={isSubmitting}
             className="mt-1 border border-input bg-background text-foreground"
           />
@@ -109,13 +102,13 @@ export function ContactForm() {
         </div>
         <div>
           <Label htmlFor="lastName" className="text-foreground">
-            Apellido
+            {t("form.lastName.label", "contacto")}
           </Label>
           <Input
             id="lastName"
             {...register("lastName")}
             aria-invalid={Boolean(errors.lastName)}
-            placeholder="Tu apellido"
+            placeholder={t("form.lastName.placeholder", "contacto")}
             disabled={isSubmitting}
             className="mt-1 border border-input bg-background text-foreground"
           />
@@ -129,14 +122,14 @@ export function ContactForm() {
 
       <div>
         <Label htmlFor="email" className="text-foreground">
-          Correo electrónico
+          {t("form.email.label", "contacto")}
         </Label>
         <Input
           id="email"
           type="email"
           {...register("email")}
           aria-invalid={Boolean(errors.email)}
-          placeholder="nombre@correo.cl"
+          placeholder={t("form.email.placeholder", "contacto")}
           disabled={isSubmitting}
           className="mt-1 border border-input bg-background text-foreground"
         />
@@ -147,13 +140,13 @@ export function ContactForm() {
 
       <div>
         <Label htmlFor="subject" className="text-foreground">
-          Asunto
+          {t("form.subject.label", "contacto")}
         </Label>
         <Input
           id="subject"
           {...register("subject")}
           aria-invalid={Boolean(errors.subject)}
-          placeholder="¿Cómo podemos ayudarte?"
+          placeholder={t("form.subject.placeholder", "contacto")}
           disabled={isSubmitting}
           className="mt-1 border border-input bg-background text-foreground"
         />
@@ -164,14 +157,14 @@ export function ContactForm() {
 
       <div>
         <Label htmlFor="message" className="text-foreground">
-          Mensaje
+          {t("form.message.label", "contacto")}
         </Label>
         <Textarea
           id="message"
           rows={5}
           {...register("message")}
           aria-invalid={Boolean(errors.message)}
-          placeholder="Cuéntanos más sobre tu consulta"
+          placeholder={t("form.message.placeholder", "contacto")}
           disabled={isSubmitting}
           className="mt-1 border border-input bg-background text-foreground"
         />
@@ -181,7 +174,9 @@ export function ContactForm() {
       </div>
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Enviando mensaje..." : "Enviar mensaje"}
+        {isSubmitting
+          ? t("form.submitting", "contacto")
+          : t("form.submit", "contacto")}
       </Button>
     </form>
   );

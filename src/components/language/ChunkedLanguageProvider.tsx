@@ -59,6 +59,12 @@ import dashboardES from "../../locales/es/dashboard.json";
 import dashboardEN from "../../locales/en/dashboard.json";
 import languageES from "../../locales/es/language.json";
 import languageEN from "../../locales/en/language.json";
+import programasES from "../../locales/es/programas.json";
+import programasEN from "../../locales/en/programas.json";
+import contactoES from "../../locales/es/contacto.json";
+import contactEN from "../../locales/en/contact.json";
+import planesES from "../../locales/es/planes.json";
+import planesEN from "../../locales/en/planes.json";
 
 // Import validation utilities for development
 import { logValidationResults } from "../../lib/translation-validation";
@@ -73,6 +79,9 @@ const translations = {
     profesor: profesorES,
     dashboard: dashboardES,
     language: languageES,
+    programas: programasES,
+    contacto: contactoES,
+    planes: planesES,
   },
   en: {
     common: commonEN,
@@ -82,6 +91,9 @@ const translations = {
     profesor: profesorEN,
     dashboard: dashboardEN,
     language: languageEN,
+    programas: programasEN,
+    contact: contactEN,
+    planes: planesEN,
   },
 } as const;
 
@@ -101,6 +113,12 @@ const translationRegistry: Record<string, TranslationStrings> = {
   "en-dashboard": dashboardEN,
   "es-language": languageES,
   "en-language": languageEN,
+  "es-programas": programasES,
+  "en-programas": programasEN,
+  "es-contacto": contactoES,
+  "en-contact": contactEN,
+  "es-planes": planesES,
+  "en-planes": planesEN,
 };
 
 // Registry is populated with all translation files
@@ -172,6 +190,11 @@ const getNamespaceForRoute = (pathname: string): string[] => {
   // Public routes
   if (pathname === "/" || pathname.startsWith("/public")) {
     return [...baseNamespaces, "navigation"];
+  }
+
+  // Programas routes
+  if (pathname.startsWith("/programas")) {
+    return [...baseNamespaces, "navigation", "programas"];
   }
 
   // Auth routes

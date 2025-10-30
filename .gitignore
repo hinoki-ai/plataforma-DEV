@@ -72,3 +72,6 @@ scripts/*password*
 # clerk configuration (can include secrets)
 /.clerk/
 .env.vercel
+
+# User export files (contain sensitive user data)
+scripts/exports/

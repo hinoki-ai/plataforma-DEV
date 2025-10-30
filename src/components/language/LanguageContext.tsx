@@ -70,6 +70,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         "profesor",
         "parent",
         "dashboard",
+        "programas",
+        "contacto",
+        "planes",
       ]}
       initialLanguage="es"
     >

@@ -1,0 +1,42 @@
+{
+  "page.title": "Contacto | Plataforma Astral",
+  "page.description": "Ponte en contacto con nosotros. Estamos aquí para ayudarte con tus consultas sobre educación.",
+  "hero.title": "Contacto",
+  "hero.subtitle": "Estamos aquí para ayudarte. No dudes en ponerte en contacto con nosotros.",
+
+  "info.section.phone.title": "Teléfonos de Contacto",
+  "info.section.email.title": "Correo Electrónico",
+  "info.section.location.title": "Ubicación",
+  "info.section.hours.title": "Horarios",
+  "info.location.address": "Región de Valparaíso, Viña Del Mar",
+  "info.location.street": "Avenida Libertad #777",
+  "info.hours.monday_friday": "Lunes a Viernes: 8:00 - 18:00",
+  "info.hours.saturday": "Sábado: 9:00 - 13:00",
+  "info.hours.sunday": "Domingo: Cerrado",
+  "info.email.address": "astral@gmail.com",
+
+  "form.section.title": "Envíanos un mensaje",
+  "form.firstName.label": "Nombre",
+  "form.firstName.placeholder": "Tu nombre",
+  "form.lastName.label": "Apellido",
+  "form.lastName.placeholder": "Tu apellido",
+  "form.email.label": "Correo electrónico",
+  "form.email.placeholder": "nombre@correo.cl",
+  "form.subject.label": "Asunto",
+  "form.subject.placeholder": "¿Cómo podemos ayudarte?",
+  "form.message.label": "Mensaje",
+  "form.message.placeholder": "Cuéntanos más sobre tu consulta",
+  "form.submit": "Enviar mensaje",
+  "form.submitting": "Enviando mensaje...",
+
+  "form.success.title": "Mensaje enviado",
+  "form.success.description": "Gracias por escribirnos. Nos pondremos en contacto contigo pronto.",
+  "form.error.validation": "Revisa los datos del formulario",
+  "form.error.general": "Ocurrió un error inesperado al enviar tu mensaje. Por favor, vuelve a intentarlo.",
+  "form.error.api": "No pudimos enviar tu mensaje en este momento. Inténtalo nuevamente más tarde.",
+
+  "contact.person.loreto.name": "Loreto Gallegos Estay",
+  "contact.person.loreto.phone": "+569 3743 6196",
+  "contact.person.agustin.name": "Agustin Arancibia Mac-Guire",
+  "contact.person.agustin.phone": "+569 8889 6773"
+}

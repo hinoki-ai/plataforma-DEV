@@ -1,0 +1,42 @@
+{
+  "page.title": "Contact | Astral Platform",
+  "page.description": "Get in touch with us. We're here to help you with your education inquiries.",
+  "hero.title": "Contact",
+  "hero.subtitle": "We're here to help you. Don't hesitate to get in touch with us.",
+
+  "info.section.phone.title": "Contact Phones",
+  "info.section.email.title": "Email",
+  "info.section.location.title": "Location",
+  "info.section.hours.title": "Hours",
+  "info.location.address": "Valparaíso Region, Viña Del Mar",
+  "info.location.street": "Avenida Libertad #777",
+  "info.hours.monday_friday": "Monday to Friday: 8:00 - 18:00",
+  "info.hours.saturday": "Saturday: 9:00 - 13:00",
+  "info.hours.sunday": "Sunday: Closed",
+  "info.email.address": "astral@gmail.com",
+
+  "form.section.title": "Send us a message",
+  "form.firstName.label": "First Name",
+  "form.firstName.placeholder": "Your first name",
+  "form.lastName.label": "Last Name",
+  "form.lastName.placeholder": "Your last name",
+  "form.email.label": "Email",
+  "form.email.placeholder": "name@email.cl",
+  "form.subject.label": "Subject",
+  "form.subject.placeholder": "How can we help you?",
+  "form.message.label": "Message",
+  "form.message.placeholder": "Tell us more about your inquiry",
+  "form.submit": "Send message",
+  "form.submitting": "Sending message...",
+
+  "form.success.title": "Message sent",
+  "form.success.description": "Thank you for writing to us. We'll get back to you soon.",
+  "form.error.validation": "Please review the form data",
+  "form.error.general": "An unexpected error occurred while sending your message. Please try again.",
+  "form.error.api": "We couldn't send your message at this time. Please try again later.",
+
+  "contact.person.loreto.name": "Loreto Gallegos Estay",
+  "contact.person.loreto.phone": "+569 3743 6196",
+  "contact.person.agustin.name": "Agustin Arancibia Mac-Guire",
+  "contact.person.agustin.phone": "+569 8889 6773"
+}

@@ -1,0 +1,214 @@
+{
+  "hero": {
+    "title": "Programas educativos basados en datos reales y colaboración",
+    "description": "Activamos experiencias formativas integrales con módulos de gestión, planificación y comunicación que conectan a administración, docentes y familias.",
+    "request_presentation": "Solicitar presentación",
+    "explorer": {
+      "cta": "Explorar programas"
+    },
+    "view_specs": "Ver especificaciones"
+  },
+  "hero_highlights": {
+    "governance": {
+      "title": "Gobernanza por rol",
+      "description": "Dashboards diferenciados para administración, docentes y apoderados con permisos y navegación contextual."
+    },
+    "calendar": {
+      "title": "Calendario centralizado",
+      "description": "Unifica eventos, reuniones y horarios con exportación, importación masiva y categorías dinámicas."
+    },
+    "coverage": {
+      "title": "Cobertura completa",
+      "description": "Configura educación parvularia, básica, media y superior desde un solo selector institucional."
+    }
+  },
+  "institution_programs": {
+    "title": "Trayectorias educativas por nivel institucional",
+    "subtitle": "Configuramos el ecosistema digital a partir de los cuatro tipos de establecimiento definidos por MINEDUC, personalizando planificaciones, calendario y comunicación según cada tramo.",
+    "curricular_focus": "Enfoque curricular",
+    "preschool": {
+      "tagline": "Trayectorias NT1-NT2 con seguimiento socioemocional y colaboración familia-escuela.",
+      "modules": [
+        "Calendario institucional con filtros para actividades pedagógicas y familiares.",
+        "Planificaciones iniciales con plantillas adaptables y recursos multimedia.",
+        "Panel de apoderados con reuniones y comunicaciones en tiempo real."
+      ]
+    },
+    "basic_school": {
+      "tagline": "Cobertura 1° básico a 8° básico con foco en interdisciplinariedad y gestión comunitaria.",
+      "modules": [
+        "Planificaciones colaborativas con buscador por asignatura, curso y autor.",
+        "Metas PME consolidadas con evidencia y seguimiento de cumplimiento.",
+        "Libro de clases digital y gestión formal de reuniones con apoderados."
+      ]
+    },
+    "high_school": {
+      "tagline": "Rutas científico-humanistas y técnico-profesionales con participación estudiantil.",
+      "modules": [
+        "Horarios sincronizados y calendario de evaluaciones en tiempo real.",
+        "Repositorio documental y votaciones para consejos escolares y centros de estudiantes.",
+        "Reportes de progreso y asistencia disponibles para equipos directivos y familias."
+      ]
+    },
+    "technical_institute": {
+      "tagline": "Formación técnica especializada con certificación profesional y práctica laboral.",
+      "modules": [
+        "Planes de estudio modulares con especializaciones técnicas.",
+        "Gestión de prácticas profesionales y certificaciones técnicas.",
+        "Coordinación docente especializada y evaluación técnica."
+      ]
+    },
+    "technical_center": {
+      "tagline": "Centros de formación técnica con certificación SENCE y empleabilidad inmediata.",
+      "modules": [
+        "Programas técnicos certificados con seguimiento de competencias.",
+        "Gestión de prácticas laborales y certificaciones estatales.",
+        "Coordinación técnica y evaluación de habilidades prácticas."
+      ]
+    },
+    "university": {
+      "tagline": "Diplomados, programas técnicos y universitarios con trazabilidad académica y administrativa.",
+      "modules": [
+        "Planificación modular para asignaturas electivas y talleres intensivos.",
+        "Coordinación de equipos docentes con agenda y reuniones integradas.",
+        "Gestión documental y reportes para procesos de acreditación y cumplimiento."
+      ]
+    }
+  },
+  "role_dashboards": {
+    "title": "Dashboards diseñados para cada rol",
+    "subtitle": "RoleAwareDashboard adapta navegación, métricas y accesos para administración, docentes y familias, manteniendo una experiencia coherente en toda la plataforma.",
+    "admin": {
+      "title": "Panel Administrativo",
+      "description": "Dirección y equipos de gestión configuran niveles, usuarios y el ecosistema de datos de la institución.",
+      "modules": [
+        "Selector de tipo de institución con matriz curricular integrada.",
+        "Gestión de usuarios, permisos y equipos desde /admin/usuarios.",
+        "Calendario, reuniones, votaciones y documentos con trazabilidad completa."
+      ]
+    },
+    "profesor": {
+      "title": "Panel Docente",
+      "description": "Docentes sincronizan planificaciones, recursos y libro de clases en un flujo continuo.",
+      "modules": [
+        "UnifiedCalendarView con búsqueda, exportación y vistas personales.",
+        "Creador y repositorio de planificaciones con versiones y filtros avanzados.",
+        "Libro de clases, actividades y recursos pedagógicos listos para aula."
+      ]
+    },
+    "parent": {
+      "title": "Panel de Familias",
+      "description": "Apoderados siguen el progreso académico y coordinan comunicación directa con docentes.",
+      "modules": [
+        "Ficha por estudiante con asistencia, notas y actividades próximas.",
+        "Mensajería, notificaciones y actas disponibles en un solo lugar.",
+        "Solicitudes de reuniones y participación en votaciones colegiadas."
+      ]
+    }
+  },
+  "platform_modules": {
+    "title": "Módulos transversales de la plataforma",
+    "subtitle": "Cada programa combina herramientas académicas, administrativas y de participación para mantener a toda la comunidad sincronizada.",
+    "see_in_action": "Ver en acción",
+    "unified_calendar": {
+      "title": "Calendario institucional unificado",
+      "description": "UnifiedCalendarView centraliza eventos académicos, administrativos y familiares con importación/exportación CSV e integración iCal."
+    },
+    "planning": {
+      "title": "Planificaciones y recursos",
+      "description": "PlanningDashboard, recursos docentes y actividades permiten diseñar, publicar y compartir clases con criterios comunes."
+    },
+    "pme": {
+      "title": "Seguimiento PME y analítica",
+      "description": "Los tableros PME consolidan metas, evidencias y avances por equipo, con estados y alertas configurables."
+    },
+    "meetings": {
+      "title": "Reuniones y comunicación",
+      "description": "Módulos de reuniones y mensajería integran agenda, confirmaciones, actas y seguimiento para toda la comunidad."
+    },
+    "documents": {
+      "title": "Gestión documental",
+      "description": "Repositorio por categorías con carga de reglamentos, protocolos y planes, visor PDF y control de versiones."
+    },
+    "voting": {
+      "title": "Participación y votaciones",
+      "description": "Flujos participativos con opciones múltiples, autenticación obligatoria y reportes descargables para actas."
+    }
+  },
+  "implementation_phases": {
+    "title": "Así desplegamos cada programa",
+    "subtitle": "Un roadmap práctico que asegura adopción y resultados medibles desde el primer trimestre.",
+    "diagnosis": {
+      "title": "Diagnóstico y configuración",
+      "duration": "Semana 1",
+      "description": "Levantamos el contexto institucional, definimos niveles y activamos la estructura con el selector educativo.",
+      "focus": "Matriz curricular, usuarios y permisos iniciales"
+    },
+    "data_load": {
+      "title": "Carga de información",
+      "duration": "Semanas 2-3",
+      "description": "Importamos calendarios, planificaciones históricas y documentos clave para comenzar con datos reales.",
+      "focus": "Eventos, planificaciones y repositorio documental"
+    },
+    "deployment": {
+      "title": "Capacitación y despliegue",
+      "duration": "Mes 1",
+      "description": "Acompañamos a equipos directivos, docentes y familias en sesiones prácticas por rol para asegurar adopción.",
+      "focus": "Sesiones guiadas por dashboard y módulos críticos"
+    },
+    "monitoring": {
+      "title": "Monitoreo continuo",
+      "duration": "Meses 2-3",
+      "description": "Seguimos indicadores PME, uso de módulos y retroalimentación para ajustes iterativos.",
+      "focus": "Reportes compartidos y planes de mejora"
+    }
+  },
+  "support": {
+    "title": "Acompañamiento y soporte continuo",
+    "subtitle": "Nuestro equipo se integra a la institución para garantizar operación diaria, soporte y mejora continua.",
+    "dedicated_team": {
+      "title": "Equipo interdisciplinario dedicado",
+      "description": "Especialistas pedagógicos, tecnológicos y de convivencia acompañan cada hito y coordinan con la institución.",
+      "bullets": [
+        "Mesa técnica semanal con dirección",
+        "Soporte priorizado para incidencias críticas",
+        "Plan de comunicación con apoderados"
+      ]
+    },
+    "operational": {
+      "title": "Acompañamiento operativo",
+      "description": "Documentamos procesos, configuramos integraciones y proveemos guías para sacar el máximo de cada módulo.",
+      "bullets": [
+        "Playbooks de calendario, reuniones y votaciones",
+        "Checklist de cumplimiento y documentación",
+        "Capacitaciones grabadas y microlearning"
+      ]
+    },
+    "community": {
+      "title": "Comunidad y recursos",
+      "description": "Acceso a banco de planificaciones, proyectos y evaluaciones compartidas entre establecimientos aliados.",
+      "bullets": [
+        "Calendario de comunidades de práctica",
+        "Repositorio abierto de proyectos STEAM",
+        "Microcursos certificados para docentes"
+      ]
+    }
+  },
+  "impact": {
+    "badge": "Impacto medible",
+    "title": "Gestión integral con información en contexto",
+    "description": "Toda la comunidad utiliza los mismos datos, sincronizados por rol y alimentados en tiempo real por nuestros módulos.",
+    "highlights": [
+      "RoleAwareDashboard sincroniza indicadores y navegación según el perfil del usuario.",
+      "Los módulos de calendario, reuniones y votaciones comparten estados y notificaciones en tiempo real.",
+      "Las familias acceden a informes, mensajes y actas sin depender de múltiples plataformas.",
+      "Los equipos directivos monitorean PME, planificaciones y documentación desde un solo panel."
+    ]
+  },
+  "cta": {
+    "title": "Construyamos la próxima etapa de tu proyecto educativo",
+    "description": "Agenda una conversación para mapear necesidades y definir el plan de roll-out por niveles y roles.",
+    "schedule_meeting": "Agendar reunión",
+    "download_specs": "Descargar ficha de programas"
+  }
+}

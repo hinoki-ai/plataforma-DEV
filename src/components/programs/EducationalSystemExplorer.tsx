@@ -177,25 +177,33 @@ export function EducationalSystemExplorer() {
             <AlertDescription className="text-white/90 leading-relaxed">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span className="font-semibold text-white">Institución:</span>{" "}
+                  <span className="font-semibold text-white">
+                    {t("programas.explorer.institution")}:
+                  </span>{" "}
                   <span className="text-white/90">
                     {INSTITUTION_TYPE_INFO[selectedType].chileanName}
                   </span>
                 </div>
                 <div>
-                  <span className="font-semibold text-white">Descripción:</span>{" "}
+                  <span className="font-semibold text-white">
+                    {t("programas.explorer.description")}:
+                  </span>{" "}
                   <span className="text-white/90">
                     {INSTITUTION_TYPE_INFO[selectedType].description}
                   </span>
                 </div>
                 <div>
-                  <span className="font-semibold text-white">Niveles:</span>{" "}
+                  <span className="font-semibold text-white">
+                    {t("programas.explorer.levels")}:
+                  </span>{" "}
                   <span className="text-white/90">
                     {INSTITUTION_TYPE_INFO[selectedType].levels.length}
                   </span>
                 </div>
                 <div>
-                  <span className="font-semibold text-white">Asignaturas:</span>{" "}
+                  <span className="font-semibold text-white">
+                    {t("programas.explorer.subjects")}:
+                  </span>{" "}
                   <span className="text-white/90">
                     {getSubjectsForInstitutionType(selectedType).length}
                   </span>
@@ -273,7 +281,8 @@ export function EducationalSystemExplorer() {
                             variant="outline"
                             className="bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/50 dark:border-blue-700 dark:text-blue-300"
                           >
-                            {level.grades?.length || 0} grados
+                            {level.grades?.length || 0}{" "}
+                            {t("programas.explorer.grades")}
                           </Badge>
                         </div>
                       </div>
@@ -290,20 +299,21 @@ export function EducationalSystemExplorer() {
                   <div className="p-2 bg-emerald-600 rounded-xl text-white">
                     <Users className="h-5 w-5" />
                   </div>
-                  Características del Sistema
+                  {t("programas.explorer.system_features")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-semibold text-slate-800 dark:text-white">
-                      Asignaturas
+                      {t("programas.explorer.subjects")}
                     </h4>
                     <Badge
                       variant="outline"
                       className="bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/50 dark:border-emerald-700 dark:text-emerald-300"
                     >
-                      {getSubjectsForInstitutionType(selectedType).length} total
+                      {getSubjectsForInstitutionType(selectedType).length}{" "}
+                      {t("programas.explorer.total")}
                     </Badge>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -325,7 +335,7 @@ export function EducationalSystemExplorer() {
                       >
                         +
                         {getSubjectsForInstitutionType(selectedType).length - 8}{" "}
-                        más
+                        {t("programas.explorer.more")}
                       </Badge>
                     )}
                   </div>
@@ -375,7 +385,7 @@ export function EducationalSystemExplorer() {
                               variant="outline"
                               className="ml-auto bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-600 text-xs"
                             >
-                              Activo
+                              {t("programas.explorer.active")}
                             </Badge>
                           )}
                         </div>
@@ -398,8 +408,7 @@ export function EducationalSystemExplorer() {
                 {t("programas.explorer.adapted_navigation")}
               </CardTitle>
               <CardDescription className="text-lg text-slate-600 dark:text-slate-300">
-                La navegación se adapta automáticamente según el tipo de
-                institución
+                {t("programas.explorer.navigation_adapts")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -421,10 +430,10 @@ export function EducationalSystemExplorer() {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white">
-                  Dashboard Interactivo
+                  {t("programas.explorer.interactive_dashboard")}
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  Vista previa del panel de control adaptado para{" "}
+                  {t("programas.explorer.dashboard_preview")}{" "}
                   {INSTITUTION_TYPE_INFO[
                     selectedType
                   ].chileanName.toLowerCase()}
@@ -453,7 +462,7 @@ export function EducationalSystemExplorer() {
               <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
                 <Info className="h-6 w-6" />
               </div>
-              Estado de Implementación
+              {t("programas.explorer.implementation_status")}
             </CardTitle>
           </CardHeader>
           <CardContent className="relative z-10 space-y-6">
@@ -535,12 +544,10 @@ export function EducationalSystemExplorer() {
                 <div className="text-3xl">🎉</div>
                 <div className="flex-1">
                   <h4 className="font-bold text-xl text-white mb-2">
-                    Sistema Completado
+                    {t("programas.explorer.system_completed")}
                   </h4>
                   <p className="text-green-100 leading-relaxed">
-                    El sistema educativo comprensivo está listo para usar.
-                    Soporta desde Educación Parvularia hasta Educación Superior
-                    con estándares chilenos e internacionales ISCED.
+                    {t("programas.explorer.system_completed_description")}
                   </p>
                 </div>
               </div>

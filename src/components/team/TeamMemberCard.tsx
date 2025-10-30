@@ -247,7 +247,7 @@ export function TeamMemberCard({
         <AdaptiveCardContent className="p-6">
           {/* Header with avatar and basic info - perfectly centered */}
           <div className="flex items-center gap-4 mb-6">
-            <Avatar className="h-16 w-16 flex-shrink-0">
+            <Avatar className="h-16 w-16 shrink-0">
               <AvatarImage src={member.imageUrl || ""} alt={member.name} />
               <AvatarFallback className="text-lg font-semibold">
                 {getInitials(member.name)}
@@ -339,7 +339,7 @@ export function TeamMemberCard({
     >
       <AdaptiveCardContent className="p-6">
         <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 flex-shrink-0">
+          <Avatar className="h-16 w-16 shrink-0">
             <AvatarImage
               src={formattedMember.imageUrl || ""}
               alt={formattedMember.name}
@@ -360,7 +360,7 @@ export function TeamMemberCard({
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+              <div className="flex items-center gap-2 shrink-0 ml-2">
                 <Badge
                   variant={formattedMember.isActive ? "default" : "secondary"}
                   className={formattedMember.isActive ? "bg-green-500" : ""}
@@ -407,13 +407,13 @@ export function TeamMemberCard({
                 <div className="flex flex-col gap-1 text-xs text-muted-foreground">
                   {formattedMember.email && (
                     <div className="flex items-center gap-2">
-                      <Mail className="w-3 h-3 flex-shrink-0" />
+                      <Mail className="w-3 h-3 shrink-0" />
                       <span className="truncate">{formattedMember.email}</span>
                     </div>
                   )}
                   {formattedMember.phone && (
                     <div className="flex items-center gap-2">
-                      <Phone className="w-3 h-3 flex-shrink-0" />
+                      <Phone className="w-3 h-3 shrink-0" />
                       <span>{formattedMember.phone}</span>
                     </div>
                   )}
