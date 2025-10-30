@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reglamento General - CPMA</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        line-height: 1.6;
+        color: #1e293b;
+        background: #ffffff;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      .title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        font-weight: 400;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 30px;
+      }
+
+      .section {
+        margin-bottom: 40px;
+      }
+
+      .section-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #1d4ed8;
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 3px solid #dbeafe;
+      }
+
+      .content-block {
+        background: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        padding: 24px 20px;
+        margin-bottom: 20px;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .number-list {
+        counter-reset: section-counter;
+      }
+
+      .list-item {
+        counter-increment: section-counter;
+        margin-bottom: 16px;
+        padding-left: 24px;
+        position: relative;
+      }
+
+      .list-item::before {
+        content: counter(section-counter) ".";
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-weight: 600;
+        color: #2563eb;
+        font-size: 14px;
+      }
+
+      .sub-list {
+        margin-left: 20px;
+        margin-top: 12px;
+      }
+
+      .sub-list .list-item {
+        counter-increment: subsection-counter;
+        font-size: 14px;
+        color: #64748b;
+      }
+
+      .sub-list .list-item::before {
+        content: counter(section-counter) "." counter(subsection-counter);
+        font-size: 12px;
+      }
+
+      .highlight-box {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 20px 0;
+        position: relative;
+      }
+
+      .highlight-box::before {
+        content: "📋";
+        position: absolute;
+        top: -12px;
+        left: 20px;
+        background: white;
+        border: 2px solid #bfdbfe;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+
+      .footer {
+        margin-top: 60px;
+        padding: 30px;
+        background: #f1f5f9;
+        border-radius: 12px;
+        text-align: center;
+        border-top: 4px solid #3b82f6;
+      }
+
+      .footer-text {
+        font-size: 14px;
+        color: #64748b;
+        font-style: italic;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+
+      @media print {
+        body {
+          font-size: 12px;
+        }
+        .container {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">🎓</div>
+        <h1 class="title">
+          CENTRO DE PERFECCIONAMIENTO Y ACTUALIZACIÓN MAGISTERIAL
+        </h1>
+        <p class="subtitle">Reglamento General</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="section">
+        <h2 class="section-title">1. OBJETIVO</h2>
+        <div class="content-block">
+          <p>
+            El Centro de Perfeccionamiento y Actualización Magisterial (CPMA)
+            tiene como objetivo principal brindar formación continua y
+            actualización pedagógica a los docentes de la institución educativa,
+            fomentando el desarrollo profesional y la mejora de la calidad
+            educativa.
+          </p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">2. ALCANCE</h2>
+        <div class="content-block">
+          <p>
+            Este reglamento aplica a todos los docentes, directivos y personal
+            administrativo de la institución que participen en los programas de
+            perfeccionamiento y actualización ofrecidos por el CPMA.
+          </p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">3. ORGANIZACIÓN DEL CPMA</h2>
+        <div class="number-list">
+          <div class="list-item">Director del CPMA</div>
+          <div class="list-item">Coordinadores de Área</div>
+          <div class="list-item">Equipo de Facilitadores</div>
+          <div class="list-item">Comité de Evaluación</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">4. PROGRAMAS DE FORMACIÓN</h2>
+        <div class="number-list">
+          <div class="list-item">Cursos de Actualización Curricular</div>
+          <div class="list-item">Talleres de Metodologías Activas</div>
+          <div class="list-item">Diplomados en Educación Inclusiva</div>
+          <div class="list-item">Programas de Desarrollo Profesional</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">5. PARTICIPACIÓN DOCENTE</h2>
+        <div class="number-list">
+          <div class="list-item">Inscripción voluntaria en programas</div>
+          <div class="list-item">Evaluación de necesidades formativas</div>
+          <div class="list-item">Seguimiento y evaluación del aprendizaje</div>
+          <div class="list-item">Certificación de competencias adquiridas</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">6. RECURSOS Y APOYO</h2>
+        <div class="number-list">
+          <div class="list-item">Biblioteca especializada</div>
+          <div class="list-item">Laboratorios tecnológicos</div>
+          <div class="list-item">Plataformas virtuales de aprendizaje</div>
+          <div class="list-item">Materiales didácticos</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">7. EVALUACIÓN Y SEGUIMIENTO</h2>
+        <div class="number-list">
+          <div class="list-item">Autoevaluación docente</div>
+          <div class="list-item">Evaluación de impacto en el aula</div>
+          <div class="list-item">Feedback y mejora continua</div>
+          <div class="list-item">Reportes anuales de progreso</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">8. COMPROMISOS INSTITUCIONALES</h2>
+        <div class="number-list">
+          <div class="list-item">Apoyo a la participación docente</div>
+          <div class="list-item">Reconocimiento al desarrollo profesional</div>
+          <div class="list-item">
+            Integración de aprendizajes en la práctica pedagógica
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <p>
+          <strong
+            >Este reglamento establece las bases para el funcionamiento efectivo
+            del CPMA, garantizando una formación de calidad que impacte
+            positivamente en la educación de nuestros estudiantes.</strong
+          >
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="footer-text">
+        Documento oficial del Centro de Perfeccionamiento y Actualización
+        Magisterial
+      </p>
+      <p class="footer-text">Versión 1.0 - Vigente desde 2025</p>
+    </div>
+  </body>
+</html>

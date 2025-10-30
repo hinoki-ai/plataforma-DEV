@@ -101,14 +101,36 @@ function LegacyLanguageAdapter({ children }: { children: React.ReactNode }) {
     language: divineContext.language,
     setLanguage: divineContext.setLanguage,
     t: (key: string, namespace?: string) => {
-      // Use specified namespace or default to 'common'
-      const targetNamespace = namespace || "common";
+      let targetNamespace = namespace || "common";
+      let lookupKey = key;
+
+      // Auto-detect namespace from key prefix if no namespace specified
+      if (!namespace) {
+        const knownNamespaces = [
+          "planes",
+          "programas",
+          "contacto",
+          "admin",
+          "profesor",
+          "parent",
+          "dashboard",
+          "navigation",
+          "language",
+        ];
+        for (const ns of knownNamespaces) {
+          if (key.startsWith(`${ns}.`)) {
+            targetNamespace = ns;
+            lookupKey = key.substring(ns.length + 1); // Remove "namespace." prefix
+            break;
+          }
+        }
+      }
 
       // Try divine oracle with the correct namespace
-      const divineTranslation = divineContext.t(key, targetNamespace);
+      const divineTranslation = divineContext.t(lookupKey, targetNamespace);
 
       // Only fallback to legacy translations if the key is still returned unchanged
-      if (divineTranslation !== key) {
+      if (divineTranslation !== lookupKey) {
         return divineTranslation;
       }
 
