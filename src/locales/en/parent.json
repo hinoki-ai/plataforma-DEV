@@ -1,7 +1,7 @@
 {
   "parent.title": "Parent Portal",
   "parent.dashboard": "Parent Dashboard",
-  "parent.children": "My Children",
+  "parent.children": "My Students",
   "parent.grades": "Grades",
   "parent.attendance": "Attendance",
   "parent.communication": "Communication",
@@ -70,7 +70,7 @@
   "parent.students.address_note": "Please consult specific address with secretary",
 
   "parent.communication.title": "Communication",
-  "parent.communication.description": "Stay informed about your child's progress and activities.",
+  "parent.communication.description": "Stay informed about your student's progress and activities.",
   "parent.communication.recent_messages": "Recent Messages",
   "parent.communication.messages_desc": "Communications from the school and teachers",
   "parent.communication.quick_actions": "Quick Actions",

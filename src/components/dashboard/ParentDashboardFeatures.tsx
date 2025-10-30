@@ -159,7 +159,7 @@ const MOCK_COMMUNICATIONS: Communication[] = [
     type: "message",
     title: "Mensaje del Profesor",
     content:
-      "Su hijo/a ha mostrado excelente progreso en matemáticas este mes.",
+      "Su estudiante ha mostrado excelente progreso en matemáticas este mes.",
     date: "2024-01-18",
     read: true,
     priority: "medium",

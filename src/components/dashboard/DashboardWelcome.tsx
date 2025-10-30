@@ -151,7 +151,7 @@ export function DashboardWelcome({
           title: `${greeting}, ${displayName}`,
           message:
             customMessage ||
-            "Mantente conectado/a con la educación de tu hijo/a. Aquí puedes ver eventos, actividades y comunicarte con nuestro equipo educativo.",
+            "Mantente conectado/a con la educación de tu estudiante. Aquí puedes ver eventos, actividades y comunicarte con nuestro equipo educativo.",
           icon: Heart,
           roleLabel: "Padre/Apoderado",
           roleColor:

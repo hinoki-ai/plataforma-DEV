@@ -45,61 +45,14 @@ export default function GlobalError({
 
   return (
     <html lang={`${language}-CL`} suppressHydrationWarning>
-      <body
-        style={{
-          margin: 0,
-          minHeight: "100vh",
-          fontFamily: "system-ui, -apple-system, sans-serif",
-        }}
-      >
+      <body className="global-error-body">
         <DonutBackground>
-          <div
-            style={{
-              maxWidth: "28rem",
-              padding: "2rem",
-              textAlign: "center",
-              color: "#ff8800",
-              background: "rgba(11, 11, 11, 0.85)",
-              borderRadius: "1rem",
-              backdropFilter: "blur(8px)",
-              boxShadow: "0 0 40px rgba(255, 136, 0, 0.2)",
-              border: "1px solid rgba(255, 136, 0, 0.3)",
-            }}
-          >
-            <h1
-              style={{
-                fontSize: "2.5rem",
-                fontWeight: "bold",
-                marginBottom: "1rem",
-                textShadow: "0 0 20px rgba(255, 136, 0, 0.5)",
-              }}
-            >
-              {t("error.global_title")}
-            </h1>
-            <p
-              style={{
-                marginBottom: "2rem",
-                opacity: 0.8,
-                color: "#ffbb66",
-                wordBreak: "break-word",
-              }}
-            >
+          <div className="global-error-container">
+            <h1 className="global-error-title">{t("error.global_title")}</h1>
+            <p className="global-error-description">
               {error?.message || t("error.global_message")}
             </p>
-            <button
-              onClick={reset}
-              style={{
-                padding: "0.75rem 1.5rem",
-                background: "#ff8800",
-                color: "#0b0b0b",
-                borderRadius: "0.5rem",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                boxShadow: "0 0 20px rgba(255, 136, 0, 0.3)",
-                transition: "all 0.3s ease",
-              }}
-            >
+            <button onClick={reset} className="global-error-retry-button">
               {t("error.retry")}
             </button>
           </div>

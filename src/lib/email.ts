@@ -475,7 +475,7 @@ function getWelcomeEmailTemplate({
             <a href="${dashboardUrl}" class="button">Ir a mi Dashboard</a>
           </p>
           
-          <p>¿Necesitas ayuda? No dudes en contactarnos. Estamos aquí para apoyarte en el proceso educativo de tu hijo/a.</p>
+          <p>¿Necesitas ayuda? No dudes en contactarnos. Estamos aquí para apoyarte en el proceso educativo de tu estudiante.</p>
         </div>
         <div class="footer">
           <p>Plataforma Educativa Astral<br>
@@ -507,7 +507,7 @@ Ahora puedes:
 
 Visita tu dashboard: ${dashboardUrl}
 
-¿Necesitas ayuda? No dudes en contactarnos. Estamos aquí para apoyarte en el proceso educativo de tu hijo/a.
+¿Necesitas ayuda? No dudes en contactarnos. Estamos aquí para apoyarte en el proceso educativo de tu estudiante.
 
 Saludos cordiales,
 Plataforma Educativa Astral

@@ -270,7 +270,7 @@ export function RoleBasedExamples() {
                       <Badge variant="secondary">PARENT</Badge>
                     </div>
                     <p className="text-sm">
-                      Seguimiento del progreso de sus hijos e información
+                      Seguimiento del progreso de sus estudiantes e información
                       escolar.
                     </p>
                   </CardContent>

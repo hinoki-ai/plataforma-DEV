@@ -87,8 +87,8 @@ export default function AdminEstudiantesPage() {
     displayStudents = []; // Teachers can't add arbitrary students
     showAddStudents = false;
   } else if (userRole === "PARENT") {
-    pageTitle = "Cursos de Mis Hijos";
-    pageSubtitle = "Ve los cursos y estudiantes de tus hijos";
+    pageTitle = "Cursos de Mis Estudiantes";
+    pageSubtitle = "Ve los cursos y estudiantes de tus estudiantes";
     displayCourses = parentCourses || [];
     displayStudents = []; // Parents can't modify enrollments
     showAddStudents = false;

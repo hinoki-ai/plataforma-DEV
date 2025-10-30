@@ -141,7 +141,7 @@ export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
         <CardTitle>Solicitar Reunión</CardTitle>
         <p className="text-muted-foreground">
           Completa el formulario para solicitar una reunión con los profesores
-          de tu hijo/a. Te contactaremos para confirmar la fecha y hora.
+          de tu estudiante. Te contactaremos para confirmar la fecha y hora.
         </p>
       </CardHeader>
       <CardContent>

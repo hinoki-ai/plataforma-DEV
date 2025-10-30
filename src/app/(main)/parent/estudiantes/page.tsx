@@ -174,9 +174,9 @@ function EstudiantesContent() {
     return (
       <div className="space-y-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Mis Hijos</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Mis Estudiantes</h1>
           <p className="text-muted-foreground">
-            Información académica y seguimiento de sus hijos
+            Información académica y seguimiento de sus estudiantes
           </p>
         </div>
         <div className="text-center py-16">
@@ -208,10 +208,10 @@ function EstudiantesContent() {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Mis Hijos</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Mis Estudiantes</h1>
         <p className="text-muted-foreground">
           Información académica, asistencia y seguimiento del progreso de sus
-          hijos
+          estudiantes
         </p>
       </div>
 

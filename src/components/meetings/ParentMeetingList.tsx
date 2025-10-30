@@ -122,7 +122,7 @@ export function ParentMeetingList({ userId }: ParentMeetingListProps) {
         <div>
           <h2 className="text-2xl font-bold text-foreground">Mis Reuniones</h2>
           <p className="text-muted-foreground">
-            Reuniones programadas con los profesores de tu hijo/a
+            Reuniones programadas con los profesores de tu estudiante
           </p>
         </div>
       </div>
