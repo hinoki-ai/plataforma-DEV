@@ -4,7 +4,7 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays, List, BarChart3, Plus } from "lucide-react";
-import { MeetingCalendar } from "./MeetingCalendar";
+import { HeavyComponents } from "@/lib/dynamic-imports";
 import { MeetingList } from "./MeetingList";
 import { MeetingStats } from "./MeetingStats";
 import { ParentRequestsList } from "./ParentRequestsList";
@@ -31,7 +31,7 @@ export function MeetingTabs({ isAdmin = false }: MeetingTabsProps) {
       id: "calendar",
       label: "Calendario",
       icon: CalendarDays,
-      content: <MeetingCalendar isAdmin={false} />,
+      content: <HeavyComponents.MeetingCalendar isAdmin={false} />,
     },
   ];
 
@@ -57,7 +57,7 @@ export function MeetingTabs({ isAdmin = false }: MeetingTabsProps) {
       id: "calendar",
       label: "Calendario",
       icon: CalendarDays,
-      content: <MeetingCalendar isAdmin={true} />,
+      content: <HeavyComponents.MeetingCalendar isAdmin={true} />,
     },
     {
       id: "stats",

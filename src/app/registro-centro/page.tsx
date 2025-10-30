@@ -43,26 +43,32 @@ export default function CentroRegistrationPage() {
 function CentroRegistrationContent() {
   const router = useRouter();
   const { t } = useLanguage();
-  const [registrationComplete, setRegistrationComplete] = useState(false);
-  const [registrationData, setRegistrationData] =
-    useState<CentroRegistrationSuccessData | null>(null);
 
-  // Check for success query parameter or success state
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("success") === "true") {
-      // If redirected from CPA success page, show success
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setRegistrationComplete(true);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setRegistrationData({
-        name: urlParams.get("name") || "",
-        email: urlParams.get("email") || "",
-        message: "Registro completado exitosamente",
-        success: true,
-      });
+  // Initialize state from URL parameters
+  const getInitialState = () => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("success") === "true") {
+        return {
+          registrationComplete: true,
+          registrationData: {
+            name: urlParams.get("name") || "",
+            email: urlParams.get("email") || "",
+            message: "Registro completado exitosamente",
+            success: true,
+          } as CentroRegistrationSuccessData,
+        };
+      }
     }
-  }, []);
+    return {
+      registrationComplete: false,
+      registrationData: null,
+    };
+  };
+
+  const initialState = getInitialState();
+  const [registrationComplete, setRegistrationComplete] = useState(initialState.registrationComplete);
+  const [registrationData, setRegistrationData] = useState<CentroRegistrationSuccessData | null>(initialState.registrationData);
 
   const successBadgeRaw = t("centro_registration.success_badge", "common");
   const successBadgeText =

@@ -54,155 +54,174 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex justify-between items-center">
-          {/* Left: Logo/Branding */}
-          <div className="flex items-center space-x-4">
-            {isAuthenticatedRoute ? (
-              // Authenticated: Logo + Dashboard Title
-              <div className="flex items-center space-x-4">
-                {/* Dashboard Title */}
-                <div className="hidden md:block">
-                  <h1 className="text-lg font-semibold text-foreground">
-                    {pathname?.startsWith("/parent") &&
-                      t("nav.parent_dashboard", "common")}
-                    {pathname?.startsWith("/profesor") &&
-                      t("nav.professor_area", "common")}
-                    {pathname?.startsWith("/admin") &&
-                      t("nav.admin_dashboard", "common")}
-                  </h1>
+    <>
+      {/* Skip Links for Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
+      >
+        Saltar al contenido principal
+      </a>
+      <a
+        href="#navigation"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg focus:translate-y-12"
+      >
+        Saltar a navegación
+      </a>
+
+      <header className="bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm border-b border-border sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            {/* Left: Logo/Branding */}
+            <div className="flex items-center space-x-4">
+              {isAuthenticatedRoute ? (
+                // Authenticated: Logo + Dashboard Title
+                <div className="flex items-center space-x-4">
+                  {/* Dashboard Title */}
+                  <div className="hidden md:block">
+                    <h1 className="text-lg font-semibold text-foreground">
+                      {pathname?.startsWith("/parent") &&
+                        t("nav.parent_dashboard", "common")}
+                      {pathname?.startsWith("/profesor") &&
+                        t("nav.professor_area", "common")}
+                      {pathname?.startsWith("/admin") &&
+                        t("nav.admin_dashboard", "common")}
+                    </h1>
+                  </div>
                 </div>
+              ) : (
+                // Public: Main site title
+                <Link href="/" className="flex items-center space-x-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center space-x-2 text-lg font-semibold hover:bg-muted/50 transition-colors"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                    <span>{t("school.name")}</span>
+                  </Button>
+                </Link>
+              )}
+            </div>
+
+            {/* Right: Navigation and Unified Auth Button */}
+            <div className="flex items-center space-x-2">
+              {/* Profile Completion Badge - Authenticated users only */}
+              {isAuthenticatedRoute && <ProfileCompletionBadge />}
+
+              {/* Desktop Navigation - Public pages only */}
+              {!isAuthenticatedRoute && (
+                <nav
+                  id="navigation"
+                  className="hidden md:flex items-center space-x-2"
+                >
+                  {publicNavLinks.map((link) => (
+                    <Button
+                      key={link.href}
+                      variant="ghost"
+                      size="sm"
+                      className="text-base font-medium hover:bg-muted/50 transition-colors"
+                      asChild
+                    >
+                      <Link href={link.href}>{link.label}</Link>
+                    </Button>
+                  ))}
+                </nav>
+              )}
+
+              {/* UNIFIED AUTH BUTTON - GOLD STANDARD - Morphs between states */}
+              <div className="hidden md:flex">
+                <UnifiedAuthButton />
               </div>
-            ) : (
-              // Public: Main site title
-              <Link href="/" className="flex items-center space-x-2">
+
+              {/* Mobile Menu Button - Public pages only */}
+              {!isAuthenticatedRoute && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="flex items-center space-x-2 text-lg font-semibold hover:bg-muted/50 transition-colors"
+                  className="md:hidden"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  aria-label={t("nav.toggle.menu", "navigation")}
                 >
-                  <ChevronLeft className="h-5 w-5" />
-                  <span>{t("school.name")}</span>
+                  {isMobileMenuOpen ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Menu className="h-5 w-5" />
+                  )}
                 </Button>
-              </Link>
-            )}
-          </div>
-
-          {/* Right: Navigation and Unified Auth Button */}
-          <div className="flex items-center space-x-2">
-            {/* Profile Completion Badge - Authenticated users only */}
-            {isAuthenticatedRoute && <ProfileCompletionBadge />}
-
-            {/* Desktop Navigation - Public pages only */}
-            {!isAuthenticatedRoute && (
-              <div className="hidden md:flex items-center space-x-2">
-                {publicNavLinks.map((link) => (
-                  <Button
-                    key={link.href}
-                    variant="ghost"
-                    size="sm"
-                    className="text-base font-medium hover:bg-muted/50 transition-colors"
-                    asChild
-                  >
-                    <Link href={link.href}>{link.label}</Link>
-                  </Button>
-                ))}
-              </div>
-            )}
-
-            {/* UNIFIED AUTH BUTTON - GOLD STANDARD - Morphs between states */}
-            <div className="hidden md:flex">
-              <UnifiedAuthButton />
+              )}
             </div>
-
-            {/* Mobile Menu Button - Public pages only */}
-            {!isAuthenticatedRoute && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="md:hidden"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label={t("nav.toggle.menu", "navigation")}
-              >
-                {isMobileMenuOpen ? (
-                  <X className="h-5 w-5" />
-                ) : (
-                  <Menu className="h-5 w-5" />
-                )}
-              </Button>
-            )}
           </div>
-        </div>
 
-        {/* Mobile Navigation Menu - Public pages only */}
-        {!isAuthenticatedRoute && isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <div
-              className="md:hidden fixed inset-0 top-[57px] bg-black/50 z-30"
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
+          {/* Mobile Navigation Menu - Public pages only */}
+          {!isAuthenticatedRoute && isMobileMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <div
+                className="md:hidden fixed inset-0 top-[57px] bg-black/50 z-30"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
 
-            {/* Menu Panel */}
-            <div className="md:hidden fixed inset-x-0 top-[57px] bottom-0 bg-background z-40 overflow-y-auto">
-              <div className="flex flex-col h-full">
-                {/* Logo Section */}
-                <div className="px-6 py-6 border-b border-border">
-                  <Link
-                    href="/"
-                    className="flex items-center space-x-2"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="text-xl font-bold text-foreground">
-                      {t("school.name")}
-                    </span>
-                  </Link>
-                </div>
-
-                {/* Navigation Links Section */}
-                <div className="flex-1 px-4 py-6">
-                  <div className="flex flex-col space-y-2">
-                    {publicNavLinks.map((link) => (
-                      <Button
-                        key={link.href}
-                        variant="ghost"
-                        size="lg"
-                        className="justify-start text-base font-medium hover:bg-muted/50 transition-colors"
-                        asChild
-                      >
-                        <Link
-                          href={link.href}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          {link.label}
-                        </Link>
-                      </Button>
-                    ))}
+              {/* Menu Panel */}
+              <div className="md:hidden fixed inset-x-0 top-[57px] bottom-0 bg-background z-40 overflow-y-auto">
+                <div className="flex flex-col h-full">
+                  {/* Logo Section */}
+                  <div className="px-6 py-6 border-b border-border">
+                    <Link
+                      href="/"
+                      className="flex items-center space-x-2"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <span className="text-xl font-bold text-foreground">
+                        {t("school.name")}
+                      </span>
+                    </Link>
                   </div>
-                </div>
 
-                {/* Settings Controls Section - Only when not authenticated */}
-                {!isAuthenticatedRoute && (
-                  <div className="px-6 py-6 border-t border-border">
-                    <p className="text-sm text-muted-foreground mb-4 text-center">
-                      {t("nav.configuration", "navigation")}
-                    </p>
-                    <div className="flex items-center justify-center">
-                      <SettingsHamburger size="md" />
+                  {/* Navigation Links Section */}
+                  <div className="flex-1 px-4 py-6">
+                    <div className="flex flex-col space-y-2">
+                      {publicNavLinks.map((link) => (
+                        <Button
+                          key={link.href}
+                          variant="ghost"
+                          size="lg"
+                          className="justify-start text-base font-medium hover:bg-muted/50 transition-colors"
+                          asChild
+                        >
+                          <Link
+                            href={link.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {link.label}
+                          </Link>
+                        </Button>
+                      ))}
                     </div>
                   </div>
-                )}
 
-                {/* Authentication Section */}
-                <div className="px-6 py-6 border-t border-border">
-                  <UnifiedAuthButton />
+                  {/* Settings Controls Section - Only when not authenticated */}
+                  {!isAuthenticatedRoute && (
+                    <div className="px-6 py-6 border-t border-border">
+                      <p className="text-sm text-muted-foreground mb-4 text-center">
+                        {t("nav.configuration", "navigation")}
+                      </p>
+                      <div className="flex items-center justify-center">
+                        <SettingsHamburger size="md" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Authentication Section */}
+                  <div className="px-6 py-6 border-t border-border">
+                    <UnifiedAuthButton />
+                  </div>
                 </div>
               </div>
-            </div>
-          </>
-        )}
-      </div>
-    </header>
+            </>
+          )}
+        </div>
+      </header>
+    </>
   );
 }

@@ -14,7 +14,7 @@ export default function ContactoContent() {
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
       <Header />
-      <main className="container mx-auto px-4 pt-8 pb-16">
+      <main id="main-content" className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
             <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">

@@ -42,6 +42,7 @@ import type { Meeting, MeetingType } from "@/lib/prisma-compat-types";
 import { createMeeting, updateMeeting } from "@/services/actions/meetings";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
+import { useAriaLive } from "@/lib/hooks/useAriaLive";
 
 const MEETING_TYPES = [
   "PARENT_TEACHER",
@@ -130,6 +131,7 @@ export function MeetingForm({
   const [usersLoading, setUsersLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useLanguage();
+  const { announce } = useAriaLive();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -216,16 +218,25 @@ export function MeetingForm({
 
   const onSubmit = async (data: MeetingFormData) => {
     setIsSubmitting(true);
+    announce(
+      mode === "create" ? "Creando reunión..." : "Actualizando reunión...",
+      "polite",
+    );
     try {
       if (mode === "create") {
         await createMeeting(data);
       } else if (meeting) {
         await updateMeeting(meeting.id, data);
       }
+      announce("Reunión guardada exitosamente", "polite");
       onSuccess?.();
       onClose();
     } catch (error) {
       console.error("Error saving meeting:", error);
+      announce(
+        "Error al guardar la reunión. Por favor intenta nuevamente.",
+        "assertive",
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -71,30 +71,45 @@ export function ContactForm() {
           });
 
           toast.error(t("form.error.validation", "contacto"));
-          announce("Hay errores de validación en el formulario. Por favor revisa los campos marcados.", "assertive");
+          announce(
+            "Hay errores de validación en el formulario. Por favor revisa los campos marcados.",
+            "assertive",
+          );
           return;
         }
 
         toast.error(result?.error || t("form.error.api", "contacto"));
-        announce("Error al enviar el mensaje. Por favor intenta nuevamente.", "assertive");
+        announce(
+          "Error al enviar el mensaje. Por favor intenta nuevamente.",
+          "assertive",
+        );
         return;
       }
 
       if (!result?.success) {
         toast.error(result?.error || t("form.error.api", "contacto"));
-        announce("Error al procesar la solicitud. Por favor intenta nuevamente.", "assertive");
+        announce(
+          "Error al procesar la solicitud. Por favor intenta nuevamente.",
+          "assertive",
+        );
         return;
       }
 
       toast.success(t("form.success.title", "contacto"), {
         description: t("form.success.description", "contacto"),
       });
-      announce("Mensaje enviado exitosamente. Gracias por contactarnos.", "polite");
+      announce(
+        "Mensaje enviado exitosamente. Gracias por contactarnos.",
+        "polite",
+      );
       reset();
     } catch (error) {
       console.error("Error submitting contact form:", error);
       toast.error(t("form.error.general", "contacto"));
-      announce("Error de conexión. Por favor verifica tu conexión a internet e intenta nuevamente.", "assertive");
+      announce(
+        "Error de conexión. Por favor verifica tu conexión a internet e intenta nuevamente.",
+        "assertive",
+      );
     }
   });
 

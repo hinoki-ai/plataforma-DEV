@@ -95,30 +95,39 @@ export const DashboardComponents = {
 export const HeavyComponents = {
   // Planning components
   PlanningDashboard: createDynamicComponent(
-    () => import('@/components/planning/PlanningDashboard'),
+    () =>
+      import("@/components/planning/PlanningDashboard").then((mod) => ({
+        default: mod.PlanningDashboard,
+      })),
     {
       loading: () => <DashboardSkeleton />,
-      displayName: 'PlanningDashboard',
-    }
+      displayName: "PlanningDashboard",
+    },
   ),
 
   // Meeting components
   MeetingCalendar: createDynamicComponent(
-    () => import('@/components/meetings/MeetingCalendar'),
+    () =>
+      import("@/components/meetings/MeetingCalendar").then((mod) => ({
+        default: mod.MeetingCalendar,
+      })),
     {
       loading: () => <CalendarSkeleton />,
-      displayName: 'MeetingCalendar',
-    }
+      displayName: "MeetingCalendar",
+    },
   ),
 
   // File components
   PDFViewer: createDynamicComponent(
-    () => import('@/components/ui/pdf-viewer'),
+    () =>
+      import("@/components/ui/pdf-viewer").then((mod) => ({
+        default: mod.PDFViewer,
+      })),
     {
       loading: () => <DocumentSkeleton />,
-      displayName: 'PDFViewer',
+      displayName: "PDFViewer",
       ssr: false, // PDF viewer shouldn't SSR
-    }
+    },
   ),
 };
 

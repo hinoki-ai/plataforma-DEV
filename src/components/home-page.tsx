@@ -1,7 +1,7 @@
 // ⚡ Performance: PPR-optimized HomePage with static shell and dynamic components
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -15,14 +15,33 @@ import Header from "@/components/layout/Header";
 import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
 import { layout, typography } from "@/lib/responsive-utils";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { motion, Variants } from "motion/react";
 
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import HomepageFooter from "@/components/layout/SuperFooter";
+
+const fadeInUp: Variants = {
+  initial: { opacity: 0, y: 60 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerChildren: Variants = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
 export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
   const { t } = useLanguage();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Component mounted successfully
 
