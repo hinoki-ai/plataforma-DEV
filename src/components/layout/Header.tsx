@@ -29,10 +29,10 @@ export default function Header() {
 
   // Public navigation links
   const publicNavLinks = [
-    { href: "/programas", label: "Programas" },
-    { href: "/planes", label: "Planes" },
-    { href: "/cpma", label: "CFMG" },
-    { href: "/contacto", label: "Contacto" },
+    { href: "/programas", label: t("nav.programs", "navigation") },
+    { href: "/planes", label: t("nav.plans", "navigation") },
+    { href: "/cpma", label: t("nav.cfmg", "navigation") },
+    { href: "/contacto", label: t("nav.contact", "navigation") },
   ];
 
   // Show loading skeleton until mounted to prevent hydration mismatch
@@ -123,7 +123,7 @@ export default function Header() {
                 size="sm"
                 className="md:hidden"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Toggle menu"
+                aria-label={t("nav.toggle.menu", "navigation")}
               >
                 {isMobileMenuOpen ? (
                   <X className="h-5 w-5" />
@@ -186,7 +186,7 @@ export default function Header() {
                 {!isAuthenticatedRoute && (
                   <div className="px-6 py-6 border-t border-border">
                     <p className="text-sm text-muted-foreground mb-4 text-center">
-                      Configuración
+                      {t("nav.configuration", "navigation")}
                     </p>
                     <div className="flex items-center justify-center">
                       <SettingsHamburger size="md" />
