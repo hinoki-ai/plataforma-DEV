@@ -1008,7 +1008,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="childRUT">{t("signup.child_rut.label")}</Label>
+                    <Label htmlFor="childRUT">
+                      {t("signup.child_rut.label")}
+                    </Label>
                     <Input
                       id="childRUT"
                       name="childRUT"
@@ -1048,7 +1050,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="childPhone">{t("signup.child_phone.label")}</Label>
+                    <Label htmlFor="childPhone">
+                      {t("signup.child_phone.label")}
+                    </Label>
                     <Input
                       id="childPhone"
                       name="childPhone"
@@ -1496,7 +1500,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   disabled={isLoading}
                   className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-8 py-3 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? t("signup.registering") : t("signup.complete_registration")}
+                  {isLoading
+                    ? t("signup.registering")
+                    : t("signup.complete_registration")}
                 </Button>
               )}
             </div>
