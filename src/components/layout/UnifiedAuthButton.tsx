@@ -158,7 +158,7 @@ export default function UnifiedAuthButton() {
           className="text-base font-medium hover:bg-muted/50 transition-colors"
           onClick={() => router.push("/login")}
         >
-          {t("nav.portal.escolar", "navigation")}
+          {t("nav.school.portal", "navigation")}
         </Button>
 
         {/* Settings Gear Button - Hidden on mobile since it's in the menu */}

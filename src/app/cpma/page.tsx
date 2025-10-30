@@ -371,9 +371,27 @@ export default function CPMAPage() {
         </div>
       </section>
 
+      {/* Signup Section - Moved to first panel below title */}
+      <section className={`${layout.spacing.section(isDesktopForced)} transition-all duration-700 ease-out delay-200 ${
+        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}>
+        <div className={`${layout.container(isDesktopForced)}`}>
+          <SignupStyleSection
+            title={t("cpma.signup_title", "common")}
+            subtitle={t("cpma.signup_subtitle", "common")}
+          >
+            <div className="max-w-4xl mx-auto">
+              <SignupStylePanel variant="action">
+                <UnifiedSignupForm />
+              </SignupStylePanel>
+            </div>
+          </SignupStyleSection>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section
-        className={`${layout.spacing.section(isDesktopForced)} transition-all duration-700 ease-out delay-500 ${
+        className={`${layout.spacing.section(isDesktopForced)} transition-all duration-700 ease-out delay-700 ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
@@ -408,22 +426,6 @@ export default function CPMAPage() {
                 </motion.div>
               ))}
             </SignupStyleGrid>
-          </SignupStyleSection>
-        </div>
-      </section>
-
-      {/* Signup Section */}
-      <section className={`${layout.spacing.section(isDesktopForced)}`}>
-        <div className={`${layout.container(isDesktopForced)}`}>
-          <SignupStyleSection
-            title={t("cpma.signup_title", "common")}
-            subtitle={t("cpma.signup_subtitle", "common")}
-          >
-            <div className="max-w-4xl mx-auto">
-              <SignupStylePanel variant="action">
-                <UnifiedSignupForm />
-              </SignupStylePanel>
-            </div>
           </SignupStyleSection>
         </div>
       </section>

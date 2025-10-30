@@ -529,24 +529,27 @@ const comunasByRegion: Record<string, string[]> = {
   ],
 };
 
-const stepTitles = [
-  "Cuenta y Seguridad",
-  "Información Personal",
-  "Ubicación",
-  "Contacto de Emergencia",
+const getStepTitles = (t: (key: string) => string) => [
+  t("signup.step1.title"),
+  t("signup.step2.title"),
+  t("signup.step3.title"),
+  t("signup.step4.title"),
 ];
 
-const stepDescriptions = [
-  "Ingresa tu correo y crea tu contraseña segura",
-  "Tus datos básicos de contacto y de tu hijo/a",
-  "Tu dirección, ubicación e institución educativa",
-  "Persona a contactar en caso de emergencia",
+const getStepDescriptions = (t: (key: string) => string) => [
+  t("signup.step1.description"),
+  t("signup.step2.description"),
+  t("signup.step3.description"),
+  t("signup.step4.description"),
 ];
 
 export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const { data: session } = useSession();
   const { signIn: clerkSignIn } = useSignIn();
   const { t } = useLanguage();
+
+  const stepTitles = getStepTitles(t);
+  const stepDescriptions = getStepDescriptions(t);
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -781,7 +784,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         }
       } catch {
         setErrors({
-          email: "Error interno del servidor. Por favor, intenta nuevamente.",
+          email: t("signup.server_error"),
         });
       } finally {
         setIsLoading(false);
@@ -1005,7 +1008,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="childRUT">RUT del Estudiante</Label>
+                    <Label htmlFor="childRUT">{t("signup.child_rut.label")}</Label>
                     <Input
                       id="childRUT"
                       name="childRUT"
@@ -1045,7 +1048,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="childPhone">Teléfono del Estudiante</Label>
+                    <Label htmlFor="childPhone">{t("signup.child_phone.label")}</Label>
                     <Input
                       id="childPhone"
                       name="childPhone"
@@ -1107,7 +1110,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 {/* Location Information */}
                 <div className="space-y-4">
                   <h4 className="text-md font-medium text-foreground">
-                    Ubicación y Dirección
+                    {t("signup.location_section.title")}
                   </h4>
                   <div className="grid md:grid-cols-2 gap-4">
                     <LabelInputContainer>
@@ -1177,7 +1180,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 {/* Institution and Grade */}
                 <div className="space-y-4">
                   <h4 className="text-md font-medium text-foreground">
-                    Institución Educativa
+                    {t("signup.institution_section.title")}
                   </h4>
                   <div className="grid md:grid-cols-2 gap-4">
                     <LabelInputContainer>
@@ -1302,7 +1305,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="emergencyContact">
-                      Nombre de Contacto Primario *
+                      {t("signup.emergency_contact_primary.label")}
                     </Label>
                     <Input
                       id="emergencyContact"
@@ -1323,7 +1326,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
                   <LabelInputContainer>
                     <Label htmlFor="emergencyPhone">
-                      Teléfono Emergencia Primario *
+                      {t("signup.emergency_phone_primary.label")}
                     </Label>
                     <Input
                       id="emergencyPhone"
@@ -1348,7 +1351,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="secondaryEmergencyContact">
-                      Nombre de Contacto Secundario
+                      {t("signup.emergency_contact_secondary.label")}
                     </Label>
                     <Input
                       id="secondaryEmergencyContact"
@@ -1371,7 +1374,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
                   <LabelInputContainer>
                     <Label htmlFor="secondaryEmergencyPhone">
-                      Teléfono Emergencia Secundario
+                      {t("signup.emergency_phone_secondary.label")}
                     </Label>
                     <Input
                       id="secondaryEmergencyPhone"
@@ -1396,7 +1399,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="tertiaryEmergencyContact">
-                      Nombre de Contacto Terciario
+                      {t("signup.emergency_contact_tertiary.label")}
                     </Label>
                     <Input
                       id="tertiaryEmergencyContact"
@@ -1417,7 +1420,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
                   <LabelInputContainer>
                     <Label htmlFor="tertiaryEmergencyPhone">
-                      Teléfono Emergencia Terciario
+                      {t("signup.emergency_phone_tertiary.label")}
                     </Label>
                     <Input
                       id="tertiaryEmergencyPhone"
@@ -1493,7 +1496,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   disabled={isLoading}
                   className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-8 py-3 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? "Registrando..." : "Completar Registro"}
+                  {isLoading ? t("signup.registering") : t("signup.complete_registration")}
                 </Button>
               )}
             </div>
