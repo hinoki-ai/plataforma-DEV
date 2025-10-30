@@ -5,7 +5,6 @@ import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import terminosES from "@/locales/es/terminos.json";
 
 // Note: Metadata cannot be used in client components, so we'll use a different approach
 // The metadata will be handled by the layout or we can create a wrapper component

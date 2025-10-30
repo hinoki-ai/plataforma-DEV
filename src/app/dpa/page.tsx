@@ -5,24 +5,14 @@ import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+// Import translations statically for direct access
 import dpaES from "@/locales/es/dpa.json";
 import dpaEN from "@/locales/en/dpa.json";
 
-// Hook to get current language
-function useCurrentLanguage() {
-  const [language, setLanguage] = React.useState<"es" | "en">("es");
-  React.useEffect(() => {
-    const stored = localStorage.getItem("aramac-language-preference");
-    if (stored === "es" || stored === "en") {
-      setLanguage(stored);
-    }
-  }, []);
-  return language;
-}
-
 export default function DpaPage() {
-  const language = useCurrentLanguage();
-  const dpaTranslations = language === "es" ? dpaES : dpaEN;
+  const { language } = useDivineParsing(["dpa"]);
+  const dpaTranslations = (language === "es" ? dpaES : dpaEN) as any;
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
