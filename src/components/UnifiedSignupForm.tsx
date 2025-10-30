@@ -588,6 +588,70 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const [institutionPopoverOpen, setInstitutionPopoverOpen] = useState(false);
   const router = useRouter();
 
+  // Field navigation for Enter key functionality
+  const getNextFieldId = useCallback((currentFieldId: string): string | null => {
+    const fieldSequences = {
+      1: ["email", "password", "confirmPassword"],
+      2: ["fullName", "childName", "rut", "childRUT", "phone", "childPhone", "relationship", "customRelationship"],
+      3: ["region", "comuna", "address", "institutionId", "childGrade"],
+      4: ["emergencyContact", "emergencyPhone", "secondaryEmergencyContact", "secondaryEmergencyPhone", "tertiaryEmergencyContact", "tertiaryEmergencyPhone"],
+    };
+
+    const currentSequence = fieldSequences[currentStep as keyof typeof fieldSequences] || [];
+    const currentIndex = currentSequence.indexOf(currentFieldId);
+
+    if (currentIndex === -1) return null;
+
+    // Special case for customRelationship - only show if relationship is "otro"
+    if (currentFieldId === "relationship" && formData.relationship !== "otro") {
+      const nextIndex = currentSequence.indexOf("customRelationship");
+      if (nextIndex !== -1) {
+        // Skip customRelationship and go to next field
+        const remainingSequence = currentSequence.slice(currentIndex + 1);
+        const nextField = remainingSequence.find(field => field !== "customRelationship");
+        return nextField || null;
+      }
+    }
+
+    if (currentIndex < currentSequence.length - 1) {
+      const nextField = currentSequence[currentIndex + 1];
+      // Skip customRelationship if not needed
+      if (nextField === "customRelationship" && formData.relationship !== "otro") {
+        return currentSequence[currentIndex + 2] || null;
+      }
+      return nextField;
+    }
+
+    return null; // End of step
+  }, [currentStep, formData.relationship]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>, fieldId: string) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const nextFieldId = getNextFieldId(fieldId);
+
+      if (nextFieldId) {
+        // Focus next field
+        const nextElement = document.getElementById(nextFieldId);
+        if (nextElement) {
+          nextElement.focus();
+          // For select elements, we might want to open them
+          if (nextElement.tagName === "SELECT") {
+            (nextElement as HTMLSelectElement).click();
+          }
+        }
+      } else {
+        // End of step, try to go to next step
+        if (currentStep < totalSteps) {
+          nextStep();
+        } else {
+          // Final step, submit form
+          handleSubmit(e as any);
+        }
+      }
+    }
+  }, [getNextFieldId, currentStep, totalSteps, nextStep, handleSubmit]);
+
   // Pre-fill form data for Google users
   useEffect(() => {
     if (
@@ -671,9 +735,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           if (!formData.childName.trim())
             newErrors.childName = t("validation.child_name_required");
           if (!formData.childRUT.trim())
-            newErrors.childRUT = "RUT del estudiante es requerido";
+            newErrors.childRUT = t("validation.child_rut_required");
           if (!formData.childPhone.trim())
-            newErrors.childPhone = "Teléfono del estudiante es requerido";
+            newErrors.childPhone = t("validation.child_phone_required");
           if (!formData.relationship)
             newErrors.relationship = t("validation.relationship_required");
           if (
@@ -892,6 +956,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     placeholder="tu@email.com"
                     value={formData.email}
                     onChange={handleChange}
+                    onKeyDown={(e) => handleKeyDown(e, "email")}
                     disabled={isGoogleUser}
                     className={cn(
                       "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-muted disabled:cursor-not-allowed",
@@ -911,6 +976,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={handleChange}
+                    onKeyDown={(e) => handleKeyDown(e, "password")}
                     className={cn(
                       "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                       errors.password &&
@@ -936,6 +1002,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     placeholder="••••••••"
                     value={formData.confirmPassword}
                     onChange={handleChange}
+                    onKeyDown={(e) => handleKeyDown(e, "confirmPassword")}
                     className={cn(
                       "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                       errors.confirmPassword &&
@@ -978,6 +1045,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         placeholder="Juan Pérez González"
                         value={formData.fullName}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "fullName")}
                         className={cn(
                           "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                           errors.fullName &&
@@ -999,6 +1067,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         placeholder="María José"
                         value={formData.childName}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "childName")}
                         className={cn(
                           "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                           errors.childName &&
