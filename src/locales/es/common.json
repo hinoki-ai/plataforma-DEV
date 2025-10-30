@@ -1150,6 +1150,8 @@
   "validation.rut_required": "El RUT es requerido",
   "validation.institution_required": "La institución es requerida",
   "validation.child_name_required": "El nombre del estudiante es requerido",
+  "validation.child_rut_required": "El RUT del estudiante es requerido",
+  "validation.child_phone_required": "El teléfono del estudiante es requerido",
   "validation.grade_required": "El grado es requerido",
   "validation.relationship_required": "La relación es requerida",
   "validation.custom_relationship_required": "Por favor especifica la relación",

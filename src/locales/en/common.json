@@ -1228,6 +1228,8 @@
   "validation.rut_required": "RUT is required",
   "validation.institution_required": "Institution is required",
   "validation.child_name_required": "Student's name is required",
+  "validation.child_rut_required": "Student's RUT is required",
+  "validation.child_phone_required": "Student's phone is required",
   "validation.grade_required": "Grade is required",
   "validation.relationship_required": "Relationship is required",
   "validation.custom_relationship_required": "Please specify the relationship",
