@@ -1,18 +1,28 @@
 "use client";
 
+import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import dpaES from "@/locales/es/dpa.json";
 import dpaEN from "@/locales/en/dpa.json";
 
-export default function DpaPage() {
-  const { t, language } = useDivineParsing(["dpa"]);
+// Hook to get current language
+function useCurrentLanguage() {
+  const [language, setLanguage] = React.useState<"es" | "en">("es");
+  React.useEffect(() => {
+    const stored = localStorage.getItem("aramac-language-preference");
+    if (stored === "es" || stored === "en") {
+      setLanguage(stored);
+    }
+  }, []);
+  return language;
+}
 
-  // Get raw DPA translations for array access
-  const dpaTranslations = (language === "es" ? dpaES : dpaEN) as any;
+export default function DpaPage() {
+  const language = useCurrentLanguage();
+  const dpaTranslations = language === "es" ? dpaES : dpaEN;
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
@@ -23,7 +33,8 @@ export default function DpaPage() {
             {dpaTranslations["hero.title"]}
           </h1>
           <p className="text-lg text-center text-foreground/90 mb-12">
-            {dpaTranslations["hero.last_updated"]}: {new Date().toLocaleDateString()}
+            {dpaTranslations["hero.last_updated"]}:{" "}
+            {new Date().toLocaleDateString()}
           </p>
 
           <div className="space-y-8 text-foreground">
@@ -74,11 +85,15 @@ export default function DpaPage() {
                   {dpaTranslations["section_3.processing_desc"]}
                 </div>
                 <div>
-                  <strong>{dpaTranslations["section_3.sensitive_data"]}:</strong>{" "}
+                  <strong>
+                    {dpaTranslations["section_3.sensitive_data"]}:
+                  </strong>{" "}
                   {dpaTranslations["section_3.sensitive_data_desc"]}
                 </div>
                 <div>
-                  <strong>{dpaTranslations["section_3.security_measures"]}:</strong>{" "}
+                  <strong>
+                    {dpaTranslations["section_3.security_measures"]}:
+                  </strong>{" "}
                   {dpaTranslations["section_3.security_measures_desc"]}
                 </div>
               </div>
@@ -94,9 +109,11 @@ export default function DpaPage() {
                     {dpaTranslations["section_4.user_data"]}:
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    {dpaTranslations["section_4.user_data_items"].map((item: string, index: number) => (
-                      <li key={index}>{item}</li>
-                    ))}
+                    {dpaTranslations["section_4.user_data_items"].map(
+                      (item: string, index: number) => (
+                        <li key={index}>{item}</li>
+                      ),
+                    )}
                   </ul>
                 </div>
                 <div>
@@ -104,9 +121,11 @@ export default function DpaPage() {
                     {dpaTranslations["section_4.student_data"]}:
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    {dpaTranslations["section_4.student_data_items"].map((item: string, index: number) => (
-                      <li key={index}>{item}</li>
-                    ))}
+                    {dpaTranslations["section_4.student_data_items"].map(
+                      (item: string, index: number) => (
+                        <li key={index}>{item}</li>
+                      ),
+                    )}
                   </ul>
                 </div>
               </div>
@@ -120,9 +139,11 @@ export default function DpaPage() {
                 {dpaTranslations["section_5.intro"]}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                {dpaTranslations["section_5.purposes"].map((purpose: string, index: number) => (
-                  <li key={index}>{purpose}</li>
-                ))}
+                {dpaTranslations["section_5.purposes"].map(
+                  (purpose: string, index: number) => (
+                    <li key={index}>{purpose}</li>
+                  ),
+                )}
               </ul>
             </div>
 
@@ -134,9 +155,11 @@ export default function DpaPage() {
                 {dpaTranslations["section_6.intro"]}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                {dpaTranslations["section_6.obligations"].map((obligation: string, index: number) => (
-                  <li key={index}>{obligation}</li>
-                ))}
+                {dpaTranslations["section_6.obligations"].map(
+                  (obligation: string, index: number) => (
+                    <li key={index}>{obligation}</li>
+                  ),
+                )}
               </ul>
             </div>
 
@@ -148,9 +171,11 @@ export default function DpaPage() {
                 {dpaTranslations["section_7.intro"]}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                {dpaTranslations["section_7.obligations"].map((obligation: string, index: number) => (
-                  <li key={index}>{obligation}</li>
-                ))}
+                {dpaTranslations["section_7.obligations"].map(
+                  (obligation: string, index: number) => (
+                    <li key={index}>{obligation}</li>
+                  ),
+                )}
               </ul>
             </div>
 
@@ -164,9 +189,11 @@ export default function DpaPage() {
                     {dpaTranslations["section_8.technical_title"]}:
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    {dpaTranslations["section_8.technical_measures"].map((measure: string, index: number) => (
-                      <li key={index}>{measure}</li>
-                    ))}
+                    {dpaTranslations["section_8.technical_measures"].map(
+                      (measure: string, index: number) => (
+                        <li key={index}>{measure}</li>
+                      ),
+                    )}
                   </ul>
                 </div>
                 <div>
@@ -174,9 +201,11 @@ export default function DpaPage() {
                     {dpaTranslations["section_8.organizational_title"]}:
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    {dpaTranslations["section_8.organizational_measures"].map((measure: string, index: number) => (
-                      <li key={index}>{measure}</li>
-                    ))}
+                    {dpaTranslations["section_8.organizational_measures"].map(
+                      (measure: string, index: number) => (
+                        <li key={index}>{measure}</li>
+                      ),
+                    )}
                   </ul>
                 </div>
               </div>
