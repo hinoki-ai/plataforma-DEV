@@ -1,4 +1,4 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { createI18nMiddleware } from "./middleware/i18n";
 
@@ -13,10 +13,12 @@ const PUBLIC_ROUTES = [
 ];
 
 // Routes that require authentication
-const PROTECTED_PREFIXES = ["/master", "/admin", "/profesor", "/parent"];
-
-// Security headers are now handled in next.config.ts
-// Keeping only headers that need dynamic logic here
+const isProtectedRoute = createRouteMatcher([
+  "/master(.*)",
+  "/admin(.*)",
+  "/profesor(.*)",
+  "/parent(.*)",
+]);
 
 const i18nMiddleware = createI18nMiddleware();
 
@@ -34,15 +36,8 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.next();
   }
 
-  const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
-  const isProtected = PROTECTED_PREFIXES.some((prefix) =>
-    pathname.startsWith(prefix),
-  );
-
-  const { userId } = await auth();
-
-  // Protected route without authentication → redirect to login
-  if (isProtected && !userId) {
+  // If it's a protected route and user is not authenticated, redirect to login
+  if (isProtectedRoute(req) && !(await auth()).userId) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = "/login";
     loginUrl.searchParams.set("callbackUrl", pathname + req.nextUrl.search);
@@ -50,7 +45,7 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   // Authenticated user on login page → redirect to success
-  if (userId && pathname.startsWith("/login")) {
+  if ((await auth()).userId && pathname.startsWith("/login")) {
     const successUrl = req.nextUrl.clone();
     successUrl.pathname = "/auth-success";
     successUrl.searchParams.set("next", pathname + req.nextUrl.search);

@@ -177,7 +177,7 @@ client.query('users.getUserCountByRole', {}).then(() => {
 
 1. Clear browser cookies and cache
 2. Test with incognito/private browser
-3. If persistent, check middleware.ts configuration
+3. If persistent, check proxy.ts configuration
 
 **Fix Time**: 5 minutes  
 **Success Rate**: 80%

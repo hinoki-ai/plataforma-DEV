@@ -101,7 +101,7 @@ enum UserRole {
 - Role-specific permission sets
 - Type-safe permission checking
 
-#### 3. Middleware Protection (`src/middleware.ts`)
+#### 3. Proxy Protection (`src/proxy.ts`)
 
 - Route-level access control
 - Automatic redirects based on role

@@ -128,7 +128,7 @@ pages: {
 - Emergency bypass: admin@plataforma-astral.com / admin123 (when DB fails)
 ```
 
-### 3. Route Protection (`src/middleware.ts`)
+### 3. Route Protection (`src/proxy.ts`)
 
 ```typescript
 // Protected Routes:
@@ -467,7 +467,7 @@ client.query('users.getUserCountByRole', {}).then(() => {
 
 1. Clear browser cookies and cache
 2. Test with incognito/private browser
-3. If persistent, check middleware.ts configuration
+3. If persistent, check proxy.ts configuration
 
 **Fix Time**: 5 minutes
 **Success Rate**: 80%

@@ -101,7 +101,7 @@ The system uses a strict role-based access model with middleware enforcement:
 
 **Roles**: `ADMIN`, `PROFESOR`, `PARENT`, `PUBLIC`
 
-**Route Protection** (`src/middleware.ts`):
+**Route Protection** (`src/proxy.ts`):
 
 - `/admin/**` → ADMIN only
 - `/profesor/**` → PROFESOR only
@@ -114,7 +114,7 @@ The system uses a strict role-based access model with middleware enforcement:
 - `src/lib/auth-convex.ts` - User authentication logic with Convex
 - `src/lib/convex.ts` - Convex client configuration
 - `src/services/actions/auth.ts` - Server Actions for login/logout
-- `src/middleware.ts` - Route protection and role-based redirects
+- `src/proxy.ts` - Route protection and role-based redirects
 
 ### Data Layer Architecture
 
