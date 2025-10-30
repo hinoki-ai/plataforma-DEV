@@ -1,5 +1,5 @@
 {
-  "nav.center.council": "CPMA Parents Center",
+  "nav.center.council": "CFMG Parents Center",
   "nav.educational.project": "Educational Project",
   "nav.photos.videos": "Photos & Videos",
   "nav.multidisciplinary.team": "Multidisciplinary Team",
@@ -27,6 +27,11 @@
   "nav.students": "Students",
   "nav.parent.meetings": "Parent Meetings",
   "nav.back.home": "Back to home",
+  "nav.programs": "Programs",
+  "nav.plans": "Plans",
+  "nav.cfmg": "CFMG",
+  "nav.contact": "Contact",
+  "nav.configuration": "Configuration",
   "nav.main.categories.principal": "Main",
   "nav.main.categories.management": "Management",
   "nav.main.categories.academic": "Academic",

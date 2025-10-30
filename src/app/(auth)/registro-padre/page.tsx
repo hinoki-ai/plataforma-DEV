@@ -72,9 +72,7 @@ function ParentRegistrationContent() {
   if (registrationComplete && registrationData) {
     return (
       <PageTransition skeletonType="page" duration={700}>
-        <div className="fixed inset-0 bg-responsive-desktop bg20 -z-50">
-          <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/20 to-black/40"></div>
-        </div>
+        <div className="fixed inset-0 bg-responsive-desktop bg20 -z-50"></div>
         <div className="min-h-screen flex flex-col relative z-0">
           <div className="container mx-auto px-4 py-16 flex-1">
             <div className="max-w-2xl mx-auto space-y-6">
@@ -233,9 +231,7 @@ function ParentRegistrationContent() {
 
   return (
     <PageTransition skeletonType="page" duration={700}>
-      <div className="fixed inset-0 bg-responsive-desktop bg20 -z-50">
-        <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/20 to-black/40"></div>
-      </div>
+      <div className="fixed inset-0 bg-responsive-desktop bg20 -z-50"></div>
       <div className="min-h-screen flex flex-col relative z-0">
         <div className="container mx-auto px-4 py-16 flex-1">
           <div className="max-w-5xl mx-auto">

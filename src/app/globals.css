@@ -674,8 +674,8 @@
 
   /* Centro consejo background */
   .bg-cpma {
-    --bg-image: url(/bg20.jpg);
-    background-image: url(/bg20.jpg) !important;
+    --bg-image: url(/bg19.jpg);
+    background-image: url(/bg19.jpg) !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
@@ -684,7 +684,7 @@
 
   /* Ensure bg-cpma works with bg-responsive-desktop */
   .bg-responsive-desktop.bg-cpma {
-    background-image: url(/bg20.jpg) !important;
+    background-image: url(/bg19.jpg) !important;
     background-size: cover !important;
   }
 

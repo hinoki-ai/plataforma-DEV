@@ -223,7 +223,7 @@ export const SettingsHamburger = ({
             initial="closed"
             animate="open"
             exit="exit"
-            className="absolute top-full mt-2 right-0 w-56 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
+            className="absolute top-full mt-2 right-0 w-auto min-w-[13rem] max-w-[90vw] bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
             style={{
               boxShadow:
                 "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -235,7 +235,7 @@ export const SettingsHamburger = ({
             {/* Gradient border effect */}
             <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-purple-500/10 rounded-xl" />
 
-            <div className="relative p-3 space-y-3">
+            <div className="relative p-2 space-y-2">
               {/* Enhanced Language Toggle */}
               <motion.div
                 variants={itemVariants}
