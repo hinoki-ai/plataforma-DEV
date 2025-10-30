@@ -25,54 +25,68 @@
 
   "section_4.title": "4. Categories of Processed Data",
   "section_4.user_data": "System User Data",
-  "section_4.user_data_item_1": "Full name, RUN/RUT, date of birth",
-  "section_4.user_data_item_2": "Contact information (email, phone)",
-  "section_4.user_data_item_3": "Institutional information and role",
-  "section_4.user_data_item_4": "Authentication and access data",
+  "section_4.user_data_items": [
+    "Full name, RUN/RUT, date of birth",
+    "Contact information (email, phone)",
+    "Institutional information and role",
+    "Authentication and access data"
+  ],
   "section_4.student_data": "Student Data",
-  "section_4.student_data_item_1": "Academic information and performance",
-  "section_4.student_data_item_2": "Health data (only with specific consent)",
-  "section_4.student_data_item_3": "Family information and guardians",
-  "section_4.student_data_item_4": "Attendance and school participation",
+  "section_4.student_data_items": [
+    "Academic information and performance",
+    "Health data (only with specific consent)",
+    "Family information and guardians",
+    "Attendance and school participation"
+  ],
 
   "section_5.title": "5. Purposes of Processing",
   "section_5.intro": "Data is processed solely for:",
-  "section_5.purpose_1": "Manage access and use of the educational platform",
-  "section_5.purpose_2": "Facilitate communication between educational community",
-  "section_5.purpose_3": "Generate academic and administrative reports",
-  "section_5.purpose_4": "Comply with legal and regulatory obligations",
-  "section_5.purpose_5": "Ensure system security and integrity",
-  "section_5.purpose_6": "Improve the quality of educational services",
+  "section_5.purposes": [
+    "Manage access and use of the educational platform",
+    "Facilitate communication between educational community",
+    "Generate academic and administrative reports",
+    "Comply with legal and regulatory obligations",
+    "Ensure system security and integrity",
+    "Improve the quality of educational services"
+  ],
 
   "section_6.title": "6. Controller's Obligations",
   "section_6.intro": "Plataforma Astral undertakes to:",
-  "section_6.obligation_1": "Process data only according to documented instructions",
-  "section_6.obligation_2": "Implement appropriate technical and organizational security measures",
-  "section_6.obligation_3": "Immediately notify any security breach",
-  "section_6.obligation_4": "Assist the processor in responding to ARCO rights requests",
-  "section_6.obligation_5": "Delete or return data upon service termination",
-  "section_6.obligation_6": "Allow audits and compliance reviews",
+  "section_6.obligations": [
+    "Process data only according to documented instructions",
+    "Implement appropriate technical and organizational security measures",
+    "Immediately notify any security breach",
+    "Assist the processor in responding to ARCO rights requests",
+    "Delete or return data upon service termination",
+    "Allow audits and compliance reviews"
+  ],
 
   "section_7.title": "7. Processor's Obligations",
   "section_7.intro": "The educational institution undertakes to:",
-  "section_7.obligation_1": "Provide clear instructions on data processing",
-  "section_7.obligation_2": "Obtain necessary consents before transferring data",
-  "section_7.obligation_3": "Notify changes that may affect data security",
-  "section_7.obligation_4": "Cooperate in the implementation of security measures",
-  "section_7.obligation_5": "Inform about applicable legal requirements",
+  "section_7.obligations": [
+    "Provide clear instructions on data processing",
+    "Obtain necessary consents before transferring data",
+    "Notify changes that may affect data security",
+    "Cooperate in the implementation of security measures",
+    "Inform about applicable legal requirements"
+  ],
 
   "section_8.title": "8. Security Measures",
   "section_8.technical_title": "Technical Measures",
-  "section_8.technical_measure_1": "Data encryption in transit and at rest",
-  "section_8.technical_measure_2": "Role-based access controls",
-  "section_8.technical_measure_3": "Multi-factor authentication",
-  "section_8.technical_measure_4": "Continuous security monitoring",
-  "section_8.technical_measure_5": "Encrypted backups",
+  "section_8.technical_measures": [
+    "Data encryption in transit and at rest",
+    "Role-based access controls",
+    "Multi-factor authentication",
+    "Continuous security monitoring",
+    "Encrypted backups"
+  ],
   "section_8.organizational_title": "Organizational Measures",
-  "section_8.organizational_measure_1": "Staff trained in data protection",
-  "section_8.organizational_measure_2": "Documented security policies",
-  "section_8.organizational_measure_3": "Periodic risk assessments",
-  "section_8.organizational_measure_4": "Incident response procedures",
+  "section_8.organizational_measures": [
+    "Staff trained in data protection",
+    "Documented security policies",
+    "Periodic risk assessments",
+    "Incident response procedures"
+  ],
 
   "section_9.title": "9. International Data Transfers",
   "section_9.content": "Data is processed and stored exclusively on servers located in Chile. No international transfers of personal data are made without the express consent of the data subject and adequate safeguards in accordance with applicable legislation.",

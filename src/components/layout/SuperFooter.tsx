@@ -1,9 +1,9 @@
 "use client";
 
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function HomepageFooter() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <footer className="bg-gray-900 border-t border-gray-800">

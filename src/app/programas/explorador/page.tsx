@@ -4,7 +4,7 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { EducationalSystemExplorer } from "@/components/programs/EducationalSystemExplorer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Sparkles } from "lucide-react";
 
 export default function ProgramasExplorerPage() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-950 dark:to-indigo-950">

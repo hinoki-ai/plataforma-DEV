@@ -14,7 +14,7 @@ import {
 import { Edit, Trash2 } from "lucide-react";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 type VideoCapsule = {
   id: string;
@@ -34,7 +34,7 @@ export function DynamicAdminControls({
   onUpdate,
 }: DynamicAdminControlsProps) {
   const { data: session } = useSession();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const isAdmin = session?.user?.role === "ADMIN";
 
   // Edit modal state

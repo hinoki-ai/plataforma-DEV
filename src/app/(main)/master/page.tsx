@@ -7,13 +7,13 @@ import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { dbLogger } from "@/lib/logger";
 import { MasterDashboard } from "@/components/master/MasterDashboard";
 import { InstitutionMasterCard } from "@/components/master/InstitutionMasterCard";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
 
 export default function MasterDashboardPage() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Handle critical failures gracefully
   try {

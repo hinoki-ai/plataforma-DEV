@@ -6,7 +6,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
   CardContent,
@@ -40,7 +40,7 @@ import { LevelSpecificDashboard } from "@/components/dashboard/LevelSpecificDash
 import { EducationalLevelAwareNavigation } from "@/components/layout/EducationalLevelAwareNavigation";
 
 export function EducationalSystemExplorer() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [selectedType, setSelectedType] =
     useState<EducationalInstitutionType>("PRESCHOOL");
   const [activeView, setActiveView] = useState<

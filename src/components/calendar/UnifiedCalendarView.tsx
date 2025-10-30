@@ -45,7 +45,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/components/providers/ContextProvider";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 import {
   getCalendarEvents,
@@ -106,7 +106,7 @@ export default function UnifiedCalendarView({
   const isHydrated = useHydrationSafe();
   const { data: session } = useSession();
   const { context, isPublicRoute, isAuthRoute } = useAppContext();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // State management - hydration-safe initialization
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);

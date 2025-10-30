@@ -28,7 +28,7 @@ import {
   EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
 } from "@/lib/educational-system";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface InstitutionConfigCardProps {
   currentType: EducationalInstitutionType;
@@ -39,7 +39,7 @@ export function InstitutionConfigCard({
   currentType,
   onConfigureClick,
 }: InstitutionConfigCardProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
   const getInstitutionIcon = (type: EducationalInstitutionType) => {

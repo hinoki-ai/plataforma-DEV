@@ -7,10 +7,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BookOpen, Users, Target } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export function PMEDashboard() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   return (
     <div className="space-y-6">
       <div>

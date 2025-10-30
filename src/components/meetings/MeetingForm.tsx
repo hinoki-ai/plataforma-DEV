@@ -40,7 +40,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import type { Meeting, MeetingType } from "@/lib/prisma-compat-types";
 import { createMeeting, updateMeeting } from "@/services/actions/meetings";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { useAriaLive } from "@/lib/hooks/useAriaLive";
 
@@ -130,7 +130,7 @@ export function MeetingForm({
   >([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const { announce } = useAriaLive();
 
   useEffect(() => {

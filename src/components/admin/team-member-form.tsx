@@ -21,7 +21,7 @@ import { TeamMember } from "@/lib/prisma-compat-types";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 /**
@@ -60,7 +60,7 @@ interface TeamMemberFormProps {
 
 export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [isLoading, setIsLoading] = useState(false);
   const [specialties, setSpecialties] = useState<string[]>(
     teamMember && Array.isArray(teamMember.specialties)

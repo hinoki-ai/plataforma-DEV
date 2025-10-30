@@ -1,7 +1,7 @@
 "use client";
 
 import { DonutBackground } from "@/components/ui/donut-background";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Global error must include html and body tags per Next.js App Router requirements
 // This is the only place where html/body tags are allowed outside of layout.tsx

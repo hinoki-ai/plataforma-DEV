@@ -14,7 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Lock, CheckCircle, AlertCircle } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "next-auth/react";
 
 interface SettingsTabsProps {
@@ -22,7 +22,7 @@ interface SettingsTabsProps {
 }
 
 export function SettingsTabs({ children }: SettingsTabsProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <Tabs defaultValue="profile" className="w-full">
@@ -197,7 +197,7 @@ export function SettingsTabs({ children }: SettingsTabsProps) {
 
 // Password Change Form Component
 function PasswordChangeForm() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const { data: session, update } = useSession();
   const [formData, setFormData] = useState({
     currentPassword: "",

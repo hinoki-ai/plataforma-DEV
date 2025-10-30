@@ -15,7 +15,7 @@ import { SUBJECTS, GRADES } from "@/lib/constants";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface PlanningDocumentFormProps {
   action:
@@ -68,7 +68,7 @@ export function PlanningDocumentForm({
   );
   const [isUploading, setIsUploading] = useState(false);
   const { isDesktopForced } = useResponsiveMode();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Enter key navigation
   const fieldOrder = ["title", "subject", "grade", "content"];

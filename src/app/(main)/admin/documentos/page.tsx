@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { PageTransition } from "@/components/ui/page-transition";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface DocumentUpload {
   id: string;
@@ -57,7 +57,7 @@ const getDocumentCategories = (
 export default function AdminDocumentosPage() {
   const { data: session } = useSession();
   const { isDesktopForced } = useResponsiveMode();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [uploading, setUploading] = useState(false);
   const [pdfViewer, setPdfViewer] = useState<{
     isOpen: boolean;

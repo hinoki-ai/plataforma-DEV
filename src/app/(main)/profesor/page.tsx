@@ -9,12 +9,12 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Removed static revalidation to prevent authentication state conflicts
 
 export default function ProfesorDashboard() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
       {/* Advanced Calendar View - MAIN FIRST PANEL */}

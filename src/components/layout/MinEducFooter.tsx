@@ -1,9 +1,9 @@
 "use client";
 
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function MinEducFooter() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <div className="w-full bg-[#173277] text-white">

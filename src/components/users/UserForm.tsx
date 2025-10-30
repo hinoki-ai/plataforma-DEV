@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { User } from "@/lib/types";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { passwordSchema } from "@/lib/user-creation";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { useAriaLive } from "@/lib/hooks/useAriaLive";
@@ -51,7 +51,7 @@ interface UserFormProps {
 export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const { announce } = useAriaLive();
 
   const userSchema = createUserSchema(t);

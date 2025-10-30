@@ -3,11 +3,11 @@
 
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // ⚡ Performance: Dynamic component that could fetch user-specific data
 export function DynamicPersonalization() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   // This could include:
   // - User preferences
   // - Recent activity

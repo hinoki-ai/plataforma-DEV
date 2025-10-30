@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ export function AuthWrapper({
 }: AuthWrapperProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   useEffect(() => {
     if (status === "loading") return;

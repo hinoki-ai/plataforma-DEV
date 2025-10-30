@@ -11,7 +11,7 @@ import {
   Users2,
 } from "lucide-react";
 import Link from "next/link";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface MetricCardProps {
   title: string;
@@ -112,7 +112,7 @@ export function UserMetricCard({
   active: number;
   recent: number;
 }) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <MetricCard
@@ -144,7 +144,7 @@ export function MeetingMetricCard({
   upcoming: number;
   recent: number;
 }) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <MetricCard
@@ -174,7 +174,7 @@ export function DocumentMetricCard({
   total: number;
   recent: number;
 }) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <MetricCard
@@ -204,7 +204,7 @@ export function TeamMetricCard({
   total: number;
   active: number;
 }) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <MetricCard

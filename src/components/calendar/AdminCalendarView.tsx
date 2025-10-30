@@ -58,7 +58,7 @@ import {
 } from "@/services/calendar/calendar-service";
 import { EventCategory } from "@/services/calendar/types";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "next-auth/react";
 
 interface CalendarEvent {
@@ -86,7 +86,7 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function AdminCalendarView() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const { data: session } = useSession();
   const userId = session?.user?.id || "system";
 

@@ -11,12 +11,12 @@ import {
   contactFormSchema,
   type ContactFormValues,
 } from "@/lib/validation/contact";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { useAriaLive } from "@/lib/hooks/useAriaLive";
 
 export function ContactForm() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const { announce } = useAriaLive();
   const {
     register,

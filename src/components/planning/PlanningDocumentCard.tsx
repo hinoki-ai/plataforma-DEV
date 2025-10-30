@@ -7,7 +7,7 @@ import { es, enUS } from "date-fns/locale";
 import { memo } from "react";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface PlanningDocumentCardProps {
   document: PlanningDocument & {

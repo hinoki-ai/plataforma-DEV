@@ -49,7 +49,7 @@ import {
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSearchParams, useRouter } from "next/navigation";
 
 interface VoteOption {

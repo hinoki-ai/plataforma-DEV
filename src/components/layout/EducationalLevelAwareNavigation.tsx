@@ -8,7 +8,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -53,7 +53,7 @@ export function EducationalLevelAwareNavigation({
   userRole,
   className,
 }: EducationalLevelAwareNavigationProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const pathname = usePathname();
 
   // Base navigation items - filtered by educational level

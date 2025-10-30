@@ -7,7 +7,7 @@ import { Button, buttonVariants } from "./button";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export type ButtonContext = "public" | "auth" | "auto";
 
@@ -116,7 +116,7 @@ const AdaptiveButton = forwardRef<HTMLButtonElement, AdaptiveButtonProps>(
   ) => {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const { t } = useLanguage();
+    const { t } = useDivineParsing(["common"]);
 
     // Auto-detect context based on route and session
     const detectedContext: Exclude<ButtonContext, "auto"> =

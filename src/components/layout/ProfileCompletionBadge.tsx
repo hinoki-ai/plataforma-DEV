@@ -12,7 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import type { SessionUser } from "@/lib/auth-client";
 import type { UserRole } from "@/lib/prisma-compat-types";
 
@@ -34,7 +34,7 @@ export function ProfileCompletionBadge({
 }: ProfileCompletionBadgeProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Don't show during loading or for unauthenticated users
   if (status === "loading" || !session?.user) {

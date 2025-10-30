@@ -5,7 +5,7 @@ import { deletePlanningDocument } from "@/services/actions/planning";
 import { Button } from "@/components/ui/button";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface PlanningDocumentActionsProps {
   documentId: string;
@@ -16,7 +16,7 @@ export function PlanningDocumentActions({
 }: PlanningDocumentActionsProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const handleDelete = async () => {
     setIsDeleting(true);

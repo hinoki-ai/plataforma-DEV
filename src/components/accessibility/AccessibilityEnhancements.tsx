@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -197,7 +197,7 @@ interface AccessibilityPanelProps {
 export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
   const { settings, saveSettings, resetSettings } = useAccessibilitySettings();
   const [isOpen, setIsOpen] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const contrastOptions = [
     {

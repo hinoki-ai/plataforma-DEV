@@ -74,6 +74,8 @@ import dpaES from "../../locales/es/dpa.json";
 import dpaEN from "../../locales/en/dpa.json";
 import terminosES from "../../locales/es/terminos.json";
 import terminosEN from "../../locales/en/terminos.json";
+import privacidadES from "../../locales/es/privacidad.json";
+import privacidadEN from "../../locales/en/privacidad.json";
 
 // Direct translation map for reliable synchronous access
 const translations = {
@@ -90,6 +92,7 @@ const translations = {
     planes: planesES,
     dpa: dpaES,
     terminos: terminosES,
+    privacidad: privacidadES,
   },
   en: {
     common: commonEN,
@@ -104,6 +107,7 @@ const translations = {
     planes: planesEN,
     dpa: dpaEN,
     terminos: terminosEN,
+    privacidad: privacidadEN,
   },
 } as const;
 
@@ -133,6 +137,8 @@ const translationRegistry: Record<string, TranslationStrings> = {
   "en-dpa": dpaEN,
   "es-terminos": terminosES,
   "en-terminos": terminosEN,
+  "es-privacidad": privacidadES,
+  "en-privacidad": privacidadEN,
 };
 
 // Registry is populated with all translation files

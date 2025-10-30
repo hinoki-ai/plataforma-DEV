@@ -14,7 +14,7 @@ import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import { navigation, layout } from "@/lib/responsive-utils";
 import { useTheme } from "next-themes";
 // 🕊️ DIVINE PARSING ORACLE - Enhanced navigation with route-based loading
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 export default function Navigation() {
@@ -25,7 +25,7 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
   const { isDesktopForced } = useResponsiveMode();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // 🕊️ DIVINE PARSING ORACLE - Route-based namespace loading
   const divineOracle = useDivineParsing();

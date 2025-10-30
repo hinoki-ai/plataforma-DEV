@@ -1,10 +1,10 @@
 "use client";
 
 import { DonutBackground } from "@/components/ui/donut-background";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function NotFound() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <DonutBackground>

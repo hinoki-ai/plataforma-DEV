@@ -6,11 +6,11 @@ import { useSearchParams } from "next/navigation";
 import { HeavyComponents } from "@/lib/dynamic-imports";
 import { PageTransition } from "@/components/ui/page-transition";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import type { PlanningDocumentsResponse } from "@/lib/types/service-responses";
 
 export default function AdminPlanificacionesPage() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const searchParams = useSearchParams();
   const [documents, setDocuments] = useState<PlanningDocumentsResponse["data"]>(
     [],

@@ -66,7 +66,7 @@ import {
   Check,
   ChevronDown,
 } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Enhanced form validation with real-time feedback
 interface ValidationResult {
@@ -176,7 +176,7 @@ export function usePasswordValidation(password: string) {
 
 // Smart email validation
 export function useEmailValidation(email: string) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   return useMemo(() => {
     const result: ValidationResult = {
       isValid: false,
@@ -237,7 +237,7 @@ export function SmartFormField({
   config,
   className,
 }: SmartFormFieldProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const form = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -618,7 +618,7 @@ export function FormProgress({
   totalFields = [],
   showFieldProgress = true,
 }: FormProgressProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const progress = useMemo(() => {
     if (totalSteps && currentStep) {
       return (currentStep / totalSteps) * 100;
@@ -671,7 +671,7 @@ export function SmartForm({
   enableValidation = true,
   className,
 }: SmartFormProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const form = useFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -788,7 +788,7 @@ export function FieldArray({
   addButtonLabel,
   className,
 }: FieldArrayProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const form = useFormContext();
   const [items, setItems] = useState([0]);
 

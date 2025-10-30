@@ -1,0 +1,95 @@
+{
+  "title": "Privacy Policy | Plataforma Astral",
+  "description": "Plataforma Astral Privacy Policy in accordance with Law 19.628",
+  "last_updated": "Last updated",
+
+  "section_1": {
+    "title": "1. General Information",
+    "content_1": "This Privacy Policy describes how Plataforma Astral SpA collects, uses, stores, and protects the personal information of users of our educational platform.",
+    "content_2": "We are committed to protecting the privacy and personal data of our users, complying with applicable Chilean legislation, especially Law 19.628 on Personal Data Protection."
+  },
+
+  "section_2": {
+    "title": "2. Information We Collect",
+    "direct_info_title": "Information provided directly by you:",
+    "direct_info_1": "Full name, RUN/RUT and date of birth",
+    "direct_info_2": "Contact information (email, phone)",
+    "direct_info_3": "Institutional information and educational role",
+    "direct_info_4": "Authentication and system access data",
+    "technical_info_title": "Information collected automatically:",
+    "technical_info_1": "IP address and browsing data",
+    "technical_info_2": "Device and browser information",
+    "technical_info_3": "Platform usage logs"
+  },
+
+  "section_3": {
+    "title": "3. Purposes of Processing",
+    "content_1": "We use your personal information for the following purposes:",
+    "content_2": "Manage access and use of the educational platform",
+    "content_3": "Facilitate communication between the educational community",
+    "content_4": "Generate academic and administrative reports",
+    "content_5": "Comply with legal and regulatory obligations",
+    "content_6": "Ensure system security and integrity",
+    "content_7": "Improve the quality of our educational services"
+  },
+
+  "section_4": {
+    "title": "4. Information Sharing",
+    "content_1": "We may share your information in the following situations:",
+    "content_2": "With educational institutions for authorized academic purposes",
+    "content_3": "With service providers who help us operate the platform",
+    "content_4": "When required by law or competent authority",
+    "content_5": "With your express consent for specific purposes"
+  },
+
+  "section_5": {
+    "title": "5. Information Security",
+    "content_1": "We implement technical and organizational security measures to protect your data:",
+    "content_2": "Data encryption in transit and at rest",
+    "content_3": "Role-based access controls and permissions",
+    "content_4": "Continuous security monitoring and threat detection",
+    "content_5": "Regular encrypted backups",
+    "content_6": "Staff training in data protection"
+  },
+
+  "section_6": {
+    "title": "6. Data Subject Rights",
+    "content": "In accordance with Law 19.628, you have the following rights:",
+    "right_1": "Right of access to your personal data",
+    "right_2": "Right of rectification of inaccurate information",
+    "right_3": "Right of erasure when appropriate",
+    "right_4": "Right of objection to processing",
+    "right_5": "Right of data portability"
+  },
+
+  "section_7": {
+    "title": "7. Cookies and Similar Technologies",
+    "content": "We use cookies and similar technologies to improve your experience on our platform, remember your preferences, and analyze site usage. You can manage your cookie preferences through your browser settings."
+  },
+
+  "section_8": {
+    "title": "8. Minors",
+    "content": "The platform is designed for educational use and may contain information about minors. Parents, guardians, or legal tutors are responsible for supervising the use that minors under their care make of our services."
+  },
+
+  "section_9": {
+    "title": "9. International Transfers",
+    "content": "Your data is processed and stored primarily on servers located in Chile. In case of international transfers, we ensure adequate safeguards are implemented according to applicable legislation."
+  },
+
+  "section_10": {
+    "title": "10. Data Retention",
+    "content": "We retain your personal information for as long as necessary to fulfill the purposes described in this policy, unless the law requires a longer retention period."
+  },
+
+  "section_11": {
+    "title": "11. Contact",
+    "content": "To exercise your rights or make inquiries related to the processing of your personal data, you can contact us through:",
+    "contact": {
+      "email": "privacidad@plataformaastral.cl",
+      "phone_1": "+56 9 3743 6196 (Privacy Officer)",
+      "phone_2": "+56 32 1234 5678 (General Support)",
+      "address": "Avenida Libertad #777, Viña del Mar, Valparaíso Region"
+    }
+  }
+}

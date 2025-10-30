@@ -8,7 +8,7 @@ import SkyToggle from "@/components/ui/sky-toggle";
 import SoundToggle from "@/components/ui/sound-toggle";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface SettingsHamburgerProps {
   className?: string;
@@ -19,7 +19,7 @@ export const SettingsHamburger = ({
   className,
   size = "sm",
 }: SettingsHamburgerProps) => {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

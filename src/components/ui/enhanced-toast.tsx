@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface EnhancedToastProps {
   title?: string;
@@ -25,7 +25,7 @@ export function EnhancedToast({
   onClose,
   className,
 }: EnhancedToastProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const typeStyles = {
     success: "border-green-500/50 bg-green-50 text-green-900",

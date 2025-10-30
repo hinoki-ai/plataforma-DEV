@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { CheckCircle, XCircle, AlertCircle, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export interface UploadProgressProps {
   files: File[];
@@ -29,7 +29,7 @@ export function UploadProgress({
   const [uploadState, setUploadState] = useState<UploadResult[]>([]);
   const [overallProgress, setOverallProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   useEffect(() => {
     if (files.length > 0) {

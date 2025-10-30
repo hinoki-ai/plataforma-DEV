@@ -14,7 +14,7 @@ import { PlanningDocumentActions } from "./PlanningDocumentActions";
 import { PlanningDocumentSearch } from "./PlanningDocumentSearch";
 import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import { layout, typography } from "@/lib/responsive-utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import type { PlanningDocumentsResponse } from "@/lib/types/service-responses";
 
 type PlanningDocumentWithAuthor = NonNullable<
@@ -41,7 +41,7 @@ export function PlanningDashboard({
   searchParams,
 }: PlanningDashboardProps) {
   const { isDesktopForced } = useResponsiveMode();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <div className="space-y-6">
