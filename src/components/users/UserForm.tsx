@@ -27,6 +27,8 @@ import {
 import { User } from "@/lib/types";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { passwordSchema } from "@/lib/user-creation";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
+import { useAriaLive } from "@/lib/hooks/useAriaLive";
 
 // Function to create schema with translated messages
 const createUserSchema = (t: (key: string, namespace?: string) => string) =>
@@ -66,6 +68,16 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
     },
   });
 
+  // Define field order - password is conditional for new users only
+  const fieldOrder = user
+    ? ["name", "email", "role", "isActive"]
+    : ["name", "email", "password", "role", "isActive"];
+
+  const { handleKeyDown } = useEnterNavigation(fieldOrder, () => {
+    const form = document.querySelector("form") as HTMLFormElement;
+    form?.requestSubmit();
+  });
+
   const handleSubmit = async (data: UserFormData) => {
     setIsSubmitting(true);
     try {
@@ -88,6 +100,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
                 <Input
                   placeholder={t("user.name.placeholder", "common")}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "name")}
                 />
               </FormControl>
               <FormMessage />
@@ -107,6 +120,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
                   placeholder={t("user.email.placeholder", "common")}
                   {...field}
                   disabled={!!user}
+                  onKeyDown={(e) => handleKeyDown(e, "email")}
                 />
               </FormControl>
               <FormDescription>
@@ -138,6 +152,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
                       }
                       {...field}
                       className="pr-10"
+                      onKeyDown={(e) => handleKeyDown(e, "password")}
                     />
                     <Button
                       type="button"
@@ -177,7 +192,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
               <FormLabel>{t("user.role.label", "common")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger onKeyDown={(e) => handleKeyDown(e, "role")}>
                     <SelectValue
                       placeholder={t("user.role.placeholder", "common")}
                     />
@@ -220,6 +235,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  onKeyDown={(e) => handleKeyDown(e, "isActive")}
                 />
               </FormControl>
             </FormItem>

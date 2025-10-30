@@ -12,6 +12,7 @@ import type { SimpleFileMetadata as FileMetadata } from "@/lib/simple-upload";
 import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import { layout, forms } from "@/lib/responsive-utils";
 import { SUBJECTS, GRADES } from "@/lib/constants";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 // i18n
 import { useLanguage } from "@/components/language/LanguageContext";
@@ -68,6 +69,14 @@ export function PlanningDocumentForm({
   const [isUploading, setIsUploading] = useState(false);
   const { isDesktopForced } = useResponsiveMode();
   const { t } = useLanguage();
+
+  // Enter key navigation
+  const fieldOrder = ["title", "subject", "grade", "content"];
+  const { handleKeyDown } = useEnterNavigation(fieldOrder, () => {
+    // Submit form when Enter is pressed on last field
+    const form = document.querySelector("form") as HTMLFormElement;
+    form?.requestSubmit();
+  });
 
   const handleFilesChange = async (files: FileWithPreview[]) => {
     if (files.length === 0) return;
@@ -171,6 +180,7 @@ export function PlanningDocumentForm({
                 className={forms.input(isDesktopForced)}
                 aria-required="true"
                 aria-describedby="title-help"
+                onKeyDown={(e) => handleKeyDown(e, "title")}
               />
               <p id="title-help" className="text-sm text-muted-foreground">
                 {t("planning.title.help", "common")}
@@ -193,6 +203,7 @@ export function PlanningDocumentForm({
                 aria-describedby="subject-help"
                 title="Seleccionar asignatura"
                 className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${forms.input(isDesktopForced)}`}
+                onKeyDown={(e) => handleKeyDown(e, "subject")}
               >
                 <option value="">
                   {t("planning.subject.placeholder", "common")}
@@ -225,6 +236,7 @@ export function PlanningDocumentForm({
               aria-describedby="grade-help"
               title="Seleccionar curso"
               className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${forms.input(isDesktopForced)}`}
+              onKeyDown={(e) => handleKeyDown(e, "grade")}
             >
               <option value="">
                 {t("planning.grade.placeholder", "common")}
@@ -257,6 +269,7 @@ export function PlanningDocumentForm({
               className={`resize-none ${forms.textarea(isDesktopForced)}`}
               aria-required="true"
               aria-describedby="content-help"
+              onKeyDown={(e) => handleKeyDown(e, "content")}
             />
           </div>
 

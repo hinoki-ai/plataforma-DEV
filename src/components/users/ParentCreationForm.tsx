@@ -32,6 +32,7 @@ import {
 import { Eye, EyeOff, UserPlus, ChevronRight, ChevronLeft } from "lucide-react";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { cn } from "@/lib/utils";
+import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
 
 // Import standardized password schema
 import { passwordSchema } from "@/lib/user-creation";
@@ -164,6 +165,22 @@ export function ParentCreationForm({
     },
   });
 
+  // Define field order for each step
+  const getFieldOrderForStep = (step: number): string[] => {
+    switch (step) {
+      case 1:
+        return ["name", "email", "phone", "relationship"];
+      case 2:
+        return ["password"];
+      case 3:
+        return ["confirmPassword"];
+      case 4:
+        return ["studentName", "studentGrade", "studentEmail", "guardianPhone"];
+      default:
+        return [];
+    }
+  };
+
   const validateStep = (step: number): boolean => {
     const values = form.getValues();
 
@@ -202,10 +219,6 @@ export function ParentCreationForm({
     }
   };
 
-  const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 1));
-  };
-
   const handleSubmit = async (data: ParentFormValues) => {
     // Clean up empty optional fields
     const { confirmPassword: _confirmPassword, ...formValues } = data;
@@ -216,6 +229,18 @@ export function ParentCreationForm({
       guardianPhone: data.guardianPhone || undefined,
     } satisfies ParentFormOutput;
     await onSubmit(cleanedData);
+  };
+
+  const { handleKeyDown } = useStepNavigation(
+    getFieldOrderForStep,
+    currentStep,
+    4,
+    nextStep,
+    () => handleSubmit({} as any),
+  );
+
+  const prevStep = () => {
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const stepTitles = [
@@ -259,7 +284,11 @@ export function ParentCreationForm({
                       <FormItem>
                         <FormLabel>Nombre Completo</FormLabel>
                         <FormControl>
-                          <Input placeholder="Ej: María González" {...field} />
+                          <Input
+                            placeholder="Ej: María González"
+                            {...field}
+                            onKeyDown={(e) => handleKeyDown(e, "name")}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -277,6 +306,7 @@ export function ParentCreationForm({
                             type="email"
                             placeholder="padre@email.com"
                             {...field}
+                            onKeyDown={(e) => handleKeyDown(e, "email")}
                           />
                         </FormControl>
                         <FormMessage />
@@ -293,7 +323,11 @@ export function ParentCreationForm({
                       <FormItem>
                         <FormLabel>Teléfono (Opcional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="+569 1234 5678" {...field} />
+                          <Input
+                            placeholder="+569 1234 5678"
+                            {...field}
+                            onKeyDown={(e) => handleKeyDown(e, "phone")}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -311,7 +345,11 @@ export function ParentCreationForm({
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger
+                              onKeyDown={(e) =>
+                                handleKeyDown(e, "relationship")
+                              }
+                            >
                               <SelectValue placeholder="Seleccione relación" />
                             </SelectTrigger>
                           </FormControl>
@@ -346,6 +384,7 @@ export function ParentCreationForm({
                             placeholder="Contraseña segura"
                             {...field}
                             className="pr-10"
+                            onKeyDown={(e) => handleKeyDown(e, "password")}
                           />
                           <Button
                             type="button"
@@ -394,6 +433,9 @@ export function ParentCreationForm({
                             placeholder="Confirma la contraseña"
                             {...field}
                             className="pr-10"
+                            onKeyDown={(e) =>
+                              handleKeyDown(e, "confirmPassword")
+                            }
                           />
                           <Button
                             type="button"
@@ -434,7 +476,11 @@ export function ParentCreationForm({
                       <FormItem>
                         <FormLabel>Nombre del Estudiante</FormLabel>
                         <FormControl>
-                          <Input placeholder="Ej: Juan Pérez" {...field} />
+                          <Input
+                            placeholder="Ej: Juan Pérez"
+                            {...field}
+                            onKeyDown={(e) => handleKeyDown(e, "studentName")}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -452,7 +498,11 @@ export function ParentCreationForm({
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger
+                              onKeyDown={(e) =>
+                                handleKeyDown(e, "studentGrade")
+                              }
+                            >
                               <SelectValue placeholder="Seleccione grado" />
                             </SelectTrigger>
                           </FormControl>
@@ -482,6 +532,7 @@ export function ParentCreationForm({
                             type="email"
                             placeholder="estudiante@email.com"
                             {...field}
+                            onKeyDown={(e) => handleKeyDown(e, "studentEmail")}
                           />
                         </FormControl>
                         <FormMessage />
@@ -498,7 +549,11 @@ export function ParentCreationForm({
                           Teléfono de Contacto Adicional (Opcional)
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="+569 8765 4321" {...field} />
+                          <Input
+                            placeholder="+569 8765 4321"
+                            {...field}
+                            onKeyDown={(e) => handleKeyDown(e, "guardianPhone")}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

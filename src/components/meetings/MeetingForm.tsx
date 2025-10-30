@@ -41,6 +41,7 @@ import { es } from "date-fns/locale";
 import type { Meeting, MeetingType } from "@/lib/prisma-compat-types";
 import { createMeeting, updateMeeting } from "@/services/actions/meetings";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 const MEETING_TYPES = [
   "PARENT_TEACHER",
@@ -170,6 +171,29 @@ export function MeetingForm({
     },
   });
 
+  // Enter key navigation
+  const { handleKeyDown } = useEnterNavigation(
+    [
+      "title",
+      "description",
+      "type",
+      "studentName",
+      "studentGrade",
+      "guardianName",
+      "guardianEmail",
+      "guardianPhone",
+      "scheduledDate",
+      "scheduledTime",
+      "duration",
+      "location",
+      "assignedTo",
+    ],
+    () => {
+      // Trigger form submission when Enter is pressed on last field
+      form.handleSubmit(onSubmit)();
+    },
+  );
+
   useEffect(() => {
     if (meeting && mode === "edit") {
       form.reset({
@@ -232,6 +256,7 @@ export function MeetingForm({
                   <FormControl>
                     <Input
                       placeholder={t("placeholders.meeting_title", "common")}
+                      onKeyDown={(e) => handleKeyDown(e, "title")}
                       {...field}
                     />
                   </FormControl>
@@ -252,6 +277,7 @@ export function MeetingForm({
                         "placeholders.meeting_description",
                         "common",
                       )}
+                      onKeyDown={(e) => handleKeyDown(e, "description")}
                       {...field}
                     />
                   </FormControl>
@@ -273,7 +299,9 @@ export function MeetingForm({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger
+                        onKeyDown={(e) => handleKeyDown(e, "type")}
+                      >
                         <SelectValue placeholder={t("select.type", "common")} />
                       </SelectTrigger>
                     </FormControl>
@@ -304,6 +332,7 @@ export function MeetingForm({
                     <FormControl>
                       <Input
                         placeholder={t("user.name.placeholder", "common")}
+                        onKeyDown={(e) => handleKeyDown(e, "studentName")}
                         {...field}
                       />
                     </FormControl>
@@ -323,7 +352,9 @@ export function MeetingForm({
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger
+                          onKeyDown={(e) => handleKeyDown(e, "studentGrade")}
+                        >
                           <SelectValue
                             placeholder={t("select.grade", "common")}
                           />
@@ -351,7 +382,11 @@ export function MeetingForm({
                   <FormItem>
                     <FormLabel>Nombre del Apoderado</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nombre del apoderado" {...field} />
+                      <Input
+                        placeholder="Nombre del apoderado"
+                        onKeyDown={(e) => handleKeyDown(e, "guardianName")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -368,6 +403,7 @@ export function MeetingForm({
                       <Input
                         type="email"
                         placeholder="email@ejemplo.com"
+                        onKeyDown={(e) => handleKeyDown(e, "guardianEmail")}
                         {...field}
                       />
                     </FormControl>
@@ -384,7 +420,11 @@ export function MeetingForm({
                 <FormItem>
                   <FormLabel>Teléfono del Apoderado</FormLabel>
                   <FormControl>
-                    <Input placeholder="+56 9 1234 5678" {...field} />
+                    <Input
+                      placeholder="+56 9 1234 5678"
+                      onKeyDown={(e) => handleKeyDown(e, "guardianPhone")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -404,6 +444,7 @@ export function MeetingForm({
                           <Button
                             variant="outline"
                             className="w-full pl-3 text-left font-normal"
+                            onKeyDown={(e) => handleKeyDown(e, "scheduledDate")}
                           >
                             {field.value ? (
                               format(field.value, "PPP", { locale: es })
@@ -442,7 +483,9 @@ export function MeetingForm({
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger
+                          onKeyDown={(e) => handleKeyDown(e, "scheduledTime")}
+                        >
                           <SelectValue
                             placeholder={t("select.time", "common")}
                           />
@@ -472,6 +515,7 @@ export function MeetingForm({
                         type="number"
                         min={15}
                         max={120}
+                        onKeyDown={(e) => handleKeyDown(e, "duration")}
                         {...field}
                         onChange={(e) => field.onChange(Number(e.target.value))}
                       />
@@ -489,7 +533,11 @@ export function MeetingForm({
                 <FormItem>
                   <FormLabel>Ubicación</FormLabel>
                   <FormControl>
-                    <Input placeholder="Sala de Reuniones" {...field} />
+                    <Input
+                      placeholder="Sala de Reuniones"
+                      onKeyDown={(e) => handleKeyDown(e, "location")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -507,7 +555,9 @@ export function MeetingForm({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger
+                        onKeyDown={(e) => handleKeyDown(e, "assignedTo")}
+                      >
                         <SelectValue
                           placeholder={t("select.professor", "common")}
                         />

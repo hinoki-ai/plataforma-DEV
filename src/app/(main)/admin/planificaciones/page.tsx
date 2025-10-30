@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 // Removed direct import of server function to use API route instead
-import { PlanningDashboard } from "@/components/planning/PlanningDashboard";
+import { HeavyComponents } from "@/lib/dynamic-imports";
 import { PageTransition } from "@/components/ui/page-transition";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
 import { useLanguage } from "@/components/language/LanguageContext";
