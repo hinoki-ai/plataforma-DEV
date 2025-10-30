@@ -7,9 +7,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { useState, useEffect } from "react";
+import { motion, Variants } from "motion/react";
+
+const fadeInUp: Variants = {
+  initial: { opacity: 0, y: 60 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerChildren: Variants = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
 export default function ContactoContent() {
   const { t } = useLanguage();
+  const [mounted] = useState(true);
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-contacto">
@@ -17,11 +33,27 @@ export default function ContactoContent() {
       <main id="main-content" className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
-            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
-              <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out">
-                {t("hero.title", "contacto")}
-              </h1>
-            </div>
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className={`transition-all duration-700 ease-out ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out">
+                    {t("hero.title", "contacto")}
+                  </h1>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
           <p className="text-lg text-center text-foreground/90 mb-12">
             {t("hero.subtitle", "contacto")}

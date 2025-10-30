@@ -67,8 +67,13 @@ function CentroRegistrationContent() {
   };
 
   const initialState = getInitialState();
-  const [registrationComplete, setRegistrationComplete] = useState(initialState.registrationComplete);
-  const [registrationData, setRegistrationData] = useState<CentroRegistrationSuccessData | null>(initialState.registrationData);
+  const [registrationComplete, setRegistrationComplete] = useState(
+    initialState.registrationComplete,
+  );
+  const [registrationData, setRegistrationData] =
+    useState<CentroRegistrationSuccessData | null>(
+      initialState.registrationData,
+    );
 
   const successBadgeRaw = t("centro_registration.success_badge", "common");
   const successBadgeText =

@@ -37,11 +37,7 @@ export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
   const { t } = useLanguage();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted] = useState(true);
 
   // Component mounted successfully
 
@@ -62,13 +58,29 @@ export function HomePage() {
       <Header />
       <section className={layout.spacing.section(isDesktopForced)}>
         <div className={`${layout.container(isDesktopForced)} text-center`}>
-          <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block mb-6">
-            <h1
-              className={`${typography.hero(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out`}
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={staggerChildren}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.div
+              variants={fadeInUp}
+              className={`mb-6 transition-all duration-700 ease-out ${
+                mounted
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
             >
-              {t("home.welcome.title", "common")}
-            </h1>
-          </div>
+              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                <h1
+                  className={`${typography.hero(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out`}
+                >
+                  {t("home.welcome.title", "common")}
+                </h1>
+              </div>
+            </motion.div>
+          </motion.div>
           <p
             className={`${typography.body(isDesktopForced)} text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed text-center`}
           >

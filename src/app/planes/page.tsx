@@ -13,8 +13,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, X, Shield, Server, Lock, Phone } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion, Variants } from "motion/react";
+import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
+import { layout, typography } from "@/lib/responsive-utils";
 import {
   BillingCycle,
   pricingPlans,
@@ -28,11 +31,26 @@ const plans = pricingPlans;
 
 const featuresList = featureLabels;
 
+const fadeInUp: Variants = {
+  initial: { opacity: 0, y: 60 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerChildren: Variants = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
 export default function PreciosPage() {
   const { t } = useLanguage();
+  const { isDesktopForced } = useDesktopToggle();
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");
   const [showContactForm, setShowContactForm] = useState(false);
+  const [mounted] = useState(true);
 
   const getDiscount = (cycle: BillingCycle) => billingCycleDiscount[cycle];
 
@@ -43,11 +61,29 @@ export default function PreciosPage() {
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
           <div className="text-center mb-8">
-            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block mb-4">
-              <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out md:text-5xl">
-                {t("planes.hero.title")}
-              </h1>
-            </div>
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className={`mb-4 transition-all duration-700 ease-out ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h1
+                    className={`${typography.hero(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out`}
+                  >
+                    {t("planes.hero.title")}
+                  </h1>
+                </div>
+              </motion.div>
+            </motion.div>
             <p className="text-xl text-muted-foreground mb-6">
               {t("planes.hero.subtitle")}
             </p>
