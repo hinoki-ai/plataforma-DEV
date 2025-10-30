@@ -137,55 +137,33 @@ export function usePasswordValidation(password: string) {
     let score = 0;
     const suggestions: string[] = [];
 
-    // Length check
+    // Length check - minimum 8 characters
     if (password.length >= 8) {
       score += 1;
     } else {
-      suggestions.push("Usa al menos 8 caracteres");
+      suggestions.push("La contraseña debe tener al menos 8 caracteres");
     }
 
-    // Uppercase check
-    if (/[A-Z]/.test(password)) {
-      score += 1;
-    } else {
-      suggestions.push("Incluye al menos una mayúscula");
-    }
-
-    // Lowercase check
-    if (/[a-z]/.test(password)) {
-      score += 1;
-    } else {
-      suggestions.push("Incluye al menos una minúscula");
-    }
-
-    // Number check
+    // Number check - at least one number (required)
     if (/\d/.test(password)) {
       score += 1;
     } else {
       suggestions.push("Incluye al menos un número");
     }
 
-    // Special character check
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      score += 1;
-    } else {
-      suggestions.push("Incluye al menos un carácter especial");
-    }
-
-    // Common patterns check
+    // Common patterns check - avoid repeating characters
     if (!/(.)\1{2,}/.test(password)) {
       score += 1;
     } else {
-      suggestions.push("Evita repetir el mismo carácter");
+      suggestions.push("Evita repetir el mismo carácter más de 2 veces");
     }
 
     // Strength assessment
-    if (score >= 5) {
+    if (score >= 4) {
       result.strength = "strong";
       result.isValid = true;
-    } else if (score >= 3) {
+    } else if (score >= 2) {
       result.strength = "medium";
-      result.isValid = true;
     } else {
       result.strength = "weak";
       result.isValid = false;

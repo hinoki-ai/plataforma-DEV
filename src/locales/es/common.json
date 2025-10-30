@@ -1099,7 +1099,7 @@
 
   "form.email_invalid": "Email inválido",
   "form.phone_invalid": "Número de teléfono inválido",
-  "form.password_min_length": "Mínimo {length} caracteres",
+  "form.password_length": "Exactamente {length} caracteres (solo letras minúsculas y números)",
   "form.value_invalid": "Valor inválido",
 
   "validation.full_name_required": "El nombre completo es requerido",
@@ -1122,7 +1122,7 @@
   "validation.tertiary_emergency_phone_required": "Si proporciona contacto terciario, debe incluir el teléfono",
   "validation.password_required": "La contraseña es requerida",
   "validation.password_min_length": "La contraseña debe tener al menos 8 caracteres",
-  "validation.password_strength": "La contraseña debe contener al menos una letra mayúscula, una minúscula y un número",
+  "validation.password_requirements": "La contraseña debe tener al menos 8 caracteres con al menos 1 número",
   "validation.confirm_password_required": "La confirmación de contraseña es requerida",
   "validation.passwords_mismatch": "Las contraseñas no coinciden",
 
@@ -1434,7 +1434,7 @@
   "programas.explorer.interactive_dashboard": "Panel de control interactivo",
 
   "signup.password.label": "Contraseña *",
-  "signup.password.hint": "Debe tener al menos 8 caracteres con mayúsculas, minúsculas y números",
+  "signup.password.hint": "Debe tener al menos 8 caracteres con al menos 1 número",
   "signup.confirm_password.label": "Confirmar Contraseña *",
   "signup.full_name.label": "Nombre Completo *",
   "signup.email.label": "Correo Electrónico *",

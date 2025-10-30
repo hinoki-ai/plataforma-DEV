@@ -1200,7 +1200,7 @@
 
   "form.email_invalid": "Invalid email",
   "form.phone_invalid": "Invalid phone number",
-  "form.password_min_length": "Minimum {length} characters",
+  "form.password_length": "Exactly {length} characters (lowercase letters and numbers only)",
   "form.value_invalid": "Invalid value",
 
   "validation.full_name_required": "Full name is required",
@@ -1223,7 +1223,7 @@
   "validation.tertiary_emergency_phone_required": "If providing tertiary contact, phone number is required",
   "validation.password_required": "Password is required",
   "validation.password_min_length": "Password must be at least 8 characters long",
-  "validation.password_strength": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+  "validation.password_requirements": "Password must be at least 8 characters with at least 1 number",
   "validation.confirm_password_required": "Password confirmation is required",
   "validation.passwords_mismatch": "Passwords do not match",
 
@@ -1535,7 +1535,7 @@
   "programas.explorer.interactive_dashboard": "Interactive dashboard",
 
   "signup.password.label": "Password *",
-  "signup.password.hint": "Must be at least 8 characters with uppercase, lowercase, and numbers",
+  "signup.password.hint": "Must be at least 8 characters with at least 1 number",
   "signup.confirm_password.label": "Confirm Password *",
   "signup.full_name.label": "Full Name *",
   "signup.email.label": "Email *",
