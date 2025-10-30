@@ -15,7 +15,6 @@ import { navigation, layout } from "@/lib/responsive-utils";
 import { useTheme } from "next-themes";
 // 🕊️ DIVINE PARSING ORACLE - Enhanced navigation with route-based loading
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);

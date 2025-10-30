@@ -8,6 +8,7 @@ import { memo } from "react";
 
 // i18n
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface PlanningDocumentCardProps {
   document: PlanningDocument & {

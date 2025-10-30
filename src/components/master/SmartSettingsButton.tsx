@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AdaptiveButton } from "@/components/ui/adaptive-button";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Settings2,
   Monitor,

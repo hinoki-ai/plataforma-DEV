@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import type { SimpleFileMetadata as FileMetadata } from "@/lib/simple-upload";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // i18n
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";

@@ -11,6 +11,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 
 // i18n
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface MeetingCardProps {
   meeting: Meeting & { teacher?: { name: string; email: string } };

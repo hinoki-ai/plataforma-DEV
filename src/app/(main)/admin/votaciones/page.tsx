@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useLanguage } from "@/components/language/LanguageContext";
 import { SkeletonLoader } from "@/components/ui/dashboard-loader";
 import {
   Vote,
