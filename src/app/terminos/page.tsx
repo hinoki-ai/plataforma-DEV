@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import terminosES from "@/locales/es/terminos.json";
 
 // Note: Metadata cannot be used in client components, so we'll use a different approach
 // The metadata will be handled by the layout or we can create a wrapper component
@@ -25,7 +26,8 @@ export default function TerminosPage() {
             </div>
           </div>
           <p className="text-lg text-center text-foreground/90 mb-12">
-            {t("hero.last_updated", "terminos")}: {new Date().toLocaleDateString()}
+            {t("hero.last_updated", "terminos")}:{" "}
+            {new Date().toLocaleDateString()}
           </p>
 
           <div className="space-y-8 text-foreground">
@@ -46,21 +48,27 @@ export default function TerminosPage() {
                 {t("section_2.content", "terminos")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                {t("section_2.features", "terminos").map((feature: string, index: number) => (
-                  <li key={index}>{feature}</li>
-                ))}
+                {terminosES["section_2.features"].map(
+                  (feature: string, index: number) => (
+                    <li key={index}>{feature}</li>
+                  ),
+                )}
               </ul>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("section_3.title", "terminos")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("section_3.title", "terminos")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 {t("section_3.content", "terminos")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground leading-relaxed space-y-2 ml-4">
-                {t("section_3.restrictions", "terminos").map((restriction: string, index: number) => (
-                  <li key={index}>{restriction}</li>
-                ))}
+                {terminosES["section_3.restrictions"].map(
+                  (restriction: string, index: number) => (
+                    <li key={index}>{restriction}</li>
+                  ),
+                )}
               </ul>
             </div>
 
@@ -101,21 +109,27 @@ export default function TerminosPage() {
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("section_8.title", "terminos")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("section_8.title", "terminos")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {t("section_8.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("section_9.title", "terminos")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("section_9.title", "terminos")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {t("section_9.content", "terminos")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("section_10.title", "terminos")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("section_10.title", "terminos")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {t("section_10.content", "terminos")}
               </p>

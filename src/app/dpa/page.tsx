@@ -23,7 +23,9 @@ export default function DpaPage() {
 
           <div className="space-y-8 text-foreground">
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("section_1.title", "dpa")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("section_1.title", "dpa")}
+              </h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
