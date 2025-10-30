@@ -645,8 +645,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.password = t("validation.password_required");
           if (formData.password.length < 8)
             newErrors.password = t("validation.password_min_length");
-          if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-            newErrors.password = t("validation.password_strength");
+          if (!/^(?=.*\d).{8,}$/.test(formData.password)) {
+            newErrors.password = t("validation.password_requirements");
           }
           if (!formData.confirmPassword.trim())
             newErrors.confirmPassword = t(
