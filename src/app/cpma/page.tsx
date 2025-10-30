@@ -372,9 +372,11 @@ export default function CPMAPage() {
       </section>
 
       {/* Signup Section - Moved to first panel below title */}
-      <section className={`${layout.spacing.section(isDesktopForced)} transition-all duration-700 ease-out delay-200 ${
-        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}>
+      <section
+        className={`${layout.spacing.section(isDesktopForced)} transition-all duration-700 ease-out delay-200 ${
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+      >
         <div className={`${layout.container(isDesktopForced)}`}>
           <SignupStyleSection
             title={t("cpma.signup_title", "common")}
