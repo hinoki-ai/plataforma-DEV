@@ -1,14 +1,19 @@
 import { Metadata } from "next";
+import { headers } from "next/headers";
+import { getServerTranslation } from "@/lib/server-translations";
 import ContactoContent from "./ContactoContent";
 
 // Server component for metadata
 export async function generateMetadata(): Promise<Metadata> {
-  // Since we can't use hooks in server components, we'll use static metadata for now
-  // In a real implementation, you might need to use a different approach
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") || "es";
+
+  // Simple language detection from Accept-Language header
+  const language = acceptLanguage.startsWith("en") ? "en" : "es";
+
   return {
-    title: "Contacto | Plataforma Astral",
-    description:
-      "Ponte en contacto con nosotros. Estamos aquí para ayudarte con tus consultas sobre educación.",
+    title: getServerTranslation("page.title", "contacto", language),
+    description: getServerTranslation("page.description", "contacto", language),
   };
 }
 

@@ -9,6 +9,12 @@ import { UserPlus, Mail, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { motion, Variants } from "motion/react";
+
+const fadeInUp: Variants = {
+  initial: { opacity: 0, y: 60 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 function LoginForm() {
   const params = useSearchParams();
@@ -45,9 +51,14 @@ function LoginForm() {
       {/* Title Panel with Glass Blur */}
       <div className="mb-8 w-full max-w-md">
         <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-4 mx-auto text-center -mt-24">
-          <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
+          <motion.h1
+            initial="initial"
+            animate="animate"
+            variants={fadeInUp}
+            className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl"
+          >
             {t("auth.portal_title")}
-          </h1>
+          </motion.h1>
         </div>
       </div>
 

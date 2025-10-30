@@ -9,5 +9,10 @@
   "admin.logs": "Registros del Sistema",
   "admin.pme.admin_actions": "Acciones Administrativas Especiales",
   "admin.pme.mark_completed": "Marcar objetivo como completado",
-  "admin.pme.delete_permanently": "Eliminar permanentemente"
+  "admin.pme.delete_permanently": "Eliminar permanentemente",
+  "admin.loading.title": "Configuración Educacional",
+  "admin.loading.subtitle": "Configurando el tipo de institución educativa",
+  "admin.loading.cta": "Cambiar Configuración",
+  "admin.dashboard.title": "Panel Administrativo",
+  "admin.dashboard.subtitle": "Gestión completa del sistema educativo"
 }

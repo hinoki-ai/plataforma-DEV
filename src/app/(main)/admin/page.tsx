@@ -8,11 +8,13 @@ import { dbLogger } from "@/lib/logger";
 import { RoleAwareDashboard } from "@/components/dashboard/RoleAwareDashboard";
 import { EducationalInstitutionSelector } from "@/components/admin/EducationalInstitutionSelector";
 import { EducationalInstitutionType } from "@/lib/educational-system";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
 
 export default function AdminDashboard() {
+  const { t } = useLanguage();
   const [currentInstitutionType, setCurrentInstitutionType] =
     useState<EducationalInstitutionType>("PRESCHOOL");
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
@@ -71,7 +73,7 @@ export default function AdminDashboard() {
 
   return (
     <AdvancedErrorBoundary
-      context="Admin Dashboard Page"
+      context={t("admin.dashboard.title", "admin")}
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >
@@ -133,12 +135,20 @@ export default function AdminDashboard() {
                 <div className="h-10 w-48 bg-gray-300 dark:bg-gray-700 rounded"></div>
               </div>
             ) : (
-              <EducationalInstitutionSelector
-                currentType={currentInstitutionType}
-                onTypeChange={(type) => {
-                  setCurrentInstitutionType(type);
-                }}
-              />
+              <div>
+                <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  {t("admin.loading.title", "admin")}
+                </h2>
+                <p className="text-sm text-blue-700 dark:text-blue-300 mb-4">
+                  {t("admin.loading.subtitle", "admin")}
+                </p>
+                <EducationalInstitutionSelector
+                  currentType={currentInstitutionType}
+                  onTypeChange={(type) => {
+                    setCurrentInstitutionType(type);
+                  }}
+                />
+              </div>
             )}
           </div>
 

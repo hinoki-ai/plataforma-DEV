@@ -18,6 +18,13 @@ import {
   CommandGroup,
   CommandItem,
 } from "@/components/ui/command";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -1188,19 +1195,30 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     {t("signup.relationship.label")}
                   </Label>
                   <Select
-                    id="relationship"
-                    name="relationship"
                     value={formData.relationship}
-                    onChange={handleChange}
-                    onKeyDown={(e) => handleKeyDown(e, "relationship")}
-                    error={errors.relationship}
+                    onValueChange={(value) => {
+                      setFormData((prev) => ({ ...prev, relationship: value }));
+                      setErrors((prev) => ({ ...prev, relationship: "" }));
+                    }}
                   >
-                    <option value="">{t("select.relationship")}</option>
-                    {getRelationships(t).map((rel) => (
-                      <option key={rel.value} value={rel.value}>
-                        {rel.label}
-                      </option>
-                    ))}
+                    <SelectTrigger
+                      id="relationship"
+                      onKeyDown={(e) => handleKeyDown(e, "relationship")}
+                      className={cn(
+                        "rounded-xl",
+                        errors.relationship &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    >
+                      <SelectValue placeholder={t("select.relationship")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getRelationships(t).map((rel) => (
+                        <SelectItem key={rel.value} value={rel.value}>
+                          {rel.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                   {errors.relationship && (
                     <ErrorMessage message={errors.relationship} />
@@ -1256,19 +1274,30 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     <LabelInputContainer>
                       <Label htmlFor="region">{t("signup.region.label")}</Label>
                       <Select
-                        id="region"
-                        name="region"
                         value={formData.region}
-                        onChange={handleChange}
-                        onKeyDown={(e) => handleKeyDown(e, "region")}
-                        error={errors.region}
+                        onValueChange={(value) => {
+                          setFormData((prev) => ({ ...prev, region: value }));
+                          setErrors((prev) => ({ ...prev, region: "" }));
+                        }}
                       >
-                        <option value="">{t("select.region")}</option>
-                        {getRegions(t).map((region) => (
-                          <option key={region.value} value={region.value}>
-                            {region.label}
-                          </option>
-                        ))}
+                        <SelectTrigger
+                          id="region"
+                          onKeyDown={(e) => handleKeyDown(e, "region")}
+                          className={cn(
+                            "rounded-xl",
+                            errors.region &&
+                              "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                          )}
+                        >
+                          <SelectValue placeholder={t("select.region")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {getRegions(t).map((region) => (
+                            <SelectItem key={region.value} value={region.value}>
+                              {region.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
                       </Select>
                       {errors.region && (
                         <ErrorMessage message={errors.region} />
@@ -1278,20 +1307,31 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     <LabelInputContainer>
                       <Label htmlFor="comuna">{t("signup.comuna.label")}</Label>
                       <Select
-                        id="comuna"
-                        name="comuna"
                         value={formData.comuna}
-                        onChange={handleChange}
-                        onKeyDown={(e) => handleKeyDown(e, "comuna")}
-                        error={errors.comuna}
+                        onValueChange={(value) => {
+                          setFormData((prev) => ({ ...prev, comuna: value }));
+                          setErrors((prev) => ({ ...prev, comuna: "" }));
+                        }}
                         disabled={!formData.region}
                       >
-                        <option value="">{t("select.comuna")}</option>
-                        {comunas.map((comuna) => (
-                          <option key={comuna} value={comuna}>
-                            {comuna}
-                          </option>
-                        ))}
+                        <SelectTrigger
+                          id="comuna"
+                          onKeyDown={(e) => handleKeyDown(e, "comuna")}
+                          className={cn(
+                            "rounded-xl",
+                            errors.comuna &&
+                              "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                          )}
+                        >
+                          <SelectValue placeholder={t("select.comuna")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {comunas.map((comuna) => (
+                            <SelectItem key={comuna} value={comuna}>
+                              {comuna}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
                       </Select>
                       {errors.comuna && (
                         <ErrorMessage message={errors.comuna} />
@@ -1410,19 +1450,33 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         {t("signup.child_grade.label")}
                       </Label>
                       <Select
-                        id="childGrade"
-                        name="childGrade"
                         value={formData.childGrade}
-                        onChange={handleChange}
-                        onKeyDown={(e) => handleKeyDown(e, "childGrade")}
-                        error={errors.childGrade}
+                        onValueChange={(value) => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            childGrade: value,
+                          }));
+                          setErrors((prev) => ({ ...prev, childGrade: "" }));
+                        }}
                       >
-                        <option value="">{t("select.grade")}</option>
-                        {getGrades(t).map((grade) => (
-                          <option key={grade.value} value={grade.value}>
-                            {grade.label}
-                          </option>
-                        ))}
+                        <SelectTrigger
+                          id="childGrade"
+                          onKeyDown={(e) => handleKeyDown(e, "childGrade")}
+                          className={cn(
+                            "rounded-xl",
+                            errors.childGrade &&
+                              "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                          )}
+                        >
+                          <SelectValue placeholder={t("select.grade")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {getGrades(t).map((grade) => (
+                            <SelectItem key={grade.value} value={grade.value}>
+                              {grade.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
                       </Select>
                       {errors.childGrade && (
                         <ErrorMessage message={errors.childGrade} />
@@ -1683,33 +1737,13 @@ const LabelInputContainer = memo(function LabelInputContainer({
   );
 });
 
-const Select = memo(function Select({
-  children,
-  error,
-  onKeyDown,
-  ...props
-}: React.SelectHTMLAttributes<HTMLSelectElement> & { error?: string }) {
-  return (
-    <select
-      {...props}
-      onKeyDown={onKeyDown}
-      className={cn(
-        "block w-full px-3 py-2 border border-input bg-background text-foreground rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:border-primary focus:ring-primary/20 disabled:bg-muted disabled:cursor-not-allowed",
-        error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-      )}
-    >
-      {children}
-    </select>
-  );
-});
-
 const ErrorMessage = memo(function ErrorMessage({
   message,
 }: {
   message: string;
 }) {
   return (
-    <p className="text-red-600 dark:text-red-400 text-sm mt-1 font-medium animate-in fade-in duration-200 flex items-center gap-1">
+    <p className="text-red-600 dark:text-red-400 text-sm mt-1 font-medium flex items-center gap-1">
       <span className="text-red-500">⚠</span>
       {message}
     </p>

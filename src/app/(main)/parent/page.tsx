@@ -6,11 +6,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { dbLogger } from "@/lib/logger";
 import { RoleAwareDashboard } from "@/components/dashboard/RoleAwareDashboard";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
 
 export default function ParentDashboardPage() {
+  const { t } = useLanguage();
+
   // 🚨 EMERGENCY: Handle database failures gracefully
   try {
     // Dashboard will show empty state but remain functional
@@ -25,7 +28,7 @@ export default function ParentDashboardPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="Parent Dashboard Page"
+      context={t("parent.dashboard.title", "parent")}
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >
