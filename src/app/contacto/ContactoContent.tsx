@@ -51,6 +51,9 @@ export default function ContactoContent() {
                   <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out">
                     {t("hero.title", "contacto")}
                   </h1>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out">
+                    {t("hero.subtitle", "contacto")}
+                  </p>
                 </div>
               </motion.div>
             </motion.div>

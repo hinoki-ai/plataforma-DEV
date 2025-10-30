@@ -54,69 +54,53 @@ export default function DpaPage() {
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">2. Objeto del Acuerdo</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("section_2.title", "dpa")}</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Este Acuerdo establece las condiciones bajo las cuales
-                Plataforma Astral procesa datos personales en nombre de las
-                instituciones educativas, cumpliendo con la Ley 19.628 sobre
-                Protección de Datos Personales y regulaciones complementarias
-                aplicables en Chile.
+                {t("section_2.content", "dpa")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">3. Definiciones</h2>
+              <h2 className="text-2xl font-bold mb-4">{t("section_3.title", "dpa")}</h2>
               <div className="space-y-3 text-muted-foreground">
                 <div>
-                  <strong>Datos Personales:</strong> Toda información relativa a
-                  personas naturales identificadas o identificables.
+                  <strong>{t("section_3.personal_data", "dpa")}:</strong> {t("section_3.personal_data_desc", "dpa")}
                 </div>
                 <div>
-                  <strong>Tratamiento:</strong> Operaciones realizadas sobre
-                  datos personales, incluyendo recolección, almacenamiento, uso,
-                  circulación y eliminación.
+                  <strong>{t("section_3.processing", "dpa")}:</strong> {t("section_3.processing_desc", "dpa")}
                 </div>
                 <div>
-                  <strong>Datos Sensibles:</strong> Información que revela
-                  origen racial, opiniones políticas, convicciones religiosas,
-                  filosóficas o morales, afiliación sindical, información
-                  referente a la salud, vida sexual, datos genéticos o
-                  biométricos.
+                  <strong>{t("section_3.sensitive_data", "dpa")}:</strong> {t("section_3.sensitive_data_desc", "dpa")}
                 </div>
                 <div>
-                  <strong>Medidas de Seguridad:</strong> Procedimientos
-                  técnicos, organizativos y legales destinados a proteger datos
-                  personales contra pérdida, alteración, acceso no autorizado o
-                  tratamiento no permitido.
+                  <strong>{t("section_3.security_measures", "dpa")}:</strong> {t("section_3.security_measures_desc", "dpa")}
                 </div>
               </div>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
               <h2 className="text-2xl font-bold mb-4">
-                4. Categorías de Datos Procesados
+                {t("section_4.title", "dpa")}
               </h2>
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    Datos de Usuarios del Sistema:
+                    {t("section_4.user_data", "dpa")}:
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    <li>Nombre completo, RUN/RUT, fecha de nacimiento</li>
-                    <li>Datos de contacto (email, teléfono)</li>
-                    <li>Información institucional y rol</li>
-                    <li>Datos de autenticación y acceso</li>
+                    {t("section_4.user_data_items", "dpa").map((item: string, index: number) => (
+                      <li key={index}>{item}</li>
+                    ))}
                   </ul>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    Datos de Estudiantes:
+                    {t("section_4.student_data", "dpa")}:
                   </h3>
                   <ul className="list-disc list-inside text-muted-foreground leading-relaxed ml-4 space-y-1">
-                    <li>Información académica y de rendimiento</li>
-                    <li>Datos de salud (solo con consentimiento específico)</li>
-                    <li>Información familiar y de tutores</li>
-                    <li>Asistencia y participación escolar</li>
+                    {t("section_4.student_data_items", "dpa").map((item: string, index: number) => (
+                      <li key={index}>{item}</li>
+                    ))}
                   </ul>
                 </div>
               </div>

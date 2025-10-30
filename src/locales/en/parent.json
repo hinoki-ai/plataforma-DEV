@@ -26,6 +26,8 @@
   "parent.voting.time.days": "days",
   "parent.voting.time.hours": "hours",
   "parent.voting.time.less_than_hour": "Less than 1 hour",
+  "parent.dashboard.title": "Parent Dashboard",
+  "parent.dashboard.subtitle": "Complete management of your children's education",
   "parent.students.title": "Student Information",
   "parent.students.description": "Access general information and resources for students at our school.",
   "parent.students.general_info": "General Information",

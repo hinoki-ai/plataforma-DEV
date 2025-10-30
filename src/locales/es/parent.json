@@ -26,6 +26,8 @@
   "parent.voting.time.days": "días",
   "parent.voting.time.hours": "horas",
   "parent.voting.time.less_than_hour": "Menos de 1 hora",
+  "parent.dashboard.title": "Panel de Padres",
+  "parent.dashboard.subtitle": "Gestión completa de la educación de tus hijos",
   "parent.students.title": "Información de Estudiantes",
   "parent.students.description": "Accede a información general y recursos para estudiantes del establecimiento.",
   "parent.students.general_info": "Información General",

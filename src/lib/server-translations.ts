@@ -18,6 +18,8 @@ import navigationES from "@/locales/es/navigation.json";
 import navigationEN from "@/locales/en/navigation.json";
 import languageES from "@/locales/es/language.json";
 import languageEN from "@/locales/en/language.json";
+import contactoES from "@/locales/es/contacto.json";
+import contactoEN from "@/locales/en/contact.json";
 
 type TranslationNamespace =
   | "common"
@@ -26,7 +28,8 @@ type TranslationNamespace =
   | "parent"
   | "dashboard"
   | "navigation"
-  | "language";
+  | "language"
+  | "contacto";
 
 const translations = {
   es: {
@@ -37,6 +40,7 @@ const translations = {
     dashboard: dashboardES,
     navigation: navigationES,
     language: languageES,
+    contacto: contactoES,
   },
   en: {
     common: commonEN,
@@ -46,6 +50,7 @@ const translations = {
     dashboard: dashboardEN,
     navigation: navigationEN,
     language: languageEN,
+    contacto: contactoEN,
   },
 } as const;
 

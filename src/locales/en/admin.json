@@ -9,5 +9,10 @@
   "admin.logs": "System Logs",
   "admin.pme.admin_actions": "Special Administrative Actions",
   "admin.pme.mark_completed": "Mark goal as completed",
-  "admin.pme.delete_permanently": "Delete permanently"
+  "admin.pme.delete_permanently": "Delete permanently",
+  "admin.loading.title": "Educational Configuration",
+  "admin.loading.subtitle": "Setting up educational institution type",
+  "admin.loading.cta": "Change Configuration",
+  "admin.dashboard.title": "Administrative Dashboard",
+  "admin.dashboard.subtitle": "Complete educational system management"
 }
