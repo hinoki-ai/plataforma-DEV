@@ -25,7 +25,7 @@ export function DynamicPersonalization() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/cpa"
+            href="/cpma"
             className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             {t("home.explore.parent.center", "common")}

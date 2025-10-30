@@ -204,10 +204,11 @@ export function DashboardActions({
             primary: true,
           },
           {
-            label: "CPA Centro de Padres",
-            href: "/cpa",
+            label: "CFMG Center of Fathers, Mothers and Guardians",
+            href: "/cpma",
             icon: Vote,
-            description: "Información del Centro de Padres",
+            description:
+              "Information about the Center of Fathers, Mothers and Guardians",
           },
         ];
 

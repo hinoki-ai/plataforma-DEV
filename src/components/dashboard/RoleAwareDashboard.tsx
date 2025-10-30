@@ -249,10 +249,10 @@ const quickActions: Record<UserRole, QuickAction[]> = {
     },
     {
       id: "contact",
-      title: "CPA Centro de Padres",
-      description: "Información del centro",
+      title: "CFMG Center of Fathers, Mothers and Guardians",
+      description: "Center information",
       icon: MessageSquare,
-      href: "/cpa",
+      href: "/cpma",
     },
   ],
 };

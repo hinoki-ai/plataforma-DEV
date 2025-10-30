@@ -9,7 +9,7 @@
   "parent.resources": "Recursos Educativos",
   "parent.tabs.overview": "Dashboard Principal",
   "parent.tabs.analytics": "Analytics Avanzados",
-  "parent.voting.title": "Votaciones del Centro de Padres",
+  "parent.voting.title": "Votaciones del CPMA Centro de Padres, Madres y Apoderados",
   "parent.voting.loading": "Cargando votaciones",
   "parent.voting.error.loading": "Error al cargar las votaciones",
   "parent.voting.success": "Voto registrado correctamente",

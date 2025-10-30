@@ -40,7 +40,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { UnifiedSignupForm } from "@/components/UnifiedSignupForm";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { FileIcons } from "@/components/icons/hero-icons";
 import {
@@ -116,7 +115,7 @@ const testimonialAvatars = {
   carolina_silva: "👩‍💻",
 };
 
-export default function CPAPage() {
+export default function CPMAPage() {
   const { t } = useDivineParsing(["common"]);
   const { isDesktopForced } = useResponsiveMode();
   const [mounted, setMounted] = useState(false);
@@ -149,38 +148,38 @@ export default function CPAPage() {
   const features = [
     {
       icon: UsersRound,
-      title: t("cpa.feature_community", "common"),
-      description: t("cpa.feature_community_desc", "common"),
+      title: t("cfmg.feature_community", "common"),
+      description: t("cfmg.feature_community_desc", "common"),
       color: "text-blue-600",
     },
     {
       icon: Shield,
-      title: t("cpa.feature_transparency", "common"),
-      description: t("cpa.feature_transparency_desc", "common"),
+      title: t("cfmg.feature_transparency", "common"),
+      description: t("cfmg.feature_transparency_desc", "common"),
       color: "text-green-600",
     },
     {
       icon: BookOpen,
-      title: t("cpa.feature_resources", "common"),
-      description: t("cpa.feature_resources_desc", "common"),
+      title: t("cfmg.feature_resources", "common"),
+      description: t("cfmg.feature_resources_desc", "common"),
       color: "text-purple-600",
     },
     {
       icon: Handshake,
-      title: t("cpa.feature_support", "common"),
-      description: t("cpa.feature_support_desc", "common"),
+      title: t("cfmg.feature_support", "common"),
+      description: t("cfmg.feature_support_desc", "common"),
       color: "text-pink-600",
     },
     {
       icon: Calendar,
-      title: t("cpa.feature_participation", "common"),
-      description: t("cpa.feature_participation_desc", "common"),
+      title: t("cfmg.feature_participation", "common"),
+      description: t("cfmg.feature_participation_desc", "common"),
       color: "text-orange-600",
     },
     {
       icon: Award,
-      title: t("cpa.feature_recognition", "common"),
-      description: t("cpa.feature_recognition_desc", "common"),
+      title: t("cfmg.feature_recognition", "common"),
+      description: t("cfmg.feature_recognition_desc", "common"),
       color: "text-indigo-600",
     },
   ];
@@ -221,10 +220,10 @@ export default function CPAPage() {
     loadVideoCapsule();
   }, []);
 
-  // Load CPA PDF documents dynamically
-  const loadCPADocuments = async () => {
+  // Load CPMA PDF documents dynamically
+  const loadCPMADocuments = async () => {
     try {
-      const response = await fetch("/api/cpa/documents");
+      const response = await fetch("/api/cpma/documents");
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.documents) {
@@ -244,7 +243,7 @@ export default function CPAPage() {
   };
 
   useEffect(() => {
-    loadCPADocuments();
+    loadCPMADocuments();
   }, []);
 
   const handleSave = async () => {
@@ -338,7 +337,7 @@ export default function CPAPage() {
   };
 
   return (
-    <div className="min-h-screen bg-responsive-desktop bg-cpa">
+    <div className="min-h-screen bg-responsive-desktop bg-cpma">
       <div className="min-h-screen bg-linear-to-b from-black/30 via-black/20 to-black/40">
         <Header />
         {/* Hero Section */}
@@ -363,114 +362,8 @@ export default function CPAPage() {
                     <h1
                       className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out`}
                     >
-                      {t("cpa.title", "common")}
+                      {t("cfmg.title", "common")}
                     </h1>
-                  </div>
-                </motion.div>
-
-                {/* Signup Form Section */}
-                <motion.div
-                  variants={fadeInUp}
-                  className={`mt-8 transition-all duration-700 ease-out delay-400 ${
-                    mounted
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-4"
-                  }`}
-                >
-                  <div
-                    className={`grid ${isDesktopForced ? "grid-cols-3" : "grid-cols-1 lg:grid-cols-3"} gap-6 items-stretch`}
-                  >
-                    {/* Unified Signup Form - Left Column (2/3 width) */}
-                    <div
-                      className={`${isDesktopForced ? "col-span-2" : "col-span-1 lg:col-span-2"} flex`}
-                    >
-                      <UnifiedSignupForm />
-                    </div>
-
-                    {/* Testimonials - Right Column (1/3 width) */}
-                    <div
-                      className={`${isDesktopForced ? "col-span-1" : "col-span-1 lg:col-span-1"}`}
-                    >
-                      {/* Testimonials container matching form height */}
-                      <div className="relative h-full flex flex-col">
-                        {/* Testimonial indicator dots */}
-                        <div className="flex justify-center gap-2 mb-4">
-                          {Array.from(
-                            { length: Math.ceil(getTestimonials().length / 3) },
-                            (_, i) => (
-                              <div
-                                key={i}
-                                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                  Math.floor(currentTestimonialIndex / 3) === i
-                                    ? "bg-primary scale-125 shadow-sm"
-                                    : "bg-primary/30 hover:bg-primary/50"
-                                }`}
-                              />
-                            ),
-                          )}
-                        </div>
-                        <AnimatePresence mode="wait">
-                          <div className="flex flex-col gap-4 h-full justify-between">
-                            {getCurrentTestimonials().map(
-                              (testimonial, index) => (
-                                <motion.div
-                                  key={`${testimonial.id}-${currentTestimonialIndex}-${index}`}
-                                  initial={{ opacity: 0, y: 20 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: -20 }}
-                                  transition={{
-                                    duration: 0.6,
-                                    ease: "easeInOut",
-                                    delay: index * 0.1,
-                                  }}
-                                  className="flex-1 flex"
-                                >
-                                  <div className="group w-full">
-                                    <SignupStyleCard className="w-full h-full backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5 hover:border-primary/30 transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] cursor-pointer">
-                                      {/* Header with avatar and name/role */}
-                                      <div className="flex items-start gap-4 mb-4">
-                                        <div className="relative">
-                                          <div className="w-12 h-12 bg-linear-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center border border-primary/20 shadow-lg">
-                                            <span className="text-2xl">
-                                              {testimonial.avatar}
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                          <h4 className="font-bold text-foreground text-lg leading-tight truncate">
-                                            {testimonial.name}
-                                          </h4>
-                                          <p className="text-sm text-muted-foreground/80 font-medium">
-                                            {testimonial.role}
-                                          </p>
-                                          {/* Star rating */}
-                                          <div className="flex items-center gap-1 mt-1">
-                                            {[...Array(5)].map((_, i) => (
-                                              <svg
-                                                key={i}
-                                                className="w-4 h-4 text-yellow-400 fill-current"
-                                                viewBox="0 0 20 20"
-                                              >
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                              </svg>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      </div>
-
-                                      {/* Content */}
-                                      <p className="text-foreground/90 leading-relaxed text-base pl-2 border-l-2 border-primary/20 group-hover:border-primary/40 transition-colors duration-300">
-                                        {testimonial.content}
-                                      </p>
-                                    </SignupStyleCard>
-                                  </div>
-                                </motion.div>
-                              ),
-                            )}
-                          </div>
-                        </AnimatePresence>
-                      </div>
-                    </div>
                   </div>
                 </motion.div>
               </motion.div>
@@ -486,8 +379,8 @@ export default function CPAPage() {
         >
           <div className={`${layout.container(isDesktopForced)}`}>
             <SignupStyleSection
-              title={t("cpa.subtitle", "common")}
-              subtitle={t("cpa.description", "common")}
+              title={t("cfmg.subtitle", "common")}
+              subtitle={t("cfmg.description", "common")}
             >
               <SignupStyleGrid columns={3} gap="md">
                 {features.map((feature, index) => (

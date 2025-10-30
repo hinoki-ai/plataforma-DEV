@@ -53,6 +53,16 @@ export async function POST(request: Request) {
       comuna: formData.get("comuna") as string,
       emergencyContact: formData.get("emergencyContact") as string,
       emergencyPhone: formData.get("emergencyPhone") as string,
+      secondaryEmergencyContact: formData.get(
+        "secondaryEmergencyContact",
+      ) as string,
+      secondaryEmergencyPhone: formData.get(
+        "secondaryEmergencyPhone",
+      ) as string,
+      tertiaryEmergencyContact: formData.get(
+        "tertiaryEmergencyContact",
+      ) as string,
+      tertiaryEmergencyPhone: formData.get("tertiaryEmergencyPhone") as string,
       institutionId: formData.get("institutionId") as string,
       password: formData.get("password") as string | undefined,
       provider: formData.get("provider") as string | undefined,

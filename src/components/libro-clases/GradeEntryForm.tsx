@@ -505,6 +505,7 @@ export function GradeEntryForm({
             <span className="font-medium">{gradePercentage.toFixed(0)}%</span>
           </div>
           <div className="h-2 bg-muted rounded-full overflow-hidden">
+            {/* eslint-disable-next-line */}
             <div
               className={cn(
                 "h-full transition-all duration-300",

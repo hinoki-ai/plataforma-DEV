@@ -15,19 +15,19 @@ export default function Error({
         <h1 className="text-3xl font-bold mb-4 text-red-400 drop-shadow-[0_0_16px_rgba(255,68,68,0.42)] sm:text-4xl">
           ¡Ups! Algo salió mal
         </h1>
-        <p className="mb-8 text-sm leading-relaxed text-red-300/90 sm:text-base break-words">
+        <p className="mb-8 text-sm leading-relaxed text-red-300/90 sm:text-base wrap-break-word">
           {error?.message || "Ha ocurrido un error inesperado"}
         </p>
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-center sm:gap-3">
           <button
             onClick={reset}
-            className="inline-flex h-10 items-center justify-center rounded-lg border border-transparent bg-red-500 px-5 text-sm font-semibold text-black shadow-[0_0_18px_rgba(255,68,68,0.3)] transition-transform duration-200 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:h-11"
+            className="inline-flex h-8 items-center justify-center rounded-lg border border-transparent bg-red-500 px-4 text-sm font-semibold text-black shadow-[0_0_18px_rgba(255,68,68,0.3)] transition-transform duration-200 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:h-9"
           >
             Intentar nuevamente
           </button>
           <a
             href="/"
-            className="inline-flex h-10 items-center justify-center rounded-lg border border-red-500/35 bg-red-500/10 px-5 text-sm font-semibold text-red-400 backdrop-blur transition-transform duration-200 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:h-11"
+            className="inline-flex h-8 items-center justify-center rounded-lg border border-red-500/35 bg-red-500/10 px-4 text-sm font-semibold text-red-400 backdrop-blur transition-transform duration-200 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:h-9"
           >
             Volver al inicio
           </a>

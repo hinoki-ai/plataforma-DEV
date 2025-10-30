@@ -94,6 +94,10 @@ export async function registerParentComplete(data: {
   comuna: string;
   emergencyContact: string;
   emergencyPhone: string;
+  secondaryEmergencyContact?: string;
+  secondaryEmergencyPhone?: string;
+  tertiaryEmergencyContact?: string;
+  tertiaryEmergencyPhone?: string;
   institutionId?: string;
   password?: string;
   provider?: string;
@@ -120,6 +124,10 @@ export async function registerParentComplete(data: {
       relationship: data.relationship,
       emergencyContact: data.emergencyContact,
       emergencyPhone: data.emergencyPhone,
+      secondaryEmergencyContact: data.secondaryEmergencyContact,
+      secondaryEmergencyPhone: data.secondaryEmergencyPhone,
+      tertiaryEmergencyContact: data.tertiaryEmergencyContact,
+      tertiaryEmergencyPhone: data.tertiaryEmergencyPhone,
       childName: data.childName,
       childGrade: data.childGrade,
       institutionId: data.institutionId as any, // Type assertion for Convex ID

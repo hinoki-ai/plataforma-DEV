@@ -295,8 +295,8 @@ const baseNavigationItems: Record<UserRole, NavigationItem[]> = {
     },
     {
       id: "about",
-      title: "CPA Centro de Padres",
-      href: "/cpa",
+      title: "CFMG Center of Fathers, Mothers and Guardians",
+      href: "/cpma",
       category: "informacion",
       description: "Sobre el centro",
     },

@@ -416,16 +416,23 @@
   .dark input:-webkit-autofill:focus,
   .dark input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 1000px rgb(142, 137, 123) inset !important;
-    -webkit-box-shadow: 0 0 0 1000px oklch(0.65 0.08 45) inset !important;
     -webkit-text-fill-color: rgb(231, 231, 231) !important;
-    -webkit-text-fill-color: oklch(0.9067 0 0) !important;
     background-color: rgb(142, 137, 123) !important;
-    background-color: oklch(0.65 0.08 45) !important;
     border-color: rgb(104, 104, 104) !important;
-    border-color: oklch(0.4091 0 0) !important;
     transition:
       background-color 0.3s ease,
       border-color 0.3s ease;
+  }
+
+  @supports (color: oklch(0 0 0)) {
+    .dark input:-webkit-autofill:hover,
+    .dark input:-webkit-autofill:focus,
+    .dark input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 1000px oklch(0.65 0.08 45) inset !important;
+      -webkit-text-fill-color: oklch(0.9067 0 0) !important;
+      background-color: oklch(0.65 0.08 45) !important;
+      border-color: oklch(0.4091 0 0) !important;
+    }
   }
 
   /* Autofill for other browsers */
@@ -434,16 +441,24 @@
   .dark input:autofill:focus,
   .dark input:autofill:active {
     box-shadow: 0 0 0 1000px rgb(142, 137, 123) inset !important;
-    box-shadow: 0 0 0 1000px oklch(0.65 0.08 45) inset !important;
     -webkit-text-fill-color: rgb(231, 231, 231) !important;
-    -webkit-text-fill-color: oklch(0.9067 0 0) !important;
     background-color: rgb(142, 137, 123) !important;
-    background-color: oklch(0.65 0.08 45) !important;
     border-color: rgb(104, 104, 104) !important;
-    border-color: oklch(0.4091 0 0) !important;
     transition:
       background-color 0.3s ease,
       border-color 0.3s ease;
+  }
+
+  @supports (color: oklch(0 0 0)) {
+    .dark input:autofill,
+    .dark input:autofill:hover,
+    .dark input:autofill:focus,
+    .dark input:autofill:active {
+      box-shadow: 0 0 0 1000px oklch(0.65 0.08 45) inset !important;
+      -webkit-text-fill-color: oklch(0.9067 0 0) !important;
+      background-color: oklch(0.65 0.08 45) !important;
+      border-color: oklch(0.4091 0 0) !important;
+    }
   }
 
   /* Ensure form error messages have sufficient contrast */
@@ -658,9 +673,19 @@
   }
 
   /* Centro consejo background */
-  .bg-cpa {
-    --bg-image: url(/bg19.jpg);
+  .bg-cpma {
+    --bg-image: url(/bg20.jpg);
+    background-image: url(/bg20.jpg) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     position: relative;
+  }
+
+  /* Ensure bg-cpma works with bg-responsive-desktop */
+  .bg-responsive-desktop.bg-cpma {
+    background-image: url(/bg20.jpg) !important;
+    background-size: cover !important;
   }
 
   /* Login/Auth background */
@@ -691,6 +716,22 @@
   .bg-contacto {
     --bg-image: url(/bg11.jpg);
     position: relative;
+  }
+
+  /* BG20 background */
+  .bg20 {
+    --bg-image: url(/bg20.jpg);
+    background-image: url(/bg20.jpg) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    position: relative;
+  }
+
+  /* Ensure bg20 overrides bg-login when both are present */
+  .bg-responsive-desktop.bg20 {
+    background-image: url(/bg20.jpg) !important;
+    background-size: cover !important;
   }
 
   /* Mobile portrait video background */

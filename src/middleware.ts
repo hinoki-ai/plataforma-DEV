@@ -7,9 +7,9 @@ const PUBLIC_ROUTES = [
   "/",
   "/login",
   "/registro",
-  "/registro-padre",
+  "/registro-centro",
   "/auth-success",
-  "/cpa",
+  "/cpma",
 ];
 
 // Routes that require authentication

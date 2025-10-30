@@ -121,12 +121,13 @@ export async function sendConfirmationEmail({
   try {
     const transporter = createTransport();
 
-    const verificationUrl = `${process.env.APP_URL}/cpa/verificar?token=${verificationToken}`;
+    const verificationUrl = `${process.env.APP_URL}/cpma/verificar?token=${verificationToken}`;
 
     const mailOptions = {
       from: DEFAULT_FROM_EMAIL,
       to,
-      subject: "Confirma tu registro - Centro de Padres Plataforma Astral",
+      subject:
+        "Confirma tu registro - CPMA Centro de Padres, Madres y Apoderados Plataforma Astral",
       html: getConfirmationEmailTemplate({ name, verificationUrl }),
       text: getConfirmationEmailText({ name, verificationUrl }),
     };
@@ -151,12 +152,13 @@ export async function sendWelcomeEmail({
   try {
     const transporter = createTransport();
 
-    const dashboardUrl = `${process.env.APP_URL}/cpa/dashboard`;
+    const dashboardUrl = `${process.env.APP_URL}/cpma/dashboard`;
 
     const mailOptions = {
       from: DEFAULT_FROM_EMAIL,
       to,
-      subject: "¡Bienvenido al Centro de Padres Plataforma Astral!",
+      subject:
+        "¡Bienvenido al CPMA Centro de Padres, Madres y Apoderados Plataforma Astral!",
       html: getWelcomeEmailTemplate({ name, dashboardUrl }),
       text: getWelcomeEmailText({ name, dashboardUrl }),
     };
@@ -362,11 +364,11 @@ function getConfirmationEmailTemplate({
       <div class="container">
         <div class="header">
           <h1>¡Hola ${name}!</h1>
-          <p>Gracias por registrarte en el Centro de Padres</p>
+          <p>Gracias por registrarte en el CPMA Centro de Padres, Madres y Apoderados</p>
         </div>
         <div class="content">
           <h2>Confirma tu cuenta</h2>
-          <p>Para completar tu registro en el Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral, necesitamos que confirmes tu dirección de correo electrónico.</p>
+          <p>Para completar tu registro en el CPMA Centro de Padres, Madres y Apoderados de la Plataforma Educativa Astral, necesitamos que confirmes tu dirección de correo electrónico.</p>
           
           <p style="text-align: center;">
             <a href="${verificationUrl}" class="button">Confirmar mi cuenta</a>
@@ -381,7 +383,7 @@ function getConfirmationEmailTemplate({
         </div>
         <div class="footer">
           <p>Plataforma Educativa Astral<br>
-          Centro de Padres y Consejo Escolar</p>
+          CPMA Centro de Padres, Madres y Apoderados</p>
         </div>
       </div>
     </body>
@@ -399,7 +401,7 @@ function getConfirmationEmailText({
   return `
 ¡Hola ${name}!
 
-Gracias por registrarte en el Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral.
+Gracias por registrarte en el CPMA Centro de Padres, Madres y Apoderados de la Plataforma Educativa Astral.
 
 Para completar tu registro, necesitamos que confirmes tu dirección de correo electrónico haciendo clic en el siguiente enlace:
 
@@ -448,7 +450,7 @@ function getWelcomeEmailTemplate({
         </div>
         <div class="content">
           <h2>¡Ya eres parte de nuestra comunidad!</h2>
-          <p>Felicitaciones por unirte al Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral.</p>
+          <p>Felicitaciones por unirte al CPMA Centro de Padres, Madres y Apoderados de la Plataforma Educativa Astral.</p>
           
           <div class="features">
             <div class="feature">
@@ -477,7 +479,7 @@ function getWelcomeEmailTemplate({
         </div>
         <div class="footer">
           <p>Plataforma Educativa Astral<br>
-          Centro de Padres y Consejo Escolar</p>
+          CPMA Centro de Padres, Madres y Apoderados</p>
         </div>
       </div>
     </body>
@@ -495,7 +497,7 @@ function getWelcomeEmailText({
   return `
 ¡Bienvenido ${name}!
 
-Tu cuenta ha sido confirmada exitosamente y ya eres parte del Centro de Padres y Consejo Escolar de la Plataforma Educativa Astral.
+Tu cuenta ha sido confirmada exitosamente y ya eres parte del CPMA Centro de Padres, Madres y Apoderados de la Plataforma Educativa Astral.
 
 Ahora puedes:
 - Participar en eventos y reuniones

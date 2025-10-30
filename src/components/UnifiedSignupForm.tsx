@@ -31,7 +31,11 @@ interface FormData {
   email: string;
   phone: string;
   rut: string;
+  password: string;
+  confirmPassword: string;
   childName: string;
+  childRUT: string;
+  childPhone: string;
   childGrade: string;
   relationship: string;
   address: string;
@@ -39,6 +43,10 @@ interface FormData {
   comuna: string;
   emergencyContact: string;
   emergencyPhone: string;
+  secondaryEmergencyContact: string;
+  secondaryEmergencyPhone: string;
+  tertiaryEmergencyContact: string;
+  tertiaryEmergencyPhone: string;
   role: "padre" | "madre" | "apoderado" | "otro";
   institutionId: string;
 }
@@ -522,16 +530,16 @@ const comunasByRegion: Record<string, string[]> = {
 };
 
 const stepTitles = [
+  "Cuenta y Seguridad",
   "Información Personal",
-  "Datos del Estudiante",
   "Ubicación",
   "Contacto de Emergencia",
 ];
 
 const stepDescriptions = [
-  "Tus datos básicos de contacto",
-  "Datos de tu hijo/a en la institución educativa",
-  "Tu dirección y ubicación",
+  "Ingresa tu correo y crea tu contraseña segura",
+  "Tus datos básicos de contacto y de tu hijo/a",
+  "Tu dirección, ubicación e institución educativa",
   "Persona a contactar en caso de emergencia",
 ];
 
@@ -544,7 +552,11 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     email: "",
     phone: "",
     rut: "",
+    password: "",
+    confirmPassword: "",
     childName: "",
+    childRUT: "",
+    childPhone: "",
     childGrade: "",
     relationship: "",
     address: "",
@@ -552,6 +564,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     comuna: "",
     emergencyContact: "",
     emergencyPhone: "",
+    secondaryEmergencyContact: "",
+    secondaryEmergencyPhone: "",
+    tertiaryEmergencyContact: "",
+    tertiaryEmergencyPhone: "",
     role: "padre",
     institutionId: "",
   });
@@ -559,6 +575,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = stepTitles.length;
   const [comunas, setComunas] = useState<string[]>([]);
   const [institutions, setInstitutions] = useState<
     Array<{ _id: string; name: string }>
@@ -619,26 +636,39 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
       switch (step) {
         case 1:
-          if (!formData.fullName.trim())
-            newErrors.fullName = t("validation.full_name_required");
           if (!formData.email.trim())
             newErrors.email = t("validation.email_required");
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = t("validation.email_invalid");
           }
+          if (!formData.password.trim())
+            newErrors.password = t("validation.password_required");
+          if (formData.password.length < 8)
+            newErrors.password = t("validation.password_min_length");
+          if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+            newErrors.password = t("validation.password_strength");
+          }
+          if (!formData.confirmPassword.trim())
+            newErrors.confirmPassword = t(
+              "validation.confirm_password_required",
+            );
+          if (formData.password !== formData.confirmPassword)
+            newErrors.confirmPassword = t("validation.passwords_mismatch");
+          break;
+
+        case 2:
+          if (!formData.fullName.trim())
+            newErrors.fullName = t("validation.full_name_required");
           if (!formData.phone.trim())
             newErrors.phone = t("validation.phone_required");
           if (!formData.rut.trim())
             newErrors.rut = t("validation.rut_required");
-          if (!formData.institutionId)
-            newErrors.institutionId = t("validation.institution_required");
-          break;
-
-        case 2:
           if (!formData.childName.trim())
             newErrors.childName = t("validation.child_name_required");
-          if (!formData.childGrade)
-            newErrors.childGrade = t("validation.grade_required");
+          if (!formData.childRUT.trim())
+            newErrors.childRUT = "RUT del estudiante es requerido";
+          if (!formData.childPhone.trim())
+            newErrors.childPhone = "Teléfono del estudiante es requerido";
           if (!formData.relationship)
             newErrors.relationship = t("validation.relationship_required");
           break;
@@ -650,6 +680,10 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.region = t("validation.region_required");
           if (!formData.comuna)
             newErrors.comuna = t("validation.comuna_required");
+          if (!formData.institutionId)
+            newErrors.institutionId = t("validation.institution_required");
+          if (!formData.childGrade)
+            newErrors.childGrade = t("validation.grade_required");
           break;
 
         case 4:
@@ -660,6 +694,40 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           }
           if (!formData.emergencyPhone.trim()) {
             newErrors.emergencyPhone = t("validation.emergency_phone_required");
+          }
+          // Secondary emergency contact is optional but if provided, phone is required
+          if (
+            formData.secondaryEmergencyContact.trim() &&
+            !formData.secondaryEmergencyPhone.trim()
+          ) {
+            newErrors.secondaryEmergencyPhone = t(
+              "validation.secondary_emergency_phone_required",
+            );
+          }
+          if (
+            formData.secondaryEmergencyPhone.trim() &&
+            !formData.secondaryEmergencyContact.trim()
+          ) {
+            newErrors.secondaryEmergencyContact = t(
+              "validation.secondary_emergency_contact_required",
+            );
+          }
+          // Tertiary emergency contact is optional but if provided, phone is required
+          if (
+            formData.tertiaryEmergencyContact.trim() &&
+            !formData.tertiaryEmergencyPhone.trim()
+          ) {
+            newErrors.tertiaryEmergencyPhone = t(
+              "validation.tertiary_emergency_phone_required",
+            );
+          }
+          if (
+            formData.tertiaryEmergencyPhone.trim() &&
+            !formData.tertiaryEmergencyContact.trim()
+          ) {
+            newErrors.tertiaryEmergencyContact = t(
+              "validation.tertiary_emergency_contact_required",
+            );
           }
           break;
       }
@@ -672,9 +740,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
   const nextStep = useCallback(() => {
     if (validateStep(currentStep)) {
-      setCurrentStep((prev) => Math.min(prev + 1, 4));
+      setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
     }
-  }, [currentStep, validateStep]);
+  }, [currentStep, validateStep, totalSteps]);
 
   const prevStep = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -683,13 +751,16 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!validateStep(4)) return;
+      if (!validateStep(totalSteps)) return;
 
       setIsLoading(true);
       try {
         const form = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
-          form.append(key, value);
+          // Skip confirmPassword as it's not needed in the API
+          if (key !== "confirmPassword") {
+            form.append(key, value);
+          }
         });
 
         if (isGoogleUser && session?.user?.provider) {
@@ -704,7 +775,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         const result = await response.json();
 
         if (result.success) {
-          router.push("/cpa/exito");
+          router.push("/cpma/exito");
         } else {
           setErrors({ email: result.error || "Error en el registro" });
         }
@@ -716,7 +787,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         setIsLoading(false);
       }
     },
-    [formData, isGoogleUser, session, router, validateStep],
+    [formData, isGoogleUser, session, router, validateStep, totalSteps],
   );
 
   const handleGoogleLogin = useCallback(() => {
@@ -724,8 +795,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     if (clerkSignIn) {
       void clerkSignIn.authenticateWithRedirect({
         strategy: "oauth_google",
-        redirectUrl: "/cpa/exito",
-        redirectUrlComplete: "/cpa/exito",
+        redirectUrl: "/cpma/exito",
+        redirectUrlComplete: "/cpma/exito",
       });
     }
   }, [clerkSignIn]);
@@ -733,28 +804,30 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const StepIndicator = memo(function StepIndicator() {
     return (
       <div className="flex items-center justify-center mb-8">
-        {[1, 2, 3, 4].map((step) => (
-          <div key={step} className="flex items-center">
-            <div
-              className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 border-2",
-                currentStep >= step
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-110 border-primary"
-                  : "bg-muted text-muted-foreground border-muted-foreground/30",
-              )}
-            >
-              {step}
-            </div>
-            {step < 4 && (
+        {Array.from({ length: totalSteps }, (_, index) => index + 1).map(
+          (step) => (
+            <div key={step} className="flex items-center">
               <div
                 className={cn(
-                  "w-12 h-1 mx-2 transition-all duration-300 rounded-full",
-                  currentStep > step ? "bg-primary shadow-sm" : "bg-muted",
+                  "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 border-2",
+                  currentStep >= step
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-110 border-primary"
+                    : "bg-muted text-muted-foreground border-muted-foreground/30",
                 )}
-              />
-            )}
-          </div>
-        ))}
+              >
+                {step}
+              </div>
+              {step < totalSteps && (
+                <div
+                  className={cn(
+                    "w-12 h-1 mx-2 transition-all duration-300 rounded-full",
+                    currentStep > step ? "bg-primary shadow-sm" : "bg-muted",
+                  )}
+                />
+              )}
+            </div>
+          ),
+        )}
       </div>
     );
   });
@@ -789,27 +862,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
               <div className="space-y-4">
                 <LabelInputContainer>
-                  <Label htmlFor="fullName">
-                    {t("signup.full_name.label")}
-                  </Label>
-                  <Input
-                    id="fullName"
-                    name="fullName"
-                    placeholder="Juan Pérez González"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    className={cn(
-                      "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                      errors.fullName &&
-                        "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                    )}
-                  />
-                  {errors.fullName && (
-                    <ErrorMessage message={errors.fullName} />
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer>
                   <Label htmlFor="email">{t("signup.email.label")}</Label>
                   <Input
                     id="email"
@@ -828,117 +880,48 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   {errors.email && <ErrorMessage message={errors.email} />}
                 </LabelInputContainer>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <LabelInputContainer>
-                    <Label htmlFor="phone">{t("signup.phone.label")}</Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="+56 9 1234 5678"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.phone &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                      )}
-                    />
-                    {errors.phone && <ErrorMessage message={errors.phone} />}
-                  </LabelInputContainer>
-
-                  <LabelInputContainer>
-                    <Label htmlFor="rut">{t("signup.rut.label")}</Label>
-                    <Input
-                      id="rut"
-                      name="rut"
-                      placeholder="12.345.678-9"
-                      value={formData.rut}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.rut &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                      )}
-                    />
-                    {errors.rut && <ErrorMessage message={errors.rut} />}
-                  </LabelInputContainer>
-                </div>
+                <LabelInputContainer>
+                  <Label htmlFor="password">{t("signup.password.label")}</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={cn(
+                      "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                      errors.password &&
+                        "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                    )}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t("signup.password.hint")}
+                  </p>
+                  {errors.password && (
+                    <ErrorMessage message={errors.password} />
+                  )}
+                </LabelInputContainer>
 
                 <LabelInputContainer>
-                  <Label htmlFor="institutionId">
-                    {t("signup.institution.label")}
+                  <Label htmlFor="confirmPassword">
+                    {t("signup.confirm_password.label")}
                   </Label>
-                  <Popover
-                    open={institutionPopoverOpen}
-                    onOpenChange={setInstitutionPopoverOpen}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                          !formData.institutionId && "text-muted-foreground",
-                          errors.institutionId &&
-                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                        )}
-                      >
-                        {formData.institutionId
-                          ? institutions.find(
-                              (institution) =>
-                                institution._id === formData.institutionId,
-                            )?.name
-                          : t("select.institution")}
-                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-full min-w-(--radix-popover-trigger-width) p-0"
-                      align="start"
-                    >
-                      <Command>
-                        <CommandInput
-                          placeholder="Buscar institución..."
-                          className="h-9"
-                        />
-                        <CommandEmpty>
-                          {t("signup.institutions_empty")}
-                        </CommandEmpty>
-                        <CommandGroup className="max-h-64 overflow-auto">
-                          {institutions.map((institution) => (
-                            <CommandItem
-                              value={institution.name}
-                              key={institution._id}
-                              onSelect={() => {
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  institutionId: institution._id,
-                                }));
-                                setErrors((prev) => ({
-                                  ...prev,
-                                  institutionId: "",
-                                }));
-                                setInstitutionPopoverOpen(false);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  institution._id === formData.institutionId
-                                    ? "opacity-100"
-                                    : "opacity-0",
-                                )}
-                              />
-                              {institution.name}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  {errors.institutionId && (
-                    <ErrorMessage message={errors.institutionId} />
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={cn(
+                      "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                      errors.confirmPassword &&
+                        "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                    )}
+                  />
+                  {errors.confirmPassword && (
+                    <ErrorMessage message={errors.confirmPassword} />
                   )}
                 </LabelInputContainer>
               </div>
@@ -957,7 +940,75 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               </div>
 
               <div className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
+                {/* Parent Information */}
+                <div className="space-y-4">
+                  <h4 className="text-md font-medium text-foreground">
+                    Información del Padre/Madre
+                  </h4>
+                  <LabelInputContainer>
+                    <Label htmlFor="fullName">
+                      {t("signup.full_name.label")}
+                    </Label>
+                    <Input
+                      id="fullName"
+                      name="fullName"
+                      placeholder="Juan Pérez González"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.fullName &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.fullName && (
+                      <ErrorMessage message={errors.fullName} />
+                    )}
+                  </LabelInputContainer>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <LabelInputContainer>
+                      <Label htmlFor="phone">{t("signup.phone.label")}</Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        placeholder="+56 9 1234 5678"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.phone &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.phone && <ErrorMessage message={errors.phone} />}
+                    </LabelInputContainer>
+
+                    <LabelInputContainer>
+                      <Label htmlFor="rut">{t("signup.rut.label")}</Label>
+                      <Input
+                        id="rut"
+                        name="rut"
+                        placeholder="12.345.678-9"
+                        value={formData.rut}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.rut &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.rut && <ErrorMessage message={errors.rut} />}
+                    </LabelInputContainer>
+                  </div>
+                </div>
+
+                {/* Child Information */}
+                <div className="space-y-4">
+                  <h4 className="text-md font-medium text-foreground">
+                    Información del Estudiante
+                  </h4>
                   <LabelInputContainer>
                     <Label htmlFor="childName">
                       {t("signup.child_name.label")}
@@ -979,52 +1030,72 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     )}
                   </LabelInputContainer>
 
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <LabelInputContainer>
+                      <Label htmlFor="childRUT">RUT del Estudiante</Label>
+                      <Input
+                        id="childRUT"
+                        name="childRUT"
+                        placeholder="12.345.678-9"
+                        value={formData.childRUT}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.childRUT &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.childRUT && (
+                        <ErrorMessage message={errors.childRUT} />
+                      )}
+                    </LabelInputContainer>
+
+                    <LabelInputContainer>
+                      <Label htmlFor="childPhone">
+                        Teléfono del Estudiante
+                      </Label>
+                      <Input
+                        id="childPhone"
+                        name="childPhone"
+                        type="tel"
+                        placeholder="+56 9 1234 5678"
+                        value={formData.childPhone}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.childPhone &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.childPhone && (
+                        <ErrorMessage message={errors.childPhone} />
+                      )}
+                    </LabelInputContainer>
+                  </div>
+
                   <LabelInputContainer>
-                    <Label htmlFor="childGrade">
-                      {t("signup.child_grade.label")}
+                    <Label htmlFor="relationship">
+                      {t("signup.relationship.label")}
                     </Label>
                     <Select
-                      id="childGrade"
-                      name="childGrade"
-                      value={formData.childGrade}
+                      id="relationship"
+                      name="relationship"
+                      value={formData.relationship}
                       onChange={handleChange}
-                      error={errors.childGrade}
+                      error={errors.relationship}
                     >
-                      <option value="">{t("select.grade")}</option>
-                      {getGrades(t).map((grade) => (
-                        <option key={grade.value} value={grade.value}>
-                          {grade.label}
+                      <option value="">{t("select.relationship")}</option>
+                      {getRelationships(t).map((rel) => (
+                        <option key={rel.value} value={rel.value}>
+                          {rel.label}
                         </option>
                       ))}
                     </Select>
-                    {errors.childGrade && (
-                      <ErrorMessage message={errors.childGrade} />
+                    {errors.relationship && (
+                      <ErrorMessage message={errors.relationship} />
                     )}
                   </LabelInputContainer>
                 </div>
-
-                <LabelInputContainer>
-                  <Label htmlFor="relationship">
-                    {t("signup.relationship.label")}
-                  </Label>
-                  <Select
-                    id="relationship"
-                    name="relationship"
-                    value={formData.relationship}
-                    onChange={handleChange}
-                    error={errors.relationship}
-                  >
-                    <option value="">{t("select.relationship")}</option>
-                    {getRelationships(t).map((rel) => (
-                      <option key={rel.value} value={rel.value}>
-                        {rel.label}
-                      </option>
-                    ))}
-                  </Select>
-                  {errors.relationship && (
-                    <ErrorMessage message={errors.relationship} />
-                  )}
-                </LabelInputContainer>
               </div>
             </div>
           )}
@@ -1041,63 +1112,184 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               </div>
 
               <div className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <LabelInputContainer>
-                    <Label htmlFor="region">{t("signup.region.label")}</Label>
-                    <Select
-                      id="region"
-                      name="region"
-                      value={formData.region}
-                      onChange={handleChange}
-                      error={errors.region}
-                    >
-                      <option value="">{t("select.region")}</option>
-                      {getRegions(t).map((region) => (
-                        <option key={region.value} value={region.value}>
-                          {region.label}
-                        </option>
-                      ))}
-                    </Select>
-                    {errors.region && <ErrorMessage message={errors.region} />}
-                  </LabelInputContainer>
+                {/* Location Information */}
+                <div className="space-y-4">
+                  <h4 className="text-md font-medium text-foreground">
+                    Ubicación y Dirección
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <LabelInputContainer>
+                      <Label htmlFor="region">{t("signup.region.label")}</Label>
+                      <Select
+                        id="region"
+                        name="region"
+                        value={formData.region}
+                        onChange={handleChange}
+                        error={errors.region}
+                      >
+                        <option value="">{t("select.region")}</option>
+                        {getRegions(t).map((region) => (
+                          <option key={region.value} value={region.value}>
+                            {region.label}
+                          </option>
+                        ))}
+                      </Select>
+                      {errors.region && (
+                        <ErrorMessage message={errors.region} />
+                      )}
+                    </LabelInputContainer>
+
+                    <LabelInputContainer>
+                      <Label htmlFor="comuna">{t("signup.comuna.label")}</Label>
+                      <Select
+                        id="comuna"
+                        name="comuna"
+                        value={formData.comuna}
+                        onChange={handleChange}
+                        error={errors.comuna}
+                        disabled={!formData.region}
+                      >
+                        <option value="">{t("select.comuna")}</option>
+                        {comunas.map((comuna) => (
+                          <option key={comuna} value={comuna}>
+                            {comuna}
+                          </option>
+                        ))}
+                      </Select>
+                      {errors.comuna && (
+                        <ErrorMessage message={errors.comuna} />
+                      )}
+                    </LabelInputContainer>
+                  </div>
 
                   <LabelInputContainer>
-                    <Label htmlFor="comuna">{t("signup.comuna.label")}</Label>
-                    <Select
-                      id="comuna"
-                      name="comuna"
-                      value={formData.comuna}
+                    <Label htmlFor="address">{t("signup.address.label")}</Label>
+                    <Input
+                      id="address"
+                      name="address"
+                      placeholder="Av. Principal 123, Comuna"
+                      value={formData.address}
                       onChange={handleChange}
-                      error={errors.comuna}
-                      disabled={!formData.region}
-                    >
-                      <option value="">{t("select.comuna")}</option>
-                      {comunas.map((comuna) => (
-                        <option key={comuna} value={comuna}>
-                          {comuna}
-                        </option>
-                      ))}
-                    </Select>
-                    {errors.comuna && <ErrorMessage message={errors.comuna} />}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.address &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.address && (
+                      <ErrorMessage message={errors.address} />
+                    )}
                   </LabelInputContainer>
                 </div>
 
-                <LabelInputContainer>
-                  <Label htmlFor="address">{t("signup.address.label")}</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    placeholder="Av. Principal 123, Comuna"
-                    value={formData.address}
-                    onChange={handleChange}
-                    className={cn(
-                      "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                      errors.address &&
-                        "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                    )}
-                  />
-                  {errors.address && <ErrorMessage message={errors.address} />}
-                </LabelInputContainer>
+                {/* Institution and Grade */}
+                <div className="space-y-4">
+                  <h4 className="text-md font-medium text-foreground">
+                    Institución Educativa
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <LabelInputContainer>
+                      <Label htmlFor="institutionId">
+                        {t("signup.institution.label")}
+                      </Label>
+                      <Popover
+                        open={institutionPopoverOpen}
+                        onOpenChange={setInstitutionPopoverOpen}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                              !formData.institutionId &&
+                                "text-muted-foreground",
+                              errors.institutionId &&
+                                "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                            )}
+                          >
+                            {formData.institutionId
+                              ? institutions.find(
+                                  (institution) =>
+                                    institution._id === formData.institutionId,
+                                )?.name
+                              : t("select.institution")}
+                            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className="w-full min-w-(--radix-popover-trigger-width) p-0"
+                          align="start"
+                        >
+                          <Command>
+                            <CommandInput
+                              placeholder="Buscar institución..."
+                              className="h-9"
+                            />
+                            <CommandEmpty>
+                              {t("signup.institutions_empty")}
+                            </CommandEmpty>
+                            <CommandGroup className="max-h-64 overflow-auto">
+                              {institutions.map((institution) => (
+                                <CommandItem
+                                  value={institution.name}
+                                  key={institution._id}
+                                  onSelect={() => {
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      institutionId: institution._id,
+                                    }));
+                                    setErrors((prev) => ({
+                                      ...prev,
+                                      institutionId: "",
+                                    }));
+                                    setInstitutionPopoverOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      institution._id === formData.institutionId
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                  {institution.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      {errors.institutionId && (
+                        <ErrorMessage message={errors.institutionId} />
+                      )}
+                    </LabelInputContainer>
+
+                    <LabelInputContainer>
+                      <Label htmlFor="childGrade">
+                        {t("signup.child_grade.label")}
+                      </Label>
+                      <Select
+                        id="childGrade"
+                        name="childGrade"
+                        value={formData.childGrade}
+                        onChange={handleChange}
+                        error={errors.childGrade}
+                      >
+                        <option value="">{t("select.grade")}</option>
+                        {getGrades(t).map((grade) => (
+                          <option key={grade.value} value={grade.value}>
+                            {grade.label}
+                          </option>
+                        ))}
+                      </Select>
+                      {errors.childGrade && (
+                        <ErrorMessage message={errors.childGrade} />
+                      )}
+                    </LabelInputContainer>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -1114,10 +1306,11 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
               </div>
 
               <div className="space-y-4">
+                {/* Primary Emergency Contact */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="emergencyContact">
-                      Nombre de Contacto *
+                      Nombre de Contacto Primario *
                     </Label>
                     <Input
                       id="emergencyContact"
@@ -1138,7 +1331,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
                   <LabelInputContainer>
                     <Label htmlFor="emergencyPhone">
-                      Teléfono Emergencia *
+                      Teléfono Emergencia Primario *
                     </Label>
                     <Input
                       id="emergencyPhone"
@@ -1158,6 +1351,100 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     )}
                   </LabelInputContainer>
                 </div>
+
+                {/* Secondary Emergency Contact */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <LabelInputContainer>
+                    <Label htmlFor="secondaryEmergencyContact">
+                      Nombre de Contacto Secundario
+                    </Label>
+                    <Input
+                      id="secondaryEmergencyContact"
+                      name="secondaryEmergencyContact"
+                      placeholder="Nombre de contacto (opcional)"
+                      value={formData.secondaryEmergencyContact}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.secondaryEmergencyContact &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.secondaryEmergencyContact && (
+                      <ErrorMessage
+                        message={errors.secondaryEmergencyContact}
+                      />
+                    )}
+                  </LabelInputContainer>
+
+                  <LabelInputContainer>
+                    <Label htmlFor="secondaryEmergencyPhone">
+                      Teléfono Emergencia Secundario
+                    </Label>
+                    <Input
+                      id="secondaryEmergencyPhone"
+                      name="secondaryEmergencyPhone"
+                      type="tel"
+                      placeholder="+56 9 1234 5678"
+                      value={formData.secondaryEmergencyPhone}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.secondaryEmergencyPhone &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.secondaryEmergencyPhone && (
+                      <ErrorMessage message={errors.secondaryEmergencyPhone} />
+                    )}
+                  </LabelInputContainer>
+                </div>
+
+                {/* Tertiary Emergency Contact */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <LabelInputContainer>
+                    <Label htmlFor="tertiaryEmergencyContact">
+                      Nombre de Contacto Terciario
+                    </Label>
+                    <Input
+                      id="tertiaryEmergencyContact"
+                      name="tertiaryEmergencyContact"
+                      placeholder="Nombre de contacto (opcional)"
+                      value={formData.tertiaryEmergencyContact}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.tertiaryEmergencyContact &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.tertiaryEmergencyContact && (
+                      <ErrorMessage message={errors.tertiaryEmergencyContact} />
+                    )}
+                  </LabelInputContainer>
+
+                  <LabelInputContainer>
+                    <Label htmlFor="tertiaryEmergencyPhone">
+                      Teléfono Emergencia Terciario
+                    </Label>
+                    <Input
+                      id="tertiaryEmergencyPhone"
+                      name="tertiaryEmergencyPhone"
+                      type="tel"
+                      placeholder="+56 9 1234 5678"
+                      value={formData.tertiaryEmergencyPhone}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.tertiaryEmergencyPhone &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.tertiaryEmergencyPhone && (
+                      <ErrorMessage message={errors.tertiaryEmergencyPhone} />
+                    )}
+                  </LabelInputContainer>
+                </div>
               </div>
             </div>
           )}
@@ -1168,30 +1455,13 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8 px-3 sm:px-6">
-      <div className="flex flex-col items-center gap-6 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-white/60 text-primary shadow-sm backdrop-blur supports-backdrop-filter:bg-white/45 dark:border-white/15 dark:bg-slate-900/60 dark:text-primary-200">
-          <UserPlus className="h-7 w-7" />
-        </div>
-        <div className="space-y-3">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-            {isGoogleUser
-              ? "Completa tu Registro"
-              : "Registro CPA Centro de Padres y Apoderados"}
-          </h1>
-          <p className="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-200">
-            Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
-          </p>
-          <p className="text-sm text-slate-500 dark:text-slate-300">
-            {stepDescriptions[currentStep - 1]}
-          </p>
-        </div>
-      </div>
+      <div className="flex flex-col items-center gap-6 text-center"></div>
 
       <Card className="glass-panel mx-auto w-full max-w-2xl text-slate-900 dark:text-slate-100">
         <CardHeader>
           <div className="text-center">
             <p className="text-sm font-medium text-primary">
-              Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
+              Paso {currentStep} de {totalSteps}: {stepTitles[currentStep - 1]}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               {stepDescriptions[currentStep - 1]}
@@ -1216,7 +1486,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 Anterior
               </Button>
 
-              {currentStep < 4 ? (
+              {currentStep < totalSteps ? (
                 <Button
                   type="button"
                   onClick={nextStep}
