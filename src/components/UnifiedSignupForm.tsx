@@ -939,12 +939,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </p>
               </div>
 
-              <div className="space-y-4">
-                {/* Parent Information */}
-                <div className="space-y-4">
-                  <h4 className="text-md font-medium text-foreground">
-                    Información del Padre/Madre
-                  </h4>
+              <div className="space-y-6">
+                {/* Names Section */}
+                <div className="grid md:grid-cols-2 gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="fullName">
                       {t("signup.full_name.label")}
@@ -966,49 +963,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     )}
                   </LabelInputContainer>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <LabelInputContainer>
-                      <Label htmlFor="phone">{t("signup.phone.label")}</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        placeholder="+56 9 1234 5678"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className={cn(
-                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                          errors.phone &&
-                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                        )}
-                      />
-                      {errors.phone && <ErrorMessage message={errors.phone} />}
-                    </LabelInputContainer>
-
-                    <LabelInputContainer>
-                      <Label htmlFor="rut">{t("signup.rut.label")}</Label>
-                      <Input
-                        id="rut"
-                        name="rut"
-                        placeholder="12.345.678-9"
-                        value={formData.rut}
-                        onChange={handleChange}
-                        className={cn(
-                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                          errors.rut &&
-                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                        )}
-                      />
-                      {errors.rut && <ErrorMessage message={errors.rut} />}
-                    </LabelInputContainer>
-                  </div>
-                </div>
-
-                {/* Child Information */}
-                <div className="space-y-4">
-                  <h4 className="text-md font-medium text-foreground">
-                    Información del Estudiante
-                  </h4>
                   <LabelInputContainer>
                     <Label htmlFor="childName">
                       {t("signup.child_name.label")}
@@ -1029,73 +983,111 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       <ErrorMessage message={errors.childName} />
                     )}
                   </LabelInputContainer>
+                </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <LabelInputContainer>
-                      <Label htmlFor="childRUT">RUT del Estudiante</Label>
-                      <Input
-                        id="childRUT"
-                        name="childRUT"
-                        placeholder="12.345.678-9"
-                        value={formData.childRUT}
-                        onChange={handleChange}
-                        className={cn(
-                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                          errors.childRUT &&
-                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                        )}
-                      />
-                      {errors.childRUT && (
-                        <ErrorMessage message={errors.childRUT} />
+                {/* RUTs Section */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <LabelInputContainer>
+                    <Label htmlFor="rut">{t("signup.rut.label")}</Label>
+                    <Input
+                      id="rut"
+                      name="rut"
+                      placeholder="12.345.678-9"
+                      value={formData.rut}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.rut &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
                       )}
-                    </LabelInputContainer>
-
-                    <LabelInputContainer>
-                      <Label htmlFor="childPhone">
-                        Teléfono del Estudiante
-                      </Label>
-                      <Input
-                        id="childPhone"
-                        name="childPhone"
-                        type="tel"
-                        placeholder="+56 9 1234 5678"
-                        value={formData.childPhone}
-                        onChange={handleChange}
-                        className={cn(
-                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                          errors.childPhone &&
-                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                        )}
-                      />
-                      {errors.childPhone && (
-                        <ErrorMessage message={errors.childPhone} />
-                      )}
-                    </LabelInputContainer>
-                  </div>
+                    />
+                    {errors.rut && <ErrorMessage message={errors.rut} />}
+                  </LabelInputContainer>
 
                   <LabelInputContainer>
-                    <Label htmlFor="relationship">
-                      {t("signup.relationship.label")}
-                    </Label>
-                    <Select
-                      id="relationship"
-                      name="relationship"
-                      value={formData.relationship}
+                    <Label htmlFor="childRUT">RUT del Estudiante</Label>
+                    <Input
+                      id="childRUT"
+                      name="childRUT"
+                      placeholder="12.345.678-9"
+                      value={formData.childRUT}
                       onChange={handleChange}
-                      error={errors.relationship}
-                    >
-                      <option value="">{t("select.relationship")}</option>
-                      {getRelationships(t).map((rel) => (
-                        <option key={rel.value} value={rel.value}>
-                          {rel.label}
-                        </option>
-                      ))}
-                    </Select>
-                    {errors.relationship && (
-                      <ErrorMessage message={errors.relationship} />
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.childRUT &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.childRUT && (
+                      <ErrorMessage message={errors.childRUT} />
                     )}
                   </LabelInputContainer>
                 </div>
+
+                {/* Phones Section */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <LabelInputContainer>
+                    <Label htmlFor="phone">{t("signup.phone.label")}</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="+56 9 1234 5678"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.phone &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.phone && <ErrorMessage message={errors.phone} />}
+                  </LabelInputContainer>
+
+                  <LabelInputContainer>
+                    <Label htmlFor="childPhone">Teléfono del Estudiante</Label>
+                    <Input
+                      id="childPhone"
+                      name="childPhone"
+                      type="tel"
+                      placeholder="+56 9 1234 5678"
+                      value={formData.childPhone}
+                      onChange={handleChange}
+                      className={cn(
+                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                        errors.childPhone &&
+                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                      )}
+                    />
+                    {errors.childPhone && (
+                      <ErrorMessage message={errors.childPhone} />
+                    )}
+                  </LabelInputContainer>
+                </div>
+
+                {/* Relationship */}
+                <LabelInputContainer>
+                  <Label htmlFor="relationship">
+                    {t("signup.relationship.label")}
+                  </Label>
+                  <Select
+                    id="relationship"
+                    name="relationship"
+                    value={formData.relationship}
+                    onChange={handleChange}
+                    error={errors.relationship}
+                  >
+                    <option value="">{t("select.relationship")}</option>
+                    {getRelationships(t).map((rel) => (
+                      <option key={rel.value} value={rel.value}>
+                        {rel.label}
+                      </option>
+                    ))}
+                  </Select>
+                  {errors.relationship && (
+                    <ErrorMessage message={errors.relationship} />
+                  )}
+                </LabelInputContainer>
               </div>
             </div>
           )}
