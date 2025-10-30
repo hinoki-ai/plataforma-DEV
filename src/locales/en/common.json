@@ -340,7 +340,7 @@
   "photos.select_photo": "Select photo:",
   "photos.select_video": "Select video:",
   "auth.welcome_staff": "Staff and Parents",
-  "parent.center.title": "CFMG Parents Center",
+  "parent.center.title": "CFMA Center of Fathers, Mothers and Guardians",
   "meetings.management.title": "Parent Meetings Management",
   "meetings.management.description": "Manage and supervise all meetings with parents of",
   "users.management.title": "User Management",
@@ -838,7 +838,7 @@
   "cfmg.feature_recognition": "Recognition",
   "cfmg.feature_recognition_desc": "Valuation of each family's contribution to educational development",
 
-  "cpma.title": "CFMG Parents Center",
+  "cpma.title": "CPMA and CFMG",
   "cpma.subtitle": "Why join the CFMG?",
   "cpma.description": "Discover the benefits of being an active part of our educational community",
   "cpma.feature_community": "Active Community",

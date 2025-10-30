@@ -25,185 +25,29 @@
   "institution_programs": {
     "title": "Educational trajectories by institutional level",
     "subtitle": "We configure the digital ecosystem based on the four establishment types defined by MINEDUC, personalizing planning, calendar and communication according to each segment.",
-    "curricular_focus": "Curricular focus",
-    "preschool": {
-      "tagline": "NT1-NT2 trajectories with socio-emotional follow-up and family-school collaboration.",
-      "modules": [
-        "Institutional calendar with filters for pedagogical and family activities.",
-        "Initial planning with adaptable templates and multimedia resources.",
-        "Parent panel with real-time meetings and communications."
-      ]
-    },
-    "basic_school": {
-      "tagline": "Coverage from 1st to 8th grade with emphasis on interdisciplinarity and community management.",
-      "modules": [
-        "Collaborative planning with search by subject, course and author.",
-        "Consolidated PME goals with evidence and compliance follow-up.",
-        "Digital classbook and formal parent meeting management."
-      ]
-    },
-    "high_school": {
-      "tagline": "Scientific-humanistic and technical-professional routes with student participation.",
-      "modules": [
-        "Synchronized schedules and real-time evaluation calendar.",
-        "Documentary repository and voting for school councils and student centers.",
-        "Progress reports and attendance available for management teams and families."
-      ]
-    },
-    "technical_institute": {
-      "tagline": "Specialized technical training with professional certification and labor practice.",
-      "modules": [
-        "Modular study plans with technical specializations.",
-        "Management of professional practices and technical certifications.",
-        "Specialized teaching coordination and technical evaluation."
-      ]
-    },
-    "technical_center": {
-      "tagline": "Technical training centers with SENCE certification and immediate employability.",
-      "modules": [
-        "Certified technical programs with skills tracking.",
-        "Labor practice management and state certifications.",
-        "Technical coordination and practical skills evaluation."
-      ]
-    },
-    "university": {
-      "tagline": "Diplomas, technical programs and university programs with academic and administrative traceability.",
-      "modules": [
-        "Modular planning for elective subjects and intensive workshops.",
-        "Coordinated teaching teams with integrated agenda and meetings.",
-        "Document management and reports for accreditation and compliance processes."
-      ]
-    }
+    "curricular_focus": "Curricular focus"
   },
   "role_dashboards": {
     "title": "Dashboards designed for each role",
-    "subtitle": "RoleAwareDashboard adapts navigation, metrics and access for administration, teachers and families, maintaining a coherent experience throughout the platform.",
-    "admin": {
-      "title": "Administrative Panel",
-      "description": "Management and administrative teams configure levels, users and the institution's data ecosystem.",
-      "modules": [
-        "Institution type selector with integrated curricular matrix.",
-        "User management, permissions and teams from /admin/users.",
-        "Calendar, meetings, voting and documents with complete traceability."
-      ]
-    },
-    "profesor": {
-      "title": "Teacher Panel",
-      "description": "Teachers synchronize planning, resources and classbook in a continuous flow.",
-      "modules": [
-        "UnifiedCalendarView with search, export and personal views.",
-        "Planning creator and repository with versions and advanced filters.",
-        "Classbook, activities and pedagogical resources ready for classroom."
-      ]
-    },
-    "parent": {
-      "title": "Family Panel",
-      "description": "Parents follow academic progress and coordinate direct communication with teachers.",
-      "modules": [
-        "Student card with attendance, grades and upcoming activities.",
-        "Messaging, notifications and minutes available in one place.",
-        "Meeting requests and participation in collegiate voting."
-      ]
-    }
+    "subtitle": "RoleAwareDashboard adapts navigation, metrics and access for administration, teachers and families, maintaining a coherent experience throughout the platform."
   },
   "platform_modules": {
     "title": "Transversal platform modules",
     "subtitle": "Each program combines academic, administrative and participation tools to keep the entire community synchronized.",
-    "see_in_action": "See in action",
-    "unified_calendar": {
-      "title": "Unified institutional calendar",
-      "description": "UnifiedCalendarView centralizes academic, administrative and family events with CSV import/export and iCal integration."
-    },
-    "planning": {
-      "title": "Planning and resources",
-      "description": "PlanningDashboard, teacher resources and activities allow designing, publishing and sharing classes with common criteria."
-    },
-    "pme": {
-      "title": "PME follow-up and analytics",
-      "description": "PME dashboards consolidate goals, evidence and advances by team, with configurable states and alerts."
-    },
-    "meetings": {
-      "title": "Meetings and communication",
-      "description": "Meeting and messaging modules integrate agenda, confirmations, minutes and follow-up for the entire community."
-    },
-    "documents": {
-      "title": "Document management",
-      "description": "Category-based repository with protocol, plan and regulation uploads, PDF viewer and version control."
-    },
-    "voting": {
-      "title": "Participation and voting",
-      "description": "Participatory flows with multiple options, mandatory authentication and downloadable reports for minutes."
-    }
+    "see_in_action": "See in action"
   },
   "implementation_phases": {
     "title": "How we deploy each program",
-    "subtitle": "A practical roadmap that ensures adoption and measurable results from the first quarter.",
-    "diagnosis": {
-      "title": "Diagnosis and configuration",
-      "duration": "Week 1",
-      "description": "We lift the institutional context, define levels and activate the structure with the educational selector.",
-      "focus": "Curricular matrix, initial users and permissions"
-    },
-    "data_load": {
-      "title": "Information loading",
-      "duration": "Weeks 2-3",
-      "description": "We import calendars, historical planning and key documents to start with real data.",
-      "focus": "Events, planning and documentary repository"
-    },
-    "deployment": {
-      "title": "Training and deployment",
-      "duration": "Month 1",
-      "description": "We accompany management, teaching and family teams in practical sessions by role to ensure adoption.",
-      "focus": "Guided sessions by dashboard and critical modules"
-    },
-    "monitoring": {
-      "title": "Continuous monitoring",
-      "duration": "Months 2-3",
-      "description": "We follow PME indicators, module usage and feedback for iterative adjustments.",
-      "focus": "Shared reports and improvement plans"
-    }
+    "subtitle": "A practical roadmap that ensures adoption and measurable results from the first quarter."
   },
   "support": {
     "title": "Continuous support and accompaniment",
-    "subtitle": "Our team integrates into the institution to guarantee daily operation, support and continuous improvement.",
-    "dedicated_team": {
-      "title": "Dedicated interdisciplinary team",
-      "description": "Pedagogical, technological and coexistence specialists accompany each milestone and coordinate with the institution.",
-      "bullets": [
-        "Weekly technical meeting with management",
-        "Prioritized support for critical incidents",
-        "Communication plan with parents"
-      ]
-    },
-    "operational": {
-      "title": "Operational accompaniment",
-      "description": "We document processes, configure integrations and provide guides to get the most out of each module.",
-      "bullets": [
-        "Calendars, meetings and voting playbooks",
-        "Compliance and documentation checklists",
-        "Recorded trainings and microlearning"
-      ]
-    },
-    "community": {
-      "title": "Community and resources",
-      "description": "Access to shared planning bank, STEAM projects and evaluations among allied establishments.",
-      "bullets": [
-        "Calendar of practice communities",
-        "Open repository of STEAM projects",
-        "Certified micro-courses for teachers"
-      ]
-    }
+    "subtitle": "Our team integrates into the institution to guarantee daily operation, support and continuous improvement."
   },
   "impact": {
     "badge": "Measurable impact",
     "title": "Comprehensive management with information in context",
-    "description": "The entire community uses the same data, synchronized by role and fed in real time by our modules.",
-    "highlights": [
-      "RoleAwareDashboard synchronizes indicators and navigation according to the user's profile.",
-      "Calendar, meeting and voting modules share states and notifications in real time.",
-      "Families access reports, messages and minutes without depending on multiple platforms.",
-      "Management teams monitor PME, planning and documentation from a single panel."
-    ]
+    "description": "The entire community uses the same data, synchronized by role and fed in real time by our modules."
   },
   "cta": {
     "title": "Let's build the next stage of your educational project",
@@ -227,5 +71,186 @@
     "dashboard": "Dashboard",
     "adapted_navigation": "Adapted Navigation"
   },
-  "schedule_meeting": "Schedule meeting"
+  "hardcoded": {
+    "hero_highlights": {
+      "governance": {
+        "title": "Role-based governance",
+        "description": "Differentiated dashboards for administration, teachers and parents with contextual permissions and navigation."
+      },
+      "calendar": {
+        "title": "Centralized calendar",
+        "description": "UnifiedCalendarView centralizes academic, administrative and family events with CSV import/export and iCal integration."
+      },
+      "coverage": {
+        "title": "Complete coverage",
+        "description": "Configure preschool, basic, middle and higher education from a single institutional selector."
+      }
+    },
+    "institution_programs": {
+      "preschool": {
+        "tagline": "NT1-NT2 trajectories with socio-emotional follow-up and family-school collaboration.",
+        "modules": [
+          "Institutional calendar with filters for pedagogical and family activities.",
+          "Initial planning with adaptable templates and multimedia resources.",
+          "Parent panel with real-time meetings and communications."
+        ]
+      },
+      "basic_school": {
+        "tagline": "Coverage from 1st to 8th grade with emphasis on interdisciplinarity and community management.",
+        "modules": [
+          "Collaborative planning with search by subject, course and author.",
+          "Consolidated PME goals with evidence and compliance follow-up.",
+          "Digital classbook and formal parent meeting management."
+        ]
+      },
+      "high_school": {
+        "tagline": "Scientific-humanistic and technical-professional routes with student participation.",
+        "modules": [
+          "Synchronized schedules and real-time evaluation calendar.",
+          "Documentary repository and voting for school councils and student centers.",
+          "Progress reports and attendance available for management teams and families."
+        ]
+      },
+      "technical_institute": {
+        "tagline": "Specialized technical training with professional certification and labor practice.",
+        "modules": [
+          "Modular study plans with technical specializations.",
+          "Management of professional practices and technical certifications.",
+          "Specialized teaching coordination and technical evaluation."
+        ]
+      },
+      "technical_center": {
+        "tagline": "Technical training centers with SENCE certification and immediate employability.",
+        "modules": [
+          "Certified technical programs with skills tracking.",
+          "Labor practice management and state certifications.",
+          "Technical coordination and practical skills evaluation."
+        ]
+      },
+      "university": {
+        "tagline": "Diplomas, technical programs and university programs with academic and administrative traceability.",
+        "modules": [
+          "Modular planning for elective subjects and intensive workshops.",
+          "Coordinated teaching teams with integrated agenda and meetings.",
+          "Document management and reports for accreditation and compliance processes."
+        ]
+      }
+    },
+    "role_dashboards": {
+      "admin": {
+        "title": "Administrative Panel",
+        "description": "Management and administrative teams configure levels, users and the institution's data ecosystem.",
+        "modules": [
+          "Institution type selector with integrated curricular matrix.",
+          "User management, permissions and teams from /admin/users.",
+          "Calendar, meetings, voting and documents with complete traceability."
+        ]
+      },
+      "profesor": {
+        "title": "Teacher Panel",
+        "description": "Teachers synchronize planning, resources and classbook in a continuous flow.",
+        "modules": [
+          "UnifiedCalendarView with search, export and personal views.",
+          "Planning creator and repository with versions and advanced filters.",
+          "Classbook, activities and pedagogical resources ready for classroom."
+        ]
+      },
+      "parent": {
+        "title": "Family Panel",
+        "description": "Parents follow academic progress and coordinate direct communication with teachers.",
+        "modules": [
+          "Student card with attendance, grades and upcoming activities.",
+          "Messaging, notifications and minutes available in one place.",
+          "Meeting requests and participation in collegiate voting."
+        ]
+      }
+    },
+    "platform_modules": {
+      "calendar": {
+        "title": "Unified institutional calendar",
+        "description": "UnifiedCalendarView centralizes academic, administrative and family events with CSV import/export and iCal integration."
+      },
+      "planning": {
+        "title": "Planning and resources",
+        "description": "PlanningDashboard, teacher resources and activities allow designing, publishing and sharing classes with common criteria."
+      },
+      "pme": {
+        "title": "PME follow-up and analytics",
+        "description": "PME dashboards consolidate goals, evidence and advances by team, with configurable states and alerts."
+      },
+      "meetings": {
+        "title": "Meetings and communication",
+        "description": "Meeting and messaging modules integrate agenda, confirmations, minutes and follow-up for the entire community."
+      },
+      "documents": {
+        "title": "Document management",
+        "description": "Category-based repository with protocol, plan and regulation uploads, PDF viewer and version control."
+      },
+      "voting": {
+        "title": "Participation and voting",
+        "description": "Participatory flows with multiple options, mandatory authentication and downloadable reports for minutes."
+      }
+    },
+    "implementation_phases": {
+      "diagnosis": {
+        "title": "Diagnosis and configuration",
+        "duration": "Week 1",
+        "description": "We lift the institutional context, define levels and activate the structure with the educational selector.",
+        "focus": "Curricular matrix, initial users and permissions"
+      },
+      "data_load": {
+        "title": "Information loading",
+        "duration": "Weeks 2-3",
+        "description": "We import calendars, historical planning and key documents to start with real data.",
+        "focus": "Events, planning and documentary repository"
+      },
+      "deployment": {
+        "title": "Training and deployment",
+        "duration": "Month 1",
+        "description": "We accompany management, teaching and family teams in practical sessions by role to ensure adoption.",
+        "focus": "Guided sessions by dashboard and critical modules"
+      },
+      "monitoring": {
+        "title": "Continuous monitoring",
+        "duration": "Months 2-3",
+        "description": "We follow PME indicators, module usage and feedback for iterative adjustments.",
+        "focus": "Shared reports and improvement plans"
+      }
+    },
+    "support": {
+      "dedicated_team": {
+        "title": "Dedicated interdisciplinary team",
+        "description": "Pedagogical, technological and coexistence specialists accompany each milestone and coordinate with the institution.",
+        "bullets": [
+          "Weekly technical meeting with management",
+          "Prioritized support for critical incidents",
+          "Communication plan with parents"
+        ]
+      },
+      "operational": {
+        "title": "Operational accompaniment",
+        "description": "We document processes, configure integrations and provide guides to get the most out of each module.",
+        "bullets": [
+          "Calendars, meetings and voting playbooks",
+          "Compliance and documentation checklists",
+          "Recorded trainings and microlearning"
+        ]
+      },
+      "community": {
+        "title": "Community and resources",
+        "description": "Access to shared planning bank, STEAM projects and evaluations among allied establishments.",
+        "bullets": [
+          "Calendar of practice communities",
+          "Open repository of STEAM projects",
+          "Certified micro-courses for teachers"
+        ]
+      }
+    },
+    "impact_highlights": [
+      "RoleAwareDashboard synchronizes indicators and navigation according to the user's profile.",
+      "Calendar, meeting and voting modules share states and notifications in real time.",
+      "Families access reports, messages and minutes without depending on multiple platforms.",
+      "Management teams monitor PME, planning and documentation from a single panel."
+    ]
+  }
 }
