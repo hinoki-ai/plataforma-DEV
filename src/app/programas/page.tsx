@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import programasES from "@/locales/es/programas.json";
+import programasEN from "@/locales/en/programas.json";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { Badge } from "@/components/ui/badge";
@@ -293,9 +295,45 @@ const staggerChildren: Variants = {
   },
 };
 
+// Fallback translation function for production
+const createFallbackTranslator = (language: "es" | "en") => {
+  const translations = language === "es" ? programasES : programasEN;
+
+  return (key: string): string => {
+    // Handle programas namespace specifically
+    let lookupKey = key;
+    if (key.startsWith("programas.")) {
+      lookupKey = key.substring("programas.".length);
+    }
+
+    const keys = lookupKey.split(".");
+    let value: any = translations;
+
+    for (const k of keys) {
+      if (value && typeof value === "object") {
+        value = value[k];
+      } else {
+        return key; // Return original key if translation not found
+      }
+    }
+
+    return typeof value === "string" ? value : key;
+  };
+};
+
 export default function ProgramasPage() {
-  const { t } = useDivineParsing(["common", "programas"]);
+  const { t: divineT, language } = useDivineParsing(["common", "programas"]);
   const [mounted] = useState(true);
+
+  // Create fallback translator
+  const fallbackT = createFallbackTranslator(language as "es" | "en");
+
+  // Use divine translation if available, otherwise fallback
+  const t = (key: string): string => {
+    const divineResult = divineT(key);
+    // If divine result is the same as key (not translated), use fallback
+    return divineResult === key ? fallbackT(key) : divineResult;
+  };
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-programas flex flex-col">

@@ -134,10 +134,8 @@ const nextConfig: NextConfig = {
   // Temporarily disabled due to missing babel-plugin-react-compiler
   // reactCompiler: true,
 
-  // Turbopack configuration for Next.js 16 - disabled to avoid font loading issues
-  // turbopack: {
-  //   // Empty config to silence the warning
-  // },
+  // Turbopack configuration for Next.js 16 - disabled to fix build issues
+  turbopack: false,
 
   // Development optimizations
   ...(isDevelopment && {

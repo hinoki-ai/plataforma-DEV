@@ -58,9 +58,6 @@ export default function ContactoContent() {
               </motion.div>
             </motion.div>
           </div>
-          <p className="text-lg text-center text-foreground/90 mb-12">
-            {t("hero.subtitle", "contacto")}
-          </p>
 
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Contact Information */}
