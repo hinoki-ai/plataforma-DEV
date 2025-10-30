@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
   CardContent,

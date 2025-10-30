@@ -10,7 +10,7 @@ import { es } from "date-fns/locale";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { toast } from "sonner";
 import { updateMeetingStatus } from "@/services/actions/meetings";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface ParentRequestCardProps {
   request: Meeting & { teacher?: { name: string; email: string } };
@@ -22,7 +22,7 @@ export function ParentRequestCard({
   onRefresh,
 }: ParentRequestCardProps) {
   const [isProcessing, setIsProcessing] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const handleApprove = async () => {
     setIsProcessing(true);

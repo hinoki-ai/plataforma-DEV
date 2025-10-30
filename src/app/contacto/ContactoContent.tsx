@@ -6,7 +6,7 @@ import CompactFooter from "@/components/layout/CompactFooter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useState, useEffect } from "react";
 import { motion, Variants } from "motion/react";
 
@@ -24,7 +24,7 @@ const staggerChildren: Variants = {
 };
 
 export default function ContactoContent() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [mounted] = useState(true);
 
   return (

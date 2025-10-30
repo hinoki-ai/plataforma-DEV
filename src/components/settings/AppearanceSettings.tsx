@@ -13,11 +13,11 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Sun, Moon, Monitor } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export function AppearanceSettings() {
   const { theme, setTheme, systemTheme } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [mounted, setMounted] = useState(false);
 
   useLayoutEffect(() => {

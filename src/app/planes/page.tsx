@@ -3,7 +3,7 @@
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
   CardContent,
@@ -45,7 +45,7 @@ const staggerChildren: Variants = {
 };
 
 export default function PreciosPage() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const { isDesktopForced } = useDesktopToggle();
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");

@@ -29,7 +29,7 @@ import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useSignIn } from "@clerk/nextjs";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
 import { UserPlus } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -555,7 +555,7 @@ const getStepDescriptions = (t: (key: string) => string) => [
 export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const { data: session } = useSession();
   const { signIn: clerkSignIn } = useSignIn();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const stepTitles = getStepTitles(t);
   const stepDescriptions = getStepDescriptions(t);

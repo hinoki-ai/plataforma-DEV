@@ -20,7 +20,7 @@ import {
   Eye,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { cn } from "@/lib/utils";
 import {
   useDesktopToggle,

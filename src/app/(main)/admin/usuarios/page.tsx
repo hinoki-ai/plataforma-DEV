@@ -34,14 +34,14 @@ import { ParentCreationForm } from "@/components/users/ParentCreationForm";
 import { User } from "@/lib/types";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { toast } from "sonner";
 
 export default function UsersPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);

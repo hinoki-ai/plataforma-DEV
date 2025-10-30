@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SUBJECTS, GRADES } from "@/lib/constants";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export function PlanningDocumentSearch() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const router = useRouter();
   const searchParams = useSearchParams();
 

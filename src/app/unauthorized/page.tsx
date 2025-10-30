@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function UnauthorizedPage() {
   const subscribe = (callback: () => void) => {
@@ -26,7 +26,7 @@ export default function UnauthorizedPage() {
     getClientSnapshot,
     getServerSnapshot,
   );
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Only throw error after component has mounted (client-side)
   if (isMounted) {

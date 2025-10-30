@@ -32,7 +32,7 @@ import {
   Trash2,
   Eye,
 } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { toast } from "sonner";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
@@ -68,7 +68,7 @@ interface ParentUser {
 function UsuariosPadresContent() {
   const { data: session } = useSession();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [parents, setParents] = useState<ParentUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

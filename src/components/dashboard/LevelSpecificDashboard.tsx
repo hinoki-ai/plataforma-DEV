@@ -6,7 +6,7 @@
 "use client";
 
 import React from "react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
   CardContent,
@@ -59,7 +59,7 @@ export function LevelSpecificDashboard({
   currentType,
   userRole,
 }: LevelSpecificDashboardProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
   const getDashboardCards = (): DashboardCard[] => {

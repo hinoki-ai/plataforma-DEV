@@ -3,7 +3,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { Badge } from "@/components/ui/badge";
@@ -294,7 +294,7 @@ const staggerChildren: Variants = {
 };
 
 export default function ProgramasPage() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [mounted] = useState(true);
 
   return (

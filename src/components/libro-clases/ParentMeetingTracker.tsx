@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
   CardContent,
@@ -62,7 +62,7 @@ export function ParentMeetingTracker({
   teacherId,
 }: ParentMeetingTrackerProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [meetingNumber, setMeetingNumber] = useState<number>(1);
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<Set<Id<"students">>>(

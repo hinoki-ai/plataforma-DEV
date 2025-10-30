@@ -30,7 +30,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Eye, EyeOff, UserPlus, ChevronRight, ChevronLeft } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { cn } from "@/lib/utils";
 import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
 
@@ -147,7 +147,7 @@ export function ParentCreationForm({
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const form = useForm<ParentFormValues>({
     resolver: zodResolver(createParentSchema),

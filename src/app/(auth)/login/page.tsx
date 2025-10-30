@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { UserPlus, Mail, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { motion, Variants } from "motion/react";
 
 const fadeInUp: Variants = {
@@ -20,7 +20,7 @@ function LoginForm() {
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl");
   const { signIn, isLoaded } = useSignIn();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);

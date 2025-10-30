@@ -32,7 +32,7 @@ import type {
 } from "@/lib/prisma-compat-types";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Extended type for team member with optional contact info
 export interface TeamMember extends Omit<PrismaTeamMember, "role"> {
@@ -122,7 +122,7 @@ export function TeamMemberCard({
   const pathname = usePathname();
   const { data: session } = useSession();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -557,7 +557,7 @@ export function TeamMemberList({
 }: TeamMemberListProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Auto-detect variant
   const detectedVariant: Exclude<TeamMemberCardVariant, "auto"> =

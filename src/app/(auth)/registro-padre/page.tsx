@@ -15,7 +15,7 @@ import { UserPlus, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { AdaptiveErrorBoundary } from "@/components/ui/adaptive-error-boundary";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 type ParentRegistrationSuccessData = {
   name: string;
@@ -40,7 +40,7 @@ export default function ParentRegistrationPage() {
 }
 
 function ParentRegistrationContent() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Check for success query parameter during initial render
   const urlParams =

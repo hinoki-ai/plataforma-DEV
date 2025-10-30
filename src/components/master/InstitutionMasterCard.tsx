@@ -6,7 +6,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
   CardContent,
@@ -43,7 +43,7 @@ interface InstitutionMasterCardProps {
 export function InstitutionMasterCard({
   currentType = "PRESCHOOL",
 }: InstitutionMasterCardProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [isConfiguring, setIsConfiguring] = useState(false);
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 

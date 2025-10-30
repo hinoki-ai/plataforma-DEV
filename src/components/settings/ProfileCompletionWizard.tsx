@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Circle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface ProfileCompletionWizardProps {
   currentStep?: number;
@@ -23,7 +23,7 @@ export function ProfileCompletionWizard({
   totalSteps = 4,
   onStepChange,
 }: ProfileCompletionWizardProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const steps = [
     {

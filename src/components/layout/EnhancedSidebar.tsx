@@ -38,7 +38,7 @@ import {
   Terminal,
   FileText,
 } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
 
 interface EnhancedSidebarProps {
@@ -353,7 +353,7 @@ export function EnhancedSidebar({
   const pathname = usePathname();
   const router = useRouter();
   const dragControls = useDragControls();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const userRole = session?.user?.role ?? null;
 

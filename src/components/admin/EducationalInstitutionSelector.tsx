@@ -35,7 +35,7 @@ import {
   getSubjectsForInstitutionType,
 } from "@/lib/educational-system";
 import { toast } from "sonner";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface EducationalInstitutionSelectorProps {
   currentType?: EducationalInstitutionType;
@@ -46,7 +46,7 @@ export function EducationalInstitutionSelector({
   currentType,
   onTypeChange,
 }: EducationalInstitutionSelectorProps) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [selectedType, setSelectedType] =
     useState<EducationalInstitutionType | null>(currentType || null);
   const [isConfiguring, setIsConfiguring] = useState(false);

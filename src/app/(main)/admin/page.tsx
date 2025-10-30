@@ -8,13 +8,13 @@ import { dbLogger } from "@/lib/logger";
 import { RoleAwareDashboard } from "@/components/dashboard/RoleAwareDashboard";
 import { EducationalInstitutionSelector } from "@/components/admin/EducationalInstitutionSelector";
 import { EducationalInstitutionType } from "@/lib/educational-system";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
 
 export default function AdminDashboard() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [currentInstitutionType, setCurrentInstitutionType] =
     useState<EducationalInstitutionType>("PRESCHOOL");
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);

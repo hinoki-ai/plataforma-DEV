@@ -1,7 +1,7 @@
 "use client";
 
 import { DonutBackground } from "@/components/ui/donut-background";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function Error({
   error,
@@ -10,7 +10,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <DonutBackground>

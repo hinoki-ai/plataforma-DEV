@@ -14,7 +14,7 @@ import { DesktopToggle } from "@/components/ui/desktop-toggle";
 import Header from "@/components/layout/Header";
 import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
 import { layout, typography } from "@/lib/responsive-utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { motion, Variants } from "motion/react";
 
 import MinEducFooter from "@/components/layout/MinEducFooter";
@@ -36,7 +36,7 @@ const staggerChildren: Variants = {
 export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
   const [mounted] = useState(true);
 
   // Component mounted successfully

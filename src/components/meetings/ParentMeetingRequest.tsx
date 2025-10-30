@@ -34,7 +34,7 @@ import { es } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { requestMeeting } from "@/services/actions/meetings";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 const meetingRequestSchema = z.object({
@@ -101,7 +101,7 @@ const timeSlots = [
 
 export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const fieldOrder = [
     "studentName",

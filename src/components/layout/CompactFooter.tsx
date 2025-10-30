@@ -1,9 +1,9 @@
 "use client";
 
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function CompactFooter() {
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   return (
     <div className="bg-gray-900 border-t border-gray-800">

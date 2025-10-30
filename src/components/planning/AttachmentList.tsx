@@ -14,7 +14,7 @@ import { OptimizedImage } from "@/components/ui/optimized-image";
 import type { SimpleFileMetadata as FileMetadata } from "@/lib/simple-upload";
 
 // i18n
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface AttachmentListProps {
   attachments: FileMetadata[];

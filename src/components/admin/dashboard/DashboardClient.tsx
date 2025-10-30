@@ -28,7 +28,7 @@ import {
 import { useAdvancedData, useRealTimeData } from "@/hooks/useAdvancedData";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface DashboardData {
   users: {
@@ -86,7 +86,7 @@ interface ActivityItem {
 // Advanced Dashboard Client with performance optimizations
 function DashboardContent() {
   const handleError = useErrorHandler();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Use advanced data hook with caching and error handling
   const {

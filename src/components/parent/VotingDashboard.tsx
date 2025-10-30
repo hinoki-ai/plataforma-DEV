@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { useSimpleLoading } from "@/lib/hooks/useLoadingState";
 import { DataLoadingErrorBoundary } from "@/components/ui/LoadingErrorBoundary";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 const fadeInUp = {
@@ -46,7 +46,7 @@ function VotingDashboardComponent({ className = "" }: VotingDashboardProps) {
   const { data: session, status } = useSession();
   const [votes, setVotes] = useState<Vote[]>([]);
   const [voting, setVoting] = useState<string | null>(null);
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   // Use enhanced loading state management
   const { isLoading, error, setLoading, setError } = useSimpleLoading(true);

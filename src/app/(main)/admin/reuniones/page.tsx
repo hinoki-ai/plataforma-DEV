@@ -44,7 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PageTransition } from "@/components/ui/page-transition";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { MeetingForm } from "@/components/meetings/MeetingForm";
 import { LoadingState } from "@/components/ui/loading-states";
 import type { Meeting } from "@/lib/prisma-compat-types";
@@ -117,7 +117,7 @@ function ReunionesContent() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   const [meetings, setMeetings] = useState<AdminMeeting[]>([]);
   const [loading, setLoading] = useState(true);

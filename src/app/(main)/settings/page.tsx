@@ -8,12 +8,12 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { SettingsTabs } from "@/components/settings/SettingsTabs";
 import { ProfileCompletionWizard } from "@/components/settings/ProfileCompletionWizard";
 import { DashboardLoader } from "@/components/ui/dashboard-loader";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t } = useDivineParsing(["common"]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
