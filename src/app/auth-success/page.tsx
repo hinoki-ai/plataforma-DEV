@@ -62,12 +62,12 @@ export default async function AuthSuccessPage() {
   // Handle PARENT with registration requirement
   if (role === "PARENT" && session.user.needsRegistration) {
     console.log(
-      "📝 [AUTH-SUCCESS] Parent needs registration, redirecting to cpa",
+      "📝 [AUTH-SUCCESS] Parent needs registration, redirecting to cpma",
       {
         timestamp: new Date().toISOString(),
       },
     );
-    redirect("/cpa");
+    redirect("/cpma");
   }
 
   // Success - redirect to role-based dashboard

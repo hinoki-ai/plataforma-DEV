@@ -33,7 +33,7 @@ export function useAuthSync() {
       const isAdminPath = pathname?.startsWith("/admin");
       const isProfesorPath = pathname?.startsWith("/profesor");
       const isParentPath = pathname?.startsWith("/parent");
-      const isCpaPath = pathname?.startsWith("/cpa");
+      const isCpaPath = pathname?.startsWith("/cpma");
       const userRole = session.user.role;
 
       // Ensure session is fully loaded before redirecting
@@ -78,7 +78,7 @@ export function useAuthSync() {
         "/admin",
         "/profesor",
         "/parent",
-        "/cpa/dashboard",
+        "/cpma/dashboard",
       ];
       const isProtectedPath = protectedPaths.some((path) =>
         pathname?.startsWith(path),

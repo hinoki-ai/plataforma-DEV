@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type DonutBackgroundProps = {
   children?: React.ReactNode;
@@ -11,35 +11,49 @@ type DonutBackgroundProps = {
 
 export function DonutBackground({
   children,
-  width = 80,
-  height = 30,
+  width: defaultWidth = 80,
+  height: defaultHeight = 30,
   speed = 1.0,
 }: DonutBackgroundProps) {
+  const [dimensions, setDimensions] = useState({
+    width: defaultWidth,
+    height: defaultHeight,
+  });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      // Calculate dimensions based on viewport size to fill the screen
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Use character dimensions that scale with viewport (zoomed out)
+      // Approximate monospace character size: ~8px wide, ~16px tall
+      // Using smaller divisors to zoom out the animation
+      const charWidth = Math.floor(viewportWidth / 12);
+      const charHeight = Math.floor(viewportHeight / 24);
+
+      // Ensure minimum dimensions to maintain donut shape
+      const width = Math.max(charWidth, 40);
+      const height = Math.max(charHeight, 15);
+
+      setDimensions({ width, height });
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "grid",
-        placeItems: "center",
-        minHeight: "100vh",
-        background: "#0b0b0b",
-        color: "#eaeaea",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "grid",
-          placeItems: "center",
-          opacity: 0.3,
-          pointerEvents: "none",
-        }}
-      >
-        <Donut width={width} height={height} speed={speed} />
+    <div className="relative grid place-items-center min-h-screen bg-[#0b0b0b] text-[#eaeaea] overflow-hidden">
+      <div className="absolute inset-0 grid place-items-center opacity-30 pointer-events-none">
+        <Donut
+          width={dimensions.width}
+          height={dimensions.height}
+          speed={speed}
+        />
       </div>
-      <div style={{ position: "relative", zIndex: 10 }}>{children}</div>
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }
@@ -146,17 +160,7 @@ function Donut({ width = 80, height = 30, speed = 1.0 }: DonutProps) {
     <pre
       ref={preRef}
       aria-label="ASCII spinning donut background animation"
-      style={{
-        fontFamily:
-          "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-        lineHeight: 1,
-        letterSpacing: 0,
-        margin: 0,
-        padding: "12px",
-        userSelect: "none",
-        whiteSpace: "pre",
-        color: "#00ff41",
-      }}
+      className="font-mono leading-none tracking-normal m-0 p-3 select-none whitespace-pre text-[#00ff41]"
     />
   );
 }

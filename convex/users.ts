@@ -757,6 +757,10 @@ export const registerParentComplete = mutation({
     relationship: v.string(),
     emergencyContact: v.string(),
     emergencyPhone: v.string(),
+    secondaryEmergencyContact: v.optional(v.string()),
+    secondaryEmergencyPhone: v.optional(v.string()),
+    tertiaryEmergencyContact: v.optional(v.string()),
+    tertiaryEmergencyPhone: v.optional(v.string()),
 
     // Student fields
     childName: v.string(),
@@ -813,6 +817,10 @@ export const registerParentComplete = mutation({
         relationship: args.relationship,
         emergencyContact: args.emergencyContact,
         emergencyPhone: args.emergencyPhone,
+        secondaryEmergencyContact: args.secondaryEmergencyContact,
+        secondaryEmergencyPhone: args.secondaryEmergencyPhone,
+        tertiaryEmergencyContact: args.tertiaryEmergencyContact,
+        tertiaryEmergencyPhone: args.tertiaryEmergencyPhone,
         registrationComplete: true,
         createdAt: now,
         updatedAt: now,

@@ -39,7 +39,16 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex w-full justify-center px-4 sm:px-6">
+    <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
+      {/* Title Panel with Glass Blur */}
+      <div className="mb-8 w-full max-w-md">
+        <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-4 mx-auto text-center -mt-24">
+          <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
+            Portal Escolar
+          </h1>
+        </div>
+      </div>
+
       <div className="glass-panel mx-auto flex w-full max-w-md flex-col items-center p-6 text-center text-foreground sm:p-10">
         {/* Email/Password Form */}
         <form onSubmit={handleEmailSignIn} className="w-full space-y-4">
@@ -102,7 +111,7 @@ function LoginForm() {
             </p>
             <Button asChild variant="outline" className="w-full rounded-xl">
               <Link
-                href="/registro-padre"
+                href="/registro-centro"
                 className="flex items-center justify-center gap-2"
               >
                 <UserPlus className="h-4 w-4" />
@@ -120,7 +129,16 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex w-full justify-center px-4 sm:px-6">
+        <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
+          {/* Title Panel with Glass Blur */}
+          <div className="mb-8 w-full max-w-md">
+            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-4 mx-auto text-center -mt-24">
+              <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
+                Portal Escolar
+              </h1>
+            </div>
+          </div>
+
           <div className="glass-panel mx-auto flex w-full max-w-md items-center justify-center p-6 text-foreground sm:p-10">
             <div className="flex items-center justify-center p-8">
               <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>

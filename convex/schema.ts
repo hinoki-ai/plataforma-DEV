@@ -150,6 +150,10 @@ export default defineSchema({
     relationship: v.string(), // padre, madre, apoderado, tutor, abuelo, otro
     emergencyContact: v.string(),
     emergencyPhone: v.string(),
+    secondaryEmergencyContact: v.optional(v.string()),
+    secondaryEmergencyPhone: v.optional(v.string()),
+    tertiaryEmergencyContact: v.optional(v.string()),
+    tertiaryEmergencyPhone: v.optional(v.string()),
     registrationComplete: v.boolean(),
     createdAt: v.number(),
     updatedAt: v.number(),

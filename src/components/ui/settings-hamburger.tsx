@@ -27,7 +27,7 @@ export const SettingsHamburger = ({
 
   // Generate stable random positions for sparkles to avoid React purity violations
   const sparklePositions = useState(() =>
-    [...Array(3)].map(() => ({
+    [...Array(1)].map(() => ({
       x: Math.random() * 40 - 20,
       y: Math.random() * 40 - 20,
     })),
@@ -158,7 +158,7 @@ export const SettingsHamburger = ({
           <AnimatePresence>
             {(isHovered || isOpen) && (
               <>
-                {[...Array(3)].map((_, i) => (
+                {[...Array(1)].map((_, i) => (
                   <motion.div
                     key={i}
                     className="absolute"
@@ -223,7 +223,7 @@ export const SettingsHamburger = ({
             initial="closed"
             animate="open"
             exit="exit"
-            className="absolute top-full mt-2 right-0 w-72 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
+            className="absolute top-full mt-2 right-0 w-56 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
             style={{
               boxShadow:
                 "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -235,14 +235,14 @@ export const SettingsHamburger = ({
             {/* Gradient border effect */}
             <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-purple-500/10 rounded-xl" />
 
-            <div className="relative p-6 space-y-6">
+            <div className="relative p-3 space-y-3">
               {/* Enhanced Language Toggle */}
               <motion.div
                 variants={itemVariants}
                 className="flex items-center justify-between group"
               >
                 <motion.label
-                  className="text-sm font-semibold text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
+                  className="text-xs font-medium text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 >
@@ -263,7 +263,7 @@ export const SettingsHamburger = ({
                 className="flex items-center justify-between group"
               >
                 <motion.label
-                  className="text-sm font-semibold text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
+                  className="text-xs font-medium text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 >
@@ -288,7 +288,7 @@ export const SettingsHamburger = ({
                 className="flex items-center justify-between group"
               >
                 <motion.label
-                  className="text-sm font-semibold text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
+                  className="text-xs font-medium text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 >

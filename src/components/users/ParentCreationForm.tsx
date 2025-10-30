@@ -240,14 +240,6 @@ export function ParentCreationForm({
           {title}
         </CardTitle>
         <CardDescription>{description}</CardDescription>
-        <div className="mt-4 text-center">
-          <p className="text-sm font-medium text-primary">
-            Paso {currentStep} de 4: {stepTitles[currentStep - 1]}
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            {stepDescriptions[currentStep - 1]}
-          </p>
-        </div>
       </CardHeader>
 
       <CardContent>
