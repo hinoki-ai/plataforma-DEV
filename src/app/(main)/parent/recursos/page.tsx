@@ -127,8 +127,8 @@ export default async function RecursosPage() {
           Recursos Educativos
         </h1>
         <p className="text-muted-foreground">
-          Materiales y herramientas para apoyar el aprendizaje de tu estudiante en
-          casa.
+          Materiales y herramientas para apoyar el aprendizaje de tu estudiante
+          en casa.
         </p>
       </div>
 
