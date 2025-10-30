@@ -12,9 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import type { SimpleFileMetadata as FileMetadata } from "@/lib/simple-upload";
-import { useLanguage } from "@/components/language/LanguageContext";
-
-// i18n
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface AttachmentListProps {
@@ -29,7 +26,7 @@ export function AttachmentList({
   onDelete,
 }: AttachmentListProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const { t, language } = useLanguage();
+  const { t, language } = useDivineParsing(["common", "profesor", "dashboard"]);
 
   if (!attachments || attachments.length === 0) {
     return (

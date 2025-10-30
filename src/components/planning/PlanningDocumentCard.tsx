@@ -6,9 +6,7 @@ import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { memo } from "react";
 
-// i18n
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import { useLanguage } from "@/components/language/LanguageContext";
 
 interface PlanningDocumentCardProps {
   document: PlanningDocument & {
@@ -29,7 +27,7 @@ export const PlanningDocumentCard = memo(function PlanningDocumentCard({
   onDelete,
   isAdmin,
 }: PlanningDocumentCardProps) {
-  const { t, language } = useLanguage();
+  const { t, language } = useDivineParsing(["common", "profesor", "dashboard"]);
 
   const formattedDate = format(new Date(document.updatedAt), "dd MMM yyyy", {
     locale: language === "es" ? es : enUS,

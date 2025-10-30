@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useLanguage } from "@/components/language/LanguageContext";
 
 import {
