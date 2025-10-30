@@ -31,6 +31,7 @@ src/locales/en/your-page.json
 ```
 
 **File Structure Example:**
+
 ```json
 {
   "page.title": "Page Title",
@@ -46,12 +47,14 @@ src/locales/en/your-page.json
 Update `src/components/language/ChunkedLanguageProvider.tsx`:
 
 1. **Add imports** at the top:
+
 ```typescript
 import yourPageES from "../../locales/es/your-page.json";
 import yourPageEN from "../../locales/en/your-page.json";
 ```
 
 2. **Add to translations object**:
+
 ```typescript
 const translations = {
   es: {
@@ -66,6 +69,7 @@ const translations = {
 ```
 
 3. **Add to translationRegistry**:
+
 ```typescript
 const translationRegistry: Record<string, TranslationStrings> = {
   // ... existing entries
@@ -102,10 +106,10 @@ export default function YourPage() {
 
 ```typescript
 // Direct key lookup (assumes "your-page" namespace)
-t("section.title")
+t("section.title");
 
 // Explicit namespace (overrides default)
-t("section.title", "common")
+t("section.title", "common");
 ```
 
 ### Nested Keys
@@ -122,18 +126,14 @@ t("section.title", "common")
 ```
 
 ```typescript
-t("user.profile.name") // Returns "User Name"
+t("user.profile.name"); // Returns "User Name"
 ```
 
 ### Arrays in Translations
 
 ```json
 {
-  "features": [
-    "Feature 1",
-    "Feature 2",
-    "Feature 3"
-  ]
+  "features": ["Feature 1", "Feature 2", "Feature 3"]
 }
 ```
 
@@ -273,6 +273,7 @@ console.log("Loaded namespaces:", loadedNamespaces);
 If migrating from the old `useLanguage` hook:
 
 1. Replace import:
+
    ```typescript
    // Old
    import { useLanguage } from "@/components/language/LanguageContext";
@@ -282,6 +283,7 @@ If migrating from the old `useLanguage` hook:
    ```
 
 2. Update hook usage:
+
    ```typescript
    // Old
    const { t } = useLanguage();
@@ -291,10 +293,11 @@ If migrating from the old `useLanguage` hook:
    ```
 
 3. Add namespace parameter to translation calls if needed:
+
    ```typescript
    // Old (implicit common namespace)
-   t("key")
+   t("key");
 
    // New (explicit namespace)
-   t("key", "your-namespace")
+   t("key", "your-namespace");
    ```

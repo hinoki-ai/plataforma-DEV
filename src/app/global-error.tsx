@@ -27,16 +27,20 @@ export default function GlobalError({
       es: {
         "error.global_title": "Error Global",
         "error.global_message": "Ha ocurrido un error crítico",
-        "error.retry": "Intentar nuevamente"
+        "error.retry": "Intentar nuevamente",
       },
       en: {
         "error.global_title": "Global Error",
         "error.global_message": "A critical error has occurred",
-        "error.retry": "Try Again"
-      }
+        "error.retry": "Try Again",
+      },
     };
 
-    return translations[language as keyof typeof translations]?.[key as keyof typeof translations.es] || key;
+    return (
+      translations[language as keyof typeof translations]?.[
+        key as keyof typeof translations.es
+      ] || key
+    );
   };
 
   return (

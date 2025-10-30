@@ -21,7 +21,8 @@ export default function PrivacidadPage() {
             </div>
           </div>
           <p className="text-lg text-center text-foreground/90 mb-12">
-            {t("privacidad.last_updated")}: {new Date().toLocaleDateString("es-CL")}
+            {t("privacidad.last_updated")}:{" "}
+            {new Date().toLocaleDateString("es-CL")}
           </p>
 
           <div className="space-y-8 text-foreground">
