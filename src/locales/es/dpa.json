@@ -25,68 +25,54 @@
 
   "section_4.title": "4. Categorías de Datos Procesados",
   "section_4.user_data": "Datos de Usuarios del Sistema",
-  "section_4.user_data_items": [
-    "Nombre completo, RUN/RUT, fecha de nacimiento",
-    "Datos de contacto (email, teléfono)",
-    "Información institucional y rol",
-    "Datos de autenticación y acceso"
-  ],
+  "section_4.user_data_item_1": "Nombre completo, RUN/RUT, fecha de nacimiento",
+  "section_4.user_data_item_2": "Datos de contacto (email, teléfono)",
+  "section_4.user_data_item_3": "Información institucional y rol",
+  "section_4.user_data_item_4": "Datos de autenticación y acceso",
   "section_4.student_data": "Datos de Estudiantes",
-  "section_4.student_data_items": [
-    "Información académica y de rendimiento",
-    "Datos de salud (solo con consentimiento específico)",
-    "Información familiar y de tutores",
-    "Asistencia y participación escolar"
-  ],
+  "section_4.student_data_item_1": "Información académica y de rendimiento",
+  "section_4.student_data_item_2": "Datos de salud (solo con consentimiento específico)",
+  "section_4.student_data_item_3": "Información familiar y de tutores",
+  "section_4.student_data_item_4": "Asistencia y participación escolar",
 
   "section_5.title": "5. Finalidades del Tratamiento",
   "section_5.intro": "Los datos se procesan únicamente para:",
-  "section_5.purposes": [
-    "Gestionar el acceso y uso de la plataforma educativa",
-    "Facilitar la comunicación entre comunidad educativa",
-    "Generar reportes académicos y administrativos",
-    "Cumplir con obligaciones legales y regulatorias",
-    "Garantizar la seguridad y integridad del sistema",
-    "Mejorar la calidad de los servicios educativos"
-  ],
+  "section_5.purpose_1": "Gestionar el acceso y uso de la plataforma educativa",
+  "section_5.purpose_2": "Facilitar la comunicación entre comunidad educativa",
+  "section_5.purpose_3": "Generar reportes académicos y administrativos",
+  "section_5.purpose_4": "Cumplir con obligaciones legales y regulatorias",
+  "section_5.purpose_5": "Garantizar la seguridad y integridad del sistema",
+  "section_5.purpose_6": "Mejorar la calidad de los servicios educativos",
 
   "section_6.title": "6. Obligaciones del Responsable",
   "section_6.intro": "Plataforma Astral se compromete a:",
-  "section_6.obligations": [
-    "Procesar datos únicamente según instrucciones documentadas",
-    "Implementar medidas de seguridad técnicas y organizativas apropiadas",
-    "Notificar inmediatamente cualquier brecha de seguridad",
-    "Asistir al encargado en la respuesta a solicitudes de derechos ARCO",
-    "Eliminar o devolver datos al finalizar el servicio",
-    "Permitir auditorías y revisiones de cumplimiento"
-  ],
+  "section_6.obligation_1": "Procesar datos únicamente según instrucciones documentadas",
+  "section_6.obligation_2": "Implementar medidas de seguridad técnicas y organizativas apropiadas",
+  "section_6.obligation_3": "Notificar inmediatamente cualquier brecha de seguridad",
+  "section_6.obligation_4": "Asistir al encargado en la respuesta a solicitudes de derechos ARCO",
+  "section_6.obligation_5": "Eliminar o devolver datos al finalizar el servicio",
+  "section_6.obligation_6": "Permitir auditorías y revisiones de cumplimiento",
 
   "section_7.title": "7. Obligaciones del Encargado",
   "section_7.intro": "La institución educativa se compromete a:",
-  "section_7.obligations": [
-    "Proporcionar instrucciones claras sobre el tratamiento de datos",
-    "Obtener consentimientos necesarios antes de transferir datos",
-    "Notificar cambios que puedan afectar la seguridad de los datos",
-    "Cooperar en la implementación de medidas de seguridad",
-    "Informar sobre requisitos legales aplicables"
-  ],
+  "section_7.obligation_1": "Proporcionar instrucciones claras sobre el tratamiento de datos",
+  "section_7.obligation_2": "Obtener consentimientos necesarios antes de transferir datos",
+  "section_7.obligation_3": "Notificar cambios que puedan afectar la seguridad de los datos",
+  "section_7.obligation_4": "Cooperar en la implementación de medidas de seguridad",
+  "section_7.obligation_5": "Informar sobre requisitos legales aplicables",
 
   "section_8.title": "8. Medidas de Seguridad",
   "section_8.technical_title": "Medidas Técnicas",
-  "section_8.technical_measures": [
-    "Cifrado de datos en tránsito y en reposo",
-    "Controles de acceso basados en roles",
-    "Autenticación multifactor",
-    "Monitoreo continuo de seguridad",
-    "Copias de seguridad encriptadas"
-  ],
+  "section_8.technical_measure_1": "Cifrado de datos en tránsito y en reposo",
+  "section_8.technical_measure_2": "Controles de acceso basados en roles",
+  "section_8.technical_measure_3": "Autenticación multifactor",
+  "section_8.technical_measure_4": "Monitoreo continuo de seguridad",
+  "section_8.technical_measure_5": "Copias de seguridad encriptadas",
   "section_8.organizational_title": "Medidas Organizativas",
-  "section_8.organizational_measures": [
-    "Personal capacitado en protección de datos",
-    "Políticas de seguridad documentadas",
-    "Evaluaciones de riesgo periódicas",
-    "Procedimientos de respuesta a incidentes"
-  ],
+  "section_8.organizational_measure_1": "Personal capacitado en protección de datos",
+  "section_8.organizational_measure_2": "Políticas de seguridad documentadas",
+  "section_8.organizational_measure_3": "Evaluaciones de riesgo periódicas",
+  "section_8.organizational_measure_4": "Procedimientos de respuesta a incidentes",
 
   "section_9.title": "9. Transferencias Internacionales",
   "section_9.content": "Los datos se procesan y almacenan exclusivamente en servidores ubicados en Chile. No se realizan transferencias internacionales de datos personales sin el consentimiento expreso del titular y las garantías adecuadas según la legislación aplicable.",

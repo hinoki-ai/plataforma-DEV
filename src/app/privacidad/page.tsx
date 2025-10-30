@@ -141,14 +141,18 @@ export default function PrivacidadPage() {
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("privacidad.section_8.title")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("privacidad.section_8.title")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {t("privacidad.section_8.content")}
               </p>
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("privacidad.section_9.title")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("privacidad.section_9.title")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {t("privacidad.section_9.content")}
               </p>
@@ -164,7 +168,9 @@ export default function PrivacidadPage() {
             </div>
 
             <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-4">{t("privacidad.section_11.title")}</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                {t("privacidad.section_11.title")}
+              </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 {t("privacidad.section_11.content")}
               </p>
