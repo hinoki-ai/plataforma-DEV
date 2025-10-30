@@ -676,8 +676,13 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.childPhone = "Teléfono del estudiante es requerido";
           if (!formData.relationship)
             newErrors.relationship = t("validation.relationship_required");
-          if (formData.relationship === "otro" && !formData.customRelationship.trim())
-            newErrors.customRelationship = t("validation.custom_relationship_required");
+          if (
+            formData.relationship === "otro" &&
+            !formData.customRelationship.trim()
+          )
+            newErrors.customRelationship = t(
+              "validation.custom_relationship_required",
+            );
           break;
 
         case 3:
@@ -767,11 +772,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           // Skip confirmPassword as it's not needed in the API
           // For relationship, use customRelationship if "otro" is selected
           if (key === "relationship") {
-            const relationshipValue = value === "otro" && formData.customRelationship.trim()
-              ? formData.customRelationship.trim()
-              : value;
+            const relationshipValue =
+              value === "otro" && formData.customRelationship.trim()
+                ? formData.customRelationship.trim()
+                : value;
             form.append(key, relationshipValue);
-          } else if (key !== "confirmPassword" && key !== "customRelationship") {
+          } else if (
+            key !== "confirmPassword" &&
+            key !== "customRelationship"
+          ) {
             form.append(key, value);
           }
         });
@@ -959,47 +968,47 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     {t("signup.personal_section.title")}
                   </h4>
                   <div className="grid md:grid-cols-2 gap-4">
-                  <LabelInputContainer>
-                    <Label htmlFor="fullName">
-                      {t("signup.full_name.label")}
-                    </Label>
-                    <Input
-                      id="fullName"
-                      name="fullName"
-                      placeholder="Juan Pérez González"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.fullName &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                    <LabelInputContainer>
+                      <Label htmlFor="fullName">
+                        {t("signup.full_name.label")}
+                      </Label>
+                      <Input
+                        id="fullName"
+                        name="fullName"
+                        placeholder="Juan Pérez González"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.fullName &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.fullName && (
+                        <ErrorMessage message={errors.fullName} />
                       )}
-                    />
-                    {errors.fullName && (
-                      <ErrorMessage message={errors.fullName} />
-                    )}
-                  </LabelInputContainer>
+                    </LabelInputContainer>
 
-                  <LabelInputContainer>
-                    <Label htmlFor="childName">
-                      {t("signup.child_name.label")}
-                    </Label>
-                    <Input
-                      id="childName"
-                      name="childName"
-                      placeholder="María José"
-                      value={formData.childName}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.childName &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                    <LabelInputContainer>
+                      <Label htmlFor="childName">
+                        {t("signup.child_name.label")}
+                      </Label>
+                      <Input
+                        id="childName"
+                        name="childName"
+                        placeholder="María José"
+                        value={formData.childName}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.childName &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.childName && (
+                        <ErrorMessage message={errors.childName} />
                       )}
-                    />
-                    {errors.childName && (
-                      <ErrorMessage message={errors.childName} />
-                    )}
-                  </LabelInputContainer>
+                    </LabelInputContainer>
                   </div>
                 </div>
 
@@ -1009,43 +1018,43 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     {t("signup.identification_section.title")}
                   </h4>
                   <div className="grid md:grid-cols-2 gap-4">
-                  <LabelInputContainer>
-                    <Label htmlFor="rut">{t("signup.rut.label")}</Label>
-                    <Input
-                      id="rut"
-                      name="rut"
-                      placeholder="12.345.678-9"
-                      value={formData.rut}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.rut &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                      )}
-                    />
-                    {errors.rut && <ErrorMessage message={errors.rut} />}
-                  </LabelInputContainer>
+                    <LabelInputContainer>
+                      <Label htmlFor="rut">{t("signup.rut.label")}</Label>
+                      <Input
+                        id="rut"
+                        name="rut"
+                        placeholder="12.345.678-9"
+                        value={formData.rut}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.rut &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.rut && <ErrorMessage message={errors.rut} />}
+                    </LabelInputContainer>
 
-                  <LabelInputContainer>
-                    <Label htmlFor="childRUT">
-                      {t("signup.child_rut.label")}
-                    </Label>
-                    <Input
-                      id="childRUT"
-                      name="childRUT"
-                      placeholder="12.345.678-9"
-                      value={formData.childRUT}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.childRUT &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                    <LabelInputContainer>
+                      <Label htmlFor="childRUT">
+                        {t("signup.child_rut.label")}
+                      </Label>
+                      <Input
+                        id="childRUT"
+                        name="childRUT"
+                        placeholder="12.345.678-9"
+                        value={formData.childRUT}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.childRUT &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.childRUT && (
+                        <ErrorMessage message={errors.childRUT} />
                       )}
-                    />
-                    {errors.childRUT && (
-                      <ErrorMessage message={errors.childRUT} />
-                    )}
-                  </LabelInputContainer>
+                    </LabelInputContainer>
                   </div>
                 </div>
 
@@ -1055,45 +1064,45 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     {t("signup.contact_section.title")}
                   </h4>
                   <div className="grid md:grid-cols-2 gap-4">
-                  <LabelInputContainer>
-                    <Label htmlFor="phone">{t("signup.phone.label")}</Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="+56 9 1234 5678"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.phone &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
-                      )}
-                    />
-                    {errors.phone && <ErrorMessage message={errors.phone} />}
-                  </LabelInputContainer>
+                    <LabelInputContainer>
+                      <Label htmlFor="phone">{t("signup.phone.label")}</Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        placeholder="+56 9 1234 5678"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.phone &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.phone && <ErrorMessage message={errors.phone} />}
+                    </LabelInputContainer>
 
-                  <LabelInputContainer>
-                    <Label htmlFor="childPhone">
-                      {t("signup.child_phone.label")}
-                    </Label>
-                    <Input
-                      id="childPhone"
-                      name="childPhone"
-                      type="tel"
-                      placeholder="+56 9 1234 5678"
-                      value={formData.childPhone}
-                      onChange={handleChange}
-                      className={cn(
-                        "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
-                        errors.childPhone &&
-                          "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                    <LabelInputContainer>
+                      <Label htmlFor="childPhone">
+                        {t("signup.child_phone.label")}
+                      </Label>
+                      <Input
+                        id="childPhone"
+                        name="childPhone"
+                        type="tel"
+                        placeholder="+56 9 1234 5678"
+                        value={formData.childPhone}
+                        onChange={handleChange}
+                        className={cn(
+                          "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
+                          errors.childPhone &&
+                            "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+                        )}
+                      />
+                      {errors.childPhone && (
+                        <ErrorMessage message={errors.childPhone} />
                       )}
-                    />
-                    {errors.childPhone && (
-                      <ErrorMessage message={errors.childPhone} />
-                    )}
-                  </LabelInputContainer>
+                    </LabelInputContainer>
                   </div>
                 </div>
 
