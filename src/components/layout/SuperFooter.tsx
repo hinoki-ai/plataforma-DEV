@@ -29,7 +29,9 @@ export default function HomepageFooter() {
                 <span>{t("home.footer.contact.email", "common")}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs">{t("home.footer.hours", "common")}</span>
+                <span className="text-xs">
+                  {t("home.footer.hours", "common")}
+                </span>
               </div>
             </div>
           </div>
@@ -145,10 +147,14 @@ export default function HomepageFooter() {
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             <div className="text-gray-300 text-sm text-center lg:text-left">
               <div className="font-medium mb-1">
-                {t("home.footer.copyright", "common").replace("{year}", new Date().getFullYear().toString())}
+                {t("home.footer.copyright", "common").replace(
+                  "{year}",
+                  new Date().getFullYear().toString(),
+                )}
               </div>
               <div className="text-xs text-gray-500">
-                {t("home.footer.school.info", "common")} • {t("home.footer.days", "common")}
+                {t("home.footer.school.info", "common")} •{" "}
+                {t("home.footer.days", "common")}
               </div>
             </div>
             <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400">
