@@ -46,21 +46,19 @@ import {
 const heroHighlights = [
   {
     icon: ShieldCheck,
-    title: "Gobernanza por rol",
-    description:
-      "Dashboards diferenciados para administración, docentes y apoderados con permisos y navegación contextual.",
+    titleKey: "programas.hardcoded.hero_highlights.governance.title",
+    descriptionKey:
+      "programas.hardcoded.hero_highlights.governance.description",
   },
   {
     icon: Calendar,
-    title: "Calendario centralizado",
-    description:
-      "Unifica eventos, reuniones y horarios con exportación, importación masiva y categorías dinámicas.",
+    titleKey: "programas.hardcoded.hero_highlights.calendar.title",
+    descriptionKey: "programas.hardcoded.hero_highlights.calendar.description",
   },
   {
     icon: Layers,
-    title: "Cobertura completa",
-    description:
-      "Configura educación parvularia, básica, media y superior desde un solo selector institucional.",
+    titleKey: "programas.hardcoded.hero_highlights.coverage.title",
+    descriptionKey: "programas.hardcoded.hero_highlights.coverage.description",
   },
 ];
 
@@ -68,69 +66,43 @@ const institutionProgramDetails: Record<
   EducationalInstitutionType,
   {
     icon: LucideIcon;
-    tagline: string;
-    modules: string[];
+    taglineKey: string;
+    modulesKey: string;
   }
 > = {
   PRESCHOOL: {
     icon: Sparkles,
-    tagline:
-      "Trayectorias NT1-NT2 con seguimiento socioemocional y colaboración familia-escuela.",
-    modules: [
-      "Calendario institucional con filtros para actividades pedagógicas y familiares.",
-      "Planificaciones iniciales con plantillas adaptables y recursos multimedia.",
-      "Panel de apoderados con reuniones y comunicaciones en tiempo real.",
-    ],
+    taglineKey: "programas.hardcoded.institution_programs.preschool.tagline",
+    modulesKey: "programas.hardcoded.institution_programs.preschool.modules",
   },
   BASIC_SCHOOL: {
     icon: Lightbulb,
-    tagline:
-      "Cobertura 1° básico a 8° básico con foco en interdisciplinariedad y gestión comunitaria.",
-    modules: [
-      "Planificaciones colaborativas con buscador por asignatura, curso y autor.",
-      "Metas PME consolidadas con evidencia y seguimiento de cumplimiento.",
-      "Libro de clases digital y gestión formal de reuniones con apoderados.",
-    ],
+    taglineKey: "programas.hardcoded.institution_programs.basic_school.tagline",
+    modulesKey: "programas.hardcoded.institution_programs.basic_school.modules",
   },
   HIGH_SCHOOL: {
     icon: Layers,
-    tagline:
-      "Rutas científico-humanistas y técnico-profesionales con participación estudiantil.",
-    modules: [
-      "Horarios sincronizados y calendario de evaluaciones en tiempo real.",
-      "Repositorio documental y votaciones para consejos escolares y centros de estudiantes.",
-      "Reportes de progreso y asistencia disponibles para equipos directivos y familias.",
-    ],
+    taglineKey: "programas.hardcoded.institution_programs.high_school.tagline",
+    modulesKey: "programas.hardcoded.institution_programs.high_school.modules",
   },
   TECHNICAL_INSTITUTE: {
     icon: Wrench,
-    tagline:
-      "Formación técnica especializada con certificación profesional y práctica laboral.",
-    modules: [
-      "Planes de estudio modulares con especializaciones técnicas.",
-      "Gestión de prácticas profesionales y certificaciones técnicas.",
-      "Coordinación docente especializada y evaluación técnica.",
-    ],
+    taglineKey:
+      "programas.hardcoded.institution_programs.technical_institute.tagline",
+    modulesKey:
+      "programas.hardcoded.institution_programs.technical_institute.modules",
   },
   TECHNICAL_CENTER: {
     icon: Settings,
-    tagline:
-      "Centros de formación técnica con certificación SENCE y empleabilidad inmediata.",
-    modules: [
-      "Programas técnicos certificados con seguimiento de competencias.",
-      "Gestión de prácticas laborales y certificaciones estatales.",
-      "Coordinación técnica y evaluación de habilidades prácticas.",
-    ],
+    taglineKey:
+      "programas.hardcoded.institution_programs.technical_center.tagline",
+    modulesKey:
+      "programas.hardcoded.institution_programs.technical_center.modules",
   },
   UNIVERSITY: {
     icon: GraduationCap,
-    tagline:
-      "Diplomados, programas técnicos y universitarios con trazabilidad académica y administrativa.",
-    modules: [
-      "Planificación modular para asignaturas electivas y talleres intensivos.",
-      "Coordinación de equipos docentes con agenda y reuniones integradas.",
-      "Gestión documental y reportes para procesos de acreditación y cumplimiento.",
-    ],
+    taglineKey: "programas.hardcoded.institution_programs.university.tagline",
+    modulesKey: "programas.hardcoded.institution_programs.university.modules",
   },
 };
 
@@ -156,8 +128,8 @@ const institutionPrograms = (
     title: info.chileanName,
     description: info.description,
     icon: details.icon,
-    tagline: details.tagline,
-    modules: details.modules,
+    taglineKey: details.taglineKey,
+    modulesKey: details.modulesKey,
     subjects,
     levelRange,
     grades,
@@ -168,82 +140,62 @@ const roleDashboards = [
   {
     id: "admin",
     icon: ShieldCheck,
-    title: "Panel Administrativo",
-    description:
-      "Dirección y equipos de gestión configuran niveles, usuarios y el ecosistema de datos de la institución.",
-    modules: [
-      "Selector de tipo de institución con matriz curricular integrada.",
-      "Gestión de usuarios, permisos y equipos desde /admin/usuarios.",
-      "Calendario, reuniones, votaciones y documentos con trazabilidad completa.",
-    ],
+    titleKey: "programas.hardcoded.role_dashboards.admin.title",
+    descriptionKey: "programas.hardcoded.role_dashboards.admin.description",
+    modulesKey: "programas.hardcoded.role_dashboards.admin.modules",
   },
   {
     id: "profesor",
     icon: Lightbulb,
-    title: "Panel Docente",
-    description:
-      "Docentes sincronizan planificaciones, recursos y libro de clases en un flujo continuo.",
-    modules: [
-      "UnifiedCalendarView con búsqueda, exportación y vistas personales.",
-      "Creador y repositorio de planificaciones con versiones y filtros avanzados.",
-      "Libro de clases, actividades y recursos pedagógicos listos para aula.",
-    ],
+    titleKey: "programas.hardcoded.role_dashboards.profesor.title",
+    descriptionKey: "programas.hardcoded.role_dashboards.profesor.description",
+    modulesKey: "programas.hardcoded.role_dashboards.profesor.modules",
   },
   {
     id: "parent",
     icon: Handshake,
-    title: "Panel de Familias",
-    description:
-      "Apoderados siguen el progreso académico y coordinan comunicación directa con docentes.",
-    modules: [
-      "Ficha por estudiante con asistencia, notas y actividades próximas.",
-      "Mensajería, notificaciones y actas disponibles en un solo lugar.",
-      "Solicitudes de reuniones y participación en votaciones colegiadas.",
-    ],
+    titleKey: "programas.hardcoded.role_dashboards.parent.title",
+    descriptionKey: "programas.hardcoded.role_dashboards.parent.description",
+    modulesKey: "programas.hardcoded.role_dashboards.parent.modules",
   },
 ];
 
 const platformModules = [
   {
     icon: Calendar,
-    title: "Calendario institucional unificado",
-    description:
-      "UnifiedCalendarView centraliza eventos académicos, administrativos y familiares con importación/exportación CSV e integración iCal.",
+    titleKey: "programas.hardcoded.platform_modules.calendar.title",
+    descriptionKey: "programas.hardcoded.platform_modules.calendar.description",
     href: "/admin/calendario-escolar",
   },
   {
     icon: FileText,
-    title: "Planificaciones y recursos",
-    description:
-      "PlanningDashboard, recursos docentes y actividades permiten diseñar, publicar y compartir clases con criterios comunes.",
+    titleKey: "programas.hardcoded.platform_modules.planning.title",
+    descriptionKey: "programas.hardcoded.platform_modules.planning.description",
     href: "/profesor/planificaciones",
   },
   {
     icon: BarChart3,
-    title: "Seguimiento PME y analítica",
-    description:
-      "Los tableros PME consolidan metas, evidencias y avances por equipo, con estados y alertas configurables.",
+    titleKey: "programas.hardcoded.platform_modules.pme.title",
+    descriptionKey: "programas.hardcoded.platform_modules.pme.description",
     href: "/admin/pme",
   },
   {
     icon: MessageSquare,
-    title: "Reuniones y comunicación",
-    description:
-      "Módulos de reuniones y mensajería integran agenda, confirmaciones, actas y seguimiento para toda la comunidad.",
+    titleKey: "programas.hardcoded.platform_modules.meetings.title",
+    descriptionKey: "programas.hardcoded.platform_modules.meetings.description",
     href: "/admin/reuniones",
   },
   {
     icon: ShieldCheck,
-    title: "Gestión documental",
-    description:
-      "Repositorio por categorías con carga de reglamentos, protocolos y planes, visor PDF y control de versiones.",
+    titleKey: "programas.hardcoded.platform_modules.documents.title",
+    descriptionKey:
+      "programas.hardcoded.platform_modules.documents.description",
     href: "/admin/documentos",
   },
   {
     icon: Users,
-    title: "Participación y votaciones",
-    description:
-      "Flujos participativos con opciones múltiples, autenticación obligatoria y reportes descargables para actas.",
+    titleKey: "programas.hardcoded.platform_modules.voting.title",
+    descriptionKey: "programas.hardcoded.platform_modules.voting.description",
     href: "/admin/votaciones",
   },
 ];
@@ -251,77 +203,79 @@ const platformModules = [
 const implementationPhases = [
   {
     icon: Compass,
-    title: "Diagnóstico y configuración",
-    duration: "Semana 1",
-    description:
-      "Levantamos el contexto institucional, definimos niveles y activamos la estructura con el selector educativo.",
-    focus: "Matriz curricular, usuarios y permisos iniciales",
+    titleKey: "programas.hardcoded.implementation_phases.diagnosis.title",
+    durationKey: "programas.hardcoded.implementation_phases.diagnosis.duration",
+    descriptionKey:
+      "programas.hardcoded.implementation_phases.diagnosis.description",
+    focusKey: "programas.hardcoded.implementation_phases.diagnosis.focus",
   },
   {
     icon: Layers,
-    title: "Carga de información",
-    duration: "Semanas 2-3",
-    description:
-      "Importamos calendarios, planificaciones históricas y documentos clave para comenzar con datos reales.",
-    focus: "Eventos, planificaciones y repositorio documental",
+    titleKey: "programas.hardcoded.implementation_phases.data_load.title",
+    durationKey: "programas.hardcoded.implementation_phases.data_load.duration",
+    descriptionKey:
+      "programas.hardcoded.implementation_phases.data_load.description",
+    focusKey: "programas.hardcoded.implementation_phases.data_load.focus",
   },
   {
     icon: Rocket,
-    title: "Capacitación y despliegue",
-    duration: "Mes 1",
-    description:
-      "Acompañamos a equipos directivos, docentes y familias en sesiones prácticas por rol para asegurar adopción.",
-    focus: "Sesiones guiadas por dashboard y módulos críticos",
+    titleKey: "programas.hardcoded.implementation_phases.deployment.title",
+    durationKey:
+      "programas.hardcoded.implementation_phases.deployment.duration",
+    descriptionKey:
+      "programas.hardcoded.implementation_phases.deployment.description",
+    focusKey: "programas.hardcoded.implementation_phases.deployment.focus",
   },
   {
     icon: BarChart3,
-    title: "Monitoreo continuo",
-    duration: "Meses 2-3",
-    description:
-      "Seguimos indicadores PME, uso de módulos y retroalimentación para ajustes iterativos.",
-    focus: "Reportes compartidos y planes de mejora",
+    titleKey: "programas.hardcoded.implementation_phases.monitoring.title",
+    durationKey:
+      "programas.hardcoded.implementation_phases.monitoring.duration",
+    descriptionKey:
+      "programas.hardcoded.implementation_phases.monitoring.description",
+    focusKey: "programas.hardcoded.implementation_phases.monitoring.focus",
   },
 ];
 
 const supportHighlights = [
   {
-    title: "Equipo interdisciplinario dedicado",
-    description:
-      "Especialistas pedagógicos, tecnológicos y de convivencia acompañan cada hito y coordinan con la institución.",
-    bullets: [
-      "Mesa técnica semanal con dirección",
-      "Soporte priorizado para incidencias críticas",
-      "Plan de comunicación con apoderados",
-    ],
+    titleKey: "programas.hardcoded.support.dedicated_team.title",
+    descriptionKey: "programas.hardcoded.support.dedicated_team.description",
+    bulletsKey: "programas.hardcoded.support.dedicated_team.bullets",
   },
   {
-    title: "Acompañamiento operativo",
-    description:
-      "Documentamos procesos, configuramos integraciones y proveemos guías para sacar el máximo de cada módulo.",
-    bullets: [
-      "Playbooks de calendario, reuniones y votaciones",
-      "Checklist de cumplimiento y documentación",
-      "Capacitaciones grabadas y microlearning",
-    ],
+    titleKey: "programas.hardcoded.support.operational.title",
+    descriptionKey: "programas.hardcoded.support.operational.description",
+    bulletsKey: "programas.hardcoded.support.operational.bullets",
   },
   {
-    title: "Comunidad y recursos",
-    description:
-      "Acceso a banco de planificaciones, proyectos y evaluaciones compartidas entre establecimientos aliados.",
-    bullets: [
-      "Calendario de comunidades de práctica",
-      "Repositorio abierto de proyectos STEAM",
-      "Microcursos certificados para docentes",
-    ],
+    titleKey: "programas.hardcoded.support.community.title",
+    descriptionKey: "programas.hardcoded.support.community.description",
+    bulletsKey: "programas.hardcoded.support.community.bullets",
   },
 ];
 
-const impactHighlights = [
-  "RoleAwareDashboard sincroniza indicadores y navegación según el perfil del usuario.",
-  "Los módulos de calendario, reuniones y votaciones comparten estados y notificaciones en tiempo real.",
-  "Las familias acceden a informes, mensajes y actas sin depender de múltiples plataformas.",
-  "Los equipos directivos monitorean PME, planificaciones y documentación desde un solo panel.",
-];
+const impactHighlightsKey = "programas.hardcoded.impact_highlights";
+
+// Helper function to safely get translation arrays
+const getTranslationArray = (t: any, key: string): string[] => {
+  const result = t(key);
+  if (Array.isArray(result)) {
+    return result;
+  }
+  // Fallback: try to access the translation directly from the hardcoded section
+  // This handles the case where the translation system doesn't work during SSG
+  try {
+    const keys = key.split('.');
+    let value: any = t('programas.hardcoded');
+    for (const k of keys.slice(2)) { // Skip 'programas.hardcoded'
+      value = value?.[k];
+    }
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+};
 
 export default function ProgramasPage() {
   const { t } = useLanguage();
@@ -368,26 +322,24 @@ export default function ProgramasPage() {
               </Button>
             </div>
             <div className="grid gap-4 sm:grid-cols-3 pt-6">
-              {heroHighlights.map(({ icon: Icon, title, description }) => (
-                <div
-                  key={title}
-                  className="backdrop-blur-xl bg-card/80 border border-border/60 rounded-2xl shadow-2xl p-5 flex flex-col items-center text-center"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 text-primary mb-3">
-                    <Icon className="h-6 w-6" aria-hidden="true" />
+              {heroHighlights.map(
+                ({ icon: Icon, titleKey, descriptionKey }) => (
+                  <div
+                    key={titleKey}
+                    className="backdrop-blur-xl bg-card/80 border border-border/60 rounded-2xl shadow-2xl p-5 flex flex-col items-center text-center"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 text-primary mb-3">
+                      <Icon className="h-6 w-6" aria-hidden="true" />
+                    </div>
+                    <h3 className="text-base font-semibold text-foreground">
+                      {t(titleKey)}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {t(descriptionKey)}
+                    </p>
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
-                    {t(
-                      `programas.hero_highlights.${title === "Gobernanza por rol" ? "governance" : title === "Calendario centralizado" ? "calendar" : "coverage"}.title`,
-                    )}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {t(
-                      `programas.hero_highlights.${title === "Gobernanza por rol" ? "governance" : title === "Calendario centralizado" ? "calendar" : "coverage"}.description`,
-                    )}
-                  </p>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </section>
 
@@ -406,9 +358,9 @@ export default function ProgramasPage() {
                   type,
                   icon: Icon,
                   title,
-                  tagline,
+                  taglineKey,
                   description,
-                  modules,
+                  modulesKey,
                   subjects,
                   levelRange,
                   grades,
@@ -432,7 +384,7 @@ export default function ProgramasPage() {
                         </div>
                       </div>
                       <CardDescription className="text-base text-muted-foreground">
-                        {tagline}
+                        {t(taglineKey)}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 space-y-4">
@@ -454,15 +406,17 @@ export default function ProgramasPage() {
                         )}
                       </div>
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        {modules.map((item) => (
-                          <li key={item} className="flex gap-2 text-left">
-                            <span
-                              className="mt-1 h-2 w-2 rounded-full bg-primary"
-                              aria-hidden="true"
-                            />
-                            <span>{item}</span>
-                          </li>
-                        ))}
+                        {(t(modulesKey) as unknown as string[]).map(
+                          (item: string) => (
+                            <li key={item} className="flex gap-2 text-left">
+                              <span
+                                className="mt-1 h-2 w-2 rounded-full bg-primary"
+                                aria-hidden="true"
+                              />
+                              <span>{item}</span>
+                            </li>
+                          ),
+                        )}
                       </ul>
                       {subjects.length > 0 && (
                         <div className="pt-2 border-t border-border/40">
@@ -501,7 +455,7 @@ export default function ProgramasPage() {
             </div>
             <div className="grid gap-6 md:grid-cols-3">
               {roleDashboards.map(
-                ({ id, icon: Icon, title, description, modules }) => (
+                ({ id, icon: Icon, titleKey, descriptionKey, modulesKey }) => (
                   <Card
                     key={id}
                     className="backdrop-blur-xl bg-card/80 border border-border/60 rounded-2xl shadow-2xl h-full flex flex-col"
@@ -511,23 +465,25 @@ export default function ProgramasPage() {
                         <Icon className="h-6 w-6" aria-hidden="true" />
                       </div>
                       <CardTitle className="text-xl text-foreground">
-                        {title}
+                        {t(titleKey)}
                       </CardTitle>
                       <CardDescription className="text-sm text-muted-foreground">
-                        {description}
+                        {t(descriptionKey)}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3 flex-1">
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        {modules.map((item) => (
-                          <li key={item} className="flex gap-2">
-                            <span
-                              className="mt-1 h-2 w-2 rounded-full bg-primary"
-                              aria-hidden="true"
-                            />
-                            <span>{item}</span>
-                          </li>
-                        ))}
+                        {(t(modulesKey) as unknown as string[]).map(
+                          (item: string) => (
+                            <li key={item} className="flex gap-2">
+                              <span
+                                className="mt-1 h-2 w-2 rounded-full bg-primary"
+                                aria-hidden="true"
+                              />
+                              <span>{item}</span>
+                            </li>
+                          ),
+                        )}
                       </ul>
                     </CardContent>
                   </Card>
@@ -547,9 +503,9 @@ export default function ProgramasPage() {
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {platformModules.map(
-                ({ icon: Icon, title, description, href }) => (
+                ({ icon: Icon, titleKey, descriptionKey, href }) => (
                   <Card
-                    key={title}
+                    key={titleKey}
                     className="backdrop-blur-xl bg-card/80 border border-border/60 rounded-2xl shadow-2xl h-full"
                   >
                     <CardHeader>
@@ -557,12 +513,12 @@ export default function ProgramasPage() {
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </div>
                       <CardTitle className="text-lg text-foreground">
-                        {title}
+                        {t(titleKey)}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <CardDescription className="text-sm text-muted-foreground">
-                        {description}
+                        {t(descriptionKey)}
                       </CardDescription>
                       <Button variant="ghost" size="sm" asChild>
                         <Link href={href}>
@@ -588,11 +544,17 @@ export default function ProgramasPage() {
             <div className="grid gap-6 lg:grid-cols-4 md:grid-cols-2">
               {implementationPhases.map(
                 (
-                  { icon: Icon, title, duration, description, focus },
+                  {
+                    icon: Icon,
+                    titleKey,
+                    durationKey,
+                    descriptionKey,
+                    focusKey,
+                  },
                   index,
                 ) => (
                   <Card
-                    key={title}
+                    key={titleKey}
                     className="backdrop-blur-xl bg-card/80 border border-border/60 rounded-2xl shadow-2xl h-full"
                   >
                     <CardHeader className="space-y-4">
@@ -602,21 +564,21 @@ export default function ProgramasPage() {
                         </div>
                         <div className="space-y-1">
                           <CardTitle className="text-lg text-foreground">
-                            {title}
+                            {t(titleKey)}
                           </CardTitle>
                           <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                            {duration}
+                            {t(durationKey)}
                           </p>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        {description}
+                        {t(descriptionKey)}
                       </p>
                       <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-primary">
                         <Icon className="h-4 w-4" aria-hidden="true" />
-                        {focus}
+                        {t(focusKey)}
                       </div>
                     </CardContent>
                   </Card>
@@ -635,32 +597,36 @@ export default function ProgramasPage() {
               </p>
             </div>
             <div className="grid gap-6 md:grid-cols-3">
-              {supportHighlights.map(({ title, description, bullets }) => (
-                <Card
-                  key={title}
-                  className="backdrop-blur-xl bg-card/80 border border-border/60 rounded-2xl shadow-2xl h-full"
-                >
-                  <CardHeader>
-                    <CardTitle className="text-lg text-foreground">
-                      {title}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground">
-                      {description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-muted-foreground">
-                    {bullets.map((item) => (
-                      <div key={item} className="flex gap-2">
-                        <span
-                          className="mt-1 h-2 w-2 rounded-full bg-primary"
-                          aria-hidden="true"
-                        />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              ))}
+              {supportHighlights.map(
+                ({ titleKey, descriptionKey, bulletsKey }) => (
+                  <Card
+                    key={titleKey}
+                    className="backdrop-blur-xl bg-card/80 border border-border/60 rounded-2xl shadow-2xl h-full"
+                  >
+                    <CardHeader>
+                      <CardTitle className="text-lg text-foreground">
+                        {t(titleKey)}
+                      </CardTitle>
+                      <CardDescription className="text-sm text-muted-foreground">
+                        {t(descriptionKey)}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3 text-sm text-muted-foreground">
+                      {(t(bulletsKey) as unknown as string[]).map(
+                        (item: string) => (
+                          <div key={item} className="flex gap-2">
+                            <span
+                              className="mt-1 h-2 w-2 rounded-full bg-primary"
+                              aria-hidden="true"
+                            />
+                            <span>{item}</span>
+                          </div>
+                        ),
+                      )}
+                    </CardContent>
+                  </Card>
+                ),
+              )}
             </div>
           </section>
 
@@ -681,24 +647,26 @@ export default function ProgramasPage() {
                   {t("programas.impact.description")}
                 </p>
                 <ul className="space-y-3 text-sm text-muted-foreground">
-                  {impactHighlights.map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span
-                        className="mt-1 h-2 w-2 rounded-full bg-primary"
-                        aria-hidden="true"
-                      />
-                      <span>{item}</span>
-                    </li>
-                  ))}
+                  {(t(impactHighlightsKey) as unknown as string[]).map(
+                    (item: string) => (
+                      <li key={item} className="flex gap-2">
+                        <span
+                          className="mt-1 h-2 w-2 rounded-full bg-primary"
+                          aria-hidden="true"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ),
+                  )}
                 </ul>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                {platformModules.slice(0, 4).map(({ title }) => (
+                {platformModules.slice(0, 4).map(({ titleKey }) => (
                   <div
-                    key={title}
+                    key={titleKey}
                     className="rounded-2xl border border-white/20 bg-white/10 p-5 text-sm text-foreground font-medium"
                   >
-                    {title}
+                    {t(titleKey)}
                   </div>
                 ))}
               </div>

@@ -46,7 +46,7 @@ const translations = {
     "language.english": "English",
     "language.toggle": "Switch language",
     "language.current": "Current language",
-    "nav.center.council": "CPMA Parents Center",
+    "nav.center.council": "CFMA Center of Fathers, Mothers and Guardians",
     "nav.educational.project": "Educational Project",
     "nav.photos.videos": "Photos & Videos",
     "nav.multidisciplinary.team": "Multidisciplinary Team",
@@ -83,7 +83,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
 // Adapter component to maintain exact same interface
 function LegacyLanguageAdapter({ children }: { children: React.ReactNode }) {
-  const divineContext = useDivineParsing(["common", "navigation", "language"]);
+  const divineContext = useDivineParsing([
+    "common",
+    "navigation",
+    "language",
+    "admin",
+    "profesor",
+    "parent",
+    "dashboard",
+    "programas",
+    "contacto",
+    "planes",
+  ]);
 
   // Create legacy-compatible interface
   const legacyValue: LanguageContextType = {
