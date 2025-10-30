@@ -63,8 +63,7 @@ import programasES from "../../locales/es/programas.json";
 import programasEN from "../../locales/en/programas.json";
 import contactoES from "../../locales/es/contacto.json";
 import contactEN from "../../locales/en/contact.json";
-import planesES from "../../locales/es/planes.json";
-import planesEN from "../../locales/en/planes.json";
+// Planes translations are now inlined to fix production loading issues
 
 // Import validation utilities for development
 import { logValidationResults } from "../../lib/translation-validation";
@@ -76,6 +75,170 @@ import terminosES from "../../locales/es/terminos.json";
 import terminosEN from "../../locales/en/terminos.json";
 import privacidadES from "../../locales/es/privacidad.json";
 import privacidadEN from "../../locales/en/privacidad.json";
+
+// Inline planes translations to fix production loading issues
+const planesESInline = {
+  hero: {
+    title: "Planes y Precios",
+    subtitle: "Precios transparentes por estudiante. Sin costos ocultos.",
+  },
+  billing: {
+    semestral: "Semestral",
+    annual: "Anual",
+    biannual: "Bianual",
+    discount_annual: "-15%",
+    discount_biannual: "-25%",
+    billing_info:
+      "* Precios en Pesos Chilenos (CLP) + IVA • Factura electrónica (SII)",
+    per_student_per_month: "por estudiante/mes",
+    savings: "Ahorro de {discount}% en plan {cycle}",
+    example: "Ejemplo: {students} estudiantes = {price}/mes",
+  },
+  pricing: {
+    select_plan: "Seleccionar Plan",
+  },
+  comparison: {
+    title: "Comparación Detallada de Planes",
+    feature: "Característica",
+  },
+  contact: {
+    title: "Solicita tu Demo Gratuita",
+    contact_sales: "Contactar a Ventas",
+    form: {
+      full_name: "Nombre Completo *",
+      email: "Email *",
+      institution: "Establecimiento *",
+      commune: "Comuna *",
+      students: "Matrícula (N° estudiantes) *",
+      phone: "Teléfono / WhatsApp *",
+      message: "Mensaje (opcional)",
+      submit: "Solicitar Demo",
+      whatsapp: "WhatsApp",
+      privacy:
+        "Al enviar este formulario, aceptas nuestra Política de Privacidad y el tratamiento de tus datos según la Ley 19.628",
+    },
+  },
+  security: {
+    title: "Seguridad y Cumplimiento",
+    data_in_chile: {
+      title: "Datos en Chile",
+      description:
+        "Servidores ubicados en Chile. Cumplimiento total con regulaciones locales.",
+    },
+    law_19628: {
+      title: "Ley 19.628",
+      description:
+        "Protección de datos personales. Cifrado end-to-end y backups diarios automáticos.",
+    },
+    certifications: {
+      title: "Certificaciones",
+      description:
+        "ISO 27001 en proceso. Auditorías de seguridad trimestrales.",
+    },
+  },
+  faq: {
+    title: "Preguntas Frecuentes",
+    iva_question: "¿El precio incluye IVA?",
+    iva_answer:
+      "No, los precios mostrados son netos. Se añade 19% de IVA en la factura electrónica emitida por el SII.",
+    semestral_calculation: "¿Cómo se calcula el cobro semestral?",
+    semestral_answer:
+      "El precio es por estudiante activo por semestre. Ejemplo: 100 estudiantes × CLP $35 = CLP $3.500/semestre + IVA. Se cobra el día 1 de cada semestre.",
+    free_trial: "¿Qué incluye la prueba gratuita?",
+    free_trial_answer:
+      "14 días de acceso completo al plan que elijas, sin restricciones. Incluye recorrido guiado por nuestro equipo y soporte completo. No se requiere tarjeta de crédito.",
+    plan_change: "¿Puedo cambiar de plan después?",
+    plan_change_answer:
+      "Sí, puedes cambiar de plan en cualquier momento. Los cambios se aplican en el siguiente ciclo de facturación.",
+    data_after_cancel: "¿Qué pasa con mis datos si cancelo?",
+    data_after_cancel_answer:
+      "Puedes exportar todos tus datos en cualquier momento. Después de la cancelación, guardamos tus datos por 90 días según Ley 19.628, luego se eliminan permanentemente.",
+    support_hours: "¿Qué horarios tiene el soporte técnico?",
+    support_hours_answer:
+      "Lunes a viernes de 9:00 a 18:00 hrs (Chile Continental). Planes Premium incluyen soporte 24/7 con tiempo de respuesta garantizado.",
+  },
+};
+
+const planesENInline = {
+  hero: {
+    title: "Plans and Pricing",
+    subtitle: "Transparent pricing per student. No hidden costs.",
+  },
+  billing: {
+    semestral: "Semestral",
+    annual: "Annual",
+    biannual: "Biannual",
+    discount_annual: "-15%",
+    discount_biannual: "-25%",
+    billing_info:
+      "* Prices in Chilean Pesos (CLP) + VAT • Electronic invoice (SII)",
+    per_student_per_month: "per student/month",
+    savings: "Save {discount}% on {cycle} plan",
+    example: "Example: {students} students = {price}/month",
+  },
+  pricing: {
+    select_plan: "Select Plan",
+  },
+  comparison: {
+    title: "Detailed Plan Comparison",
+    feature: "Feature",
+  },
+  contact: {
+    title: "Request Your Free Demo",
+    contact_sales: "Contact Sales",
+    form: {
+      full_name: "Full Name *",
+      email: "Email *",
+      institution: "Institution *",
+      commune: "Commune *",
+      students: "Enrollment (Number of students) *",
+      phone: "Phone / WhatsApp *",
+      message: "Message (optional)",
+      submit: "Request Demo",
+      whatsapp: "WhatsApp",
+      privacy:
+        "By submitting this form, you accept our Privacy Policy and the treatment of your data according to Law 19.628",
+    },
+  },
+  security: {
+    title: "Security and Compliance",
+    data_in_chile: {
+      title: "Data in Chile",
+      description:
+        "Servers located in Chile. Full compliance with local regulations.",
+    },
+    law_19628: {
+      title: "Law 19.628",
+      description:
+        "Personal data protection. End-to-end encryption and automatic daily backups.",
+    },
+    certifications: {
+      title: "Certifications",
+      description: "ISO 27001 in progress. Quarterly security audits.",
+    },
+  },
+  faq: {
+    title: "Frequently Asked Questions",
+    iva_question: "Does the price include VAT?",
+    iva_answer:
+      "No, the prices shown are net. 19% VAT is added to the electronic invoice issued by the SII.",
+    semestral_calculation: "How is the semestral billing calculated?",
+    semestral_answer:
+      "The price is per active student per semester. Example: 100 students × CLP $35 = CLP $3,500/semester + VAT. Billed on the 1st of each semester.",
+    free_trial: "What does the free trial include?",
+    free_trial_answer:
+      "14 days of full access to the plan you choose, without restrictions. Includes guided tour by our team and complete support. No credit card required.",
+    plan_change: "Can I change plans later?",
+    plan_change_answer:
+      "Yes, you can change plans at any time. Changes apply to the next billing cycle.",
+    data_after_cancel: "What happens to my data if I cancel?",
+    data_after_cancel_answer:
+      "You can export all your data at any time. After cancellation, we keep your data for 90 days according to Law 19.628, then it is permanently deleted.",
+    support_hours: "What are the technical support hours?",
+    support_hours_answer:
+      "Monday to Friday from 9:00 to 18:00 hrs (Chile Continental). Premium plans include 24/7 support with guaranteed response time.",
+  },
+};
 
 // Direct translation map for reliable synchronous access
 const translations = {
@@ -89,7 +252,7 @@ const translations = {
     language: languageES,
     programas: programasES,
     contacto: contactoES,
-    planes: planesES,
+    planes: planesESInline,
     dpa: dpaES,
     terminos: terminosES,
     privacidad: privacidadES,
@@ -104,7 +267,7 @@ const translations = {
     language: languageEN,
     programas: programasEN,
     contact: contactEN,
-    planes: planesEN,
+    planes: planesENInline,
     dpa: dpaEN,
     terminos: terminosEN,
     privacidad: privacidadEN,
@@ -131,8 +294,8 @@ const translationRegistry: Record<string, TranslationStrings> = {
   "en-programas": programasEN,
   "es-contacto": contactoES,
   "en-contact": contactEN,
-  "es-planes": planesES,
-  "en-planes": planesEN,
+  "es-planes": planesESInline,
+  "en-planes": planesENInline,
   "es-dpa": dpaES,
   "en-dpa": dpaEN,
   "es-terminos": terminosES,
