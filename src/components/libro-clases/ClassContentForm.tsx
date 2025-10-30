@@ -37,6 +37,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Calendar as CalendarIcon, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 const classContentSchema = z.object({
   date: z.date({
@@ -78,6 +79,24 @@ export function ClassContentForm({
 
   const createContent = useMutation(api.classContent.createClassContent);
   const updateContent = useMutation(api.classContent.updateClassContent);
+
+  // Define field order for Enter key navigation
+  const fieldOrder = [
+    "date",
+    "subject",
+    "period",
+    "topic",
+    "objectives",
+    "content",
+    "activities",
+    "resources",
+    "homework",
+  ];
+
+  const { handleKeyDown } = useEnterNavigation(fieldOrder, () => {
+    const form = document.querySelector("form") as HTMLFormElement;
+    form?.requestSubmit();
+  });
 
   const form = useForm<ClassContentFormData>({
     resolver: zodResolver(classContentSchema),
@@ -184,6 +203,7 @@ export function ClassContentForm({
                           "pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground",
                         )}
+                        onKeyDown={(e) => handleKeyDown(e, "date")}
                       >
                         {field.value ? (
                           format(field.value, "PPP", { locale: es })
@@ -224,7 +244,9 @@ export function ClassContentForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger
+                      onKeyDown={(e) => handleKeyDown(e, "subject")}
+                    >
                       <SelectValue placeholder="Seleccione asignatura" />
                     </SelectTrigger>
                   </FormControl>
@@ -250,7 +272,11 @@ export function ClassContentForm({
             <FormItem>
               <FormLabel>Período (Opcional)</FormLabel>
               <FormControl>
-                <Input placeholder="Ej: 1ra hora, 3ro-4to bloque" {...field} />
+                <Input
+                  placeholder="Ej: 1ra hora, 3ro-4to bloque"
+                  {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "period")}
+                />
               </FormControl>
               <FormDescription>
                 Especifique el bloque o período horario de la clase
@@ -271,6 +297,7 @@ export function ClassContentForm({
                 <Input
                   placeholder="Ej: Fracciones equivalentes y simplificación"
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "topic")}
                 />
               </FormControl>
               <FormDescription>
@@ -293,6 +320,7 @@ export function ClassContentForm({
                   placeholder="Ej: OA 5: Demostrar que comprenden las fracciones con denominadores 100, 12, 10, 8, 6, 5, 4, 3, 2..."
                   rows={3}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "objectives")}
                 />
               </FormControl>
               <FormDescription>
@@ -315,6 +343,7 @@ export function ClassContentForm({
                   placeholder="Describa el contenido tratado en la clase..."
                   rows={5}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "content")}
                 />
               </FormControl>
               <FormDescription>
@@ -337,6 +366,7 @@ export function ClassContentForm({
                   placeholder="Ej: Ejercicios en pizarra, trabajo en grupos, resolución de guía..."
                   rows={3}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "activities")}
                 />
               </FormControl>
               <FormDescription>
@@ -359,6 +389,7 @@ export function ClassContentForm({
                   placeholder="Ej: PowerPoint, video educativo, material concreto, guía impresa..."
                   rows={2}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "resources")}
                 />
               </FormControl>
               <FormDescription>
@@ -381,6 +412,7 @@ export function ClassContentForm({
                   placeholder="Ej: Realizar ejercicios página 45, estudiar para prueba..."
                   rows={2}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "homework")}
                 />
               </FormControl>
               <FormDescription>

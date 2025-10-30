@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useAuth } from "@clerk/nextjs";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 const courseSchema = z.object({
   name: z
@@ -62,6 +63,21 @@ export function CourseForm({
     initialData?.subjects || [],
   );
   const [subjectInput, setSubjectInput] = useState("");
+
+  const fieldOrder = [
+    "name",
+    "level",
+    "grade",
+    "section",
+    "academicYear",
+    "teacherId",
+    "subjects",
+    "maxStudents",
+  ];
+  const { handleKeyDown } = useEnterNavigation(fieldOrder, () => {
+    const form = document.querySelector("form") as HTMLFormElement;
+    form?.requestSubmit();
+  });
 
   // Get teachers
   const teachers = useQuery(api.users.getUsersByRole, { role: "PROFESOR" });
@@ -150,7 +166,11 @@ export function CourseForm({
             <FormItem>
               <FormLabel>Nombre del Curso</FormLabel>
               <FormControl>
-                <Input placeholder="Ej: Matemáticas 8° Básico" {...field} />
+                <Input
+                  placeholder="Ej: Matemáticas 8° Básico"
+                  {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "name")}
+                />
               </FormControl>
               <FormDescription>
                 Nombre completo del curso o asignatura
@@ -172,7 +192,7 @@ export function CourseForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger onKeyDown={(e) => handleKeyDown(e, "level")}>
                       <SelectValue placeholder="Seleccione nivel" />
                     </SelectTrigger>
                   </FormControl>
@@ -193,7 +213,11 @@ export function CourseForm({
               <FormItem>
                 <FormLabel>Grado</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ej: 8vo, 1ro Medio" {...field} />
+                  <Input
+                    placeholder="Ej: 8vo, 1ro Medio"
+                    {...field}
+                    onKeyDown={(e) => handleKeyDown(e, "grade")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -209,7 +233,11 @@ export function CourseForm({
               <FormItem>
                 <FormLabel>Sección</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ej: A, B, C" {...field} />
+                  <Input
+                    placeholder="Ej: A, B, C"
+                    {...field}
+                    onKeyDown={(e) => handleKeyDown(e, "section")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -227,6 +255,7 @@ export function CourseForm({
                     type="number"
                     {...field}
                     onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    onKeyDown={(e) => handleKeyDown(e, "academicYear")}
                   />
                 </FormControl>
                 <FormMessage />
@@ -243,7 +272,9 @@ export function CourseForm({
               <FormLabel>Profesor Jefe</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger
+                    onKeyDown={(e) => handleKeyDown(e, "teacherId")}
+                  >
                     <SelectValue placeholder="Seleccione profesor" />
                   </SelectTrigger>
                 </FormControl>
@@ -271,6 +302,7 @@ export function CourseForm({
                   placeholder="Ej: Matemáticas"
                   value={subjectInput}
                   onChange={(e) => setSubjectInput(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, "subjects")}
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -319,6 +351,7 @@ export function CourseForm({
                       e.target.value ? parseInt(e.target.value) : undefined,
                     )
                   }
+                  onKeyDown={(e) => handleKeyDown(e, "maxStudents")}
                 />
               </FormControl>
               <FormMessage />

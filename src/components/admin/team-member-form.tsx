@@ -22,6 +22,7 @@ import { ActionLoader } from "@/components/ui/dashboard-loader";
 
 // i18n
 import { useLanguage } from "@/components/language/LanguageContext";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 /**
  * Team Member Form Component
@@ -94,6 +95,16 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
           : [],
     },
   });
+
+  // Enter key navigation
+  const { handleKeyDown } = useEnterNavigation(
+    ["name", "title", "description", "imageUrl", "order", "isActive"],
+    () => {
+      // Trigger form submission when Enter is pressed on last field
+      const form = document.querySelector("form") as HTMLFormElement;
+      form?.requestSubmit();
+    },
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -201,6 +212,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
               id="name"
               {...register("name")}
               placeholder={t("user.name.placeholder", "common")}
+              onKeyDown={(e) => handleKeyDown(e, "name")}
             />
             {errors.name && (
               <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -215,6 +227,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
               id="title"
               {...register("title")}
               placeholder={t("team.form.specialties.placeholder", "common")}
+              onKeyDown={(e) => handleKeyDown(e, "title")}
             />
             {errors.title && (
               <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -233,6 +246,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
                 " the member's profile and responsibilities..."
               }
               rows={4}
+              onKeyDown={(e) => handleKeyDown(e, "description")}
             />
             {errors.description && (
               <p className="text-sm text-red-500">
@@ -291,6 +305,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
                     setImagePreview(e.target.value);
                     setValue("imageUrl", e.target.value);
                   }}
+                  onKeyDown={(e) => handleKeyDown(e, "imageUrl")}
                 />
                 {errors.imageUrl && (
                   <p className="text-sm text-red-500">
@@ -365,6 +380,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
                 type="number"
                 {...register("order", { valueAsNumber: true })}
                 min="0"
+                onKeyDown={(e) => handleKeyDown(e, "order")}
               />
               {errors.order && (
                 <p className="text-sm text-red-500">{errors.order.message}</p>
@@ -373,7 +389,11 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
 
             <div className="space-y-2">
               <Label htmlFor="isActive">Estado</Label>
-              <div className="flex items-center space-x-2 pt-2">
+              <div
+                className="flex items-center space-x-2 pt-2"
+                onKeyDown={(e) => handleKeyDown(e, "isActive")}
+                tabIndex={0}
+              >
                 <Switch
                   {...register("isActive")}
                   checked={watch("isActive")}

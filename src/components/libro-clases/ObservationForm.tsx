@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -46,6 +46,7 @@ import {
   Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 const observationSchema = z.object({
   date: z.date({
@@ -152,6 +153,32 @@ export function ObservationForm({
   const watchedType = form.watch("type");
   const watchedSeverity = form.watch("severity");
 
+  // Dynamic field order based on form state
+  const fieldOrder = React.useMemo(() => {
+    const baseFields = ["date", "type", "category", "subject"];
+
+    if (watchedType === "NEGATIVA") {
+      baseFields.push("severity");
+    }
+
+    baseFields.push("observation");
+
+    if (watchedSeverity === "GRAVE" || watchedSeverity === "GRAVISIMA") {
+      baseFields.push("actionTaken");
+    }
+
+    baseFields.push("notifyParent");
+
+    return baseFields;
+  }, [watchedType, watchedSeverity]);
+
+  // Enter key navigation
+  const { handleKeyDown } = useEnterNavigation(fieldOrder, () => {
+    // Trigger form submission when Enter is pressed on last field
+    const formElement = document.querySelector("form") as HTMLFormElement;
+    formElement?.requestSubmit();
+  });
+
   const onSubmit = async (data: ObservationFormData) => {
     // Validate severity for negative observations
     if (data.type === "NEGATIVA" && !data.severity) {
@@ -248,6 +275,7 @@ export function ObservationForm({
                           "pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground",
                         )}
+                        onKeyDown={(e) => handleKeyDown(e, "date")}
                       >
                         {field.value ? (
                           format(field.value, "PPP", { locale: es })
@@ -321,7 +349,9 @@ export function ObservationForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger
+                      onKeyDown={(e) => handleKeyDown(e, "category")}
+                    >
                       <SelectValue placeholder="Seleccione categoría" />
                     </SelectTrigger>
                   </FormControl>
@@ -345,7 +375,11 @@ export function ObservationForm({
               <FormItem>
                 <FormLabel>Asignatura (Opcional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ej: Matemáticas" {...field} />
+                  <Input
+                    placeholder="Ej: Matemáticas"
+                    {...field}
+                    onKeyDown={(e) => handleKeyDown(e, "subject")}
+                  />
                 </FormControl>
                 <FormDescription>
                   Si aplica a una asignatura específica
@@ -369,7 +403,9 @@ export function ObservationForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger
+                      onKeyDown={(e) => handleKeyDown(e, "severity")}
+                    >
                       <SelectValue placeholder="Seleccione nivel" />
                     </SelectTrigger>
                   </FormControl>
@@ -405,6 +441,7 @@ export function ObservationForm({
                   placeholder="Describa la observación de forma clara y objetiva..."
                   rows={5}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "observation")}
                 />
               </FormControl>
               <FormDescription>
@@ -429,6 +466,7 @@ export function ObservationForm({
                       placeholder="Describa las medidas o acciones tomadas..."
                       rows={3}
                       {...field}
+                      onKeyDown={(e) => handleKeyDown(e, "actionTaken")}
                     />
                   </FormControl>
                   <FormDescription>
@@ -459,6 +497,7 @@ export function ObservationForm({
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  onKeyDown={(e) => handleKeyDown(e, "notifyParent")}
                 />
               </FormControl>
             </FormItem>

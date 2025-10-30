@@ -35,6 +35,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { requestMeeting } from "@/services/actions/meetings";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 const meetingRequestSchema = z.object({
   studentName: z.string().min(2, "El nombre del estudiante es requerido"),
@@ -102,6 +103,18 @@ export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useLanguage();
 
+  const fieldOrder = [
+    "studentName",
+    "studentGrade",
+    "preferredDate",
+    "preferredTime",
+    "reason",
+  ];
+  const { handleKeyDown } = useEnterNavigation(fieldOrder, () => {
+    const form = document.querySelector("form") as HTMLFormElement;
+    form?.requestSubmit();
+  });
+
   const form = useForm<MeetingRequestData>({
     resolver: zodResolver(meetingRequestSchema),
     defaultValues: {
@@ -158,6 +171,7 @@ export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
                       <Input
                         placeholder={t("user.name.placeholder", "common")}
                         {...field}
+                        onKeyDown={(e) => handleKeyDown(e, "studentName")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -176,7 +190,9 @@ export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger
+                          onKeyDown={(e) => handleKeyDown(e, "studentGrade")}
+                        >
                           <SelectValue placeholder="Selecciona el grado" />
                         </SelectTrigger>
                       </FormControl>
@@ -207,6 +223,7 @@ export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
                           <Button
                             variant="outline"
                             className="w-full pl-3 text-left font-normal"
+                            onKeyDown={(e) => handleKeyDown(e, "preferredDate")}
                           >
                             {field.value ? (
                               format(field.value, "PPP", { locale: es })
@@ -243,7 +260,9 @@ export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger
+                          onKeyDown={(e) => handleKeyDown(e, "preferredTime")}
+                        >
                           <SelectValue placeholder="Selecciona la hora" />
                         </SelectTrigger>
                       </FormControl>
@@ -272,6 +291,7 @@ export function ParentMeetingRequest({ userId }: ParentMeetingRequestProps) {
                       placeholder="Describe el motivo de la reunión..."
                       className="min-h-[100px]"
                       {...field}
+                      onKeyDown={(e) => handleKeyDown(e, "reason")}
                     />
                   </FormControl>
                   <FormMessage />

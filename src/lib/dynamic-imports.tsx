@@ -92,7 +92,6 @@ export const DashboardComponents = {
 };
 
 // ⚡ Performance: Heavy components that should always be lazy loaded
-/*
 export const HeavyComponents = {
   // Planning components
   PlanningDashboard: createDynamicComponent(
@@ -122,7 +121,6 @@ export const HeavyComponents = {
     }
   ),
 };
-*/
 
 // ⚡ Performance: Conditional imports based on user role
 /*

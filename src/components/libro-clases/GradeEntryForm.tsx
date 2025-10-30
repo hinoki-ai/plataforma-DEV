@@ -38,6 +38,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import {
   Calendar as CalendarIcon,
   TrendingUp,
@@ -136,6 +137,22 @@ export function GradeEntryForm({
 }: GradeEntryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useLanguage();
+
+  const fieldOrder = [
+    "date",
+    "subject",
+    "evaluationType",
+    "evaluationName",
+    "grade",
+    "maxGrade",
+    "percentage",
+    "period",
+    "comments",
+  ];
+  const { handleKeyDown } = useEnterNavigation(fieldOrder, () => {
+    const form = document.querySelector("form") as HTMLFormElement;
+    form?.requestSubmit();
+  });
 
   // Get course details to show available subjects
   const course = useQuery(api.courses.getCourseById, { courseId });
@@ -283,6 +300,7 @@ export function GradeEntryForm({
                           "pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground",
                         )}
+                        onKeyDown={(e) => handleKeyDown(e, "date")}
                       >
                         {field.value ? (
                           format(field.value, "PPP", { locale: es })
@@ -320,7 +338,9 @@ export function GradeEntryForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger
+                      onKeyDown={(e) => handleKeyDown(e, "subject")}
+                    >
                       <SelectValue placeholder="Seleccione asignatura" />
                     </SelectTrigger>
                   </FormControl>
@@ -351,7 +371,9 @@ export function GradeEntryForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger
+                      onKeyDown={(e) => handleKeyDown(e, "evaluationType")}
+                    >
                       <SelectValue placeholder="Seleccione tipo" />
                     </SelectTrigger>
                   </FormControl>
@@ -381,7 +403,9 @@ export function GradeEntryForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger
+                      onKeyDown={(e) => handleKeyDown(e, "period")}
+                    >
                       <SelectValue placeholder="Seleccione período" />
                     </SelectTrigger>
                   </FormControl>
@@ -410,6 +434,7 @@ export function GradeEntryForm({
                 <Input
                   placeholder="Ej: Prueba Unidad 3 - Fracciones"
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "evaluationName")}
                 />
               </FormControl>
               <FormDescription>
@@ -436,6 +461,7 @@ export function GradeEntryForm({
                     max={MAX_GRADE}
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                    onKeyDown={(e) => handleKeyDown(e, "grade")}
                   />
                 </FormControl>
                 <FormDescription>
@@ -460,6 +486,7 @@ export function GradeEntryForm({
                     max={MAX_GRADE}
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                    onKeyDown={(e) => handleKeyDown(e, "maxGrade")}
                   />
                 </FormControl>
                 <FormDescription>
@@ -489,6 +516,7 @@ export function GradeEntryForm({
                         e.target.value ? parseFloat(e.target.value) : undefined,
                       )
                     }
+                    onKeyDown={(e) => handleKeyDown(e, "percentage")}
                   />
                 </FormControl>
                 <FormDescription>Peso de la nota (opcional)</FormDescription>
@@ -534,6 +562,7 @@ export function GradeEntryForm({
                   placeholder="Comentarios sobre el desempeño del estudiante..."
                   rows={3}
                   {...field}
+                  onKeyDown={(e) => handleKeyDown(e, "comments")}
                 />
               </FormControl>
               <FormDescription>

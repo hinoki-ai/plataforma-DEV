@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useSignIn } from "@clerk/nextjs";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
 import { UserPlus } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
@@ -589,68 +590,61 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const router = useRouter();
 
   // Field navigation for Enter key functionality
-  const getNextFieldId = useCallback((currentFieldId: string): string | null => {
-    const fieldSequences = {
-      1: ["email", "password", "confirmPassword"],
-      2: ["fullName", "childName", "rut", "childRUT", "phone", "childPhone", "relationship", "customRelationship"],
-      3: ["region", "comuna", "address", "institutionId", "childGrade"],
-      4: ["emergencyContact", "emergencyPhone", "secondaryEmergencyContact", "secondaryEmergencyPhone", "tertiaryEmergencyContact", "tertiaryEmergencyPhone"],
-    };
+  const getFieldOrderForStep = useCallback(
+    (step: number): string[] => {
+      const fieldSequences = {
+        1: ["email", "password", "confirmPassword"],
+        2: [
+          "fullName",
+          "childName",
+          "rut",
+          "childRUT",
+          "phone",
+          "childPhone",
+          "relationship",
+          "customRelationship",
+        ],
+        3: ["region", "comuna", "address", "institutionId", "childGrade"],
+        4: [
+          "emergencyContact",
+          "emergencyPhone",
+          "secondaryEmergencyContact",
+          "secondaryEmergencyPhone",
+          "tertiaryEmergencyContact",
+          "tertiaryEmergencyPhone",
+        ],
+      };
 
-    const currentSequence = fieldSequences[currentStep as keyof typeof fieldSequences] || [];
-    const currentIndex = currentSequence.indexOf(currentFieldId);
-
-    if (currentIndex === -1) return null;
-
-    // Special case for customRelationship - only show if relationship is "otro"
-    if (currentFieldId === "relationship" && formData.relationship !== "otro") {
-      const nextIndex = currentSequence.indexOf("customRelationship");
-      if (nextIndex !== -1) {
-        // Skip customRelationship and go to next field
-        const remainingSequence = currentSequence.slice(currentIndex + 1);
-        const nextField = remainingSequence.find(field => field !== "customRelationship");
-        return nextField || null;
+      const sequence =
+        fieldSequences[step as keyof typeof fieldSequences] || [];
+      // Filter out customRelationship if not needed
+      if (step === 2 && formData.relationship !== "otro") {
+        return sequence.filter((field) => field !== "customRelationship");
       }
-    }
+      return sequence;
+    },
+    [formData.relationship],
+  );
 
-    if (currentIndex < currentSequence.length - 1) {
-      const nextField = currentSequence[currentIndex + 1];
-      // Skip customRelationship if not needed
-      if (nextField === "customRelationship" && formData.relationship !== "otro") {
-        return currentSequence[currentIndex + 2] || null;
-      }
-      return nextField;
-    }
-
-    return null; // End of step
-  }, [currentStep, formData.relationship]);
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>, fieldId: string) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const nextFieldId = getNextFieldId(fieldId);
-
-      if (nextFieldId) {
-        // Focus next field
-        const nextElement = document.getElementById(nextFieldId);
-        if (nextElement) {
-          nextElement.focus();
-          // For select elements, we might want to open them
-          if (nextElement.tagName === "SELECT") {
-            (nextElement as HTMLSelectElement).click();
+  // Custom handler for institution popover
+  const handleInstitutionKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        setInstitutionPopoverOpen(true);
+        // Focus the command input inside the popover after a short delay
+        setTimeout(() => {
+          const commandInput = document.querySelector(
+            "[data-radix-collection-item] input",
+          ) as HTMLInputElement;
+          if (commandInput) {
+            commandInput.focus();
           }
-        }
-      } else {
-        // End of step, try to go to next step
-        if (currentStep < totalSteps) {
-          nextStep();
-        } else {
-          // Final step, submit form
-          handleSubmit(e as any);
-        }
+        }, 100);
       }
-    }
-  }, [getNextFieldId, currentStep, totalSteps, nextStep, handleSubmit]);
+    },
+    [],
+  );
 
   // Pre-fill form data for Google users
   useEffect(() => {
@@ -823,6 +817,15 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const prevStep = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   }, []);
+
+  // Step-based Enter key navigation
+  const { handleKeyDown } = useStepNavigation(
+    getFieldOrderForStep,
+    currentStep,
+    totalSteps,
+    nextStep,
+    () => handleSubmit({} as any),
+  );
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -1095,6 +1098,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         placeholder="12.345.678-9"
                         value={formData.rut}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "rut")}
                         className={cn(
                           "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                           errors.rut &&
@@ -1114,6 +1118,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         placeholder="12.345.678-9"
                         value={formData.childRUT}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "childRUT")}
                         className={cn(
                           "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                           errors.childRUT &&
@@ -1142,6 +1147,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         placeholder="+56 9 1234 5678"
                         value={formData.phone}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "phone")}
                         className={cn(
                           "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                           errors.phone &&
@@ -1162,6 +1168,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         placeholder="+56 9 1234 5678"
                         value={formData.childPhone}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "childPhone")}
                         className={cn(
                           "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                           errors.childPhone &&
@@ -1185,6 +1192,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     name="relationship"
                     value={formData.relationship}
                     onChange={handleChange}
+                    onKeyDown={(e) => handleKeyDown(e, "relationship")}
                     error={errors.relationship}
                   >
                     <option value="">{t("select.relationship")}</option>
@@ -1211,6 +1219,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder={t("signup.custom_relationship.placeholder")}
                       value={formData.customRelationship}
                       onChange={handleChange}
+                      onKeyDown={(e) => handleKeyDown(e, "customRelationship")}
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.customRelationship &&
@@ -1251,6 +1260,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         name="region"
                         value={formData.region}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "region")}
                         error={errors.region}
                       >
                         <option value="">{t("select.region")}</option>
@@ -1272,6 +1282,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         name="comuna"
                         value={formData.comuna}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "comuna")}
                         error={errors.comuna}
                         disabled={!formData.region}
                       >
@@ -1296,6 +1307,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder="Av. Principal 123, Comuna"
                       value={formData.address}
                       onChange={handleChange}
+                      onKeyDown={(e) => handleKeyDown(e, "address")}
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.address &&
@@ -1326,6 +1338,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                           <Button
                             variant="outline"
                             role="combobox"
+                            onKeyDown={handleInstitutionKeyDown}
                             className={cn(
                               "w-full justify-between rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                               !formData.institutionId &&
@@ -1401,6 +1414,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         name="childGrade"
                         value={formData.childGrade}
                         onChange={handleChange}
+                        onKeyDown={(e) => handleKeyDown(e, "childGrade")}
                         error={errors.childGrade}
                       >
                         <option value="">{t("select.grade")}</option>
@@ -1444,6 +1458,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder="Nombre de contacto"
                       value={formData.emergencyContact}
                       onChange={handleChange}
+                      onKeyDown={(e) => handleKeyDown(e, "emergencyContact")}
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.emergencyContact &&
@@ -1466,6 +1481,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder="+56 9 1234 5678"
                       value={formData.emergencyPhone}
                       onChange={handleChange}
+                      onKeyDown={(e) => handleKeyDown(e, "emergencyPhone")}
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.emergencyPhone &&
@@ -1490,6 +1506,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder="Nombre de contacto (opcional)"
                       value={formData.secondaryEmergencyContact}
                       onChange={handleChange}
+                      onKeyDown={(e) =>
+                        handleKeyDown(e, "secondaryEmergencyContact")
+                      }
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.secondaryEmergencyContact &&
@@ -1514,6 +1533,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder="+56 9 1234 5678"
                       value={formData.secondaryEmergencyPhone}
                       onChange={handleChange}
+                      onKeyDown={(e) =>
+                        handleKeyDown(e, "secondaryEmergencyPhone")
+                      }
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.secondaryEmergencyPhone &&
@@ -1538,6 +1560,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder="Nombre de contacto (opcional)"
                       value={formData.tertiaryEmergencyContact}
                       onChange={handleChange}
+                      onKeyDown={(e) =>
+                        handleKeyDown(e, "tertiaryEmergencyContact")
+                      }
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.tertiaryEmergencyContact &&
@@ -1560,6 +1585,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       placeholder="+56 9 1234 5678"
                       value={formData.tertiaryEmergencyPhone}
                       onChange={handleChange}
+                      onKeyDown={(e) =>
+                        handleKeyDown(e, "tertiaryEmergencyPhone")
+                      }
                       className={cn(
                         "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20",
                         errors.tertiaryEmergencyPhone &&
@@ -1658,11 +1686,13 @@ const LabelInputContainer = memo(function LabelInputContainer({
 const Select = memo(function Select({
   children,
   error,
+  onKeyDown,
   ...props
 }: React.SelectHTMLAttributes<HTMLSelectElement> & { error?: string }) {
   return (
     <select
       {...props}
+      onKeyDown={onKeyDown}
       className={cn(
         "block w-full px-3 py-2 border border-input bg-background text-foreground rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:border-primary focus:ring-primary/20 disabled:bg-muted disabled:cursor-not-allowed",
         error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",

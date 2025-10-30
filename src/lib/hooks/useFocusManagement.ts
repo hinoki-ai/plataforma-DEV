@@ -151,3 +151,96 @@ export function createFocusTrap(element: HTMLElement) {
     element.removeEventListener("keydown", handleKeyDown);
   };
 }
+
+/**
+ * Hook for Enter key navigation between form fields
+ * Provides smart navigation through form inputs with Enter key
+ */
+export function useEnterNavigation(
+  fieldOrder: string[],
+  onSubmit?: () => void,
+) {
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLElement>,
+    currentFieldId: string,
+  ) => {
+    if (event.key !== "Enter") return;
+
+    // Don't interfere with textarea Enter behavior (allow line breaks)
+    if (
+      event.target instanceof HTMLTextAreaElement &&
+      !event.ctrlKey &&
+      !event.metaKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const currentIndex = fieldOrder.indexOf(currentFieldId);
+    if (currentIndex === -1) return;
+
+    if (currentIndex < fieldOrder.length - 1) {
+      // Move to next field
+      const nextFieldId = fieldOrder[currentIndex + 1];
+      const nextElement = document.getElementById(nextFieldId);
+      if (nextElement) {
+        nextElement.focus();
+
+        // For select elements, open the dropdown
+        if (nextElement instanceof HTMLSelectElement) {
+          nextElement.click();
+        }
+
+        // For inputs, move cursor to end
+        if (nextElement instanceof HTMLInputElement) {
+          nextElement.setSelectionRange(
+            nextElement.value.length,
+            nextElement.value.length,
+          );
+        }
+      }
+    } else {
+      // Last field - call submit callback if provided
+      onSubmit?.();
+    }
+  };
+
+  return { handleKeyDown };
+}
+
+/**
+ * Hook for step-based Enter key navigation
+ * Handles navigation within multi-step forms where each step has different fields
+ */
+export function useStepNavigation(
+  getFieldOrderForStep: (step: number) => string[],
+  currentStep: number,
+  totalSteps: number,
+  onStepComplete?: () => void,
+  onFormComplete?: () => void,
+) {
+  const fieldOrder = getFieldOrderForStep(currentStep);
+
+  const { handleKeyDown: baseHandleKeyDown } = useEnterNavigation(
+    fieldOrder,
+    () => {
+      // When reaching end of current step
+      if (currentStep < totalSteps) {
+        onStepComplete?.();
+      } else {
+        // Final step - submit form
+        onFormComplete?.();
+      }
+    },
+  );
+
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLElement>,
+    currentFieldId: string,
+  ) => {
+    baseHandleKeyDown(event, currentFieldId);
+  };
+
+  return { handleKeyDown };
+}

@@ -34,6 +34,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Calendar as CalendarIcon, Check, CheckCircle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 
 const ATTENDANCE_STATUS = {
   PRESENTE: { label: "Presente", color: "bg-green-500", icon: CheckCircle },
@@ -67,6 +68,10 @@ export function AttendanceRecorder({
     Map<Id<"students">, AttendanceRecord>
   >(new Map());
   const [isSaving, setIsSaving] = useState(false);
+
+  // Enter key navigation for main controls
+  const fieldOrder = ["date-picker", "mark-all-btn", "save-btn"];
+  const { handleKeyDown } = useEnterNavigation(fieldOrder);
 
   // Get attendance for selected date
   const existingAttendance = useQuery(api.attendance.getAttendanceByDate, {
@@ -195,11 +200,13 @@ export function AttendanceRecorder({
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
+                    id="date-picker"
                     variant="outline"
                     className={cn(
                       "w-[240px] justify-start text-left font-normal",
                       !selectedDate && "text-muted-foreground",
                     )}
+                    onKeyDown={(e) => handleKeyDown(e, "date-picker")}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {selectedDate ? (
@@ -253,10 +260,12 @@ export function AttendanceRecorder({
           {/* Quick Actions */}
           <div className="flex gap-2">
             <Button
+              id="mark-all-btn"
               variant="outline"
               size="sm"
               onClick={markAllAsPresent}
               disabled={!existingAttendance || existingAttendance.length === 0}
+              onKeyDown={(e) => handleKeyDown(e, "mark-all-btn")}
             >
               <CheckCircle className="h-4 w-4 mr-2" />
               Marcar Todos Presentes
@@ -372,9 +381,11 @@ export function AttendanceRecorder({
       {existingAttendance && existingAttendance.length > 0 && (
         <div className="flex justify-end gap-2">
           <Button
+            id="save-btn"
             onClick={handleSave}
             disabled={isSaving || attendanceRecords.size === 0}
             size="lg"
+            onKeyDown={(e) => handleKeyDown(e, "save-btn")}
           >
             {isSaving ? "Guardando..." : "Guardar Asistencia"}
           </Button>
