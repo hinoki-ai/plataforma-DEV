@@ -157,15 +157,8 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  // Turbopack configuration for Next.js 16 compatibility
-  turbopack: {
-    rules: {
-      "*.svg": {
-        loaders: ["@svgr/webpack"],
-        as: "*.js",
-      },
-    },
-  },
+  // Empty turbopack config to silence webpack warning
+  turbopack: {},
 
   async redirects() {
     return [

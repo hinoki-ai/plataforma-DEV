@@ -219,7 +219,7 @@ grep NEXTAUTH_SECRET .env.local
 - `src/lib/auth-convex.ts` - Convex auth utilities
 - `src/lib/convex.ts` - Convex client
 - `src/lib/middleware-auth.ts` - Middleware auth helpers
-- `src/middleware.ts` - Route protection middleware
+- `src/proxy.ts` - Route protection middleware
 - `convex/users.ts` - User queries and mutations
 - `convex/seed.ts` - Database seeding
 

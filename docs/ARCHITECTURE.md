@@ -8,7 +8,7 @@
 
 ## Key Modules
 
-- `src/middleware.ts`: redirects and access control
+- `src/proxy.ts`: redirects and access control
 - `src/lib/auth*`: credential auth, session helpers
 - `src/components/language/*`: i18n context, toggle, html lang updater
 - `src/components/layout/*`: header, navigation, layout wrappers

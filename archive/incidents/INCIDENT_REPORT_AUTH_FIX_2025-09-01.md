@@ -56,7 +56,7 @@ NEXTAUTH_URL="https://school.aramac.dev"  # CURRENT DOMAIN
 
 - `src/lib/auth.ts` - NextAuth configuration
 - `src/lib/auth-prisma.ts` - Database authentication
-- `src/middleware.ts` - Route protection
+- `src/proxy.ts` - Route protection
 - Vercel environment variables (production)
 
 ## ⚡ IMMEDIATE ACTIONS TAKEN
