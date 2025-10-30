@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
-import LegalFooter from "@/components/layout/LegalFooter";
+import CompactFooter from "@/components/layout/CompactFooter";
 import {
   Card,
   CardContent,
@@ -527,7 +527,7 @@ export default function PricingCalculatorPage({
         </div>
       </main>
       <MinEducFooter />
-      <LegalFooter />
+      <CompactFooter />
     </div>
   );
 }

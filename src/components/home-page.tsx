@@ -16,12 +16,8 @@ import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
 import { layout, typography } from "@/lib/responsive-utils";
 import { useLanguage } from "@/components/language/LanguageContext";
 
-// ⚡ Performance: Dynamic components for PPR streaming
-import {
-  DynamicPersonalization,
-  PersonalizationSkeleton,
-} from "@/components/home/DynamicPersonalization";
 import MinEducFooter from "@/components/layout/MinEducFooter";
+import HomepageFooter from "@/components/layout/SuperFooter";
 
 export function HomePage() {
   // Layout and responsive state
@@ -211,12 +207,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ⚡ Performance: PPR Dynamic Content - streams in after static shell loads */}
-      <Suspense fallback={<PersonalizationSkeleton />}>
-        <DynamicPersonalization />
-      </Suspense>
-
       <MinEducFooter />
+      <HomepageFooter />
 
       {/* Desktop Toggle - only shows on mobile */}
       <DesktopToggle />

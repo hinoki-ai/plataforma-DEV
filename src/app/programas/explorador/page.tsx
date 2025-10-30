@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
-import LegalFooter from "@/components/layout/LegalFooter";
+import CompactFooter from "@/components/layout/CompactFooter";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { EducationalSystemExplorer } from "@/components/programs/EducationalSystemExplorer";
 import { Badge } from "@/components/ui/badge";
@@ -123,7 +123,7 @@ export default function ProgramasExplorerPage() {
         </main>
 
         <MinEducFooter />
-        <LegalFooter />
+        <CompactFooter />
       </div>
     </div>
   );

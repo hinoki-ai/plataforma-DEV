@@ -31,7 +31,7 @@ export default function Header() {
   const publicNavLinks = [
     { href: "/programas", label: t("nav.programs", "navigation") },
     { href: "/planes", label: t("nav.plans", "navigation") },
-    { href: "/cpma", label: t("nav.cfmg", "navigation") },
+    { href: "/cpma", label: t("cpma.title", "common") },
     { href: "/contacto", label: t("nav.contact", "navigation") },
   ];
 
