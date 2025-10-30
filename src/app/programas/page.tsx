@@ -259,16 +259,17 @@ const impactHighlightsKey = "programas.hardcoded.impact_highlights";
 
 // Helper function to safely get translation arrays
 const getTranslationArray = (t: any, key: string): string[] => {
-  const result = t(key);
-  if (Array.isArray(result)) {
-    return result;
-  }
-  // Fallback: try to access the translation directly from the hardcoded section
-  // This handles the case where the translation system doesn't work during SSG
   try {
-    const keys = key.split('.');
-    let value: any = t('programas.hardcoded');
-    for (const k of keys.slice(2)) { // Skip 'programas.hardcoded'
+    const result = t(key);
+    if (Array.isArray(result)) {
+      return result;
+    }
+    // Fallback: try to access the translation directly from the hardcoded section
+    // This handles the case where the translation system doesn't work during SSG
+    const keys = key.split(".");
+    let value: any = t("programas.hardcoded");
+    for (const k of keys.slice(2)) {
+      // Skip 'programas.hardcoded'
       value = value?.[k];
     }
     return Array.isArray(value) ? value : [];
@@ -406,7 +407,7 @@ export default function ProgramasPage() {
                         )}
                       </div>
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        {(t(modulesKey) as unknown as string[]).map(
+                        {getTranslationArray(t, modulesKey).map(
                           (item: string) => (
                             <li key={item} className="flex gap-2 text-left">
                               <span
@@ -473,7 +474,7 @@ export default function ProgramasPage() {
                     </CardHeader>
                     <CardContent className="space-y-3 flex-1">
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        {(t(modulesKey) as unknown as string[]).map(
+                        {getTranslationArray(t, modulesKey).map(
                           (item: string) => (
                             <li key={item} className="flex gap-2">
                               <span
@@ -612,7 +613,7 @@ export default function ProgramasPage() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3 text-sm text-muted-foreground">
-                      {(t(bulletsKey) as unknown as string[]).map(
+                      {getTranslationArray(t, bulletsKey).map(
                         (item: string) => (
                           <div key={item} className="flex gap-2">
                             <span
@@ -647,7 +648,7 @@ export default function ProgramasPage() {
                   {t("programas.impact.description")}
                 </p>
                 <ul className="space-y-3 text-sm text-muted-foreground">
-                  {(t(impactHighlightsKey) as unknown as string[]).map(
+                  {getTranslationArray(t, impactHighlightsKey).map(
                     (item: string) => (
                       <li key={item} className="flex gap-2">
                         <span
