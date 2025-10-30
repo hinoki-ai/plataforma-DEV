@@ -364,10 +364,16 @@ export default function CPMAPage() {
                   >
                     {t("cfmg.title", "common")}
                   </h1>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out">
+                    {t("cpma.signup_title", "common")}
+                  </p>
                 </div>
               </motion.div>
             </motion.div>
           </div>
+          <p className="text-lg text-center text-foreground/90 mb-12">
+            {t("cpma.signup_subtitle", "common")}
+          </p>
         </div>
       </section>
 
@@ -378,10 +384,7 @@ export default function CPMAPage() {
         }`}
       >
         <div className={`${layout.container(isDesktopForced)}`}>
-          <SignupStyleSection
-            title={t("cpma.signup_title", "common")}
-            subtitle={t("cpma.signup_subtitle", "common")}
-          >
+          <SignupStyleSection>
             <div className="max-w-4xl mx-auto">
               <UnifiedSignupForm />
             </div>
