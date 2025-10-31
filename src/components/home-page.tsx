@@ -1,7 +1,7 @@
 // ⚡ Performance: PPR-optimized HomePage with static shell and dynamic components
 "use client";
 
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef, useLayoutEffect } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DesktopToggle } from "@/components/ui/desktop-toggle";
 import Header from "@/components/layout/Header";
 import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
 import { layout, typography } from "@/lib/responsive-utils";
@@ -37,7 +36,7 @@ export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
   const { t } = useDivineParsing(["common"]);
-  const [mounted] = useState(true);
+  const [mounted, setMounted] = useState(true);
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -94,7 +93,8 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-responsive-desktop bg-home-page">
       {/* Mobile portrait video background */}
-      {!videoError && (
+      {/* Only render video after client-side hydration to prevent hydration mismatches */}
+      {mounted && !videoError && (
         <video
           ref={videoRef}
           className="mobile-portrait-video"
@@ -292,9 +292,6 @@ export function HomePage() {
 
       <MinEducFooter />
       <HomepageFooter />
-
-      {/* Desktop Toggle - only shows on mobile */}
-      <DesktopToggle />
     </div>
   );
 }

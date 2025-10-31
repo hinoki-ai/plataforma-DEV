@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { LanguageToggle } from "@/components/language/LanguageToggle";
-import { DesktopToggle } from "@/components/ui/desktop-toggle";
 import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import { navigation, layout } from "@/lib/responsive-utils";
 import { useTheme } from "next-themes";
@@ -332,13 +331,6 @@ export default function Navigation() {
           </div>
         )}
       </div>
-
-      {/* Add Desktop Toggle for authenticated routes */}
-      {pathname.startsWith("/admin") ||
-      pathname.startsWith("/profesor") ||
-      pathname.startsWith("/parent") ? (
-        <DesktopToggle />
-      ) : null}
 
       {/* 🕊️ DIVINE PARSING ORACLE - Development debug info */}
       {process.env.NODE_ENV === "development" && translationStats && (

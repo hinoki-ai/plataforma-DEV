@@ -468,8 +468,8 @@ export default function LoginButton() {
               <span>
                 {t(
                   isHydrated && theme === "dark"
-                    ? "appearance.theme_dark"
-                    : "appearance.theme_light",
+                    ? "appearance.theme_light"
+                    : "appearance.theme_dark",
                   "common",
                 )}
               </span>
@@ -482,7 +482,7 @@ export default function LoginButton() {
               <Globe className="mr-2 h-4 w-4" />
               <span>
                 {t(
-                  language === "es" ? "language.spanish" : "language.english",
+                  language === "es" ? "language.english" : "language.spanish",
                   "language",
                 )}
               </span>

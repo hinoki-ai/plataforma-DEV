@@ -13,6 +13,9 @@ import UnifiedAuthButton from "./UnifiedAuthButton";
 import ProfileCompletionBadge from "./ProfileCompletionBadge";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { SettingsHamburger } from "@/components/ui/settings-hamburger";
+import { LanguageToggle } from "@/components/language/LanguageToggle";
+import SkyToggle from "@/components/ui/sky-toggle";
+import SoundToggle from "@/components/ui/sound-toggle";
 import { useHydrationSafe } from "./hooks/useHydrationSafe";
 
 export default function Header() {
@@ -158,15 +161,15 @@ export default function Header() {
             <>
               {/* Backdrop */}
               <div
-                className="md:hidden fixed inset-0 top-[57px] bg-black/50 z-30"
+                className="md:hidden fixed inset-0 bg-black/50 z-40"
                 onClick={() => setIsMobileMenuOpen(false)}
               />
 
               {/* Menu Panel */}
-              <div className="md:hidden fixed inset-x-0 top-[57px] bottom-0 bg-background z-40 overflow-y-auto">
-                <div className="flex flex-col h-full">
-                  {/* Logo Section */}
-                  <div className="px-6 py-6 border-b border-border">
+              <div className="md:hidden fixed left-0 right-0 top-0 w-full bg-background z-50 overflow-y-auto shadow-xl max-h-[90vh]">
+                <div className="flex flex-col">
+                  {/* Header with Close Button */}
+                  <div className="bg-background border-b border-border z-10 px-4 py-4 flex items-center justify-between backdrop-blur supports-backdrop-filter:bg-background/95">
                     <Link
                       href="/"
                       className="flex items-center space-x-2"
@@ -176,17 +179,29 @@ export default function Header() {
                         {t("school.name")}
                       </span>
                     </Link>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-10 w-10"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      aria-label={
+                        t("nav.close.menu", "navigation") || "Close menu"
+                      }
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
                   </div>
 
                   {/* Navigation Links Section */}
-                  <div className="flex-1 px-4 py-6">
-                    <div className="flex flex-col space-y-2">
-                      {publicNavLinks.map((link) => (
+                  <div className="px-4 py-6">
+                    <nav className="grid grid-cols-2 gap-2">
+                      {/* Row 1: First 2 nav links */}
+                      {publicNavLinks.slice(0, 2).map((link) => (
                         <Button
                           key={link.href}
                           variant="ghost"
                           size="lg"
-                          className="justify-start text-base font-medium hover:bg-muted/50 transition-colors"
+                          className="justify-start text-base font-medium hover:bg-muted/50 transition-colors w-full h-auto py-3"
                           asChild
                         >
                           <Link
@@ -197,24 +212,57 @@ export default function Header() {
                           </Link>
                         </Button>
                       ))}
-                    </div>
-                  </div>
 
-                  {/* Settings Controls Section - Only when not authenticated */}
-                  {!isAuthenticatedRoute && (
-                    <div className="px-6 py-6 border-t border-border">
-                      <p className="text-sm text-muted-foreground mb-4 text-center">
-                        {t("nav.configuration", "navigation")}
-                      </p>
-                      <div className="flex items-center justify-center">
-                        <SettingsHamburger size="md" />
+                      {/* Row 2: Next 2 nav links */}
+                      {publicNavLinks.slice(2, 4).map((link) => (
+                        <Button
+                          key={link.href}
+                          variant="ghost"
+                          size="lg"
+                          className="justify-start text-base font-medium hover:bg-muted/50 transition-colors w-full h-auto py-3"
+                          asChild
+                        >
+                          <Link
+                            href={link.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {link.label}
+                          </Link>
+                        </Button>
+                      ))}
+
+                      {/* Row 3: Portal Escolar | Language Toggle */}
+                      <Button
+                        variant="ghost"
+                        size="lg"
+                        className="justify-start text-base font-medium hover:bg-muted/50 transition-colors w-full h-auto py-3"
+                        asChild
+                      >
+                        <Link
+                          href="/login"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {t("nav.school.portal", "navigation")}
+                        </Link>
+                      </Button>
+                      <div className="w-full h-auto py-3 flex items-center justify-start pl-[30px]">
+                        <div className="scale-[1.2]">
+                          <LanguageToggle size="sm" />
+                        </div>
                       </div>
-                    </div>
-                  )}
 
-                  {/* Authentication Section */}
-                  <div className="px-6 py-6 border-t border-border">
-                    <UnifiedAuthButton />
+                      {/* Row 4: Sky Toggle | Sound Toggle */}
+                      <div className="w-full h-auto py-3 flex items-center justify-start pl-[30px]">
+                        <div className="scale-[1.2]">
+                          <SkyToggle size="sm" />
+                        </div>
+                      </div>
+                      <div className="w-full h-auto py-3 flex items-center justify-start pl-[30px]">
+                        <div className="scale-[1.2]">
+                          <SoundToggle size="sm" />
+                        </div>
+                      </div>
+                    </nav>
                   </div>
                 </div>
               </div>
