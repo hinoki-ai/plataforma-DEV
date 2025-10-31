@@ -125,6 +125,9 @@ const nextConfig: NextConfig = {
   // Skip trailing slash redirect for better compatibility
   skipTrailingSlashRedirect: true,
 
+  // Proxy configuration (migrated from middleware)
+  skipProxyUrlNormalize: true,
+
   // Generate buildId to help with debugging
   generateBuildId: async () => {
     return `build-${Date.now()}`;

@@ -108,7 +108,12 @@ export default function UnifiedAuthButton() {
   const { isAuthRoute } = useAppContext();
   const { t } = useDivineParsing(["common"]);
 
-  const isAuthenticated = !!session?.user && status === "authenticated";
+  // More robust authentication check - consistent with ContextProvider
+  // Only consider authenticated if we have a complete session with user data
+  const isAuthenticated =
+    status === "authenticated" &&
+    Boolean(session?.user) &&
+    Boolean(session?.user?.id);
   const isAuthenticatedRoute = isHydrated && isAuthRoute;
 
   const handleLogout = async () => {
@@ -148,7 +153,21 @@ export default function UnifiedAuthButton() {
   }
 
   // PUBLIC STATE: Portal Escolar + Settings Gear
+  // Only show when explicitly unauthenticated or during loading with no session
   if (!isAuthenticated) {
+    // Debug: Log when public state is shown
+    console.warn(
+      "🔐 [UnifiedAuthButton] Showing PUBLIC state - Auth check failed:",
+      {
+        status,
+        hasSession: !!session,
+        hasUser: !!session?.user,
+        hasUserId: !!session?.user?.id,
+        userRole: session?.user?.role,
+        isAuthenticated,
+        timestamp: new Date().toISOString(),
+      },
+    );
     return (
       <div className="flex items-center space-x-2">
         {/* Portal Escolar Button */}
@@ -197,6 +216,12 @@ export default function UnifiedAuthButton() {
   }
 
   // AUTHENTICATED STATE: User Profile + Advanced Settings Gear
+  // TypeScript guard: we know session exists here because isAuthenticated check passed
+  if (!session?.user) {
+    // This should never happen, but TypeScript needs it
+    return null;
+  }
+
   const RoleIcon = roleData.icon;
 
   return (
