@@ -327,12 +327,12 @@ export default function ProgramasPage() {
                     <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out md:text-5xl">
                       {t("programas.hero.title")}
                     </h1>
+                    <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out md:text-xl">
+                      {t("programas.hero.description")}
+                    </p>
                   </div>
                 </motion.div>
               </motion.div>
-              <p className="text-lg md:text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed">
-                {t("programas.hero.description")}
-              </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg">

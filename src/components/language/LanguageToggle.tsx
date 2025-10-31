@@ -131,16 +131,6 @@ const LanguageToggle = memo(
                 </div>
               </div>
 
-              {/* Language Code Display */}
-              <div className="language-switch__text">
-                <span className="language-switch__code language-switch__code--es">
-                  ES
-                </span>
-                <span className="language-switch__code language-switch__code--en">
-                  EN
-                </span>
-              </div>
-
               {/* Circle Container with Flag */}
               <div className="language-switch__circle-container">
                 <div className="language-switch__flag-container">
@@ -257,34 +247,6 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     transform: translateX(0);
   }
 
-  .language-switch__text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 0 0.5em;
-    z-index: 1;
-    font-weight: 600;
-    color: var(--text-color);
-    text-shadow: 0 0.062em 0.125em rgba(0, 0, 0, 0.3);
-  }
-
-  .language-switch__code {
-    font-size: 0.9em;
-    opacity: 0.8;
-    transition: var(--transition);
-    letter-spacing: 0.05em;
-  }
-
-  .language-switch__code--es {
-    transform: translateX(0);
-  }
-
-  .language-switch__code--en {
-    transform: translateX(0);
-  }
-
   .language-switch__circle-container {
     width: var(--circle-container-diameter);
     height: var(--circle-container-diameter);
@@ -383,18 +345,6 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     filter: grayscale(0);
   }
 
-  .language-switch__checkbox:checked
-    + .language-switch__container
-    .language-switch__code--es {
-    opacity: 0.4;
-  }
-
-  .language-switch__checkbox:checked
-    + .language-switch__container
-    .language-switch__code--en {
-    opacity: 1;
-  }
-
   /* Spanish State (unchecked) */
   .language-switch__checkbox:not(:checked)
     + .language-switch__container
@@ -408,18 +358,6 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     .language-switch__flag--en {
     opacity: 0.2;
     filter: grayscale(0.8);
-  }
-
-  .language-switch__checkbox:not(:checked)
-    + .language-switch__container
-    .language-switch__code--es {
-    opacity: 1;
-  }
-
-  .language-switch__checkbox:not(:checked)
-    + .language-switch__container
-    .language-switch__code--en {
-    opacity: 0.4;
   }
 
   /* Hover Effects */

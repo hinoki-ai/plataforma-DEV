@@ -6,10 +6,8 @@ import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { EducationalSystemExplorer } from "@/components/programs/EducationalSystemExplorer";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export default function ProgramasExplorerPage() {
   const { t } = useDivineParsing(["common", "programas"]);
@@ -32,11 +30,6 @@ export default function ProgramasExplorerPage() {
             <section className="text-center space-y-8 relative">
               <div className="absolute inset-0 bg-linear-to-r from-blue-600/5 via-purple-600/5 to-indigo-600/5 rounded-3xl blur-3xl -z-10"></div>
 
-              <div className="inline-flex items-center gap-2 bg-linear-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-medium shadow-lg">
-                <Sparkles className="h-4 w-4" />
-                {t("programas.explorer.title")}
-              </div>
-
               <div className="space-y-4">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-linear-to-r from-slate-900 via-blue-900 to-indigo-900 dark:from-white dark:via-blue-100 dark:to-indigo-100 bg-clip-text text-transparent leading-tight">
                   {t("programas.explorer.page_heading")}
@@ -44,20 +37,6 @@ export default function ProgramasExplorerPage() {
                 <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto leading-relaxed font-light">
                   {t("programas.explorer.page_subheading")}
                 </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:shadow-lg transition-all duration-300 group"
-                >
-                  <Link href="/programas" className="flex items-center gap-2">
-                    <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-200" />
-                    {t("programas.explorer.back")}
-                  </Link>
-                </Button>
               </div>
             </section>
 

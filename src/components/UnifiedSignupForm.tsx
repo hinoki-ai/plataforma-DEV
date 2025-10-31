@@ -1662,10 +1662,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-8 px-3 sm:px-6">
-      <div className="flex flex-col items-center gap-6 text-center"></div>
-
-      <Card className="glass-panel mx-auto w-full max-w-2xl text-slate-900 dark:text-slate-100">
+    <div className="w-full max-w-5xl mx-auto px-3 sm:px-6 h-full flex flex-col">
+      <Card className="glass-panel mx-auto w-full max-w-2xl text-slate-900 dark:text-slate-100 grow">
         <CardHeader>
           <div className="text-center">
             <p className="text-sm font-medium text-primary">
@@ -1677,13 +1675,16 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           </div>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="grow flex flex-col">
           <StepIndicator />
 
-          <form onSubmit={handleSubmit} className="space-y-6 mt-6">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 mt-6 grow flex flex-col"
+          >
             {renderStep()}
 
-            <div className="flex justify-between items-center pt-6 border-t border-border">
+            <div className="flex justify-between items-center pt-6 border-t border-border mt-auto">
               <Button
                 type="button"
                 onClick={prevStep}

@@ -83,12 +83,12 @@ export default function PreciosPage() {
                   >
                     {tp("planes.hero.title")}
                   </h1>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out md:text-xl">
+                    {tp("planes.hero.subtitle")}
+                  </p>
                 </div>
               </motion.div>
             </motion.div>
-            <p className="text-xl text-muted-foreground mb-6">
-              {tp("planes.hero.subtitle")}
-            </p>
 
             {/* Billing Cycle Toggle */}
             <div className="flex justify-center gap-2 mb-4">
@@ -120,7 +120,7 @@ export default function PreciosPage() {
                 </span>
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-700 dark:text-white">
               {tp("planes.billing.billing_info")}
             </p>
           </div>

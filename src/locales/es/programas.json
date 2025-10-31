@@ -1,4 +1,6 @@
 {
+  "request_presentation": "Solicitar presentación",
+  "view_specs": "Ver especificaciones",
   "hero": {
     "title": "Programas educativos basados en datos reales y colaboración",
     "description": "Activamos experiencias formativas integrales con módulos de gestión, planificación y comunicación que conectan a administración, docentes y familias.",
@@ -54,6 +56,60 @@
     "description": "Agenda una conversación para mapear necesidades y definir el plan de roll-out por niveles y roles.",
     "schedule_meeting": "Agendar reunión",
     "download_specs": "Descargar ficha de programas"
+  },
+  "schedule_meeting": "Agendar reunión",
+  "view_specs": "Ver especificaciones",
+  "explorer": {
+    "cta": "Explorar programas",
+    "title": "🎓 Explorador Integral del Sistema Educativo",
+    "page_heading": "Explora nuestros programas educativos",
+    "page_subheading": "Descubre cómo nuestra plataforma se adapta a diferentes niveles educativos y tipos institucionales con soluciones integradas.",
+    "back": "Volver a Programas",
+    "contact_title": "¿Listo para transformar tu institución?",
+    "contact_subtitle": "Hablemos sobre cómo podemos adaptar nuestra plataforma educativa integral a tus necesidades específicas.",
+    "select_institution_type": "Seleccionar Tipo de Institución",
+    "explore_adaptation": "Explora cómo la plataforma se adapta a diferentes contextos educativos",
+    "levels_text": "niveles",
+    "institution": "Institución",
+    "description": "Descripción",
+    "levels": "Niveles",
+    "subjects": "Asignaturas",
+    "grades": "cursos",
+    "enabled_features": "Características Habilitadas",
+    "system_features": "Características del Sistema",
+    "total": "total",
+    "more": "más",
+    "active": "Activo",
+    "overview": "Resumen",
+    "navigation": "Navegación",
+    "dashboard": "Panel",
+    "adapted_navigation": "Navegación Adaptada",
+    "navigation_adapts": "La navegación se adapta automáticamente según el tipo de institución seleccionado, mostrando solo las opciones relevantes para cada nivel educativo.",
+    "interactive_dashboard": "Panel Interactivo",
+    "dashboard_preview": "Vista previa del panel adaptado para",
+    "implementation_status": "Estado de Implementación",
+    "system_completed": "Sistema Completado",
+    "system_completed_description": "Nuestro sistema educativo integral está completamente implementado y listo para adaptarse a cualquier tipo de institución educativa en Chile.",
+    "implementation_items": {
+      "educational_system": "Sistema Educativo",
+      "isced_levels": "Niveles ISCED",
+      "database": "Base de Datos",
+      "admin_interface": "Interface Admin",
+      "adaptive_navigation": "Navegación Adaptiva",
+      "specific_dashboard": "Dashboard Específico",
+      "apis_hooks": "APIs y Hooks",
+      "migration": "Migración BD",
+      "completed": "Completado",
+      "ready": "Listo"
+    },
+    "feature_names": {
+      "parent_meetings": "Reuniones de apoderados",
+      "academic_planning": "Planificación académica",
+      "grading_system": "Sistema de calificaciones",
+      "daycare_features": "Características de guardería",
+      "university_features": "Características universitarias",
+      "research_projects": "Proyectos de investigación"
+    }
   },
   "hardcoded": {
     "hero_highlights": {

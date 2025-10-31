@@ -1,4 +1,6 @@
 {
+  "request_presentation": "Request presentation",
+  "view_specs": "View specifications",
   "hero": {
     "title": "Educational programs based on real data and collaboration",
     "description": "We activate comprehensive educational experiences with management, planning and communication modules that connect administration, teachers and families.",
@@ -55,7 +57,10 @@
     "schedule_meeting": "Schedule meeting",
     "download_specs": "Download program specs"
   },
+  "schedule_meeting": "Schedule meeting",
+  "view_specs": "View specifications",
   "explorer": {
+    "cta": "Explore programs",
     "title": "🎓 Comprehensive Educational System Explorer",
     "page_heading": "Explore our educational programs",
     "page_subheading": "Discover how our platform adapts to different educational levels and institutional types with integrated solutions.",
@@ -65,11 +70,46 @@
     "select_institution_type": "Select Institution Type",
     "explore_adaptation": "Explore how the platform adapts to different educational contexts",
     "levels_text": "levels",
+    "institution": "Institution",
+    "description": "Description",
+    "levels": "Levels",
+    "subjects": "Subjects",
+    "grades": "grades",
     "enabled_features": "Enabled Features",
+    "system_features": "System Features",
+    "total": "total",
+    "more": "more",
+    "active": "Active",
     "overview": "Overview",
     "navigation": "Navigation",
     "dashboard": "Dashboard",
-    "adapted_navigation": "Adapted Navigation"
+    "adapted_navigation": "Adapted Navigation",
+    "navigation_adapts": "Navigation automatically adapts based on the selected institution type, showing only relevant options for each educational level.",
+    "interactive_dashboard": "Interactive Dashboard",
+    "dashboard_preview": "Preview of the adapted dashboard for",
+    "implementation_status": "Implementation Status",
+    "system_completed": "System Completed",
+    "system_completed_description": "Our comprehensive educational system is fully implemented and ready to adapt to any type of educational institution in Chile.",
+    "implementation_items": {
+      "educational_system": "Educational System",
+      "isced_levels": "ISCED Levels",
+      "database": "Database",
+      "admin_interface": "Admin Interface",
+      "adaptive_navigation": "Adaptive Navigation",
+      "specific_dashboard": "Specific Dashboard",
+      "apis_hooks": "APIs and Hooks",
+      "migration": "Database Migration",
+      "completed": "Completed",
+      "ready": "Ready"
+    },
+    "feature_names": {
+      "parent_meetings": "Parent meetings",
+      "academic_planning": "Academic planning",
+      "grading_system": "Grading system",
+      "daycare_features": "Daycare features",
+      "university_features": "University features",
+      "research_projects": "Research projects"
+    }
   },
   "hardcoded": {
     "hero_highlights": {
