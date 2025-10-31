@@ -1,36 +1,37 @@
-import nodemailer, {
-  type SendMailOptions,
-  type SentMessageInfo,
-  type Transporter,
-} from "nodemailer";
+import { Resend } from "resend";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 
+// Development logging for Resend
+const isDevelopment = process.env.NODE_ENV === "development";
+
 // Email configuration
-const createTransport = () => {
+const createResendClient = () => {
   // For development, we'll use console logging instead of actual email sending
-  if (process.env.NODE_ENV === "development") {
-    return nodemailer.createTransport({
-      streamTransport: true,
-      newline: "unix",
-      buffer: true,
-    });
+  if (isDevelopment) {
+    return {
+      emails: {
+        send: async (options: any) => {
+          console.info("📨 Email preview (development)", {
+            from: options.from,
+            to: options.to,
+            subject: options.subject,
+            html: options.html?.substring(0, 200) + "...",
+          });
+          return { data: { id: "dev-" + Date.now() } };
+        }
+      }
+    };
   }
 
-  // Production email configuration
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_SERVER_HOST,
-    port: parseInt(process.env.EMAIL_SERVER_PORT || "587"),
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: process.env.EMAIL_SERVER_USER,
-      pass: process.env.EMAIL_SERVER_PASSWORD,
-    },
-  });
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY environment variable is required");
+  }
+  return new Resend(apiKey);
 };
 
-const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || "astral@gmail.com";
-const isDevelopment = process.env.NODE_ENV === "development";
+const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || "preuastral@gmail.com";
 
 function parseRecipientList(value?: string | null): string[] {
   if (!value) {
@@ -76,36 +77,6 @@ function getContactRecipients(): string[] {
   return [...recipients];
 }
 
-function logDevelopmentPreview(info: SentMessageInfo) {
-  if (!isDevelopment) {
-    return;
-  }
-
-  const rawMessage = (info as any)?.message;
-
-  if (typeof rawMessage === "string") {
-    console.info("📨 Email preview (development)\n%s", rawMessage);
-    return;
-  }
-
-  if (rawMessage && Buffer.isBuffer(rawMessage)) {
-    console.info("📨 Email preview (development)\n%s", rawMessage.toString());
-    return;
-  }
-
-  console.info("📨 Email dispatched (development)", {
-    messageId: info.messageId,
-    envelope: info.envelope,
-  });
-}
-
-async function dispatchMail(
-  transporter: Transporter,
-  mailOptions: SendMailOptions,
-): Promise<void> {
-  const info = await transporter.sendMail(mailOptions);
-  logDevelopmentPreview(info);
-}
 
 interface SendConfirmationEmailParams {
   to: string;
@@ -119,21 +90,20 @@ export async function sendConfirmationEmail({
   verificationToken,
 }: SendConfirmationEmailParams): Promise<boolean> {
   try {
-    const transporter = createTransport();
+    const resend = createResendClient();
 
     const verificationUrl = `${process.env.APP_URL}/cpma/verificar?token=${verificationToken}`;
 
-    const mailOptions = {
+    const result = await resend.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to,
       subject:
         "Confirma tu registro - CPMA Centro de Padres, Madres y Apoderados Plataforma Astral",
       html: getConfirmationEmailTemplate({ name, verificationUrl }),
       text: getConfirmationEmailText({ name, verificationUrl }),
-    };
+    });
 
-    await dispatchMail(transporter, mailOptions);
-    return true;
+    return result.data?.id ? true : false;
   } catch (error) {
     console.error("Error sending confirmation email:", error);
     return false;
@@ -150,21 +120,20 @@ export async function sendWelcomeEmail({
   name,
 }: SendWelcomeEmailParams): Promise<boolean> {
   try {
-    const transporter = createTransport();
+    const resend = createResendClient();
 
     const dashboardUrl = `${process.env.APP_URL}/cpma/dashboard`;
 
-    const mailOptions = {
+    const result = await resend.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to,
       subject:
         "¡Bienvenido al CPMA Centro de Padres, Madres y Apoderados Plataforma Astral!",
       html: getWelcomeEmailTemplate({ name, dashboardUrl }),
       text: getWelcomeEmailText({ name, dashboardUrl }),
-    };
+    });
 
-    await dispatchMail(transporter, mailOptions);
-    return true;
+    return result.data?.id ? true : false;
   } catch (error) {
     console.error("Error sending welcome email:", error);
     return false;
@@ -183,17 +152,17 @@ export async function sendContactEmail(
   payload: ContactEmailPayload,
 ): Promise<boolean> {
   try {
-    const transporter = createTransport();
+    const resend = createResendClient();
     const recipients = getContactRecipients();
     const submittedAt = new Date();
 
     const normalizedSubject = payload.subject.replace(/\s+/g, " ").trim();
     const fullName = `${payload.firstName} ${payload.lastName}`.trim();
 
-    const mailOptions: SendMailOptions = {
+    const result = await resend.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to: recipients,
-      replyTo: payload.email,
+      reply_to: payload.email,
       subject: `[Contacto] ${normalizedSubject}`,
       html: getContactEmailTemplate({
         ...payload,
@@ -205,10 +174,9 @@ export async function sendContactEmail(
         fullName,
         submittedAt,
       }),
-    };
+    });
 
-    await dispatchMail(transporter, mailOptions);
-    return true;
+    return result.data?.id ? true : false;
   } catch (error) {
     console.error("Error sending contact email:", error);
     return false;
