@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ContactForm } from "@/components/contact/ContactForm";
 import { Button } from "@/components/ui/button";
 import {
   Check,
@@ -75,7 +76,6 @@ export default function PreciosPage() {
   const { isDesktopForced } = useDesktopToggle();
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");
-  const [showContactForm, setShowContactForm] = useState(false);
   const [mounted] = useState(true);
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
 
@@ -570,153 +570,14 @@ export default function PreciosPage() {
           </div>
 
           {/* Contact Form Section */}
-          {showContactForm && (
-            <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
-              <div className="max-w-2xl mx-auto">
-                <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-                  {tp("planes.contact.title")}
-                </h2>
-                <form className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        htmlFor="nombre"
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        {tp("planes.contact.form.full_name")}
-                      </label>
-                      <input
-                        id="nombre"
-                        type="text"
-                        required
-                        className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        {tp("planes.contact.form.email")}
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        required
-                        className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        htmlFor="establecimiento"
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        {tp("planes.contact.form.institution")}
-                      </label>
-                      <input
-                        id="establecimiento"
-                        type="text"
-                        required
-                        className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="comuna"
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        {tp("planes.contact.form.commune")}
-                      </label>
-                      <input
-                        id="comuna"
-                        type="text"
-                        required
-                        className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        htmlFor="matricula"
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        {tp("planes.contact.form.students")}
-                      </label>
-                      <input
-                        id="matricula"
-                        type="number"
-                        required
-                        min="1"
-                        className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="telefono"
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        {tp("planes.contact.form.phone")}
-                      </label>
-                      <input
-                        id="telefono"
-                        type="tel"
-                        required
-                        placeholder="+56 9 xxxx xxxx"
-                        className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="mensaje"
-                      className="block text-sm font-medium text-foreground mb-2"
-                    >
-                      {tp("planes.contact.form.message")}
-                    </label>
-                    <textarea
-                      id="mensaje"
-                      rows={3}
-                      className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground focus:ring-2 focus:ring-primary"
-                    ></textarea>
-                  </div>
-                  <div className="flex gap-4">
-                    <Button type="submit" className="flex-1">
-                      {tp("planes.contact.form.submit")}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="flex items-center gap-2"
-                      onClick={() =>
-                        window.open("https://wa.me/56912345678", "_blank")
-                      }
-                    >
-                      <Phone className="w-4 h-4" />
-                      {tp("planes.contact.form.whatsapp")}
-                    </Button>
-                  </div>
-                </form>
-                <p className="text-xs text-muted-foreground mt-4 text-center">
-                  {tp("planes.contact.form.privacy")}
-                </p>
-              </div>
+          <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
+                {tp("planes.contact.title")}
+              </h2>
+              <ContactForm />
             </div>
-          )}
-
-          {!showContactForm && (
-            <div className="text-center mb-12">
-              <Button
-                size="lg"
-                onClick={() => setShowContactForm(true)}
-                className="text-lg px-8"
-              >
-                {tp("planes.contact.contact_sales")}
-              </Button>
-            </div>
-          )}
+          </div>
 
           {/* Security & Compliance Section */}
           <div className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl p-8 mb-12">

@@ -106,7 +106,7 @@ export default function ContactoContent() {
                       </h4>
                       <div className="ml-6">
                         <a
-                          href="mailto:astral@gmail.com"
+                          href="mailto:preuastral@gmail.com"
                           className="text-primary hover:underline"
                         >
                           {t("info.email.address", "contacto")}
