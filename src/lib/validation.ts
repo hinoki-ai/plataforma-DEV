@@ -1,5 +1,6 @@
 import { z } from "zod";
 import DOMPurify from "isomorphic-dompurify";
+import { validateRUT } from "./rut-utils";
 
 // Common validation patterns
 const SAFE_TEXT_REGEX = /^[a-zA-Z0-9\s\-_.,()\u00C0-\u017F]+$/; // Includes Spanish characters
@@ -477,6 +478,22 @@ export function validateDataAccess(
 }
 
 /**
+ * RUT validation using módulo 11 algorithm
+ */
+export const rutValidation = z
+  .string()
+  .min(1, "El RUT es requerido")
+  .refine((rut) => {
+    const result = validateRUT(rut);
+    return result.valid;
+  }, "RUT inválido")
+  .transform((rut) => {
+    // Normalize and format RUT for storage
+    const result = validateRUT(rut);
+    return result.normalized || rut;
+  });
+
+/**
  * Common validation rules that can be shared across schemas
  */
 export const commonValidationRules = {
@@ -486,6 +503,7 @@ export const commonValidationRules = {
     .string()
     .regex(/^[0-9+\-\s()]+$/, "Teléfono no válido")
     .optional(),
+  rut: rutValidation,
   name: z
     .string()
     .min(2, "Nombre muy corto")

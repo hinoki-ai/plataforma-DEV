@@ -1155,6 +1155,7 @@
   "validation.email_invalid": "El email no es válido",
   "validation.phone_required": "El teléfono es requerido",
   "validation.rut_required": "El RUT es requerido",
+  "validation.rut_invalid": "El RUT no es válido",
   "validation.institution_required": "La institución es requerida",
   "validation.child_name_required": "El nombre del estudiante es requerido",
   "validation.child_rut_required": "El RUT del estudiante es requerido",

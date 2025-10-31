@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
@@ -12,8 +13,31 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, X, Shield, Server, Lock, Phone } from "lucide-react";
-import { useState, useEffect } from "react";
+import {
+  Check,
+  X,
+  Shield,
+  Server,
+  Lock,
+  Phone,
+  Users,
+  BookOpen,
+  HardDrive,
+  Video,
+  Zap,
+  BarChart3,
+  Database,
+  Code,
+  Headphones,
+  Clock,
+  TrendingUp,
+  Info,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  CheckCircle2,
+} from "lucide-react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, Variants } from "motion/react";
 import { useDesktopToggle } from "@/lib/hooks/useDesktopToggle";
@@ -53,8 +77,64 @@ export default function PreciosPage() {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");
   const [showContactForm, setShowContactForm] = useState(false);
   const [mounted] = useState(true);
+  const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
 
   const getDiscount = (cycle: BillingCycle) => billingCycleDiscount[cycle];
+
+  const togglePlanExpansion = (planId: string) => {
+    setExpandedPlans((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(planId)) {
+        newSet.delete(planId);
+      } else {
+        newSet.add(planId);
+      }
+      return newSet;
+    });
+  };
+
+  const getMonthlyPrice = (
+    pricePerStudent: number,
+    students: number = 1,
+    cycle: BillingCycle,
+  ) => {
+    const total = calculateBillingPrice(pricePerStudent, students, cycle);
+    if (cycle === "semestral") {
+      return total / 6; // 6 months per semester
+    } else if (cycle === "annual") {
+      return total / 12;
+    } else {
+      return total / 24; // biannual = 24 months
+    }
+  };
+
+  const getTotalPrice = (
+    pricePerStudent: number,
+    students: number,
+    cycle: BillingCycle,
+  ) => {
+    return calculateBillingPrice(pricePerStudent, students, cycle);
+  };
+
+  const featureIcons: Record<
+    string,
+    React.ComponentType<{ className?: string }>
+  > = {
+    courses: BookOpen,
+    storage: HardDrive,
+    meetings: Video,
+    users: Users,
+    support: Headphones,
+    sla: Shield,
+    platform: Zap,
+    basicMaterials: BookOpen,
+    academicTracking: BarChart3,
+    training: TrendingUp,
+    advancedReports: BarChart3,
+    integrations: Code,
+    api: Database,
+    dedicatedManager: Users,
+  };
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-planes">
@@ -125,96 +205,309 @@ export default function PreciosPage() {
             </p>
           </div>
 
-          {/* Pricing Cards */}
+          {/* Pricing Cards - Enhanced with Detailed Information */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
-            {plans.map((plan) => (
-              <Card
-                key={plan.id}
-                className="relative backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl flex flex-col h-full"
-              >
-                {plan.badge && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <span
-                      className={`${
-                        plan.badge === "Premium"
-                          ? "bg-linear-to-r from-purple-500 to-pink-500"
-                          : "bg-primary"
-                      } text-white px-3 py-1 rounded-full text-sm font-medium`}
-                    >
-                      {plan.badge}
-                    </span>
-                  </div>
-                )}
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl text-foreground min-h-[4rem] flex items-center justify-center text-center">
-                    {plan.name}
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground text-base">
-                    {plan.description}
-                  </CardDescription>
-                  <div className="pt-4">
-                    <div className="text-3xl font-bold text-primary">
-                      {formatCLP(plan.pricePerStudent)}
+            {plans.map((plan) => {
+              const monthlyPrice = getMonthlyPrice(
+                plan.pricePerStudent,
+                1,
+                billingCycle,
+              );
+              const isExpanded = expandedPlans.has(plan.id);
+
+              return (
+                <Card
+                  key={plan.id}
+                  className="relative backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl flex flex-col h-full hover:shadow-3xl transition-all duration-300"
+                >
+                  {plan.badge && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                      <span
+                        className={`${
+                          plan.badge === "Premium"
+                            ? "bg-gradient-to-r from-purple-500 to-pink-500"
+                            : "bg-primary"
+                        } text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-1`}
+                      >
+                        <Sparkles className="w-3 h-3" />
+                        {plan.badge}
+                      </span>
                     </div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {tp("planes.billing.per_student_per_month")}
-                    </div>
-                    {billingCycle !== "semestral" && (
-                      <div className="text-xs text-green-400 mt-1">
-                        {tp("planes.billing.savings")
-                          .replace(
-                            "{discount}",
-                            (getDiscount(billingCycle) * 100).toString(),
-                          )
-                          .replace(
-                            "{cycle}",
-                            billingCycle === "annual"
-                              ? tp("planes.billing.annual")
-                              : tp("planes.billing.biannual"),
-                          )}
+                  )}
+
+                  <CardHeader className="text-center pb-4">
+                    <CardTitle className="text-2xl font-bold text-foreground min-h-[3rem] flex items-center justify-center text-center">
+                      {plan.name}
+                    </CardTitle>
+                    <CardDescription className="text-muted-foreground text-sm font-medium mt-2">
+                      {plan.description}
+                    </CardDescription>
+
+                    {/* Simple Price Display */}
+                    <div className="pt-6 pb-4 border-b border-border/50">
+                      <div className="text-center">
+                        {billingCycle !== "semestral" ? (
+                          <>
+                            <div className="flex items-center justify-center gap-3 mb-2">
+                              <div className="text-xl font-medium text-muted-foreground line-through">
+                                {formatCLP(plan.pricePerStudent)}
+                              </div>
+                              <div className="text-4xl font-bold text-primary">
+                                {formatCLP(Math.round(monthlyPrice))}
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                              <span className="text-xs font-semibold text-green-500">
+                                Ahorro de{" "}
+                                {(getDiscount(billingCycle) * 100).toFixed(0)}%
+                              </span>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="text-4xl font-bold text-primary mb-2">
+                            {formatCLP(plan.pricePerStudent)}
+                          </div>
+                        )}
+                        <div className="text-xs text-muted-foreground font-medium">
+                          por estudiante/mes
+                        </div>
                       </div>
-                    )}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-2 border-t border-border pt-2">
-                    {tp("planes.billing.example")
-                      .replace(
-                        "{students}",
-                        (plan.maxStudents || "1.500").toString(),
-                      )
-                      .replace(
-                        "{price}",
-                        formatCLP(
-                          calculateBillingPrice(
-                            plan.pricePerStudent,
-                            plan.maxStudents || 1500,
-                            billingCycle,
-                          ),
-                        ),
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="flex-1 flex flex-col px-6">
+                    {/* Key Features List */}
+                    <div className="space-y-3 mb-4">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                        <Zap className="w-4 h-4 text-primary" />
+                        Características Principales
+                      </div>
+                      <ul className="space-y-2.5 text-sm">
+                        {[
+                          {
+                            key: "courses",
+                            label: `${plan.features.courses} cursos/asignaturas`,
+                            icon: BookOpen,
+                          },
+                          {
+                            key: "storage",
+                            label: `${plan.features.storage} almacenamiento`,
+                            icon: HardDrive,
+                          },
+                          {
+                            key: "meetings",
+                            label: `${plan.features.meetings} reuniones virtuales/mes`,
+                            icon: Video,
+                          },
+                          {
+                            key: "users",
+                            label: `${plan.features.users} usuarios administrativos`,
+                            icon: Users,
+                          },
+                          {
+                            key: "support",
+                            label: `Soporte: ${plan.features.support}`,
+                            icon: Headphones,
+                          },
+                          {
+                            key: "sla",
+                            label: `SLA ${plan.features.sla} disponibilidad`,
+                            icon: Shield,
+                          },
+                        ].map((feature) => {
+                          const Icon = feature.icon;
+                          return (
+                            <li
+                              key={feature.key}
+                              className="flex items-start gap-2 text-muted-foreground"
+                            >
+                              <div className="flex items-center gap-2 flex-1">
+                                <Icon className="w-4 h-4 text-primary shrink-0" />
+                                <span>{feature.label}</span>
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+
+                    {/* Expandable Detailed Features */}
+                    <div className="border-t border-border/50 pt-3">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-between text-xs"
+                        onClick={() => togglePlanExpansion(plan.id)}
+                      >
+                        <span className="flex items-center gap-2">
+                          <Info className="w-4 h-4" />
+                          {isExpanded
+                            ? "Ocultar detalles completos"
+                            : "Ver todas las características"}
+                        </span>
+                        {isExpanded ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
+                      </Button>
+
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4 space-y-4"
+                        >
+                          {/* Platform Features */}
+                          <div>
+                            <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
+                              <Zap className="w-4 h-4 text-primary" />
+                              Plataforma
+                            </h4>
+                            <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
+                              <li>✓ Acceso completo a plataforma educativa</li>
+                              <li>✓ Materiales de estudio básicos</li>
+                              <li>✓ Seguimiento académico completo</li>
+                            </ul>
+                          </div>
+
+                          {/* Advanced Features */}
+                          <div>
+                            <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
+                              <TrendingUp className="w-4 h-4 text-primary" />
+                              Características Avanzadas
+                            </h4>
+                            <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
+                              <li>
+                                Capacitación del personal:{" "}
+                                {plan.features.training ? (
+                                  <span className="text-green-500 font-semibold">
+                                    Incluida
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500">
+                                    No incluida
+                                  </span>
+                                )}
+                              </li>
+                              <li>
+                                Reportes avanzados:{" "}
+                                {plan.features.advancedReports ? (
+                                  <span className="text-green-500 font-semibold">
+                                    Disponible
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500">
+                                    No disponible
+                                  </span>
+                                )}
+                              </li>
+                              <li>
+                                Integraciones (SIGE, etc.):{" "}
+                                {plan.features.integrations ? (
+                                  <span className="text-green-500 font-semibold">
+                                    Disponible
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500">
+                                    No disponible
+                                  </span>
+                                )}
+                              </li>
+                              <li>
+                                API y Webhooks:{" "}
+                                {plan.features.api ? (
+                                  <span className="text-green-500 font-semibold">
+                                    Disponible
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500">
+                                    No disponible
+                                  </span>
+                                )}
+                              </li>
+                              <li>
+                                Gerente de cuenta dedicado:{" "}
+                                {plan.features.dedicatedManager ? (
+                                  <span className="text-green-500 font-semibold">
+                                    Incluido
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500">
+                                    No incluido
+                                  </span>
+                                )}
+                              </li>
+                            </ul>
+                          </div>
+
+                          {/* Limits & Capacity */}
+                          <div>
+                            <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
+                              <Database className="w-4 h-4 text-primary" />
+                              Límites y Capacidad
+                            </h4>
+                            <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
+                              <li>
+                                Estudiantes: {plan.minStudents} -{" "}
+                                {plan.maxStudents
+                                  ? `${plan.maxStudents.toLocaleString()}`
+                                  : "Ilimitado"}
+                              </li>
+                              <li>
+                                Usuarios administrativos: {plan.features.users}
+                              </li>
+                              <li>Almacenamiento: {plan.features.storage}</li>
+                              <li>
+                                Reuniones virtuales:{" "}
+                                {typeof plan.features.meetings === "number"
+                                  ? `${plan.features.meetings}/mes`
+                                  : plan.features.meetings}
+                              </li>
+                              <li>Cursos máximos: {plan.features.courses}</li>
+                            </ul>
+                          </div>
+
+                          {/* Support Details */}
+                          <div>
+                            <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
+                              <Headphones className="w-4 h-4 text-primary" />
+                              Soporte Técnico
+                            </h4>
+                            <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
+                              <li>Tipo: {plan.features.support}</li>
+                              <li>
+                                SLA de disponibilidad: {plan.features.sla}
+                              </li>
+                              <li>
+                                {plan.features.dedicatedManager
+                                  ? "Incluye gerente de cuenta dedicado"
+                                  : "Soporte estándar"}
+                              </li>
+                            </ul>
+                          </div>
+                        </motion.div>
                       )}
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col">
-                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
-                    <li>✓ {plan.features.courses} cursos</li>
-                    <li>✓ {plan.features.storage} almacenamiento</li>
-                    <li>✓ {plan.features.meetings} reuniones/mes</li>
-                    <li>✓ {plan.features.users} usuarios admin</li>
-                    <li>✓ {plan.features.support}</li>
-                    <li>✓ SLA {plan.features.sla}</li>
-                  </ul>
-                  <Button
-                    className="w-full mt-auto"
-                    onClick={() =>
-                      router.push(
-                        `/planes/calculadora?plan=${plan.id}&billing=${billingCycle}`,
-                      )
-                    }
-                  >
-                    {tp("planes.pricing.select_plan")}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                    </div>
+
+                    {/* CTA Button */}
+                    <Button
+                      className="w-full mt-6 font-semibold"
+                      size="lg"
+                      onClick={() =>
+                        router.push(
+                          `/planes/calculadora?plan=${plan.id}&billing=${billingCycle}`,
+                        )
+                      }
+                    >
+                      {tp("planes.pricing.select_plan")}
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           {/* Comparison Table */}
