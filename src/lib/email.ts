@@ -24,8 +24,8 @@ const createResendClient = () => {
             html: options.html?.substring(0, 200) + "...",
           });
           return { data: { id: "dev-" + Date.now() } };
-        }
-      }
+        },
+      },
     };
   }
 
@@ -77,7 +77,6 @@ function getContactRecipients(): string[] {
 
   return [...recipients];
 }
-
 
 interface SendConfirmationEmailParams {
   to: string;
