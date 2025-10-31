@@ -34,6 +34,16 @@ const createResendClient = () => {
 
 const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || "preuastral@gmail.com";
 
+// Stub implementations for missing functions to fix TypeScript errors
+// TODO: Implement proper email functionality
+function createTransport() {
+  throw new Error("Email functionality not implemented");
+}
+
+async function dispatchMail(transporter: any, mailOptions: any) {
+  throw new Error("Email functionality not implemented");
+}
+
 function parseRecipientList(value?: string | null): string[] {
   if (!value) {
     return [];
