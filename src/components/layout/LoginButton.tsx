@@ -1,4 +1,4 @@
-"use client";
+|"use client";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useSession, signOut } from "@/lib/auth-client";

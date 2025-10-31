@@ -7,6 +7,11 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 // Email configuration
 const createResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY environment variable is required");
+  }
+
   // For development, we'll use console logging instead of actual email sending
   if (isDevelopment) {
     return {
@@ -24,10 +29,6 @@ const createResendClient = () => {
     };
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error("RESEND_API_KEY environment variable is required");
-  }
   return new Resend(apiKey);
 };
 
