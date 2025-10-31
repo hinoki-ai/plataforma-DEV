@@ -190,7 +190,9 @@ export function SignupStyleSection({
           {title && (
             <h2 className="text-2xl font-bold text-foreground mb-2">{title}</h2>
           )}
-          {subtitle && <p className="text-white/80 text-sm">{subtitle}</p>}
+          {subtitle && (
+            <p className="text-muted-foreground text-sm">{subtitle}</p>
+          )}
         </div>
       )}
       {children}

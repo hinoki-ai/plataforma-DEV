@@ -297,7 +297,10 @@ export default function ProgramasPage() {
   const { t: divineT } = useDivineParsing(["common", "programas"]);
   const [mounted] = useState(true);
   const t = (key: string): string =>
-    divineT(key.startsWith("programas.") ? key.substring(10) : key, "programas");
+    divineT(
+      key.startsWith("programas.") ? key.substring(10) : key,
+      "programas",
+    );
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-programas flex flex-col">
