@@ -162,7 +162,7 @@ export async function sendContactEmail(
     const result = await resend.emails.send({
       from: DEFAULT_FROM_EMAIL,
       to: recipients,
-      reply_to: payload.email,
+      replyTo: payload.email,
       subject: `[Contacto] ${normalizedSubject}`,
       html: getContactEmailTemplate({
         ...payload,
