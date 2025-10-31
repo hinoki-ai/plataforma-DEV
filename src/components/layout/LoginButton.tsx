@@ -45,7 +45,11 @@ const ROLE_CONFIG = {
     color: "text-yellow-500",
     translationKey: "user.role.master",
   },
-  ADMIN: { icon: Shield, color: "text-red-500", translationKey: "user.role.admin" },
+  ADMIN: {
+    icon: Shield,
+    color: "text-red-500",
+    translationKey: "user.role.admin",
+  },
   PROFESOR: {
     icon: BookOpen,
     color: "text-blue-500",
@@ -56,7 +60,11 @@ const ROLE_CONFIG = {
     color: "text-green-500",
     translationKey: "user.role.parent",
   },
-  PUBLIC: { icon: Eye, color: "text-gray-500", translationKey: "user.role.public" },
+  PUBLIC: {
+    icon: Eye,
+    color: "text-gray-500",
+    translationKey: "user.role.public",
+  },
   default: {
     icon: Building,
     color: "text-gray-500",
@@ -179,10 +187,10 @@ export default function LoginButton() {
               "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             )}
           >
-              <Avatar className="h-8 w-8 border-2 border-border">
+            <Avatar className="h-8 w-8 border-2 border-border">
               <AvatarImage
                 src={session.user.image || undefined}
-                  alt={session.user.name || t("user.role.default", "common")}
+                alt={session.user.name || t("user.role.default", "common")}
               />
               <AvatarFallback
                 className={cn(

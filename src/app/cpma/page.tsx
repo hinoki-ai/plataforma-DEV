@@ -389,15 +389,6 @@ export default function CPMAPage() {
               <div className="grid lg:grid-cols-2 gap-8 items-start">
                 {/* Testimonials */}
                 <div className="space-y-6">
-                  <div className="text-center lg:text-left">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">
-                      {t("centro_consejo.testimonials_title", "common")}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {t("centro_consejo.testimonials_subtitle", "common")}
-                    </p>
-                  </div>
-
                   <div className="space-y-4">
                     {getCurrentTestimonials().map((testimonial, index) => (
                       <motion.div
@@ -431,12 +422,6 @@ export default function CPMAPage() {
                         </SignupStyleCard>
                       </motion.div>
                     ))}
-                  </div>
-
-                  <div className="text-center">
-                    <p className="text-xs text-muted-foreground">
-                      {t("centro_consejo.testimonials_rotating", "common")}
-                    </p>
                   </div>
                 </div>
 
