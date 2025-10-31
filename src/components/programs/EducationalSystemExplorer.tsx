@@ -40,7 +40,7 @@ import { LevelSpecificDashboard } from "@/components/dashboard/LevelSpecificDash
 import { EducationalLevelAwareNavigation } from "@/components/layout/EducationalLevelAwareNavigation";
 
 export function EducationalSystemExplorer() {
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["common", "programas"]);
   const [selectedType, setSelectedType] =
     useState<EducationalInstitutionType>("PRESCHOOL");
   const [activeView, setActiveView] = useState<
@@ -77,7 +77,7 @@ export function EducationalSystemExplorer() {
               🎓 {t("programas.explorer.title")}
             </CardTitle>
             <CardDescription className="text-blue-100 text-lg leading-relaxed mt-2">
-              {t("educational_system.description")}
+              {t("programas.explorer.explore_adaptation")}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -378,7 +378,8 @@ export function EducationalSystemExplorer() {
                                 : "text-slate-600 dark:text-slate-400"
                             }`}
                           >
-                            {feature.split("_").join(" ")}
+                            {t(`programas.explorer.feature_names.${feature}`) ||
+                              feature.split("_").join(" ")}
                           </span>
                           {enabled && (
                             <Badge
@@ -469,50 +470,50 @@ export function EducationalSystemExplorer() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
-                  label: "Sistema Educativo",
-                  status: "Completado",
+                  key: "educational_system",
+                  status: "completed",
                   color: "bg-green-400",
                   icon: "🎓",
                 },
                 {
-                  label: "Niveles ISCED",
-                  status: "Completado",
+                  key: "isced_levels",
+                  status: "completed",
                   color: "bg-green-400",
                   icon: "📚",
                 },
                 {
-                  label: "Base de Datos",
-                  status: "Completado",
+                  key: "database",
+                  status: "completed",
                   color: "bg-green-400",
                   icon: "💾",
                 },
                 {
-                  label: "Interface Admin",
-                  status: "Completado",
+                  key: "admin_interface",
+                  status: "completed",
                   color: "bg-green-400",
                   icon: "🖥️",
                 },
                 {
-                  label: "Navegación Adaptiva",
-                  status: "Completado",
+                  key: "adaptive_navigation",
+                  status: "completed",
                   color: "bg-green-400",
                   icon: "🧭",
                 },
                 {
-                  label: "Dashboard Específico",
-                  status: "Completado",
+                  key: "specific_dashboard",
+                  status: "completed",
                   color: "bg-green-400",
                   icon: "📊",
                 },
                 {
-                  label: "APIs y Hooks",
-                  status: "Completado",
+                  key: "apis_hooks",
+                  status: "completed",
                   color: "bg-green-400",
                   icon: "⚙️",
                 },
                 {
-                  label: "Migración BD",
-                  status: "Listo",
+                  key: "migration",
+                  status: "ready",
                   color: "bg-blue-400",
                   icon: "🚀",
                 },
@@ -525,10 +526,14 @@ export function EducationalSystemExplorer() {
                     <div className="text-2xl">{item.icon}</div>
                     <div className="flex-1">
                       <div className="font-semibold text-white group-hover:scale-105 transition-transform duration-200">
-                        {item.label}
+                        {t(
+                          `programas.explorer.implementation_items.${item.key}`,
+                        )}
                       </div>
                       <div className="text-sm text-green-100">
-                        {item.status}
+                        {t(
+                          `programas.explorer.implementation_items.${item.status}`,
+                        )}
                       </div>
                     </div>
                     <div

@@ -386,10 +386,10 @@ export default function CPMAPage() {
         <div className={`${layout.container(isDesktopForced)}`}>
           <SignupStyleSection>
             <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-8 items-start">
+              <div className="grid lg:grid-cols-2 gap-8 items-stretch">
                 {/* Testimonials */}
-                <div className="space-y-6">
-                  <div className="space-y-4">
+                <div className="space-y-6 flex flex-col">
+                  <div className="space-y-4 grow">
                     {getCurrentTestimonials().map((testimonial, index) => (
                       <motion.div
                         key={testimonial.id}
@@ -426,7 +426,7 @@ export default function CPMAPage() {
                 </div>
 
                 {/* Signup Form */}
-                <div className="space-y-6">
+                <div className="space-y-6 flex flex-col">
                   <UnifiedSignupForm />
                 </div>
               </div>
