@@ -61,7 +61,7 @@ const developerContacts = [
     id: "principal",
     name: "Tu Equipo Astral",
     role: "Lead Developer & Onboarding",
-    email: "accion@astral.school",
+    email: "directoaccion@astral.school",
     whatsappDisplay: "+56 9 7500 1234",
     whatsappLink: "https://wa.me/56975001234",
   },
@@ -69,9 +69,25 @@ const developerContacts = [
     id: "loreto",
     name: "Loreto",
     role: "Desarrolladora Senior",
-    email: "loreto@astral.school",
+    email: "directoloreto@astral.school",
     whatsappDisplay: "+56 9 6854 3210",
     whatsappLink: "https://wa.me/56968543210",
+  },
+  {
+    id: "agustin",
+    name: "Agustin",
+    role: "Lead Developer",
+    email: "agustin@astral.school",
+    whatsappDisplay: "+56 9 0000 0000",
+    whatsappLink: "https://wa.me/56900000000",
+  },
+  {
+    id: "salesman",
+    name: "Equipo de Ventas",
+    role: "Sales Representative",
+    email: "ventas@astral.school",
+    whatsappDisplay: "+56 9 0000 0000",
+    whatsappLink: "https://wa.me/56900000000",
   },
 ] as const;
 
@@ -136,6 +152,25 @@ export default function PricingCalculatorPage({
   })();
 
   const [students, setStudents] = useState<number>(initialStudents);
+  // Separate input state to allow temporary invalid values while typing
+  const [inputValue, setInputValue] = useState<string>(String(initialStudents));
+
+  // Sync inputValue when students changes externally (slider, buttons, plan change)
+  useEffect(() => {
+    setInputValue(String(students));
+  }, [students]);
+
+  // Ensure students is valid when plan changes
+  useEffect(() => {
+    setStudents((currentStudents) => {
+      const clamped = clampStudents(currentStudents);
+      if (clamped !== currentStudents) {
+        setInputValue(String(clamped));
+        return clamped;
+      }
+      return currentStudents;
+    });
+  }, [selectedPlan.id]); // Only when plan changes
 
   const billingInfo = billingMetadata[billingCycle];
   const discountPercentage = billingCycleDiscount[billingCycle];
@@ -194,15 +229,35 @@ export default function PricingCalculatorPage({
   );
 
   const updateStudents = (value: number) => {
-    setStudents(clampStudents(value));
+    const clamped = clampStudents(value);
+    setStudents(clamped);
+    setInputValue(String(clamped));
   };
 
-  const handleStudentInput = (value: string) => {
-    const numeric = Number.parseInt(value, 10);
-    if (Number.isNaN(numeric)) {
+  const handleStudentInputChange = (value: string) => {
+    // Allow empty string or partial input while typing
+    if (value === "" || value === "-") {
+      setInputValue(value);
       return;
     }
-    updateStudents(numeric);
+
+    // Allow typing numbers freely
+    const numeric = Number.parseInt(value.replace(/\D/g, ""), 10);
+    if (!Number.isNaN(numeric)) {
+      setInputValue(value.replace(/\D/g, ""));
+    }
+  };
+
+  const handleStudentInputBlur = () => {
+    // On blur, validate and clamp the value
+    const numeric = Number.parseInt(inputValue, 10);
+    if (Number.isNaN(numeric) || inputValue === "") {
+      // Reset to current valid students value if input is invalid
+      setInputValue(String(students));
+    } else {
+      // Clamp and apply the value
+      updateStudents(numeric);
+    }
   };
 
   const adjustStudents = (delta: number) => {
@@ -304,13 +359,18 @@ export default function PricingCalculatorPage({
                   <div className="mt-4 flex flex-col gap-4">
                     <div className="flex flex-wrap items-center gap-3">
                       <Input
-                        type="number"
-                        min={selectedPlan.minStudents}
-                        max={selectedPlan.maxStudents ?? undefined}
-                        value={students}
+                        type="text"
+                        inputMode="numeric"
+                        value={inputValue}
                         onChange={(event) =>
-                          handleStudentInput(event.target.value)
+                          handleStudentInputChange(event.target.value)
                         }
+                        onBlur={handleStudentInputBlur}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") {
+                            event.currentTarget.blur();
+                          }
+                        }}
                         className="w-32 bg-gray-800 border-gray-700 text-lg font-semibold text-white"
                       />
                       <div className="flex items-center gap-2">

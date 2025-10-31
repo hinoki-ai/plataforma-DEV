@@ -33,6 +33,7 @@ import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider"
 import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
 import { UserPlus } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { validateRUT } from "@/lib/rut-utils";
 
 interface FormData {
   fullName: string;
@@ -733,10 +734,24 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.phone = t("validation.phone_required");
           if (!formData.rut.trim())
             newErrors.rut = t("validation.rut_required");
+          else {
+            const rutValidation = validateRUT(formData.rut);
+            if (!rutValidation.valid) {
+              newErrors.rut =
+                rutValidation.error || t("validation.rut_invalid");
+            }
+          }
           if (!formData.childName.trim())
             newErrors.childName = t("validation.child_name_required");
           if (!formData.childRUT.trim())
             newErrors.childRUT = t("validation.child_rut_required");
+          else {
+            const childRutValidation = validateRUT(formData.childRUT);
+            if (!childRutValidation.valid) {
+              newErrors.childRUT =
+                childRutValidation.error || t("validation.rut_invalid");
+            }
+          }
           if (!formData.childPhone.trim())
             newErrors.childPhone = t("validation.child_phone_required");
           if (!formData.relationship)

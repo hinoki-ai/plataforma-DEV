@@ -1235,6 +1235,7 @@
   "validation.email_invalid": "Email is not valid",
   "validation.phone_required": "Phone is required",
   "validation.rut_required": "RUT is required",
+  "validation.rut_invalid": "RUT is invalid",
   "validation.institution_required": "Institution is required",
   "validation.child_name_required": "Student's name is required",
   "validation.child_rut_required": "Student's RUT is required",
