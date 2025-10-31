@@ -1,7 +1,7 @@
 // ⚡ Performance: PPR-optimized HomePage with static shell and dynamic components
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -38,23 +38,77 @@ export function HomePage() {
   const { isDesktopForced } = useDesktopToggle();
   const { t } = useDivineParsing(["common"]);
   const [mounted] = useState(true);
+  const [videoError, setVideoError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Handle video autoplay for mobile devices
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const playVideo = async () => {
+      try {
+        // Wait for video to be loaded
+        if (video.readyState >= 2) {
+          await video.play();
+        } else {
+          video.addEventListener("loadeddata", () => {
+            video.play().catch(() => {
+              // Video failed to autoplay - hide it and show static background
+              setVideoError(true);
+            });
+          });
+        }
+      } catch (error) {
+        // Video failed to autoplay - hide it and show static background
+        console.warn("Video autoplay failed:", error);
+        setVideoError(true);
+      }
+    };
+
+    // Try to play immediately
+    playVideo();
+
+    // Also try to play on user interaction (required by mobile browsers)
+    const handleUserInteraction = () => {
+      playVideo();
+      // Remove listeners after first interaction
+      document.removeEventListener("touchstart", handleUserInteraction);
+      document.removeEventListener("click", handleUserInteraction);
+    };
+
+    document.addEventListener("touchstart", handleUserInteraction, {
+      once: true,
+    });
+    document.addEventListener("click", handleUserInteraction, { once: true });
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("touchstart", handleUserInteraction);
+      document.removeEventListener("click", handleUserInteraction);
+    };
+  }, []);
 
   // Component mounted successfully
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-home-page">
       {/* Mobile portrait video background */}
-      <video
-        className="mobile-portrait-video"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        aria-hidden="true"
-      >
-        <source src="/heromobile.mp4" type="video/mp4" />
-      </video>
+      {!videoError && (
+        <video
+          ref={videoRef}
+          className="mobile-portrait-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          onError={() => setVideoError(true)}
+        >
+          <source src="/heromobile.mp4" type="video/mp4" />
+        </video>
+      )}
       <Header />
       <section className={layout.spacing.section(isDesktopForced)}>
         <div className={`${layout.container(isDesktopForced)} text-center`}>

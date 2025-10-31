@@ -138,17 +138,17 @@ export default function MinEducFooter() {
         {/* White horizontal line */}
         <hr className="border-t-2 border-white mt-[21px] mb-4" />
         {/* Bottom row: GOBIERNO DE CHILE | CHILE AVANZA CONTIGO */}
-        <div className="grid grid-cols-2 sm:flex sm:flex-row sm:items-center sm:justify-between flex-grow min-h-12 gap-4 sm:gap-0">
+        <div className="flex flex-row items-center justify-between grow min-h-12">
           <a
             href="https://www.gob.cl/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col sm:flex-row sm:items-center items-center text-center sm:text-left text-lg font-bold hover:underline focus:outline-none gap-1 sm:gap-2"
+            className="flex flex-col items-start text-left text-lg font-bold hover:underline focus:outline-none gap-1"
             aria-label="Gobierno de Chile"
           >
             <span>GOBIERNO</span>
             <div className="flex items-center gap-1">
-              <span className="font-normal">DE</span>
+              <span>DE</span>
               <span className="text-red-500">CHILE</span>
             </div>
           </a>
@@ -156,7 +156,7 @@ export default function MinEducFooter() {
             href="https://www.mineduc.cl/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col sm:flex-row sm:items-center items-center text-center sm:text-left text-lg font-bold hover:underline focus:outline-none gap-1 sm:gap-2"
+            className="flex flex-col items-end text-right text-lg font-bold hover:underline focus:outline-none gap-1"
             aria-label="Chile Avanza Contigo"
           >
             <span>

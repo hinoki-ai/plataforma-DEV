@@ -139,7 +139,7 @@ export default function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="md:hidden"
+                  className="md:hidden h-11 w-11"
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   aria-label={t("nav.toggle.menu", "navigation")}
                 >

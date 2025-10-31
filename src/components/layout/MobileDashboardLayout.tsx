@@ -99,7 +99,7 @@ export function MobileDashboardLayout({
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(true)}
-            className="mr-2"
+            className="mr-2 h-11 w-11"
           >
             <Menu className="h-5 w-5" />
           </Button>
