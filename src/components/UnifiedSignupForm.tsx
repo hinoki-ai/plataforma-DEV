@@ -1059,7 +1059,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   <h4 className="text-md font-medium text-foreground">
                     {t("signup.personal_section.title")}
                   </h4>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <LabelInputContainer>
                       <Label htmlFor="fullName">
                         {t("signup.full_name.label")}
@@ -1111,7 +1111,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   <h4 className="text-md font-medium text-foreground">
                     {t("signup.identification_section.title")}
                   </h4>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <LabelInputContainer>
                       <Label htmlFor="rut">{t("signup.rut.label")}</Label>
                       <Input
@@ -1159,7 +1159,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   <h4 className="text-md font-medium text-foreground">
                     {t("signup.contact_section.title")}
                   </h4>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <LabelInputContainer>
                       <Label htmlFor="phone">{t("signup.phone.label")}</Label>
                       <Input
@@ -1285,7 +1285,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   <h4 className="text-md font-medium text-foreground">
                     {t("signup.location_section.title")}
                   </h4>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <LabelInputContainer>
                       <Label htmlFor="region">{t("signup.region.label")}</Label>
                       <Select
@@ -1380,7 +1380,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   <h4 className="text-md font-medium text-foreground">
                     {t("signup.institution_section.title")}
                   </h4>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <LabelInputContainer>
                       <Label htmlFor="institutionId">
                         {t("signup.institution.label")}
@@ -1516,7 +1516,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
 
               <div className="space-y-4">
                 {/* Primary Emergency Contact */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="emergencyContact">
                       {t("signup.emergency_contact_primary.label")}
@@ -1564,7 +1564,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </div>
 
                 {/* Secondary Emergency Contact */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="secondaryEmergencyContact">
                       {t("signup.emergency_contact_secondary.label")}
@@ -1618,7 +1618,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 </div>
 
                 {/* Tertiary Emergency Contact */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <LabelInputContainer>
                     <Label htmlFor="tertiaryEmergencyContact">
                       {t("signup.emergency_contact_tertiary.label")}
@@ -1677,7 +1677,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-3 sm:px-6 h-full flex flex-col">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 h-full flex flex-col">
       <Card className="glass-panel mx-auto w-full max-w-2xl text-slate-900 dark:text-slate-100 grow">
         <CardHeader>
           <div className="text-center">
@@ -1690,22 +1690,22 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           </div>
         </CardHeader>
 
-        <CardContent className="grow flex flex-col">
+        <CardContent className="grow flex flex-col px-4 sm:px-6">
           <StepIndicator />
 
           <form
             onSubmit={handleSubmit}
-            className="space-y-6 mt-6 grow flex flex-col"
+            className="space-y-4 sm:space-y-6 mt-4 sm:mt-6 grow flex flex-col"
           >
             {renderStep()}
 
-            <div className="flex justify-between items-center pt-6 border-t border-border mt-auto">
+            <div className="flex justify-between items-center pt-4 sm:pt-6 border-t border-border mt-auto gap-3 sm:gap-0">
               <Button
                 type="button"
                 onClick={prevStep}
                 disabled={currentStep === 1 || isLoading}
                 variant="outline"
-                className="rounded-full border-white/60 bg-white/70 px-6 text-slate-700 shadow-sm transition hover:bg-white/80 dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-900/70 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-full border-white/60 bg-white/70 px-4 sm:px-6 text-sm sm:text-base text-slate-700 shadow-sm transition hover:bg-white/80 dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-900/70 disabled:opacity-50 disabled:cursor-not-allowed flex-1 sm:flex-none"
               >
                 Anterior
               </Button>
@@ -1715,7 +1715,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   type="button"
                   onClick={nextStep}
                   disabled={isLoading}
-                  className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-6 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-4 sm:px-6 text-sm sm:text-base font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex-1 sm:flex-none"
                 >
                   Siguiente
                 </Button>
@@ -1723,7 +1723,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-8 py-3 font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex-1 sm:flex-none"
                 >
                   {isLoading
                     ? t("signup.registering")

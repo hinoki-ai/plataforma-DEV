@@ -386,10 +386,10 @@ export default function CPMAPage() {
         <div className={`${layout.container(isDesktopForced)}`}>
           <SignupStyleSection>
             <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+              <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
                 {/* Testimonials */}
-                <div className="space-y-6 flex flex-col">
-                  <div className="space-y-4 grow">
+                <div className="space-y-4 lg:space-y-6 flex flex-col order-2 lg:order-1">
+                  <div className="space-y-3 lg:space-y-4">
                     {getCurrentTestimonials().map((testimonial, index) => (
                       <motion.div
                         key={testimonial.id}
@@ -401,21 +401,21 @@ export default function CPMAPage() {
                           variant="info"
                           className="backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5"
                         >
-                          <div className="flex flex-col space-y-4">
-                            <div className="flex items-center space-x-4">
-                              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-2xl shadow-lg">
+                          <div className="flex flex-col space-y-3 lg:space-y-4">
+                            <div className="flex items-center space-x-3 lg:space-x-4">
+                              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/10 rounded-full flex items-center justify-center text-xl lg:text-2xl shadow-lg">
                                 {testimonial.avatar}
                               </div>
-                              <div>
-                                <h4 className="font-semibold text-foreground">
+                              <div className="min-w-0 flex-1">
+                                <h4 className="font-semibold text-foreground text-sm lg:text-base truncate">
                                   {testimonial.name}
                                 </h4>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-xs lg:text-sm text-muted-foreground truncate">
                                   {testimonial.role}
                                 </p>
                               </div>
                             </div>
-                            <p className="text-foreground leading-relaxed italic">
+                            <p className="text-foreground leading-relaxed italic text-sm lg:text-base">
                               &ldquo;{testimonial.content}&rdquo;
                             </p>
                           </div>
@@ -426,7 +426,7 @@ export default function CPMAPage() {
                 </div>
 
                 {/* Signup Form */}
-                <div className="space-y-6 flex flex-col">
+                <div className="space-y-4 lg:space-y-6 flex flex-col order-1 lg:order-2">
                   <UnifiedSignupForm />
                 </div>
               </div>

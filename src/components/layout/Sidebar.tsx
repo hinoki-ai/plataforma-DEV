@@ -544,12 +544,12 @@ export function SidebarTrigger({ onToggle }: { onToggle: () => void }) {
     <Button
       variant="ghost"
       size="icon"
-      className="fixed left-4 top-4 z-50 md:hidden"
+      className="fixed left-4 top-4 z-50 md:hidden h-11 w-11"
       onClick={onToggle}
       aria-label="Abrir menú de navegación"
       title="Abrir menú de navegación"
     >
-      <NavigationIcons.Menu className="h-4 w-4" aria-hidden="true" />
+      <NavigationIcons.Menu className="h-5 w-5" aria-hidden="true" />
     </Button>
   );
 }

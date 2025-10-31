@@ -118,8 +118,18 @@ export default function PricingCalculatorPage({
     resolveParams();
   }, [searchParams]);
 
-  const planFromParams = resolvedSearchParams.plan
-    ? findPricingPlan(resolvedSearchParams.plan)
+  // Map legacy or alternative plan names to correct plan IDs
+  const planMappings: Record<string, string> = {
+    enterprise: "institucional",
+    // Add any other mappings here if needed
+  };
+
+  const planParam = resolvedSearchParams.plan;
+  const mappedPlanId = planParam
+    ? planMappings[planParam] || planParam
+    : undefined;
+  const planFromParams = mappedPlanId
+    ? findPricingPlan(mappedPlanId)
     : undefined;
   const fallbackPlan = pricingPlans[1] ?? pricingPlans[0];
   const selectedPlan = planFromParams ?? fallbackPlan;

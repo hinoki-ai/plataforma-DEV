@@ -1,15 +1,32 @@
-# 📚 Plataforma Astral - Complete Documentation Index
+# 📚 Plataforma Astral - Documentation Index
 
 **Educational Management System**  
 **Version**: 0.1.0  
-**Last Updated**: January 2025  
+**Last Updated**: October 31, 2025  
 **Status**: Production Ready ✅
+
+---
+
+## 🎯 AI-Oriented Documentation (PRIMARY)
+
+### 🤖 **[AI Knowledge Base](./docs/AI_KNOWLEDGE_BASE.md)** - **RECOMMENDED STARTING POINT**
+
+**Complete consolidated documentation optimized for AI assistants and automated systems**
+
+- ✅ **Structured machine-readable format** with JSON/YAML sections
+- ✅ **Comprehensive cross-references** between all system components
+- ✅ **Current technology stack** (Clerk + Convex + Next.js 16)
+- ✅ **Implementation patterns and constraints** for reliable development
+- ✅ **Troubleshooting patterns** with diagnostic procedures
+- ✅ **Migration guidance** for system evolution
+
+**Use this document for all development, debugging, and system understanding tasks.**
 
 ---
 
 ## 🎯 Overview
 
-Plataforma Astral is a comprehensive SaaS educational management platform built with Next.js 15, React 19, TypeScript, and Convex for real-time backend services. This platform provides complete school management functionality including user authentication, student management, voting systems, and administrative tools.
+Plataforma Astral is a comprehensive SaaS educational management platform built with Next.js 16, React 19, TypeScript, and Convex for real-time backend services. This platform provides complete school management functionality including user authentication, student management, voting systems, and administrative tools.
 
 ---
 
@@ -21,11 +38,12 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 - **[CLAUDE.md](./CLAUDE.md)** - AI Assistant development guidelines
 - **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)** - Git workflow and branching strategy
 
-### 🏗️ Architecture & Technical
+### 🏗️ Architecture & Technical (See AI Knowledge Base for current details)
 
-- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture and design patterns
-- **[docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)** - Complete API endpoint reference
-- **[docs/FRONTEND.md](./docs/FRONTEND.md)** - Frontend development patterns and components
+- **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Complete current system documentation**
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Legacy architecture overview (superseded)
+- **[docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)** - Legacy API documentation (superseded)
+- **[docs/FRONTEND.md](./docs/FRONTEND.md)** - Frontend patterns and components
 - **[docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md)** - Environment configuration and deployment
 
 #### Documentation Directory Structure (`docs/`)
@@ -62,13 +80,13 @@ The `docs/` directory contains detailed technical documentation organized as fol
 
 - `TESTING_GUIDE.md` - Comprehensive testing guide
 
-### 🔐 Authentication & Security
+### 🔐 Authentication & Security (See AI Knowledge Base for current implementation)
 
-- **[docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)** - Complete authentication system guide (consolidated)
+- **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Current Clerk + Convex auth system**
 - **[docs/ROLE_SYSTEM.md](./docs/ROLE_SYSTEM.md)** - Role-based access control (RBAC) system
 - **[docs/protected-paths.md](./docs/protected-paths.md)** - Protected routes and access control
 - **[docs/EMERGENCY_ACCESS_PROCEDURES.md](./docs/EMERGENCY_ACCESS_PROCEDURES.md)** - Emergency access protocols
-- **[docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)** - Authentication troubleshooting guide
+- **[docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)** - Auth troubleshooting guide (legacy - see AI KB)
 
 ### 🚢 Deployment & Operations
 
@@ -76,10 +94,10 @@ The `docs/` directory contains detailed technical documentation organized as fol
 - **[scripts/deploy.js](./scripts/deploy.js)** - Automated deployment script
 - **[scripts/verify-deployment.js](./scripts/verify-deployment.js)** - Deployment verification utilities
 
-### 🎯 Features & Functionality
+### 🎯 Features & Functionality (See AI Knowledge Base for implementation details)
 
-- **[docs/VOTING_SYSTEM.md](./docs/VOTING_SYSTEM.md)** - Centro Consejo voting system (complete guide with architecture, constraints, API patterns, and testing)
-- **[docs/ANIMATION_GUIDE.md](./docs/ANIMATION_GUIDE.md)** - UI animation patterns and guidelines
+- **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Current feature implementations**
+- **[docs/VOTING_SYSTEM.md](./docs/VOTING_SYSTEM.md)** - Centro Consejo voting system (AI-optimized guide)
 - **[docs/LIBRO_DE_CLASES_GUIDE.md](./docs/LIBRO_DE_CLASES_GUIDE.md)** - Complete Libro de Clases system guide
 - **[docs/LIBRO_CLASES_IMPLEMENTATION_STATUS.md](./docs/LIBRO_CLASES_IMPLEMENTATION_STATUS.md)** - Libro de Clases implementation status
 
@@ -207,6 +225,13 @@ npm run verify-deployment  # Verify deployment readiness
 
 ## 📈 Recent Updates
 
+- ✅ **October 31, 2025**: Complete AI-oriented documentation consolidation
+  - Created comprehensive [AI Knowledge Base](./docs/AI_KNOWLEDGE_BASE.md) with machine-readable structure
+  - Consolidated all technical documentation into single AI-optimized reference
+  - Updated documentation index to prioritize AI Knowledge Base
+  - Marked legacy documentation as superseded where applicable
+  - Added structured JSON/YAML sections for automated processing
+  - Included complete cross-reference system for all components
 - ✅ **January 2025**: Major documentation consolidation completed
   - Consolidated 4 voting system docs into single AI-oriented guide
   - Removed redundant and deprecated documentation files
