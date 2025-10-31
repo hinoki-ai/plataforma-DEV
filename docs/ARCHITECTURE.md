@@ -2,7 +2,7 @@
 
 - App Router under `src/app`
 - Providers in `src/components/providers.tsx` (Theme, Session, Language, DesktopToggle, WebVitals)
-- Auth via NextAuth v5, with middleware enforcing access by role
+- Auth via NextAuth v5, with proxy enforcing access by role
 - DB via Prisma; services split into `services/queries` (read) and `services/actions` (write)
 - Layouts: `FixedBackgroundLayout` standardizes public page backgrounds
 

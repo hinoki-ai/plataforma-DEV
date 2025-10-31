@@ -458,14 +458,14 @@ const setStoredLanguage = (language: Language): void => {
     // Set localStorage for fast client-side access
     localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
 
-    // Also set cookie for server-side middleware synchronization
-    // Match exact attributes used in middleware/i18n.ts
+    // Also set cookie for server-side proxy synchronization
+    // Match exact attributes used in proxy.ts
     const cookieName = "aramac-language-preference";
-    const maxAge = 60 * 60 * 24 * 365; // 1 year (matches middleware)
+    const maxAge = 60 * 60 * 24 * 365; // 1 year (matches proxy.ts)
     const expires = new Date(Date.now() + maxAge * 1000).toUTCString();
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-    const sameSite = "; SameSite=Lax"; // matches middleware sameSite: "lax"
-    const path = "; Path=/"; // matches middleware path: "/"
+    const sameSite = "; SameSite=Lax"; // matches proxy.ts sameSite: "lax"
+    const path = "; Path=/"; // matches proxy.ts path: "/"
     document.cookie = `${cookieName}=${language}${path}; Max-Age=${maxAge}; Expires=${expires}${secure}${sameSite}`;
   } catch (error) {
     // Silently fail - language state will still work with localStorage

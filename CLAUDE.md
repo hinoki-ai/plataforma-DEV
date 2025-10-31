@@ -91,13 +91,13 @@ npx convex deploy --prod    # Deploy with production flag
 
 - **Next.js 15** with App Router and React 19
 - **Convex** serverless backend with real-time database
-- **NextAuth.js v5** with role-based middleware protection
+- **NextAuth.js v5** with role-based proxy protection
 - **Tailwind CSS** + **shadcn/ui** components
 - **TypeScript** throughout the entire codebase
 
 ### Authentication & Authorization System
 
-The system uses a strict role-based access model with middleware enforcement:
+The system uses a strict role-based access model with proxy enforcement:
 
 **Roles**: `ADMIN`, `PROFESOR`, `PARENT`, `PUBLIC`
 
@@ -302,11 +302,11 @@ GOOGLE_CLIENT_SECRET=...
 - SessionProvider with selective refresh (`refetchOnWindowFocus` only for auth routes)
 - Optimized imports and dynamic loading where appropriate
 - Image optimization through Cloudinary integration
-- Edge runtime compatibility in middleware
+- Edge runtime compatibility in proxy
 
 ### Security Measures
 
-- All routes protected by middleware with role validation
+- All routes protected by proxy with role validation
 - CSRF protection through NextAuth
 - Input validation using Zod schemas
 - Secure cookie configuration aligned with Auth.js v5
@@ -325,7 +325,7 @@ GOOGLE_CLIENT_SECRET=...
 1. **Never bypass the services layer** - Always use `src/services/actions/` and `src/services/queries/` or Convex client
 2. **Always run `npx convex dev`** - Required for type generation and development
 3. **Don't mix auth approaches** - Stick to NextAuth.js patterns, don't create custom auth
-4. **Respect the role hierarchy** - Don't create routes that bypass middleware protection
+4. **Respect the role hierarchy** - Don't create routes that bypass proxy protection
 5. **Follow the provider nesting order** - Changing provider order can break functionality
 6. **Always test role-based access** - E2E tests must verify route protection works
 7. **Don't ignore TypeScript errors** - Use `npm run type-check` and fix all issues
