@@ -223,7 +223,7 @@ export const SettingsHamburger = ({
             initial="closed"
             animate="open"
             exit="exit"
-            className="absolute top-full mt-2 right-0 w-auto min-w-[13rem] max-w-[90vw] bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
+            className="absolute top-full mt-2 right-0 w-20 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
             style={{
               boxShadow:
                 "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -233,79 +233,17 @@ export const SettingsHamburger = ({
             aria-label="Settings menu"
           >
             {/* Gradient border effect */}
-            <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-purple-500/10 rounded-xl" />
+            <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-purple-500/10 rounded-xl pointer-events-none" />
 
-            <div className="relative p-2 space-y-2">
+            <div className="relative py-1 px-1 inline-flex flex-col items-center space-y-0.5 scale-125 origin-top">
               {/* Enhanced Language Toggle */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center justify-between group"
-              >
-                <motion.label
-                  className="text-xs font-medium text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  🌐 {t("language.label", "Language")}
-                </motion.label>
-                <motion.div
-                  className="shrink-0"
-                  whileHover={{ scale: 1.05, rotate: [0, -2, 2, 0] }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <LanguageToggle />
-                </motion.div>
-              </motion.div>
+              <LanguageToggle size="sm" />
 
               {/* Enhanced Theme Toggle */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center justify-between group"
-              >
-                <motion.label
-                  className="text-xs font-medium text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  🌙 {t("appearance.theme", "Theme")}
-                </motion.label>
-                <motion.div
-                  className="shrink-0"
-                  whileHover={{
-                    scale: 1.05,
-                    rotate: [0, -3, 3, 0],
-                    filter: "drop-shadow(0 0 8px rgba(147, 197, 253, 0.3))",
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <SkyToggle size="sm" />
-                </motion.div>
-              </motion.div>
+              <SkyToggle size="sm" />
 
               {/* Enhanced Sound Toggle */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center justify-between group"
-              >
-                <motion.label
-                  className="text-xs font-medium text-foreground bg-linear-to-r from-foreground to-foreground/70 bg-clip-text"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  🎵 {t("sound.music", "Music")}
-                </motion.label>
-                <motion.div
-                  className="shrink-0"
-                  whileHover={{
-                    scale: 1.05,
-                    rotate: [0, -3, 3, 0],
-                    filter: "drop-shadow(0 0 8px rgba(52, 211, 153, 0.3))",
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <SoundToggle size="sm" />
-                </motion.div>
-              </motion.div>
+              <SoundToggle size="sm" />
             </div>
           </motion.div>
         )}

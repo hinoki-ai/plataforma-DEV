@@ -35,15 +35,15 @@ const LanguageToggle = memo(
       {
         code: "es",
         name: "Spanish",
-        nativeName: t("language.spanish", "language"),
-        flag: "🇪🇸",
+        nativeName: t("language.spanish", "language") || "Español",
+        flag: "🇨🇱",
         ariaLabel:
           t("language.ariaSwitchSpanish", "language") || "Cambiar a español",
       },
       {
         code: "en",
         name: "English",
-        nativeName: t("language.english", "language"),
+        nativeName: t("language.english", "language") || "English",
         flag: "🇺🇸",
         ariaLabel:
           t("language.ariaSwitchEnglish", "language") || "Switch to English",
@@ -121,16 +121,42 @@ const LanguageToggle = memo(
               }
             />
             <div className="language-switch__container">
-              {/* Language Flags Background */}
-              <div className="language-switch__flags-background">
-                <div className="language-switch__flag language-switch__flag--es">
-                  {languageOptions.find((l) => l.code === "es")?.flag}
+              {/* Stars overlay for English (checkerboard pattern) */}
+              {isEnglish && (
+                <div className="language-switch__stars-overlay">
+                  {/* Row 1: oxoxoxo (4 stars, offset start) */}
+                  <div className="language-switch__star-row language-switch__star-row--1">
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                  </div>
+                  {/* Row 2: xoxoxox (4 stars, offset end) */}
+                  <div className="language-switch__star-row language-switch__star-row--2">
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                  </div>
+                  {/* Row 3: oxoxoxo (4 stars, offset start) */}
+                  <div className="language-switch__star-row language-switch__star-row--3">
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
+                    <span className="language-switch__star">★</span>
+                  </div>
                 </div>
-                <div className="language-switch__flag language-switch__flag--en">
-                  {languageOptions.find((l) => l.code === "en")?.flag}
-                </div>
-              </div>
-
+              )}
               {/* Circle Container with Flag */}
               <div className="language-switch__circle-container">
                 <div className="language-switch__flag-container">
@@ -199,6 +225,59 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     position: relative;
   }
 
+  .language-switch__stars-overlay {
+    position: absolute;
+    left: 0.6em;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.06em;
+    z-index: 1;
+    opacity: 0;
+    -webkit-transition: opacity var(--transition);
+    -o-transition: opacity var(--transition);
+    transition: opacity var(--transition);
+    width: 2em;
+  }
+
+  .language-switch__checkbox:checked
+    + .language-switch__container
+    .language-switch__stars-overlay {
+    opacity: 1;
+  }
+
+  .language-switch__star-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    height: 0.32em;
+    gap: 0;
+  }
+
+  .language-switch__star {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.36em;
+    color: white;
+    line-height: 1;
+    text-shadow: 0 0 0.08em rgba(255, 255, 255, 0.95);
+    width: 100%;
+    height: 100%;
+  }
+
+  .language-switch__space {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .language-switch__container::before {
     content: "";
     position: absolute;
@@ -220,31 +299,6 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
   .language-switch__checkbox:disabled + .language-switch__container {
     cursor: not-allowed;
     opacity: 0.5;
-  }
-
-  .language-switch__flags-background {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 0 0.5em;
-    z-index: 0;
-  }
-
-  .language-switch__flag {
-    font-size: 1.5em;
-    opacity: 0.3;
-    transition: var(--transition);
-    filter: grayscale(0.5);
-  }
-
-  .language-switch__flag--es {
-    transform: translateX(0);
-  }
-
-  .language-switch__flag--en {
-    transform: translateX(0);
   }
 
   .language-switch__circle-container {
@@ -315,7 +369,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
   }
 
   .language-switch__flag-icon {
-    font-size: 1.2em;
+    font-size: 1.35em;
     line-height: 1;
     transition: var(--transition);
   }
@@ -325,39 +379,14 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     background-color: var(--container-en-bg);
   }
 
+  .language-switch__checkbox:checked + .language-switch__container::after {
+    opacity: 1;
+  }
+
   .language-switch__checkbox:checked
     + .language-switch__container
     .language-switch__circle-container {
     left: calc(100% - var(--circle-offset) - var(--circle-container-diameter));
-  }
-
-  .language-switch__checkbox:checked
-    + .language-switch__container
-    .language-switch__flag--es {
-    opacity: 0.2;
-    filter: grayscale(0.8);
-  }
-
-  .language-switch__checkbox:checked
-    + .language-switch__container
-    .language-switch__flag--en {
-    opacity: 0.5;
-    filter: grayscale(0);
-  }
-
-  /* Spanish State (unchecked) */
-  .language-switch__checkbox:not(:checked)
-    + .language-switch__container
-    .language-switch__flag--es {
-    opacity: 0.5;
-    filter: grayscale(0);
-  }
-
-  .language-switch__checkbox:not(:checked)
-    + .language-switch__container
-    .language-switch__flag--en {
-    opacity: 0.2;
-    filter: grayscale(0.8);
   }
 
   /* Hover Effects */
