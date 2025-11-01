@@ -12,7 +12,7 @@ export default function ProfesorHorariosPage() {
   return (
     <PageTransition skeletonType="page" duration={700}>
       <div className="space-y-6">
-        <HorariosDashboardReal />
+        <HorariosDashboardReal persona="profesor" />
       </div>
     </PageTransition>
   );

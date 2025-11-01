@@ -137,7 +137,7 @@ export function MeetingForm({
     const fetchUsers = async () => {
       try {
         setUsersLoading(true);
-        const response = await fetch("/api/users");
+        const response = await fetch("/api/profesores");
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -576,8 +576,8 @@ export function MeetingForm({
                     </FormControl>
                     <SelectContent>
                       {usersLoading ? (
-                        <SelectItem value="" disabled>
-                          Cargando...
+                        <SelectItem value="loading" disabled>
+                          Cargando profesores...
                         </SelectItem>
                       ) : (
                         users?.map((user) => (

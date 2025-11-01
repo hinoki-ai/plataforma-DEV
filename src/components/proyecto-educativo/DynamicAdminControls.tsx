@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -126,6 +127,9 @@ export function DynamicAdminControls({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t("video.edit.title", "common")}</DialogTitle>
+            <DialogDescription>
+              Edita la información de la cápsula de video
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

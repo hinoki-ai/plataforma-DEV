@@ -9,7 +9,7 @@ import { AdaptiveButton } from "@/components/ui/adaptive-button";
 import { ChevronLeft, Menu, X } from "lucide-react";
 import { useAppContext } from "@/components/providers/ContextProvider";
 import { cn } from "@/lib/utils";
-import UnifiedAuthButton from "./UnifiedAuthButton";
+import LoginButton from "./LoginButton";
 import ProfileCompletionBadge from "./ProfileCompletionBadge";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LanguageToggle } from "@/components/language/LanguageToggle";
@@ -131,9 +131,9 @@ export default function Header() {
                 </nav>
               )}
 
-              {/* UNIFIED AUTH BUTTON - GOLD STANDARD - Morphs between states */}
+              {/* LOGIN BUTTON - Enhanced with role-based dashboard navigation */}
               <div className="hidden md:flex">
-                <UnifiedAuthButton />
+                <LoginButton />
               </div>
 
               {/* Mobile Menu Button - Public pages only */}

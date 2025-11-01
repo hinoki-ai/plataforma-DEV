@@ -32,6 +32,7 @@ import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -474,6 +475,11 @@ export default function AdminVotesPage() {
                   ? t("admin.votaciones.edit.title", "common")
                   : t("admin.votaciones.create.title", "common")}
               </DialogTitle>
+              <DialogDescription>
+                {selectedVote
+                  ? "Edita la configuración de la votación existente"
+                  : "Crea una nueva votación para los padres"}
+              </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4">

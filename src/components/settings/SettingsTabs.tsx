@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Lock, CheckCircle, AlertCircle } from "lucide-react";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 
 interface SettingsTabsProps {
   children?: React.ReactNode;

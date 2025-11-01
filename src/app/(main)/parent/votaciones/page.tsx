@@ -205,6 +205,22 @@ function VotacionesContent() {
     }
   };
 
+  const getCategoryLabel = (category: string) => {
+    const labels: Record<string, string> = {
+      GENERAL: t("admin.votaciones.category.general", "common"),
+      ACADEMIC: t("admin.votaciones.category.academic", "common"),
+      ADMINISTRATIVE: t("admin.votaciones.category.administrative", "common"),
+      SOCIAL: t("admin.votaciones.category.social", "common"),
+      FINANCIAL: t("admin.votaciones.category.financial", "common"),
+      INFRASTRUCTURE: t("admin.votaciones.category.infrastructure", "common"),
+      CURRICULUM: t("admin.votaciones.category.curriculum", "common"),
+      EVENTS: t("admin.votaciones.category.events", "common"),
+      POLICIES: t("admin.votaciones.category.policies", "common"),
+      OTHER: t("admin.votaciones.category.other", "common"),
+    };
+    return labels[category] || t("admin.votaciones.category.other", "common");
+  };
+
   // Handle loading state
   if (status === "loading") {
     return <LoadingState />;
@@ -372,7 +388,7 @@ function VotacionesContent() {
                       <Badge
                         className={getCategoryColor(selectedSession.category)}
                       >
-                        {selectedSession.category}
+                        {getCategoryLabel(selectedSession.category)}
                       </Badge>
                     </CardTitle>
                     <CardDescription className="mb-3">

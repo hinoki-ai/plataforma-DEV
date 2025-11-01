@@ -982,7 +982,7 @@ export default function UnifiedCalendarView({
                       <span>{getCategoryConfig(category).icon}</span>
                       <span>{getCategoryConfig(category).label}</span>
                       <span className="text-xs opacity-60">
-                        ({statistics?.eventsByCategory[category] || 0})
+                        ({statistics?.byCategory[category] || 0})
                       </span>
                     </Badge>
                   ),
@@ -1133,7 +1133,7 @@ export default function UnifiedCalendarView({
                     eventos este mes
                   </div>
                   {Object.entries(categorySystem).map(([category, system]) => {
-                    const count = statistics.eventsByCategory[category] || 0;
+                    const count = statistics.byCategory[category] || 0;
                     if (count === 0) return null;
                     return (
                       <div

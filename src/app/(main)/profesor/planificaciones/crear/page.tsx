@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { createPlanningDocument } from "@/services/actions/planning";
+import { createPlanningDocumentAction } from "@/app/actions/planning";
 import { PlanningDocumentForm } from "@/components/planning/PlanningDocumentForm";
 import { Button } from "@/components/ui/button";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -30,7 +30,7 @@ export default function CrearPlanificacionPage() {
           </h1>
         </div>
 
-        <PlanningDocumentForm action={createPlanningDocument} />
+        <PlanningDocumentForm action={createPlanningDocumentAction} />
       </div>
     </PageTransition>
   );

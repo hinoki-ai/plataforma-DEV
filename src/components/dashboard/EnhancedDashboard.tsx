@@ -21,6 +21,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -422,6 +423,9 @@ function WidgetConfigModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Configurar Widget: {widget.title}</DialogTitle>
+          <DialogDescription>
+            Configura las opciones de visualización para este widget
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <div>
