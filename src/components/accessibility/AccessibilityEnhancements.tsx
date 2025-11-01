@@ -16,6 +16,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -277,6 +278,10 @@ export function AccessibilityPanel({ className }: AccessibilityPanelProps) {
             <Accessibility className="h-5 w-5" />
             Configuración de Accesibilidad
           </DialogTitle>
+          <DialogDescription>
+            Personaliza las opciones de accesibilidad para mejorar tu
+            experiencia en la plataforma
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">

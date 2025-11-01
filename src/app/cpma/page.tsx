@@ -37,6 +37,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -924,6 +925,9 @@ export default function CPMAPage() {
             <DialogTitle>
               {t("proyecto_educativo.edit_video_capsule", "common")}
             </DialogTitle>
+            <DialogDescription>
+              Edita la información de la cápsula de video seleccionada
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
