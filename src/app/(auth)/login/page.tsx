@@ -49,8 +49,8 @@ function LoginForm() {
   return (
     <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
       {/* Title Panel with Glass Blur */}
-      <div className="mb-8 w-full max-w-md">
-        <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-4 mx-auto text-center -mt-24">
+      <div className="mb-6 w-full max-w-md">
+        <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-2 mx-auto text-center -mt-20">
           <motion.h1
             initial="initial"
             animate="animate"
@@ -144,8 +144,8 @@ export default function LoginPage() {
       fallback={
         <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
           {/* Title Panel with Glass Blur */}
-          <div className="mb-8 w-full max-w-md">
-            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-4 mx-auto text-center -mt-24">
+          <div className="mb-6 w-full max-w-md">
+            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-2 mx-auto text-center -mt-20">
               <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
                 Portal de Acceso
               </h1>

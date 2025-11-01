@@ -20,7 +20,7 @@ export function DocsArticleContent({
   return (
     <div className="min-h-screen bg-responsive-desktop bg-docs flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 pt-12 pb-12 flex-1">
+      <main className="container mx-auto px-4 pt-8 pb-12 flex-1">
         <div className="max-w-5xl mx-auto space-y-10">
           <div className="text-center">
             <div className="backdrop-blur-md bg-white/5 dark:bg-black/30 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">

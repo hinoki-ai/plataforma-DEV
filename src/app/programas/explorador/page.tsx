@@ -25,7 +25,7 @@ export default function ProgramasExplorerPage() {
         <div className="relative flex flex-1 flex-col">
           <Header />
 
-          <main className="container mx-auto px-4 py-12 md:py-16 flex-1">
+          <main className="container mx-auto px-4 pt-8 pb-12 md:pb-16 flex-1">
             <div className="max-w-7xl mx-auto space-y-16">
               {/* Hero Section */}
               <section className="text-center space-y-8">

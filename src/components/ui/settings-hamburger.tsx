@@ -3,9 +3,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Settings, X, Sparkles } from "lucide-react";
-import { LanguageToggle } from "@/components/language/LanguageToggle";
-import SkyToggle from "@/components/ui/sky-toggle";
-import SoundToggle from "@/components/ui/sound-toggle";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
@@ -24,6 +21,7 @@ export const SettingsHamburger = ({
   const [isHovered, setIsHovered] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
 
   // Generate stable random positions for sparkles to avoid React purity violations
   const sparklePositions = useState(() =>
@@ -223,10 +221,22 @@ export const SettingsHamburger = ({
             initial="closed"
             animate="open"
             exit="exit"
-            className="absolute top-full mt-2 right-0 w-20 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-2xl z-50 overflow-hidden"
             style={{
-              boxShadow:
-                "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+              position: 'absolute',
+              top: '100%',
+              marginTop: '8px',
+              right: '0',
+              width: '12px',
+              minWidth: '12px',
+              maxWidth: '12px',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '8px',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+              zIndex: 50,
+              overflow: 'hidden',
+              boxSizing: 'border-box'
             }}
             id="settings-menu"
             role="menu"
@@ -235,15 +245,16 @@ export const SettingsHamburger = ({
             {/* Gradient border effect */}
             <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-purple-500/10 rounded-xl pointer-events-none" />
 
-            <div className="relative py-1 px-1 inline-flex flex-col items-center space-y-0.5 scale-125 origin-top">
-              {/* Enhanced Language Toggle */}
-              <LanguageToggle size="sm" />
-
-              {/* Enhanced Theme Toggle */}
-              <SkyToggle size="sm" />
-
-              {/* Enhanced Sound Toggle */}
-              <SoundToggle size="sm" />
+            <div className="flex flex-col items-center gap-3 p-1">
+              <div className="transform scale-125 origin-center">
+                <LanguageToggle size="sm" />
+              </div>
+              <div className="transform scale-125 origin-center">
+                <SkyToggle size="sm" />
+              </div>
+              <div className="transform scale-125 origin-center">
+                <SoundToggle size="sm" />
+              </div>
             </div>
           </motion.div>
         )}

@@ -160,7 +160,9 @@ const LanguageToggle = memo(
               <div className="language-switch__circle-container">
                 <div className="language-switch__flag-container">
                   {/* Spanish Flag */}
-                  <div className={`language-switch__flag language-switch__flag--es ${!isEnglish ? 'language-switch__flag--active' : ''}`}>
+                  <div
+                    className={`language-switch__flag language-switch__flag--es ${!isEnglish ? "language-switch__flag--active" : ""}`}
+                  >
                     <span
                       className="language-switch__flag-icon"
                       role="img"
@@ -170,7 +172,9 @@ const LanguageToggle = memo(
                     </span>
                   </div>
                   {/* English Flag */}
-                  <div className={`language-switch__flag language-switch__flag--en ${isEnglish ? 'language-switch__flag--active' : ''}`}>
+                  <div
+                    className={`language-switch__flag language-switch__flag--en ${isEnglish ? "language-switch__flag--active" : ""}`}
+                  >
                     <span
                       className="language-switch__flag-icon"
                       role="img"

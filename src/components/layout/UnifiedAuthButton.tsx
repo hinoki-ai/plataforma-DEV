@@ -195,16 +195,16 @@ export default function UnifiedAuthButton() {
               <Settings2 className="h-[1.1rem] w-[1.1rem]" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-72">
+          <DropdownMenuContent align="end" className="w-10">
             <DropdownMenuGroup>
-              <div className="flex items-center justify-center py-2">
-                <SkyToggle size="sm" />
-              </div>
-              <div className="flex items-center justify-center py-2">
-                <SoundToggle size="sm" />
-              </div>
-              <div className="flex items-center justify-center py-2">
-                <div onClick={(e) => e.stopPropagation()}>
+              <div className="flex flex-col items-center gap-4 p-2">
+                <div className="transform scale-125">
+                  <SkyToggle size="sm" />
+                </div>
+                <div className="transform scale-125">
+                  <SoundToggle size="sm" />
+                </div>
+                <div className="transform scale-125">
                   <LanguageToggle size="sm" />
                 </div>
               </div>

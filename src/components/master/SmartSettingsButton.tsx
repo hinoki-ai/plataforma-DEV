@@ -98,7 +98,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
         </AdaptiveButton>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-64" sideOffset={8}>
+      <DropdownMenuContent align="end" className="w-40" sideOffset={8}>
         <DropdownMenuLabel className="flex items-center gap-2">
           <Settings2 className="h-4 w-4" />
           <span>Configuración Avanzada</span>
