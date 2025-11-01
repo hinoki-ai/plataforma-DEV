@@ -4,12 +4,7 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface DocsArticleContentProps {
   htmlContent: string;
@@ -63,7 +58,8 @@ export function DocsArticleContent({
 
           <div className="backdrop-blur-xl bg-card/70 border border-border/70 rounded-2xl shadow-lg p-6 text-sm text-muted-foreground">
             <p>
-              Archivo: <code className="bg-muted px-2 py-1 rounded">{fileName}</code>
+              Archivo:{" "}
+              <code className="bg-muted px-2 py-1 rounded">{fileName}</code>
             </p>
             <p className="mt-2">
               <a

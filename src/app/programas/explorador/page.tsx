@@ -75,7 +75,10 @@ export default function ProgramasExplorerPage() {
                       variant="secondary"
                       className="bg-white text-blue-600 hover:bg-blue-50 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                     >
-                      <Link href="/contacto" className="flex items-center gap-2">
+                      <Link
+                        href="/contacto"
+                        className="flex items-center gap-2"
+                      >
                         <Sparkles className="h-4 w-4" />
                         {t("programas.schedule_meeting")}
                       </Link>

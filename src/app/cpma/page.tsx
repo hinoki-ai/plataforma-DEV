@@ -756,7 +756,10 @@ export default function CPMAPage() {
             title={t("proyecto_educativo.methodology_title", "common")}
           >
             <SignupStyleGrid columns={3} gap="md">
-              <SignupStyleCard variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+              <SignupStyleCard
+                variant="info"
+                className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+              >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                     <div className="text-3xl">🌱</div>
@@ -772,7 +775,10 @@ export default function CPMAPage() {
                 </div>
               </SignupStyleCard>
 
-              <SignupStyleCard variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+              <SignupStyleCard
+                variant="info"
+                className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+              >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                     <div className="text-3xl">👤</div>
@@ -791,7 +797,10 @@ export default function CPMAPage() {
                 </div>
               </SignupStyleCard>
 
-              <SignupStyleCard variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+              <SignupStyleCard
+                variant="info"
+                className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+              >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                     <div className="text-3xl">📊</div>
@@ -868,7 +877,11 @@ export default function CPMAPage() {
                   ),
                 },
               ].map((member, index) => (
-                <SignupStyleCard key={index} variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+                <SignupStyleCard
+                  key={index}
+                  variant="info"
+                  className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+                >
                   <div className="flex flex-col items-center text-center space-y-4">
                     <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                       <div className="text-3xl">{member.icon}</div>
@@ -889,7 +902,10 @@ export default function CPMAPage() {
               ))}
             </SignupStyleGrid>
 
-            <SignupStyleCard variant="info" className="mt-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+            <SignupStyleCard
+              variant="info"
+              className="mt-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+            >
               <p className="text-center text-sm text-muted-foreground">
                 <strong className="text-foreground">
                   {t("proyecto_educativo.collaborative_work_note", "common")}
