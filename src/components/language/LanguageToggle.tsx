@@ -121,10 +121,10 @@ const LanguageToggle = memo(
               }
             />
             <div className="language-switch__container">
-              {/* Stars overlay for English (checkerboard pattern) */}
+              {/* Stars overlay for English (3-2-3 pattern) */}
               {isEnglish && (
                 <div className="language-switch__stars-overlay">
-                  {/* Row 1: oxoxoxo (4 stars, offset start) */}
+                  {/* Row 1: 3 stars (oxoxoxo) */}
                   <div className="language-switch__star-row language-switch__star-row--1">
                     <span className="language-switch__star">★</span>
                     <span className="language-switch__space"></span>
@@ -132,20 +132,19 @@ const LanguageToggle = memo(
                     <span className="language-switch__space"></span>
                     <span className="language-switch__star">★</span>
                     <span className="language-switch__space"></span>
-                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
                   </div>
-                  {/* Row 2: xoxoxox (4 stars, offset end) */}
+                  {/* Row 2: 2 stars (xoxoxox) */}
                   <div className="language-switch__star-row language-switch__star-row--2">
                     <span className="language-switch__space"></span>
                     <span className="language-switch__star">★</span>
                     <span className="language-switch__space"></span>
                     <span className="language-switch__star">★</span>
                     <span className="language-switch__space"></span>
-                    <span className="language-switch__star">★</span>
                     <span className="language-switch__space"></span>
-                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
                   </div>
-                  {/* Row 3: oxoxoxo (4 stars, offset start) */}
+                  {/* Row 3: 3 stars (oxoxoxo) */}
                   <div className="language-switch__star-row language-switch__star-row--3">
                     <span className="language-switch__star">★</span>
                     <span className="language-switch__space"></span>
@@ -153,20 +152,31 @@ const LanguageToggle = memo(
                     <span className="language-switch__space"></span>
                     <span className="language-switch__star">★</span>
                     <span className="language-switch__space"></span>
-                    <span className="language-switch__star">★</span>
+                    <span className="language-switch__space"></span>
                   </div>
                 </div>
               )}
               {/* Circle Container with Flag */}
               <div className="language-switch__circle-container">
                 <div className="language-switch__flag-container">
-                  <div className="language-switch__current-flag">
+                  {/* Spanish Flag */}
+                  <div className={`language-switch__flag language-switch__flag--es ${!isEnglish ? 'language-switch__flag--active' : ''}`}>
                     <span
                       className="language-switch__flag-icon"
                       role="img"
-                      aria-label={`${currentLanguage?.name} flag`}
+                      aria-label="Spanish flag"
                     >
-                      {currentLanguage?.flag}
+                      🇨🇱
+                    </span>
+                  </div>
+                  {/* English Flag */}
+                  <div className={`language-switch__flag language-switch__flag--en ${isEnglish ? 'language-switch__flag--active' : ''}`}>
+                    <span
+                      className="language-switch__flag-icon"
+                      role="img"
+                      aria-label="English flag"
+                    >
+                      🇺🇸
                     </span>
                   </div>
                 </div>
@@ -190,7 +200,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     --circle-container-diameter: 3.375em;
     --flag-diameter: 2.125em;
     --flag-bg: #ffffff;
-    --transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     --circle-transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     --text-color: #ffffff;
   }
@@ -227,7 +237,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
 
   .language-switch__stars-overlay {
     position: absolute;
-    left: 0.6em;
+    left: 1.2em;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
@@ -359,19 +369,24 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     justify-content: center;
   }
 
-  .language-switch__current-flag {
+  .language-switch__flag {
+    position: absolute;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .language-switch__flag--active {
+    opacity: 1;
   }
 
   .language-switch__flag-icon {
     font-size: 1.35em;
     line-height: 1;
-    transition: var(--transition);
   }
 
   /* English State (checked) */

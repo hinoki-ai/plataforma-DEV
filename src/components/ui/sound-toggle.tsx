@@ -93,7 +93,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     --container-height: 2.5em;
     --container-radius: 6.25em;
     --container-sound-bg: #4a90e2;
-    --container-mute-bg: #e74c3c;
+    --container-mute-bg: #708090;
     --circle-container-diameter: 3.375em;
     --speaker-diameter: 2.125em;
     --speaker-bg: #ffffff;
@@ -230,7 +230,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #e74c3c;
+    color: #36454F;
     opacity: 0;
     transform: scale(0) rotate(-90deg);
     transition: var(--transition);
@@ -243,7 +243,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
 
   .sound-switch__waves {
     position: absolute;
-    right: 0.5em;
+    right: 0.9em;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
