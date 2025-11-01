@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 type MeteorsProps = {
   number?: number;
@@ -14,16 +14,41 @@ export const Meteors = ({
   className,
   containerClassName,
 }: MeteorsProps) => {
-  const [meteors] = useState(() =>
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(800);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  const [meteors, setMeteors] = useState(() =>
     Array.from({ length: number }).map((_, idx) => ({
       id: idx,
-      position: idx * (800 / number) - 400,
+      position: idx * (800 / number) - 400, // Initial position based on default width
       duration: Math.floor(Math.random() * (10 - 5) + 5),
       delay: Math.random() * 5,
     })),
   );
+
+  useEffect(() => {
+    setMeteors(prevMeteors =>
+      prevMeteors.map((meteor, idx) => ({
+        ...meteor,
+        position: idx * (containerWidth / number) - containerWidth / 2,
+      }))
+    );
+  }, [containerWidth, number]);
   return (
     <motion.div
+      ref={containerRef}
       aria-hidden="true"
       className={cn(
         "pointer-events-none absolute inset-0 overflow-hidden",
