@@ -945,7 +945,10 @@ export function HorariosDashboardReal({
                         "h-2 rounded-full bg-linear-to-r",
                         category.tone,
                       )}
-                      style={{ width: `${category.percent}%` }}
+                      style={{
+                        width: `var(--progress-width, ${category.percent}%)`,
+                        "--progress-width": `${category.percent}%`,
+                      } as React.CSSProperties}
                     />
                   </div>
                 </div>

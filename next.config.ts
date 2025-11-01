@@ -349,6 +349,10 @@ const nextConfig: NextConfig = {
                     "https://*.clerk.accounts.dev",
                     "https://clerk.plataforma.aramac.dev",
                     "https://api.clerk.com",
+                    "https://ws-us3.pusher.com",
+                    "wss://ws-us3.pusher.com",
+                    "https://*.pusher.com",
+                    "wss://*.pusher.com",
                   ]),
                   directive("media-src", [
                     "'self'",
