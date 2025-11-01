@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from "next-themes";
@@ -119,8 +119,7 @@ export default function UnifiedAuthButton() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await fetch("/api/auth/signout", { method: "POST" });
-      router.push("/");
+      await signOut({ callbackUrl: "/" });
     } catch (error) {
       console.error("Logout error:", error);
       router.push("/");

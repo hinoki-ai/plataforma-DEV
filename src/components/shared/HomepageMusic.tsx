@@ -7,6 +7,7 @@ export function HomepageMusic() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const { preferences, isLoaded } = useAudioConsent();
   const [allowAutoplay, setAllowAutoplay] = useState(true);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isFadingRef = useRef(false);
   const baseVolumeRef = useRef(0.25);
@@ -99,7 +100,9 @@ export function HomepageMusic() {
         audio.removeAttribute("muted");
 
         if (audio.paused) {
-          await audio.play();
+          // Only attempt to play after user interaction to comply with autoplay policies
+          // The audio will be triggered by user events or the cookie consent handler
+          return;
         }
       } catch (error) {
         // Silently handle audio playback errors
@@ -117,7 +120,8 @@ export function HomepageMusic() {
       preferences.hasConsented &&
       !preferences.isMuted
     ) {
-      void startPlayback();
+      // Don't auto-play on load - wait for user interaction
+      // This prevents browser autoplay blocking
     } else {
       pausePlayback();
     }
@@ -127,6 +131,70 @@ export function HomepageMusic() {
     preferences.musicEnabled,
     preferences.isMuted,
     allowAutoplay,
+  ]);
+
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      if (!hasUserInteracted) {
+        setHasUserInteracted(true);
+        // Remove listeners after first interaction
+        window.removeEventListener("click", handleUserInteraction);
+        window.removeEventListener("keydown", handleUserInteraction);
+        window.removeEventListener("touchstart", handleUserInteraction);
+        window.removeEventListener("scroll", handleUserInteraction);
+      }
+    };
+
+    if (!hasUserInteracted) {
+      window.addEventListener("click", handleUserInteraction, { once: true });
+      window.addEventListener("keydown", handleUserInteraction, { once: true });
+      window.addEventListener("touchstart", handleUserInteraction, { once: true });
+      window.addEventListener("scroll", handleUserInteraction, { once: true });
+    }
+
+    return () => {
+      window.removeEventListener("click", handleUserInteraction);
+      window.removeEventListener("keydown", handleUserInteraction);
+      window.removeEventListener("touchstart", handleUserInteraction);
+      window.removeEventListener("scroll", handleUserInteraction);
+    };
+  }, [hasUserInteracted]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !isLoaded || !hasUserInteracted) return;
+
+    const startPlayback = async () => {
+      try {
+        audio.muted = false;
+        if (!isFadingRef.current) {
+          audio.volume = baseVolumeRef.current;
+        }
+        audio.removeAttribute("muted");
+
+        if (audio.paused) {
+          await audio.play();
+        }
+      } catch (error) {
+        // Silently handle audio playback errors
+      }
+    };
+
+    if (
+      preferences.musicEnabled &&
+      preferences.hasConsented &&
+      !preferences.isMuted &&
+      allowAutoplay
+    ) {
+      void startPlayback();
+    }
+  }, [
+    isLoaded,
+    preferences.hasConsented,
+    preferences.musicEnabled,
+    preferences.isMuted,
+    allowAutoplay,
+    hasUserInteracted,
   ]);
 
   useEffect(() => {
@@ -140,7 +208,7 @@ export function HomepageMusic() {
       }
       audio.removeAttribute("muted");
 
-      if (audio.paused) {
+      if (audio.paused && hasUserInteracted) {
         audio.play().catch(() => {});
       }
     };
@@ -149,7 +217,7 @@ export function HomepageMusic() {
     return () => {
       window.removeEventListener("homepage-music-play", handleCookieAccept);
     };
-  }, [allowAutoplay]);
+  }, [allowAutoplay, hasUserInteracted]);
 
   return (
     <audio
