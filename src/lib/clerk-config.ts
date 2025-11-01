@@ -18,6 +18,6 @@ export const clerkConfig = {
   },
   signInUrl: "/login",
   signUpUrl: "/registro",
-  afterSignInUrl: "/auth-success",
-  afterSignUpUrl: "/auth-success",
+  fallbackRedirectUrl: "/auth-success",
+  signUpFallbackRedirectUrl: "/auth-success",
 };
