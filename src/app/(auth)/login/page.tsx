@@ -1,7 +1,8 @@
 "use client";
 
 import { useSignIn } from "@clerk/nextjs";
-import { useSearchParams } from "next/navigation";
+import { isClerkAPIResponseError } from "@clerk/shared/error";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -19,17 +20,20 @@ const fadeInUp: Variants = {
 function LoginForm() {
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl");
-  const { signIn, isLoaded } = useSignIn();
+  const router = useRouter();
+  const { signIn, isLoaded, setActive } = useSignIn();
   const { t } = useDivineParsing(["common"]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLoaded) return;
 
     setIsLoading(true);
+    setError(null);
     try {
       const result = await signIn.create({
         identifier: email,
@@ -37,10 +41,30 @@ function LoginForm() {
       });
 
       if (result.status === "complete") {
-        window.location.href = callbackUrl ?? "/auth-success";
+        await setActive({ session: result.createdSessionId });
+        const target = callbackUrl ?? "/auth-success";
+        router.replace(target);
+        return;
       }
+
+      console.error("Unexpected sign-in status:", result);
+      setError(t("auth.login_error"));
     } catch (err) {
       console.error("Error signing in:", err);
+      if (isClerkAPIResponseError(err)) {
+        const firstError = err.errors?.[0];
+        if (
+          firstError?.code === "form_password_incorrect" ||
+          firstError?.code === "form_identifier_not_found" ||
+          firstError?.code === "form_identifier_invalid"
+        ) {
+          setError(t("auth.invalid_credentials"));
+        } else {
+          setError(firstError?.longMessage ?? t("auth.login_error"));
+        }
+      } else {
+        setError(t("auth.login_error"));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -106,6 +130,15 @@ function LoginForm() {
               />
             </div>
           </div>
+
+          {error && (
+            <p
+              className="text-left text-sm font-medium text-destructive"
+              role="alert"
+            >
+              {error}
+            </p>
+          )}
 
           <Button
             type="submit"
