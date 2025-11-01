@@ -1,13 +1,11 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { dbLogger } from "@/lib/logger";
 import { RoleAwareDashboard } from "@/components/dashboard/RoleAwareDashboard";
-import { EducationalInstitutionSelector } from "@/components/admin/EducationalInstitutionSelector";
-import { EducationalInstitutionType } from "@/lib/educational-system";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Force dynamic rendering for Vercel compatibility
@@ -15,49 +13,6 @@ export const dynamic = "force-dynamic";
 
 export default function AdminDashboard() {
   const { t } = useDivineParsing(["common"]);
-  const [currentInstitutionType, setCurrentInstitutionType] =
-    useState<EducationalInstitutionType>("PRESCHOOL");
-  const [isLoadingConfig, setIsLoadingConfig] = useState(true);
-
-  // Fetch current institution configuration on mount
-  useEffect(() => {
-    const fetchInstitutionConfig = async () => {
-      try {
-        const response = await fetch("/api/educational-system");
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            console.warn(
-              "Unauthorized to fetch institution config, using default",
-            );
-          } else {
-            console.error(
-              "Failed to fetch institution config:",
-              response.status,
-              response.statusText,
-            );
-          }
-          // Keep default 'PRESCHOOL' if API fails
-          return;
-        }
-
-        const data = await response.json();
-
-        if (data.success && data.institutionType) {
-          setCurrentInstitutionType(data.institutionType);
-        } else {
-          console.warn("Invalid response format from institution config API");
-        }
-      } catch (error) {
-        console.error("Error fetching institution configuration:", error);
-        // Keep default 'PRESCHOOL' if API fails
-      } finally {
-        setIsLoadingConfig(false);
-      }
-    };
-
-    fetchInstitutionConfig();
-  }, []);
 
   // 🚨 EMERGENCY: Handle database failures gracefully
   try {
@@ -119,39 +74,6 @@ export default function AdminDashboard() {
         }
       >
         <div className="space-y-8">
-          {/* Educational Institution Configuration - Priority Section */}
-          <div className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
-            {isLoadingConfig ? (
-              <div className="animate-pulse">
-                <div className="h-6 w-64 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-32 bg-gray-300 dark:bg-gray-700 rounded"
-                    ></div>
-                  ))}
-                </div>
-                <div className="h-10 w-48 bg-gray-300 dark:bg-gray-700 rounded"></div>
-              </div>
-            ) : (
-              <div>
-                <h2 className="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                  {t("admin.loading.title", "admin")}
-                </h2>
-                <p className="text-sm text-blue-700 dark:text-blue-300 mb-4">
-                  {t("admin.loading.subtitle", "admin")}
-                </p>
-                <EducationalInstitutionSelector
-                  currentType={currentInstitutionType}
-                  onTypeChange={(type) => {
-                    setCurrentInstitutionType(type);
-                  }}
-                />
-              </div>
-            )}
-          </div>
-
           {/* Standard Admin Dashboard */}
           <RoleAwareDashboard />
         </div>
