@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import DocsLandingContent from "./DocsLandingContent";
 
 export const metadata: Metadata = {
   title: "Documentation - Plataforma Astral",
@@ -111,38 +112,5 @@ const staticMarkdown = `# Technical Documentation
 export default function DocsPage() {
   const htmlContent = markdownToHtml(staticMarkdown);
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <nav className="mb-6">
-          <a href="/" className="text-blue-600 hover:text-blue-800 underline">
-            ← Back to Home
-          </a>
-        </nav>
-
-        <article className="prose prose-lg max-w-none">
-          <div
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
-            className="text-foreground"
-          />
-        </article>
-
-        <footer className="mt-12 pt-8 border-t border-border">
-          <div className="text-sm text-muted-foreground">
-            <p>
-              For complete documentation, visit the{" "}
-              <a
-                href="https://github.com/hinoki-ai/plataforma-DEV/tree/main/docs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline"
-              >
-                docs folder on GitHub
-              </a>
-            </p>
-          </div>
-        </footer>
-      </div>
-    </div>
-  );
+  return <DocsLandingContent htmlContent={htmlContent} />;
 }
