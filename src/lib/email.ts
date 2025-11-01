@@ -33,6 +33,7 @@ const createResendClient = () => {
 };
 
 const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || "preuastral@gmail.com";
+const DEFAULT_CONTACT_RECIPIENTS = ["preuastral@gmail.com"];
 
 // Stub implementations for missing functions to fix TypeScript errors
 // TODO: Implement proper email functionality
@@ -77,6 +78,10 @@ function getContactRecipients(): string[] {
     for (const email of parseRecipientList(source)) {
       recipients.add(email);
     }
+  }
+
+  for (const fallbackRecipient of DEFAULT_CONTACT_RECIPIENTS) {
+    recipients.add(fallbackRecipient);
   }
 
   if (!recipients.size) {

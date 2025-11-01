@@ -392,7 +392,7 @@ export default function CPMAPage() {
                     >
                       <SignupStyleCard
                         variant="info"
-                        className="backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5"
+                        className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
                       >
                         <div className="flex flex-col space-y-3 lg:space-y-4">
                           <div className="flex items-center space-x-3 lg:space-x-4">
@@ -443,7 +443,7 @@ export default function CPMAPage() {
                 <motion.div key={index} variants={fadeInUp}>
                   <SignupStyleCard
                     variant="feature"
-                    className="h-full backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5"
+                    className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
                   >
                     <div className="flex flex-col items-center text-center space-y-4">
                       <div
@@ -483,7 +483,7 @@ export default function CPMAPage() {
             icon={<FileIcons.Document className="w-8 h-8 text-foreground" />}
             variant="info"
           >
-            <div className="bg-black/5 dark:bg-black/10 p-6 rounded-xl border border-white/10 dark:border-white/5 relative overflow-hidden backdrop-blur-sm">
+            <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 relative overflow-hidden">
               {/* Background pattern */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-16 translate-x-16" />
               <div className="relative z-10">
@@ -536,7 +536,7 @@ export default function CPMAPage() {
             icon={<FileIcons.Document className="w-8 h-8 text-foreground" />}
             variant="info"
           >
-            <div className="bg-black/5 dark:bg-black/10 p-6 rounded-xl border border-white/10 dark:border-white/5 relative overflow-hidden backdrop-blur-sm">
+            <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 relative overflow-hidden">
               {/* Background pattern */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -translate-y-16 translate-x-16" />
               <div className="relative z-10">
@@ -589,7 +589,7 @@ export default function CPMAPage() {
           >
             <SignupStylePanel variant="info">
               <div className="space-y-6">
-                <div className="bg-black/5 dark:bg-black/10 p-6 rounded-xl border border-white/5 dark:border-white/5 backdrop-blur-sm">
+                <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
                   <p className="text-lg leading-relaxed text-foreground">
                     {t("proyecto_educativo.philosophy_description", "common")}
                   </p>
@@ -756,7 +756,7 @@ export default function CPMAPage() {
             title={t("proyecto_educativo.methodology_title", "common")}
           >
             <SignupStyleGrid columns={3} gap="md">
-              <SignupStyleCard variant="info" className="h-full">
+              <SignupStyleCard variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                     <div className="text-3xl">🌱</div>
@@ -772,7 +772,7 @@ export default function CPMAPage() {
                 </div>
               </SignupStyleCard>
 
-              <SignupStyleCard variant="info" className="h-full">
+              <SignupStyleCard variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                     <div className="text-3xl">👤</div>
@@ -791,7 +791,7 @@ export default function CPMAPage() {
                 </div>
               </SignupStyleCard>
 
-              <SignupStyleCard variant="info" className="h-full">
+              <SignupStyleCard variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                     <div className="text-3xl">📊</div>
@@ -868,7 +868,7 @@ export default function CPMAPage() {
                   ),
                 },
               ].map((member, index) => (
-                <SignupStyleCard key={index} variant="info" className="h-full">
+                <SignupStyleCard key={index} variant="info" className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                   <div className="flex flex-col items-center text-center space-y-4">
                     <div className="p-3 bg-white/10 rounded-xl shadow-lg">
                       <div className="text-3xl">{member.icon}</div>
@@ -889,7 +889,7 @@ export default function CPMAPage() {
               ))}
             </SignupStyleGrid>
 
-            <SignupStyleCard variant="info" className="mt-6">
+            <SignupStyleCard variant="info" className="mt-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
               <p className="text-center text-sm text-muted-foreground">
                 <strong className="text-foreground">
                   {t("proyecto_educativo.collaborative_work_note", "common")}

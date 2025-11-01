@@ -2,6 +2,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import DocsArticleContent from "../DocsArticleContent";
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
@@ -65,51 +66,22 @@ export default async function DocsPage({ params }: PageProps) {
   const fileName = slug.join("/") + ".md";
   const filePath = join(process.cwd(), "docs", fileName);
 
-  let markdown: string;
-  let htmlContent: string;
+  let htmlContent = "";
 
   try {
-    markdown = readFileSync(filePath, "utf-8");
+    const markdown = readFileSync(filePath, "utf-8");
     htmlContent = markdownToHtml(markdown);
   } catch (error) {
     notFound();
   }
 
+  const githubUrl = `https://github.com/hinoki-ai/plataforma-DEV/blob/main/docs/${fileName}`;
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <nav className="mb-6">
-          <a href="/" className="text-blue-600 hover:text-blue-800 underline">
-            ← Back to Home
-          </a>
-        </nav>
-
-        <article className="prose prose-lg max-w-none">
-          <div
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
-            className="text-foreground"
-          />
-        </article>
-
-        <footer className="mt-12 pt-8 border-t border-border">
-          <div className="text-sm text-muted-foreground">
-            <p>
-              File:{" "}
-              <code className="bg-muted px-2 py-1 rounded">{fileName}</code>
-            </p>
-            <p className="mt-2">
-              <a
-                href={`https://github.com/hinoki-ai/plataforma-DEV/blob/main/docs/${fileName}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline"
-              >
-                View on GitHub →
-              </a>
-            </p>
-          </div>
-        </footer>
-      </div>
-    </div>
+    <DocsArticleContent
+      htmlContent={htmlContent}
+      fileName={fileName}
+      githubUrl={githubUrl}
+    />
   );
 }
