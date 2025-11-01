@@ -19,7 +19,7 @@ export async function GET() {
     const fallbackInstitutions = [
       {
         _id: "real-1",
-        name: "Escuela Especial de Lenguaje Manitos Pintadas",
+        name: "Escuela Especial de Lenguaje Plataforma Astral",
         institutionType: "PRESCHOOL",
         address: "Anibal Pinto Nº 160, Los Sauces, Chile",
       },
@@ -109,7 +109,7 @@ export async function GET() {
     const fallbackInstitutions = [
       {
         _id: "real-1",
-        name: "Escuela Especial de Lenguaje Manitos Pintadas",
+        name: "Escuela Especial de Lenguaje Plataforma Astral",
         institutionType: "PRESCHOOL",
         address: "Anibal Pinto Nº 160, Los Sauces, Chile",
       },

@@ -5,7 +5,7 @@
 // BUNDLE_IMPACT: 97.4% REDUCTION (TARGET)
 // FEATURES: LAZY_LOADING, CACHING, ROUTE_BASED_LOADING, PERFORMANCE_MONITORING
 // INSPIRED BY: Parking Project's Divine Parsing Oracle
-// ADAPTED FOR: Manitos Pintadas School Portal
+// ADAPTED FOR: Plataforma Astral School Portal
 
 import React, {
   createContext,

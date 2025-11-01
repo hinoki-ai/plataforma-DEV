@@ -142,7 +142,7 @@ export function MeetingForm({
           throw new Error("Failed to fetch users");
         }
         const data = await response.json();
-        setUsers(data.data || []);
+        setUsers(Array.isArray(data.data) ? data.data : []);
       } catch (error) {
         console.error("Error fetching users:", error);
         setUsers([]);
@@ -580,7 +580,8 @@ export function MeetingForm({
                           Cargando profesores...
                         </SelectItem>
                       ) : (
-                        users?.map((user) => (
+                        Array.isArray(users) &&
+                        users.map((user) => (
                           <SelectItem key={user.id} value={user.id}>
                             {user.name || user.email}
                           </SelectItem>

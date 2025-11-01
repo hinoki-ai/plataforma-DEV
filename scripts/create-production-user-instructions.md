@@ -6,7 +6,7 @@
 
    ```bash
    # Open this URL in your browser:
-   https://dashboard.convex.dev/t/hinoki-ai/manitos-pintadas/industrious-manatee-7/data
+   https://dashboard.convex.dev/t/hinoki-ai/plataforma-astral/industrious-manatee-7/data
    ```
 
 2. **Find/Create User:**
@@ -16,7 +16,7 @@
    - Click on the user row
    - Copy this bcrypt hash (password: `59163476a`):
 
-   ```
+   ```text
    $2a$10$nDqQE4yF7JvPz3qH.K5V.eZ3zM7xQW8JvGR5Y6tN8pKLmH9Q2tXWm
    ```
 
@@ -27,6 +27,7 @@
 4. **If user DOESN'T exist:**
    - Click "Insert Document"
    - Fill in:
+
      ```json
      {
        "email": "agustin@astral.cl",
@@ -37,10 +38,11 @@
        "isOAuthUser": false
      }
      ```
+
    - Click "Insert"
 
 5. **Test Login:**
-   - Go to: https://plataforma.aramac.dev/login
+   - Go to: <https://plataforma.aramac.dev/login>
    - Email: `agustin@astral.cl`
    - Password: `59163476a`
 

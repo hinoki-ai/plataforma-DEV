@@ -62,7 +62,7 @@ const globalSettings: GlobalSetting[] = [
     label: "Nombre del Sistema",
     description: "Nombre público del sistema",
     type: "text",
-    value: "Manitos Pintadas",
+    value: "Plataforma Astral",
     category: "system",
   },
   {

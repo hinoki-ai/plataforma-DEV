@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Development setup script for ManitosPintadas
+# Development setup script for Plataforma Astral
 # This script sets up the development environment with SQLite
 
 set -e

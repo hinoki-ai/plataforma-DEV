@@ -294,7 +294,7 @@ END:VEVENT`;
 
         exportedData = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Manitos Pintadas//Calendar Export//ES
+PRODID:-//Plataforma Astral//Calendar Export//ES
 ${icsEvents.join("\n")}
 END:VCALENDAR`;
         break;

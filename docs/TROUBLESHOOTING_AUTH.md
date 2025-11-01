@@ -1,7 +1,7 @@
 # Authentication Troubleshooting Guide
 
 **Last Updated**: September 1, 2025  
-**For**: Manitos Pintadas School Management System  
+**For**: Plataforma Astral School Management System  
 **Site**: <https://school.aramac.dev>
 
 ## 🚨 QUICK DIAGNOSTIC CHECKLIST
@@ -59,7 +59,7 @@ npx vercel env ls
 
    ```bash
    # Should be: https://school.aramac.dev
-   # NOT: https://manitos-pintadas.vercel.app (old domain - now plataforma.aramac.dev)
+   # NOT: https://manitos-pintadas.vercel.app (old Manitos Pintadas domain - now plataforma.aramac.dev)
    ```
 
 #### Issue #1: Solution

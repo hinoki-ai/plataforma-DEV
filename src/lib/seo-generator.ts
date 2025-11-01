@@ -41,7 +41,7 @@ const DEFAULT_CONFIG = {
   keywords: [
     "jardín infantil",
     "educación inicial",
-    "manitos pintadas",
+    "plataforma astral",
     "equipo multidisciplinario",
     "centro y consejo",
     "proyecto educativo",

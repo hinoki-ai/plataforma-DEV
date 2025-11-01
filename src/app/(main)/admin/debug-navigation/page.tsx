@@ -15,7 +15,7 @@ import { SessionAnalytics } from "@/components/debug/SessionAnalytics";
 import { DebugPanel } from "@/components/admin/dashboard/DebugPanel";
 
 export const metadata: Metadata = {
-  title: "Enhanced Debug Panel - Manitos Pintadas",
+  title: "Enhanced Debug Panel - Plataforma Astral",
   description:
     "Advanced debugging and monitoring dashboard for system administrators.",
 };

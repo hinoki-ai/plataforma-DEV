@@ -284,7 +284,7 @@ export function Sidebar({
               <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                 <NavigationIcons.Planning className="h-4 w-4 text-primary" />
               </div>
-              <span className="font-semibold text-sm">Manitos Pintadas</span>
+              <span className="font-semibold text-sm">Plataforma Astral</span>
             </div>
           )}
           {isCollapsed && (

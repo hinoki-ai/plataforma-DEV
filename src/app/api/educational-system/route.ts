@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
 
     // Update or create school info with new institution type
     await client.mutation(api.institutionInfo.createOrUpdateSchoolInfo, {
-      name: "Manitos Pintadas Educational Institution",
+      name: "Plataforma Astral Educational Institution",
       mission: "Educating and nurturing young minds",
       vision: "A leading educational institution in our community",
       address: "To be configured",
