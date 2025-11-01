@@ -5,9 +5,10 @@ import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { Meteors } from "@/components/ui/meteors";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, Variants } from "motion/react";
 
 const fadeInUp: Variants = {
@@ -62,8 +63,13 @@ export default function ContactoContent() {
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Contact Information */}
             <div className="space-y-8">
-              <Card className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
-                <CardContent>
+              <Card className="relative isolate overflow-hidden backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
+                <Meteors
+                  number={28}
+                  containerClassName="absolute inset-0"
+                  className="bg-primary/55 shadow-[0_0_0_1px_hsl(var(--primary)/0.25)] before:from-primary/70 before:via-primary/15 dark:bg-primary/25 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.2)] dark:before:from-primary/40 dark:before:via-primary/10"
+                />
+                <CardContent className="relative z-10">
                   <div className="space-y-6">
                     <div>
                       <h4 className="font-bold text-foreground text-lg mb-3 flex items-center gap-2">
@@ -117,8 +123,13 @@ export default function ContactoContent() {
                 </CardContent>
               </Card>
 
-              <Card className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
-                <CardContent>
+              <Card className="relative isolate overflow-hidden backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
+                <Meteors
+                  number={24}
+                  containerClassName="absolute inset-0"
+                  className="bg-primary/55 shadow-[0_0_0_1px_hsl(var(--primary)/0.25)] before:from-primary/70 before:via-primary/12 dark:bg-primary/25 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.2)] dark:before:from-primary/40 dark:before:via-primary/8"
+                />
+                <CardContent className="relative z-10">
                   <div className="space-y-6">
                     <div>
                       <h4 className="font-bold text-foreground text-lg mb-3 flex items-center gap-2">
@@ -152,13 +163,18 @@ export default function ContactoContent() {
             </div>
 
             {/* Contact Form */}
-            <Card className="backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
-              <CardHeader>
+            <Card className="relative isolate overflow-hidden backdrop-blur-xl bg-card/80 border border-border rounded-2xl shadow-2xl">
+              <Meteors
+                number={20}
+                containerClassName="absolute inset-0"
+                className="bg-primary/50 shadow-[0_0_0_1px_hsl(var(--primary)/0.25)] before:from-primary/65 before:via-primary/12 dark:bg-primary/20 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.18)] dark:before:from-primary/35 dark:before:via-primary/8"
+              />
+              <CardHeader className="relative z-10">
                 <CardTitle className="text-foreground text-lg font-bold">
                   {t("form.section.title", "contacto")}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative z-10">
                 <ContactForm />
               </CardContent>
             </Card>
