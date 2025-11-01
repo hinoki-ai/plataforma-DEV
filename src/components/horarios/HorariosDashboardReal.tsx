@@ -567,7 +567,7 @@ export function HorariosDashboardReal({
             </p>
           </div>
 
-          <Card className="bg-gradient-to-br from-primary/20 via-primary/10 to-transparent shadow-lg">
+          <Card className="bg-linear-to-br from-primary/20 via-primary/10 to-transparent shadow-lg">
             <CardContent className="flex flex-col gap-1 p-4">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary/80">
                 <ShieldCheck className="h-4 w-4" />
@@ -775,7 +775,7 @@ export function HorariosDashboardReal({
                           <Badge
                             variant="outline"
                             className={cn(
-                              "border-none bg-gradient-to-r text-xs font-medium text-white shadow",
+                              "border-none bg-linear-to-r text-xs font-medium text-white shadow",
                               CATEGORY_COLORS[event.category] ??
                                 "from-slate-500/80 to-slate-400/80",
                             )}
@@ -942,7 +942,7 @@ export function HorariosDashboardReal({
                   <div className="h-2 rounded-full bg-muted">
                     <div
                       className={cn(
-                        "h-2 rounded-full bg-gradient-to-r",
+                        "h-2 rounded-full bg-linear-to-r",
                         category.tone,
                       )}
                       style={{ width: `${category.percent}%` }}

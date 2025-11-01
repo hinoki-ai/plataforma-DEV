@@ -6,13 +6,15 @@ import { getConvexClient } from "@/lib/convex";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
+import type { SimpleFileMetadata } from "@/lib/simple-upload";
+
 export async function createPlanningDocument(data: {
   title: string;
   content: string;
   subject: string;
   grade: string;
   authorId: string;
-  attachments?: Array<{ name: string; url: string }>;
+  attachments?: SimpleFileMetadata[];
 }) {
   try {
     const client = getConvexClient();
@@ -36,7 +38,7 @@ export async function updatePlanningDocument(
     content?: string;
     subject?: string;
     grade?: string;
-    attachments?: Array<{ name: string; url: string }>;
+    attachments?: SimpleFileMetadata[];
   },
 ) {
   try {

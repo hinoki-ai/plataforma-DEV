@@ -220,7 +220,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
               )}
 
               <div className="text-xs text-muted-foreground mt-4">
-                Sistema Escolar Manitos Pintadas
+                Sistema Escolar Plataforma Astral
               </div>
             </div>
           </div>

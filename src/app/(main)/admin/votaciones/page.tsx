@@ -329,18 +329,18 @@ export default function AdminVotesPage() {
 
   const getCategoryLabel = (category: string) => {
     const labels: Record<string, string> = {
-      GENERAL: t("admin.votaciones.category.general", "admin"),
-      ACADEMIC: t("admin.votaciones.category.academic", "admin"),
-      ADMINISTRATIVE: t("admin.votaciones.category.administrative", "admin"),
-      SOCIAL: t("admin.votaciones.category.social", "admin"),
-      FINANCIAL: t("admin.votaciones.category.financial", "admin"),
-      INFRASTRUCTURE: t("admin.votaciones.category.infrastructure", "admin"),
-      CURRICULUM: t("admin.votaciones.category.curriculum", "admin"),
-      EVENTS: t("admin.votaciones.category.events", "admin"),
-      POLICIES: t("admin.votaciones.category.policies", "admin"),
-      OTHER: t("admin.votaciones.category.other", "admin"),
+      GENERAL: t("admin.votaciones.category.general", "common"),
+      ACADEMIC: t("admin.votaciones.category.academic", "common"),
+      ADMINISTRATIVE: t("admin.votaciones.category.administrative", "common"),
+      SOCIAL: t("admin.votaciones.category.social", "common"),
+      FINANCIAL: t("admin.votaciones.category.financial", "common"),
+      INFRASTRUCTURE: t("admin.votaciones.category.infrastructure", "common"),
+      CURRICULUM: t("admin.votaciones.category.curriculum", "common"),
+      EVENTS: t("admin.votaciones.category.events", "common"),
+      POLICIES: t("admin.votaciones.category.policies", "common"),
+      OTHER: t("admin.votaciones.category.other", "common"),
     };
-    return labels[category] || t("admin.votaciones.category.other", "admin");
+    return labels[category] || t("admin.votaciones.category.other", "common");
   };
 
   if (isLoading) {
@@ -537,34 +537,40 @@ export default function AdminVotesPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="GENERAL">
-                        {t("admin.votaciones.category.general", "admin")}
+                        {t("admin.votaciones.category.general", "common")}
                       </SelectItem>
                       <SelectItem value="ACADEMIC">
-                        {t("admin.votaciones.category.academic", "admin")}
+                        {t("admin.votaciones.category.academic", "common")}
                       </SelectItem>
                       <SelectItem value="ADMINISTRATIVE">
-                        {t("admin.votaciones.category.administrative", "admin")}
+                        {t(
+                          "admin.votaciones.category.administrative",
+                          "common",
+                        )}
                       </SelectItem>
                       <SelectItem value="SOCIAL">
-                        {t("admin.votaciones.category.social", "admin")}
+                        {t("admin.votaciones.category.social", "common")}
                       </SelectItem>
                       <SelectItem value="FINANCIAL">
-                        {t("admin.votaciones.category.financial", "admin")}
+                        {t("admin.votaciones.category.financial", "common")}
                       </SelectItem>
                       <SelectItem value="INFRASTRUCTURE">
-                        {t("admin.votaciones.category.infrastructure", "admin")}
+                        {t(
+                          "admin.votaciones.category.infrastructure",
+                          "common",
+                        )}
                       </SelectItem>
                       <SelectItem value="CURRICULUM">
-                        {t("admin.votaciones.category.curriculum", "admin")}
+                        {t("admin.votaciones.category.curriculum", "common")}
                       </SelectItem>
                       <SelectItem value="EVENTS">
-                        {t("admin.votaciones.category.events", "admin")}
+                        {t("admin.votaciones.category.events", "common")}
                       </SelectItem>
                       <SelectItem value="POLICIES">
-                        {t("admin.votaciones.category.policies", "admin")}
+                        {t("admin.votaciones.category.policies", "common")}
                       </SelectItem>
                       <SelectItem value="OTHER">
-                        {t("admin.votaciones.category.other", "admin")}
+                        {t("admin.votaciones.category.other", "common")}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -598,7 +604,7 @@ export default function AdminVotesPage() {
                     }
                   />
                   <Label htmlFor="isActive">
-                    {t("admin.votaciones.form.active", "admin")}
+                    {t("admin.votaciones.form.active.label", "common")}
                   </Label>
                 </div>
 
@@ -611,7 +617,7 @@ export default function AdminVotesPage() {
                     }
                   />
                   <Label htmlFor="isPublic">
-                    {t("admin.votaciones.form.public", "admin")}
+                    {t("admin.votaciones.form.public.label", "common")}
                   </Label>
                 </div>
               </div>
@@ -629,7 +635,7 @@ export default function AdminVotesPage() {
                     }
                   />
                   <Label htmlFor="allowMultipleVotes">
-                    {t("admin.votaciones.form.allow_multiple_votes", "admin")}
+                    {t("admin.votaciones.form.multiple_votes.label", "common")}
                   </Label>
                 </div>
 
@@ -645,7 +651,7 @@ export default function AdminVotesPage() {
                     }
                   />
                   <Label htmlFor="requireAuthentication">
-                    {t("admin.votaciones.form.require_authentication", "admin")}
+                    {t("admin.votaciones.form.auth_required.label", "common")}
                   </Label>
                 </div>
               </div>
@@ -653,7 +659,7 @@ export default function AdminVotesPage() {
               {formData.allowMultipleVotes && (
                 <div>
                   <Label htmlFor="maxVotesPerUser">
-                    {t("admin.votaciones.form.max_votes_per_user", "admin")}
+                    {t("admin.votaciones.form.max_votes.label", "common")}
                   </Label>
                   <Input
                     id="maxVotesPerUser"
@@ -669,14 +675,17 @@ export default function AdminVotesPage() {
                           : undefined,
                       }))
                     }
-                    placeholder={t("admin.votaciones.form.unlimited", "admin")}
+                    placeholder={t(
+                      "admin.votaciones.form.max_votes.placeholder",
+                      "common",
+                    )}
                   />
                 </div>
               )}
 
               <div>
                 <Label>
-                  {t("admin.votaciones.form.options_label", "admin")}
+                  {t("admin.votaciones.form.options.label", "common")}
                 </Label>
                 <div className="space-y-2">
                   {formData.options.map((option, index) => (
@@ -684,7 +693,7 @@ export default function AdminVotesPage() {
                       <Input
                         value={option.text}
                         onChange={(e) => updateOption(index, e.target.value)}
-                        placeholder={`${t("admin.votaciones.form.option_placeholder", "admin")} ${index + 1}`}
+                        placeholder={`${t("admin.votaciones.form.options.placeholder", "common")} ${index + 1}`}
                       />
                       {formData.options.length > 2 && (
                         <Button
@@ -706,7 +715,7 @@ export default function AdminVotesPage() {
                       className="w-full"
                     >
                       <Plus className="h-4 w-4 mr-2" />
-                      {t("admin.votaciones.form.add_option", "admin")}
+                      {t("admin.votaciones.form.add_option", "common")}
                     </Button>
                   )}
                 </div>
@@ -715,7 +724,7 @@ export default function AdminVotesPage() {
 
             <div className="flex justify-end space-x-2 pt-4">
               <Button variant="outline" onClick={handleCloseDialog}>
-                {t("admin.votaciones.form.cancel", "admin")}
+                {t("admin.votaciones.form.cancel", "common")}
               </Button>
               <Button
                 onClick={selectedVote ? handleUpdateVote : handleCreateVote}
@@ -728,10 +737,10 @@ export default function AdminVotesPage() {
                 }
               >
                 {isCreating || isEditing
-                  ? t("admin.votaciones.form.saving", "admin")
+                  ? t("admin.votaciones.form.saving", "common")
                   : selectedVote
-                    ? t("admin.votaciones.form.update", "admin")
-                    : t("admin.votaciones.form.save", "admin")}
+                    ? t("admin.votaciones.form.update", "common")
+                    : t("admin.votaciones.form.create", "common")}
               </Button>
             </div>
           </DialogContent>
@@ -833,21 +842,24 @@ export default function AdminVotesPage() {
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>
-                          {t("admin.votaciones.delete.title", "admin")}
+                          {t("admin.votaciones.delete.confirm.title", "common")}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                          {t("admin.votaciones.delete.description", "admin")}
+                          {t(
+                            "admin.votaciones.delete.confirm.description",
+                            "common",
+                          )}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>
-                          {t("admin.votaciones.delete.cancel", "admin")}
+                          {t("admin.votaciones.delete.cancel", "common")}
                         </AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDeleteVote(vote.id)}
                           className="bg-red-600 hover:bg-red-700"
                         >
-                          {t("admin.votaciones.delete.confirm", "admin")}
+                          {t("admin.votaciones.delete.confirm", "common")}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

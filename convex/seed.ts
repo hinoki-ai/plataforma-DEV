@@ -98,15 +98,15 @@ export const seedDatabase = mutation({
 
     // Create School Info - Real Institution
     await ctx.db.insert("institutionInfo", {
-      name: "Escuela Especial de Lenguaje Manitos Pintadas",
+      name: "Escuela Especial de Lenguaje Plataforma Astral",
       mission:
         "Queremos que cada niño y niña crezca feliz, aprenda y se desarrolle en un ambiente de respeto y cariño. Buscamos que todos puedan aprender, convivir y prepararse para la vida, valorando siempre la alegría y la sencillez.",
       vision:
         "Soñamos con ser una escuelita reconocida por su trabajo en equipo, donde cada estudiante es valorado y apoyado. Queremos que nuestros estudiantes sean personas responsables, creativas y alegres, preparadas para aportar a su comunidad y al mundo.",
       address: "Anibal Pinto Nº 160, Los Sauces, Chile",
       phone: "+56 45 278 3486",
-      email: "contacto@manitospintadas.cl",
-      website: "https://manitos-pintadas.vercel.app",
+      email: "contacto@plataformaastral.cl",
+      website: "https://plataforma-astral.vercel.app",
       institutionType: "PRESCHOOL",
       createdAt: now,
       updatedAt: now,

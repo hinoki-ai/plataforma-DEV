@@ -129,7 +129,7 @@ export default function Navigation() {
             <>
               {/* CENTER CONTENT: Title only */}
               <div className="flex items-center">
-                {/* Position 3: "Manitos Pintadas" text/button */}
+                {/* Position 3: "Plataforma Astral" text/button */}
                 <Link
                   href="/"
                   className="text-xl font-bold text-foreground hover:text-primary transition-colors ml-4"
