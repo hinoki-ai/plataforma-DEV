@@ -148,7 +148,9 @@ export function HomepageMusic() {
     if (!hasUserInteracted) {
       window.addEventListener("click", handleUserInteraction, { once: true });
       window.addEventListener("keydown", handleUserInteraction, { once: true });
-      window.addEventListener("touchstart", handleUserInteraction, { once: true });
+      window.addEventListener("touchstart", handleUserInteraction, {
+        once: true,
+      });
       window.addEventListener("scroll", handleUserInteraction, { once: true });
     }
 

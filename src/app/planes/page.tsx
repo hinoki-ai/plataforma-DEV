@@ -225,7 +225,7 @@ export default function PreciosPage() {
                       <span
                         className={`${
                           plan.badge === "Premium"
-                            ? "bg-gradient-to-r from-purple-500 to-pink-500"
+                            ? "bg-linear-to-r from-purple-500 to-pink-500"
                             : "bg-primary"
                         } text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-1`}
                       >
