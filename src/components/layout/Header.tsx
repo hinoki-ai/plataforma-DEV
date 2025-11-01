@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 import UnifiedAuthButton from "./UnifiedAuthButton";
 import ProfileCompletionBadge from "./ProfileCompletionBadge";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
-import { SettingsHamburger } from "@/components/ui/settings-hamburger";
 import { LanguageToggle } from "@/components/language/LanguageToggle";
 import SkyToggle from "@/components/ui/sky-toggle";
 import SoundToggle from "@/components/ui/sound-toggle";
@@ -246,19 +245,19 @@ export default function Header() {
                         </Link>
                       </Button>
                       <div className="w-full h-auto py-3 flex items-center justify-start pl-[30px]">
-                        <div className="scale-[1.2]">
+                        <div className="scale-[1.2]" data-language-toggle>
                           <LanguageToggle size="sm" />
                         </div>
                       </div>
 
                       {/* Row 4: Sky Toggle | Sound Toggle */}
                       <div className="w-full h-auto py-3 flex items-center justify-start pl-[30px]">
-                        <div className="scale-[1.2]">
+                        <div className="scale-[1.2]" data-theme-toggle>
                           <SkyToggle size="sm" />
                         </div>
                       </div>
                       <div className="w-full h-auto py-3 flex items-center justify-start pl-[30px]">
-                        <div className="scale-[1.2]">
+                        <div className="scale-[1.2]" data-sound-toggle>
                           <SoundToggle size="sm" />
                         </div>
                       </div>

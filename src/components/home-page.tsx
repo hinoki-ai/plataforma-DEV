@@ -36,9 +36,14 @@ export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
   const { t } = useDivineParsing(["common"]);
-  const [mounted, setMounted] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Set mounted after hydration to prevent hydration mismatches
+  useLayoutEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Handle video autoplay for mobile devices
   useEffect(() => {
@@ -98,10 +103,10 @@ export function HomePage() {
         <video
           ref={videoRef}
           className="mobile-portrait-video"
-          autoPlay
-          loop
-          muted
-          playsInline
+          autoPlay={true}
+          loop={true}
+          muted={true}
+          playsInline={true}
           preload="auto"
           aria-hidden="true"
           onError={() => setVideoError(true)}
@@ -110,7 +115,7 @@ export function HomePage() {
         </video>
       )}
       <Header />
-      <section className={layout.spacing.section(isDesktopForced)}>
+      <section className="pt-8">
         <div className={`${layout.container(isDesktopForced)} text-center`}>
           <motion.div
             initial="initial"

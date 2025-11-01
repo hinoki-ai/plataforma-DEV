@@ -305,7 +305,7 @@ export default function ProgramasPage() {
   return (
     <div className="min-h-screen bg-responsive-desktop bg-programas flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 py-16 flex-1">
+      <main className="container mx-auto px-4 pt-8 pb-16 flex-1">
         <div className="max-w-6xl mx-auto space-y-16">
           <section className="text-center space-y-6">
             <div className="space-y-4">

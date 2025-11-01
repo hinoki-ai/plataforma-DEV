@@ -139,7 +139,7 @@ export default function PreciosPage() {
   return (
     <div className="min-h-screen bg-responsive-desktop bg-planes">
       <Header />
-      <main className="container mx-auto px-4 pt-12 pb-12">
+      <main className="container mx-auto px-4 pt-8 pb-12">
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
           <div className="text-center mb-8">

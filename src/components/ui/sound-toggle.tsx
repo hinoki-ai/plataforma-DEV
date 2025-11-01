@@ -230,7 +230,7 @@ const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #36454F;
+    color: #36454f;
     opacity: 0;
     transform: scale(0) rotate(-90deg);
     transition: var(--transition);

@@ -363,10 +363,10 @@ export default function CPMAPage() {
                 >
                   {t("cfmg.title", "common")}
                 </h1>
-                <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out">
+                <p className="text-center text-lg font-medium leading-relaxed text-gray-600 dark:text-gray-200 mt-3 transition-all duration-700 ease-out">
                   {t("cpma.signup_title", "common")}
                 </p>
-                <p className="text-center text-base leading-relaxed text-gray-600 dark:text-gray-400 mt-4 transition-all duration-700 ease-out">
+                <p className="text-center text-base leading-relaxed text-gray-500 dark:text-gray-100 mt-4 transition-all duration-700 ease-out">
                   {t("cpma.signup_subtitle", "common")}
                 </p>
               </div>

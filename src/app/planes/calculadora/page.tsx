@@ -298,7 +298,7 @@ export default function PricingCalculatorPage({
   return (
     <div className="min-h-screen bg-responsive-desktop bg-planes">
       <Header />
-      <main className="container mx-auto px-4 pt-10 pb-16">
+      <main className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="flex flex-col gap-3 text-white">
             <Button variant="ghost" className="w-fit" asChild>
