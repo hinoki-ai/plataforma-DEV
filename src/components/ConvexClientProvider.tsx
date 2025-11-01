@@ -1,9 +1,31 @@
 "use client";
 
 import { ReactNode } from "react";
-import { ConvexProviderWithClerk } from "convex/react";
+import { ConvexProviderWithAuth } from "convex/react";
 import { ConvexReactClient } from "convex/react";
 import { useAuth } from "@clerk/nextjs";
+
+// Create a custom auth hook that matches Convex's expected interface
+const useConvexAuth = () => {
+  const { isLoaded, isSignedIn, getToken } = useAuth();
+
+  return () => ({
+    isLoading: !isLoaded,
+    isAuthenticated: !!isSignedIn,
+    fetchAccessToken: async ({
+      forceRefreshToken,
+    }: {
+      forceRefreshToken: boolean;
+    }) => {
+      try {
+        return await getToken({ skipCache: forceRefreshToken });
+      } catch (error) {
+        console.error("Error fetching access token:", error);
+        return null;
+      }
+    },
+  });
+};
 
 const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
 
@@ -17,9 +39,9 @@ const convex = new ConvexReactClient(convexUrl);
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   return (
-    <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+    <ConvexProviderWithAuth client={convex} useAuth={useConvexAuth()}>
       {children}
-    </ConvexProviderWithClerk>
+    </ConvexProviderWithAuth>
   );
 }
 
