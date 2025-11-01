@@ -184,16 +184,32 @@ export function HomePage() {
       <section className={layout.spacing.section(isDesktopForced)}>
         <div className={layout.container(isDesktopForced)}>
           <div className="text-center mb-12">
-            <h2
-              className={`${typography.heading(isDesktopForced)} font-bold text-foreground mb-4`}
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
             >
-              {t("home.features.title", "common")}
-            </h2>
-            <p
-              className={`${typography.body(isDesktopForced)} text-muted-foreground max-w-2xl mx-auto`}
-            >
-              {t("home.features.description", "common")}
-            </p>
+              <motion.div
+                variants={fadeInUp}
+                className={`transition-all duration-700 ease-out delay-300 ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h2
+                    className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out mb-4`}
+                  >
+                    {t("home.features.title", "common")}
+                  </h2>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 transition-all duration-700 ease-out">
+                    {t("home.features.description", "common")}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
 
           <div

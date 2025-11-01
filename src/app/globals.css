@@ -718,6 +718,11 @@
     position: relative;
   }
 
+  .bg-docs {
+    --bg-image: url(/bg12.jpg);
+    position: relative;
+  }
+
   /* BG20 background */
   .bg20 {
     --bg-image: url(/bg20.jpg);

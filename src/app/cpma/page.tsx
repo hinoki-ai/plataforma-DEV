@@ -341,99 +341,91 @@ export default function CPMAPage() {
     <div className="min-h-screen bg-responsive-desktop bg-cpma">
       <Header />
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="relative z-10 px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
-          <div className={`${layout.container(isDesktopForced)} text-center`}>
+      <div className={`${layout.container(isDesktopForced)} pt-8`}>
+        <div className="max-w-4xl mx-auto text-center mb-8">
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={staggerChildren}
+            className="max-w-4xl mx-auto"
+          >
             <motion.div
-              initial="initial"
-              animate="animate"
-              variants={staggerChildren}
-              className="max-w-4xl mx-auto"
+              variants={fadeInUp}
+              className={`transition-all duration-700 ease-out ${
+                mounted
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
             >
-              <motion.div
-                variants={fadeInUp}
-                className={`mb-6 transition-all duration-700 ease-out ${
-                  mounted
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
-                }`}
-              >
-                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
-                  <h1
-                    className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out`}
-                  >
-                    {t("cfmg.title", "common")}
-                  </h1>
-                  <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out">
-                    {t("cpma.signup_title", "common")}
-                  </p>
-                  <p className="text-center text-base leading-relaxed text-gray-600 dark:text-gray-400 mt-4 transition-all duration-700 ease-out">
-                    {t("cpma.signup_subtitle", "common")}
-                  </p>
-                </div>
-              </motion.div>
+              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                <h1
+                  className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out`}
+                >
+                  {t("cfmg.title", "common")}
+                </h1>
+                <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out">
+                  {t("cpma.signup_title", "common")}
+                </p>
+                <p className="text-center text-base leading-relaxed text-gray-600 dark:text-gray-400 mt-4 transition-all duration-700 ease-out">
+                  {t("cpma.signup_subtitle", "common")}
+                </p>
+              </div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </div>
 
-      {/* Signup Section - Moved to first panel below title */}
-      <section
-        className={`${layout.spacing.section(isDesktopForced)} transition-all duration-700 ease-out delay-200 ${
-          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
-      >
-        <div className={`${layout.container(isDesktopForced)}`}>
+      {/* Main Content Area */}
+      <main className={`${layout.container(isDesktopForced)} pt-8 pb-16`}>
+        <div className="max-w-7xl mx-auto">
           <SignupStyleSection>
-            <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
-                {/* Testimonials */}
-                <div className="space-y-4 lg:space-y-6 flex flex-col order-2 lg:order-1">
-                  <div className="space-y-3 lg:space-y-4">
-                    {getCurrentTestimonials().map((testimonial, index) => (
-                      <motion.div
-                        key={testimonial.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
+            <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+              {/* Testimonials */}
+              <div className="space-y-4 lg:space-y-6 flex flex-col order-2 lg:order-1">
+                <div className="space-y-3 lg:space-y-4">
+                  {getCurrentTestimonials().map((testimonial, index) => (
+                    <motion.div
+                      key={testimonial.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                    >
+                      <SignupStyleCard
+                        variant="info"
+                        className="backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5"
                       >
-                        <SignupStyleCard
-                          variant="info"
-                          className="backdrop-blur-md bg-white/5 dark:bg-black/20 border-white/10 dark:border-white/5"
-                        >
-                          <div className="flex flex-col space-y-3 lg:space-y-4">
-                            <div className="flex items-center space-x-3 lg:space-x-4">
-                              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/10 rounded-full flex items-center justify-center text-xl lg:text-2xl shadow-lg">
-                                {testimonial.avatar}
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <h4 className="font-semibold text-foreground text-sm lg:text-base truncate">
-                                  {testimonial.name}
-                                </h4>
-                                <p className="text-xs lg:text-sm text-muted-foreground truncate">
-                                  {testimonial.role}
-                                </p>
-                              </div>
+                        <div className="flex flex-col space-y-3 lg:space-y-4">
+                          <div className="flex items-center space-x-3 lg:space-x-4">
+                            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/10 rounded-full flex items-center justify-center text-xl lg:text-2xl shadow-lg">
+                              {testimonial.avatar}
                             </div>
-                            <p className="text-foreground leading-relaxed italic text-sm lg:text-base">
-                              &ldquo;{testimonial.content}&rdquo;
-                            </p>
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-semibold text-foreground text-sm lg:text-base truncate">
+                                {testimonial.name}
+                              </h4>
+                              <p className="text-xs lg:text-sm text-muted-foreground truncate">
+                                {testimonial.role}
+                              </p>
+                            </div>
                           </div>
-                        </SignupStyleCard>
-                      </motion.div>
-                    ))}
-                  </div>
+                          <p className="text-foreground leading-relaxed italic text-sm lg:text-base">
+                            &ldquo;{testimonial.content}&rdquo;
+                          </p>
+                        </div>
+                      </SignupStyleCard>
+                    </motion.div>
+                  ))}
                 </div>
+              </div>
 
-                {/* Signup Form */}
-                <div className="space-y-4 lg:space-y-6 flex flex-col order-1 lg:order-2">
-                  <UnifiedSignupForm />
-                </div>
+              {/* Signup Form */}
+              <div className="space-y-4 lg:space-y-6 flex flex-col order-1 lg:order-2">
+                <UnifiedSignupForm />
               </div>
             </div>
           </SignupStyleSection>
         </div>
-      </section>
+      </main>
 
       {/* Features Section */}
       <section
