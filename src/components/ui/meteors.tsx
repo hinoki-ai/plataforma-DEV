@@ -66,6 +66,7 @@ export const Meteors = ({
             "dark:bg-primary/25 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.2)] dark:before:from-primary/45 dark:before:via-primary/12",
             className,
           )}
+          // eslint-disable-next-line
           style={
             {
               "--meteor-left": `${meteor.position}px`,
