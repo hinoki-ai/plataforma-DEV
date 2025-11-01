@@ -36,14 +36,11 @@ export function HomePage() {
   // Layout and responsive state
   const { isDesktopForced } = useDesktopToggle();
   const { t } = useDivineParsing(["common"]);
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(true);
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Set mounted after hydration to prevent hydration mismatches
-  useLayoutEffect(() => {
-    setMounted(true);
-  }, []);
+  // Mounted state to prevent hydration mismatches - initialized to true
 
   // Handle video autoplay for mobile devices
   useEffect(() => {
