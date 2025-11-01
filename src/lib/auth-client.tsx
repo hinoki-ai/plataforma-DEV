@@ -91,8 +91,7 @@ export function AppSessionProvider({
     const roleMetadata = user.publicMetadata?.role as string | undefined;
 
     const needsRegistration = Boolean(
-      (user.publicMetadata?.needsRegistration as boolean | undefined) ??
-        false,
+      (user.publicMetadata?.needsRegistration as boolean | undefined) ?? false,
     );
 
     const hasExternalAccounts = Array.isArray(user.externalAccounts)
@@ -100,15 +99,12 @@ export function AppSessionProvider({
       : false;
 
     const providerFromAccount = hasExternalAccounts
-      ? (user.externalAccounts?.[0]?.provider as string | undefined) ??
-        (user.externalAccounts?.[0]?.strategy as string | undefined) ??
-        "oauth"
+      ? ((user.externalAccounts?.[0]?.provider as string | undefined) ??
+        "oauth")
       : "clerk";
 
     const derivedId =
-      (user.publicMetadata?.appUserId as string | undefined) ??
-      (user.privateMetadata?.appUserId as string | undefined) ??
-      user.id;
+      (user.publicMetadata?.appUserId as string | undefined) ?? user.id;
 
     return {
       user: {

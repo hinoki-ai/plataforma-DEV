@@ -6,6 +6,9 @@ import { Settings, X, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import { LanguageToggle } from "@/components/language/LanguageToggle";
+import SkyToggle from "@/components/ui/sky-toggle";
+import SoundToggle from "@/components/ui/sound-toggle";
 
 interface SettingsHamburgerProps {
   className?: string;
@@ -21,7 +24,6 @@ export const SettingsHamburger = ({
   const [isHovered, setIsHovered] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
 
   // Generate stable random positions for sparkles to avoid React purity violations
   const sparklePositions = useState(() =>
@@ -222,21 +224,22 @@ export const SettingsHamburger = ({
             animate="open"
             exit="exit"
             style={{
-              position: 'absolute',
-              top: '100%',
-              marginTop: '8px',
-              right: '0',
-              width: '12px',
-              minWidth: '12px',
-              maxWidth: '12px',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '8px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+              position: "absolute",
+              top: "100%",
+              marginTop: "8px",
+              right: "0",
+              width: "12px",
+              minWidth: "12px",
+              maxWidth: "12px",
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "8px",
+              boxShadow:
+                "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
               zIndex: 50,
-              overflow: 'hidden',
-              boxSizing: 'border-box'
+              overflow: "hidden",
+              boxSizing: "border-box",
             }}
             id="settings-menu"
             role="menu"

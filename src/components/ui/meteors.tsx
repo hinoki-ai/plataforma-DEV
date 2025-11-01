@@ -37,12 +37,14 @@ export const Meteors = ({
     })),
   );
 
-  const meteors = useMemo(() =>
-    meteorSeeds.map((meteor, idx) => ({
-      ...meteor,
-      position: idx * (containerWidth / number) - containerWidth / 2,
-    })),
-  [meteorSeeds, containerWidth, number]);
+  const meteors = useMemo(
+    () =>
+      meteorSeeds.map((meteor, idx) => ({
+        ...meteor,
+        position: idx * (containerWidth / number) - containerWidth / 2,
+      })),
+    [meteorSeeds, containerWidth, number],
+  );
   return (
     <motion.div
       ref={containerRef}
@@ -64,11 +66,13 @@ export const Meteors = ({
             "dark:bg-primary/25 dark:shadow-[0_0_0_1px_hsl(var(--primary)/0.2)] dark:before:from-primary/45 dark:before:via-primary/12",
             className,
           )}
-          style={{
-            '--meteor-left': `${meteor.position}px`,
-            animationDuration: `${meteor.duration}s`,
-            animationDelay: `${meteor.delay}s`,
-          } as React.CSSProperties}
+          style={
+            {
+              "--meteor-left": `${meteor.position}px`,
+              animationDuration: `${meteor.duration}s`,
+              animationDelay: `${meteor.delay}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </motion.div>
