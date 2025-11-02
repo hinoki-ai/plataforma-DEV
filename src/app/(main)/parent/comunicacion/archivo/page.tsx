@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { getRoleAccess } from "@/lib/role-utils";
@@ -64,82 +64,45 @@ export default function ArchivoPage() {
   const [sortBy, setSortBy] = useState("date-desc");
 
   useEffect(() => {
-    // Simulate API call
     const loadMessages = async () => {
-      setLoading(true);
-      // In a real app, this would be an API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setMessages(mockMessages);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const response = await fetch(
+          "/api/parent/communications?status=archived",
+        );
+
+        if (response.ok) {
+          const json = await response.json();
+          const archived = (json?.data ?? []).map((item: any) => ({
+            id: item.id,
+            type: item.type ?? "notification",
+            from: item.from ?? "Sistema",
+            subject: item.subject ?? "Comunicado",
+            content: item.content ?? "",
+            preview: item.preview ?? item.content ?? "",
+            date: item.date ?? new Date().toISOString(),
+            read: Boolean(item.read),
+            priority: item.priority ?? "medium",
+            category: item.category ?? "general",
+            isStarred: Boolean(item.isStarred),
+            archivedAt: item.date ?? new Date().toISOString(),
+          })) as ArchivedMessage[];
+
+          setMessages(archived);
+        } else {
+          console.warn("Falling back to cached archived communications");
+          setMessages([]);
+        }
+      } catch (error) {
+        console.error("Error fetching archived communications:", error);
+        setMessages([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadMessages();
   }, []);
-
-  // Mock archived messages
-  const mockMessages: ArchivedMessage[] = [
-    {
-      id: "1",
-      type: "message",
-      from: "Dirección",
-      subject: "Reunión de Padres - Marzo 2024",
-      content:
-        "Estimados padres, les informamos sobre la reunión programada...",
-      preview:
-        "Estimados padres, les informamos sobre la reunión programada para el próximo mes.",
-      date: "2024-02-15",
-      read: true,
-      priority: "normal",
-      category: "meetings",
-      isStarred: false,
-      archivedAt: "2024-03-01",
-    },
-    {
-      id: "2",
-      type: "message",
-      from: "Profesor Jefe",
-      subject: "Informe de Rendimiento Académico",
-      content: "Adjunto el informe parcial del rendimiento académico...",
-      preview:
-        "Adjunto el informe parcial del rendimiento académico del primer trimestre.",
-      date: "2024-01-30",
-      read: true,
-      priority: "high",
-      category: "academic",
-      isStarred: true,
-      archivedAt: "2024-02-15",
-    },
-    {
-      id: "3",
-      type: "notification",
-      from: "Sistema",
-      subject: "Cambio en Horarios de Clases",
-      content: "Se informa que los horarios de clases han sido modificados...",
-      preview:
-        "Se informa que los horarios de clases han sido modificados por mantención.",
-      date: "2024-01-20",
-      read: false,
-      priority: "normal",
-      category: "administrative",
-      isStarred: false,
-      archivedAt: "2024-02-01",
-    },
-    {
-      id: "4",
-      type: "message",
-      from: "Coordinación PIE",
-      subject: "Evaluación Especializada",
-      content: "La evaluación especializada ha sido completada...",
-      preview:
-        "La evaluación especializada ha sido completada con resultados positivos.",
-      date: "2024-01-10",
-      read: true,
-      priority: "high",
-      category: "special_needs",
-      isStarred: true,
-      archivedAt: "2024-01-25",
-    },
-  ];
 
   // Handle loading state
   if (status === "loading") {

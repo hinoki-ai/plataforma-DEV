@@ -104,6 +104,81 @@ export const getStudentAttendance = query({
 });
 
 /**
+ * Get a summarized attendance view for a student across all courses
+ */
+export const getStudentAttendanceSummary = query({
+  args: {
+    studentId: v.id("students"),
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+  },
+  handler: async (ctx, { studentId, startDate, endDate }) => {
+    let records = await ctx.db
+      .query("classAttendance")
+      .withIndex("by_studentId", (q) => q.eq("studentId", studentId))
+      .collect();
+
+    if (startDate !== undefined) {
+      records = records.filter((r) => r.date >= startDate);
+    }
+
+    if (endDate !== undefined) {
+      records = records.filter((r) => r.date <= endDate);
+    }
+
+    const summary = {
+      present: 0,
+      absent: 0,
+      late: 0,
+      justified: 0,
+      earlyDeparture: 0,
+      total: records.length,
+    };
+
+    for (const record of records) {
+      switch (record.status as AttendanceStatus) {
+        case "PRESENTE":
+          summary.present += 1;
+          break;
+        case "AUSENTE":
+          summary.absent += 1;
+          break;
+        case "ATRASADO":
+          summary.late += 1;
+          break;
+        case "JUSTIFICADO":
+          summary.justified += 1;
+          break;
+        case "RETIRADO":
+          summary.earlyDeparture += 1;
+          break;
+        default:
+          break;
+      }
+    }
+
+    const attendanceRate =
+      summary.total > 0
+        ? ((summary.present + summary.justified) / summary.total) * 100
+        : null;
+
+    const lastUpdated = records.length
+      ? Math.max(
+          ...records.map(
+            (record) => record.updatedAt ?? record.createdAt ?? record.date,
+          ),
+        )
+      : null;
+
+    return {
+      ...summary,
+      attendanceRate,
+      lastUpdated,
+    };
+  },
+});
+
+/**
  * Generate attendance report for a course
  */
 export const getAttendanceReport = query({
