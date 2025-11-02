@@ -34,15 +34,45 @@ export const ADMIN_NAVIGATION = [
     ],
   },
   {
+    title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Resumen General",
+        href: "/admin/libro-clases",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+L",
+      },
+      {
+        title: "Asistencia",
+        href: "/admin/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+A",
+      },
+      {
+        title: "Calificaciones",
+        href: "/admin/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+N",
+      },
+      {
+        title: "Observaciones",
+        href: "/admin/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+O",
+      },
+      {
+        title: "Gestión de Estudiantes",
+        href: "/admin/libro-clases/estudiantes",
+        icon: NavigationIcons.Profile,
+        shortcut: "Alt+G",
+      },
+    ],
+  },
+  {
     title: STANDARD_SECTION_ORDER.ACADEMIC,
     defaultOpen: false,
     items: [
-      {
-        title: "Libro de Clases",
-        href: "/admin/libro-clases",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+L",
-      },
       {
         title: "Planificaciones",
         href: "/profesor/planificaciones",
@@ -131,15 +161,49 @@ export const PROFESOR_NAVIGATION = [
     ],
   },
   {
-    title: ROLE_SPECIFIC_SECTIONS.PROFESOR.academic,
+    title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
     defaultOpen: true,
     items: [
       {
-        title: "Libro de Clases",
+        title: "Resumen General",
         href: "/profesor/libro-clases",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+L",
       },
+      {
+        title: "Asistencia",
+        href: "/profesor/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+A",
+      },
+      {
+        title: "Contenidos y Planificación",
+        href: "/profesor/libro-clases/contenidos",
+        icon: NavigationIcons.Planning,
+      },
+      {
+        title: "Calificaciones",
+        href: "/profesor/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+N",
+      },
+      {
+        title: "Observaciones",
+        href: "/profesor/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+O",
+      },
+      {
+        title: "Reuniones con Apoderados",
+        href: "/profesor/libro-clases/reuniones",
+        icon: NavigationIcons.Team,
+      },
+    ],
+  },
+  {
+    title: ROLE_SPECIFIC_SECTIONS.PROFESOR.academic,
+    defaultOpen: true,
+    items: [
       {
         title: "Planificaciones",
         href: "/profesor/planificaciones",
@@ -214,6 +278,40 @@ export const PARENT_NAVIGATION = [
     ],
   },
   {
+    title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Resumen General",
+        href: "/parent/libro-clases",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+L",
+      },
+      {
+        title: "Asistencia",
+        href: "/parent/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+A",
+      },
+      {
+        title: "Calificaciones",
+        href: "/parent/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+N",
+      },
+      {
+        title: "Observaciones",
+        href: "/parent/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "Reuniones",
+        href: "/parent/libro-clases/reuniones",
+        icon: NavigationIcons.Team,
+      },
+    ],
+  },
+  {
     title: ROLE_SPECIFIC_SECTIONS.PARENT.academic,
     defaultOpen: true,
     items: [
@@ -222,12 +320,6 @@ export const PARENT_NAVIGATION = [
         href: "/parent/estudiantes",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+E",
-      },
-      {
-        title: "Libro de Clases",
-        href: "/parent/libro-clases",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+L",
       },
       {
         title: "Calendario Escolar",
@@ -337,15 +429,45 @@ export const MASTER_NAVIGATION = [
     ],
   },
   {
+    title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
+    defaultOpen: true,
+    items: [
+      {
+        title: "Resumen Libro de Clases",
+        href: "/admin/libro-clases",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+L",
+      },
+      {
+        title: "Asistencia",
+        href: "/admin/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+A",
+      },
+      {
+        title: "Calificaciones",
+        href: "/admin/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+N",
+      },
+      {
+        title: "Observaciones",
+        href: "/admin/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+O",
+      },
+      {
+        title: "Gestión de Estudiantes",
+        href: "/admin/libro-clases/estudiantes",
+        icon: NavigationIcons.Profile,
+        shortcut: "Alt+G",
+      },
+    ],
+  },
+  {
     title: STANDARD_SECTION_ORDER.ACADEMIC,
     defaultOpen: false,
     items: [
-      {
-        title: "Libro de Clases",
-        href: "/admin/libro-clases",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+L",
-      },
       {
         title: "Planificaciones",
         href: "/profesor/planificaciones",

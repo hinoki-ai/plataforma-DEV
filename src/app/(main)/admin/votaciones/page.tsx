@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { SkeletonLoader } from "@/components/ui/dashboard-loader";
 import {
@@ -85,7 +85,7 @@ interface Vote {
 }
 
 export default function AdminVotesPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { t, language } = useLanguage();
   const searchParams = useSearchParams();
   const router = useRouter();

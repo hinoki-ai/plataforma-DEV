@@ -28,6 +28,7 @@ export const STANDARD_SECTION_ORDER = {
   PRIMARY: "Principal",
   USER_MANAGEMENT: "Gestión de Usuarios",
   ACADEMIC: "Gestión Académica",
+  LIBRO_CLASES: "Libro de Clases",
   COMMUNICATION: "Comunicación",
   RESOURCES: "Recursos",
   PERSONAL: "Personal",

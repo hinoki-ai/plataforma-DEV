@@ -60,6 +60,16 @@ interface NavigationItem {
   readonly description?: string;
 }
 
+// Helper function to filter navigation items with shortcuts
+const filterItemsWithShortcuts = (
+  items: readonly NavigationItem[],
+): Array<NavigationItem & { shortcut: string }> => {
+  return items.filter(
+    (item): item is NavigationItem & { shortcut: string } =>
+      typeof item.shortcut === "string" && item.shortcut.length > 0,
+  );
+};
+
 // Function to get translated navigation configuration
 const getEnhancedNavigation = (
   t: (key: string, namespace?: string) => string,
@@ -93,17 +103,42 @@ const getEnhancedNavigation = (
       {
         title: "Libro de Clases",
         href: "/admin/libro-clases",
-        icon: NavigationIcons.Planning,
+        icon: NavigationIcons.Analytics,
         shortcut: "Alt+L",
-        category: t("nav.main.categories.academic"),
-        description: "Gestión del libro de clases",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Visión integral del libro de clases institucional",
+      },
+      {
+        title: "Asistencia Institucional",
+        href: "/admin/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+A",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Consolida asistencia diaria y alertas de ausentismo",
+      },
+      {
+        title: "Calificaciones y Promedios",
+        href: "/admin/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+N",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Seguimiento de notas y tendencias por curso",
+      },
+      {
+        title: "Observaciones y Convivencia",
+        href: "/admin/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+O",
+        category: t("nav.main.categories.libro_clases"),
+        description:
+          "Registro centralizado de anotaciones, convivencias y medidas formativas",
       },
       {
         title: "Gestión de Estudiantes",
         href: "/admin/libro-clases/estudiantes",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+G",
-        category: t("nav.main.categories.academic"),
+        category: t("nav.main.categories.libro_clases"),
         description: "Administrar estudiantes por curso",
       },
       {
@@ -181,6 +216,52 @@ const getEnhancedNavigation = (
         description: t("nav.dashboard"),
       },
       {
+        title: "Libro de Clases",
+        href: "/profesor/libro-clases",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+L",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Resumen diario del libro de clases",
+      },
+      {
+        title: "Asistencia",
+        href: "/profesor/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+A",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Registrar asistencia y atrasos",
+      },
+      {
+        title: "Contenidos y Planificación",
+        href: "/profesor/libro-clases/contenidos",
+        icon: NavigationIcons.Planning,
+        category: t("nav.main.categories.libro_clases"),
+        description: "Documentar cobertura curricular y actividades",
+      },
+      {
+        title: "Calificaciones",
+        href: "/profesor/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+N",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Registrar y revisar notas por estudiante",
+      },
+      {
+        title: "Observaciones",
+        href: "/profesor/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+O",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Gestionar anotaciones y retroalimentación",
+      },
+      {
+        title: "Reuniones con Apoderados",
+        href: "/profesor/libro-clases/reuniones",
+        icon: NavigationIcons.Team,
+        category: t("nav.main.categories.libro_clases"),
+        description: "Planificar y registrar reuniones con familias",
+      },
+      {
         title: t("nav.planning"),
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
@@ -203,14 +284,6 @@ const getEnhancedNavigation = (
         shortcut: "Alt+M",
         category: t("nav.main.categories.academic"),
         description: t("nav.pme"),
-      },
-      {
-        title: "Mis Estudiantes",
-        href: "/admin/libro-clases/estudiantes",
-        icon: NavigationIcons.Profile,
-        shortcut: "Alt+E",
-        category: t("nav.main.categories.academic"),
-        description: "Ver estudiantes de mis cursos",
       },
       {
         title: t("nav.parent.meetings"),
@@ -263,12 +336,42 @@ const getEnhancedNavigation = (
         description: t("nav.students"),
       },
       {
-        title: "Cursos de Mis Estudiantes",
-        href: "/admin/libro-clases/estudiantes",
-        icon: NavigationIcons.Planning,
-        shortcut: "Alt+U",
-        category: t("nav.main.categories.information"),
-        description: "Ver cursos y compañeros de mis estudiantes",
+        title: "Libro de Clases",
+        href: "/parent/libro-clases",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+L",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Resumen del aprendizaje y comunicaciones del curso",
+      },
+      {
+        title: "Asistencia",
+        href: "/parent/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+A",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Seguimiento de asistencia diaria y tardanzas",
+      },
+      {
+        title: "Calificaciones",
+        href: "/parent/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+N",
+        category: t("nav.main.categories.libro_clases"),
+        description: "Notas por asignatura y promedios parciales",
+      },
+      {
+        title: "Observaciones",
+        href: "/parent/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+        category: t("nav.main.categories.libro_clases"),
+        description: "Anotaciones formativas y comunicados",
+      },
+      {
+        title: "Reuniones",
+        href: "/parent/libro-clases/reuniones",
+        icon: NavigationIcons.Team,
+        category: t("nav.main.categories.libro_clases"),
+        description: "Agenda de reuniones y compromisos",
       },
       {
         title: t("nav.calendar"),
@@ -333,9 +436,10 @@ const getKeyboardShortcuts = (t: (key: string, namespace?: string) => string) =>
       Object.entries(getEnhancedNavigation(t)).map(([role, items]) => [
         role,
         Object.fromEntries(
-          items
-            .filter((item) => item.shortcut)
-            .map((item) => [item.shortcut!, item.href]),
+          filterItemsWithShortcuts(items).map((item) => [
+            item.shortcut,
+            item.href,
+          ]),
         ),
       ]),
     ),
