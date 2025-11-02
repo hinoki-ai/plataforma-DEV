@@ -7,6 +7,9 @@ const eslintConfig = [
       "src/generated/**/*",
       "convex/_generated/**/*",
       "**/*.d.ts",
+      // Ignore test reports and traces
+      "playwright-report/**/*",
+      "test-results/**/*",
       // Ignore build outputs
       ".next/**/*",
       "dist/**/*",
