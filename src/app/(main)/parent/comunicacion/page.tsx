@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { getRoleAccess } from "@/lib/role-utils";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useEffect, useState } from "react";
 import {
   Card,

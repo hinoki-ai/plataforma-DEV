@@ -137,11 +137,16 @@ export function MeetingForm({
     const fetchUsers = async () => {
       try {
         setUsersLoading(true);
+        console.log("Fetching professors...");
         const response = await fetch("/api/profesores");
+        console.log("Response status:", response.status);
         if (!response.ok) {
-          throw new Error("Failed to fetch users");
+          const errorText = await response.text();
+          console.error("Failed to fetch users:", response.status, errorText);
+          throw new Error(`Failed to fetch users: ${response.status}`);
         }
         const data = await response.json();
+        console.log("Fetched users data:", data);
         setUsers(Array.isArray(data.data) ? data.data : []);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -247,12 +252,10 @@ export function MeetingForm({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {mode === "create"
-              ? `${t("common.create", "common")} ${t("common.title", "common")}`
-              : `${t("common.edit", "common")} ${t("common.title", "common")}`}
+            {mode === "create" ? "Crear Reunión" : "Editar Reunión"}
           </DialogTitle>
           <DialogDescription>
-            {t("forms.description.placeholder", "common")}
+            {t("placeholders.meeting_description", "common")}
           </DialogDescription>
         </DialogHeader>
 
