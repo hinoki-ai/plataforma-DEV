@@ -83,6 +83,22 @@ const getInitials = (name?: string | null): string => {
     .slice(0, 2);
 };
 
+// ⚡ Performance: Extract dashboard link function to prevent recreation
+const getDashboardLink = (role: string): string => {
+  switch (role) {
+    case "MASTER":
+      return "/master";
+    case "ADMIN":
+      return "/admin";
+    case "PROFESOR":
+      return "/profesor";
+    case "PARENT":
+      return "/parent";
+    default:
+      return "/";
+  }
+};
+
 export default function LoginButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -113,15 +129,15 @@ export default function LoginButton() {
     }
   }, [isOpen, handleClickOutside]);
 
-  // ⚡ Performance: Memoize theme toggle function
+  // ⚡ Performance: Memoize theme toggle function with stable dependencies
   const toggleTheme = useCallback(() => {
-    setTheme(theme === "light" ? "dark" : "light");
-  }, [theme, setTheme]);
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  }, [setTheme]);
 
-  // ⚡ Performance: Memoize language toggle function
+  // ⚡ Performance: Memoize language toggle function with stable dependencies
   const toggleLanguage = useCallback(() => {
     setLanguage(language === "es" ? "en" : "es");
-  }, [language, setLanguage]);
+  }, [setLanguage, language]);
 
   const handleLogout = useCallback(async () => {
     setIsLoggingOut(true);
@@ -133,21 +149,23 @@ export default function LoginButton() {
     } finally {
       setIsLoggingOut(false);
     }
-  }, [router]);
+  }, [router]); // router is stable from useRouter
 
-  // ⚡ Performance: Optimized role data calculation with static config
+  // ⚡ Performance: Optimized role data calculation with stable memoization
   const roleData = useMemo(() => {
     const role = session?.user?.role;
+    const name = session?.user?.name;
     const config =
       ROLE_CONFIG[role as keyof typeof ROLE_CONFIG] || ROLE_CONFIG.default;
 
     return {
-      initials: getInitials(session?.user?.name),
+      initials: getInitials(name),
       icon: config.icon,
       color: config.color,
       nameKey: config.translationKey,
+      roleName: t(config.translationKey, "common"),
     };
-  }, [session?.user?.role, session?.user?.name]);
+  }, [session?.user?.role, session?.user?.name, t]); // Keep these dependencies but ensure they're stable
 
   if (status === "loading" || !isHydrated) {
     return (
@@ -205,7 +223,7 @@ export default function LoginButton() {
 
             <div className="hidden md:flex flex-col items-start">
               <span className="text-xs font-medium text-muted-foreground">
-                {t(roleData.nameKey, "common")}
+                {roleData.roleName}
               </span>
               <span className="text-sm font-semibold text-foreground">
                 {session.user.name?.split(" ")[0]}
@@ -250,7 +268,7 @@ export default function LoginButton() {
                 <div className="flex items-center space-x-1">
                   <RoleIcon className={cn("h-3 w-3", roleData.color)} />
                   <span className={cn("text-xs font-medium", roleData.color)}>
-                    {t(roleData.nameKey, "common")}
+                    {roleData.roleName}
                   </span>
                 </div>
               </div>
@@ -260,200 +278,29 @@ export default function LoginButton() {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            {/* Dashboard Navigation Dropdown for MASTER users */}
-            {session.user.role === "MASTER" && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <span>{t("nav.dashboard", "navigation")}</span>
-                    <ChevronDown className="ml-auto h-4 w-4" />
-                  </DropdownMenuItem>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  sideOffset={8}
-                  align="start"
-                  className="w-56"
-                >
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/master");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Crown className="mr-2 h-4 w-4" />
-                    <span>{t("master.dashboard.title", "common")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/admin");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Shield className="mr-2 h-4 w-4" />
-                    <span>{t("admin.dashboard", "admin")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/profesor");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>{t("profesor.dashboard", "profesor")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/parent");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>{t("parent.dashboard", "parent")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Home className="mr-2 h-4 w-4" />
-                    <span>{t("nav.home", "navigation")}</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+            {/* Simplified Navigation - Single dashboard link based on role */}
+            <DropdownMenuItem asChild>
+              <Link
+                href={getDashboardLink(session.user.role)}
+                className="cursor-pointer"
+                onClick={() => setIsOpen(false)}
+              >
+                <Calendar className="mr-2 h-4 w-4" />
+                <span>{t("nav.dashboard", "navigation")}</span>
+              </Link>
+            </DropdownMenuItem>
 
-            {/* Dashboard Navigation Dropdown for ADMIN users */}
-            {session.user.role === "ADMIN" && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <span>{t("nav.dashboard", "navigation")}</span>
-                    <ChevronDown className="ml-auto h-4 w-4" />
-                  </DropdownMenuItem>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  sideOffset={8}
-                  align="start"
-                  className="w-56"
-                >
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/admin");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Shield className="mr-2 h-4 w-4" />
-                    <span>{t("admin.dashboard", "admin")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/profesor");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>{t("profesor.dashboard", "profesor")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/parent");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>{t("parent.dashboard", "parent")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Home className="mr-2 h-4 w-4" />
-                    <span>{t("nav.home", "navigation")}</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-
-            {/* Dashboard Navigation Dropdown for PROFESOR users */}
-            {session.user.role === "PROFESOR" && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <span>{t("nav.dashboard", "navigation")}</span>
-                    <ChevronDown className="ml-auto h-4 w-4" />
-                  </DropdownMenuItem>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  sideOffset={8}
-                  align="start"
-                  className="w-56"
-                >
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/profesor");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>{t("profesor.dashboard", "profesor")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/parent");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>{t("parent.dashboard", "parent")}</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push("/");
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Home className="mr-2 h-4 w-4" />
-                    <span>{t("nav.home", "navigation")}</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-
-            {/* Direct menu items for PARENT users */}
-            {session.user.role === "PARENT" && (
-              <>
-                <DropdownMenuItem asChild>
-                  <Link href="/parent" className="cursor-pointer">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <span>{t("parent.dashboard", "parent")}</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/" className="cursor-pointer">
-                    <Menu className="mr-2 h-4 w-4" />
-                    <span>{t("nav.home", "navigation")}</span>
-                  </Link>
-                </DropdownMenuItem>
-              </>
-            )}
+            {/* Home link for all users */}
+            <DropdownMenuItem asChild>
+              <Link
+                href="/"
+                className="cursor-pointer"
+                onClick={() => setIsOpen(false)}
+              >
+                <Home className="mr-2 h-4 w-4" />
+                <span>{t("nav.home", "navigation")}</span>
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
