@@ -1,4 +1,6 @@
 import { auth as clerkAuth, currentUser } from "@clerk/nextjs/server";
+import { api } from "@/convex/_generated/api";
+import { getConvexClient } from "@/lib/convex";
 import type { SessionData } from "@/lib/auth-client";
 import type { ExtendedUserRole } from "@/lib/authorization";
 import { getClerkUserById } from "@/services/actions/clerk-users";
@@ -41,20 +43,37 @@ export async function auth(): Promise<SessionData | null> {
 
   const user = await currentUser();
 
+  let convexUser: any | null = null;
+  try {
+    const convex = getConvexClient();
+    convexUser = await convex.query(api.users.getUserByClerkId, {
+      clerkId: userId,
+    });
+  } catch (error) {
+    console.error("Failed to resolve Convex user for session", {
+      clerkId: userId,
+      error,
+    });
+  }
+
   const expires = sessionClaims?.exp
     ? new Date(sessionClaims.exp * 1000).toISOString()
     : undefined;
 
   const session: SessionData = {
     user: {
-      id: clerkUser.user.id,
+      id: convexUser?._id ?? clerkUser.user.id,
       clerkId: userId,
-      email: clerkUser.user.email,
-      name: clerkUser.user.name ?? user?.fullName ?? null,
-      image: clerkUser.user.image ?? user?.imageUrl ?? null,
-      role: clerkUser.user.role,
+      email: convexUser?.email ?? clerkUser.user.email,
+      name: convexUser?.name ?? clerkUser.user.name ?? user?.fullName ?? null,
+      image:
+        convexUser?.image ?? clerkUser.user.image ?? user?.imageUrl ?? null,
+      role:
+        (convexUser?.role as ExtendedUserRole | undefined) ??
+        clerkUser.user.role,
       needsRegistration: clerkUser.needsRegistration,
-      isOAuthUser: clerkUser.user.isOAuthUser,
+      isOAuthUser:
+        convexUser?.isOAuthUser ?? clerkUser.user.isOAuthUser ?? false,
       provider: clerkUser.user.provider,
     },
     expires,

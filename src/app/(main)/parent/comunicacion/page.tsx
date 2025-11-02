@@ -87,8 +87,19 @@ export default function ComunicacionPage() {
       setLoading(true);
       const response = await fetch("/api/parent/communications");
       if (response.ok) {
-        const data = await response.json();
-        setCommunications(data.data || []);
+        const json = await response.json();
+        const items = (json?.data ?? []).map((item: any) => ({
+          id: item.id,
+          type: item.type ?? "notification",
+          from: item.from ?? "Sistema",
+          subject: item.subject ?? "Comunicado",
+          content: item.content ?? "",
+          preview: item.preview ?? item.content ?? "",
+          date: item.date ?? new Date().toISOString(),
+          read: Boolean(item.read),
+          priority: item.priority ?? "medium",
+        })) as Communication[];
+        setCommunications(items);
       } else {
         console.warn("API failed, using fallback data");
         // Use fallback data when API fails

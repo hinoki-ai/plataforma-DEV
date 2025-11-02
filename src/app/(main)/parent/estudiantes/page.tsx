@@ -94,49 +94,68 @@ function EstudiantesContent() {
 
       if (result.data) {
         // Transform API data to match Student interface
-        const apiStudents: Student[] = result.data.map((child: any) => ({
-          id: child.id,
-          name: child.name,
-          grade: child.grade,
-          enrollmentDate: child.enrollmentDate,
-          attendance: child.attendance,
-          academicProgress: child.average ? child.average * 10 : 0, // Convert to percentage, handle null values
-          teacher: {
-            name: "Profesor Asignado", // This would come from the Student model
-            email: "profesor@plataforma-astral.com",
-            phone: "+56 9 0000 0000",
-          },
-          subjects: child.subjects || [
-            { name: "Lenguaje", grade: "A", progress: 90 },
-            { name: "Matemáticas", grade: "B+", progress: 85 },
-            { name: "Ciencias", grade: "A-", progress: 92 },
-          ],
-          upcomingActivities: [
-            {
-              title: "Reunión de apoderados",
-              date: "2024-01-25",
-              type: "Reunión",
+        const apiStudents: Student[] = result.data.map((child: any) => {
+          const defaultSubjects = [
+            { name: "Lenguaje", grade: "-", progress: 0 },
+            { name: "Matemáticas", grade: "-", progress: 0 },
+            { name: "Ciencias", grade: "-", progress: 0 },
+          ];
+
+          const subjects =
+            Array.isArray(child.subjects) && child.subjects.length
+              ? child.subjects.map((subject: any) => ({
+                  name: subject.name ?? "General",
+                  grade: subject.grade ?? "-",
+                  progress:
+                    typeof subject.progress === "number"
+                      ? Math.max(0, Math.min(100, subject.progress))
+                      : 0,
+                }))
+              : defaultSubjects;
+
+          const upcomingActivities = Array.isArray(child.upcomingActivities)
+            ? child.upcomingActivities.map((activity: any) => ({
+                title: activity.title ?? "Actividad",
+                date: activity.date ?? new Date().toISOString(),
+                type: activity.type ?? "General",
+              }))
+            : [];
+
+          const recentReports = Array.isArray(child.recentReports)
+            ? child.recentReports.map((report: any) => ({
+                title: report.title ?? "Reporte",
+                date: report.date ?? new Date().toISOString(),
+                type: report.type ?? "General",
+              }))
+            : [];
+
+          const attendance =
+            typeof child.attendance === "number"
+              ? Math.max(0, Math.min(100, child.attendance))
+              : 0;
+
+          const academicProgress =
+            typeof child.academicProgress === "number"
+              ? Math.max(0, Math.min(100, child.academicProgress))
+              : 0;
+
+          return {
+            id: child.id,
+            name: child.name,
+            grade: child.grade ?? "Sin grado",
+            enrollmentDate: child.enrollmentDate,
+            attendance,
+            academicProgress,
+            teacher: {
+              name: child.teacher?.name ?? "Profesor asignado",
+              email: child.teacher?.email ?? "",
+              phone: child.teacher?.phone ?? undefined,
             },
-            {
-              title: "Evaluación parcial",
-              date: "2024-01-28",
-              type: "Evaluación",
-            },
-            { title: "Taller creativo", date: "2024-01-30", type: "Taller" },
-          ],
-          recentReports: [
-            {
-              title: "Informe trimestral",
-              date: "2024-01-10",
-              type: "Informe",
-            },
-            {
-              title: "Evaluación mensual",
-              date: "2024-01-08",
-              type: "Evaluación",
-            },
-          ],
-        }));
+            subjects,
+            upcomingActivities,
+            recentReports,
+          } satisfies Student;
+        });
 
         setStudents(apiStudents);
         if (apiStudents.length > 0) {
