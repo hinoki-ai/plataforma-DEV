@@ -4,13 +4,10 @@ import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
   try {
     const session = await auth();
 
@@ -25,6 +22,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
+    const params = await context.params;
     const notificationId = params.id;
     if (!notificationId) {
       return NextResponse.json(
