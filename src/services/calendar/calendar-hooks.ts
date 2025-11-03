@@ -17,12 +17,14 @@ import type {
 /**
  * Hook to get calendar events
  */
-export function useCalendarEvents(filters: {
-  startDate?: Date;
-  endDate?: Date;
-  category?: string;
-  isActive?: boolean;
-} = {}) {
+export function useCalendarEvents(
+  filters: {
+    startDate?: Date;
+    endDate?: Date;
+    category?: string;
+    isActive?: boolean;
+  } = {},
+) {
   const events = useQuery(api.calendar.getCalendarEvents, {
     startDate: filters.startDate?.getTime(),
     endDate: filters.endDate?.getTime(),
@@ -53,7 +55,7 @@ export function useUpcomingEvents(limit?: number) {
 export function useCalendarEventById(id: Id<"calendarEvents"> | null) {
   const event = useQuery(
     api.calendar.getCalendarEventById,
-    id ? { id } : "skip"
+    id ? { id } : "skip",
   );
   return {
     event: event ?? null,
@@ -123,7 +125,7 @@ export function useCalendarMutations() {
         location?: string;
         isActive?: boolean;
         updatedBy?: Id<"users">;
-      }
+      },
     ) => {
       const updates: Record<string, unknown> = { ...data };
       if (data.startDate) updates.startDate = data.startDate.getTime();
@@ -186,4 +188,3 @@ export function useCalendarStatistics(events?: CalendarEvent[]) {
 
   return stats;
 }
-
