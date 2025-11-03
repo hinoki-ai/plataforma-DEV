@@ -44,18 +44,20 @@ export const getUserInstitutions = query({
 
     // Get institution details for each membership
     const institutionsWithMemberships = await Promise.all(
-      memberships.map(async (membership) => {
-        const institution = await ctx.db.get(membership.institutionId);
-        return {
-          institution,
-          membership: {
-            _id: membership._id,
-            role: membership.role,
-            status: membership.status,
-            joinedAt: membership.joinedAt,
-          },
-        };
-      }),
+      memberships
+        .filter((membership) => membership.institutionId)
+        .map(async (membership) => {
+          const institution = await ctx.db.get(membership.institutionId!);
+          return {
+            institution,
+            membership: {
+              _id: membership._id,
+              role: membership.role,
+              status: membership.status,
+              joinedAt: membership.joinedAt,
+            },
+          };
+        }),
     );
 
     return institutionsWithMemberships.filter(
@@ -78,18 +80,20 @@ export const getUserActiveInstitutions = query({
     const activeMemberships = memberships.filter((m) => m.status === "ACTIVE");
 
     const institutionsWithMemberships = await Promise.all(
-      activeMemberships.map(async (membership) => {
-        const institution = await ctx.db.get(membership.institutionId);
-        return {
-          institution,
-          membership: {
-            _id: membership._id,
-            role: membership.role,
-            status: membership.status,
-            joinedAt: membership.joinedAt,
-          },
-        };
-      }),
+      activeMemberships
+        .filter((membership) => membership.institutionId)
+        .map(async (membership) => {
+          const institution = await ctx.db.get(membership.institutionId!);
+          return {
+            institution,
+            membership: {
+              _id: membership._id,
+              role: membership.role,
+              status: membership.status,
+              joinedAt: membership.joinedAt,
+            },
+          };
+        }),
     );
 
     return institutionsWithMemberships.filter(
@@ -216,12 +220,7 @@ export const createInstitutionWithAdmins = mutation({
         email: v.string(),
         password: v.string(),
         phone: v.optional(v.string()),
-        role: v.optional(
-          v.union(
-            v.literal("ADMIN"),
-            v.literal("MASTER"),
-          ),
-        ),
+        role: v.optional(v.union(v.literal("ADMIN"), v.literal("MASTER"))),
         isPrimary: v.optional(v.boolean()),
       }),
     ),
@@ -231,7 +230,9 @@ export const createInstitutionWithAdmins = mutation({
     const { institution, admins, createdBy } = args;
 
     if (!admins.length) {
-      throw new Error("At least one administrator is required to create an institution");
+      throw new Error(
+        "At least one administrator is required to create an institution",
+      );
     }
 
     if (!admins.some((admin) => admin.isPrimary)) {
@@ -243,7 +244,9 @@ export const createInstitutionWithAdmins = mutation({
     for (const admin of admins) {
       const email = admin.email.trim().toLowerCase();
       if (normalizedEmails.has(email)) {
-        throw new Error(`Duplicate administrator email detected: ${admin.email}`);
+        throw new Error(
+          `Duplicate administrator email detected: ${admin.email}`,
+        );
       }
       normalizedEmails.add(email);
 

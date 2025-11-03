@@ -452,7 +452,7 @@ export const createSignature = mutation({
           args.recordId as Id<"classContent">,
         );
         if (classContent) {
-          institutionId = classContent.institutionId;
+          institutionId = classContent.institutionId ?? null;
         }
       } else if (
         args.recordType === "ATTENDANCE" ||
@@ -463,7 +463,7 @@ export const createSignature = mutation({
         const courseId = args.recordId.split("-")[0] as Id<"courses">;
         const course = await ctx.db.get(courseId);
         if (course) {
-          institutionId = course.institutionId;
+          institutionId = course.institutionId ?? null;
         }
       }
     }
@@ -598,7 +598,7 @@ export const createCertification = mutation({
           args.recordId as Id<"classContent">,
         );
         if (classContent) {
-          institutionId = classContent.institutionId;
+          institutionId = classContent.institutionId ?? null;
         }
       } else if (
         args.recordType === "ATTENDANCE" ||
@@ -607,7 +607,7 @@ export const createCertification = mutation({
         const courseId = args.recordId.split("-")[0] as Id<"courses">;
         const course = await ctx.db.get(courseId);
         if (course) {
-          institutionId = course.institutionId;
+          institutionId = course.institutionId ?? null;
         }
       }
     }

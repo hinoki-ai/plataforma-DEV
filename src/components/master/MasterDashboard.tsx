@@ -21,6 +21,7 @@ import {
   BarChart3,
   Zap,
   CheckCircle,
+  Building2,
 } from "lucide-react";
 import { MasterPageTemplate } from "./MasterPageTemplate";
 import { MasterActionCard } from "./MasterActionCard";
@@ -49,6 +50,14 @@ const masterQuickActions: QuickAction[] = [
     description: "Monitor all system components",
     icon: Activity,
     href: "/master/system-overview",
+    category: "Core",
+  },
+  {
+    id: "institution-creation",
+    title: "Institution Provisioning",
+    description: "Create and onboard new tenants",
+    icon: Building2,
+    href: "/master/institution-creation",
     category: "Core",
   },
   {

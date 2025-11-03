@@ -50,7 +50,7 @@ export default defineSchema({
     .index("by_clerkId", ["clerkId"]),
 
   institutionMemberships: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     userId: v.id("users"),
     role: v.union(
       v.literal("ADMIN"),
@@ -80,7 +80,7 @@ export default defineSchema({
   // ==================== PLANNING & DOCUMENTS ====================
 
   planningDocuments: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     content: v.string(),
     subject: v.string(),
@@ -142,7 +142,7 @@ export default defineSchema({
   // ==================== TEAM MEMBERS ====================
 
   teamMembers: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     name: v.string(),
     title: v.string(),
     description: v.string(),
@@ -160,7 +160,7 @@ export default defineSchema({
   // ==================== STUDENTS ====================
 
   students: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     firstName: v.string(),
     lastName: v.string(),
     birthDate: v.number(),
@@ -188,7 +188,7 @@ export default defineSchema({
   // ==================== PARENT PROFILES ====================
 
   parentProfiles: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     userId: v.id("users"),
     rut: v.string(),
     address: v.string(),
@@ -212,7 +212,7 @@ export default defineSchema({
   // ==================== MEETINGS ====================
 
   meetings: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     description: v.optional(v.string()),
     studentName: v.string(),
@@ -260,7 +260,7 @@ export default defineSchema({
     .index("by_parentRequested", ["parentRequested"]),
 
   meetingTemplates: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     name: v.string(),
     description: v.optional(v.string()),
     duration: v.number(),
@@ -325,7 +325,7 @@ export default defineSchema({
     .index("by_priority_date", ["priority", "startDate", "isActive"]),
 
   recurrenceRules: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     calendarEventId: v.id("calendarEvents"),
     pattern: v.union(
       v.literal("NONE"),
@@ -347,7 +347,7 @@ export default defineSchema({
     .index("by_calendarEventId", ["calendarEventId"]),
 
   calendarEventTemplates: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     name: v.string(),
     title: v.string(),
     description: v.optional(v.string()),
@@ -380,7 +380,7 @@ export default defineSchema({
   // ==================== MEDIA ====================
 
   photos: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.optional(v.string()),
     description: v.optional(v.string()),
     url: v.string(),
@@ -393,7 +393,7 @@ export default defineSchema({
     .index("by_createdAt", ["createdAt"]),
 
   videos: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     description: v.optional(v.string()),
     url: v.string(),
@@ -411,7 +411,7 @@ export default defineSchema({
     .index("by_isPublic", ["isPublic"]),
 
   videoCapsules: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     description: v.optional(v.string()),
     url: v.string(),
@@ -425,7 +425,7 @@ export default defineSchema({
   // ==================== VOTING SYSTEM ====================
 
   votes: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     description: v.optional(v.string()),
     category: v.union(
@@ -457,7 +457,7 @@ export default defineSchema({
     .index("by_endDate", ["endDate"]),
 
   voteOptions: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     text: v.string(),
     voteId: v.id("votes"),
     createdAt: v.number(),
@@ -466,7 +466,7 @@ export default defineSchema({
     .index("by_voteId", ["voteId"]),
 
   voteResponses: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     voteId: v.id("votes"),
     optionId: v.id("voteOptions"),
     userId: v.id("users"),
@@ -481,7 +481,7 @@ export default defineSchema({
   // ==================== STUDENT PROGRESS ====================
 
   studentProgressReports: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     studentId: v.id("students"),
     reportDate: v.number(),
     subject: v.string(),
@@ -499,7 +499,7 @@ export default defineSchema({
   // ==================== ACTIVITIES ====================
 
   activities: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     description: v.string(),
     type: v.union(
@@ -536,7 +536,7 @@ export default defineSchema({
   // ==================== DOCUMENT STORAGE ====================
 
   documents: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     name: v.string(),
     originalName: v.string(),
     fileId: v.id("_storage"),
@@ -558,7 +558,7 @@ export default defineSchema({
     .index("by_createdAt", ["createdAt"]),
 
   notifications: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     message: v.string(),
     type: v.union(
@@ -599,7 +599,7 @@ export default defineSchema({
 
   // Cursos/Clases - Class/Course definitions
   courses: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     name: v.string(), // e.g., "8vo Básico A", "1ro Medio B"
     level: v.string(), // e.g., "BASICA", "MEDIA"
     grade: v.string(), // e.g., "8vo", "1ro Medio"
@@ -623,7 +623,7 @@ export default defineSchema({
 
   // Estudiantes en Cursos - Student enrollment in courses
   courseStudents: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     courseId: v.id("courses"),
     studentId: v.id("students"),
     enrollmentDate: v.number(),
@@ -637,7 +637,7 @@ export default defineSchema({
 
   // Asistencia Diaria - Daily attendance records
   classAttendance: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     courseId: v.id("courses"),
     studentId: v.id("students"),
     date: v.number(), // Timestamp of the day
@@ -664,7 +664,7 @@ export default defineSchema({
 
   // Objetivos de Aprendizaje (OA) - Learning Objectives according to Decreto 67
   learningObjectives: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     code: v.string(), // OA code (e.g., "OA01", "OA02")
     subject: v.string(), // Subject/Asignatura
     level: v.string(), // Educational level (BASICA, MEDIA)
@@ -690,7 +690,7 @@ export default defineSchema({
 
   // Indicadores de Evaluación - Evaluation Indicators linked to OA
   evaluationIndicators: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     learningObjectiveId: v.id("learningObjectives"),
     code: v.string(), // Indicator code (e.g., "IE01")
     description: v.string(), // Description of the indicator
@@ -713,7 +713,7 @@ export default defineSchema({
 
   // Vinculación OA-Contenido de Clase - Link between class content and OA
   classContentOA: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     classContentId: v.id("classContent"),
     learningObjectiveId: v.id("learningObjectives"),
     evaluationIndicatorIds: v.optional(v.array(v.id("evaluationIndicators"))), // Linked indicators
@@ -731,7 +731,7 @@ export default defineSchema({
 
   // Cobertura Curricular - Curriculum coverage tracking
   curriculumCoverage: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     courseId: v.id("courses"),
     subject: v.string(),
     learningObjectiveId: v.id("learningObjectives"),
@@ -760,7 +760,7 @@ export default defineSchema({
 
   // Firmas Digitales - Digital Signatures for Circular N°30 compliance
   digitalSignatures: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     recordType: v.union(
       v.literal("CLASS_CONTENT"),
       v.literal("ATTENDANCE"),
@@ -793,7 +793,7 @@ export default defineSchema({
 
   // Certificación de Registros - Record Certification for Circular N°30
   recordCertifications: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     recordType: v.union(
       v.literal("CLASS_CONTENT"),
       v.literal("ATTENDANCE"),
@@ -837,7 +837,7 @@ export default defineSchema({
 
   // Bloqueo de Registros - Record Locking for period closure
   recordLocks: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     courseId: v.id("courses"),
     period: v.union(
       v.literal("PRIMER_SEMESTRE"),
@@ -867,7 +867,7 @@ export default defineSchema({
 
   // Registro de Contenidos y Objetivos - Daily lesson content
   classContent: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     courseId: v.id("courses"),
     date: v.number(),
     subject: v.string(), // Subject/Asignatura
@@ -894,7 +894,7 @@ export default defineSchema({
 
   // Observaciones del Estudiante - Student behavioral observations (Chilean standard)
   studentObservations: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     studentId: v.id("students"),
     courseId: v.id("courses"),
     date: v.number(),
@@ -935,7 +935,7 @@ export default defineSchema({
 
   // Registro de Evaluaciones - Grades/evaluation records
   classGrades: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     studentId: v.id("students"),
     courseId: v.id("courses"),
     subject: v.string(),
@@ -973,7 +973,7 @@ export default defineSchema({
 
   // Asistencia a Reuniones de Apoderados - Parent meeting attendance
   parentMeetingAttendance: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     courseId: v.id("courses"),
     studentId: v.id("students"),
     parentId: v.id("users"),
@@ -998,7 +998,7 @@ export default defineSchema({
 
   // Actividades Extra-programáticas - Extra-curricular activities
   extraCurricularActivities: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     name: v.string(),
     description: v.string(),
     category: v.union(
@@ -1025,7 +1025,7 @@ export default defineSchema({
 
   // Participación en Actividades Extra-programáticas
   extraCurricularParticipants: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     activityId: v.id("extraCurricularActivities"),
     studentId: v.id("students"),
     courseId: v.id("courses"),

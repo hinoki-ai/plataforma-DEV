@@ -107,7 +107,7 @@ export async function requireCurrentInstitution(
   if ((!institutionId || (!membership && !isMaster)) && requireMembership) {
     const fallbackMembership = await findActiveMembership(ctx, user._id);
     if (fallbackMembership) {
-      institutionId = fallbackMembership.institutionId;
+      institutionId = fallbackMembership.institutionId ?? null;
       membership = fallbackMembership;
     }
   }
@@ -213,7 +213,7 @@ export async function ensureMembershipRole(
 
 export function ensureInstitutionMatch<
   DocType extends {
-    institutionId: Id<"institutionInfo">;
+    institutionId?: Id<"institutionInfo"> | undefined;
   },
 >(
   record: DocType | null,
@@ -224,7 +224,10 @@ export function ensureInstitutionMatch<
     throw new Error(notFoundMessage);
   }
 
-  if (record.institutionId !== tenancy.institution._id) {
+  if (
+    record.institutionId &&
+    record.institutionId !== tenancy.institution._id
+  ) {
     throw new Error(notFoundMessage);
   }
 
