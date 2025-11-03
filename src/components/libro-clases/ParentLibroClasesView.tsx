@@ -123,8 +123,9 @@ export function ParentLibroClasesView({
     }
   };
 
-  // Loading state
-  if (!currentUser || courses === undefined) {
+  const isLoading = currentUser === undefined || courses === undefined;
+
+  if (isLoading) {
     return (
       <PageTransition>
         <div className="space-y-6">
@@ -136,6 +137,28 @@ export function ParentLibroClasesView({
               <div key={i} className="h-48 bg-muted animate-pulse rounded-lg" />
             ))}
           </div>
+        </div>
+      </PageTransition>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Perfil familiar no encontrado"
+            subtitle="Contacta al establecimiento para habilitar el acceso"
+          />
+          <Card>
+            <CardContent className="py-10">
+              <p className="text-muted-foreground">
+                No pudimos asociar tu cuenta a un apoderado registrado. Por
+                favor confirma con el colegio que tu usuario esté vinculado a un
+                estudiante.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </PageTransition>
     );
