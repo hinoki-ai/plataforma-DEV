@@ -176,9 +176,19 @@ export async function getClerkUsers(
 ): Promise<ClerkUserData[]> {
   try {
     const client = await clerkClient();
-    const users = await client.users.getUserList({ limit: 500 });
+    const users = await client.users.getUserList({ limit: 100 });
 
-    let filteredUsers = users.data.map(clerkUserToAppFormat);
+    let filteredUsers = users.data
+      .filter((user) => user) // Filter out null/undefined users
+      .map((user) => {
+        try {
+          return clerkUserToAppFormat(user);
+        } catch (error) {
+          console.error(`Error formatting user ${user.id}:`, error);
+          return null;
+        }
+      })
+      .filter((user) => user !== null);
 
     if (role) {
       filteredUsers = filteredUsers.filter((user) => user.role === role);
