@@ -104,6 +104,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    // Validate that session.user.id is a valid Convex ID
+    // It should start with a letter followed by alphanumeric characters
+    if (!session.user.id || !/^[a-z]/.test(session.user.id)) {
+      console.error("Invalid user ID format in session:", {
+        id: session.user.id,
+        clerkId: session.user.clerkId,
+        email: session.user.email,
+        role: session.user.role,
+      });
+      return NextResponse.json(
+        { error: "User not found in database. Please contact support." },
+        { status: 500 },
+      );
+    }
+
     const convex = getConvexClient();
     const body = await request.json();
     const {
@@ -156,8 +171,51 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error creating vote:", error);
+
+    // Provide more helpful error messages
+    if (error instanceof Error) {
+      if (error.message.includes("Authentication required")) {
+        return NextResponse.json(
+          { error: "Authentication required. Please log in again." },
+          { status: 401 },
+        );
+      }
+      if (error.message.includes("User record not found")) {
+        return NextResponse.json(
+          {
+            error:
+              "Your account needs to be synced. Please contact support or log out and log back in.",
+          },
+          { status: 403 },
+        );
+      }
+      if (error.message.includes("No institution selected")) {
+        return NextResponse.json(
+          {
+            error:
+              "You must be associated with an institution to create votes.",
+          },
+          { status: 403 },
+        );
+      }
+      if (error.message.includes("Membership required")) {
+        return NextResponse.json(
+          { error: "You must have an active membership to create votes." },
+          { status: 403 },
+        );
+      }
+      if (error.message.includes("User is inactive")) {
+        return NextResponse.json(
+          { error: "Your account is inactive. Please contact support." },
+          { status: 403 },
+        );
+      }
+    }
+
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: error instanceof Error ? error.message : "Internal server error",
+      },
       { status: 500 },
     );
   }

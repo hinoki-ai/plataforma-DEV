@@ -56,6 +56,19 @@ export async function auth(): Promise<SessionData | null> {
     });
   }
 
+  // Warn if user is not found in Convex - this is a configuration issue
+  if (!convexUser) {
+    console.warn(
+      `⚠️ User ${userId} (${clerkUser.user.email}) not found in Convex database. ` +
+        `This may cause issues with tenant-based operations. Consider running a sync.`,
+      {
+        clerkId: userId,
+        email: clerkUser.user.email,
+        role: clerkUser.user.role,
+      },
+    );
+  }
+
   const expires = sessionClaims?.exp
     ? new Date(sessionClaims.exp * 1000).toISOString()
     : undefined;
