@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useLanguage } from "@/components/language/LanguageContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -176,7 +177,7 @@ const quickActions: Record<UserRole, QuickAction[]> = {
     {
       id: "new-planning",
       title: "Nueva Planificación",
-      description: "Crear lección",
+      description: "Crear nueva planificación",
       icon: Plus,
       href: "/profesor/planificaciones/new",
     },
@@ -422,6 +423,7 @@ export function RoleAwareDashboard() {
   const { data: session } = useSession();
   const { user } = useNavigation();
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   // Determine the contextual role based on current path for MASTER users
   const getContextualRole = () => {

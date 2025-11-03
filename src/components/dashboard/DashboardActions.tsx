@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/adaptive-card";
 import { AdaptiveButton } from "@/components/ui/adaptive-button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/language/LanguageContext";
 import {
   Plus,
   Calendar,
@@ -65,6 +66,7 @@ export function DashboardActions({
 }: DashboardActionsProps) {
   const pathname = usePathname();
   const { data: _session } = useSession();
+  const { t } = useLanguage();
 
   // Auto-detect variant based on route and session
   const detectedVariant: Exclude<DashboardActionsVariant, "auto"> =
@@ -83,6 +85,10 @@ export function DashboardActions({
   // Role-specific action configurations
   const getActionsConfig = () => {
     const baseActions = customActions.length > 0 ? customActions : [];
+
+    // Helper function to get translated label
+    const getLabel = (key: string, fallback: string) =>
+      t(key, "common") || fallback;
 
     switch (detectedVariant) {
       case "admin":
@@ -131,10 +137,16 @@ export function DashboardActions({
         return [
           ...baseActions,
           {
-            label: "Nueva Planificación",
-            href: "/profesor/planning/new",
+            label: getLabel(
+              "planning.dashboard.new_button",
+              "Nueva Planificación",
+            ),
+            href: "/profesor/planificaciones/new",
             icon: Plus,
-            description: "Crear nueva planificación",
+            description: getLabel(
+              "profesor.dashboard.planning.description",
+              "Crear nueva planificación",
+            ),
             primary: true,
           },
           {

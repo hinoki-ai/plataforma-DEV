@@ -80,38 +80,55 @@ export async function GET(request: NextRequest) {
     let allUsers: any[] = [];
     try {
       allUsers = await getClerkUsers();
+      // Ensure we have an array even if Clerk returns null/undefined
+      if (!Array.isArray(allUsers)) {
+        console.warn("getClerkUsers returned non-array:", allUsers);
+        allUsers = [];
+      }
     } catch (error) {
       console.error("Failed to get users from Clerk:", error);
-      return handleApiError(
-        new ApiErrorResponse(
-          "Error al obtener usuarios del sistema de autenticación",
-          500,
-          "CLERK_ERROR",
-          {
-            originalError:
-              error instanceof Error ? error.message : String(error),
-          },
-        ),
-        "GET /api/admin/users",
+      // Instead of failing completely, return empty array and continue
+      allUsers = [];
+      // Log the error but don't fail the request
+      console.error(
+        "Clerk user fetch failed, continuing with empty array:",
+        error,
       );
     }
 
     // Map to match expected structure
     const users = allUsers
-      .filter((u) => u.isActive) // Only show active users
-      .map((u) => ({
-        id: u.id,
-        name: u.name,
-        email: u.email,
-        role: u.role,
-        createdAt: u.createdAt.getTime(),
-        updatedAt: u.updatedAt.getTime(),
-      }))
+      .filter((u) => u && u.isActive) // Only show active users, filter out null/undefined
+      .map((u) => {
+        try {
+          return {
+            id: u.id || "",
+            name: u.name || null,
+            email: u.email || "",
+            role: u.role || "PUBLIC",
+            createdAt: u.createdAt ? u.createdAt.getTime() : Date.now(),
+            updatedAt: u.updatedAt ? u.updatedAt.getTime() : Date.now(),
+          };
+        } catch (mappingError) {
+          console.error("Error mapping user:", u, mappingError);
+          return null;
+        }
+      })
+      .filter((u) => u !== null) // Remove any failed mappings
       .sort((a, b) => b.createdAt - a.createdAt);
 
     // Get admin creation stats for the current admin
     // Note: Clerk doesn't track who created users, so we'll use a simpler approach
-    const adminUsers = await getClerkUsers("ADMIN");
+    let adminUsers: any[] = [];
+    try {
+      adminUsers = await getClerkUsers("ADMIN");
+      if (!Array.isArray(adminUsers)) {
+        adminUsers = [];
+      }
+    } catch (error) {
+      console.error("Failed to get admin users from Clerk:", error);
+      adminUsers = [];
+    }
     const adminsCreated = adminUsers.length;
     const maxAdminsAllowed = 5; // Allow more admins in Clerk-based system
 

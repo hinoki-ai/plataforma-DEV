@@ -31,19 +31,40 @@ function LoginForm() {
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoaded) return;
 
+    // Reset loading state at the start
     setIsLoading(true);
     setError(null);
+
     try {
+      // Check if Clerk is loaded before proceeding
+      if (!isLoaded) {
+        console.warn("Clerk not loaded yet, retrying...");
+        // Wait a bit and try again, or show an error
+        setTimeout(() => {
+          if (!isLoaded) {
+            setError(
+              "Authentication service is loading. Please wait and try again.",
+            );
+            setIsLoading(false);
+          }
+        }, 2000);
+        return;
+      }
+
+      console.log("Attempting sign in for:", email);
       const result = await signIn.create({
         identifier: email,
         password,
       });
 
+      console.log("Sign in result:", result);
+
       if (result.status === "complete") {
+        console.log("Sign in complete, setting active session");
         await setActive({ session: result.createdSessionId });
         const target = callbackUrl ?? "/auth-success";
+        console.log("Redirecting to:", target);
         router.replace(target);
         return;
       }
@@ -161,10 +182,14 @@ function LoginForm() {
 
           <Button
             type="submit"
-            disabled={isLoading}
-            className="w-full rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none"
+            disabled={isLoading || !isLoaded}
+            className="w-full rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none disabled:opacity-50"
           >
-            {isLoading ? t("auth.signing_in_button") : t("auth.sign_in_button")}
+            {isLoading
+              ? t("auth.signing_in_button")
+              : !isLoaded
+                ? "Cargando..."
+                : t("auth.sign_in_button")}
           </Button>
         </form>
 
