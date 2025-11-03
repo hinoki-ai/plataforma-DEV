@@ -266,6 +266,10 @@ export const recordMeetingAttendance = mutation({
       throw new Error("Student not found");
     }
 
+    if (student.institutionId !== course.institutionId) {
+      throw new Error("Student and course must belong to the same institution");
+    }
+
     // Check enrollment
     const enrollment = await ctx.db
       .query("courseStudents")
@@ -323,6 +327,7 @@ export const recordMeetingAttendance = mutation({
     } else {
       // Create new record
       return await ctx.db.insert("parentMeetingAttendance", {
+        institutionId: course.institutionId,
         courseId: args.courseId,
         studentId: args.studentId,
         parentId: args.parentId,
@@ -365,6 +370,11 @@ export const bulkRecordMeetingAttendance = mutation({
     registeredBy: v.id("users"),
   },
   handler: async (ctx, args) => {
+    const course = await ctx.db.get(args.courseId);
+    if (!course) {
+      throw new Error("Course not found");
+    }
+
     const now = Date.now();
     const results = [];
     const errors = [];
@@ -396,6 +406,7 @@ export const bulkRecordMeetingAttendance = mutation({
           results.push({ studentId: record.studentId, action: "updated" });
         } else {
           const attendanceId = await ctx.db.insert("parentMeetingAttendance", {
+            institutionId: course.institutionId,
             courseId: args.courseId,
             studentId: record.studentId,
             parentId: record.parentId,

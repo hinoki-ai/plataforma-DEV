@@ -5,7 +5,7 @@
 
 import { v } from "convex/values";
 import { tenantQuery } from "./tenancy";
-import { Id } from "./_generated/dataModel";
+import { Id, Doc } from "./_generated/dataModel";
 
 // ==================== QUERIES ====================
 
@@ -46,7 +46,7 @@ export const getLibroClasesForExport = tenantQuery({
       .collect();
 
     const studentsData = await Promise.all(
-      enrollments.map(async (enrollment: any) => {
+      enrollments.map(async (enrollment) => {
         const student = await ctx.db.get(enrollment.studentId);
         if (!student) return null;
 
@@ -58,10 +58,17 @@ export const getLibroClasesForExport = tenantQuery({
           )
           .collect();
 
-        attendance = attendance.filter((a: any) => a.courseId === courseId);
+        attendance = attendance.filter(
+          (a: Doc<"classAttendance">) => a.courseId === courseId,
+        );
         if (startDate)
-          attendance = attendance.filter((a: any) => a.date >= startDate);
-        if (endDate) attendance = attendance.filter((a: any) => a.date <= endDate);
+          attendance = attendance.filter(
+            (a: Doc<"classAttendance">) => a.date >= startDate,
+          );
+        if (endDate)
+          attendance = attendance.filter(
+            (a: Doc<"classAttendance">) => a.date <= endDate,
+          );
 
         // Get grades
         let grades = await ctx.db
@@ -71,10 +78,19 @@ export const getLibroClasesForExport = tenantQuery({
           )
           .collect();
 
-        grades = grades.filter((g) => g.courseId === courseId);
-        if (startDate) grades = grades.filter((g) => g.date >= startDate);
-        if (endDate) grades = grades.filter((g) => g.date <= endDate);
-        if (period) grades = grades.filter((g) => g.period === period);
+        grades = grades.filter(
+          (g: Doc<"classGrades">) => g.courseId === courseId,
+        );
+        if (startDate)
+          grades = grades.filter(
+            (g: Doc<"classGrades">) => g.date >= startDate,
+          );
+        if (endDate)
+          grades = grades.filter((g: Doc<"classGrades">) => g.date <= endDate);
+        if (period)
+          grades = grades.filter(
+            (g: Doc<"classGrades">) => g.period === period,
+          );
 
         // Get observations
         let observations = await ctx.db
@@ -84,23 +100,29 @@ export const getLibroClasesForExport = tenantQuery({
           )
           .collect();
 
-        observations = observations.filter((o) => o.courseId === courseId);
+        observations = observations.filter(
+          (o: Doc<"studentObservations">) => o.courseId === courseId,
+        );
         if (startDate)
-          observations = observations.filter((o) => o.date >= startDate);
+          observations = observations.filter(
+            (o: Doc<"studentObservations">) => o.date >= startDate,
+          );
         if (endDate)
-          observations = observations.filter((o) => o.date <= endDate);
+          observations = observations.filter(
+            (o: Doc<"studentObservations">) => o.date <= endDate,
+          );
 
         return {
           id: student._id,
           firstName: student.firstName,
           lastName: student.lastName,
-          attendance: attendance.map((a: any) => ({
+          attendance: attendance.map((a: Doc<"classAttendance">) => ({
             date: new Date(a.date).toISOString(),
             status: a.status,
             subject: a.subject,
             observation: a.observation,
           })),
-          grades: grades.map((g) => ({
+          grades: grades.map((g: Doc<"classGrades">) => ({
             date: new Date(g.date).toISOString(),
             subject: g.subject,
             evaluationName: g.evaluationName,
@@ -108,7 +130,7 @@ export const getLibroClasesForExport = tenantQuery({
             maxGrade: g.maxGrade,
             period: g.period,
           })),
-          observations: observations.map((o) => ({
+          observations: observations.map((o: Doc<"studentObservations">) => ({
             date: new Date(o.date).toISOString(),
             type: o.type,
             category: o.category,
@@ -126,11 +148,16 @@ export const getLibroClasesForExport = tenantQuery({
       .collect();
 
     if (startDate)
-      classContent = classContent.filter((c) => c.date >= startDate);
-    if (endDate) classContent = classContent.filter((c) => c.date <= endDate);
+      classContent = classContent.filter(
+        (c: Doc<"classContent">) => c.date >= startDate,
+      );
+    if (endDate)
+      classContent = classContent.filter(
+        (c: Doc<"classContent">) => c.date <= endDate,
+      );
 
     const classContentData = await Promise.all(
-      classContent.map(async (content) => {
+      classContent.map(async (content: Doc<"classContent">) => {
         const teacherInfo = await ctx.db.get(content.teacherId);
         return {
           date: new Date(content.date).toISOString(),
@@ -145,10 +172,17 @@ export const getLibroClasesForExport = tenantQuery({
     // Get parent meetings attendance
     let meetings = await ctx.db.query("parentMeetingAttendance").collect();
 
-    meetings = meetings.filter((m) => m.courseId === courseId);
+    meetings = meetings.filter(
+      (m: Doc<"parentMeetingAttendance">) => m.courseId === courseId,
+    );
     if (startDate)
-      meetings = meetings.filter((m) => m.meetingDate >= startDate);
-    if (endDate) meetings = meetings.filter((m) => m.meetingDate <= endDate);
+      meetings = meetings.filter(
+        (m: Doc<"parentMeetingAttendance">) => m.meetingDate >= startDate,
+      );
+    if (endDate)
+      meetings = meetings.filter(
+        (m: Doc<"parentMeetingAttendance">) => m.meetingDate <= endDate,
+      );
 
     // Aggregate meetings by date
     const meetingMap = new Map<
@@ -160,7 +194,7 @@ export const getLibroClasesForExport = tenantQuery({
       }
     >();
 
-    meetings.forEach((meeting) => {
+    meetings.forEach((meeting: Doc<"parentMeetingAttendance">) => {
       const existing = meetingMap.get(meeting.meetingDate);
       if (existing) {
         if (meeting.attended) {
@@ -245,7 +279,7 @@ export const getStudentLibroForExport = tenantQuery({
           .collect();
 
     const courses = coursesList.filter(
-      (c): c is NonNullable<typeof c> => c !== null,
+      (c: Doc<"courses"> | null): c is Doc<"courses"> => c !== null,
     );
 
     const allData = {
@@ -261,7 +295,29 @@ export const getStudentLibroForExport = tenantQuery({
         lastName: student.lastName,
         grade: student.grade,
       },
-      courses: [] as any[],
+      courses: [] as Array<{
+        courseName: string;
+        courseLevel: string;
+        courseGrade: string;
+        courseSection: string;
+        teacherName: string;
+        attendance: Array<{ date: string; status: string; subject: string }>;
+        grades: Array<{
+          date: string;
+          subject: string;
+          evaluationName: string;
+          grade: number;
+          maxGrade: number;
+          period: string;
+        }>;
+        observations: Array<{
+          date: string;
+          type: string;
+          category: string;
+          observation: string;
+          severity?: string;
+        }>;
+      }>,
     };
 
     for (const course of courses) {
@@ -272,7 +328,7 @@ export const getStudentLibroForExport = tenantQuery({
         .collect();
 
       const isEnrolled = enrollment.some(
-        (e) => e.studentId === studentId && e.isActive,
+        (e: Doc<"courseStudents">) => e.studentId === studentId && e.isActive,
       );
 
       if (!isEnrolled) continue;
@@ -285,9 +341,17 @@ export const getStudentLibroForExport = tenantQuery({
         .withIndex("by_studentId_date", (q: any) => q.eq("studentId", studentId))
         .collect();
 
-      attendance = attendance.filter((a: any) => a.courseId === course._id);
-      if (startDate) attendance = attendance.filter((a: any) => a.date >= startDate);
-      if (endDate) attendance = attendance.filter((a: any) => a.date <= endDate);
+      attendance = attendance.filter(
+        (a: Doc<"classAttendance">) => a.courseId === course._id,
+      );
+      if (startDate)
+        attendance = attendance.filter(
+          (a: Doc<"classAttendance">) => a.date >= startDate,
+        );
+      if (endDate)
+        attendance = attendance.filter(
+          (a: Doc<"classAttendance">) => a.date <= endDate,
+        );
 
       // Get grades
       let grades = await ctx.db
@@ -295,9 +359,13 @@ export const getStudentLibroForExport = tenantQuery({
         .withIndex("by_studentId_subject", (q: any) => q.eq("studentId", studentId))
         .collect();
 
-      grades = grades.filter((g) => g.courseId === course._id);
-      if (startDate) grades = grades.filter((g) => g.date >= startDate);
-      if (endDate) grades = grades.filter((g) => g.date <= endDate);
+      grades = grades.filter(
+        (g: Doc<"classGrades">) => g.courseId === course._id,
+      );
+      if (startDate)
+        grades = grades.filter((g: Doc<"classGrades">) => g.date >= startDate);
+      if (endDate)
+        grades = grades.filter((g: Doc<"classGrades">) => g.date <= endDate);
 
       // Get observations
       let observations = await ctx.db
@@ -305,10 +373,17 @@ export const getStudentLibroForExport = tenantQuery({
         .withIndex("by_studentId_date", (q: any) => q.eq("studentId", studentId))
         .collect();
 
-      observations = observations.filter((o) => o.courseId === course._id);
+      observations = observations.filter(
+        (o: Doc<"studentObservations">) => o.courseId === course._id,
+      );
       if (startDate)
-        observations = observations.filter((o) => o.date >= startDate);
-      if (endDate) observations = observations.filter((o) => o.date <= endDate);
+        observations = observations.filter(
+          (o: Doc<"studentObservations">) => o.date >= startDate,
+        );
+      if (endDate)
+        observations = observations.filter(
+          (o: Doc<"studentObservations">) => o.date <= endDate,
+        );
 
       allData.courses.push({
         courseName: course.name,
@@ -316,12 +391,12 @@ export const getStudentLibroForExport = tenantQuery({
         courseGrade: course.grade,
         courseSection: course.section,
         teacherName: teacher?.name || "Sin asignar",
-        attendance: attendance.map((a: any) => ({
+        attendance: attendance.map((a: Doc<"classAttendance">) => ({
           date: new Date(a.date).toISOString(),
           status: a.status,
           subject: a.subject,
         })),
-        grades: grades.map((g) => ({
+        grades: grades.map((g: Doc<"classGrades">) => ({
           date: new Date(g.date).toISOString(),
           subject: g.subject,
           evaluationName: g.evaluationName,
@@ -329,7 +404,7 @@ export const getStudentLibroForExport = tenantQuery({
           maxGrade: g.maxGrade,
           period: g.period,
         })),
-        observations: observations.map((o) => ({
+        observations: observations.map((o: Doc<"studentObservations">) => ({
           date: new Date(o.date).toISOString(),
           type: o.type,
           category: o.category,

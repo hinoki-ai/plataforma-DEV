@@ -3,35 +3,43 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import type { Doc } from "./_generated/dataModel";
+import { ensureInstitutionMatch, tenantMutation, tenantQuery } from "./tenancy";
 
 // ==================== QUERIES ====================
 
-export const getTeamMembers = query({
+export const getTeamMembers = tenantQuery({
   args: {
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { isActive }) => {
-    let members = await ctx.db.query("teamMembers").collect();
+  handler: async (ctx, { isActive }, tenancy) => {
+    const members = (await ctx.db
+      .query("teamMembers")
+      .withIndex("by_institutionId", (q: any) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect()) as Doc<"teamMembers">[];
 
-    if (isActive !== undefined) {
-      members = members.filter((m) => m.isActive === isActive);
-    }
+    const filtered =
+      isActive === undefined
+        ? members
+        : members.filter((member) => member.isActive === isActive);
 
-    return members.sort((a, b) => a.order - b.order);
+    return filtered.sort((a, b) => a.order - b.order);
   },
 });
 
-export const getTeamMemberById = query({
+export const getTeamMemberById = tenantQuery({
   args: { id: v.id("teamMembers") },
-  handler: async (ctx, { id }) => {
-    return await ctx.db.get(id);
+  handler: async (ctx, { id }, tenancy) => {
+    const member = await ctx.db.get(id);
+    return ensureInstitutionMatch(member, tenancy, "Team member not found");
   },
 });
 
 // ==================== MUTATIONS ====================
 
-export const createTeamMember = mutation({
+export const createTeamMember = tenantMutation({
   args: {
     name: v.string(),
     title: v.string(),
@@ -40,15 +48,21 @@ export const createTeamMember = mutation({
     imageUrl: v.optional(v.string()),
     order: v.optional(v.number()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args, tenancy) => {
     const now = Date.now();
 
     // Get the max order to append at the end
-    const members = await ctx.db.query("teamMembers").collect();
+    const members = (await ctx.db
+      .query("teamMembers")
+      .withIndex("by_institutionId", (q: any) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect()) as Doc<"teamMembers">[];
     const maxOrder = members.reduce((max, m) => Math.max(max, m.order), -1);
 
     return await ctx.db.insert("teamMembers", {
       ...args,
+      institutionId: tenancy.institution._id,
       order: args.order ?? maxOrder + 1,
       isActive: true,
       createdAt: now,
@@ -57,7 +71,7 @@ export const createTeamMember = mutation({
   },
 });
 
-export const updateTeamMember = mutation({
+export const updateTeamMember = tenantMutation({
   args: {
     id: v.id("teamMembers"),
     name: v.optional(v.string()),
@@ -68,7 +82,12 @@ export const updateTeamMember = mutation({
     order: v.optional(v.number()),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { id, ...updates }) => {
+  handler: async (ctx, { id, ...updates }, tenancy) => {
+    ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Team member not found",
+    );
     await ctx.db.patch(id, {
       ...updates,
       updatedAt: Date.now(),
@@ -77,9 +96,14 @@ export const updateTeamMember = mutation({
   },
 });
 
-export const deleteTeamMember = mutation({
+export const deleteTeamMember = tenantMutation({
   args: { id: v.id("teamMembers") },
-  handler: async (ctx, { id }) => {
+  handler: async (ctx, { id }, tenancy) => {
+    ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Team member not found",
+    );
     await ctx.db.delete(id);
   },
 });
@@ -87,10 +111,15 @@ export const deleteTeamMember = mutation({
 /**
  * Get team member statistics for admin dashboard
  */
-export const getTeamMemberStats = query({
+export const getTeamMemberStats = tenantQuery({
   args: {},
-  handler: async (ctx) => {
-    const members = await ctx.db.query("teamMembers").collect();
+  handler: async (ctx, _args, tenancy) => {
+    const members = (await ctx.db
+      .query("teamMembers")
+      .withIndex("by_institutionId", (q: any) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect()) as Doc<"teamMembers">[];
 
     return {
       total: members.length,
@@ -102,12 +131,17 @@ export const getTeamMemberStats = query({
 /**
  * Toggle team member active status
  */
-export const toggleTeamMemberStatus = mutation({
+export const toggleTeamMemberStatus = tenantMutation({
   args: {
     id: v.id("teamMembers"),
     isActive: v.boolean(),
   },
-  handler: async (ctx, { id, isActive }) => {
+  handler: async (ctx, { id, isActive }, tenancy) => {
+    ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Team member not found",
+    );
     await ctx.db.patch(id, {
       isActive,
       updatedAt: Date.now(),
