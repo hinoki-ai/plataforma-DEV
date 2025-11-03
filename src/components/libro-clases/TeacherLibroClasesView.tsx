@@ -60,6 +60,16 @@ interface TeacherLibroClasesViewProps {
   view?: TabValue;
 }
 
+type CourseEnrollment = {
+  _id: Id<"courseStudents">;
+  studentId: Id<"students">;
+  student?: {
+    firstName?: string;
+    lastName?: string;
+    grade?: string | null;
+  } | null;
+};
+
 const TEACHER_TAB_ROUTES: Record<TabValue, string> = {
   overview: "/profesor/libro-clases",
   attendance: "/profesor/libro-clases/asistencia",
@@ -519,48 +529,50 @@ export function TeacherLibroClasesView({
                       {selectedCourse?.students &&
                       selectedCourse.students.length > 0 ? (
                         <div className="space-y-2 max-h-[400px] overflow-y-auto">
-                          {selectedCourse.students.map((enrollment) => (
-                            <div
-                              key={enrollment._id}
-                              className="flex items-center justify-between p-3 border rounded-lg"
-                            >
-                              <div>
-                                <div className="font-medium">
-                                  {enrollment.student?.firstName}{" "}
-                                  {enrollment.student?.lastName}
+                          {(selectedCourse.students as CourseEnrollment[]).map(
+                            (enrollment) => (
+                              <div
+                                key={enrollment._id}
+                                className="flex items-center justify-between p-3 border rounded-lg"
+                              >
+                                <div>
+                                  <div className="font-medium">
+                                    {enrollment.student?.firstName}{" "}
+                                    {enrollment.student?.lastName}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {enrollment.student?.grade}
+                                  </div>
                                 </div>
-                                <div className="text-sm text-muted-foreground">
-                                  {enrollment.student?.grade}
+                                <div className="flex gap-2">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() =>
+                                      handleObservationClick(
+                                        enrollment.studentId,
+                                        `${enrollment.student?.firstName} ${enrollment.student?.lastName}`,
+                                      )
+                                    }
+                                  >
+                                    Observación
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() =>
+                                      handleGradeClick(
+                                        enrollment.studentId,
+                                        `${enrollment.student?.firstName} ${enrollment.student?.lastName}`,
+                                      )
+                                    }
+                                  >
+                                    Nota
+                                  </Button>
                                 </div>
                               </div>
-                              <div className="flex gap-2">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() =>
-                                    handleObservationClick(
-                                      enrollment.studentId,
-                                      `${enrollment.student?.firstName} ${enrollment.student?.lastName}`,
-                                    )
-                                  }
-                                >
-                                  Observación
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() =>
-                                    handleGradeClick(
-                                      enrollment.studentId,
-                                      `${enrollment.student?.firstName} ${enrollment.student?.lastName}`,
-                                    )
-                                  }
-                                >
-                                  Nota
-                                </Button>
-                              </div>
-                            </div>
-                          ))}
+                            ),
+                          )}
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
@@ -577,15 +589,17 @@ export function TeacherLibroClasesView({
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
-                        {selectedCourse?.subjects?.map((subject, idx) => (
-                          <Badge
-                            key={idx}
-                            variant="secondary"
-                            className="text-sm py-2 px-3"
-                          >
-                            {subject}
-                          </Badge>
-                        ))}
+                        {selectedCourse?.subjects?.map(
+                          (subject: string, idx: number) => (
+                            <Badge
+                              key={idx}
+                              variant="secondary"
+                              className="text-sm py-2 px-3"
+                            >
+                              {subject}
+                            </Badge>
+                          ),
+                        )}
                       </div>
                     </CardContent>
                   </Card>

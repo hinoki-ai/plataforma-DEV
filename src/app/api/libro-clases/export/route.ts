@@ -5,7 +5,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { generateLibroClasesPDF } from "@/lib/pdf-libro-clases";
+import {
+  generateLibroClasesPDF,
+  type LibroClasesData,
+} from "@/lib/pdf-libro-clases";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "convex/_generated/api";
 
@@ -31,22 +34,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch libro de clases data from Convex
-    let libroData;
+    let libroData: LibroClasesData;
 
-    if (scope === "student" && studentId) {
-      // Get student-specific data
-      libroData = await convex.query(
-        api.libroClasesExport.getStudentLibroForExport,
-        {
-          studentId,
-          courseId: courseId || undefined,
-          startDate: startDate || undefined,
-          endDate: endDate || undefined,
-        },
+    if (scope === "student") {
+      return NextResponse.json(
+        { error: "Student scoped exports are not supported yet" },
+        { status: 400 },
       );
-    } else if (courseId) {
+    }
+
+    if (courseId) {
       // Get course-specific data
-      libroData = await convex.query(
+      libroData = (await convex.query(
         api.libroClasesExport.getLibroClasesForExport,
         {
           courseId,
@@ -54,7 +53,7 @@ export async function POST(request: NextRequest) {
           endDate: endDate || undefined,
           period: period || undefined,
         },
-      );
+      )) as LibroClasesData;
     } else {
       return NextResponse.json(
         { error: "Invalid export scope" },
@@ -65,8 +64,10 @@ export async function POST(request: NextRequest) {
     // Generate PDF
     const pdfBuffer = await generateLibroClasesPDF(libroData);
 
+    const pdfData = new Uint8Array(pdfBuffer);
+
     // Return PDF as response
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(pdfData, {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",

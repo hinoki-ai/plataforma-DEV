@@ -57,6 +57,27 @@ interface ParentMeetingTrackerProps {
   teacherId: Id<"users">;
 }
 
+type CourseEnrollment = {
+  studentId: Id<"students">;
+  student?: {
+    firstName?: string;
+    lastName?: string;
+    grade?: string | null;
+  } | null;
+  meetings?: Array<{
+    meetingDate: number;
+    attended: boolean;
+    meetingNumber: number;
+  }>;
+  parentMeetings?: Array<{
+    meetingDate: number;
+    attended: boolean;
+    meetingNumber: number;
+    representativeName?: string | null;
+    relationship?: string | null;
+  }>;
+};
+
 export function ParentMeetingTracker({
   courseId,
   teacherId,
@@ -139,7 +160,7 @@ export function ParentMeetingTracker({
         ([studentId, data]) => {
           // Find student to get parentId
           const student = course?.students?.find(
-            (s) => s.studentId === studentId,
+            (s: CourseEnrollment) => s.studentId === studentId,
           )?.student;
 
           return {
@@ -175,7 +196,7 @@ export function ParentMeetingTracker({
 
     setAttendanceData((prev) => {
       const newData = new Map(prev);
-      course.students.forEach((enrollment) => {
+      (course.students as CourseEnrollment[]).forEach((enrollment) => {
         newData.set(enrollment.studentId, {
           attended: true,
         });
@@ -333,121 +354,124 @@ export function ParentMeetingTracker({
                     <Label>Asistencia por Estudiante</Label>
                     {course?.students && course.students.length > 0 ? (
                       <div className="space-y-2">
-                        {course.students.map((enrollment) => {
-                          if (!enrollment.student) return null;
+                        {(course.students as CourseEnrollment[]).map(
+                          (enrollment) => {
+                            if (!enrollment.student) return null;
 
-                          const studentData = attendanceData.get(
-                            enrollment.studentId,
-                          );
-                          const attended = studentData?.attended || false;
+                            const studentData = attendanceData.get(
+                              enrollment.studentId,
+                            );
+                            const attended = studentData?.attended || false;
 
-                          return (
-                            <div
-                              key={enrollment.studentId}
-                              className="border rounded-lg p-4 space-y-3"
-                            >
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                  <Checkbox
-                                    checked={attended}
-                                    onCheckedChange={(checked: boolean) =>
-                                      updateAttendance(
-                                        enrollment.studentId,
-                                        checked as boolean,
-                                      )
-                                    }
-                                  />
-                                  <div>
-                                    <div className="font-medium">
-                                      {enrollment.student.firstName}{" "}
-                                      {enrollment.student.lastName}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                      {enrollment.student.grade}
-                                    </div>
-                                  </div>
-                                </div>
-                                {attended ? (
-                                  <Badge variant="default">
-                                    <CheckCircle className="h-3 w-3 mr-1" />
-                                    Asistió
-                                  </Badge>
-                                ) : (
-                                  <Badge variant="secondary">
-                                    <XCircle className="h-3 w-3 mr-1" />
-                                    No asistió
-                                  </Badge>
-                                )}
-                              </div>
-
-                              {attended && (
-                                <div className="grid grid-cols-2 gap-3 pl-8">
-                                  <div className="space-y-1">
-                                    <Label className="text-xs">
-                                      Nombre del Apoderado
-                                    </Label>
-                                    <Input
-                                      placeholder="Nombre completo"
-                                      value={
-                                        studentData?.representativeName || ""
-                                      }
-                                      onChange={(e) =>
+                            return (
+                              <div
+                                key={enrollment.studentId}
+                                className="border rounded-lg p-4 space-y-3"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <Checkbox
+                                      checked={attended}
+                                      onCheckedChange={(checked: boolean) =>
                                         updateAttendance(
                                           enrollment.studentId,
-                                          true,
-                                          {
-                                            representativeName: e.target.value,
-                                          },
+                                          checked as boolean,
                                         )
                                       }
                                     />
+                                    <div>
+                                      <div className="font-medium">
+                                        {enrollment.student.firstName}{" "}
+                                        {enrollment.student.lastName}
+                                      </div>
+                                      <div className="text-sm text-muted-foreground">
+                                        {enrollment.student.grade}
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="space-y-1">
-                                    <Label className="text-xs">
-                                      Parentesco
-                                    </Label>
-                                    <Select
-                                      value={studentData?.relationship || ""}
-                                      onValueChange={(value: string) =>
-                                        updateAttendance(
-                                          enrollment.studentId,
-                                          true,
-                                          {
-                                            relationship: value,
-                                          },
-                                        )
-                                      }
-                                    >
-                                      <SelectTrigger className="h-9">
-                                        <SelectValue placeholder="Seleccionar" />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="padre">
-                                          Padre
-                                        </SelectItem>
-                                        <SelectItem value="madre">
-                                          Madre
-                                        </SelectItem>
-                                        <SelectItem value="apoderado">
-                                          Apoderado
-                                        </SelectItem>
-                                        <SelectItem value="tutor">
-                                          Tutor
-                                        </SelectItem>
-                                        <SelectItem value="abuelo">
-                                          Abuelo/a
-                                        </SelectItem>
-                                        <SelectItem value="otro">
-                                          Otro
-                                        </SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
+                                  {attended ? (
+                                    <Badge variant="default">
+                                      <CheckCircle className="h-3 w-3 mr-1" />
+                                      Asistió
+                                    </Badge>
+                                  ) : (
+                                    <Badge variant="secondary">
+                                      <XCircle className="h-3 w-3 mr-1" />
+                                      No asistió
+                                    </Badge>
+                                  )}
                                 </div>
-                              )}
-                            </div>
-                          );
-                        })}
+
+                                {attended && (
+                                  <div className="grid grid-cols-2 gap-3 pl-8">
+                                    <div className="space-y-1">
+                                      <Label className="text-xs">
+                                        Nombre del Apoderado
+                                      </Label>
+                                      <Input
+                                        placeholder="Nombre completo"
+                                        value={
+                                          studentData?.representativeName || ""
+                                        }
+                                        onChange={(e) =>
+                                          updateAttendance(
+                                            enrollment.studentId,
+                                            true,
+                                            {
+                                              representativeName:
+                                                e.target.value,
+                                            },
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                    <div className="space-y-1">
+                                      <Label className="text-xs">
+                                        Parentesco
+                                      </Label>
+                                      <Select
+                                        value={studentData?.relationship || ""}
+                                        onValueChange={(value: string) =>
+                                          updateAttendance(
+                                            enrollment.studentId,
+                                            true,
+                                            {
+                                              relationship: value,
+                                            },
+                                          )
+                                        }
+                                      >
+                                        <SelectTrigger className="h-9">
+                                          <SelectValue placeholder="Seleccionar" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="padre">
+                                            Padre
+                                          </SelectItem>
+                                          <SelectItem value="madre">
+                                            Madre
+                                          </SelectItem>
+                                          <SelectItem value="apoderado">
+                                            Apoderado
+                                          </SelectItem>
+                                          <SelectItem value="tutor">
+                                            Tutor
+                                          </SelectItem>
+                                          <SelectItem value="abuelo">
+                                            Abuelo/a
+                                          </SelectItem>
+                                          <SelectItem value="otro">
+                                            Otro
+                                          </SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          },
+                        )}
                       </div>
                     ) : (
                       <div className="text-center py-8 text-muted-foreground">

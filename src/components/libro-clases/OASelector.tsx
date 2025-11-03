@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id, type Doc } from "@/convex/_generated/dataModel";
 import {
   Command,
   CommandEmpty,
@@ -35,12 +35,7 @@ interface SelectedOA {
   id: Id<"learningObjectives">;
   code: string;
   description: string;
-  indicators?: Array<{
-    _id: Id<"evaluationIndicators">;
-    code: string;
-    description: string;
-    level: string;
-  }>;
+  indicators: Doc<"evaluationIndicators">[];
 }
 
 export function OASelector({
@@ -82,18 +77,20 @@ export function OASelector({
 
     if (!learningObjectives) return;
 
-    const selected = value
-      .map((id) => {
-        const obj = learningObjectives.find((o) => o._id === id);
-        if (!obj) return null;
-        return {
-          id: obj._id,
-          code: obj.code,
-          description: obj.description,
-          indicators: obj.indicators || [],
-        };
-      })
-      .filter((o): o is SelectedOA => o !== null);
+    const selected = value.reduce<SelectedOA[]>((acc, id) => {
+      const obj = learningObjectives.find((o) => o._id === id);
+      if (!obj) {
+        return acc;
+      }
+
+      acc.push({
+        id: obj._id,
+        code: obj.code,
+        description: obj.description,
+        indicators: obj.indicators ?? [],
+      });
+      return acc;
+    }, []);
 
     setSelectedOAs(selected);
   }, [value, learningObjectives]);

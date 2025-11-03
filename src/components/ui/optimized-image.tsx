@@ -45,7 +45,6 @@ export function OptimizedImage({
 
   useEffect(() => {
     if (priority) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(false);
     }
   }, [priority]);

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id, type Doc } from "@/convex/_generated/dataModel";
 import {
   Card,
   CardContent,
@@ -64,6 +64,11 @@ interface SignatureAuditTrailProps {
   courseId?: Id<"courses">;
 }
 
+type SignatureWithDetails = Doc<"digitalSignatures"> & {
+  signer?: Doc<"users"> | null;
+  certifier?: Doc<"users"> | null;
+};
+
 export function SignatureAuditTrail({
   recordType,
   recordId,
@@ -79,8 +84,8 @@ export function SignatureAuditTrail({
   // Note: You may need to create a custom query for this
   const signatures = useQuery(
     api.digitalSignatures.getSignaturesByUser,
-    {}, // This would need to be adapted based on your needs
-  );
+    "skip",
+  ) as SignatureWithDetails[] | undefined;
 
   const getRecordTypeLabel = (type: RecordType): string => {
     const labels: Record<RecordType, string> = {
@@ -109,7 +114,7 @@ export function SignatureAuditTrail({
     }
   };
 
-  const filteredSignatures = signatures?.filter((sig) => {
+  const filteredSignatures = signatures?.filter((sig: SignatureWithDetails) => {
     if (filterType !== "ALL" && sig.recordType !== filterType) {
       return false;
     }
@@ -236,7 +241,7 @@ export function SignatureAuditTrail({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredSignatures.map((sig) => (
+                  {filteredSignatures.map((sig: SignatureWithDetails) => (
                     <TableRow key={sig._id}>
                       <TableCell className="font-medium">
                         {format(sig.createdAt, "dd/MM/yyyy HH:mm:ss", {

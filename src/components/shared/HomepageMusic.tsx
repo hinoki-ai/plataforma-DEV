@@ -23,7 +23,6 @@ export function HomepageMusic() {
     const isTouchPrimary =
       window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768;
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAllowAutoplay(!(prefersReducedMotion || isTouchPrimary));
   }, []);
 

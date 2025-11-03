@@ -69,7 +69,22 @@ export const getSignaturesByUser = query({
       signatures = signatures.filter((s) => s.isCertified === isCertified);
     }
 
-    return signatures.sort((a, b) => b.createdAt - a.createdAt);
+    const signaturesWithDetails = await Promise.all(
+      signatures.map(async (signature) => {
+        const signer = await ctx.db.get(signature.signedBy);
+        const certifier = signature.certifiedBy
+          ? await ctx.db.get(signature.certifiedBy)
+          : null;
+
+        return {
+          ...signature,
+          signer,
+          certifier,
+        };
+      }),
+    );
+
+    return signaturesWithDetails.sort((a, b) => b.createdAt - a.createdAt);
   },
 });
 

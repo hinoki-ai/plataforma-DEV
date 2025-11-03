@@ -41,7 +41,6 @@ export function NetworkErrorBoundary({
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
@@ -67,7 +66,6 @@ export function NetworkErrorBoundary({
         },
       );
 
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setNetworkError({
         hasNetworkError: true,
         errorType: "offline",

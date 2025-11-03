@@ -1,11 +1,20 @@
 "use client";
 
 import type { TeamMember } from "@/lib/prisma-compat-types";
-import { TeamMemberList as UnifiedTeamMemberList } from "@/components/team/TeamMemberCard";
+import {
+  TeamMemberList as UnifiedTeamMemberList,
+  type TeamMemberCardVariant,
+} from "@/components/team/TeamMemberCard";
 import { useRouter } from "next/navigation";
 
 interface TeamMemberListProps {
   teamMembers: TeamMember[];
+  variant?: TeamMemberCardVariant;
+  showActions?: boolean;
+  showContact?: boolean;
+  gridColumns?: "auto" | 1 | 2 | 3 | 4;
+  className?: string;
+  emptyMessage?: string;
 }
 
 /**
@@ -29,7 +38,15 @@ interface TeamMemberListProps {
  * @see TeamMemberList (unified) for the underlying component
  * @see TeamMemberCard for individual card documentation
  */
-export function TeamMemberList({ teamMembers }: TeamMemberListProps) {
+export function TeamMemberList({
+  teamMembers,
+  variant = "admin",
+  showActions = true,
+  showContact = false,
+  gridColumns = 1,
+  className,
+  emptyMessage,
+}: TeamMemberListProps) {
   const router = useRouter();
 
   /**
@@ -45,9 +62,12 @@ export function TeamMemberList({ teamMembers }: TeamMemberListProps) {
   return (
     <UnifiedTeamMemberList
       members={teamMembers}
-      variant="admin"
-      showActions={true}
-      gridColumns={1}
+      variant={variant}
+      showActions={showActions}
+      showContact={showContact}
+      gridColumns={gridColumns}
+      className={className}
+      emptyMessage={emptyMessage}
       onUpdate={handleUpdate}
     />
   );

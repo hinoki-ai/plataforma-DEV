@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { canAccessProfesor } from "@/lib/role-utils";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
+import type { Doc } from "@/convex/_generated/dataModel";
 import { z } from "zod";
 import {
   checkRateLimit,
@@ -66,22 +67,26 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
 
     // Get activities for this teacher
-    const allActivities = await client.query(api.activities.getActivities, {
+    const allActivities = (await client.query(api.activities.getActivities, {
       teacherId: session.user.id as any,
       type: type as any,
-    });
+    })) as Doc<"activities">[];
 
     // Apply status filter
     const now = Date.now();
-    let filteredActivities = allActivities;
+    let filteredActivities: Doc<"activities">[] = allActivities;
     if (status === "upcoming") {
-      filteredActivities = allActivities.filter((a) => a.scheduledDate >= now);
+      filteredActivities = allActivities.filter(
+        (a: Doc<"activities">) => a.scheduledDate >= now,
+      );
     } else if (status === "completed") {
-      filteredActivities = allActivities.filter((a) => a.scheduledDate < now);
+      filteredActivities = allActivities.filter(
+        (a: Doc<"activities">) => a.scheduledDate < now,
+      );
     }
 
     // Sort based on status
-    filteredActivities.sort((a, b) => {
+    filteredActivities.sort((a: Doc<"activities">, b: Doc<"activities">) => {
       if (status === "upcoming") {
         return a.scheduledDate - b.scheduledDate; // Ascending for upcoming
       }
@@ -97,7 +102,7 @@ export async function GET(request: NextRequest) {
 
     // Get teacher info for each activity
     const activitiesWithTeacher = await Promise.all(
-      paginatedActivities.map(async (activity) => {
+      paginatedActivities.map(async (activity: Doc<"activities">) => {
         const teacher = await client.query(api.users.getUserById, {
           userId: activity.teacherId,
         });

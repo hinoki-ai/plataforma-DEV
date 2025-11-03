@@ -9,7 +9,6 @@ export default function NotFound() {
 
   // Only use translation after mounting to avoid SSR issues
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 

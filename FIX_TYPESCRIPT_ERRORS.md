@@ -146,6 +146,7 @@ After fixing all errors:
    ```
 
 4. Verify the build works:
+
    ```bash
    npm run build
    ```
