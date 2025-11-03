@@ -221,6 +221,10 @@ export const createObservation = mutation({
       throw new Error("Course not found");
     }
 
+    if (student.institutionId !== course.institutionId) {
+      throw new Error("Student and course must belong to the same institution");
+    }
+
     // Validate teacher exists and is PROFESOR
     const teacher = await ctx.db.get(args.teacherId);
     if (!teacher || teacher.role !== "PROFESOR") {
@@ -249,6 +253,7 @@ export const createObservation = mutation({
 
     // Create observation
     const observationId = await ctx.db.insert("studentObservations", {
+      institutionId: student.institutionId,
       studentId: args.studentId,
       courseId: args.courseId,
       date: args.date,
@@ -373,6 +378,7 @@ ${observation.actionTaken ? `\nAcción tomada: ${observation.actionTaken}` : ""}
 Profesor: ${teacher?.name || "N/A"}`;
 
     await ctx.db.insert("notifications", {
+      institutionId: student.institutionId,
       title: notificationTitle,
       message: notificationMessage,
       type: observation.type === "NEGATIVA" ? "WARNING" : "INFO",

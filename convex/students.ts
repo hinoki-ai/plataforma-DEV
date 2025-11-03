@@ -4,6 +4,7 @@
 
 import { v } from "convex/values";
 import { tenantMutation, tenantQuery, ensureInstitutionMatch } from "./tenancy";
+import type { Doc } from "./_generated/dataModel";
 
 // ==================== QUERIES ====================
 
@@ -17,7 +18,7 @@ export const getStudents = tenantQuery({
   handler: async (ctx, { teacherId, parentId, grade, isActive }, tenancy) => {
     let queryBuilder = ctx.db
       .query("students")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       );
 
@@ -25,7 +26,7 @@ export const getStudents = tenantQuery({
       tenancy.membershipRole === "PROFESOR" ? tenancy.user._id : teacherId;
 
     if (enforcedTeacherId) {
-      queryBuilder = queryBuilder.filter((q) =>
+      queryBuilder = queryBuilder.filter((q: any) =>
         q.eq("teacherId", enforcedTeacherId),
       );
     }
@@ -34,22 +35,26 @@ export const getStudents = tenantQuery({
       tenancy.membershipRole === "PARENT" ? tenancy.user._id : parentId;
 
     if (enforcedParentId) {
-      queryBuilder = queryBuilder.filter((q) =>
+      queryBuilder = queryBuilder.filter((q: any) =>
         q.eq("parentId", enforcedParentId),
       );
     }
 
     if (grade) {
-      queryBuilder = queryBuilder.filter((q) => q.eq("grade", grade));
+      queryBuilder = queryBuilder.filter((q: any) => q.eq("grade", grade));
     }
 
-    let allStudents = await queryBuilder.collect();
+    let allStudents = (await queryBuilder.collect()) as Doc<"students">[];
 
     if (isActive !== undefined) {
-      allStudents = allStudents.filter((s) => s.isActive === isActive);
+      allStudents = allStudents.filter(
+        (s: Doc<"students">) => s.isActive === isActive,
+      );
     }
 
-    return allStudents.sort((a, b) => a.lastName.localeCompare(b.lastName));
+    return allStudents.sort((a: Doc<"students">, b: Doc<"students">) =>
+      a.lastName.localeCompare(b.lastName),
+    );
   },
 });
 

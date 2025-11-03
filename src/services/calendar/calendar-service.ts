@@ -189,24 +189,30 @@ export async function getCalendarStatistics(
       byPriority: {},
     };
 
-    events.forEach((event: { category: EventCategory; priority?: EventPriority; startDate: number }) => {
-      // Count by category
-      const category = event.category as EventCategory;
-      if (category) {
-        stats.byCategory[category] = (stats.byCategory[category] || 0) + 1;
-      }
+    events.forEach(
+      (event: {
+        category: EventCategory;
+        priority?: EventPriority;
+        startDate: number;
+      }) => {
+        // Count by category
+        const category = event.category as EventCategory;
+        if (category) {
+          stats.byCategory[category] = (stats.byCategory[category] || 0) + 1;
+        }
 
-      // Count by priority
-      const priority = event.priority as EventPriority | undefined;
-      if (priority) {
-        stats.byPriority[priority] = (stats.byPriority[priority] || 0) + 1;
-      }
+        // Count by priority
+        const priority = event.priority as EventPriority | undefined;
+        if (priority) {
+          stats.byPriority[priority] = (stats.byPriority[priority] || 0) + 1;
+        }
 
-      // Count upcoming events
-      if (event.startDate >= now) {
-        stats.upcoming++;
-      }
-    });
+        // Count upcoming events
+        if (event.startDate >= now) {
+          stats.upcoming++;
+        }
+      },
+    );
 
     return stats;
   } catch (error) {

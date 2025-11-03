@@ -194,7 +194,6 @@ export const syncFromClerk = internalMutation({
       isOAuthUser,
       clerkId,
       createdByAdmin: undefined,
-      institutionId: undefined,
       createdAt: now,
       updatedAt: now,
       emailVerified: undefined,
@@ -371,7 +370,7 @@ export const createUser = mutation({
         isOAuthUser: args.isOAuthUser ?? false,
         createdByAdmin: args.createdByAdmin,
         parentRole: args.parentRole,
-        institutionId: args.institutionId,
+        currentInstitutionId: args.institutionId,
         status: args.status ?? "ACTIVE",
       };
 
@@ -774,6 +773,9 @@ export const registerParentComplete = mutation({
     isOAuthUser: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
+    if (!args.institutionId) {
+      throw new Error("institutionId is required");
+    }
     try {
       const now = Date.now();
 
@@ -798,7 +800,7 @@ export const registerParentComplete = mutation({
         phone: args.phone,
         role: "PARENT",
         parentRole: args.relationship,
-        institutionId: args.institutionId,
+        currentInstitutionId: args.institutionId,
         isActive: true,
         isOAuthUser: args.isOAuthUser ?? false,
         provider: args.provider,
@@ -809,6 +811,7 @@ export const registerParentComplete = mutation({
 
       // 2. Create parent profile
       await ctx.db.insert("parentProfiles", {
+        institutionId: args.institutionId!,
         userId,
         rut: args.rut,
         address: args.address,
@@ -853,6 +856,7 @@ export const registerParentComplete = mutation({
       }
 
       const studentId = await ctx.db.insert("students", {
+        institutionId: args.institutionId!,
         firstName,
         lastName,
         birthDate: now, // Will be updated later with actual birthdate

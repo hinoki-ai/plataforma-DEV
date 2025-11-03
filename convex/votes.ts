@@ -4,6 +4,7 @@
 
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { tenantMutation } from "./tenancy";
 
 const voteCategoryValidator = v.union(
   v.literal("GENERAL"),
@@ -95,7 +96,7 @@ export const getUserVoteResponse = query({
 
 // ==================== MUTATIONS ====================
 
-export const createVote = mutation({
+export const createVote = tenantMutation({
   args: {
     title: v.string(),
     description: v.optional(v.string()),
@@ -109,11 +110,12 @@ export const createVote = mutation({
     createdBy: v.id("users"),
     options: v.array(v.string()),
   },
-  handler: async (ctx, { options, ...args }) => {
+  handler: async (ctx, { options, ...args }, tenancy) => {
     const now = Date.now();
 
     // Create the vote data, filtering out null/undefined optional fields
     const voteData: any = {
+      institutionId: tenancy.institution._id,
       title: args.title,
       endDate: args.endDate,
       createdBy: args.createdBy,
@@ -138,8 +140,9 @@ export const createVote = mutation({
 
     // Create options
     await Promise.all(
-      options.map((text) =>
+      options.map((text: string) =>
         ctx.db.insert("voteOptions", {
+          institutionId: tenancy.institution._id,
           text,
           voteId,
           createdAt: now,
@@ -151,13 +154,13 @@ export const createVote = mutation({
   },
 });
 
-export const castVote = mutation({
+export const castVote = tenantMutation({
   args: {
     voteId: v.id("votes"),
     optionId: v.id("voteOptions"),
     userId: v.id("users"),
   },
-  handler: async (ctx, { voteId, optionId, userId }) => {
+  handler: async (ctx, { voteId, optionId, userId }, tenancy) => {
     const vote = await ctx.db.get(voteId);
     if (!vote) throw new Error("Vote not found");
 
@@ -185,6 +188,7 @@ export const castVote = mutation({
     }
 
     return await ctx.db.insert("voteResponses", {
+      institutionId: tenancy.institution._id,
       voteId,
       optionId,
       userId,
