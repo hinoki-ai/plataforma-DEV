@@ -3,6 +3,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import { sanitizeJsonInput } from "@/lib/sanitization";
 
 const INSTITUTION_TYPES = [
@@ -17,9 +18,7 @@ const INSTITUTION_TYPES = [
 const adminSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   email: z.string().email("Ingrese un correo electrónico válido"),
-  password: z
-    .string()
-    .min(8, "La contraseña debe tener al menos 8 caracteres"),
+  password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
   phone: z.string().min(6, "Ingrese un teléfono válido").optional(),
   role: z.enum(["ADMIN", "MASTER"]).optional(),
   isPrimary: z.boolean().optional(),
@@ -54,15 +53,14 @@ const institutionSchema = z.object({
 const payloadSchema = z
   .object({
     institution: institutionSchema,
-    admins: z.array(adminSchema).min(1, "Debe registrar al menos un administrador"),
+    admins: z
+      .array(adminSchema)
+      .min(1, "Debe registrar al menos un administrador"),
   })
-  .refine(
-    (data) => data.admins.some((admin) => admin.isPrimary),
-    {
-      message: "Debe marcar un administrador principal",
-      path: ["admins"],
-    },
-  );
+  .refine((data) => data.admins.some((admin) => admin.isPrimary), {
+    message: "Debe marcar un administrador principal",
+    path: ["admins"],
+  });
 
 export const runtime = "nodejs";
 
@@ -83,7 +81,7 @@ export async function POST(request: NextRequest) {
 
     const client = getConvexClient();
 
-    let createdByUserId: string | undefined;
+    let createdByUserId: Id<"users"> | undefined;
     try {
       const convexUser = await client.query(api.users.getUserByEmail, {
         email: session.user.email,

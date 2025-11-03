@@ -12,7 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -50,7 +57,11 @@ const institutionCreationSchema = z
     phone: z.string().min(7, "Ingrese un teléfono de contacto"),
     email: z.string().email("Ingrese un correo institucional válido"),
     website: z.string().url("Ingrese una URL válida"),
-    logoUrl: z.string().url("Ingrese una URL válida").optional().or(z.literal("")),
+    logoUrl: z
+      .string()
+      .url("Ingrese una URL válida")
+      .optional()
+      .or(z.literal("")),
     institutionType: z.enum([
       "PRESCHOOL",
       "BASIC_SCHOOL",
@@ -61,13 +72,10 @@ const institutionCreationSchema = z
     ] satisfies [EducationalInstitutionType, ...EducationalInstitutionType[]]),
     admins: z.array(adminSchema).min(1, "Debe crear al menos un administrador"),
   })
-  .refine(
-    (data) => data.admins.some((admin) => admin.isPrimary),
-    {
-      message: "Debe existir un administrador principal",
-      path: ["admins"],
-    },
-  );
+  .refine((data) => data.admins.some((admin) => admin.isPrimary), {
+    message: "Debe existir un administrador principal",
+    path: ["admins"],
+  });
 
 type InstitutionCreationFormValues = z.infer<typeof institutionCreationSchema>;
 
@@ -224,17 +232,21 @@ export function InstitutionCreationForm() {
       });
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "No se pudo crear la institución";
+        error instanceof Error
+          ? error.message
+          : "No se pudo crear la institución";
       toast.error(message);
     }
   };
 
   const adminErrors = form.formState.errors.admins;
   const adminsRootError =
-    typeof adminErrors === "object" && "root" in adminErrors
-      ? adminErrors.root?.message
-      : // @ts-expect-error react-hook-form unions are tricky here
-        adminErrors?.message;
+    (
+      adminErrors as
+        | { root?: { message?: string }; message?: string }
+        | undefined
+    )?.root?.message ??
+    (adminErrors as { message?: string } | undefined)?.message;
 
   return (
     <MasterPageTemplate
@@ -255,7 +267,10 @@ export function InstitutionCreationForm() {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 <div className="grid gap-4 md:grid-cols-2">
                   <FormField
                     control={form.control}
@@ -276,7 +291,10 @@ export function InstitutionCreationForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Tipo de institución</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Seleccione tipo" />
@@ -284,7 +302,10 @@ export function InstitutionCreationForm() {
                           </FormControl>
                           <SelectContent>
                             {institutionOptions.map((option) => (
-                              <SelectItem key={option.value} value={option.value}>
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
                                 <div className="flex flex-col">
                                   <span>{option.label}</span>
                                   <span className="text-xs text-muted-foreground">
@@ -345,7 +366,10 @@ export function InstitutionCreationForm() {
                       <FormItem>
                         <FormLabel>Logo (opcional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="https://colegio.cl/logo.png" {...field} />
+                          <Input
+                            placeholder="https://colegio.cl/logo.png"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -358,7 +382,10 @@ export function InstitutionCreationForm() {
                       <FormItem className="md:col-span-2">
                         <FormLabel>Dirección</FormLabel>
                         <FormControl>
-                          <Input placeholder="Calle 123, Comuna, Región" {...field} />
+                          <Input
+                            placeholder="Calle 123, Comuna, Región"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -410,7 +437,8 @@ export function InstitutionCreationForm() {
                         Administradores del tenant
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        Cree las credenciales maestras para ingresar al nuevo tenant
+                        Cree las credenciales maestras para ingresar al nuevo
+                        tenant
                       </p>
                     </div>
                     <Button
@@ -493,7 +521,10 @@ export function InstitutionCreationForm() {
                               <FormItem>
                                 <FormLabel>Correo</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="admin@colegio.cl" {...field} />
+                                  <Input
+                                    placeholder="admin@colegio.cl"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -506,7 +537,10 @@ export function InstitutionCreationForm() {
                               <FormItem>
                                 <FormLabel>Teléfono (opcional)</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="+56 9 1234 5678" {...field} />
+                                  <Input
+                                    placeholder="+56 9 1234 5678"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -592,10 +626,13 @@ export function InstitutionCreationForm() {
                 <AlertDescription>
                   <div className="space-y-3 text-sm">
                     <div>
-                      ID Convex: {creationResult.institutionId || "sincronizando..."}
+                      ID Convex:{" "}
+                      {creationResult.institutionId || "sincronizando..."}
                     </div>
                     <div className="space-y-1">
-                      <div className="font-semibold">Administradores provisionados</div>
+                      <div className="font-semibold">
+                        Administradores provisionados
+                      </div>
                       <ul className="list-disc pl-5 space-y-1">
                         {creationResult.admins.map((admin) => (
                           <li key={admin.userId}>

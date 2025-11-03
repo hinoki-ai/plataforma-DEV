@@ -3,8 +3,15 @@
  * This fixes records created before institutionId became required
  */
 
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+
+export const checkRecord = query({
+  args: { id: v.string() },
+  handler: async (ctx, { id }) => {
+    return await ctx.db.get(id as any);
+  },
+});
 
 export const migrateInstitutionIds = mutation({
   args: {},
@@ -18,33 +25,70 @@ export const migrateInstitutionIds = mutation({
     const institutionId = defaultInstitution._id;
     console.log(`Using institution ${institutionId} as default for migration`);
 
-    // Migrate calendar events
-    const calendarEvents = await ctx.db.query("calendarEvents").collect();
-    let calendarCount = 0;
-    for (const event of calendarEvents) {
-      if (!event.institutionId) {
-        await ctx.db.patch(event._id, { institutionId });
-        calendarCount++;
+    let totalCount = 0;
+
+    // Tables to migrate (add more as needed)
+    const tablesToMigrate = [
+      "calendarEvents",
+      "meetings",
+      "students",
+      "courses",
+      "activities",
+      "notifications",
+      "votes",
+      "voteOptions",
+      "voteResponses",
+      "studentProgressReports",
+      "photos",
+      "videos",
+      "videoCapsules",
+      "documents",
+      "planningDocuments",
+      "teamMembers",
+      "parentProfiles",
+      "meetingTemplates",
+      "calendarEventTemplates",
+      "recurrenceRules",
+      "calendarEventTemplates",
+      "courses",
+      "courseStudents",
+      "classAttendance",
+      "learningObjectives",
+      "evaluationIndicators",
+      "classContentOA",
+      "curriculumCoverage",
+      "recordCertifications",
+      "recordLocks",
+      "classContent",
+      "studentObservations",
+      "classGrades",
+      "parentMeetingAttendance",
+      "extraCurricularActivities",
+      "extraCurricularParticipants",
+    ];
+
+    for (const tableName of tablesToMigrate) {
+      try {
+        const records = await ctx.db.query(tableName as any).collect();
+        let count = 0;
+        for (const record of records) {
+          if (!record.institutionId) {
+            await ctx.db.patch(record._id, { institutionId });
+            count++;
+            totalCount++;
+          }
+        }
+        if (count > 0) {
+          console.log(`Migrated ${count} records in ${tableName}`);
+        }
+      } catch (error) {
+        console.warn(`Failed to migrate table ${tableName}:`, error);
       }
     }
-    console.log(`Migrated ${calendarCount} calendar events`);
-
-    // Migrate meetings
-    const meetings = await ctx.db.query("meetings").collect();
-    let meetingsCount = 0;
-    for (const meeting of meetings) {
-      if (!meeting.institutionId) {
-        await ctx.db.patch(meeting._id, { institutionId });
-        meetingsCount++;
-      }
-    }
-    console.log(`Migrated ${meetingsCount} meetings`);
-
-    // Add more migrations here for other tables as needed
 
     return {
       success: true,
-      message: `Migration completed. Updated ${calendarCount} calendar events and ${meetingsCount} meetings.`,
+      message: `Migration completed. Updated ${totalCount} records across ${tablesToMigrate.length} tables.`,
     };
   },
 });

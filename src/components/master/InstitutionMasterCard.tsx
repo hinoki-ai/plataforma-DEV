@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
@@ -44,6 +45,7 @@ export function InstitutionMasterCard({
   currentType = "PRESCHOOL",
 }: InstitutionMasterCardProps) {
   const { t } = useDivineParsing(["common"]);
+  const router = useRouter();
   const [isConfiguring, setIsConfiguring] = useState(false);
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
 
@@ -74,6 +76,14 @@ export function InstitutionMasterCard({
   };
 
   const masterActions = [
+    {
+      label: "Provisionar nueva institución",
+      icon: Building2,
+      description: "Crear y vincular un tenant completo",
+      action: () => router.push("/master/institution-creation"),
+      color:
+        "bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700",
+    },
     {
       label: "Configurar Sistema Educativo",
       icon: Settings,
