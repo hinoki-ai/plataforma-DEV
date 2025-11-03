@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -142,6 +142,7 @@ export function GradeEntryForm({
   const [savedGradeId, setSavedGradeId] = useState<Id<"classGrades"> | null>(
     null,
   );
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
   const fieldOrder = [
     "date",
@@ -203,6 +204,12 @@ export function GradeEntryForm({
     watchedMaxGrade && watchedMaxGrade > 0
       ? Math.min((watchedGrade / watchedMaxGrade) * 100, 100)
       : 0;
+
+  useEffect(() => {
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = `${gradePercentage}%`;
+    }
+  }, [gradePercentage]);
 
   const onSubmit = async (data: GradeFormData) => {
     setIsSubmitting(true);
@@ -577,6 +584,7 @@ export function GradeEntryForm({
           </div>
           <div className="h-3 bg-muted rounded-full overflow-hidden border">
             <div
+              ref={progressBarRef}
               className={cn(
                 "h-full transition-all duration-300 ease-out rounded-full",
                 watchedGrade >= 6.0
@@ -587,7 +595,6 @@ export function GradeEntryForm({
                       ? "bg-linear-to-r from-yellow-400 to-yellow-600 shadow-sm"
                       : "bg-linear-to-r from-red-400 to-red-600 shadow-sm",
               )}
-              style={{ width: `${gradePercentage}%` }}
             />
           </div>
           <div className="flex justify-between text-xs text-muted-foreground">
