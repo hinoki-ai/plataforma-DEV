@@ -454,7 +454,7 @@ export function TeamMemberCard({
                   </Button>
 
                   <Link
-                    href="/public/equipo-multidisciplinario"
+                    href="/equipo-multidisciplinario"
                     target="_blank"
                   >
                     <Button size="sm" variant="ghost">

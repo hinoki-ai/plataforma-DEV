@@ -211,8 +211,7 @@ export function SignatureModal({
             <div className="border-2 border-dashed rounded-lg bg-muted/30">
               <canvas
                 ref={canvasRef}
-                className="w-full cursor-crosshair"
-                style={{ height: "200px", touchAction: "none" }}
+                className="w-full cursor-crosshair h-[200px] touch-none"
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}

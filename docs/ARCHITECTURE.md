@@ -16,7 +16,7 @@
 
 ## Routing
 
-- Public: `/`, `/cpa`, `/fotos-videos`, `/public/equipo-multidisciplinario`
+- Public: `/`, `/cpa`, `/fotos-videos`, `/equipo-multidisciplinario`
 - Auth dashboards: `/admin`, `/profesor`, `/parent` + subroutes
 
 ## Background System

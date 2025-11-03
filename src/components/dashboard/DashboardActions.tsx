@@ -187,7 +187,7 @@ export function DashboardActions({
           },
           {
             label: "Equipo Multidisciplinario",
-            href: "/public/equipo-multidisciplinario",
+            href: "/equipo-multidisciplinario",
             icon: Users,
             description: "Conocer al equipo de profesionales",
           },

@@ -89,7 +89,7 @@ const baseNavigationItems: Record<UserRole, NavigationItem[]> = {
     {
       id: "system-settings",
       title: "Configuración del Sistema",
-      href: "/admin/settings",
+      href: "/settings",
       category: "sistema",
       description: "Configuración avanzada",
       permissions: ["admin:dashboard"],
@@ -310,7 +310,7 @@ const baseNavigationItems: Record<UserRole, NavigationItem[]> = {
     {
       id: "team",
       title: "Equipo Multidisciplinario",
-      href: "/public/equipo-multidisciplinario",
+      href: "/equipo-multidisciplinario",
       category: "equipo",
       description: "Conocer al equipo",
     },

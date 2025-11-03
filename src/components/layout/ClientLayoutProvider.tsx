@@ -39,8 +39,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
 
   // Pages that use FixedBackgroundLayout and need full-screen rendering
   const isFullScreenPage =
-    pathname?.startsWith("/public/equipo-multidisciplinario") ||
-    pathname === "/equipo-multidisciplinario" ||
+    pathname?.startsWith("/equipo-multidisciplinario") ||
     pathname === "/cpma" ||
     pathname?.startsWith("/fotos-videos");
 
