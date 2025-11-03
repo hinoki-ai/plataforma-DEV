@@ -47,18 +47,12 @@ CLERK_WEBHOOK_SECRET=whsec_aAAkO7Fa5AYqSYzs8EJkk7qN+gqs2M2q
 The application is already set up with:
 
 - ✅ ClerkProvider with proper configuration
-- ✅ Google Sign-In button in login page
+- ✅ Email/password authentication
 - ✅ Middleware protection for routes
 - ✅ User session management with Convex integration
 - ✅ Role-based access control
 
 ## Troubleshooting
-
-### Google OAuth Not Working
-
-1. Check Google Cloud Console redirect URIs
-2. Verify Client ID/Secret in Clerk dashboard
-3. Ensure domain is authorized in Google Console
 
 ### Environment Variables Issues
 
@@ -99,4 +93,4 @@ curl https://plataforma.aramac.dev/api/health
 - ✅ User sessions are validated server-side
 - ✅ Role-based access control implemented
 
-The authentication system is now properly configured with Clerk and ready for Google OAuth integration!
+The authentication system is now properly configured with Clerk!

@@ -19,61 +19,61 @@ export const GET = createApiRoute(
     const client = getConvexClient();
 
     // Optimized parallel queries for teacher data with error handling
-    const [
-      teacherInfo,
-      studentsData,
-      planningData,
-      meetingsData,
-      coursesData
-    ] = await Promise.allSettled([
-      // Teacher basic info
-      client.query(api.users.getUserById, { userId: teacherId }),
+    const [teacherInfo, studentsData, planningData, meetingsData, coursesData] =
+      await Promise.allSettled([
+        // Teacher basic info
+        client.query(api.users.getUserById, { userId: teacherId }),
 
-      // Students managed by teacher
-      client.query(api.students.getStudents, {
-        teacherId,
-        isActive: true,
-      }),
+        // Students managed by teacher
+        client.query(api.students.getStudents, {
+          teacherId,
+          isActive: true,
+        }),
 
-      // All planning documents by teacher
-      client.query(api.planning.getPlanningDocuments, {
-        authorId: teacherId,
-      }),
+        // All planning documents by teacher
+        client.query(api.planning.getPlanningDocuments, {
+          authorId: teacherId,
+        }),
 
-      // All meetings assigned to teacher
-      client.query(api.meetings.getMeetingsByTeacher, {
-        teacherId,
-      }),
+        // All meetings assigned to teacher
+        client.query(api.meetings.getMeetingsByTeacher, {
+          teacherId,
+        }),
 
-      // All courses taught by teacher
-      client.query(api.courses.getCourses, {
-        teacherId,
-        isActive: true,
-      }),
-    ]);
+        // All courses taught by teacher
+        client.query(api.courses.getCourses, {
+          teacherId,
+          isActive: true,
+        }),
+      ]);
 
     // Extract results and handle errors
-    const teacherResult = teacherInfo.status === 'fulfilled' ? teacherInfo.value : null;
-    const studentsResult = studentsData.status === 'fulfilled' ? studentsData.value : [];
-    const planningResult = planningData.status === 'fulfilled' ? planningData.value : [];
-    const meetingsResult = meetingsData.status === 'fulfilled' ? meetingsData.value : [];
-    const coursesResult = coursesData.status === 'fulfilled' ? coursesData.value : [];
+    const teacherResult =
+      teacherInfo.status === "fulfilled" ? teacherInfo.value : null;
+    const studentsResult =
+      studentsData.status === "fulfilled" ? studentsData.value : [];
+    const planningResult =
+      planningData.status === "fulfilled" ? planningData.value : [];
+    const meetingsResult =
+      meetingsData.status === "fulfilled" ? meetingsData.value : [];
+    const coursesResult =
+      coursesData.status === "fulfilled" ? coursesData.value : [];
 
     // Log any errors for debugging
-    if (teacherInfo.status === 'rejected') {
-      console.error('Error fetching teacher info:', teacherInfo.reason);
+    if (teacherInfo.status === "rejected") {
+      console.error("Error fetching teacher info:", teacherInfo.reason);
     }
-    if (studentsData.status === 'rejected') {
-      console.error('Error fetching students data:', studentsData.reason);
+    if (studentsData.status === "rejected") {
+      console.error("Error fetching students data:", studentsData.reason);
     }
-    if (planningData.status === 'rejected') {
-      console.error('Error fetching planning data:', planningData.reason);
+    if (planningData.status === "rejected") {
+      console.error("Error fetching planning data:", planningData.reason);
     }
-    if (meetingsData.status === 'rejected') {
-      console.error('Error fetching meetings data:', meetingsData.reason);
+    if (meetingsData.status === "rejected") {
+      console.error("Error fetching meetings data:", meetingsData.reason);
     }
-    if (coursesData.status === 'rejected') {
-      console.error('Error fetching courses data:', coursesData.reason);
+    if (coursesData.status === "rejected") {
+      console.error("Error fetching courses data:", coursesData.reason);
     }
 
     const now = Date.now();

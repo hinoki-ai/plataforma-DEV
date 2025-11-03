@@ -253,18 +253,20 @@ export const getCurrentTenancy = query({
           id: tenancy.institution._id,
           name: tenancy.institution.name,
         },
-        membership: tenancy.membership ? {
-          id: tenancy.membership._id,
-          role: tenancy.membership.role,
-          status: tenancy.membership.status,
-        } : null,
+        membership: tenancy.membership
+          ? {
+              id: tenancy.membership._id,
+              role: tenancy.membership.role,
+              status: tenancy.membership.status,
+            }
+          : null,
         membershipRole: tenancy.membershipRole,
         isMaster: tenancy.isMaster,
       };
     } catch (error) {
       return {
-        error: error.message,
-        stack: error.stack,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
       };
     }
   },

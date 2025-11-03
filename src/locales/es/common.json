@@ -117,7 +117,6 @@
   "user.role.description": "Define los permisos del usuario en el sistema",
   "user.active.label": "Cuenta Activa",
   "user.active.description": "Los usuarios inactivos no pueden acceder al sistema",
-  "user.email.description": "Se usará para crear la cuenta de Google Workspace",
   "user.email.immutable": "El email no puede ser modificado",
   "user.saving": "Guardando...",
   "user.update": "Actualizar",

@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # 🔐 Clerk Authentication Setup Script
-# This script helps you set up Clerk authentication with Google OAuth
+# This script helps you set up Clerk authentication
 
 set -e
 
-echo "🔐 Setting up Clerk Authentication with Google OAuth..."
+echo "🔐 Setting up Clerk Authentication..."
 echo ""
 
 # Check if we're in the right directory
@@ -82,30 +82,13 @@ echo ""
 
 echo "🎉 Setup completed successfully!"
 echo ""
-echo "📋 Next steps to enable Google OAuth:"
+echo "📋 Next steps:"
 echo ""
-echo "1. 🌐 Configure Google OAuth in Clerk Dashboard:"
-echo "   - Go to https://clerk.com and sign in"
-echo "   - Select your application: plataforma.aramac.dev"
-echo "   - Navigate to 'User & Authentication' → 'Social Connections'"
-echo "   - Enable Google OAuth"
-echo ""
-echo "2. 🔑 Set up Google Cloud Console:"
-echo "   - Go to https://console.cloud.google.com"
-echo "   - Create OAuth 2.0 Client ID"
-echo "   - Add redirect URIs:"
-echo "     - https://clerk.plataforma.aramac.dev/v1/oauth_callback"
-echo "     - http://localhost:3000/v1/oauth_callback"
-echo ""
-echo "3. 🔗 Connect Google to Clerk:"
-echo "   - Copy Client ID and Secret from Google"
-echo "   - Paste them into Clerk's Google configuration"
-echo ""
-echo "4. 🚀 Test the setup:"
+echo "1. 🚀 Test the setup:"
 echo "   - Start dev server: npm run dev"
-echo "   - Test Google login at: http://localhost:3000/login"
+echo "   - Test login at: http://localhost:3000/login"
 echo ""
-echo "5. 📦 Deploy to production:"
+echo "2. 📦 Deploy to production:"
 echo "   - git add ."
 echo "   - git commit -m 'feat: configure Clerk authentication'"
 echo "   - git push origin main"

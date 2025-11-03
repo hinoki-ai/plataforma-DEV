@@ -21,29 +21,28 @@ export const GET = createApiRoute(
       const user = await client.query(api.users.getUserById, { userId });
 
       // Try to get tenancy context (this will fail if tenancy is not set up)
-      const tenancyContext = await client.query(api.tenancy.getCurrentTenancy, {});
+      const tenancyContext = await client.query(
+        api.tenancy.getCurrentTenancy,
+        {},
+      );
 
       return createSuccessResponse({
-        user: {
-          id: user._id,
-          email: user.email,
-          role: user.role,
-          currentInstitutionId: user.currentInstitutionId,
-          isActive: user.isActive,
-        },
+        user: user
+          ? {
+              id: user._id,
+              email: user.email,
+              role: user.role,
+              currentInstitutionId: user.currentInstitutionId,
+              isActive: user.isActive,
+            }
+          : null,
         tenancy: tenancyContext,
       });
     } catch (error) {
       return createSuccessResponse({
-        user: user ? {
-          id: user._id,
-          email: user.email,
-          role: user.role,
-          currentInstitutionId: user.currentInstitutionId,
-          isActive: user.isActive,
-        } : null,
-        error: error.message,
-        errorStack: error.stack,
+        user: null,
+        error: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
       });
     }
   },

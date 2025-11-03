@@ -65,7 +65,6 @@ NEXT_PUBLIC_CLERK_FRONTEND_API_URL="https://clerk.your-domain.com"
 
 ## Optional Environment Variables
 
-
 ### Media Upload (Cloudinary)
 
 ```bash
@@ -148,16 +147,16 @@ CLOUDINARY_URL="cloudinary://prod_key:prod_secret@prod_cloud"
 
 ## Configuration by Environment
 
-| Variable                          | Local Development            | Production                     | Required    |
-| --------------------------------- | ---------------------------- | ------------------------------ | ----------- |
-| `NEXT_PUBLIC_CONVEX_URL`          | Dev Convex URL               | Production Convex URL          | ✅ Yes      |
-| `CONVEX_DEPLOYMENT`               | `dev:your-project-name`      | N/A (managed by Convex)        | ✅ Yes      |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Keyless (auto)              | Production Clerk key           | ✅ Yes      |
-| `CLERK_SECRET_KEY`                | Keyless (auto)              | Production Clerk secret        | ✅ Yes      |
-| `CLERK_WEBHOOK_SECRET`            | Keyless (auto)              | Production webhook secret      | ⚪ Optional |
-| `NEXT_PUBLIC_CLERK_FRONTEND_API_URL` | Auto-configured             | Your Clerk domain              | ✅ Yes      |
-| `RESEND_API_KEY`                  | Test key                     | Production Resend key          | ⚪ Optional |
-| `CLOUDINARY_URL`         | Dev account             | Production account        | ⚪ Optional |
+| Variable                             | Local Development       | Production                | Required    |
+| ------------------------------------ | ----------------------- | ------------------------- | ----------- |
+| `NEXT_PUBLIC_CONVEX_URL`             | Dev Convex URL          | Production Convex URL     | ✅ Yes      |
+| `CONVEX_DEPLOYMENT`                  | `dev:your-project-name` | N/A (managed by Convex)   | ✅ Yes      |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`  | Keyless (auto)          | Production Clerk key      | ✅ Yes      |
+| `CLERK_SECRET_KEY`                   | Keyless (auto)          | Production Clerk secret   | ✅ Yes      |
+| `CLERK_WEBHOOK_SECRET`               | Keyless (auto)          | Production webhook secret | ⚪ Optional |
+| `NEXT_PUBLIC_CLERK_FRONTEND_API_URL` | Auto-configured         | Your Clerk domain         | ✅ Yes      |
+| `RESEND_API_KEY`                     | Test key                | Production Resend key     | ⚪ Optional |
+| `CLOUDINARY_URL`                     | Dev account             | Production account        | ⚪ Optional |
 
 ---
 

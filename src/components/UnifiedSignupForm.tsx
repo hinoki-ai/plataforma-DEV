@@ -653,7 +653,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     [],
   );
 
-
   // Update comunas when region changes
   useEffect(() => {
     if (formData.region) {
@@ -858,7 +857,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           }
         });
 
-
         const response = await fetch("/api/parent/register", {
           method: "POST",
           body: form,
@@ -880,7 +878,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     },
     [formData, router, validateStep, totalSteps],
   );
-
 
   const StepIndicator = memo(function StepIndicator() {
     return (
