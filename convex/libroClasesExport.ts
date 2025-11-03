@@ -40,33 +40,33 @@ export const getLibroClasesForExport = tenantQuery({
     // Get enrolled students
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId_isActive", (q) =>
+      .withIndex("by_courseId_isActive", (q: any) =>
         q.eq("courseId", courseId).eq("isActive", true),
       )
       .collect();
 
     const studentsData = await Promise.all(
-      enrollments.map(async (enrollment) => {
+      enrollments.map(async (enrollment: any) => {
         const student = await ctx.db.get(enrollment.studentId);
         if (!student) return null;
 
         // Get attendance
         let attendance = await ctx.db
           .query("classAttendance")
-          .withIndex("by_studentId_date", (q) =>
+          .withIndex("by_studentId_date", (q: any) =>
             q.eq("studentId", enrollment.studentId),
           )
           .collect();
 
-        attendance = attendance.filter((a) => a.courseId === courseId);
+        attendance = attendance.filter((a: any) => a.courseId === courseId);
         if (startDate)
-          attendance = attendance.filter((a) => a.date >= startDate);
-        if (endDate) attendance = attendance.filter((a) => a.date <= endDate);
+          attendance = attendance.filter((a: any) => a.date >= startDate);
+        if (endDate) attendance = attendance.filter((a: any) => a.date <= endDate);
 
         // Get grades
         let grades = await ctx.db
           .query("classGrades")
-          .withIndex("by_studentId_subject", (q) =>
+          .withIndex("by_studentId_subject", (q: any) =>
             q.eq("studentId", enrollment.studentId),
           )
           .collect();
@@ -79,7 +79,7 @@ export const getLibroClasesForExport = tenantQuery({
         // Get observations
         let observations = await ctx.db
           .query("studentObservations")
-          .withIndex("by_studentId_date", (q) =>
+          .withIndex("by_studentId_date", (q: any) =>
             q.eq("studentId", enrollment.studentId),
           )
           .collect();
@@ -94,7 +94,7 @@ export const getLibroClasesForExport = tenantQuery({
           id: student._id,
           firstName: student.firstName,
           lastName: student.lastName,
-          attendance: attendance.map((a) => ({
+          attendance: attendance.map((a: any) => ({
             date: new Date(a.date).toISOString(),
             status: a.status,
             subject: a.subject,
@@ -122,7 +122,7 @@ export const getLibroClasesForExport = tenantQuery({
     // Get class content
     let classContent = await ctx.db
       .query("classContent")
-      .withIndex("by_courseId_date", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId_date", (q: any) => q.eq("courseId", courseId))
       .collect();
 
     if (startDate)
@@ -239,7 +239,7 @@ export const getStudentLibroForExport = tenantQuery({
       ? [await ctx.db.get(courseId)]
       : await ctx.db
           .query("courses")
-          .withIndex("by_institutionId", (q) =>
+          .withIndex("by_institutionId", (q: any) =>
             q.eq("institutionId", tenancy.institution._id),
           )
           .collect();
@@ -268,7 +268,7 @@ export const getStudentLibroForExport = tenantQuery({
       // Get enrollments to verify student is in course
       const enrollment = await ctx.db
         .query("courseStudents")
-        .withIndex("by_courseId", (q) => q.eq("courseId", course._id))
+        .withIndex("by_courseId", (q: any) => q.eq("courseId", course._id))
         .collect();
 
       const isEnrolled = enrollment.some(
@@ -282,17 +282,17 @@ export const getStudentLibroForExport = tenantQuery({
       // Get attendance
       let attendance = await ctx.db
         .query("classAttendance")
-        .withIndex("by_studentId_date", (q) => q.eq("studentId", studentId))
+        .withIndex("by_studentId_date", (q: any) => q.eq("studentId", studentId))
         .collect();
 
-      attendance = attendance.filter((a) => a.courseId === course._id);
-      if (startDate) attendance = attendance.filter((a) => a.date >= startDate);
-      if (endDate) attendance = attendance.filter((a) => a.date <= endDate);
+      attendance = attendance.filter((a: any) => a.courseId === course._id);
+      if (startDate) attendance = attendance.filter((a: any) => a.date >= startDate);
+      if (endDate) attendance = attendance.filter((a: any) => a.date <= endDate);
 
       // Get grades
       let grades = await ctx.db
         .query("classGrades")
-        .withIndex("by_studentId_subject", (q) => q.eq("studentId", studentId))
+        .withIndex("by_studentId_subject", (q: any) => q.eq("studentId", studentId))
         .collect();
 
       grades = grades.filter((g) => g.courseId === course._id);
@@ -302,7 +302,7 @@ export const getStudentLibroForExport = tenantQuery({
       // Get observations
       let observations = await ctx.db
         .query("studentObservations")
-        .withIndex("by_studentId_date", (q) => q.eq("studentId", studentId))
+        .withIndex("by_studentId_date", (q: any) => q.eq("studentId", studentId))
         .collect();
 
       observations = observations.filter((o) => o.courseId === course._id);
@@ -316,7 +316,7 @@ export const getStudentLibroForExport = tenantQuery({
         courseGrade: course.grade,
         courseSection: course.section,
         teacherName: teacher?.name || "Sin asignar",
-        attendance: attendance.map((a) => ({
+        attendance: attendance.map((a: any) => ({
           date: new Date(a.date).toISOString(),
           status: a.status,
           subject: a.subject,

@@ -31,7 +31,9 @@ export const getActivities = tenantQuery({
       );
 
     if (teacherId) {
-      queryBuilder = queryBuilder.filter((q: any) => q.eq("teacherId", teacherId));
+      queryBuilder = queryBuilder.filter((q: any) =>
+        q.eq("teacherId", teacherId),
+      );
     }
 
     if (type) {
@@ -47,7 +49,9 @@ export const getActivities = tenantQuery({
     }
 
     const allActivities = await queryBuilder.collect();
-    return allActivities.sort((a: any, b: any) => b.scheduledDate - a.scheduledDate);
+    return allActivities.sort(
+      (a: any, b: any) => b.scheduledDate - a.scheduledDate,
+    );
   },
 });
 

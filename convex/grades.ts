@@ -148,7 +148,9 @@ export const getStudentGrades = tenantQuery({
 
     let grades = await ctx.db
       .query("classGrades")
-      .withIndex("by_studentId_subject", (q: any) => q.eq("studentId", studentId))
+      .withIndex("by_studentId_subject", (q: any) =>
+        q.eq("studentId", studentId),
+      )
       .collect();
 
     grades = filterInstitutionGrades(grades, tenancy);
@@ -271,7 +273,9 @@ export const calculatePeriodAverage = tenantQuery({
         )
         .collect(),
       tenancy,
-    ).filter((grade: any) => grade.courseId === courseId && grade.period === period);
+    ).filter(
+      (grade: any) => grade.courseId === courseId && grade.period === period,
+    );
 
     if (grades.length === 0) {
       return {
@@ -332,7 +336,9 @@ export const getSubjectAverages = tenantQuery({
         .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
         .collect(),
       tenancy,
-    ).filter((grade: any) => grade.subject === subject && grade.period === period);
+    ).filter(
+      (grade: any) => grade.subject === subject && grade.period === period,
+    );
 
     const studentGradesMap = new Map<Id<"students">, GradeDoc[]>();
     for (const grade of grades) {

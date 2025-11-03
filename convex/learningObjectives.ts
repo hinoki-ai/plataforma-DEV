@@ -491,6 +491,7 @@ export const createEvaluationIndicator = mutation({
     const now = Date.now();
 
     return await ctx.db.insert("evaluationIndicators", {
+      institutionId: objective.institutionId,
       ...args,
       isActive: true,
       createdAt: now,
@@ -592,6 +593,7 @@ export const linkClassContentToOA = mutation({
 
     // Create link
     const linkId = await ctx.db.insert("classContentOA", {
+      institutionId: classContent.institutionId,
       classContentId: args.classContentId,
       learningObjectiveId: args.learningObjectiveId,
       evaluationIndicatorIds: args.evaluationIndicatorIds,
@@ -647,6 +649,7 @@ export const linkClassContentToOA = mutation({
     } else {
       // Create new coverage record
       await ctx.db.insert("curriculumCoverage", {
+        institutionId: classContent.institutionId,
         courseId: classContent.courseId,
         subject: classContent.subject,
         learningObjectiveId: args.learningObjectiveId,

@@ -103,7 +103,7 @@ export function DashboardActions({
           },
           {
             label: "Crear Evento",
-            href: "/admin/calendario-escolario-escolar",
+            href: "/admin/calendario-escolar",
             icon: Plus,
             description: "Programar nuevo evento",
           },

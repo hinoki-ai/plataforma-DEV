@@ -35,7 +35,9 @@ async function enrichMeetingsWithTeacher<C extends AnyCtx>(
     return meetings;
   }
 
-  const teacherIds = Array.from(new Set(meetings.map((m: any) => m.assignedTo)));
+  const teacherIds = Array.from(
+    new Set(meetings.map((m: any) => m.assignedTo)),
+  );
   const teacherEntries = await Promise.all(
     teacherIds.map(async (id) => {
       const teacher = await ctx.db.get(id);
@@ -101,7 +103,9 @@ export const getMeetings = tenantQuery({
         : assignedTo;
 
     if (enforcedAssignedTo) {
-      meetings = meetings.filter((m: any) => m.assignedTo === enforcedAssignedTo);
+      meetings = meetings.filter(
+        (m: any) => m.assignedTo === enforcedAssignedTo,
+      );
     }
 
     if (filter?.status) {
@@ -113,7 +117,9 @@ export const getMeetings = tenantQuery({
     }
 
     if (parentRequested !== undefined) {
-      meetings = meetings.filter((m: any) => m.parentRequested === parentRequested);
+      meetings = meetings.filter(
+        (m: any) => m.parentRequested === parentRequested,
+      );
     }
 
     meetings.sort((a: any, b: any) => b.scheduledDate - a.scheduledDate);
@@ -179,7 +185,9 @@ export const getMeetingsByTeacher = tenantQuery({
 
     const meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_assignedTo", (q: any) => q.eq("assignedTo", effectiveTeacherId))
+      .withIndex("by_assignedTo", (q: any) =>
+        q.eq("assignedTo", effectiveTeacherId),
+      )
       .collect();
 
     const scoped = meetings.filter(
@@ -346,7 +354,8 @@ export const getParentMeetingRequests = tenantQuery({
 
     const filtered = meetings
       .filter(
-        (meeting: any) => meeting.parentRequested && meeting.status === "SCHEDULED",
+        (meeting: any) =>
+          meeting.parentRequested && meeting.status === "SCHEDULED",
       )
       .sort((a: any, b: any) => a.scheduledDate - b.scheduledDate);
 
@@ -622,7 +631,9 @@ export const requestMeeting = tenantMutation({
       )
       .collect();
 
-    const teacherMembership = memberships.find((m: any) => m.role === "PROFESOR");
+    const teacherMembership = memberships.find(
+      (m: any) => m.role === "PROFESOR",
+    );
     if (!teacherMembership) {
       throw new Error("No teacher available to assign meeting");
     }
