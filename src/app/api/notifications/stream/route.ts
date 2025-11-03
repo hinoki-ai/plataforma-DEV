@@ -2,6 +2,9 @@ import { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 
 // SSE stream endpoint for real-time notifications
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
@@ -11,40 +14,69 @@ export async function GET(request: NextRequest) {
     }
 
     // Create a ReadableStream for Server-Sent Events
+    let heartbeat: NodeJS.Timeout | null = null;
+
     const stream = new ReadableStream({
       start(controller) {
-        // Send initial connection message
-        const data = `data: ${JSON.stringify({
-          type: "connected",
-          timestamp: new Date().toISOString(),
-          userId: session.user.id,
-        })}\n\n`;
+        try {
+          // Send initial connection message
+          const data = `data: ${JSON.stringify({
+            type: "connected",
+            timestamp: new Date().toISOString(),
+            userId: session.user.id,
+          })}\n\n`;
 
-        controller.enqueue(new TextEncoder().encode(data));
+          controller.enqueue(new TextEncoder().encode(data));
 
-        // Set up a simple heartbeat to keep the connection alive
-        const heartbeat = setInterval(() => {
+          // Set up a simple heartbeat to keep the connection alive
+          heartbeat = setInterval(() => {
+            try {
+              const heartbeatData = `data: ${JSON.stringify({
+                type: "heartbeat",
+                timestamp: new Date().toISOString(),
+              })}\n\n`;
+              controller.enqueue(new TextEncoder().encode(heartbeatData));
+            } catch (error) {
+              console.error("Error sending heartbeat:", error);
+              if (heartbeat) {
+                clearInterval(heartbeat);
+                heartbeat = null;
+              }
+              try {
+                controller.close();
+              } catch (closeError) {
+                // Connection already closed
+              }
+            }
+          }, 30000); // Send heartbeat every 30 seconds
+
+          // Clean up on connection close
+          request.signal.addEventListener("abort", () => {
+            if (heartbeat) {
+              clearInterval(heartbeat);
+              heartbeat = null;
+            }
+            try {
+              controller.close();
+            } catch (closeError) {
+              // Connection already closed
+            }
+          });
+        } catch (error) {
+          console.error("Error in SSE stream start:", error);
           try {
-            const heartbeatData = `data: ${JSON.stringify({
-              type: "heartbeat",
-              timestamp: new Date().toISOString(),
-            })}\n\n`;
-            controller.enqueue(new TextEncoder().encode(heartbeatData));
-          } catch (error) {
-            console.error("Error sending heartbeat:", error);
-            clearInterval(heartbeat);
             controller.close();
+          } catch (closeError) {
+            // Connection already closed
           }
-        }, 30000); // Send heartbeat every 30 seconds
-
-        // Clean up on connection close
-        request.signal.addEventListener("abort", () => {
-          clearInterval(heartbeat);
-          controller.close();
-        });
+        }
       },
       cancel() {
         console.log("SSE stream cancelled for user:", session.user.id);
+        if (heartbeat) {
+          clearInterval(heartbeat);
+          heartbeat = null;
+        }
       },
     });
 

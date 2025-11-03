@@ -10,11 +10,15 @@ import {
 } from "@/components/ui/card";
 import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import { OACoverageWidget } from "@/components/dashboard/OACoverageWidget";
+import { useOptimizedDashboard } from "@/hooks/useOptimizedDashboard";
 
 // Removed static revalidation to prevent authentication state conflicts
 
 export default function ProfesorDashboard() {
   const { t } = useDivineParsing(["common"]);
+  const { stats, loading } = useOptimizedDashboard();
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
       {/* Advanced Calendar View - MAIN FIRST PANEL */}
@@ -33,6 +37,14 @@ export default function ProfesorDashboard() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* OA Coverage Widget */}
+      <div className="mb-6">
+        <OACoverageWidget
+          data={stats?.learningObjectives || null}
+          loading={loading}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

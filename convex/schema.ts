@@ -278,7 +278,7 @@ export default defineSchema({
   // ==================== CALENDAR EVENTS ====================
 
   calendarEvents: defineTable({
-    institutionId: v.id("institutionInfo"),
+    institutionId: v.optional(v.id("institutionInfo")),
     title: v.string(),
     description: v.optional(v.string()),
     startDate: v.number(),

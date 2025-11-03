@@ -11,6 +11,7 @@ import { MiniCalendarWidget } from "./MiniCalendarWidget";
 import { ActivityFeedWidget } from "./ActivityFeedWidget";
 import { SystemStatusWidget } from "./SystemStatusWidget";
 import { PerformanceMonitor } from "./PerformanceMonitor";
+import { OACoverageWidget } from "@/components/dashboard/OACoverageWidget";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -63,6 +64,25 @@ interface DashboardData {
   planning: {
     recent: number;
   };
+  learningObjectives?: {
+    totalCourses: number;
+    overallCoverage: number;
+    totalOA: number;
+    coverageByStatus: {
+      noIniciado: number;
+      enProgreso: number;
+      cubierto: number;
+      reforzado: number;
+    };
+    byCourse?: Array<{
+      courseId: string;
+      courseName: string;
+      total: number;
+      coverage: number;
+      cubierto: number;
+      reforzado: number;
+    }>;
+  };
   system: {
     status: string;
     lastUpdated: string;
@@ -105,6 +125,10 @@ function DashboardContent() {
     enableBackgroundRefresh: true,
     backgroundRefreshInterval: 300000, // 5 minutes
     onError: handleError,
+    // Extract data from API response (which is wrapped in { success: true, data: ... })
+    transformData: (responseData: any) => {
+      return responseData.data || responseData;
+    },
   });
 
   // Generate activities from dashboard data
@@ -395,6 +419,12 @@ function DashboardContent() {
           active={dashboardData.team.active}
         />
       </div>
+
+      {/* OA Coverage Widget */}
+      <OACoverageWidget
+        data={dashboardData.learningObjectives || null}
+        loading={loading}
+      />
 
       {/* Enhanced Widgets Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

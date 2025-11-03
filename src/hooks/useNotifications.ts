@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 
 export interface Notification {
@@ -28,6 +28,7 @@ export function useNotifications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [eventSource, setEventSource] = useState<EventSource | null>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
 
   // Fetch notifications from API
   const fetchNotifications = useCallback(
@@ -175,20 +176,54 @@ export function useNotifications() {
 
   // Set up Server-Sent Events for real-time notifications
   useEffect(() => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.id) {
+      // Clean up any existing connection if session is lost
+      if (eventSourceRef.current) {
+        try {
+          eventSourceRef.current.close();
+        } catch (err) {
+          // EventSource might already be closed
+        }
+        eventSourceRef.current = null;
+        setEventSource(null);
+      }
+      return;
+    }
 
-    let reconnectTimeout: NodeJS.Timeout;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
     let reconnectAttempts = 0;
     const maxReconnectAttempts = 3;
+    let isCleaningUp = false;
 
     const createEventSource = () => {
+      // Clean up previous connection if it exists
+      if (eventSourceRef.current) {
+        try {
+          eventSourceRef.current.close();
+        } catch (err) {
+          // EventSource might already be closed
+        }
+        eventSourceRef.current = null;
+      }
+
+      // Don't create new connection if we're cleaning up
+      if (isCleaningUp) {
+        return null;
+      }
+
       try {
         // Create EventSource for real-time updates
         const es = new EventSource("/api/notifications/stream");
+        eventSourceRef.current = es;
 
         es.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
+
+            // Ignore heartbeat messages
+            if (data.type === "heartbeat") {
+              return;
+            }
 
             if (data.type === "notification") {
               // Add new notification to the list
@@ -215,38 +250,44 @@ export function useNotifications() {
         es.onopen = () => {
           console.log("SSE connection established");
           reconnectAttempts = 0; // Reset attempts on successful connection
+          setEventSource(es);
+          setError(null); // Clear any previous errors
         };
 
         es.onerror = (error) => {
-          console.error("SSE connection error:", error);
+          // Check if the connection is closed (readyState 2 = CLOSED)
+          if (es.readyState === EventSource.CLOSED) {
+            console.error("SSE connection closed");
 
-          // Close the current connection
-          es.close();
+            // Only attempt to reconnect if we haven't exceeded max attempts and we're not cleaning up
+            if (!isCleaningUp && reconnectAttempts < maxReconnectAttempts) {
+              reconnectAttempts++;
+              const delay = Math.min(
+                1000 * Math.pow(2, reconnectAttempts),
+                30000,
+              ); // Exponential backoff, max 30s
 
-          // Only attempt to reconnect if we haven't exceeded max attempts
-          if (reconnectAttempts < maxReconnectAttempts) {
-            reconnectAttempts++;
-            const delay = Math.min(
-              1000 * Math.pow(2, reconnectAttempts),
-              30000,
-            ); // Exponential backoff, max 30s
+              console.log(
+                `Attempting to reconnect SSE in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})`,
+              );
 
-            console.log(
-              `Attempting to reconnect SSE in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})`,
-            );
-
-            reconnectTimeout = setTimeout(() => {
-              createEventSource();
-            }, delay);
+              reconnectTimeout = setTimeout(() => {
+                if (!isCleaningUp) {
+                  createEventSource();
+                }
+              }, delay);
+            } else if (reconnectAttempts >= maxReconnectAttempts) {
+              console.log("Max SSE reconnection attempts reached. Giving up.");
+              setError(
+                "Real-time notifications unavailable. Please refresh the page.",
+              );
+            }
           } else {
-            console.log("Max SSE reconnection attempts reached. Giving up.");
-            setError(
-              "Real-time notifications unavailable. Please refresh the page.",
-            );
+            // Connection is still open (readyState 0 = CONNECTING, 1 = OPEN)
+            // This might be a temporary network issue, wait and see
+            console.warn("SSE connection error, but connection still open");
           }
         };
-
-        setEventSource(es);
 
         return es;
       } catch (err) {
@@ -259,11 +300,23 @@ export function useNotifications() {
     const es = createEventSource();
 
     return () => {
-      if (es) {
-        es.close();
-      }
+      isCleaningUp = true;
+
+      // Clear any pending reconnection
       if (reconnectTimeout) {
         clearTimeout(reconnectTimeout);
+        reconnectTimeout = null;
+      }
+
+      // Close current EventSource
+      if (eventSourceRef.current) {
+        try {
+          eventSourceRef.current.close();
+        } catch (err) {
+          // EventSource might already be closed
+        }
+        eventSourceRef.current = null;
+        setEventSource(null);
       }
     };
   }, [session?.user?.id]);

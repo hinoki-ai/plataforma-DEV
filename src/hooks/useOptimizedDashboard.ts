@@ -86,6 +86,25 @@ interface DashboardStats {
     meetings?: { total: number; scheduled: number };
     logs?: { total: number; recent: number; critical: number };
   };
+  learningObjectives?: {
+    totalCourses: number;
+    overallCoverage: number;
+    totalOA: number;
+    coverageByStatus: {
+      noIniciado: number;
+      enProgreso: number;
+      cubierto: number;
+      reforzado: number;
+    };
+    byCourse?: Array<{
+      courseId: string;
+      courseName: string;
+      total: number;
+      coverage: number;
+      cubierto: number;
+      reforzado: number;
+    }>;
+  };
 }
 
 // Cache for dashboard data with TTL
@@ -185,7 +204,10 @@ export function useOptimizedDashboard() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const responseData = await response.json();
+
+        // Extract data from API response (which is wrapped in { success: true, data: ... })
+        const data = responseData.data || responseData;
 
         // Cache the data
         setCachedData(cacheKey, data);

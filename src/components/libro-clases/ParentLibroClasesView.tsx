@@ -123,7 +123,9 @@ export function ParentLibroClasesView({
     selectedCourseId ? { courseId: selectedCourseId } : "skip",
   );
 
-  const isLoading = currentUser === undefined || courses === undefined;
+  const isCurrentUserLoading = currentUser === undefined;
+  const isLoading =
+    isCurrentUserLoading || (currentUser ? courses === undefined : false);
 
   useEffect(() => {
     if (!isLoading) {
