@@ -9,7 +9,13 @@ import { Id, type Doc } from "@/convex/_generated/dataModel";
 export const GET = createApiRoute(
   async (request, validated) => {
     const session = validated.session;
-    const teacherId = (session?.user?.id || "") as unknown as Id<"users">;
+
+    // Validate teacherId - must be present and non-empty
+    if (!session?.user?.id) {
+      throw new Error("User ID is required");
+    }
+
+    const teacherId = session.user.id as unknown as Id<"users">;
     const client = getConvexClient();
 
     // Optimized parallel queries for teacher data

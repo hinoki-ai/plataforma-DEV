@@ -183,6 +183,29 @@ export const getMeetingsByTeacher = tenantQuery({
         ? tenancy.user._id
         : teacherId;
 
+    // Validate effectiveTeacherId
+    if (!effectiveTeacherId) {
+      throw new Error("Teacher ID is required");
+    }
+
+    // Verify the teacher exists
+    const teacher = await ctx.db.get(effectiveTeacherId);
+    if (!teacher) {
+      throw new Error("Teacher not found");
+    }
+
+    // Verify teacher is in the same institution (if not master)
+    if (
+      !tenancy.isMaster &&
+      !(await userInInstitution(
+        ctx,
+        effectiveTeacherId,
+        tenancy.institution._id,
+      ))
+    ) {
+      throw new Error("Teacher is not part of this institution");
+    }
+
     const meetings = await ctx.db
       .query("meetings")
       .withIndex("by_assignedTo", (q: any) =>

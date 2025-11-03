@@ -69,6 +69,8 @@ import {
   getHolidaysByYear,
   type ChileanHoliday,
 } from "@/data/comprehensive-calendar";
+import commonES from "../../locales/es/common.json";
+import commonEN from "../../locales/en/common.json";
 
 interface UnifiedCalendarViewProps {
   /** View mode: full calendar, compact, or meeting-focused */
@@ -112,7 +114,7 @@ export default function UnifiedCalendarView({
   const isHydrated = useHydrationSafe();
   const { data: session } = useSession();
   const { context, isPublicRoute, isAuthRoute } = useAppContext();
-  const { t } = useDivineParsing(["common"]);
+  const { t, language } = useDivineParsing(["common"]);
 
   // State management - hydration-safe initialization
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
@@ -826,18 +828,26 @@ export default function UnifiedCalendarView({
 
         {/* Weekday Headers */}
         <div className="grid grid-cols-7 bg-muted/50">
-          {String(
-            t("calendar.weekdays", "common") || "Dom,Lun,Mar,Mié,Jue,Vie,Sáb",
-          )
-            .split(",")
-            .map((day) => (
-              <div
-                key={day}
-                className="text-center py-2 text-sm font-semibold text-muted-foreground"
-              >
-                {day}
-              </div>
-            ))}
+          {(
+            (language === "es"
+              ? (commonES as any).calendar?.weekdays
+              : (commonEN as any).calendar?.weekdays) || [
+              "Dom",
+              "Lun",
+              "Mar",
+              "Mié",
+              "Jue",
+              "Vie",
+              "Sáb",
+            ]
+          ).map((day: string) => (
+            <div
+              key={day}
+              className="text-center py-2 text-sm font-semibold text-muted-foreground"
+            >
+              {day}
+            </div>
+          ))}
         </div>
 
         {/* Calendar Grid */}
@@ -932,6 +942,7 @@ export default function UnifiedCalendarView({
     t,
     handleDateSelect,
     getEventsForDate,
+    language,
     // getCategoryConfig and getMonthGradient are pure functions and don't need to be in deps
   ]);
 
