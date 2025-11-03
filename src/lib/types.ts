@@ -1,10 +1,12 @@
+import type { ExtendedUserRole } from "@/lib/authorization";
+
 export interface User {
   id: string;
   name: string | null;
   email: string;
   emailVerified: Date | null;
   image: string | null;
-  role: "ADMIN" | "PROFESOR" | "PARENT" | "PUBLIC";
+  role: ExtendedUserRole;
   createdAt: Date;
   updatedAt: Date;
   googleUserId: string | null;
