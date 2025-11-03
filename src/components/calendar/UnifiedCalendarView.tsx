@@ -44,16 +44,18 @@ import {
 } from "@/components/ui/adaptive-card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/components/providers/ContextProvider";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import {
-  exportCalendarEventsInFormat,
-} from "@/services/calendar/calendar-service";
+import { exportCalendarEventsInFormat } from "@/services/calendar/calendar-service";
 import { useSession } from "@/lib/auth-client";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 import {
@@ -63,6 +65,10 @@ import {
   CalendarExportFormat,
   CalendarEvent,
 } from "@/services/calendar/types";
+import {
+  getHolidaysByYear,
+  type ChileanHoliday,
+} from "@/data/comprehensive-calendar";
 
 interface UnifiedCalendarViewProps {
   /** View mode: full calendar, compact, or meeting-focused */
@@ -188,6 +194,48 @@ export default function UnifiedCalendarView({
     [],
   );
 
+  // Transform holidays from comprehensive-calendar into UnifiedCalendarEvent format
+  const transformHolidayToEvent = useCallback(
+    (holiday: ChileanHoliday): UnifiedCalendarEvent => {
+      const holidayDate = new Date(holiday.date);
+      const now = new Date();
+      return {
+        id: `holiday-${holiday.id}`,
+        title: holiday.name,
+        description:
+          holiday.description ||
+          `Feriado${holiday.isNational ? " nacional" : ""}${holiday.region ? ` - ${holiday.region}` : ""}`,
+        startDate: holidayDate,
+        endDate: holidayDate,
+        category: "HOLIDAY" as EventCategory,
+        priority: "HIGH" as const,
+        isAllDay: true,
+        isRecurring: holiday.isRecurring,
+        createdBy: "system",
+        createdAt: now,
+        updatedAt: now,
+        color: "#ef4444", // red for holidays
+      };
+    },
+    [],
+  );
+
+  // Get holidays for relevant years (current year ± 1 for better coverage)
+  const getRelevantHolidays = useCallback((): UnifiedCalendarEvent[] => {
+    if (!isHydrated) return [];
+
+    const currentYear = new Date().getFullYear();
+    const years = [currentYear - 1, currentYear, currentYear + 1];
+
+    const holidays: UnifiedCalendarEvent[] = [];
+    years.forEach((year) => {
+      const yearHolidays = getHolidaysByYear(year);
+      holidays.push(...yearHolidays.map(transformHolidayToEvent));
+    });
+
+    return holidays;
+  }, [isHydrated, transformHolidayToEvent]);
+
   // Mobile detection - hydration-safe
   const [isMobileView, setIsMobileView] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -225,7 +273,14 @@ export default function UnifiedCalendarView({
   useEffect(() => {
     if (!isHydrated) return;
 
-    setIsLoading(allEvents === undefined || monthEventsData === undefined || upcomingEventsData === undefined);
+    setIsLoading(
+      allEvents === undefined ||
+        monthEventsData === undefined ||
+        upcomingEventsData === undefined,
+    );
+
+    // Get holidays from comprehensive-calendar dataset
+    const holidays = getRelevantHolidays();
 
     // Filter events by selected categories
     const filterByCategories = (eventList: any[] | undefined) => {
@@ -247,17 +302,65 @@ export default function UnifiedCalendarView({
       );
     };
 
-    // Process all events
-    let processedEvents = filterByCategories(allEvents);
+    // Merge holidays with database events and process all events
+    const allEventsWithHolidays = [
+      ...(allEvents || []).map((e: any) => ({
+        ...e,
+        startDate:
+          typeof e.startDate === "number" ? new Date(e.startDate) : e.startDate,
+        endDate:
+          typeof e.endDate === "number" ? new Date(e.endDate) : e.endDate,
+      })),
+      ...holidays,
+    ];
+    let processedEvents = filterByCategories(allEventsWithHolidays);
     processedEvents = filterBySearch(processedEvents);
 
-    // Process month events
-    let processedMonthEvents = filterByCategories(monthEventsData);
+    // Process month events - merge holidays for current month
+    const monthHolidays = holidays.filter((holiday) => {
+      const holidayDate = new Date(holiday.startDate);
+      return holidayDate >= startOfMonthDate && holidayDate <= endOfMonthDate;
+    });
+    const monthEventsWithHolidays = [
+      ...(monthEventsData || []).map((e: any) => ({
+        ...e,
+        startDate:
+          typeof e.startDate === "number" ? new Date(e.startDate) : e.startDate,
+        endDate:
+          typeof e.endDate === "number" ? new Date(e.endDate) : e.endDate,
+      })),
+      ...monthHolidays,
+    ];
+    let processedMonthEvents = filterByCategories(monthEventsWithHolidays);
     processedMonthEvents = filterBySearch(processedMonthEvents);
 
-    // Process upcoming events
-    let processedUpcoming = filterByCategories(upcomingEventsData);
+    // Process upcoming events - include upcoming holidays
+    const now = Date.now();
+    const upcomingHolidays = holidays
+      .filter((holiday) => {
+        const holidayTime = new Date(holiday.startDate).getTime();
+        return holidayTime >= now;
+      })
+      .slice(0, 10); // Limit to 10 upcoming holidays
+    const upcomingEventsWithHolidays = [
+      ...(upcomingEventsData || []).map((e: any) => ({
+        ...e,
+        startDate:
+          typeof e.startDate === "number" ? new Date(e.startDate) : e.startDate,
+        endDate:
+          typeof e.endDate === "number" ? new Date(e.endDate) : e.endDate,
+      })),
+      ...upcomingHolidays,
+    ];
+    let processedUpcoming = filterByCategories(upcomingEventsWithHolidays);
     processedUpcoming = filterBySearch(processedUpcoming);
+    // Sort by date and limit
+    processedUpcoming.sort((a, b) => {
+      const aTime = new Date(a.startDate).getTime();
+      const bTime = new Date(b.startDate).getTime();
+      return aTime - bTime;
+    });
+    processedUpcoming = processedUpcoming.slice(0, 10);
 
     // Normalize and set events
     setMonthEvents(processedMonthEvents.map(normalizeEvent));
@@ -266,7 +369,10 @@ export default function UnifiedCalendarView({
     // Group events by date
     const grouped: Record<string, UnifiedCalendarEvent[]> = {};
     processedEvents.forEach((event: any) => {
-      const startDate = new Date(event.startDate);
+      const startDate =
+        event.startDate instanceof Date
+          ? event.startDate
+          : new Date(event.startDate);
       const dateKey = startDate.toISOString().split("T")[0];
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
@@ -276,17 +382,17 @@ export default function UnifiedCalendarView({
     setGroupedEvents(grouped);
     setEvents(grouped);
 
-    // Calculate statistics
-    if (allEvents) {
+    // Calculate statistics including holidays
+    if (allEventsWithHolidays.length > 0) {
       const currentTime = Date.now();
       const stats = {
-        total: allEvents.length,
+        total: allEventsWithHolidays.length,
         upcoming: 0,
         byCategory: {} as Record<string, number>,
         byPriority: {} as Record<string, number>,
       };
 
-      allEvents.forEach((event: any) => {
+      allEventsWithHolidays.forEach((event: any) => {
         if (event.category) {
           stats.byCategory[event.category] =
             (stats.byCategory[event.category] || 0) + 1;
@@ -315,6 +421,9 @@ export default function UnifiedCalendarView({
     searchTerm,
     isHydrated,
     normalizeEvent,
+    getRelevantHolidays,
+    startOfMonthDate,
+    endOfMonthDate,
   ]);
 
   // Refresh data - hooks automatically refresh, so we just trigger a re-render
@@ -651,8 +760,8 @@ export default function UnifiedCalendarView({
     },
   };
 
-  // Grid Calendar Component
-  const GridCalendar = () => {
+  // Grid Calendar Component - memoized to avoid creating during render
+  const GridCalendar = useMemo(() => {
     const monthStart = startOfMonth(safeCurrentMonth);
     const monthEnd = endOfMonth(safeCurrentMonth);
     const startDate = new Date(monthStart);
@@ -812,7 +921,19 @@ export default function UnifiedCalendarView({
         </div>
       </div>
     );
-  };
+  }, [
+    safeCurrentMonth,
+    monthEvents.length,
+    selectedDate,
+    isMobileView,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+    t,
+    handleDateSelect,
+    getEventsForDate,
+    // getCategoryConfig and getMonthGradient are pure functions and don't need to be in deps
+  ]);
 
   // Compact view for when mode is compact
   if (mode === "compact") {
@@ -914,9 +1035,7 @@ export default function UnifiedCalendarView({
                     <TrendingUp className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold">
-                      {statistics.total}
-                    </div>
+                    <div className="text-2xl font-bold">{statistics.total}</div>
                     <div className="text-sm text-muted-foreground">
                       Total eventos
                     </div>
@@ -1048,14 +1167,21 @@ export default function UnifiedCalendarView({
                         size="sm"
                         className="h-auto p-1 text-xs"
                         onClick={() => {
-                          if (selectedCategories.length === (Object.keys(categorySystem) as EventCategory[]).length) {
+                          if (
+                            selectedCategories.length ===
+                            (Object.keys(categorySystem) as EventCategory[])
+                              .length
+                          ) {
                             setSelectedCategories([]);
                           } else {
-                            setSelectedCategories(Object.keys(categorySystem) as EventCategory[]);
+                            setSelectedCategories(
+                              Object.keys(categorySystem) as EventCategory[],
+                            );
                           }
                         }}
                       >
-                        {selectedCategories.length === (Object.keys(categorySystem) as EventCategory[]).length
+                        {selectedCategories.length ===
+                        (Object.keys(categorySystem) as EventCategory[]).length
                           ? "Deseleccionar todo"
                           : "Seleccionar todo"}
                       </Button>
@@ -1064,8 +1190,10 @@ export default function UnifiedCalendarView({
                       {(Object.keys(categorySystem) as EventCategory[]).map(
                         (category) => {
                           const config = getCategoryConfig(category);
-                          const isSelected = selectedCategories.includes(category);
-                          const eventCount = statistics?.byCategory[category] || 0;
+                          const isSelected =
+                            selectedCategories.includes(category);
+                          const eventCount =
+                            statistics?.byCategory[category] || 0;
                           return (
                             <button
                               key={category}
@@ -1074,12 +1202,8 @@ export default function UnifiedCalendarView({
                                 "relative flex items-center gap-3 p-3 rounded-lg border transition-all duration-200 text-left",
                                 "hover:shadow-md hover:scale-[1.02]",
                                 isSelected
-                                  ? cn(
-                                      config.color,
-                                      config.border,
-                                      "border-2"
-                                    )
-                                  : "bg-card border-border hover:border-primary/50"
+                                  ? cn(config.color, config.border, "border-2")
+                                  : "bg-card border-border hover:border-primary/50",
                               )}
                             >
                               <span className="text-xl">{config.icon}</span>
@@ -1088,7 +1212,8 @@ export default function UnifiedCalendarView({
                                   {config.label}
                                 </div>
                                 <div className="text-xs opacity-60">
-                                  {eventCount} {eventCount === 1 ? "evento" : "eventos"}
+                                  {eventCount}{" "}
+                                  {eventCount === 1 ? "evento" : "eventos"}
                                 </div>
                               </div>
                               {isSelected && (
@@ -1096,7 +1221,7 @@ export default function UnifiedCalendarView({
                               )}
                             </button>
                           );
-                        }
+                        },
                       )}
                     </div>
                   </div>
@@ -1113,7 +1238,7 @@ export default function UnifiedCalendarView({
         <motion.div variants={cardVariants} className="lg:col-span-2">
           <AdaptiveCard variant={context}>
             <AdaptiveCardContent className="p-6">
-              <GridCalendar />
+              {GridCalendar}
             </AdaptiveCardContent>
           </AdaptiveCard>
         </motion.div>

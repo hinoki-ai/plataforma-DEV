@@ -59,6 +59,10 @@ import { EventCategory } from "@/services/calendar/types";
 import { cn } from "@/lib/utils";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "next-auth/react";
+import {
+  getHolidaysByYear,
+  type ChileanHoliday,
+} from "@/data/comprehensive-calendar";
 
 interface CalendarEvent {
   id: string;
@@ -198,11 +202,40 @@ export default function AdminCalendarView() {
   const updateEventMutation = useMutation(api.calendar.updateCalendarEvent);
   const deleteEventMutation = useMutation(api.calendar.deleteCalendarEvent);
 
+  // Transform holidays from comprehensive-calendar into CalendarEvent format
+  const transformHolidayToEvent = (holiday: ChileanHoliday): CalendarEvent => {
+    const holidayDate = new Date(holiday.date);
+    return {
+      id: `holiday-${holiday.id}`,
+      title: holiday.name,
+      description:
+        holiday.description ||
+        `Feriado${holiday.isNational ? " nacional" : ""}${holiday.region ? ` - ${holiday.region}` : ""}`,
+      startDate: holidayDate,
+      endDate: holidayDate,
+      category: "HOLIDAY",
+      level: "all",
+      color: "#ef4444", // red for holidays
+      location: holiday.region || undefined,
+      isRecurring: holiday.isRecurring,
+      isAllDay: true,
+    };
+  };
+
   // Process events when data loads
   useEffect(() => {
-    if (calendarEventsData) {
-      setEvents(
-        calendarEventsData.map((event: any) => ({
+    // Get holidays from comprehensive-calendar dataset
+    const currentYear = new Date().getFullYear();
+    const years = [currentYear - 1, currentYear, currentYear + 1];
+    const holidays: CalendarEvent[] = [];
+    years.forEach((year) => {
+      const yearHolidays = getHolidaysByYear(year);
+      holidays.push(...yearHolidays.map(transformHolidayToEvent));
+    });
+
+    // Merge database events with holidays
+    const databaseEvents = calendarEventsData
+      ? calendarEventsData.map((event: any) => ({
           ...event,
           id: event._id,
           description: event.description ?? undefined,
@@ -213,9 +246,15 @@ export default function AdminCalendarView() {
           isRecurring: event.metadata?.isRecurring || false,
           startDate: new Date(event.startDate),
           endDate: new Date(event.endDate),
-        })),
-      );
-    }
+        }))
+      : [];
+
+    // Combine and sort by date
+    const allEvents = [...databaseEvents, ...holidays].sort((a, b) => {
+      return a.startDate.getTime() - b.startDate.getTime();
+    });
+
+    setEvents(allEvents);
     setIsLoading(calendarEventsData === undefined);
   }, [calendarEventsData]);
 

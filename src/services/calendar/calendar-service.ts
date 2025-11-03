@@ -42,8 +42,7 @@ export async function getCalendarEvents(
     return { success: true, data: events };
   } catch (error: any) {
     console.error("Failed to fetch calendar events:", error);
-    const errorMessage =
-      error?.message || "No se pudieron cargar los eventos";
+    const errorMessage = error?.message || "No se pudieron cargar los eventos";
     return {
       success: false,
       error: errorMessage,
@@ -66,8 +65,7 @@ export async function getUpcomingEvents(limit?: number) {
     return { success: true, data: events };
   } catch (error: any) {
     console.error("Failed to fetch upcoming events:", error);
-    const errorMessage =
-      error?.message || "No se pudieron cargar los eventos";
+    const errorMessage = error?.message || "No se pudieron cargar los eventos";
     return {
       success: false,
       error: errorMessage,

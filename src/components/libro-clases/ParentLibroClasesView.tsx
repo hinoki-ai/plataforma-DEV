@@ -99,6 +99,42 @@ export function ParentLibroClasesView({
     setActiveTab(view);
   }, [view]);
 
+  // Get current user - must be called before any early returns
+  const currentUser = useQuery(
+    api.users.getUserByClerkId,
+    userId && isLoaded && isSignedIn ? { clerkId: userId } : "skip",
+  );
+
+  // Fetch parent's courses (where their children are enrolled) - must be called before early returns
+  const courses = useQuery(
+    api.courses.getCoursesForParent,
+    currentUser?._id
+      ? {
+          parentId: currentUser._id,
+          academicYear: new Date().getFullYear(),
+          isActive: true,
+        }
+      : "skip",
+  );
+
+  // Get selected course details - must be called before early returns
+  const selectedCourse = useQuery(
+    api.courses.getCourseById,
+    selectedCourseId ? { courseId: selectedCourseId } : "skip",
+  );
+
+  const isLoading = currentUser === undefined || courses === undefined;
+
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingTimedOut(false);
+      return;
+    }
+
+    const timeout = setTimeout(() => setLoadingTimedOut(true), 6000);
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
+
   const header = PARENT_TAB_HEADERS[activeTab] ?? PARENT_TAB_HEADERS.overview;
 
   // Wait for Clerk auth to load
@@ -145,30 +181,6 @@ export function ParentLibroClasesView({
     );
   }
 
-  // Get current user
-  const currentUser = useQuery(
-    api.users.getUserByClerkId,
-    userId ? { clerkId: userId } : "skip",
-  );
-
-  // Fetch parent's courses (where their children are enrolled)
-  const courses = useQuery(
-    api.courses.getCoursesForParent,
-    currentUser?._id
-      ? {
-          parentId: currentUser._id,
-          academicYear: new Date().getFullYear(),
-          isActive: true,
-        }
-      : "skip",
-  );
-
-  // Get selected course details
-  const selectedCourse = useQuery(
-    api.courses.getCourseById,
-    selectedCourseId ? { courseId: selectedCourseId } : "skip",
-  );
-
   const handleTabChange = (value: string) => {
     const tab = value as TabValue;
     setActiveTab(tab);
@@ -177,18 +189,6 @@ export function ParentLibroClasesView({
       router.push(target);
     }
   };
-
-  const isLoading = currentUser === undefined || courses === undefined;
-
-  useEffect(() => {
-    if (!isLoading) {
-      setLoadingTimedOut(false);
-      return;
-    }
-
-    const timeout = setTimeout(() => setLoadingTimedOut(true), 6000);
-    return () => clearTimeout(timeout);
-  }, [isLoading]);
 
   if (isLoading) {
     if (loadingTimedOut) {
