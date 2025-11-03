@@ -2,7 +2,7 @@
 
 **Educational Management System**  
 **Version**: 0.1.0  
-**Last Updated**: October 31, 2025  
+**Last Updated**: January 2025  
 **Status**: Production Ready ✅
 
 ---
@@ -166,8 +166,7 @@ npm run verify-deployment  # Verify deployment readiness
 
 ### Primary Documentation
 
-- **Architecture**: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
-- **API Reference**: [docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)
+- **AI Knowledge Base**: [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) - **Complete system architecture**
 - **Authentication**: [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)
 
 ### Development Resources
