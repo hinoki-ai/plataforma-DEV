@@ -30,6 +30,7 @@ import {
   ROLE_SPECIFIC_SECTIONS,
   getNavigationGroupsForRole,
 } from "./navigation";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean;
@@ -91,6 +92,7 @@ const renderNavigationItem = (
   pathname: string,
   onToggle?: () => void,
   handleLogout?: () => void,
+  t?: (key: string) => string,
 ) => {
   const handleClick = handleNavigationItemClick(
     item,
@@ -107,11 +109,11 @@ const renderNavigationItem = (
           "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2 w-full text-left",
           "text-muted-foreground hover:text-foreground",
         )}
-        aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+        aria-label={`${t ? t(item.title) : item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
         onClick={handleClick}
       >
         <item.icon className="h-4 w-4 shrink-0" />
-        <span className="flex-1">{item.title}</span>
+        <span className="flex-1">{t ? t(item.title) : item.title}</span>
         {(item as any).shortcut && (
           <span className="ml-auto text-xs text-muted-foreground hidden lg:block">
             {(item as any).shortcut}
@@ -161,6 +163,9 @@ export function Sidebar({
   const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
+
+  // Load navigation translations
+  const { t } = useDivineParsing(["navigation"]);
 
   // Pulsating icon effect state
   const [pulseCount, setPulseCount] = React.useState(0);
@@ -315,12 +320,12 @@ export function Sidebar({
             className="h-8 w-8 mb-1"
             onClick={onToggle}
             aria-label={
-              isCollapsed ? "Expandir barra lateral" : "Contraer barra lateral"
+              isCollapsed ? t("nav.sidebar.expand") : t("nav.sidebar.collapse")
             }
             title={
               isCollapsed
-                ? "Expandir barra lateral (Escape)"
-                : "Contraer barra lateral (Escape)"
+                ? t("nav.sidebar.expand.shortcut")
+                : t("nav.sidebar.collapse.shortcut")
             }
           >
             <NavigationIcons.ChevronRight
@@ -358,7 +363,7 @@ export function Sidebar({
                         id={`group-${group.title}`}
                         aria-label={`${openGroups[group.title] ? "Contraer" : "Expandir"} grupo ${group.title}`}
                       >
-                        <span>{group.title}</span>
+                        <span>{t(group.title)}</span>
                         <NavigationIcons.ChevronDown
                           className={cn(
                             "h-3 w-3 transition-transform",
@@ -388,12 +393,13 @@ export function Sidebar({
                                 pathname,
                                 onToggle,
                                 handleLogout,
+                                t,
                               )}
                             </TooltipTrigger>
                             {!isCollapsed && (
                               <TooltipContent side="right">
                                 <div className="flex items-center gap-2">
-                                  <span>{item.title}</span>
+                                  <span>{t ? t(item.title) : item.title}</span>
                                   {(item as any).shortcut && (
                                     <span className="text-xs opacity-60">
                                       {(item as any).shortcut}
@@ -423,7 +429,7 @@ export function Sidebar({
                           {(item as any).action === "logout" ? (
                             <button
                               className="flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
-                              aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+                              aria-label={`${t ? t(item.title) : item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
                               onClick={handleNavigationItemClick(
                                 item,
                                 pathname,
@@ -444,7 +450,7 @@ export function Sidebar({
                                   : "text-muted-foreground",
                               )}
                               aria-current={isActive ? "page" : undefined}
-                              aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+                              aria-label={`${t ? t(item.title) : item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
                               onClick={handleNavigationItemClick(
                                 item,
                                 pathname,
@@ -458,7 +464,7 @@ export function Sidebar({
                         </TooltipTrigger>
                         <TooltipContent side="right">
                           <div className="flex items-center gap-2">
-                            <span>{item.title}</span>
+                            <span>{t ? t(item.title) : item.title}</span>
                             {(item as any).shortcut && (
                               <span className="text-xs opacity-60">
                                 {(item as any).shortcut}
@@ -505,10 +511,10 @@ export function Sidebar({
                   </p>
                   <p className="text-xs text-muted-foreground" id="user-role">
                     {session?.user?.role === "ADMIN"
-                      ? "Administrador"
+                      ? t("nav.roles.admin")
                       : session?.user?.role === "PROFESOR"
-                        ? "Profesor"
-                        : "Padre/Apoderado"}
+                        ? t("nav.roles.profesor")
+                        : t("nav.roles.parent")}
                   </p>
                 </div>
               )}
@@ -519,8 +525,8 @@ export function Sidebar({
                 size="sm"
                 onClick={handleLogout}
                 className="text-xs"
-                aria-label="Cerrar sesión"
-                title="Cerrar Sesión"
+                aria-label={t("nav.logout.button")}
+                title={t("nav.logout.button")}
               >
                 <ThemeIcons.Logout className="h-4 w-4" aria-hidden="true" />
               </Button>
@@ -534,14 +540,14 @@ export function Sidebar({
                   size="sm"
                   className="w-full mt-2"
                   onClick={handleLogout}
-                  aria-label="Cerrar sesión"
-                  title="Cerrar Sesión"
+                  aria-label={t("nav.logout.button")}
+                  title={t("nav.logout.button")}
                 >
                   <ThemeIcons.Logout className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                <p>Cerrar Sesión</p>
+                <p>{t("nav.logout.button")}</p>
               </TooltipContent>
             </Tooltip>
           )}

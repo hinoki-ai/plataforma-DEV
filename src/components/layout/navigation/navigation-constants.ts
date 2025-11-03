@@ -4,50 +4,50 @@ import { NavigationIcons, ThemeIcons } from "@/components/icons/hero-icons";
 // Navigation constants and shared items across all roles
 export const SHARED_NAVIGATION_ITEMS = {
   SETTINGS: {
-    title: "Configuración",
+    title: "nav.configuration",
     href: "/settings",
     icon: NavigationIcons.Settings,
     shortcut: "Alt+S",
   },
   PROFILE: {
-    title: "Perfil",
+    title: "nav.profile",
     href: "/profile",
     icon: NavigationIcons.Profile,
     shortcut: "Alt+P",
   },
   LOGOUT: {
-    title: "Cerrar Sesión",
+    title: "nav.logout",
     href: "#logout",
     icon: ThemeIcons.Logout,
     action: "logout",
   },
 } as const;
 
-// Standardized section ordering and naming
+// Standardized section ordering and naming - now using translation keys
 export const STANDARD_SECTION_ORDER = {
-  PRIMARY: "Principal",
-  USER_MANAGEMENT: "Gestión de Usuarios",
-  ACADEMIC: "Gestión Académica",
-  LIBRO_CLASES: "Libro de Clases",
-  COMMUNICATION: "Comunicación",
-  RESOURCES: "Recursos",
-  PERSONAL: "Personal",
-  SYSTEM: "Sistema",
-  DEBUG: "Debug & Development",
+  PRIMARY: "nav.main.categories.principal",
+  USER_MANAGEMENT: "nav.main.categories.management",
+  ACADEMIC: "nav.main.categories.academic",
+  LIBRO_CLASES: "nav.main.categories.libro_clases",
+  COMMUNICATION: "nav.main.categories.communication",
+  RESOURCES: "nav.main.categories.resources",
+  PERSONAL: "nav.main.categories.personal",
+  SYSTEM: "nav.main.categories.system",
+  DEBUG: "nav.main.categories.debug",
 } as const;
 
-// Role-specific section names
+// Role-specific section names - now using translation keys
 export const ROLE_SPECIFIC_SECTIONS = {
   MASTER: {
-    primary: "🏛️ SUPREME MASTER",
-    system: "Sistema Supremo",
+    primary: "nav.main.categories.principal",
+    system: "nav.main.categories.system",
   },
   PROFESOR: {
-    academic: "Trabajo Académico",
-    info: "Información",
+    academic: "nav.main.categories.academic",
+    info: "nav.main.categories.information",
   },
   PARENT: {
-    academic: "Información Estudiantil",
-    resources: "Recursos Educativos",
+    academic: "nav.main.categories.academic",
+    resources: "nav.main.categories.resources",
   },
 } as const;
