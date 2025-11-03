@@ -164,8 +164,9 @@ export function TeacherLibroClasesView({
     setIsGradeDialogOpen(true);
   };
 
-  // Loading state
-  if (!currentUser || courses === undefined) {
+  const isLoading = currentUser === undefined || courses === undefined;
+
+  if (isLoading) {
     return (
       <PageTransition>
         <div className="space-y-6">
@@ -177,6 +178,28 @@ export function TeacherLibroClasesView({
               <div key={i} className="h-48 bg-muted animate-pulse rounded-lg" />
             ))}
           </div>
+        </div>
+      </PageTransition>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Perfil docente no encontrado"
+            subtitle="Contacta al administrador para completar tu registro"
+          />
+          <Card>
+            <CardContent className="py-10">
+              <p className="text-muted-foreground">
+                No pudimos encontrar tu perfil en el libro de clases. Por favor
+                verifica que tu cuenta esté asociada a un usuario docente en la
+                plataforma.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </PageTransition>
     );
