@@ -148,15 +148,12 @@ export function ParentLibroClasesView({
             <Card>
               <CardContent className="py-10 space-y-4">
                 <p className="text-muted-foreground">
-                  Aún no logramos traer la información del libro de clases. Si estás
-                  trabajando en local, ejecuta el servicio Convex (`npx convex dev`)
-                  junto a la app para habilitar los datos.
+                  Aún no logramos traer la información del libro de clases. Si
+                  estás trabajando en local, ejecuta el servicio Convex (`npx
+                  convex dev`) junto a la app para habilitar los datos.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => router.refresh()}
-                  >
+                  <Button variant="outline" onClick={() => router.refresh()}>
                     Reintentar
                   </Button>
                 </div>
