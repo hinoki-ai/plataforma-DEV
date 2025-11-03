@@ -233,3 +233,39 @@ export function ensureInstitutionMatch<
 
   return record;
 }
+
+/**
+ * Get current tenancy context for debugging
+ */
+export const getCurrentTenancy = query({
+  args: {},
+  handler: async (ctx) => {
+    try {
+      const tenancy = await requireCurrentInstitution(ctx);
+      return {
+        user: {
+          id: tenancy.user._id,
+          email: tenancy.user.email,
+          role: tenancy.user.role,
+          currentInstitutionId: tenancy.user.currentInstitutionId,
+        },
+        institution: {
+          id: tenancy.institution._id,
+          name: tenancy.institution.name,
+        },
+        membership: tenancy.membership ? {
+          id: tenancy.membership._id,
+          role: tenancy.membership.role,
+          status: tenancy.membership.status,
+        } : null,
+        membershipRole: tenancy.membershipRole,
+        isMaster: tenancy.isMaster,
+      };
+    } catch (error) {
+      return {
+        error: error.message,
+        stack: error.stack,
+      };
+    }
+  },
+});

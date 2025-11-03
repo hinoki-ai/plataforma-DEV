@@ -819,27 +819,6 @@
     }
   }
 
-  @keyframes meteorEffect {
-    0% {
-      opacity: 0;
-      transform: rotate(220deg) translate3d(0, 0, 0) scale(1);
-    }
-    10% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-      transform: rotate(220deg) translate3d(320px, 720px, 0) scale(0.75);
-    }
-  }
-
-  /* Meteor component styles */
-  .meteor-base {
-    top: -48px;
-    left: var(--meteor-left, 0px);
-    animation: meteorEffect linear infinite;
-    opacity: 0.85;
-  }
 
   /* Footer background pattern styles */
   .footer-bg-pattern {
