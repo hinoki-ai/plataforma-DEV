@@ -226,6 +226,7 @@ export async function requestMeeting(data: {
     | "EMERGENCY"
     | "IEP_REVIEW"
     | "GRADE_CONFERENCE";
+  teacherId?: string;
 }) {
   try {
     const client = getConvexClient();
@@ -233,6 +234,7 @@ export async function requestMeeting(data: {
     const meetingId = await client.mutation(api.meetings.requestMeeting, {
       ...data,
       preferredDate: data.preferredDate.getTime(),
+      teacherId: data.teacherId as Id<"users"> | undefined,
     });
 
     return { success: true, data: { id: meetingId } };

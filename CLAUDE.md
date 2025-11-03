@@ -4,20 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 15 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
+**Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 16 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
 
 ## 📚 Critical Documentation
 
-**Status**: Production ready with full Convex integration ✅
-**Backend**: 100% migrated to Convex serverless
+**Status**: Production ready with full Convex integration ✅  
+**Backend**: 100% migrated to Convex serverless  
+**Authentication**: Clerk integration complete
 
-### Documentation Reference
+### Primary Documentation Reference
 
+- **⭐ `docs/AI_KNOWLEDGE_BASE.md`** - **PRIMARY**: Complete system documentation optimized for AI assistants (comprehensive reference)
+- `DOCUMENTATION_INDEX.md` - Complete documentation catalog
+- `docs/AUTHENTICATION_COMPLETE_GUIDE.md` - Authentication system details
 - `docs/TROUBLESHOOTING_AUTH.md` - Authentication troubleshooting
-- `docs/AUTHENTICATION_COMPLETE_GUIDE.md` - Full system architecture
 - `DEPLOYMENT.md` - Deployment procedures
 - `START_HERE.md` - Quick start guide
-- `DOCUMENTATION_INDEX.md` - Complete documentation index
 
 ## Essential Commands
 
@@ -89,9 +91,9 @@ npx convex deploy --prod    # Deploy with production flag
 
 ### Core Stack
 
-- **Next.js 15** with App Router and React 19
+- **Next.js 16** with App Router and React 19
 - **Convex** serverless backend with real-time database
-- **NextAuth.js v5** with role-based proxy protection
+- **Clerk** authentication with role-based proxy protection
 - **Tailwind CSS** + **shadcn/ui** components
 - **TypeScript** throughout the entire codebase
 
@@ -110,11 +112,12 @@ The system uses a strict role-based access model with proxy enforcement:
 
 **Key Auth Files**:
 
-- `src/lib/auth.ts` - NextAuth configuration with credentials + OAuth
-- `src/lib/auth-convex.ts` - User authentication logic with Convex
+- `src/lib/auth.ts` - Clerk authentication integration with Convex user resolution
 - `src/lib/convex.ts` - Convex client configuration
-- `src/services/actions/auth.ts` - Server Actions for login/logout
+- `src/services/actions/clerk-users.ts` - Clerk user management actions
 - `src/proxy.ts` - Route protection and role-based redirects
+
+**Note**: System migrated from NextAuth.js v5 to Clerk. See `docs/AUTHENTICATION_COMPLETE_GUIDE.md` for details.
 
 ### Data Layer Architecture
 

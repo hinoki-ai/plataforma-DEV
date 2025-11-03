@@ -1,6 +1,7 @@
+import { defineConfig } from "vitest/config";
 import path from "path";
 
-const config = {
+export default defineConfig({
   test: {
     environment: "node",
     globals: true,
@@ -8,9 +9,8 @@ const config = {
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@/convex": path.resolve(__dirname, "./convex"),
       "@/convex/_generated": path.resolve(__dirname, "./convex/_generated"),
     },
   },
-};
-
-export default config;
+});

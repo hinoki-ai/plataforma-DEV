@@ -1,4 +1,4 @@
-# Technical Documentation
+# Technical Documentation Directory
 
 **Plataforma Astral Educational Management System**  
 **Last Updated**: January 2025  
@@ -6,11 +6,11 @@
 
 ---
 
-## 📚 Documentation Index
+## 🎯 Primary Documentation
 
-This directory contains detailed technical documentation. For a complete documentation overview, see:
+👉 **For complete documentation overview and navigation, see: [DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md)**
 
-👉 **[Main Documentation Index](../DOCUMENTATION_INDEX.md)**
+👉 **For AI assistants and comprehensive system documentation: [AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md)** ⭐ **PRIMARY**
 
 ---
 
@@ -18,9 +18,8 @@ This directory contains detailed technical documentation. For a complete documen
 
 ### Architecture & Design
 
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture overview
-- **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - Complete API endpoint documentation
-- **[FRONTEND.md](./FRONTEND.md)** - Frontend patterns and components
+- **[AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete system architecture and documentation
+- **[ANIMATION_GUIDE.md](./ANIMATION_GUIDE.md)** - UI animation patterns and components
 
 ### Authentication & Security
 
@@ -74,7 +73,7 @@ This directory contains detailed technical documentation. For a complete documen
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Next.js 15 + React 19 + TypeScript
+- **Frontend**: Next.js 16 + React 19 + TypeScript
 - **Backend**: Convex (Serverless, real-time)
 - **Authentication**: Clerk
 - **Styling**: Tailwind CSS + shadcn/ui
@@ -87,9 +86,8 @@ This directory contains detailed technical documentation. For a complete documen
 For questions or issues:
 
 1. Check [TROUBLESHOOTING_AUTH.md](./TROUBLESHOOTING_AUTH.md) first
-2. Review [ARCHITECTURE.md](./ARCHITECTURE.md) for system overview
+2. Review [AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md) for system overview
 3. See [../CLAUDE.md](../CLAUDE.md) for development guidelines
-4. Consult [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for API details
 
 ---
 

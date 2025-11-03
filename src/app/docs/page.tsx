@@ -65,15 +65,13 @@ const staticMarkdown = `# Technical Documentation
 ## 📚 Documentation Index
 
 ### Core Systems
-- **[Architecture](ARCHITECTURE.md)** - System design and data flow
+- **[AI Knowledge Base](AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete system architecture and design
 - **[Authentication](AUTHENTICATION_COMPLETE_GUIDE.md)** - Login, roles, and security
-- **[Frontend](FRONTEND.md)** - UI components and user experience
-- **[API Documentation](API_DOCUMENTATION.md)** - Backend endpoints and integration
+- **[Animation Guide](ANIMATION_GUIDE.md)** - UI components and user experience patterns
 
 ### Specialized Features
 - **[Voting System](VOTING_SYSTEM.md)** - Democratic decision-making tools
 - **[Role System](ROLE_SYSTEM.md)** - User permissions and access control
-- **[Animation Guide](ANIMATION_GUIDE.md)** - Motion design and interactions
 
 ### Operations & Troubleshooting
 - **[Environment Setup](ENVIRONMENT.md)** - Development and deployment configs

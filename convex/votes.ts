@@ -3,8 +3,8 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
-import { tenantMutation } from "./tenancy";
+import type { Doc } from "./_generated/dataModel";
+import { tenantMutation, tenantQuery, ensureInstitutionMatch } from "./tenancy";
 
 const voteCategoryValidator = v.union(
   v.literal("GENERAL"),
@@ -21,55 +21,71 @@ const voteCategoryValidator = v.union(
 
 // ==================== QUERIES ====================
 
-export const getVotes = query({
+export const getVotes = tenantQuery({
   args: {
     isActive: v.optional(v.boolean()),
     category: v.optional(voteCategoryValidator),
   },
-  handler: async (ctx, { isActive, category }) => {
-    let allVotes;
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
+  handler: async (ctx, { isActive, category }, tenancy) => {
+    let votes = await ctx.db
+      .query("votes")
+      .withIndex("by_institutionId", (q: any) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
 
     if (category) {
-      allVotes = await ctx.db
-        .query("votes")
-        .withIndex("by_category", (q) => q.eq("category", category))
-        .collect();
-    } else {
-      allVotes = await ctx.db.query("votes").collect();
+      votes = votes.filter((vote: Doc<"votes">) => vote.category === category);
     }
 
     if (isActive !== undefined) {
-      allVotes = allVotes.filter((v) => v.isActive === isActive);
+      votes = votes.filter((vote: Doc<"votes">) => vote.isActive === isActive);
     }
 
-    return allVotes.sort((a, b) => b.createdAt - a.createdAt);
+    return votes.sort(
+      (a: Doc<"votes">, b: Doc<"votes">) => b.createdAt - a.createdAt,
+    );
   },
 });
 
-export const getVoteById = query({
+export const getVoteById = tenantQuery({
   args: { id: v.id("votes") },
-  handler: async (ctx, { id }) => {
-    const vote = await ctx.db.get(id);
-    if (!vote) return null;
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
+  handler: async (ctx, { id }, tenancy) => {
+    const vote = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Vote not found",
+    );
 
-    // Get options with response counts
     const options = await ctx.db
       .query("voteOptions")
-      .withIndex("by_voteId", (q) => q.eq("voteId", id))
+      .withIndex("by_voteId", (q: any) => q.eq("voteId", id))
       .collect();
 
     const optionsWithCounts = await Promise.all(
-      options.map(async (option) => {
-        const responses = await ctx.db
-          .query("voteResponses")
-          .withIndex("by_optionId", (q) => q.eq("optionId", option._id))
-          .collect();
+      options
+        .filter(
+          (option: Doc<"voteOptions">) =>
+            option.institutionId === tenancy.institution._id,
+        )
+        .map(async (option: Doc<"voteOptions">) => {
+          const responses = await ctx.db
+            .query("voteResponses")
+            .withIndex("by_optionId", (q: any) => q.eq("optionId", option._id))
+            .collect();
 
-        return {
-          ...option,
-          voteCount: responses.length,
-        };
-      }),
+          const scopedResponses = responses.filter(
+            (response: Doc<"voteResponses">) =>
+              response.institutionId === tenancy.institution._id,
+          );
+
+          return {
+            ...option,
+            voteCount: scopedResponses.length,
+          };
+        }),
     );
 
     return {
@@ -79,18 +95,49 @@ export const getVoteById = query({
   },
 });
 
-export const getUserVoteResponse = query({
+export const getUserVoteResponse = tenantQuery({
   args: {
     voteId: v.id("votes"),
     userId: v.id("users"),
   },
-  handler: async (ctx, { voteId, userId }) => {
-    return await ctx.db
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
+  handler: async (ctx, { voteId, userId }, tenancy) => {
+    const scopedVote = ensureInstitutionMatch(
+      await ctx.db.get(voteId),
+      tenancy,
+      "Vote not found",
+    );
+
+    const effectiveUserId =
+      tenancy.membershipRole === "PARENT" && !tenancy.isMaster
+        ? tenancy.user._id
+        : userId;
+
+    if (
+      !tenancy.isMaster &&
+      tenancy.membershipRole !== "ADMIN" &&
+      tenancy.membershipRole !== "STAFF" &&
+      effectiveUserId !== tenancy.user._id
+    ) {
+      throw new Error("Cannot access votes for another user");
+    }
+
+    const response = await ctx.db
       .query("voteResponses")
       .withIndex("by_voteId_userId", (q: any) =>
-        q.eq("voteId", voteId).eq("userId", userId),
+        q.eq("voteId", scopedVote._id).eq("userId", effectiveUserId),
       )
       .first();
+
+    if (!response) {
+      return null;
+    }
+
+    if (response.institutionId !== tenancy.institution._id) {
+      return null;
+    }
+
+    return response;
   },
 });
 
@@ -110,6 +157,7 @@ export const createVote = tenantMutation({
     createdBy: v.id("users"),
     options: v.array(v.string()),
   },
+  roles: ["ADMIN", "STAFF", "MASTER"],
   handler: async (ctx, { options, ...args }, tenancy) => {
     const now = Date.now();
 
@@ -136,6 +184,10 @@ export const createVote = tenantMutation({
       voteData.maxVotesPerUser = args.maxVotesPerUser;
     }
 
+    if (!tenancy.isMaster && args.createdBy !== tenancy.user._id) {
+      throw new Error("Votes must be created by the authenticated user");
+    }
+
     const voteId = await ctx.db.insert("votes", voteData);
 
     // Create options
@@ -160,9 +212,26 @@ export const castVote = tenantMutation({
     optionId: v.id("voteOptions"),
     userId: v.id("users"),
   },
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
   handler: async (ctx, { voteId, optionId, userId }, tenancy) => {
-    const vote = await ctx.db.get(voteId);
-    if (!vote) throw new Error("Vote not found");
+    const vote = ensureInstitutionMatch(
+      await ctx.db.get(voteId),
+      tenancy,
+      "Vote not found",
+    );
+
+    if (!tenancy.isMaster && userId !== tenancy.user._id) {
+      throw new Error("Cannot cast vote for another user");
+    }
+
+    const option = await ctx.db.get(optionId);
+    if (!option || option.voteId !== vote._id) {
+      throw new Error("Invalid vote option");
+    }
+
+    if (option.institutionId !== tenancy.institution._id) {
+      throw new Error("Vote option not available in this institution");
+    }
 
     // Get all existing responses for this user and vote
     const existingResponses = await ctx.db
@@ -196,25 +265,34 @@ export const castVote = tenantMutation({
     });
   },
 });
-
-export const deleteVote = mutation({
+export const deleteVote = tenantMutation({
   args: { id: v.id("votes") },
-  handler: async (ctx, { id }) => {
-    // Delete all responses
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, { id }, tenancy) => {
+    const vote = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Vote not found",
+    );
+
     const responses = await ctx.db
       .query("voteResponses")
-      .withIndex("by_voteId", (q: any) => q.eq("voteId", id))
+      .withIndex("by_voteId", (q: any) => q.eq("voteId", vote._id))
       .collect();
-    await Promise.all(responses.map((r) => ctx.db.delete(r._id)));
+    await Promise.all(
+      responses.map((response: Doc<"voteResponses">) =>
+        ctx.db.delete(response._id),
+      ),
+    );
 
-    // Delete all options
     const options = await ctx.db
       .query("voteOptions")
-      .withIndex("by_voteId", (q: any) => q.eq("voteId", id))
+      .withIndex("by_voteId", (q: any) => q.eq("voteId", vote._id))
       .collect();
-    await Promise.all(options.map((o) => ctx.db.delete(o._id)));
+    await Promise.all(
+      options.map((option: Doc<"voteOptions">) => ctx.db.delete(option._id)),
+    );
 
-    // Delete vote
-    await ctx.db.delete(id);
+    await ctx.db.delete(vote._id);
   },
 });
