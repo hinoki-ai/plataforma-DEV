@@ -132,7 +132,7 @@ export default async function AdminTeamMembersPage() {
           </Alert>
         ) : (
           <TeamMemberList
-            members={teamMembers}
+            teamMembers={teamMembers}
             variant="admin"
             showActions
             gridColumns={1}

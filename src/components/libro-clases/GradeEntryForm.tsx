@@ -587,7 +587,6 @@ export function GradeEntryForm({
                       ? "bg-linear-to-r from-yellow-400 to-yellow-600 shadow-sm"
                       : "bg-linear-to-r from-red-400 to-red-600 shadow-sm",
               )}
-              // eslint-disable-next-line react/forbid-dom-props
               style={{ width: `${gradePercentage}%` }}
             />
           </div>

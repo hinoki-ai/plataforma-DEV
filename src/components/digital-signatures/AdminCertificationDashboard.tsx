@@ -89,9 +89,7 @@ export function AdminCertificationDashboard({
   // Get uncertified signatures
   const uncertifiedSignatures = useQuery(
     api.digitalSignatures.getUncertifiedSignatures,
-    selectedRecordType !== "ALL"
-      ? { recordType: selectedRecordType }
-      : undefined,
+    selectedRecordType !== "ALL" ? { recordType: selectedRecordType } : "skip",
   );
 
   // Get all courses for filtering

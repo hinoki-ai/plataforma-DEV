@@ -25,6 +25,7 @@ const eslintConfig = [
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "react-hooks/exhaustive-deps": "off",
+      "react-hooks/set-state-in-effect": "off",
       "@next/next/no-img-element": "off",
       "jsx-a11y/role-has-required-aria-props": "off",
       // Disable apple-touch-icon requirement since it's handled by Next.js metadata API

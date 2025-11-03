@@ -62,6 +62,7 @@ import {
   EventCategory,
   CalendarQuery,
   CalendarExportFormat,
+  CalendarEvent,
 } from "@/services/calendar/types";
 
 interface UnifiedCalendarViewProps {
@@ -142,6 +143,20 @@ export default function UnifiedCalendarView({
     Record<string, UnifiedCalendarEvent[]>
   >({});
 
+  const normalizeEvent = useCallback(
+    (
+      event: (CalendarEvent | UnifiedCalendarEvent) & { _id?: string },
+    ): UnifiedCalendarEvent => ({
+      ...event,
+      id: event.id ?? event._id ?? Math.random().toString(36).slice(2),
+      startDate: new Date(event.startDate),
+      endDate: new Date(event.endDate),
+      createdAt: new Date(event.createdAt),
+      updatedAt: new Date(event.updatedAt),
+    }),
+    [],
+  );
+
   // Mobile detection - hydration-safe
   const [isMobileView, setIsMobileView] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -214,26 +229,16 @@ export default function UnifiedCalendarView({
 
       setMonthEvents(
         monthEventsResult.success && monthEventsResult.data
-          ? monthEventsResult.data.map((event) => ({
-              ...event,
-              id: event._id,
-              startDate: new Date(event.startDate),
-              endDate: new Date(event.endDate),
-              createdAt: new Date(event.createdAt),
-              updatedAt: new Date(event.updatedAt),
-            }))
+          ? monthEventsResult.data.map((event: CalendarEvent) =>
+              normalizeEvent(event),
+            )
           : [],
       );
       setUpcomingEvents(
         upcomingResult.success && upcomingResult.data
-          ? upcomingResult.data.map((event) => ({
-              ...event,
-              id: event._id,
-              startDate: new Date(event.startDate),
-              endDate: new Date(event.endDate),
-              createdAt: new Date(event.createdAt),
-              updatedAt: new Date(event.updatedAt),
-            }))
+          ? upcomingResult.data.map((event: CalendarEvent) =>
+              normalizeEvent(event),
+            )
           : [],
       );
       setGroupedEvents(

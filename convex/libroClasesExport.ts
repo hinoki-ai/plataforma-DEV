@@ -46,7 +46,7 @@ export const getLibroClasesForExport = tenantQuery({
       .collect();
 
     const studentsData = await Promise.all(
-      enrollments.map(async (enrollment) => {
+      enrollments.map(async (enrollment: Doc<"courseStudents">) => {
         const student = await ctx.db.get(enrollment.studentId);
         if (!student) return null;
 
@@ -338,7 +338,9 @@ export const getStudentLibroForExport = tenantQuery({
       // Get attendance
       let attendance = await ctx.db
         .query("classAttendance")
-        .withIndex("by_studentId_date", (q: any) => q.eq("studentId", studentId))
+        .withIndex("by_studentId_date", (q: any) =>
+          q.eq("studentId", studentId),
+        )
         .collect();
 
       attendance = attendance.filter(
@@ -356,7 +358,9 @@ export const getStudentLibroForExport = tenantQuery({
       // Get grades
       let grades = await ctx.db
         .query("classGrades")
-        .withIndex("by_studentId_subject", (q: any) => q.eq("studentId", studentId))
+        .withIndex("by_studentId_subject", (q: any) =>
+          q.eq("studentId", studentId),
+        )
         .collect();
 
       grades = grades.filter(
@@ -370,7 +374,9 @@ export const getStudentLibroForExport = tenantQuery({
       // Get observations
       let observations = await ctx.db
         .query("studentObservations")
-        .withIndex("by_studentId_date", (q: any) => q.eq("studentId", studentId))
+        .withIndex("by_studentId_date", (q: any) =>
+          q.eq("studentId", studentId),
+        )
         .collect();
 
       observations = observations.filter(

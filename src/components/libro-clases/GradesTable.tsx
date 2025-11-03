@@ -2,7 +2,7 @@
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id, type Doc } from "@/convex/_generated/dataModel";
 import {
   Table,
   TableBody,
@@ -39,6 +39,48 @@ interface GradesTableProps {
   teacherId: Id<"users">;
   isParentView?: boolean;
 }
+
+type GradeOverviewEntry = {
+  studentId: Id<"students">;
+  student: {
+    firstName: string;
+    lastName: string;
+    grade?: string | null;
+  };
+  subjectAverages: Record<
+    string,
+    {
+      average: number;
+      weightedAverage: number | null;
+      count: number;
+      passing: boolean;
+      grades: Doc<"classGrades">[];
+    }
+  >;
+  overallAverage: number;
+  overallWeightedAverage: number | null;
+  totalGrades: number;
+  passingSubjects: number;
+  totalSubjects: number;
+};
+
+type CourseStudentEntry = {
+  studentId: Id<"students">;
+  student?: {
+    parentId?: Id<"users"> | null;
+    firstName?: string;
+    lastName?: string;
+    grade?: string | null;
+  } | null;
+};
+
+type CourseDetails = {
+  name: string;
+  grade?: string | null;
+  section?: string | null;
+  subjects: string[];
+  students?: CourseStudentEntry[];
+};
 
 type Period = "PRIMER_SEMESTRE" | "SEGUNDO_SEMESTRE" | "ANUAL";
 
@@ -85,7 +127,7 @@ export function GradesTable({
     useState<Period>("PRIMER_SEMESTRE");
 
   // Get course details
-  const course = useQuery(api.courses.getCourseById, { courseId });
+  const courseData = useQuery(api.courses.getCourseById, { courseId });
 
   // Get current user if parent view
   const currentUser = useQuery(
@@ -99,7 +141,7 @@ export function GradesTable({
     period: selectedPeriod,
   });
 
-  if (!course || gradeOverview === undefined) {
+  if (!courseData || gradeOverview === undefined) {
     return (
       <Card>
         <CardContent className="py-12 text-center">
@@ -113,7 +155,7 @@ export function GradesTable({
     );
   }
 
-  if (!course) {
+  if (!courseData) {
     return (
       <Card>
         <CardContent className="py-12 text-center text-muted-foreground">
@@ -125,17 +167,21 @@ export function GradesTable({
     );
   }
 
+  const typedCourse = courseData as CourseDetails;
+  const gradeOverviewData = gradeOverview as GradeOverviewEntry[];
+
   // Filter gradeOverview for parent view - only show their children
-  let filteredGradeOverview = gradeOverview;
+  let filteredGradeOverview: GradeOverviewEntry[] = gradeOverviewData;
   if (isParentView && currentUser) {
-    filteredGradeOverview =
-      gradeOverview?.filter((student) => {
+    filteredGradeOverview = gradeOverviewData.filter(
+      (student: GradeOverviewEntry) => {
         // Get the student details from the course to check parentId
-        const courseStudent = course.students?.find(
-          (s) => s.studentId === student.studentId,
+        const courseStudent = typedCourse.students?.find(
+          (s: CourseStudentEntry) => s.studentId === student.studentId,
         );
         return courseStudent?.student?.parentId === currentUser._id;
-      }) || [];
+      },
+    );
   }
 
   if (!filteredGradeOverview || filteredGradeOverview.length === 0) {
@@ -166,7 +212,7 @@ export function GradesTable({
                 </SelectContent>
               </Select>
               <div className="text-sm text-muted-foreground">
-                {course.name} - {course.grade} {course.section}
+                {typedCourse.name} - {typedCourse.grade} {typedCourse.section}
               </div>
             </div>
           </div>
@@ -185,13 +231,13 @@ export function GradesTable({
   }
 
   const averageGrade =
-    filteredGradeOverview.reduce((acc, student) => {
+    filteredGradeOverview.reduce((acc, student: GradeOverviewEntry) => {
       const avg = student.overallWeightedAverage ?? student.overallAverage;
       return acc + avg;
     }, 0) / filteredGradeOverview.length;
 
   const passingRate =
-    (filteredGradeOverview.filter((student) => {
+    (filteredGradeOverview.filter((student: GradeOverviewEntry) => {
       const avg = student.overallWeightedAverage ?? student.overallAverage;
       return avg >= PASSING_GRADE;
     }).length /
@@ -229,7 +275,7 @@ export function GradesTable({
               </Select>
             )}
             <div className="text-sm text-muted-foreground">
-              {course.name} - {course.grade} {course.section}
+              {typedCourse.name} - {typedCourse.grade} {typedCourse.section}
               {isParentView && ` | ${PERIOD_LABELS[selectedPeriod]}`}
             </div>
           </div>
@@ -269,7 +315,7 @@ export function GradesTable({
             <TableHeader>
               <TableRow>
                 <TableHead className="w-64">Estudiante</TableHead>
-                {course.subjects.map((subject) => (
+                {typedCourse.subjects.map((subject: string) => (
                   <TableHead key={subject} className="text-center min-w-24">
                     {subject}
                   </TableHead>
@@ -281,7 +327,7 @@ export function GradesTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredGradeOverview.map((student) => {
+              {filteredGradeOverview.map((student: GradeOverviewEntry) => {
                 const overallAvg =
                   student.overallWeightedAverage ?? student.overallAverage;
                 const GradeIcon = getGradeIcon(overallAvg);
@@ -298,7 +344,7 @@ export function GradesTable({
                         </div>
                       </div>
                     </TableCell>
-                    {course.subjects.map((subject) => {
+                    {typedCourse.subjects.map((subject: string) => {
                       const subjectData = student.subjectAverages[subject];
                       if (!subjectData || subjectData.count === 0) {
                         return (

@@ -155,7 +155,7 @@ export function CurriculumCoverageDashboard({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas las asignaturas</SelectItem>
-                  {course.subjects.map((subject) => (
+                  {course.subjects.map((subject: string) => (
                     <SelectItem key={subject} value={subject}>
                       {subject}
                     </SelectItem>

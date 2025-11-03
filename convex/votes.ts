@@ -87,7 +87,7 @@ export const getUserVoteResponse = query({
   handler: async (ctx, { voteId, userId }) => {
     return await ctx.db
       .query("voteResponses")
-      .withIndex("by_voteId_userId", (q) =>
+      .withIndex("by_voteId_userId", (q: any) =>
         q.eq("voteId", voteId).eq("userId", userId),
       )
       .first();
@@ -167,7 +167,7 @@ export const castVote = tenantMutation({
     // Get all existing responses for this user and vote
     const existingResponses = await ctx.db
       .query("voteResponses")
-      .withIndex("by_voteId_userId", (q) =>
+      .withIndex("by_voteId_userId", (q: any) =>
         q.eq("voteId", voteId).eq("userId", userId),
       )
       .collect();
@@ -203,14 +203,14 @@ export const deleteVote = mutation({
     // Delete all responses
     const responses = await ctx.db
       .query("voteResponses")
-      .withIndex("by_voteId", (q) => q.eq("voteId", id))
+      .withIndex("by_voteId", (q: any) => q.eq("voteId", id))
       .collect();
     await Promise.all(responses.map((r) => ctx.db.delete(r._id)));
 
     // Delete all options
     const options = await ctx.db
       .query("voteOptions")
-      .withIndex("by_voteId", (q) => q.eq("voteId", id))
+      .withIndex("by_voteId", (q: any) => q.eq("voteId", id))
       .collect();
     await Promise.all(options.map((o) => ctx.db.delete(o._id)));
 

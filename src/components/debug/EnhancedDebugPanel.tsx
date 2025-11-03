@@ -178,7 +178,6 @@ export function EnhancedDebugPanel() {
     // Auto-start monitoring - initialization is appropriate here
     // Only start if not already monitoring to avoid cascading renders
     if (!isMonitoring) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       startMonitoring();
     }
 

@@ -36,6 +36,16 @@ type TabValue =
   | "observations"
   | "meetings";
 
+type CourseEnrollment = {
+  _id: Id<"courseStudents">;
+  student?: {
+    parentId?: Id<"users"> | null;
+    firstName?: string;
+    lastName?: string;
+    grade?: string | null;
+  } | null;
+};
+
 interface ParentLibroClasesViewProps {
   view?: TabValue;
 }
@@ -201,6 +211,11 @@ export function ParentLibroClasesView({
       </PageTransition>
     );
   }
+
+  const parentEnrollments: CourseEnrollment[] =
+    (selectedCourse?.students as CourseEnrollment[] | undefined)?.filter(
+      (enrollment) => enrollment.student?.parentId === currentUser?._id,
+    ) ?? [];
 
   return (
     <PageTransition>
@@ -440,36 +455,28 @@ export function ParentLibroClasesView({
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      {selectedCourse?.students &&
-                      selectedCourse.students.length > 0 ? (
+                      {parentEnrollments.length > 0 ? (
                         <div className="space-y-2 max-h-[400px] overflow-y-auto">
-                          {selectedCourse.students
-                            .filter(
-                              (enrollment) =>
-                                // Only show parent's children
-                                enrollment.student?.parentId ===
-                                currentUser._id,
-                            )
-                            .map((enrollment) => (
-                              <div
-                                key={enrollment._id}
-                                className="flex items-center justify-between p-3 border rounded-lg bg-muted/30"
-                              >
-                                <div>
-                                  <div className="font-medium">
-                                    {enrollment.student?.firstName}{" "}
-                                    {enrollment.student?.lastName}
-                                  </div>
-                                  <div className="text-sm text-muted-foreground">
-                                    {enrollment.student?.grade}
-                                  </div>
+                          {parentEnrollments.map((enrollment) => (
+                            <div
+                              key={enrollment._id}
+                              className="flex items-center justify-between p-3 border rounded-lg bg-muted/30"
+                            >
+                              <div>
+                                <div className="font-medium">
+                                  {enrollment.student?.firstName}{" "}
+                                  {enrollment.student?.lastName}
                                 </div>
-                                <Badge variant="outline" className="text-xs">
-                                  <Eye className="h-3 w-3 mr-1" />
-                                  Solo Vista
-                                </Badge>
+                                <div className="text-sm text-muted-foreground">
+                                  {enrollment.student?.grade}
+                                </div>
                               </div>
-                            ))}
+                              <Badge variant="outline" className="text-xs">
+                                <Eye className="h-3 w-3 mr-1" />
+                                Solo Vista
+                              </Badge>
+                            </div>
+                          ))}
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
@@ -486,15 +493,17 @@ export function ParentLibroClasesView({
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
-                        {selectedCourse?.subjects?.map((subject, idx) => (
-                          <Badge
-                            key={idx}
-                            variant="secondary"
-                            className="text-sm py-2 px-3"
-                          >
-                            {subject}
-                          </Badge>
-                        ))}
+                        {selectedCourse?.subjects?.map(
+                          (subject: string, idx: number) => (
+                            <Badge
+                              key={idx}
+                              variant="secondary"
+                              className="text-sm py-2 px-3"
+                            >
+                              {subject}
+                            </Badge>
+                          ),
+                        )}
                       </div>
                     </CardContent>
                   </Card>

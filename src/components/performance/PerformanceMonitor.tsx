@@ -54,7 +54,6 @@ export function PerformanceMonitor({
         "navigation",
       )[0] as PerformanceNavigationTiming;
       if (navigation) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMetrics((prev) => ({
           ...prev,
           loadTime: navigation.loadEventEnd - navigation.fetchStart,

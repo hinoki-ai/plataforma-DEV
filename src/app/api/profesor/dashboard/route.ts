@@ -3,7 +3,7 @@ import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 import { createApiRoute } from "@/lib/api-validation";
 import { createSuccessResponse } from "@/lib/api-error";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id, type Doc } from "@/convex/_generated/dataModel";
 
 // GET /api/profesor/dashboard - Teacher dashboard metrics
 export const GET = createApiRoute(
@@ -47,7 +47,8 @@ export const GET = createApiRoute(
     ).length;
 
     // Get recent planning documents
-    const recentActivity = planningData.slice(0, 5); // Already sorted by updatedAt desc
+    const planningDocuments = planningData as Doc<"planningDocuments">[];
+    const recentActivity = planningDocuments.slice(0, 5); // Already sorted by updatedAt desc
 
     // Calculate student statistics
     const activeStudents = studentsData;
@@ -137,14 +138,16 @@ export const GET = createApiRoute(
 
       planning: {
         totalDocuments: planningData.length,
-        recentDocuments: recentActivity.map((doc) => ({
-          id: doc._id,
-          title: doc.title,
-          subject: doc.subject || "Sin Materia",
-          grade: doc.grade || "Sin Grado",
-          lastUpdated: new Date(doc.updatedAt).toISOString(),
-          isRecent: doc.updatedAt > sevenDaysAgo,
-        })),
+        recentDocuments: recentActivity.map(
+          (doc: Doc<"planningDocuments">) => ({
+            id: doc._id,
+            title: doc.title,
+            subject: doc.subject || "Sin Materia",
+            grade: doc.grade || "Sin Grado",
+            lastUpdated: new Date(doc.updatedAt).toISOString(),
+            isRecent: doc.updatedAt > sevenDaysAgo,
+          }),
+        ),
       },
 
       meetings: {
@@ -159,7 +162,7 @@ export const GET = createApiRoute(
             (s.attendanceRate || 0) < 0.8 || (s.academicProgress || 0) < 60,
         ).length,
         documentsThisWeek: recentActivity.filter(
-          (doc) => doc.updatedAt > sevenDaysAgo,
+          (doc: Doc<"planningDocuments">) => doc.updatedAt > sevenDaysAgo,
         ).length,
         averageClassSize:
           activeStudents.length /

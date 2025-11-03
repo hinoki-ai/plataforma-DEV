@@ -299,7 +299,7 @@ export function SmartFormField({
           suggestion.toLowerCase().includes(watchedValue.toLowerCase()),
         )
         .slice(0, 5);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+
       setSuggestions(filtered);
     }
   }, [watchedValue, config.suggestions]);
