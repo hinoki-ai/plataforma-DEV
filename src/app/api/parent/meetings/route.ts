@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 
 export async function GET(request: NextRequest) {
   try {
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
       description: meeting.description || "Sin descripción",
       date: new Date(meeting.scheduledDate).toISOString(),
       status: meeting.status.toLowerCase(),
-      teacher: meeting.teacherName || "Profesor asignado",
+      teacher: meeting.teacher?.name || "Profesor asignado",
       subject: meeting.studentGrade || "General",
       location: meeting.location,
       studentName: meeting.studentName,
@@ -81,54 +82,54 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { teacherId, subject, message, preferredDate, studentName } =
-      await request.json();
+    const {
+      teacherId,
+      subject,
+      message,
+      preferredDate,
+      preferredTime,
+      studentName,
+      studentGrade,
+      guardianPhone,
+    } = await request.json();
 
-    if (!teacherId || !subject || !message) {
-      return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
-    }
-
-    // Get teacher information
-    const teacher = await client.query(api.users.getUserById, {
-      userId: teacherId,
-    });
-
-    if (!teacher) {
+    if (!message) {
       return NextResponse.json(
-        { error: "Profesor no encontrado" },
-        { status: 404 },
+        { error: "Debes indicar el motivo de la reunión" },
+        { status: 400 },
       );
     }
 
-    // Create meeting request
-    const meetingRequest = await client.mutation(api.meetings.createMeeting, {
-      title: `Solicitud de reunión: ${subject}`,
-      description: message,
+    const effectivePreferredDate = preferredDate
+      ? new Date(preferredDate).getTime()
+      : Date.now() + 7 * 24 * 60 * 60 * 1000;
+
+    const effectivePreferredTime = preferredTime || "10:00";
+
+    const effectiveStudentGrade = studentGrade || subject || "General";
+
+    const meetingRequest = await client.mutation(api.meetings.requestMeeting, {
       studentName: studentName || "Estudiante",
-      studentGrade: subject,
-      guardianName: session.user.name || "Padre/Madre",
+      studentGrade: effectiveStudentGrade,
+      guardianName: session.user.name || user.name || "Padre/Madre",
       guardianEmail: session.user.email,
-      guardianPhone: "",
-      scheduledDate: preferredDate
-        ? new Date(preferredDate).getTime()
-        : Date.now() + 7 * 24 * 60 * 60 * 1000,
-      scheduledTime: "10:00",
-      duration: 30,
-      location: "Sala de Reuniones",
+      guardianPhone: guardianPhone || user.phone || "",
+      preferredDate: effectivePreferredDate,
+      preferredTime: effectivePreferredTime,
+      reason: message,
       type: "PARENT_TEACHER",
-      assignedTo: teacherId,
-      reason: `Solicitud de reunión: ${message}`,
-      parentRequested: true,
+      teacherId: teacherId ? (teacherId as Id<"users">) : undefined,
     });
 
     return NextResponse.json({
       message: "Solicitud de reunión enviada correctamente",
       data: {
         id: meetingRequest,
-        teacherId,
-        subject,
+        teacherId: teacherId ?? null,
+        subject: effectiveStudentGrade,
         message,
-        preferredDate,
+        preferredDate: new Date(effectivePreferredDate).toISOString(),
+        preferredTime: effectivePreferredTime,
         status: "scheduled",
         createdAt: new Date().toISOString(),
       },

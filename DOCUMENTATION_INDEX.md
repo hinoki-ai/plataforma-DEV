@@ -38,55 +38,20 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 - **[CLAUDE.md](./CLAUDE.md)** - AI Assistant development guidelines
 - **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)** - Git workflow and branching strategy
 
-### 🏗️ Architecture & Technical (See AI Knowledge Base for current details)
+### 🏗️ Architecture & Technical
 
 - **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Complete current system documentation**
-- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Legacy architecture overview (superseded)
-- **[docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)** - Legacy API documentation (superseded)
-- **[docs/FRONTEND.md](./docs/FRONTEND.md)** - Frontend patterns and components
 - **[docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md)** - Environment configuration and deployment
+- **[docs/ANIMATION_GUIDE.md](./docs/ANIMATION_GUIDE.md)** - UI animation patterns
 
-#### Documentation Directory Structure (`docs/`)
-
-The `docs/` directory contains detailed technical documentation organized as follows:
-
-**Architecture & Design**
-
-- `ARCHITECTURE.md` - System architecture overview
-- `API_DOCUMENTATION.md` - Complete API endpoint documentation
-- `FRONTEND.md` - Frontend patterns and components
-
-**Authentication & Security**
-
-- `AUTHENTICATION_COMPLETE_GUIDE.md` - Complete auth system documentation
-- `ROLE_SYSTEM.md` - Role-based access control (RBAC)
-- `protected-paths.md` - List of protected routes
-- `EMERGENCY_ACCESS_PROCEDURES.md` - Emergency access protocols
-- `TROUBLESHOOTING_AUTH.md` - Auth troubleshooting guide
-- `CLERK_SETUP.md` - Clerk authentication setup guide
-
-**Configuration & Environment**
-
-- `ENVIRONMENT.md` - Environment configuration guide
-
-**Features & Functionality**
-
-- `VOTING_SYSTEM.md` - Centro Consejo voting system (complete guide for AI assistants)
-- `ANIMATION_GUIDE.md` - UI animation patterns
-- `LIBRO_DE_CLASES_GUIDE.md` - Libro de Clases system guide
-- `LIBRO_CLASES_IMPLEMENTATION_STATUS.md` - Libro de Clases implementation status
-
-**Testing & Quality**
-
-- `TESTING_GUIDE.md` - Comprehensive testing guide
-
-### 🔐 Authentication & Security (See AI Knowledge Base for current implementation)
+### 🔐 Authentication & Security
 
 - **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Current Clerk + Convex auth system**
 - **[docs/ROLE_SYSTEM.md](./docs/ROLE_SYSTEM.md)** - Role-based access control (RBAC) system
 - **[docs/protected-paths.md](./docs/protected-paths.md)** - Protected routes and access control
 - **[docs/EMERGENCY_ACCESS_PROCEDURES.md](./docs/EMERGENCY_ACCESS_PROCEDURES.md)** - Emergency access protocols
-- **[docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)** - Auth troubleshooting guide (legacy - see AI KB)
+- **[docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)** - Auth troubleshooting guide
+- **[docs/CLERK_SETUP.md](./docs/CLERK_SETUP.md)** - Clerk authentication setup guide
 
 ### 🚢 Deployment & Operations
 
@@ -94,20 +59,15 @@ The `docs/` directory contains detailed technical documentation organized as fol
 - **[scripts/deploy.js](./scripts/deploy.js)** - Automated deployment script
 - **[scripts/verify-deployment.js](./scripts/verify-deployment.js)** - Deployment verification utilities
 
-### 🎯 Features & Functionality (See AI Knowledge Base for implementation details)
+### 🎯 Features & Functionality
 
 - **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Current feature implementations**
 - **[docs/VOTING_SYSTEM.md](./docs/VOTING_SYSTEM.md)** - Centro Consejo voting system (AI-optimized guide)
 - **[docs/LIBRO_DE_CLASES_GUIDE.md](./docs/LIBRO_DE_CLASES_GUIDE.md)** - Complete Libro de Clases system guide
-- **[docs/LIBRO_CLASES_IMPLEMENTATION_STATUS.md](./docs/LIBRO_CLASES_IMPLEMENTATION_STATUS.md)** - Libro de Clases implementation status
 
 ### 🧪 Testing & Quality
 
 - **[docs/TESTING_GUIDE.md](./docs/TESTING_GUIDE.md)** - Comprehensive testing guide and procedures
-
-### ⚙️ Setup & Configuration
-
-- **[docs/CLERK_SETUP.md](./docs/CLERK_SETUP.md)** - Clerk authentication setup guide
 
 ---
 
@@ -225,21 +185,20 @@ npm run verify-deployment  # Verify deployment readiness
 
 ## 📈 Recent Updates
 
+- ✅ **January 2025**: Major documentation consolidation and cleanup
+  - Archived deprecated documentation (ARCHITECTURE.md, API_DOCUMENTATION.md, FRONTEND.md)
+  - These legacy docs superseded by AI_KNOWLEDGE_BASE.md with current Convex + Clerk stack
+  - Updated all documentation cross-references
+  - Simplified documentation index structure
+  - Consolidated Libro de Clases documentation (GAP_ANALYSIS, STATUS, PDF_EXPORT maintained)
 - ✅ **October 31, 2025**: Complete AI-oriented documentation consolidation
   - Created comprehensive [AI Knowledge Base](./docs/AI_KNOWLEDGE_BASE.md) with machine-readable structure
   - Consolidated all technical documentation into single AI-optimized reference
   - Updated documentation index to prioritize AI Knowledge Base
-  - Marked legacy documentation as superseded where applicable
   - Added structured JSON/YAML sections for automated processing
   - Included complete cross-reference system for all components
-- ✅ **January 2025**: Major documentation consolidation completed
-  - Consolidated 4 voting system docs into single AI-oriented guide
-  - Removed redundant and deprecated documentation files
-  - Moved testing guide and Clerk setup to `docs/` directory
-  - Consolidated Libro de Clases documentation
-  - Moved historical MIGRATION.md to `archive/` directory
-  - Updated documentation index with new structure
-  - Fixed all cross-references
+- ✅ **January 2025**: Consolidated 4 voting system docs into single AI-oriented guide
+- ✅ **January 2025**: Moved historical MIGRATION.md to `archive/` directory
 - ✅ **October 2025**: Next.js 16 upgrade and system refactoring
 - ✅ **Authentication**: Full Clerk integration with Convex
 - ✅ **Real-time Features**: Convex-powered live updates and notifications
@@ -268,4 +227,5 @@ npm run verify-deployment  # Verify deployment readiness
 
 **Maintained by**: Development Team  
 **Last Documentation Review**: January 2025  
-**Last Major Consolidation**: January 2025
+**Last Major Consolidation**: January 2025  
+**Consolidation Status**: ✅ Complete - All documentation consolidated and cross-referenced

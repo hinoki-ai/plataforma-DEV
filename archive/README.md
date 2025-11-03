@@ -2,7 +2,7 @@
 
 This directory contains historical documentation that is no longer actively maintained but kept for reference and context.
 
-**Last Updated**: October 13, 2025
+**Last Updated**: January 2025
 
 ---
 
@@ -28,9 +28,18 @@ Historical incident reports:
 
 ---
 
-### `deprecated/`
+### Root Level Files
 
-Previously contained documentation for deprecated features and outdated implementation guides. All files have been removed as they were superseded by current documentation.
+Archived outdated documentation files:
+
+- **ARCHITECTURE.md** - Legacy architecture overview (Prisma + NextAuth.js)  
+  **Why archived**: Superseded by `docs/AI_KNOWLEDGE_BASE.md` with current Convex + Clerk architecture
+
+- **API_DOCUMENTATION.md** - Legacy REST API documentation (Prisma-based)  
+  **Why archived**: Superseded by `docs/AI_KNOWLEDGE_BASE.md` with current Convex query/mutation patterns
+
+- **FRONTEND.md** - Legacy frontend patterns  
+  **Why archived**: Superseded by `docs/AI_KNOWLEDGE_BASE.md` and `docs/ANIMATION_GUIDE.md`
 
 ---
 

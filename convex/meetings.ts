@@ -642,29 +642,11 @@ export const requestMeeting = tenantMutation({
       v.literal("IEP_REVIEW"),
       v.literal("GRADE_CONFERENCE"),
     ),
+    teacherId: v.optional(v.id("users")),
   },
   roles: ["PARENT", "ADMIN", "STAFF", "MASTER"],
   handler: async (ctx, args, tenancy) => {
     const now = Date.now();
-
-    const memberships = await ctx.db
-      .query("institutionMemberships")
-      .withIndex("by_institutionId", (q: any) =>
-        q.eq("institutionId", tenancy.institution._id),
-      )
-      .collect();
-
-    const teacherMembership = memberships.find(
-      (m: any) => m.role === "PROFESOR",
-    );
-    if (!teacherMembership) {
-      throw new Error("No teacher available to assign meeting");
-    }
-
-    const teacher = await ctx.db.get(teacherMembership.userId);
-    if (!teacher) {
-      throw new Error("Assigned teacher not found");
-    }
 
     const guardianEmail =
       tenancy.membershipRole === "PARENT" && !tenancy.isMaster
@@ -681,6 +663,52 @@ export const requestMeeting = tenantMutation({
         ? (tenancy.user.phone ?? args.guardianPhone)
         : args.guardianPhone;
 
+    const memberships = await ctx.db
+      .query("institutionMemberships")
+      .withIndex("by_institutionId", (q: any) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
+
+    let assignedTeacherId: Id<"users"> | null = null;
+
+    if (args.teacherId) {
+      const teacherMembership = memberships.find(
+        (membership: any) =>
+          membership.userId === args.teacherId &&
+          membership.role === "PROFESOR",
+      );
+
+      if (!teacherMembership) {
+        throw new Error("Assigned teacher is not part of this institution");
+      }
+
+      const teacher = await ctx.db.get(args.teacherId);
+      if (!teacher) {
+        throw new Error("Assigned teacher not found");
+      }
+
+      assignedTeacherId = teacher._id;
+    } else {
+      const fallbackTeacherMembership = memberships.find(
+        (membership: any) => membership.role === "PROFESOR",
+      );
+
+      if (!fallbackTeacherMembership) {
+        throw new Error("No teacher available to assign meeting");
+      }
+
+      const fallbackTeacher = await ctx.db.get(
+        fallbackTeacherMembership.userId,
+      );
+
+      if (!fallbackTeacher) {
+        throw new Error("Assigned teacher not found");
+      }
+
+      assignedTeacherId = fallbackTeacher._id;
+    }
+
     return await ctx.db.insert("meetings", {
       title: `Reunión solicitada: ${args.studentName}`,
       description: args.reason,
@@ -696,7 +724,7 @@ export const requestMeeting = tenantMutation({
       type: args.type,
       status: "SCHEDULED",
       reason: args.reason,
-      assignedTo: teacher._id,
+      assignedTo: assignedTeacherId,
       parentRequested: true,
       source: "PARENT_REQUESTED",
       followUpRequired: false,

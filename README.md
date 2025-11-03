@@ -1,7 +1,7 @@
 # Plataforma Astral - Educational Management SaaS
 
 **Educational Management Platform for Chilean Institutions**  
-**Built with Next.js 15 + React 19 + TypeScript + Convex**  
+**Built with Next.js 16 + React 19 + TypeScript + Convex**  
 **Status**: Production Ready ✅ | **Site**: [plataforma.aramac.dev](https://plataforma.aramac.dev)
 
 ---
@@ -52,7 +52,7 @@ Plataforma Astral is a comprehensive educational management platform that provid
 
 ### Tech Stack
 
-- **Frontend**: Next.js 15 + React 19 + TypeScript
+- **Frontend**: Next.js 16 + React 19 + TypeScript
 - **Backend**: Convex (serverless real-time database)
 - **Authentication**: Clerk with role-based access
 - **UI**: Tailwind CSS + shadcn/ui components
@@ -67,7 +67,7 @@ Plataforma Astral is a comprehensive educational management platform that provid
 | **Start developing**             | [START_HERE.md](./START_HERE.md)                                                 |
 | **Deploy to production**         | [DEPLOYMENT.md](./DEPLOYMENT.md)                                                 |
 | **Understand authentication**    | [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md) |
-| **Learn system architecture**    | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)                                   |
+| **Learn system architecture**    | [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)                         |
 | **Troubleshoot issues**          | [docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)                   |
 | **Complete documentation index** | [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)                               |
 
@@ -133,10 +133,10 @@ npx convex deploy       # Deploy Convex backend
 - **🚀 Setup Guide**: [START_HERE.md](./START_HERE.md)
 - **🔐 Authentication**: [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)
 - **🚢 Deployment**: [DEPLOYMENT.md](./DEPLOYMENT.md)
-- **🏗️ Architecture**: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
+- **🏗️ Architecture**: [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)
 
 ---
 
 **Plataforma Astral** - Educational Management SaaS  
-**Version**: 1.0.0 | **Last Updated**: October 29, 2025  
+**Version**: 1.0.0 | **Last Updated**: January 2025  
 **Status**: Production Ready ✅
