@@ -110,7 +110,7 @@ function directive(name: string, sources: (string | undefined)[]) {
 const nextConfig: NextConfig = {
   // TypeScript configuration - skip type checking during build (done separately)
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
 
   // Output configuration - use standalone for server deployment

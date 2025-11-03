@@ -30,7 +30,7 @@ Comprehensive PDF export system for Libro de Clases that generates printable rep
 
 ## 📁 File Structure
 
-```
+```text
 src/
 ├── lib/
 │   └── pdf-libro-clases.ts                    # PDF generation utilities
