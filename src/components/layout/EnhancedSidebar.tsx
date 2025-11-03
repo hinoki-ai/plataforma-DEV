@@ -761,7 +761,7 @@ export function EnhancedSidebar({
                       </TooltipTrigger>
                       <TooltipContent side="right">
                         <div className="flex items-center gap-2">
-                          <span>{item.title}</span>
+                          <span>{t(item.title)}</span>
                           {item.shortcut && (
                             <span className="text-xs opacity-60">
                               {item.shortcut}
@@ -788,7 +788,7 @@ export function EnhancedSidebar({
                     aria-current={isActive ? "page" : undefined}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
-                    <span className="flex-1">{item.title}</span>
+                    <span className="flex-1">{t(item.title)}</span>
                     {item.badge && (
                       <Badge variant="secondary" className="text-xs">
                         {item.badge}

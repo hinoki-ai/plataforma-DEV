@@ -135,11 +135,11 @@ const renderNavigationItem = (
           : "text-muted-foreground hover:text-foreground",
       )}
       aria-current={isActive ? "page" : undefined}
-      aria-label={`${item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+      aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
       onClick={handleClick}
     >
       <item.icon className="h-4 w-4 shrink-0" />
-      <span className="flex-1">{item.title}</span>
+      <span className="flex-1">{t(item.title)}</span>
       {(item as any).badge && (
         <span className="ml-auto bg-accent text-accent-foreground text-xs px-1.5 py-0.5 rounded">
           {(item as any).badge}

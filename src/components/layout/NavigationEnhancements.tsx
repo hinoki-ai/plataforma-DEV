@@ -208,7 +208,7 @@ export function QuickSearch({
                         <Icon className="h-4 w-4 shrink-0" />
                         <div className="flex-1">
                           <div className="text-sm font-medium">
-                            {item.title}
+                            {t(item.title, "navigation")}
                           </div>
                           {item.description && (
                             <div className="text-xs text-muted-foreground">
@@ -367,7 +367,7 @@ export function SmartRecommendations({
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium truncate">{item.title}</div>
+                <div className="text-sm font-medium truncate">{t(item.title, "navigation")}</div>
                 <div className="text-xs text-muted-foreground flex items-center gap-2">
                   <span>{item.category}</span>
                   {usage && (

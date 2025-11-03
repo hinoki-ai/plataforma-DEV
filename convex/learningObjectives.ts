@@ -6,6 +6,7 @@
 
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { tenantQuery, tenantMutation } from "./tenancy";
 import { Id } from "./_generated/dataModel";
 
 // ==================== QUERIES ====================
@@ -13,7 +14,7 @@ import { Id } from "./_generated/dataModel";
 /**
  * Get learning objectives by subject, level, and grade
  */
-export const getLearningObjectives = query({
+export const getLearningObjectives = tenantQuery({
   args: {
     subject: v.optional(v.string()),
     level: v.optional(v.string()),
@@ -27,32 +28,40 @@ export const getLearningObjectives = query({
     ),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args, tenancy) => {
     let objectives;
 
     // Use the most selective index
     if (args.subject && args.level && args.grade) {
       objectives = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_subject_level", (q) =>
+        .withIndex("by_subject_level", (q: any) =>
           q
             .eq("subject", args.subject!)
             .eq("level", args.level!)
-            .eq("grade", args.grade!),
+            .eq("grade", args.grade!)
+            .eq("institutionId", tenancy.institution._id),
         )
         .collect();
     } else if (args.subject) {
       objectives = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_subject", (q) => q.eq("subject", args.subject!))
+        .withIndex("by_subject", (q: any) =>
+          q.eq("subject", args.subject!).eq("institutionId", tenancy.institution._id)
+        )
         .collect();
     } else if (args.level) {
       objectives = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_level", (q) => q.eq("level", args.level!))
+        .withIndex("by_level", (q: any) =>
+          q.eq("level", args.level!).eq("institutionId", tenancy.institution._id)
+        )
         .collect();
     } else {
-      objectives = await ctx.db.query("learningObjectives").collect();
+      objectives = await ctx.db
+        .query("learningObjectives")
+        .withIndex("by_institutionId", (q: any) => q.eq("institutionId", tenancy.institution._id))
+        .collect();
     }
 
     // Filter by semester if provided
@@ -92,18 +101,18 @@ export const getLearningObjectives = query({
 /**
  * Get a single learning objective with its indicators
  */
-export const getLearningObjectiveById = query({
+export const getLearningObjectiveById = tenantQuery({
   args: { objectiveId: v.id("learningObjectives") },
-  handler: async (ctx, { objectiveId }) => {
+  handler: async (ctx, { objectiveId }, tenancy) => {
     const objective = await ctx.db.get(objectiveId);
-    if (!objective) {
+    if (!objective || objective.institutionId !== tenancy.institution._id) {
       throw new Error("Learning objective not found");
     }
 
     const indicators = await ctx.db
       .query("evaluationIndicators")
       .withIndex("by_learningObjectiveId", (q) =>
-        q.eq("learningObjectiveId", objectiveId),
+        q.eq("learningObjectiveId", objectiveId).eq("institutionId", tenancy.institution._id),
       )
       .filter((q) => q.eq(q.field("isActive"), true))
       .collect();
@@ -118,7 +127,7 @@ export const getLearningObjectiveById = query({
 /**
  * Get evaluation indicators for a learning objective
  */
-export const getEvaluationIndicators = query({
+export const getEvaluationIndicators = tenantQuery({
   args: {
     learningObjectiveId: v.id("learningObjectives"),
     level: v.optional(
@@ -130,11 +139,11 @@ export const getEvaluationIndicators = query({
       ),
     ),
   },
-  handler: async (ctx, { learningObjectiveId, level }) => {
+  handler: async (ctx, { learningObjectiveId, level }, tenancy) => {
     let indicators = await ctx.db
       .query("evaluationIndicators")
       .withIndex("by_learningObjectiveId", (q) =>
-        q.eq("learningObjectiveId", learningObjectiveId),
+        q.eq("learningObjectiveId", learningObjectiveId).eq("institutionId", tenancy.institution._id),
       )
       .filter((q) => q.eq(q.field("isActive"), true))
       .collect();
@@ -151,7 +160,7 @@ export const getEvaluationIndicators = query({
 /**
  * Get curriculum coverage for a course and subject
  */
-export const getCurriculumCoverage = query({
+export const getCurriculumCoverage = tenantQuery({
   args: {
     courseId: v.id("courses"),
     subject: v.optional(v.string()),
@@ -163,15 +172,17 @@ export const getCurriculumCoverage = query({
       ),
     ),
   },
-  handler: async (ctx, { courseId, subject, period }) => {
+  handler: async (ctx, { courseId, subject, period }, tenancy) => {
     const course = await ctx.db.get(courseId);
-    if (!course) {
+    if (!course || course.institutionId !== tenancy.institution._id) {
       throw new Error("Course not found");
     }
 
     let coverage = await ctx.db
       .query("curriculumCoverage")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId", (q) =>
+        q.eq("courseId", courseId).eq("institutionId", tenancy.institution._id)
+      )
       .collect();
 
     // Filter by subject if provided
@@ -202,13 +213,13 @@ export const getCurriculumCoverage = query({
 /**
  * Get OA linked to a class content entry
  */
-export const getClassContentOA = query({
+export const getClassContentOA = tenantQuery({
   args: { classContentId: v.id("classContent") },
-  handler: async (ctx, { classContentId }) => {
+  handler: async (ctx, { classContentId }, tenancy) => {
     const links = await ctx.db
       .query("classContentOA")
       .withIndex("by_classContentId", (q) =>
-        q.eq("classContentId", classContentId),
+        q.eq("classContentId", classContentId).eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
@@ -236,7 +247,7 @@ export const getClassContentOA = query({
 /**
  * Get coverage statistics for a course
  */
-export const getCoverageStatistics = query({
+export const getCoverageStatistics = tenantQuery({
   args: {
     courseId: v.id("courses"),
     subject: v.optional(v.string()),
@@ -248,9 +259,10 @@ export const getCoverageStatistics = query({
       ),
     ),
   },
-  handler: async (ctx, { courseId, subject, period }) => {
+  handler: async (ctx, { courseId, subject, period }, tenancy) => {
+    // Ensure course belongs to the current institution
     const course = await ctx.db.get(courseId);
-    if (!course) {
+    if (!course || course.institutionId !== tenancy.institution._id) {
       throw new Error("Course not found");
     }
 
@@ -259,17 +271,17 @@ export const getCoverageStatistics = query({
 
     let allObjectives: any[] = [];
     for (const subj of subjectsToCheck) {
-      // Get objectives matching subject, level, and grade
+      // Get objectives matching subject, level, grade, and institution
       const allObjectivesForSubject = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_subject", (q) => q.eq("subject", subj))
-        .filter((q) =>
-          q.and(
-            q.eq(q.field("level"), course.level),
-            q.eq(q.field("grade"), course.grade),
-            q.eq(q.field("isActive"), true),
-          ),
+        .withIndex("by_subject_level", (q) =>
+          q
+            .eq("subject", subj)
+            .eq("level", course.level)
+            .eq("grade", course.grade)
+            .eq("institutionId", tenancy.institution._id),
         )
+        .filter((q) => q.eq(q.field("isActive"), true))
         .collect();
 
       const objectives = allObjectivesForSubject;
@@ -286,10 +298,12 @@ export const getCoverageStatistics = query({
       }
     }
 
-    // Get coverage records
+    // Get coverage records for this institution
     let coverage = await ctx.db
       .query("curriculumCoverage")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId", (q) =>
+        q.eq("courseId", courseId).eq("institutionId", tenancy.institution._id)
+      )
       .collect();
 
     if (subject) {
@@ -349,7 +363,7 @@ export const getCoverageStatistics = query({
 /**
  * Create a new learning objective
  */
-export const createLearningObjective = mutation({
+export const createLearningObjective = tenantMutation({
   args: {
     code: v.string(),
     subject: v.string(),
@@ -363,11 +377,13 @@ export const createLearningObjective = mutation({
       v.literal("ANUAL"),
     ),
   },
-  handler: async (ctx, args) => {
-    // Check if code already exists
+  handler: async (ctx, args, tenancy) => {
+    // Check if code already exists for this institution
     const existing = await ctx.db
       .query("learningObjectives")
-      .withIndex("by_code", (q) => q.eq("code", args.code))
+      .withIndex("by_code", (q) =>
+        q.eq("code", args.code).eq("institutionId", tenancy.institution._id)
+      )
       .first();
 
     if (existing) {
@@ -376,25 +392,10 @@ export const createLearningObjective = mutation({
       );
     }
 
-    // Get user from auth to get institutionId
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Authentication required");
-    }
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
-      .first();
-
-    if (!user || !user.currentInstitutionId) {
-      throw new Error("User must have a current institution");
-    }
-
     const now = Date.now();
 
     return await ctx.db.insert("learningObjectives", {
-      institutionId: user.currentInstitutionId,
+      institutionId: tenancy.institution._id,
       ...args,
       isActive: true,
       createdAt: now,
@@ -406,7 +407,7 @@ export const createLearningObjective = mutation({
 /**
  * Update a learning objective
  */
-export const updateLearningObjective = mutation({
+export const updateLearningObjective = tenantMutation({
   args: {
     objectiveId: v.id("learningObjectives"),
     code: v.optional(v.string()),
@@ -421,9 +422,9 @@ export const updateLearningObjective = mutation({
     ),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { objectiveId, ...updates }) => {
+  handler: async (ctx, { objectiveId, ...updates }, tenancy) => {
     const objective = await ctx.db.get(objectiveId);
-    if (!objective) {
+    if (!objective || objective.institutionId !== tenancy.institution._id) {
       throw new Error("Learning objective not found");
     }
 
@@ -431,7 +432,9 @@ export const updateLearningObjective = mutation({
     if (updates.code && updates.code !== objective.code) {
       const existing = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_code", (q) => q.eq("code", updates.code!))
+        .withIndex("by_code", (q) =>
+          q.eq("code", updates.code!).eq("institutionId", tenancy.institution._id)
+        )
         .first();
 
       if (existing) {
@@ -453,7 +456,7 @@ export const updateLearningObjective = mutation({
 /**
  * Create an evaluation indicator
  */
-export const createEvaluationIndicator = mutation({
+export const createEvaluationIndicator = tenantMutation({
   args: {
     learningObjectiveId: v.id("learningObjectives"),
     code: v.string(),
@@ -466,10 +469,10 @@ export const createEvaluationIndicator = mutation({
       v.literal("AVANZADO"),
     ),
   },
-  handler: async (ctx, args) => {
-    // Validate learning objective exists
+  handler: async (ctx, args, tenancy) => {
+    // Validate learning objective exists and belongs to institution
     const objective = await ctx.db.get(args.learningObjectiveId);
-    if (!objective) {
+    if (!objective || objective.institutionId !== tenancy.institution._id) {
       throw new Error("Learning objective not found");
     }
 
@@ -477,7 +480,7 @@ export const createEvaluationIndicator = mutation({
     const existing = await ctx.db
       .query("evaluationIndicators")
       .withIndex("by_learningObjectiveId", (q) =>
-        q.eq("learningObjectiveId", args.learningObjectiveId),
+        q.eq("learningObjectiveId", args.learningObjectiveId).eq("institutionId", tenancy.institution._id),
       )
       .filter((q) => q.eq(q.field("code"), args.code))
       .first();
@@ -491,7 +494,7 @@ export const createEvaluationIndicator = mutation({
     const now = Date.now();
 
     return await ctx.db.insert("evaluationIndicators", {
-      institutionId: objective.institutionId,
+      institutionId: tenancy.institution._id,
       ...args,
       isActive: true,
       createdAt: now,
@@ -503,7 +506,7 @@ export const createEvaluationIndicator = mutation({
 /**
  * Update an evaluation indicator
  */
-export const updateEvaluationIndicator = mutation({
+export const updateEvaluationIndicator = tenantMutation({
   args: {
     indicatorId: v.id("evaluationIndicators"),
     code: v.optional(v.string()),
@@ -519,9 +522,9 @@ export const updateEvaluationIndicator = mutation({
     ),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { indicatorId, ...updates }) => {
+  handler: async (ctx, { indicatorId, ...updates }, tenancy) => {
     const indicator = await ctx.db.get(indicatorId);
-    if (!indicator) {
+    if (!indicator || indicator.institutionId !== tenancy.institution._id) {
       throw new Error("Evaluation indicator not found");
     }
 
@@ -530,7 +533,7 @@ export const updateEvaluationIndicator = mutation({
       const existing = await ctx.db
         .query("evaluationIndicators")
         .withIndex("by_learningObjectiveId", (q) =>
-          q.eq("learningObjectiveId", indicator.learningObjectiveId),
+          q.eq("learningObjectiveId", indicator.learningObjectiveId).eq("institutionId", tenancy.institution._id),
         )
         .filter((q) => q.eq(q.field("code"), updates.code!))
         .first();
@@ -554,23 +557,23 @@ export const updateEvaluationIndicator = mutation({
 /**
  * Link OA and indicators to class content
  */
-export const linkClassContentToOA = mutation({
+export const linkClassContentToOA = tenantMutation({
   args: {
     classContentId: v.id("classContent"),
     learningObjectiveId: v.id("learningObjectives"),
     evaluationIndicatorIds: v.optional(v.array(v.id("evaluationIndicators"))),
     coverage: v.optional(v.union(v.literal("PARCIAL"), v.literal("COMPLETA"))),
   },
-  handler: async (ctx, args) => {
-    // Validate class content exists
+  handler: async (ctx, args, tenancy) => {
+    // Validate class content exists and belongs to institution
     const classContent = await ctx.db.get(args.classContentId);
-    if (!classContent) {
+    if (!classContent || classContent.institutionId !== tenancy.institution._id) {
       throw new Error("Class content not found");
     }
 
-    // Validate learning objective exists
+    // Validate learning objective exists and belongs to institution
     const objective = await ctx.db.get(args.learningObjectiveId);
-    if (!objective) {
+    if (!objective || objective.institutionId !== tenancy.institution._id) {
       throw new Error("Learning objective not found");
     }
 
@@ -578,7 +581,7 @@ export const linkClassContentToOA = mutation({
     if (args.evaluationIndicatorIds) {
       for (const indicatorId of args.evaluationIndicatorIds) {
         const indicator = await ctx.db.get(indicatorId);
-        if (!indicator) {
+        if (!indicator || indicator.institutionId !== tenancy.institution._id) {
           throw new Error(`Evaluation indicator ${indicatorId} not found`);
         }
         if (indicator.learningObjectiveId !== args.learningObjectiveId) {
@@ -593,7 +596,7 @@ export const linkClassContentToOA = mutation({
 
     // Create link
     const linkId = await ctx.db.insert("classContentOA", {
-      institutionId: classContent.institutionId,
+      institutionId: tenancy.institution._id,
       classContentId: args.classContentId,
       learningObjectiveId: args.learningObjectiveId,
       evaluationIndicatorIds: args.evaluationIndicatorIds,
@@ -603,7 +606,7 @@ export const linkClassContentToOA = mutation({
 
     // Update curriculum coverage
     const course = await ctx.db.get(classContent.courseId);
-    if (!course) {
+    if (!course || course.institutionId !== tenancy.institution._id) {
       throw new Error("Course not found");
     }
 
@@ -613,7 +616,8 @@ export const linkClassContentToOA = mutation({
       .withIndex("by_courseId_subject", (q) =>
         q
           .eq("courseId", classContent.courseId)
-          .eq("subject", classContent.subject),
+          .eq("subject", classContent.subject)
+          .eq("institutionId", tenancy.institution._id),
       )
       .filter((q) =>
         q.eq(q.field("learningObjectiveId"), args.learningObjectiveId),
@@ -649,7 +653,7 @@ export const linkClassContentToOA = mutation({
     } else {
       // Create new coverage record
       await ctx.db.insert("curriculumCoverage", {
-        institutionId: classContent.institutionId,
+        institutionId: tenancy.institution._id,
         courseId: classContent.courseId,
         subject: classContent.subject,
         learningObjectiveId: args.learningObjectiveId,
@@ -669,13 +673,13 @@ export const linkClassContentToOA = mutation({
 /**
  * Remove OA link from class content
  */
-export const unlinkClassContentFromOA = mutation({
+export const unlinkClassContentFromOA = tenantMutation({
   args: {
     linkId: v.id("classContentOA"),
   },
-  handler: async (ctx, { linkId }) => {
+  handler: async (ctx, { linkId }, tenancy) => {
     const link = await ctx.db.get(linkId);
-    if (!link) {
+    if (!link || link.institutionId !== tenancy.institution._id) {
       throw new Error("Link not found");
     }
 
@@ -692,7 +696,7 @@ export const unlinkClassContentFromOA = mutation({
 /**
  * Update curriculum coverage status manually
  */
-export const updateCurriculumCoverage = mutation({
+export const updateCurriculumCoverage = tenantMutation({
   args: {
     coverageId: v.id("curriculumCoverage"),
     coverageStatus: v.union(
@@ -702,9 +706,9 @@ export const updateCurriculumCoverage = mutation({
       v.literal("REFORZADO"),
     ),
   },
-  handler: async (ctx, { coverageId, coverageStatus }) => {
+  handler: async (ctx, { coverageId, coverageStatus }, tenancy) => {
     const coverage = await ctx.db.get(coverageId);
-    if (!coverage) {
+    if (!coverage || coverage.institutionId !== tenancy.institution._id) {
       throw new Error("Curriculum coverage not found");
     }
 
