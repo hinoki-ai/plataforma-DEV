@@ -125,7 +125,7 @@ export function AppSessionProvider({
   const status: SessionStatus = useMemo(() => {
     if (!isLoaded) return "loading";
     if (!isSignedIn) return "unauthenticated";
-    if (sessionQuery === undefined) return "loading";
+    if (sessionQuery === undefined && !fallbackSession) return "loading";
     if (sessionQuery) return "authenticated";
     if (fallbackSession) return "authenticated";
     return "unauthenticated";

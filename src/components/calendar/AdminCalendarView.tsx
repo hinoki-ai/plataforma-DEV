@@ -22,6 +22,9 @@ import {
   Download,
   Upload,
 } from "lucide-react";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,10 +49,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
-  getCalendarEvents,
-  createCalendarEvent,
-  updateCalendarEvent,
-  deleteCalendarEvent,
   importCalendarEventsFromCSV,
   exportCalendarEventsToCSV,
   bulkCreateCalendarEvents,
@@ -186,79 +185,87 @@ export default function AdminCalendarView() {
   const [csvPreview, setCsvPreview] = useState<string[][]>([]);
   const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
 
-  useEffect(() => {
-    loadEvents();
-  }, [currentDate]);
+  // Use Convex React hooks for queries
+  const calendarEventsData = useQuery(api.calendar.getCalendarEvents, {
+    startDate: undefined,
+    endDate: undefined,
+    category: undefined,
+    isActive: true,
+  });
 
-  const loadEvents = async () => {
-    try {
-      setIsLoading(true);
-      const result = await getCalendarEvents();
-      if (result.success && result.data) {
-        setEvents(
-          result.data.map((event: any) => ({
-            ...event,
-            description: event.description ?? undefined,
-            location: event.location ?? undefined,
-            metadata: event.metadata ?? undefined,
-            color: event.color ?? undefined,
-            level: event.metadata?.level || "both",
-            isRecurring: event.metadata?.isRecurring || false,
-            startDate: new Date(event.startDate),
-            endDate: new Date(event.endDate),
-          })),
-        );
-      } else {
-        toast.error(result.error);
-      }
-    } catch (error) {
-      toast.error(t("calendar.load_error", "common"));
-    } finally {
-      setIsLoading(false);
+  // Use mutations for create, update, delete
+  const createEventMutation = useMutation(api.calendar.createCalendarEvent);
+  const updateEventMutation = useMutation(api.calendar.updateCalendarEvent);
+  const deleteEventMutation = useMutation(api.calendar.deleteCalendarEvent);
+
+  // Process events when data loads
+  useEffect(() => {
+    if (calendarEventsData) {
+      setEvents(
+        calendarEventsData.map((event: any) => ({
+          ...event,
+          id: event._id,
+          description: event.description ?? undefined,
+          location: event.location ?? undefined,
+          metadata: event.metadata ?? undefined,
+          color: event.color ?? undefined,
+          level: event.metadata?.level || "both",
+          isRecurring: event.metadata?.isRecurring || false,
+          startDate: new Date(event.startDate),
+          endDate: new Date(event.endDate),
+        })),
+      );
     }
-  };
+    setIsLoading(calendarEventsData === undefined);
+  }, [calendarEventsData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      let result;
       if (isEditMode && selectedEvent) {
-        const eventData = {
-          ...formData,
-          category: formData.category as EventCategory,
-          priority: "MEDIUM" as const,
-          startDate: new Date(formData.startDate),
-          endDate: new Date(formData.endDate),
-          isRecurring: false,
-          updatedBy: userId,
-        };
-        result = await updateCalendarEvent(selectedEvent.id, eventData);
-      } else {
-        const eventData = {
-          ...formData,
-          category: formData.category as EventCategory,
-          priority: "MEDIUM" as const,
-          startDate: new Date(formData.startDate),
-          endDate: new Date(formData.endDate),
-          isRecurring: false,
-          createdBy: userId,
-        };
-        result = await createCalendarEvent(eventData);
-      }
-
-      if (result.success) {
+        await updateEventMutation({
+          id: selectedEvent.id as Id<"calendarEvents">,
+          title: formData.title,
+          description: formData.description || undefined,
+          startDate: new Date(formData.startDate).getTime(),
+          endDate: new Date(formData.endDate).getTime(),
+          category: formData.category as any,
+          priority: "MEDIUM",
+          level: formData.level,
+          isAllDay: formData.isAllDay,
+          color: formData.color || undefined,
+          location: formData.location || undefined,
+          updatedBy: userId as Id<"users">,
+        });
         toast.success(
-          `El evento "${formData.title}" ha sido ${isEditMode ? t("common.update", "common") : t("common.create", "common")} ${t("common.success", "common").toLowerCase()}.`,
+          `El evento "${formData.title}" ha sido ${t("common.update", "common")} ${t("common.success", "common").toLowerCase()}.`,
         );
-        setIsDialogOpen(false);
-        resetForm();
-        loadEvents();
       } else {
-        toast.error(result.error);
+        await createEventMutation({
+          title: formData.title,
+          description: formData.description || undefined,
+          startDate: new Date(formData.startDate).getTime(),
+          endDate: new Date(formData.endDate).getTime(),
+          category: formData.category as any,
+          priority: "MEDIUM",
+          level: formData.level,
+          isRecurring: false,
+          isAllDay: formData.isAllDay,
+          color: formData.color || undefined,
+          location: formData.location || undefined,
+          createdBy: userId as Id<"users">,
+        });
+        toast.success(
+          `El evento "${formData.title}" ha sido ${t("common.create", "common")} ${t("common.success", "common").toLowerCase()}.`,
+        );
       }
-    } catch (error) {
-      toast.error(t("calendar.save_error", "common"));
+      setIsDialogOpen(false);
+      resetForm();
+      // Events will automatically refresh via the useQuery hook
+    } catch (error: any) {
+      console.error("Error saving event:", error);
+      toast.error(error?.message || t("calendar.save_error", "common"));
     }
   };
 
@@ -266,20 +273,17 @@ export default function AdminCalendarView() {
     if (!confirm(t("calendar.confirm_delete", "common"))) return;
 
     try {
-      const result = await deleteCalendarEvent(eventId);
-      if (result.success) {
-        toast.success(
-          t("common.delete", "common") +
-            " " +
-            t("common.success", "common").toLowerCase() +
-            ".",
-        );
-        loadEvents();
-      } else {
-        toast.error(result.error);
-      }
-    } catch (error) {
-      toast.error(t("calendar.delete_error", "common"));
+      await deleteEventMutation({ id: eventId as Id<"calendarEvents"> });
+      toast.success(
+        t("common.delete", "common") +
+          " " +
+          t("common.success", "common").toLowerCase() +
+          ".",
+      );
+      // Events will automatically refresh via the useQuery hook
+    } catch (error: any) {
+      console.error("Error deleting event:", error);
+      toast.error(error?.message || t("calendar.delete_error", "common"));
     }
   };
 
@@ -352,7 +356,7 @@ export default function AdminCalendarView() {
         setIsBulkDialogOpen(false);
         setSelectedEvents([]);
         setIsSelecting(false);
-        loadEvents();
+        // Events will automatically refresh via the useQuery hook
       } else {
         toast.error(result.error);
       }
@@ -376,7 +380,7 @@ export default function AdminCalendarView() {
         setCsvFile(null);
         setCsvPreview([]);
         setCsvHeaders([]);
-        loadEvents();
+        // Events will automatically refresh via the useQuery hook
       } else {
         toast.error(result.error);
       }
@@ -472,7 +476,7 @@ export default function AdminCalendarView() {
           `${t("common.create", "common")} ${result.data.total} ${t("calendar.events_created", "common")}`,
         );
         setIsRecurringDialogOpen(false);
-        loadEvents();
+        // Events will automatically refresh via the useQuery hook
       }
     } catch (error) {
       toast.error(t("calendar.recurring_error", "common"));
