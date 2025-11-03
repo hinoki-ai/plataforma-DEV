@@ -127,20 +127,6 @@ const config: Config = {
           "0%": { transform: "scale(0.95)", opacity: "0" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
-        meteorEffect: {
-          "0%": {
-            opacity: "0",
-            transform: "rotate(220deg) translate3d(0, 0, 0) scale(1)",
-          },
-          "10%": {
-            opacity: "1",
-          },
-          "100%": {
-            opacity: "0",
-            transform:
-              "rotate(220deg) translate3d(320px, 720px, 0) scale(0.75)",
-          },
-        },
       },
     },
   },

@@ -18,53 +18,82 @@ export const GET = createApiRoute(
     const teacherId = session.user.id as unknown as Id<"users">;
     const client = getConvexClient();
 
-    // Optimized parallel queries for teacher data
-    const [teacherInfo, studentsData, planningData, meetingsData, coursesData] =
-      await Promise.all([
-        // Teacher basic info
-        client.query(api.users.getUserById, { userId: teacherId }),
+    // Optimized parallel queries for teacher data with error handling
+    const [
+      teacherInfo,
+      studentsData,
+      planningData,
+      meetingsData,
+      coursesData
+    ] = await Promise.allSettled([
+      // Teacher basic info
+      client.query(api.users.getUserById, { userId: teacherId }),
 
-        // Students managed by teacher
-        client.query(api.students.getStudents, {
-          teacherId,
-          isActive: true,
-        }),
+      // Students managed by teacher
+      client.query(api.students.getStudents, {
+        teacherId,
+        isActive: true,
+      }),
 
-        // All planning documents by teacher
-        client.query(api.planning.getPlanningDocuments, {
-          authorId: teacherId,
-        }),
+      // All planning documents by teacher
+      client.query(api.planning.getPlanningDocuments, {
+        authorId: teacherId,
+      }),
 
-        // All meetings assigned to teacher
-        client.query(api.meetings.getMeetingsByTeacher, {
-          teacherId,
-        }),
+      // All meetings assigned to teacher
+      client.query(api.meetings.getMeetingsByTeacher, {
+        teacherId,
+      }),
 
-        // All courses taught by teacher
-        client.query(api.courses.getCourses, {
-          teacherId,
-          isActive: true,
-        }),
-      ]);
+      // All courses taught by teacher
+      client.query(api.courses.getCourses, {
+        teacherId,
+        isActive: true,
+      }),
+    ]);
+
+    // Extract results and handle errors
+    const teacherResult = teacherInfo.status === 'fulfilled' ? teacherInfo.value : null;
+    const studentsResult = studentsData.status === 'fulfilled' ? studentsData.value : [];
+    const planningResult = planningData.status === 'fulfilled' ? planningData.value : [];
+    const meetingsResult = meetingsData.status === 'fulfilled' ? meetingsData.value : [];
+    const coursesResult = coursesData.status === 'fulfilled' ? coursesData.value : [];
+
+    // Log any errors for debugging
+    if (teacherInfo.status === 'rejected') {
+      console.error('Error fetching teacher info:', teacherInfo.reason);
+    }
+    if (studentsData.status === 'rejected') {
+      console.error('Error fetching students data:', studentsData.reason);
+    }
+    if (planningData.status === 'rejected') {
+      console.error('Error fetching planning data:', planningData.reason);
+    }
+    if (meetingsData.status === 'rejected') {
+      console.error('Error fetching meetings data:', meetingsData.reason);
+    }
+    if (coursesData.status === 'rejected') {
+      console.error('Error fetching courses data:', coursesData.reason);
+    }
 
     const now = Date.now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
 
     // Filter meetings
-    const upcomingMeetings = meetingsData.filter(
+    const upcomingMeetings = meetingsResult.filter(
       (m) => m.scheduledDate >= now,
     ).length;
-    const recentMeetings = meetingsData.filter(
+    const recentMeetings = meetingsResult.filter(
       (m) => m.createdAt >= sevenDaysAgo,
     ).length;
 
     // Get recent planning documents
-    const planningDocuments = planningData as Doc<"planningDocuments">[];
+    const planningDocuments = planningResult as Doc<"planningDocuments">[];
     const recentActivity = planningDocuments.slice(0, 5); // Already sorted by updatedAt desc
 
     // Get OA coverage statistics for all teacher's courses
     const coverageStatsByCourse = await Promise.all(
-      coursesData.map(async (course) => {
+      coursesResult.map(async (course) => {
         try {
           const stats = await client.query(
             api.learningObjectives.getCoverageStatistics,
@@ -122,7 +151,7 @@ export const GET = createApiRoute(
         : 0;
 
     // Calculate student statistics
-    const activeStudents = studentsData;
+    const activeStudents = studentsResult;
     const averageAttendance =
       activeStudents.length > 0
         ? activeStudents.reduce((sum, s) => sum + (s.attendanceRate || 0), 0) /
@@ -150,19 +179,19 @@ export const GET = createApiRoute(
     );
 
     const profesorDashboard = {
-      teacher: teacherInfo
+      teacher: teacherResult
         ? {
-            id: teacherInfo._id,
-            name: teacherInfo.name,
-            email: teacherInfo.email,
-            createdAt: new Date(teacherInfo.createdAt).toISOString(),
+            id: teacherResult._id,
+            name: teacherResult.name,
+            email: teacherResult.email,
+            createdAt: new Date(teacherResult.createdAt).toISOString(),
           }
         : null,
 
       overview: {
         totalStudents: activeStudents.length,
         totalGrades: Object.keys(studentsByGrade).length,
-        planningDocuments: planningData.length,
+        planningDocuments: planningResult.length,
         upcomingMeetings,
         averageAttendance: Math.round(averageAttendance * 100) / 100,
         averageProgress: Math.round(averageProgress * 100) / 100,
@@ -208,7 +237,7 @@ export const GET = createApiRoute(
       },
 
       planning: {
-        totalDocuments: planningData.length,
+        totalDocuments: planningResult.length,
         recentDocuments: recentActivity.map(
           (doc: Doc<"planningDocuments">) => ({
             id: doc._id,
@@ -241,7 +270,7 @@ export const GET = createApiRoute(
       },
 
       learningObjectives: {
-        totalCourses: coursesData.length,
+        totalCourses: coursesResult.length,
         overallCoverage: overallCoveragePercentage,
         totalOA,
         coverageByStatus: {

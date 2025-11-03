@@ -6,7 +6,7 @@ This guide covers environment variable configuration for Plataforma Astral acros
 
 ## Environment Structure
 
-```
+```text
 .env.example       # Template (committed to git)
 .env.local         # Local development (gitignored)
 .env.production    # Production reference (gitignored)
@@ -44,36 +44,27 @@ NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"
 2. Authenticate and create/select project
 3. Copy the URL shown in terminal
 
-### Authentication
+### Authentication (Clerk)
 
 ```bash
-NEXTAUTH_SECRET="your-secret-key-minimum-32-characters-long"
-NEXTAUTH_URL="http://localhost:3000"  # or your production domain
+# Clerk Authentication (Production keys)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_live_..."
+CLERK_SECRET_KEY="sk_live_..."
+CLERK_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_CLERK_FRONTEND_API_URL="https://clerk.your-domain.com"
 ```
 
-**Generate secret**:
+**Setup Clerk**:
 
-```bash
-openssl rand -base64 32
-```
+1. Sign up at [clerk.com](https://clerk.com)
+2. Create application
+3. Get API keys from Clerk dashboard
+4. Configure webhook endpoints for user events
 
 ---
 
 ## Optional Environment Variables
 
-### OAuth (Google Sign-in)
-
-```bash
-GOOGLE_CLIENT_ID="your-google-client-id.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
-```
-
-**Setup**:
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create project → APIs & Services → Credentials
-3. Create OAuth 2.0 Client ID
-4. Add authorized redirect URI: `https://your-domain.com/api/auth/callback/google`
 
 ### Media Upload (Cloudinary)
 
@@ -97,13 +88,14 @@ CLOUDINARY_URL="cloudinary://api_key:api_secret@cloud_name"
 # Convex Backend
 NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"
 
-# Authentication
-NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
-NEXTAUTH_URL="http://localhost:3000"
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=""
+CLERK_SECRET_KEY=""
+CLERK_WEBHOOK_SECRET=""
+NEXT_PUBLIC_CLERK_FRONTEND_API_URL="https://clerk.your-domain.com"
 
-# OAuth (Optional)
-GOOGLE_CLIENT_ID=""
-GOOGLE_CLIENT_SECRET=""
+# Email Service (Optional)
+RESEND_API_KEY=""
 
 # Media Upload (Optional)
 CLOUDINARY_URL=""
@@ -114,14 +106,18 @@ CLOUDINARY_URL=""
 ```bash
 # Convex Backend (Dev)
 NEXT_PUBLIC_CONVEX_URL="https://dev-project.convex.cloud"
+CONVEX_DEPLOYMENT="dev:your-project-name"
 
-# Authentication (Dev)
-NEXTAUTH_SECRET="development-secret-at-least-32-characters"
-NEXTAUTH_URL="http://localhost:3000"
+# Clerk Authentication (Dev)
+# Uses keyless development keys automatically
+# Uncomment below for production keys testing
+# NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_live_..."
+# CLERK_SECRET_KEY="sk_live_..."
+# CLERK_WEBHOOK_SECRET="whsec_..."
+# NEXT_PUBLIC_CLERK_FRONTEND_API_URL="https://clerk.your-domain.com"
 
-# OAuth (Optional - use test credentials)
-GOOGLE_CLIENT_ID="dev-google-id.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="dev-google-secret"
+# Email Service (Dev)
+RESEND_API_KEY=""
 
 # Media (Optional - use dev account)
 CLOUDINARY_URL="cloudinary://dev_key:dev_secret@dev_cloud"
@@ -135,13 +131,14 @@ Set these in Vercel dashboard → Settings → Environment Variables:
 # Convex Backend (Production)
 NEXT_PUBLIC_CONVEX_URL="https://prod-project.convex.cloud"
 
-# Authentication (Production)
-NEXTAUTH_SECRET="production-secret-minimum-32-chars-secure-random"
-NEXTAUTH_URL="https://your-production-domain.com"
+# Clerk Authentication (Production)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_live_..."
+CLERK_SECRET_KEY="sk_live_..."
+CLERK_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_CLERK_FRONTEND_API_URL="https://clerk.your-domain.com"
 
-# OAuth (Production credentials)
-GOOGLE_CLIENT_ID="prod-google-id.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="prod-google-secret"
+# Email Service (Production)
+RESEND_API_KEY=""
 
 # Media (Production account)
 CLOUDINARY_URL="cloudinary://prod_key:prod_secret@prod_cloud"
@@ -151,13 +148,15 @@ CLOUDINARY_URL="cloudinary://prod_key:prod_secret@prod_cloud"
 
 ## Configuration by Environment
 
-| Variable                 | Local Development       | Production                | Required    |
-| ------------------------ | ----------------------- | ------------------------- | ----------- |
-| `NEXT_PUBLIC_CONVEX_URL` | Dev Convex URL          | Production Convex URL     | ✅ Yes      |
-| `NEXTAUTH_SECRET`        | Dev secret (32+ chars)  | Secure secret (32+ chars) | ✅ Yes      |
-| `NEXTAUTH_URL`           | `http://localhost:3000` | Your production domain    | ✅ Yes      |
-| `GOOGLE_CLIENT_ID`       | Test credentials        | Production credentials    | ⚪ Optional |
-| `GOOGLE_CLIENT_SECRET`   | Test secret             | Production secret         | ⚪ Optional |
+| Variable                          | Local Development            | Production                     | Required    |
+| --------------------------------- | ---------------------------- | ------------------------------ | ----------- |
+| `NEXT_PUBLIC_CONVEX_URL`          | Dev Convex URL               | Production Convex URL          | ✅ Yes      |
+| `CONVEX_DEPLOYMENT`               | `dev:your-project-name`      | N/A (managed by Convex)        | ✅ Yes      |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Keyless (auto)              | Production Clerk key           | ✅ Yes      |
+| `CLERK_SECRET_KEY`                | Keyless (auto)              | Production Clerk secret        | ✅ Yes      |
+| `CLERK_WEBHOOK_SECRET`            | Keyless (auto)              | Production webhook secret      | ⚪ Optional |
+| `NEXT_PUBLIC_CLERK_FRONTEND_API_URL` | Auto-configured             | Your Clerk domain              | ✅ Yes      |
+| `RESEND_API_KEY`                  | Test key                     | Production Resend key          | ⚪ Optional |
 | `CLOUDINARY_URL`         | Dev account             | Production account        | ⚪ Optional |
 
 ---
@@ -235,36 +234,37 @@ cat .env.local | grep CONVEX
 # If missing, add it and restart dev server
 ```
 
-### "Invalid NEXTAUTH_SECRET"
+### Clerk Authentication Issues
 
-**Cause**: Secret too short or missing
+**Cause**: Missing or incorrect Clerk configuration
 
 **Fix**:
 
 ```bash
-# Generate new secret
-openssl rand -base64 32
+# Check Clerk configuration
+npx clerk telemetry disable  # Optional: disable telemetry
 
-# Add to .env.local
-echo "NEXTAUTH_SECRET=<generated-secret>" >> .env.local
+# Verify keys in Clerk dashboard
+# Ensure webhook URLs are configured for your domain
 
-# Restart dev server
+# For development, Clerk provides keyless authentication
+# For production, ensure all Clerk keys are set in Vercel
 ```
 
-### Authentication loop
+### Convex Connection Issues
 
-**Cause**: `NEXTAUTH_URL` doesn't match actual URL
+**Cause**: Wrong Convex URL or deployment mismatch
 
 **Fix**:
 
 ```bash
-# Development
-NEXTAUTH_URL=http://localhost:3000
+# Check Convex deployment
+npx convex dev --once
 
-# Production (must match your domain exactly)
-NEXTAUTH_URL=https://your-actual-domain.com
+# Verify CONVEX_DEPLOYMENT matches your project
+echo $CONVEX_DEPLOYMENT
 
-# No trailing slash!
+# Update NEXT_PUBLIC_CONVEX_URL if deployment changed
 ```
 
 ### Environment variables not updating
@@ -314,12 +314,12 @@ Moving from development to production:
 
 - [ ] Deploy Convex to production (`npx convex deploy`)
 - [ ] Get production Convex URL
-- [ ] Generate secure `NEXTAUTH_SECRET` (32+ chars)
-- [ ] Set production `NEXTAUTH_URL` (your domain)
-- [ ] Configure production OAuth credentials (if using)
-- [ ] Set up production Cloudinary account (if using)
-- [ ] Add all variables to Vercel
-- [ ] Test deployment
+- [ ] Set up Clerk application and get production keys
+- [ ] Configure Clerk webhooks for your production domain
+- [ ] Set up production Resend account (if using email)
+- [ ] Set up production Cloudinary account (if using media upload)
+- [ ] Add all environment variables to Vercel dashboard
+- [ ] Test deployment and authentication flow
 - [ ] Verify health endpoint
 
 ---
@@ -334,17 +334,23 @@ Moving from development to production:
 # Convex backend URL (public, safe to expose)
 NEXT_PUBLIC_CONVEX_URL="https://your-project.convex.cloud"
 
-# Auth secret (private, never expose)
-NEXTAUTH_SECRET="minimum-32-characters-random-string"
+# Convex deployment identifier
+CONVEX_DEPLOYMENT="dev:your-project-name"
 
-# Auth callback URL (must match deployment URL)
-NEXTAUTH_URL="http://localhost:3000"  # or production domain
+# Clerk Authentication (public key - safe to expose)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_live_..."
+
+# Clerk Authentication (private - never expose)
+CLERK_SECRET_KEY="sk_live_..."
+CLERK_WEBHOOK_SECRET="whsec_..."
+
+# Clerk Frontend API URL
+NEXT_PUBLIC_CLERK_FRONTEND_API_URL="https://clerk.your-domain.com"
 
 # === OPTIONAL ===
 
-# Google OAuth
-GOOGLE_CLIENT_ID="your-app.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="your-secret"
+# Email service
+RESEND_API_KEY="re_..."
 
 # Cloudinary media upload
 CLOUDINARY_URL="cloudinary://key:secret@cloud"
@@ -390,7 +396,8 @@ npx convex dashboard
 - **Next.js Env Vars**: [nextjs.org/docs/basic-features/environment-variables](https://nextjs.org/docs/basic-features/environment-variables)
 - **Vercel Env Vars**: [vercel.com/docs/environment-variables](https://vercel.com/docs/environment-variables)
 - **Convex Deployment**: [docs.convex.dev/production/hosting](https://docs.convex.dev/production/hosting)
-- **NextAuth Config**: [next-auth.js.org/configuration/options](https://next-auth.js.org/configuration/options)
+- **Clerk Documentation**: [clerk.com/docs](https://clerk.com/docs)
+- **Clerk Next.js Guide**: [clerk.com/docs/quickstarts/nextjs](https://clerk.com/docs/quickstarts/nextjs)
 
 ---
 

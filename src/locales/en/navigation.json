@@ -50,5 +50,17 @@
   "nav.roles.admin": "Administrator",
   "nav.roles.profesor": "Teacher",
   "nav.roles.parent": "Parent/Guardian",
-  "nav.main.categories.debug": "Debug & Development"
+  "nav.main.categories.debug": "Debug & Development",
+  "nav.libro_clases": "Libro de Clases",
+  "nav.libro_clases.description": "Daily class book summary",
+  "nav.asistencia": "Attendance",
+  "nav.asistencia.description": "Record attendance and delays",
+  "nav.contenidos_planificacion": "Content and Planning",
+  "nav.contenidos_planificacion.description": "Document curriculum coverage and activities",
+  "nav.calificaciones": "Grades",
+  "nav.calificaciones.description": "Record and review grades by student",
+  "nav.observaciones": "Observations",
+  "nav.observaciones.description": "Manage notes and feedback",
+  "nav.reuniones_apoderados": "Parent Meetings",
+  "nav.reuniones_apoderados.description": "Plan and record meetings with families"
 }

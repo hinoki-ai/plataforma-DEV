@@ -9,37 +9,9 @@
 - `CLERK_WEBHOOK_SECRET` - Webhook secret
 - `NEXT_PUBLIC_CONVEX_URL` - Production Convex URL
 
-## Next Steps to Enable Google OAuth
+## Next Steps
 
-### 1. Configure Google OAuth in Clerk Dashboard
-
-1. **Access Clerk Dashboard**:
-   - Go to [clerk.com](https://clerk.com) and sign in
-   - Select your application: `plataforma.aramac.dev`
-
-2. **Enable Google OAuth**:
-   - Navigate to **"User & Authentication"** → **"Social Connections"**
-   - Find **"Google"** and click **"Configure"**
-   - Toggle **"Enable Google"** to ON
-
-3. **Set up Google OAuth Credentials**:
-   - Go to [Google Cloud Console](https://console.cloud.google.com)
-   - Create a new project or select existing one
-   - Enable **Google+ API** and **Google OAuth2 API**
-   - Go to **"Credentials"** → **"Create Credentials"** → **"OAuth 2.0 Client ID"**
-   - Application type: **"Web application"**
-   - Authorized redirect URIs:
-     ```
-     https://clerk.plataforma.aramac.dev/v1/oauth_callback
-     http://localhost:3000/v1/oauth_callback
-     ```
-
-4. **Configure in Clerk**:
-   - Copy **Client ID** and **Client Secret** from Google
-   - Paste them into Clerk's Google configuration
-   - Save the configuration
-
-### 2. Update Local Environment
+### 1. Update Local Environment
 
 Create/update your `.env.local` file:
 
@@ -53,7 +25,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_Y2xlcmsucGxhdGFmb3JtYS5hcmFtYWMuZGV2JA
 CLERK_WEBHOOK_SECRET=whsec_aAAkO7Fa5AYqSYzs8EJkk7qN+gqs2M2q
 ```
 
-### 3. Test the Setup
+### 2. Test the Setup
 
 1. **Start Development Server**:
 
@@ -62,10 +34,9 @@ CLERK_WEBHOOK_SECRET=whsec_aAAkO7Fa5AYqSYzs8EJkk7qN+gqs2M2q
    npx convex dev  # In separate terminal
    ```
 
-2. **Test Google Login**:
+2. **Test Login**:
    - Go to `http://localhost:3000/login`
-   - Click "Continuar con Google"
-   - Should redirect to Google OAuth flow
+   - Use email/password authentication
 
 3. **Test Production**:
    - Deploy to Vercel: `git push origin main`

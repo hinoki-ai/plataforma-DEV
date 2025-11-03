@@ -587,7 +587,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
-  const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = stepTitles.length;
   const [comunas, setComunas] = useState<string[]>([]);
@@ -654,21 +653,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     [],
   );
 
-  // Pre-fill form data for Google users
-  useEffect(() => {
-    if (
-      session?.user &&
-      session.user.role === "PARENT" &&
-      session.user.needsRegistration
-    ) {
-      setIsGoogleUser(true);
-      setFormData((prev) => ({
-        ...prev,
-        fullName: session.user?.name || "",
-        email: session.user?.email || "",
-      }));
-    }
-  }, [session]);
 
   // Update comunas when region changes
   useEffect(() => {
@@ -874,10 +858,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           }
         });
 
-        if (isGoogleUser && session?.user?.provider) {
-          form.append("provider", session.user.provider);
-          form.append("providerUserId", session.user.id || "");
-        }
 
         const response = await fetch("/api/parent/register", {
           method: "POST",
@@ -898,19 +878,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         setIsLoading(false);
       }
     },
-    [formData, isGoogleUser, session, router, validateStep, totalSteps],
+    [formData, router, validateStep, totalSteps],
   );
 
-  const handleGoogleLogin = useCallback(() => {
-    setIsLoading(true);
-    if (clerkSignIn) {
-      void clerkSignIn.authenticateWithRedirect({
-        strategy: "oauth_google",
-        redirectUrl: "/cpma/exito",
-        redirectUrlComplete: "/cpma/exito",
-      });
-    }
-  }, [clerkSignIn]);
 
   const StepIndicator = memo(function StepIndicator() {
     return (
@@ -982,7 +952,6 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     value={formData.email}
                     onChange={handleChange}
                     onKeyDown={(e) => handleKeyDown(e, "email")}
-                    disabled={isGoogleUser}
                     className={cn(
                       "border border-input bg-background text-foreground placeholder:text-muted-foreground rounded-xl transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-muted disabled:cursor-not-allowed",
                       errors.email &&

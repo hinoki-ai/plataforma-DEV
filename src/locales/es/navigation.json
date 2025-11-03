@@ -50,5 +50,17 @@
   "nav.roles.admin": "Administrador",
   "nav.roles.profesor": "Profesor",
   "nav.roles.parent": "Padre/Apoderado",
-  "nav.main.categories.debug": "Debug & Development"
+  "nav.main.categories.debug": "Debug & Development",
+  "nav.libro_clases": "Libro de Clases",
+  "nav.libro_clases.description": "Resumen diario del libro de clases",
+  "nav.asistencia": "Asistencia",
+  "nav.asistencia.description": "Registrar asistencia y atrasos",
+  "nav.contenidos_planificacion": "Contenidos y Planificación",
+  "nav.contenidos_planificacion.description": "Documentar cobertura curricular y actividades",
+  "nav.calificaciones": "Calificaciones",
+  "nav.calificaciones.description": "Registrar y revisar notas por estudiante",
+  "nav.observaciones": "Observaciones",
+  "nav.observaciones.description": "Gestionar anotaciones y retroalimentación",
+  "nav.reuniones_apoderados": "Reuniones con Apoderados",
+  "nav.reuniones_apoderados.description": "Planificar y registrar reuniones con familias"
 }
