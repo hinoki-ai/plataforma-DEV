@@ -33,11 +33,11 @@ npm run dev
 
 ### Test Credentials
 
-| Role    | Email                          | Password    |
-| ------- | ------------------------------ | ----------- |
-| Admin   | admin@plataforma-astral.com    | admin123    |
-| Teacher | profesor@plataforma-astral.com | profesor123 |
-| Parent  | parent@plataforma-astral.com   | parent123   |
+| Role    | Email                                    | Password    |
+| ------- | ---------------------------------------- | ----------- |
+| Admin   | `admin@plataforma-astral.com`            | admin123    |
+| Teacher | `profesor@plataforma-astral.com`        | profesor123 |
+| Parent  | `parent@plataforma-astral.com`          | parent123   |
 
 ## 📖 Overview
 

@@ -328,19 +328,19 @@ Todos los componentes UI están completamente implementados con validaciones y m
 
 ### Operaciones Adicionales
 
-4. **Registrar Observaciones**
+1. **Registrar Observaciones**
    - Ir a pestaña Resumen
    - Clic en "Observación" junto al estudiante
    - Completar formulario
    - Activar notificación si es necesaria
 
-5. **Registrar Calificaciones**
+2. **Registrar Calificaciones**
    - Ir a pestaña Resumen
    - Clic en "Nota" junto al estudiante
    - Ingresar calificación
    - Guardar
 
-6. **Registrar Reuniones de Apoderados**
+3. **Registrar Reuniones de Apoderados**
    - Ir a pestaña Reuniones
    - Clic en "Registrar"
    - Marcar asistencias
