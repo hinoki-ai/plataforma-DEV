@@ -26,7 +26,7 @@ async function userInInstitution(
 ): Promise<boolean> {
   const membership = await ctx.db
     .query("institutionMemberships")
-    .withIndex("by_user_institution", (q) =>
+    .withIndex("by_user_institution", (q: any) =>
       q.eq("userId", userId).eq("institutionId", institutionId),
     )
     .first();
@@ -73,12 +73,12 @@ function filterCourses(
 ) {
   let result = courses;
   if (academicYear !== undefined) {
-    result = result.filter((course) => course.academicYear === academicYear);
+    result = result.filter((course: any) => course.academicYear === academicYear);
   }
   if (isActive !== undefined) {
-    result = result.filter((course) => course.isActive === isActive);
+    result = result.filter((course: any) => course.isActive === isActive);
   }
-  return result.sort((a, b) => {
+  return result.sort((a: any, b: any) => {
     if (a.academicYear !== b.academicYear) {
       return b.academicYear - a.academicYear;
     }
@@ -97,7 +97,7 @@ export const getCourses = tenantQuery({
   handler: async (ctx, { teacherId, academicYear, isActive }, tenancy) => {
     let courses = await ctx.db
       .query("courses")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
@@ -109,7 +109,7 @@ export const getCourses = tenantQuery({
 
     if (enforcedTeacherId) {
       courses = courses.filter(
-        (course) => course.teacherId === enforcedTeacherId,
+        (course: any) => course.teacherId === enforcedTeacherId,
       );
     }
 
@@ -136,18 +136,18 @@ export const getCourseById = tenantQuery({
 
     let enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId_isActive", (q) =>
+      .withIndex("by_courseId_isActive", (q: any) =>
         q.eq("courseId", courseId).eq("isActive", true),
       )
       .collect();
 
     enrollments = enrollments.filter(
-      (enrollment) => enrollment.institutionId === tenancy.institution._id,
+      (enrollment: any) => enrollment.institutionId === tenancy.institution._id,
     );
 
     const students = (
       await Promise.all(
-        enrollments.map(async (enrollment) => {
+        enrollments.map(async (enrollment: any) => {
           const student = await ctx.db.get(enrollment.studentId);
           if (!student || student.institutionId !== tenancy.institution._id) {
             return null;
@@ -166,7 +166,7 @@ export const getCourseById = tenantQuery({
     if (
       tenancy.membershipRole === "PARENT" &&
       !tenancy.isMaster &&
-      !students.some((record) => record.student.parentId === tenancy.user._id)
+      !students.some((record: any) => record.student.parentId === tenancy.user._id)
     ) {
       throw new Error("No permission to access this course");
     }
@@ -190,11 +190,11 @@ export const getCoursesByGrade = tenantQuery({
   handler: async (ctx, { academicYear, grade, isActive }, tenancy) => {
     const courses = await ctx.db
       .query("courses")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq("academicYear", academicYear))
-      .filter((q) => q.eq("grade", grade))
+      .filter((q: any) => q.eq("academicYear", academicYear))
+      .filter((q: any) => q.eq("grade", grade))
       .collect();
 
     return filterCourses(courses, { isActive });
@@ -210,14 +210,14 @@ export const getActiveCourses = tenantQuery({
 
     const courses = await ctx.db
       .query("courses")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq("academicYear", targetYear))
-      .filter((q) => q.eq("isActive", true))
+      .filter((q: any) => q.eq("academicYear", targetYear))
+      .filter((q: any) => q.eq("isActive", true))
       .collect();
 
-    return courses.sort((a, b) => a.grade.localeCompare(b.grade));
+    return courses.sort((a: any, b: any) => a.grade.localeCompare(b.grade));
   },
 });
 
@@ -248,30 +248,30 @@ export const getCoursesForParent = tenantQuery({
 
     const students = await ctx.db
       .query("students")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq("parentId", effectiveParentId))
+      .filter((q: any) => q.eq("parentId", effectiveParentId))
       .collect();
 
     if (students.length === 0) {
       return [];
     }
 
-    const studentIds = new Set(students.map((student) => student._id));
+    const studentIds = new Set(students.map((student: any) => student._id));
 
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq("isActive", true))
+      .filter((q: any) => q.eq("isActive", true))
       .collect();
 
     const relevantCourseIds = new Set(
       enrollments
-        .filter((enrollment) => studentIds.has(enrollment.studentId))
-        .map((enrollment) => enrollment.courseId),
+        .filter((enrollment: any) => studentIds.has(enrollment.studentId))
+        .map((enrollment: any) => enrollment.courseId),
     );
 
     if (relevantCourseIds.size === 0) {
@@ -324,15 +324,15 @@ export const createCourse = tenantMutation({
 
     const existingCourses = await ctx.db
       .query("courses")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq("academicYear", args.academicYear))
-      .filter((q) => q.eq("grade", args.grade))
+      .filter((q: any) => q.eq("academicYear", args.academicYear))
+      .filter((q: any) => q.eq("grade", args.grade))
       .collect();
 
     const duplicate = existingCourses.find(
-      (course) => course.section === args.section && course.name === args.name,
+      (course: any) => course.section === args.section && course.name === args.name,
     );
     if (duplicate) {
       throw new Error(
@@ -420,15 +420,15 @@ export const deleteCourse = tenantMutation({
 
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
       .collect();
 
     await Promise.all(
       enrollments
         .filter(
-          (enrollment) => enrollment.institutionId === tenancy.institution._id,
+          (enrollment: any) => enrollment.institutionId === tenancy.institution._id,
         )
-        .map((enrollment) =>
+        .map((enrollment: any) =>
           ctx.db.patch(enrollment._id, {
             isActive: false,
           }),
@@ -464,11 +464,11 @@ export const enrollStudent = tenantMutation({
 
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
       .collect();
 
     const activeEnrollment = enrollments.find(
-      (enrollment) =>
+      (enrollment: any) =>
         enrollment.institutionId === tenancy.institution._id &&
         enrollment.studentId === studentId &&
         enrollment.isActive,
@@ -479,7 +479,7 @@ export const enrollStudent = tenantMutation({
     }
 
     const activeCount = enrollments.filter(
-      (enrollment) =>
+      (enrollment: any) =>
         enrollment.institutionId === tenancy.institution._id &&
         enrollment.isActive,
     ).length;
@@ -523,11 +523,11 @@ export const removeStudent = tenantMutation({
 
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
       .collect();
 
     const enrollment = enrollments.find(
-      (record) =>
+      (record: any) =>
         record.institutionId === tenancy.institution._id &&
         record.studentId === studentId &&
         record.isActive,
@@ -585,8 +585,8 @@ export const bulkEnrollStudents = tenantMutation({
 
         const existingEnrollment = await ctx.db
           .query("courseStudents")
-          .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
-          .filter((q) => q.eq("studentId", studentId))
+          .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
+          .filter((q: any) => q.eq("studentId", studentId))
           .first();
 
         if (existingEnrollment && existingEnrollment.isActive) {
@@ -596,12 +596,12 @@ export const bulkEnrollStudents = tenantMutation({
         if (course.maxStudents) {
           const activeCount = await ctx.db
             .query("courseStudents")
-            .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
-            .filter((q) => q.eq("isActive", true))
+            .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
+            .filter((q: any) => q.eq("isActive", true))
             .collect();
 
           const scopedActive = activeCount.filter(
-            (record) => record.institutionId === tenancy.institution._id,
+            (record: any) => record.institutionId === tenancy.institution._id,
           ).length;
 
           if (scopedActive >= course.maxStudents) {
@@ -659,8 +659,8 @@ export const bulkRemoveStudents = tenantMutation({
       try {
         const enrollment = await ctx.db
           .query("courseStudents")
-          .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
-          .filter((q) => q.eq("studentId", studentId))
+          .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
+          .filter((q: any) => q.eq("studentId", studentId))
           .first();
 
         if (

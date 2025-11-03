@@ -108,7 +108,7 @@ async function ensureTeacherMembership(
 
   const membership = await ctx.db
     .query("institutionMemberships")
-    .withIndex("by_user_institution", (q) =>
+    .withIndex("by_user_institution", (q: any) =>
       q.eq("userId", teacherId).eq("institutionId", institutionId),
     )
     .first();
@@ -120,12 +120,12 @@ async function ensureTeacherMembership(
 
 function filterInstitutionGrades(grades: GradeDoc[], tenancy: TenancyContext) {
   return grades.filter(
-    (grade) => grade.institutionId === tenancy.institution._id,
+    (grade: any) => grade.institutionId === tenancy.institution._id,
   );
 }
 
 function sortGradesByDate(grades: GradeDoc[]) {
-  return grades.sort((a, b) => b.date - a.date);
+  return grades.sort((a: any, b: any) => b.date - a.date);
 }
 
 // ==================== QUERIES ====================
@@ -148,26 +148,26 @@ export const getStudentGrades = tenantQuery({
 
     let grades = await ctx.db
       .query("classGrades")
-      .withIndex("by_studentId_subject", (q) => q.eq("studentId", studentId))
+      .withIndex("by_studentId_subject", (q: any) => q.eq("studentId", studentId))
       .collect();
 
     grades = filterInstitutionGrades(grades, tenancy);
 
     if (subject) {
-      grades = grades.filter((grade) => grade.subject === subject);
+      grades = grades.filter((grade: any) => grade.subject === subject);
     }
 
     if (courseId) {
-      grades = grades.filter((grade) => grade.courseId === courseId);
+      grades = grades.filter((grade: any) => grade.courseId === courseId);
     }
 
     if (period) {
-      grades = grades.filter((grade) => grade.period === period);
+      grades = grades.filter((grade: any) => grade.period === period);
     }
 
     const detailed = (
       await Promise.all(
-        grades.map(async (grade) => {
+        grades.map(async (grade: any) => {
           const teacher = await ctx.db.get(grade.teacherId);
           const course = await ctx.db.get(grade.courseId);
           if (!course || course.institutionId !== tenancy.institution._id) {
@@ -211,21 +211,21 @@ export const getCourseGrades = tenantQuery({
 
     let grades = await ctx.db
       .query("classGrades")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
       .collect();
 
     grades = filterInstitutionGrades(grades, tenancy);
 
     if (subject) {
-      grades = grades.filter((grade) => grade.subject === subject);
+      grades = grades.filter((grade: any) => grade.subject === subject);
     }
 
     if (period) {
-      grades = grades.filter((grade) => grade.period === period);
+      grades = grades.filter((grade: any) => grade.period === period);
     }
 
     const detailed = await Promise.all(
-      grades.map(async (grade) => {
+      grades.map(async (grade: any) => {
         const student = await ctx.db.get(grade.studentId);
         if (!student || student.institutionId !== tenancy.institution._id) {
           return null;
@@ -266,12 +266,12 @@ export const calculatePeriodAverage = tenantQuery({
     const grades = filterInstitutionGrades(
       await ctx.db
         .query("classGrades")
-        .withIndex("by_studentId_subject", (q) =>
+        .withIndex("by_studentId_subject", (q: any) =>
           q.eq("studentId", studentId).eq("subject", subject),
         )
         .collect(),
       tenancy,
-    ).filter((grade) => grade.courseId === courseId && grade.period === period);
+    ).filter((grade: any) => grade.courseId === courseId && grade.period === period);
 
     if (grades.length === 0) {
       return {
@@ -329,10 +329,10 @@ export const getSubjectAverages = tenantQuery({
     const grades = filterInstitutionGrades(
       await ctx.db
         .query("classGrades")
-        .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+        .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
         .collect(),
       tenancy,
-    ).filter((grade) => grade.subject === subject && grade.period === period);
+    ).filter((grade: any) => grade.subject === subject && grade.period === period);
 
     const studentGradesMap = new Map<Id<"students">, GradeDoc[]>();
     for (const grade of grades) {
@@ -389,7 +389,7 @@ export const getSubjectAverages = tenantQuery({
 
     return averages
       .filter((value): value is NonNullable<typeof value> => value !== null)
-      .sort((a, b) => {
+      .sort((a: any, b: any) => {
         const avgA = a.weightedAverage ?? a.average;
         const avgB = b.weightedAverage ?? b.average;
         return avgB - avgA;
@@ -412,7 +412,7 @@ export const getCourseGradeOverview = tenantQuery({
 
     const courseStudents = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId_isActive", (q) =>
+      .withIndex("by_courseId_isActive", (q: any) =>
         q.eq("courseId", courseId).eq("isActive", true),
       )
       .collect();
@@ -420,10 +420,10 @@ export const getCourseGradeOverview = tenantQuery({
     const allGrades = filterInstitutionGrades(
       await ctx.db
         .query("classGrades")
-        .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+        .withIndex("by_courseId", (q: any) => q.eq("courseId", courseId))
         .collect(),
       tenancy,
-    ).filter((grade) => grade.period === period);
+    ).filter((grade: any) => grade.period === period);
 
     const studentSubjectGrades = new Map<
       Id<"students">,
@@ -442,7 +442,7 @@ export const getCourseGradeOverview = tenantQuery({
     }
 
     const report = await Promise.all(
-      courseStudents.map(async (enrollment) => {
+      courseStudents.map(async (enrollment: any) => {
         const student = await ctx.db.get(enrollment.studentId);
         if (!student || student.institutionId !== tenancy.institution._id) {
           return null;
@@ -549,7 +549,7 @@ export const getCourseGradeOverview = tenantQuery({
 
     return report
       .filter((value): value is NonNullable<typeof value> => value !== null)
-      .sort((a, b) => {
+      .sort((a: any, b: any) => {
         const avgA = a.overallWeightedAverage ?? a.overallAverage;
         const avgB = b.overallWeightedAverage ?? b.overallAverage;
         return avgB - avgA;
@@ -616,9 +616,9 @@ export const createGrade = tenantMutation({
     const enrollment = await ctx.db
       .query("courseStudents")
       .query("courseStudents")
-      .withIndex("by_courseId", (q) => q.eq("courseId", args.courseId))
-      .filter((q) => q.eq("studentId", args.studentId))
-      .filter((q) => q.eq("isActive", true))
+      .withIndex("by_courseId", (q: any) => q.eq("courseId", args.courseId))
+      .filter((q: any) => q.eq("studentId", args.studentId))
+      .filter((q: any) => q.eq("isActive", true))
       .first();
 
     if (!enrollment) {
@@ -802,9 +802,9 @@ export const bulkCreateGrades = tenantMutation({
 
         const enrollment = await ctx.db
           .query("courseStudents")
-          .withIndex("by_courseId", (q) => q.eq("courseId", args.courseId))
-          .filter((q) => q.eq("studentId", gradeData.studentId))
-          .filter((q) => q.eq("isActive", true))
+          .withIndex("by_courseId", (q: any) => q.eq("courseId", args.courseId))
+          .filter((q: any) => q.eq("studentId", gradeData.studentId))
+          .filter((q: any) => q.eq("isActive", true))
           .first();
 
         if (!enrollment) {

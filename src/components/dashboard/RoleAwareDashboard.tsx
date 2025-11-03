@@ -179,14 +179,14 @@ const quickActions: Record<UserRole, QuickAction[]> = {
       title: "Nueva Planificación",
       description: "Crear nueva planificación",
       icon: Plus,
-      href: "/profesor/planificaciones/new",
+      href: "/profesor/planificaciones/crear",
     },
     {
       id: "schedule-parent-meeting",
       title: "Reunión con Padres",
       description: "Agendar reunión",
       icon: Calendar,
-      href: "/profesor/reuniones/new",
+      href: "/profesor/reuniones",
     },
     {
       id: "view-calendar",
@@ -216,7 +216,7 @@ const quickActions: Record<UserRole, QuickAction[]> = {
       title: "Agendar Reunión",
       description: "Con profesor",
       icon: Calendar,
-      href: "/parent/reuniones/new",
+      href: "/parent/reuniones",
     },
     {
       id: "view-calendar",
@@ -239,7 +239,7 @@ const quickActions: Record<UserRole, QuickAction[]> = {
       title: "Conocer Equipo",
       description: "Equipo multidisciplinario",
       icon: Users,
-      href: "/public/equipo-multidisciplinario",
+      href: "/equipo-multidisciplinario",
     },
     {
       id: "photos-videos",

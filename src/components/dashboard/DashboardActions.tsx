@@ -96,14 +96,14 @@ export function DashboardActions({
           ...baseActions,
           {
             label: "Nuevo Usuario",
-            href: "/admin/users/new",
+            href: "/admin/usuarios/new",
             icon: UserPlus,
             description: "Agregar nuevo usuario al sistema",
             primary: true,
           },
           {
             label: "Crear Evento",
-            href: "/admin/calendar/new",
+            href: "/admin/calendario-escolario-escolar",
             icon: Plus,
             description: "Programar nuevo evento",
           },
@@ -115,19 +115,19 @@ export function DashboardActions({
           },
           {
             label: "Configuración",
-            href: "/admin/settings",
+            href: "/settings",
             icon: Settings,
             description: "Configuración del sistema",
           },
           {
             label: "Ver Calendario",
-            href: "/admin/calendar",
+            href: "/admin/calendario-escolar",
             icon: Calendar,
             description: "Gestionar calendario completo",
           },
           {
             label: "Documentos",
-            href: "/admin/documents",
+            href: "/admin/documentos",
             icon: FileText,
             description: "Gestionar documentos del sistema",
           },
@@ -141,7 +141,7 @@ export function DashboardActions({
               "planning.dashboard.new_button",
               "Nueva Planificación",
             ),
-            href: "/profesor/planificaciones/new",
+            href: "/profesor/planificaciones/crear",
             icon: Plus,
             description: getLabel(
               "profesor.dashboard.planning.description",
@@ -151,7 +151,7 @@ export function DashboardActions({
           },
           {
             label: "Mi Calendario",
-            href: "/profesor/calendar",
+            href: "/profesor/calendario-escolar",
             icon: Calendar,
             description: "Ver mi calendario de clases",
           },
@@ -169,7 +169,7 @@ export function DashboardActions({
           },
           {
             label: "Mis Documentos",
-            href: "/profesor/documents",
+            href: "/profesor/planificaciones",
             icon: FileText,
             description: "Mis planificaciones y documentos",
           },
@@ -193,7 +193,7 @@ export function DashboardActions({
           },
           {
             label: "Recursos",
-            href: "/parent/resources",
+            href: "/parent/recursos",
             icon: BookOpen,
             description: "Recursos educativos disponibles",
           },
