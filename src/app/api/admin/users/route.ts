@@ -57,7 +57,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const session = await auth();
+    let session = null;
+    try {
+      session = await auth();
+    } catch (error) {
+      console.error("Auth error:", error);
+      return handleApiError(
+        new ApiErrorResponse("Error de autenticación", 500, "AUTH_ERROR", {
+          originalError: error instanceof Error ? error.message : String(error)
+        }),
+        "GET /api/admin/users",
+      );
+    }
 
     if (!session || session.user.role !== "ADMIN") {
       return handleApiError(
@@ -66,7 +77,21 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const allUsers = await getClerkUsers();
+    let allUsers: any[] = [];
+    try {
+      allUsers = await getClerkUsers();
+    } catch (error) {
+      console.error("Failed to get users from Clerk:", error);
+      return handleApiError(
+        new ApiErrorResponse(
+          "Error al obtener usuarios del sistema de autenticación",
+          500,
+          "CLERK_ERROR",
+          { originalError: error instanceof Error ? error.message : String(error) }
+        ),
+        "GET /api/admin/users",
+      );
+    }
 
     // Map to match expected structure
     const users = allUsers
