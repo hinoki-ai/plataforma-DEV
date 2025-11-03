@@ -1,43 +1,70 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { getPlanningDocuments } from "@/services/queries/planning";
-import type { PlanningFilters } from "@/lib/types/service-responses";
+import { NextRequest } from "next/server";
+import { getConvexClient } from "@/lib/convex";
+import { api } from "@/convex/_generated/api";
+import { createApiRoute } from "@/lib/api-validation";
+import { createSuccessResponse } from "@/lib/api-error";
+import { Id, Doc } from "@/convex/_generated/dataModel";
+import { z } from "zod";
 
-export async function GET(request: NextRequest) {
-  try {
-    // Get search parameters from the request URL
-    const { searchParams } = new URL(request.url);
-    const filters: PlanningFilters = {
-      q: searchParams.get("q") || undefined,
-      subject: searchParams.get("subject") || undefined,
-      grade: searchParams.get("grade") || undefined,
-      page: searchParams.get("page")
-        ? parseInt(searchParams.get("page")!)
-        : undefined,
-      limit: searchParams.get("limit")
-        ? parseInt(searchParams.get("limit")!)
-        : undefined,
-    };
+// Query schema for filtering
+const planningFiltersSchema = z.object({
+  q: z.string().optional(),
+  subject: z.string().optional(),
+  grade: z.string().optional(),
+  page: z.coerce.number().int().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(100).optional(),
+});
 
-    // Call the server function which will handle authentication
-    const result = await getPlanningDocuments(filters);
+// GET /api/profesor/planning - Get planning documents for authenticated teacher
+export const GET = createApiRoute(
+  async (request, validated, filters) => {
+    const session = validated.session;
+    const teacherId = (session?.user?.id || "") as unknown as Id<"users">;
 
-    if (!result.success) {
-      return NextResponse.json({ error: result.error }, { status: 401 });
+    if (!teacherId) {
+      throw new Error("User ID not found in session");
     }
 
-    return NextResponse.json({
-      success: true,
-      data: result.data,
-      page: filters.page || 1,
-      limit: filters.limit || 10,
-      total: result.data?.length || 0,
+    const client = getConvexClient();
+
+    // Query planning documents filtered by teacher ID and optional filters
+    const docs = await client.query(api.planning.getPlanningDocuments, {
+      authorId: teacherId,
+      subject: filters?.subject,
+      grade: filters?.grade,
     });
-  } catch (error) {
-    console.error("API Error fetching planning documents:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
-  }
-}
+
+    // Adapt documents for response format
+    const adaptedDocs = docs.map((doc: Doc<"planningDocuments">) => ({
+      ...doc,
+      id: doc._id,
+      createdAt: new Date(doc.createdAt).toISOString(),
+      updatedAt: new Date(doc.updatedAt).toISOString(),
+      author: {
+        id: doc.authorId,
+        name: null,
+        email: "",
+      },
+    }));
+
+    // Apply pagination if requested
+    const page = filters?.page || 1;
+    const limit = filters?.limit || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedDocs = adaptedDocs.slice(startIndex, endIndex);
+
+    return createSuccessResponse({
+      data: paginatedDocs,
+      page,
+      limit,
+      total: adaptedDocs.length,
+    });
+  },
+  {
+    requiredRole: "TEACHER_PLUS",
+    querySchema: planningFiltersSchema,
+  },
+);
+
+export const runtime = "nodejs";
