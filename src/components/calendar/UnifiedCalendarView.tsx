@@ -153,30 +153,36 @@ export default function UnifiedCalendarView({
 
   // Use Convex React hooks for authenticated queries - only when authenticated
   const allEvents = useQuery(
-    isAuthenticated ? api.calendar.getCalendarEvents : null,
-    {
-      startDate: undefined,
-      endDate: undefined,
-      category: undefined,
-      isActive: true,
-    },
+    api.calendar.getCalendarEvents,
+    isAuthenticated
+      ? {
+          startDate: undefined,
+          endDate: undefined,
+          category: undefined,
+          isActive: true,
+        }
+      : "skip",
   );
 
   const monthEventsData = useQuery(
-    isAuthenticated ? api.calendar.getCalendarEvents : null,
-    {
-      startDate: startOfMonthDate.getTime(),
-      endDate: endOfMonthDate.getTime(),
-      category: undefined,
-      isActive: true,
-    },
+    api.calendar.getCalendarEvents,
+    isAuthenticated
+      ? {
+          startDate: startOfMonthDate.getTime(),
+          endDate: endOfMonthDate.getTime(),
+          category: undefined,
+          isActive: true,
+        }
+      : "skip",
   );
 
   const upcomingEventsData = useQuery(
-    isAuthenticated ? api.calendar.getUpcomingEvents : null,
-    {
-      limit: 10,
-    },
+    api.calendar.getUpcomingEvents,
+    isAuthenticated
+      ? {
+          limit: 10,
+        }
+      : "skip",
   );
 
   // Process and group events

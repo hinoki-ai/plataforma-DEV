@@ -234,15 +234,17 @@ export function OASelector({
                         </p>
                         {oa.indicators && oa.indicators.length > 0 && (
                           <div className="flex flex-wrap gap-1 mt-1">
-                            {oa.indicators.slice(0, 3).map((ind) => (
-                              <Badge
-                                key={ind._id}
-                                variant="secondary"
-                                className="text-xs"
-                              >
-                                {ind.code}
-                              </Badge>
-                            ))}
+                            {oa.indicators
+                              .slice(0, 3)
+                              .map((ind: Doc<"evaluationIndicators">) => (
+                                <Badge
+                                  key={ind._id}
+                                  variant="secondary"
+                                  className="text-xs"
+                                >
+                                  {ind.code}
+                                </Badge>
+                              ))}
                             {oa.indicators.length > 3 && (
                               <Badge variant="secondary" className="text-xs">
                                 +{oa.indicators.length - 3}

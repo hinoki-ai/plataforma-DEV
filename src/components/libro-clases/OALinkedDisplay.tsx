@@ -2,7 +2,7 @@
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id, Doc } from "@/convex/_generated/dataModel";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -71,20 +71,22 @@ export function OALinkedDisplay({
                         Indicadores evaluados:
                       </p>
                       <div className="space-y-1">
-                        {link.indicators.map((ind) => (
-                          <div
-                            key={ind._id}
-                            className="flex items-start gap-2 text-xs"
-                          >
-                            <CheckCircle2 className="h-3 w-3 mt-0.5 text-primary shrink-0" />
-                            <div>
-                              <span className="font-medium">{ind.code}:</span>{" "}
-                              <span className="text-muted-foreground">
-                                {ind.description}
-                              </span>
+                        {link.indicators.map(
+                          (ind: Doc<"evaluationIndicators">) => (
+                            <div
+                              key={ind._id}
+                              className="flex items-start gap-2 text-xs"
+                            >
+                              <CheckCircle2 className="h-3 w-3 mt-0.5 text-primary shrink-0" />
+                              <div>
+                                <span className="font-medium">{ind.code}:</span>{" "}
+                                <span className="text-muted-foreground">
+                                  {ind.description}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ),
+                        )}
                       </div>
                     </div>
                   )}
@@ -146,7 +148,7 @@ export function OALinkedDisplay({
                     Indicadores de Evaluación:
                   </p>
                   <div className="space-y-1.5">
-                    {link.indicators.map((ind) => (
+                    {link.indicators.map((ind: Doc<"evaluationIndicators">) => (
                       <div
                         key={ind._id}
                         className="flex items-start gap-2 p-2 bg-muted/50 rounded text-xs"

@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import Header from "@/components/layout/Header";
 import { usePathname } from "next/navigation";
