@@ -134,12 +134,12 @@ convex/                    # Convex backend
 ```json
 {
   "clerk_config": {
-    "providers": ["credentials", "google_oauth"],
+    "providers": ["credentials"],
     "role_mapping": {
       "MASTER": { "access": "complete_system", "auth": "credentials_only" },
       "ADMIN": { "access": "administrative", "auth": "credentials_only" },
       "PROFESOR": { "access": "teaching", "auth": "credentials_only" },
-      "PARENT": { "access": "parent_features", "auth": "oauth_preferred" }
+      "PARENT": { "access": "parent_features", "auth": "credentials_only" }
     },
     "session_handling": {
       "middleware": "src/proxy.ts",
@@ -156,12 +156,6 @@ convex/                    # Convex backend
 
 ```
 User Login → Clerk Auth → proxy.ts → Convex User Resolution → Role-Based Dashboard
-```
-
-**Pattern 2: OAuth Registration**
-
-```
-Google OAuth → Clerk User Created → Convex User Sync → Registration Completion → Dashboard
 ```
 
 **Pattern 3: Emergency Access**

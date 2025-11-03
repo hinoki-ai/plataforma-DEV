@@ -26,10 +26,9 @@
 
 ### Overview
 
-The Plataforma Astral authentication system uses **NextAuth.js v5** with a hybrid approach:
+The Plataforma Astral authentication system uses **NextAuth.js v5** with a credentials-based approach:
 
-- **Credentials Provider**: For staff (ADMIN, PROFESOR, MASTER) - Convex database authentication
-- **OAuth Providers**: For parents (PARENT) - Google login
+- **Credentials Provider**: For all users - Convex database authentication
 - **Role-Based Access**: Middleware-enforced route protection
 - **Transition Pages**: Auth-success page handles role-based routing
 
@@ -82,7 +81,7 @@ The Plataforma Astral authentication system uses **NextAuth.js v5** with a hybri
 
 - **Access**: Parent-specific features
 - **Routes**: `/parent/**`
-- **Authentication**: OAuth (Google) or credentials
+- **Authentication**: Credentials only
 - **Capabilities**: Meeting requests, student progress, voting participation, calendar viewing
 
 ### PUBLIC Role
@@ -194,15 +193,6 @@ const isValid = await verifyPassword(plaintext, hashed);
 - Session token validation
 - Origin verification
 
-### OAuth Security
-
-```typescript
-// Provider Configuration:
-- Google OAuth: Restricted to parent registration
-- Existing staff accounts: OAuth blocked for ADMIN/PROFESOR/MASTER roles
-- New OAuth users: Auto-assigned PARENT role
-```
-
 ---
 
 ## 🚨 Critical Issues & Fixes
@@ -250,7 +240,6 @@ const isValid = await verifyPassword(plaintext, hashed);
 #### MEDIUM PRIORITY (90%+ Pass Rate)
 
 - [x] Concurrent login attempts → no race conditions
-- [x] OAuth flow (Google) → works for parents only
 - [x] Session expiration → graceful redirect
 - [x] Logout flow → session cleared
 
@@ -432,31 +421,6 @@ client.query('users.getUserCountByRole', {}).then(() => {
 
 **Fix Time**: 3 minutes
 **Success Rate**: 85%
-
-#### Issue #3: OAuth Provider Errors
-
-**Symptoms**: Google/Facebook login fails, redirect errors
-**Most Likely Cause**: OAuth configuration mismatch
-
-**Solution**:
-
-1. Update OAuth provider redirect URIs to:
-
-   ```text
-   https://plataforma.aramac.dev/api/auth/callback/google
-   https://plataforma.aramac.dev/api/auth/callback/facebook
-   ```
-
-2. Verify client IDs and secrets are current:
-
-   ```bash
-   # Update if needed
-   npx vercel env rm GOOGLE_CLIENT_ID production
-   npx vercel env add GOOGLE_CLIENT_ID production
-   ```
-
-**Fix Time**: 10 minutes
-**Success Rate**: 90%
 
 #### Issue #4: Middleware Route Protection Errors
 

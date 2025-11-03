@@ -37,20 +37,6 @@ export interface AuditLog {
   user: User;
 }
 
-export interface GoogleWorkspaceUser {
-  id: string;
-  primaryEmail: string;
-  name: {
-    givenName: string;
-    familyName: string;
-    fullName: string;
-  };
-  suspended: boolean;
-  password: string;
-  changePasswordAtNextLogin: boolean;
-  includeInGlobalAddressList: boolean;
-}
-
 export interface DNSRecord {
   type: "MX" | "SPF" | "DKIM" | "DMARC";
   host: string;

@@ -117,7 +117,6 @@
   "user.role.description": "Define user permissions in the system",
   "user.active.label": "Active Account",
   "user.active.description": "Inactive users cannot access the system",
-  "user.email.description": "Will be used to create Google Workspace account",
   "user.email.immutable": "Email cannot be modified",
   "user.saving": "Saving...",
   "user.update": "Update",

@@ -119,41 +119,6 @@ client.query('users.getUserCountByRole', {}).then(() => {
 **Fix Time**: 3 minutes  
 **Success Rate**: 85%
 
-### Issue #3: OAuth Provider Errors
-
-**Symptoms**: Google/Facebook login fails, redirect errors
-**Most Likely Cause**: OAuth configuration mismatch
-
-#### Issue #3: Diagnostic Steps
-
-1. Check OAuth environment variables:
-
-   ```bash
-   npx vercel env ls | grep -E "GOOGLE|FACEBOOK"
-   ```
-
-2. Verify OAuth provider settings match current domain
-
-#### Issue #3: Solution
-
-1. Update OAuth provider redirect URIs to:
-
-   ```text
-   https://school.aramac.dev/api/auth/callback/google
-   https://school.aramac.dev/api/auth/callback/facebook
-   ```
-
-2. Verify client IDs and secrets are current:
-
-   ```bash
-   # Update if needed
-   npx vercel env rm GOOGLE_CLIENT_ID production
-   npx vercel env add GOOGLE_CLIENT_ID production
-   ```
-
-**Fix Time**: 10 minutes  
-**Success Rate**: 90%
-
 ### Issue #4: Middleware Route Protection Errors
 
 **Symptoms**: Infinite redirects, "Access denied" for valid users
