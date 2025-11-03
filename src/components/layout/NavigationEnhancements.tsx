@@ -367,7 +367,9 @@ export function SmartRecommendations({
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium truncate">{t(item.title, "navigation")}</div>
+                <div className="text-sm font-medium truncate">
+                  {t(item.title, "navigation")}
+                </div>
                 <div className="text-xs text-muted-foreground flex items-center gap-2">
                   <span>{item.category}</span>
                   {usage && (
