@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
       isActive: isActive ?? true,
       isPublic: isPublic ?? true,
       allowMultipleVotes: allowMultipleVotes ?? false,
-      maxVotesPerUser: maxVotesPerUser || undefined,
+      maxVotesPerUser: maxVotesPerUser ?? null,
       requireAuthentication: requireAuthentication ?? true,
       createdBy: session.user.id as any,
       options: options.map((opt: string) => opt.trim()),

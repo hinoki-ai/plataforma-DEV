@@ -378,7 +378,7 @@ export default defineSchema({
     isActive: v.boolean(),
     isPublic: v.boolean(),
     allowMultipleVotes: v.boolean(),
-    maxVotesPerUser: v.optional(v.number()),
+    maxVotesPerUser: v.optional(v.union(v.float64(), v.null())),
     requireAuthentication: v.boolean(),
     createdBy: v.id("users"),
     createdAt: v.number(),

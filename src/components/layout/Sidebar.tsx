@@ -297,7 +297,7 @@ export function Sidebar({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
+            className="h-8 w-8 mb-1"
             onClick={onToggle}
             aria-label={
               isCollapsed ? "Expandir barra lateral" : "Contraer barra lateral"
@@ -309,10 +309,7 @@ export function Sidebar({
             }
           >
             <NavigationIcons.ChevronRight
-              className={cn(
-                "h-4 w-4 transition-transform",
-                isCollapsed && "rotate-180",
-              )}
+              className="h-4 w-4 transition-transform"
               aria-hidden="true"
             />
           </Button>

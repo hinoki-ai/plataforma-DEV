@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
-import { api } from "@/convex/_generated/api";
+import { getClerkUsers } from "@/services/actions/clerk-users";
 import {
   createSuccessResponse,
   handleApiError,
@@ -19,20 +18,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const client = getConvexClient();
+    // Get all active professors from Clerk
+    const professors = await getClerkUsers("PROFESOR");
 
-    // Get all active professors
-    const professors = await client.query(api.users.getUsers, {
-      role: "PROFESOR",
-      isActive: true,
-    });
-
-    // Map to expected structure for the frontend
-    const users = professors.map((professor) => ({
-      id: professor._id,
-      name: professor.name,
-      email: professor.email,
-    }));
+    // Filter only active professors and map to expected structure for the frontend
+    const users = professors
+      .filter((professor) => professor.isActive)
+      .map((professor) => ({
+        id: professor.id,
+        name: professor.name,
+        email: professor.email,
+      }));
 
     return createSuccessResponse({ data: users });
   } catch (error) {

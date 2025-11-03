@@ -692,7 +692,7 @@ export function EnhancedSidebar({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8"
+              className="h-8 w-8 mb-1"
               onClick={isMobile ? onClose : onToggle}
               aria-label={
                 isMobile
@@ -703,10 +703,7 @@ export function EnhancedSidebar({
               }
             >
               <NavigationIcons.ChevronRight
-                className={cn(
-                  "h-4 w-4 transition-transform",
-                  isCollapsed && !isMobile && "rotate-180",
-                )}
+                className="h-4 w-4 transition-transform"
                 aria-hidden="true"
               />
             </Button>
