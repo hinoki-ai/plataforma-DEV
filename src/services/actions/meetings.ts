@@ -128,6 +128,14 @@ export async function getMeetingsAction() {
 
 export async function getMeetingsByTeacherAction(teacherId: string) {
   try {
+    // Validate teacherId before making the query
+    if (!teacherId || teacherId.trim() === "") {
+      return {
+        success: false,
+        error: "ID de profesor es requerido",
+      };
+    }
+
     const client = getConvexClient();
     const meetings = await client.query(api.meetings.getMeetingsByTeacher, {
       teacherId: teacherId as Id<"users">,

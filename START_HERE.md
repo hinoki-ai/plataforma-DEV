@@ -80,9 +80,9 @@ curl http://localhost:3000/api/db/health
 
 ### Tech Stack
 
-- **Frontend**: Next.js 15 (App Router) + React 19
-- **Backend**: Convex (Serverless)
-- **Authentication**: NextAuth.js v5
+- **Frontend**: Next.js 16 (App Router) + React 19
+- **Backend**: Convex (Serverless, Real-time)
+- **Authentication**: Clerk (with Convex integration)
 - **Styling**: Tailwind CSS + shadcn/ui
 - **Language**: TypeScript throughout
 
@@ -120,27 +120,16 @@ plataforma-astral/
 
 ---
 
-## 📊 Current Migration Status
+## 📊 Current Status
 
-### ✅ Complete (100%)
+### ✅ Complete
 
-- Convex infrastructure & schema (32 models)
-- Backend functions (12 files)
-- Service layer wrappers (11 files)
-- Authentication system
-- 11 API routes migrated
+- **Convex backend**: Fully migrated and operational
+- **Authentication**: Clerk integration complete
+- **Real-time features**: Convex-powered live updates
+- **Production ready**: System deployed and stable
 
-### 🚧 In Progress (~50%)
-
-- API routes (11/33 complete)
-- Calendar service (needs update)
-
-### ⏳ Pending
-
-- Test suite updates
-- Complete API route migration
-
-**See [MIGRATION.md](./MIGRATION.md) for detailed status and migration guide.**
+**Historical reference**: See [archive/MIGRATION.md](./archive/MIGRATION.md) for migration details (migration complete).
 
 ---
 
@@ -202,22 +191,17 @@ npx convex deploy
 
 ### Essential Reading
 
-- **[archive/MIGRATION.md](./archive/MIGRATION.md)** - Historical: Prisma to Convex migration guide (migration complete)
+- **[README.md](./README.md)** - Project overview and quick start
+- **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Complete documentation catalog
 - **[CLAUDE.md](./CLAUDE.md)** - Guide for AI assistants working on this project
 - **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment procedures & environments
-- **[README.md](./README.md)** - Project overview
 
-### Technical Documentation (`docs/` directory)
+### Technical Documentation
 
-- **Architecture** - System design & patterns
-- **API Documentation** - All API endpoints
-- **Authentication** - Auth system details
-- **Testing** - Test strategy & guidelines
-
-### Quick References
-
-- **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Complete documentation catalog
-- **[.env.example](./.env.example)** - Environment variables template
+- **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete system documentation (AI-optimized)
+- **[docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)** - Authentication system details
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture overview
+- **All documentation**: See [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for complete list
 
 ---
 
@@ -247,17 +231,22 @@ git push origin feature/your-feature-name
 ### Working with Convex
 
 ```typescript
-// Reading data (Query)
+// Reading data (Query) - Client component
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 const meetings = useQuery(api.meetings.getMeetings, {});
 
-// Writing data (Mutation)
+// Writing data (Mutation) - Client component
 import { useMutation } from "convex/react";
 
 const createMeeting = useMutation(api.meetings.createMeeting);
 await createMeeting({ title, date, userId });
+
+// Server-side operations
+import { getConvexClient } from "@/lib/convex";
+const client = getConvexClient();
+const meetings = await client.query(api.meetings.getMeetings, {});
 ```
 
 ---
@@ -274,15 +263,15 @@ await createMeeting({ title, date, userId });
 
 ### Build Errors
 
-**Solution**: Ensure Convex dev is running in background
+**Solution**: Ensure Convex dev is running in background (`npx convex dev`)
 
-### API Route Returns 500
+### Authentication Issues
 
-**Solution**: Check if route is migrated to Convex in [MIGRATION.md](./MIGRATION.md)
+**Solution**: See [docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md) or [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)
 
-### Tests Failing
+### Clerk Configuration Issues
 
-**Solution**: Tests need updating for Convex - see migration guide
+**Solution**: Check [docs/CLERK_SETUP.md](./docs/CLERK_SETUP.md) for setup instructions
 
 ---
 
@@ -302,8 +291,8 @@ await createMeeting({ title, date, userId });
 ### Project-Specific
 
 - Read [CLAUDE.md](./CLAUDE.md) for development patterns
-- Check [archive/MIGRATION.md](./archive/MIGRATION.md) for historical Convex migration patterns
-- Review existing code in `src/services/` for examples
+- Review [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) for complete system documentation
+- Check existing code in `src/services/` for examples
 
 ---
 
@@ -342,8 +331,8 @@ await createMeeting({ title, date, userId });
 ## 🚀 Next Steps
 
 1. **Complete Setup** - Follow [First Time Setup](#-first-time-setup-10-minutes) above
-2. **Explore Codebase** - Read [CLAUDE.md](./CLAUDE.md) for patterns
-3. **See Historical Migration** - Review [archive/MIGRATION.md](./archive/MIGRATION.md) (migration complete)
+2. **Explore Codebase** - Read [CLAUDE.md](./CLAUDE.md) for development patterns
+3. **Review Documentation** - Check [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for all available guides
 4. **Start Developing** - Pick a task from the docs or create new features
 
 ---
