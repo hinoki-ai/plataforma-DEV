@@ -116,8 +116,9 @@ export default async function LibroClasesAttendancePage() {
               Control de asistencia trazable para toda la comunidad escolar
             </h1>
             <p className="text-lg text-muted-foreground md:text-xl">
-              Registra asistencia, atrasos, justificativos y retiros en tiempo real.
-              Todas las acciones quedan documentadas y listas para inspectoría, UTP y MINEDUC.
+              Registra asistencia, atrasos, justificativos y retiros en tiempo
+              real. Todas las acciones quedan documentadas y listas para
+              inspectoría, UTP y MINEDUC.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -133,11 +134,16 @@ export default async function LibroClasesAttendancePage() {
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {FIELD_METRICS.map((metric) => (
-              <Card key={metric.label} className="border-primary/20 bg-background/80">
+              <Card
+                key={metric.label}
+                className="border-primary/20 bg-background/80"
+              >
                 <CardContent className="flex flex-col gap-2 p-5">
                   <metric.icon className="h-5 w-5 text-primary" />
                   <div className="text-2xl font-semibold">{metric.value}</div>
-                  <div className="text-sm text-muted-foreground">{metric.label}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {metric.label}
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -154,7 +160,8 @@ export default async function LibroClasesAttendancePage() {
             Reduce ausentismo y mejora la respuesta ante eventualidades
           </h2>
           <p className="text-muted-foreground md:text-lg">
-            Un módulo diseñado junto a equipos de inspectoría y convivencia escolar.
+            Un módulo diseñado junto a equipos de inspectoría y convivencia
+            escolar.
           </p>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
@@ -179,7 +186,8 @@ export default async function LibroClasesAttendancePage() {
             Cada actor tiene una vista focalizada
           </h2>
           <p className="text-muted-foreground md:text-lg">
-            Implementamos procesos simples para registrar, justificar y monitorear asistencia desde cualquier dispositivo.
+            Implementamos procesos simples para registrar, justificar y
+            monitorear asistencia desde cualquier dispositivo.
           </p>
         </div>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -206,10 +214,12 @@ export default async function LibroClasesAttendancePage() {
 
       <section className="rounded-3xl border border-primary/20 bg-primary/5 p-8 text-center md:p-12">
         <h2 className="text-2xl font-semibold md:text-3xl">
-          Controla asistencia con la misma plataforma que gestiona calificaciones y convivencia
+          Controla asistencia con la misma plataforma que gestiona
+          calificaciones y convivencia
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-muted-foreground md:text-lg">
-          Libera planillas manuales, evita reprocesos y entrega información al instante a quienes toman decisiones.
+          Libera planillas manuales, evita reprocesos y entrega información al
+          instante a quienes toman decisiones.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Button asChild size="lg">

@@ -1,12 +1,24 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BookOpenCheck, CalendarDays, Layers, ShieldCheck, Users } from "lucide-react";
+import {
+  BookOpenCheck,
+  CalendarDays,
+  Layers,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import { PageTransition } from "@/components/ui/page-transition";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { ExtendedUserRole } from "@/lib/authorization";
 
 const ROLE_DESTINATIONS: Partial<Record<ExtendedUserRole, string>> = {
@@ -106,10 +118,10 @@ export default async function LibroClasesLandingPage() {
               Control académico integral alineado con normativa chilena
             </h1>
             <p className="text-lg text-muted-foreground md:text-xl">
-              Centraliza asistencia, calificaciones, contenidos y observaciones en
-              un solo panel. Diseñado para cumplir con las exigencias del MINEDUC
-              y entregar trazabilidad real a equipos directivos, docentes y
-              familias.
+              Centraliza asistencia, calificaciones, contenidos y observaciones
+              en un solo panel. Diseñado para cumplir con las exigencias del
+              MINEDUC y entregar trazabilidad real a equipos directivos,
+              docentes y familias.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg">
@@ -127,7 +139,8 @@ export default async function LibroClasesLandingPage() {
             <CardHeader>
               <CardTitle className="text-lg">Indicadores clave</CardTitle>
               <CardDescription>
-                Métricas instantáneas disponibles para dirección, UTP e inspectoría.
+                Métricas instantáneas disponibles para dirección, UTP e
+                inspectoría.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
@@ -160,7 +173,8 @@ export default async function LibroClasesLandingPage() {
                 Cada rol accede a la misma verdad institucional
               </h2>
               <p className="text-muted-foreground md:text-lg">
-                Flujos diseñados para directivos, docentes y familias con accesos controlados.
+                Flujos diseñados para directivos, docentes y familias con
+                accesos controlados.
               </p>
             </div>
             <div className="flex gap-2">
@@ -209,20 +223,29 @@ export default async function LibroClasesLandingPage() {
             Cumplimiento garantizado en inspecciones y supervisiones
           </h2>
           <p className="text-muted-foreground md:text-lg">
-            Diseñamos cada módulo junto a equipos UTP e inspectoría para asegurar trazabilidad en auditorías y cierres de año escolar.
+            Diseñamos cada módulo junto a equipos UTP e inspectoría para
+            asegurar trazabilidad en auditorías y cierres de año escolar.
           </p>
           <div className="space-y-3 text-sm text-muted-foreground">
             <div className="flex items-start gap-2">
               <ShieldCheck className="mt-0.5 h-4 w-4 text-primary" />
-              <span>Formato oficial compatible con Libro de Clases Digital MINEDUC.</span>
+              <span>
+                Formato oficial compatible con Libro de Clases Digital MINEDUC.
+              </span>
             </div>
             <div className="flex items-start gap-2">
               <Layers className="mt-0.5 h-4 w-4 text-primary" />
-              <span>Histórico por curso con respaldo de firmas electrónicas y bitácora.</span>
+              <span>
+                Histórico por curso con respaldo de firmas electrónicas y
+                bitácora.
+              </span>
             </div>
             <div className="flex items-start gap-2">
               <CalendarDays className="mt-0.5 h-4 w-4 text-primary" />
-              <span>Actas de evaluación, consejos de profesores y reportes listos para supervisión.</span>
+              <span>
+                Actas de evaluación, consejos de profesores y reportes listos
+                para supervisión.
+              </span>
             </div>
           </div>
         </div>
@@ -230,18 +253,22 @@ export default async function LibroClasesLandingPage() {
           <CardHeader>
             <CardTitle className="text-lg">Implementación acompañada</CardTitle>
             <CardDescription>
-              Nos encargamos de habilitar el libro digital en menos de 10 días hábiles.
+              Nos encargamos de habilitar el libro digital en menos de 10 días
+              hábiles.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {IMPLEMENTATION_STEPS.map((step) => (
               <div key={step.title} className="rounded-xl border p-4">
                 <p className="font-semibold">{step.title}</p>
-                <p className="text-sm text-muted-foreground">{step.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {step.description}
+                </p>
               </div>
             ))}
             <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-primary">
-              Acceso a mesa de ayuda nacional, capacitaciones recurrentes y reportes personalizados.
+              Acceso a mesa de ayuda nacional, capacitaciones recurrentes y
+              reportes personalizados.
             </div>
           </CardContent>
         </Card>
@@ -252,7 +279,8 @@ export default async function LibroClasesLandingPage() {
           Listo para modernizar el libro de clases de tu institución?
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-muted-foreground md:text-lg">
-          Agenda una demostración personalizada y descubre cómo centralizar gestión académica, convivencia escolar y comunicación con familias.
+          Agenda una demostración personalizada y descubre cómo centralizar
+          gestión académica, convivencia escolar y comunicación con familias.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Button asChild size="lg">
