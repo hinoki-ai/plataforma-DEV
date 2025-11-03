@@ -87,7 +87,7 @@ const PARENT_TAB_HEADERS: Record<
 export function ParentLibroClasesView({
   view = "overview",
 }: ParentLibroClasesViewProps) {
-  const { userId } = useAuth();
+  const { userId, isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [selectedCourseId, setSelectedCourseId] =
@@ -100,6 +100,50 @@ export function ParentLibroClasesView({
   }, [view]);
 
   const header = PARENT_TAB_HEADERS[activeTab] ?? PARENT_TAB_HEADERS.overview;
+
+  // Wait for Clerk auth to load
+  if (!isLoaded) {
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div className="h-8 w-64 bg-muted animate-pulse rounded" />
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-48 bg-muted animate-pulse rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </PageTransition>
+    );
+  }
+
+  // Check if user is signed in
+  if (!isSignedIn || !userId) {
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Autenticación requerida"
+            subtitle="Debes iniciar sesión para acceder al libro de clases"
+          />
+          <Card>
+            <CardContent className="py-10">
+              <p className="text-muted-foreground">
+                Por favor, inicia sesión para continuar.
+              </p>
+              <div className="flex flex-wrap gap-3 mt-4">
+                <Button onClick={() => router.push("/login")}>
+                  Ir a iniciar sesión
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </PageTransition>
+    );
+  }
 
   // Get current user
   const currentUser = useQuery(

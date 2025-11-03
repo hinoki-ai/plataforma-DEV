@@ -6,7 +6,7 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   format,
@@ -31,6 +31,7 @@ import {
   TrendingUp,
   Search,
   RefreshCw,
+  Check,
 } from "lucide-react";
 
 import { Calendar } from "@/components/ui/calendar";
@@ -43,19 +44,17 @@ import {
 } from "@/components/ui/adaptive-card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/components/providers/ContextProvider";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import {
-  getCalendarEvents,
-  getUpcomingEvents,
-  getCalendarStatistics,
   exportCalendarEventsInFormat,
-  getCurrentMonthEvents,
-  getCalendarEventsGroupedByDate,
 } from "@/services/calendar/calendar-service";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 import {
   UnifiedCalendarEvent,
@@ -130,7 +129,39 @@ export default function UnifiedCalendarView({
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Data state
+  // Ensure currentMonth is never null for the rest of the component
+  const safeCurrentMonth = currentMonth || new Date();
+
+  // Get current month date range for queries - reactive to currentMonth
+  const startOfMonthDate = useMemo(
+    () => startOfMonth(safeCurrentMonth),
+    [safeCurrentMonth],
+  );
+  const endOfMonthDate = useMemo(
+    () => endOfMonth(safeCurrentMonth),
+    [safeCurrentMonth],
+  );
+
+  // Use Convex React hooks for authenticated queries
+  const allEvents = useQuery(api.calendar.getCalendarEvents, {
+    startDate: undefined,
+    endDate: undefined,
+    category: undefined,
+    isActive: true,
+  });
+
+  const monthEventsData = useQuery(api.calendar.getCalendarEvents, {
+    startDate: startOfMonthDate.getTime(),
+    endDate: endOfMonthDate.getTime(),
+    category: undefined,
+    isActive: true,
+  });
+
+  const upcomingEventsData = useQuery(api.calendar.getUpcomingEvents, {
+    limit: 10,
+  });
+
+  // Process and group events
   const [events, setEvents] = useState<Record<string, UnifiedCalendarEvent[]>>(
     {},
   );
@@ -175,16 +206,6 @@ export default function UnifiedCalendarView({
     }
   }, [isHydrated]); // Remove selectedDate and currentMonth from deps to prevent re-initialization
 
-  // Ensure currentMonth is never null for the rest of the component
-  const safeCurrentMonth = currentMonth || new Date();
-
-  // Load data on mount and when dependencies change - only after hydration
-  useEffect(() => {
-    if (isHydrated && safeCurrentMonth) {
-      loadCalendarData();
-    }
-  }, [safeCurrentMonth, selectedCategories, searchTerm, isHydrated]);
-
   // Mobile detection - only after hydration
   useEffect(() => {
     if (!isHydrated) return;
@@ -200,79 +221,108 @@ export default function UnifiedCalendarView({
     return () => window.removeEventListener("resize", checkMobile);
   }, [isHydrated]);
 
-  // Load all calendar data
-  const loadCalendarData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const query: CalendarQuery = {
-        categories: selectedCategories,
-        ...(searchTerm && { search: searchTerm }),
+  // Process events when data is loaded from hooks
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    setIsLoading(allEvents === undefined || monthEventsData === undefined || upcomingEventsData === undefined);
+
+    // Filter events by selected categories
+    const filterByCategories = (eventList: any[] | undefined) => {
+      if (!eventList) return [];
+      if (selectedCategories.length === 0) return eventList;
+      return eventList.filter((event) =>
+        selectedCategories.includes(event.category as EventCategory),
+      );
+    };
+
+    // Filter by search term
+    const filterBySearch = (eventList: any[]) => {
+      if (!searchTerm) return eventList;
+      const searchLower = searchTerm.toLowerCase();
+      return eventList.filter(
+        (event) =>
+          event.title?.toLowerCase().includes(searchLower) ||
+          event.description?.toLowerCase().includes(searchLower),
+      );
+    };
+
+    // Process all events
+    let processedEvents = filterByCategories(allEvents);
+    processedEvents = filterBySearch(processedEvents);
+
+    // Process month events
+    let processedMonthEvents = filterByCategories(monthEventsData);
+    processedMonthEvents = filterBySearch(processedMonthEvents);
+
+    // Process upcoming events
+    let processedUpcoming = filterByCategories(upcomingEventsData);
+    processedUpcoming = filterBySearch(processedUpcoming);
+
+    // Normalize and set events
+    setMonthEvents(processedMonthEvents.map(normalizeEvent));
+    setUpcomingEvents(processedUpcoming.map(normalizeEvent));
+
+    // Group events by date
+    const grouped: Record<string, UnifiedCalendarEvent[]> = {};
+    processedEvents.forEach((event: any) => {
+      const startDate = new Date(event.startDate);
+      const dateKey = startDate.toISOString().split("T")[0];
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = [];
+      }
+      grouped[dateKey].push(normalizeEvent(event));
+    });
+    setGroupedEvents(grouped);
+    setEvents(grouped);
+
+    // Calculate statistics
+    if (allEvents) {
+      const currentTime = Date.now();
+      const stats = {
+        total: allEvents.length,
+        upcoming: 0,
+        byCategory: {} as Record<string, number>,
+        byPriority: {} as Record<string, number>,
       };
 
-      const [
-        allEventsResult,
-        monthEventsResult,
-        upcomingResult,
-        statsResult,
-        groupedResult,
-      ] = await Promise.all([
-        getCalendarEvents(query),
-        getCurrentMonthEvents(),
-        getUpcomingEvents(10),
-        getCalendarStatistics(),
-        getCalendarEventsGroupedByDate(query),
-      ]);
-
-      if (groupedResult.success && groupedResult.data) {
-        setEvents(groupedResult.data);
-      }
-
-      setMonthEvents(
-        monthEventsResult.success && monthEventsResult.data
-          ? monthEventsResult.data.map((event: CalendarEvent) =>
-              normalizeEvent(event),
-            )
-          : [],
-      );
-      setUpcomingEvents(
-        upcomingResult.success && upcomingResult.data
-          ? upcomingResult.data.map((event: CalendarEvent) =>
-              normalizeEvent(event),
-            )
-          : [],
-      );
-      setGroupedEvents(
-        groupedResult.success && groupedResult.data ? groupedResult.data : {},
-      );
-
-      if (statsResult) {
-        setStatistics(statsResult);
-      }
-    } catch (error) {
-      console.error("Error loading calendar data:", error);
-      setAnnounceText("Error al cargar los datos del calendario");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [selectedCategories, searchTerm]);
-
-  // Refresh data
-  const handleRefresh = async () => {
-    setIsLoading(true);
-    try {
-      const result = await getCalendarEventsGroupedByDate({
-        categories: selectedCategories,
-        ...(searchTerm && { search: searchTerm }),
+      allEvents.forEach((event: any) => {
+        if (event.category) {
+          stats.byCategory[event.category] =
+            (stats.byCategory[event.category] || 0) + 1;
+        }
+        if (event.priority) {
+          stats.byPriority[event.priority] =
+            (stats.byPriority[event.priority] || 0) + 1;
+        }
+        const eventStartTime =
+          event.startDate instanceof Date
+            ? event.startDate.getTime()
+            : typeof event.startDate === "number"
+              ? event.startDate
+              : new Date(event.startDate).getTime();
+        if (eventStartTime >= currentTime) {
+          stats.upcoming++;
+        }
       });
-      if (result.success && result.data) {
-        setEvents(result.data);
-      }
-    } catch (error) {
-      console.error("Error refreshing calendar:", error);
-    } finally {
-      setIsLoading(false);
+      setStatistics(stats);
     }
-  };
+  }, [
+    allEvents,
+    monthEventsData,
+    upcomingEventsData,
+    selectedCategories,
+    searchTerm,
+    isHydrated,
+    normalizeEvent,
+  ]);
+
+  // Refresh data - hooks automatically refresh, so we just trigger a re-render
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    // The useEffect above will automatically pick up new data from hooks
+    setTimeout(() => setIsRefreshing(false), 500);
+  }, []);
 
   // Get events for a specific date
   const getEventsForDate = useCallback(
@@ -449,7 +499,7 @@ export default function UnifiedCalendarView({
         "bg-violet-50 text-violet-700 dark:bg-violet-950/30 dark:text-violet-300",
       accent: "bg-violet-500",
       border: "border-violet-200 dark:border-violet-800",
-      icon: "🔐",
+      icon: "🛡️",
     },
     PROFESOR: {
       label: "Profesores",
@@ -500,7 +550,7 @@ export default function UnifiedCalendarView({
       color: "bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300",
       accent: "bg-red-500",
       border: "border-red-200 dark:border-red-800",
-      icon: "🎉",
+      icon: "🎈",
     },
     MEETING: {
       label: "Reuniones",
@@ -516,14 +566,14 @@ export default function UnifiedCalendarView({
         "bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300",
       accent: "bg-green-500",
       border: "border-green-200 dark:border-green-800",
-      icon: "✨",
+      icon: "⭐",
     },
     SPECIAL: {
       label: "Especial",
       color: "bg-pink-50 text-pink-700 dark:bg-pink-950/30 dark:text-pink-300",
       accent: "bg-pink-500",
       border: "border-pink-200 dark:border-pink-800",
-      icon: "🎊",
+      icon: "🎁",
     },
     PARENT: {
       label: "Padres",
@@ -539,7 +589,7 @@ export default function UnifiedCalendarView({
         "bg-slate-50 text-slate-700 dark:bg-slate-950/30 dark:text-slate-300",
       accent: "bg-slate-500",
       border: "border-slate-200 dark:border-slate-800",
-      icon: "📋",
+      icon: "📄",
     },
     EXAM: {
       label: "Exámenes",
@@ -865,7 +915,7 @@ export default function UnifiedCalendarView({
                   </div>
                   <div>
                     <div className="text-2xl font-bold">
-                      {statistics.totalEvents}
+                      {statistics.total}
                     </div>
                     <div className="text-sm text-muted-foreground">
                       Total eventos
@@ -965,34 +1015,93 @@ export default function UnifiedCalendarView({
                 </div>
               )}
 
-              {/* Category Filters */}
-              <div className="flex flex-wrap gap-2">
-                {(Object.keys(categorySystem) as EventCategory[]).map(
-                  (category) => (
-                    <Badge
-                      key={category}
-                      variant={
-                        selectedCategories.includes(category)
-                          ? "default"
-                          : "outline"
-                      }
-                      className={cn(
-                        "cursor-pointer select-none flex items-center space-x-1.5 px-3 py-1.5",
-                        selectedCategories.includes(category) &&
-                          getCategoryConfig(category).color,
-                        "transition-all duration-200 hover:shadow-md",
-                      )}
-                      onClick={() => handleCategoryToggle(category)}
-                    >
-                      <span>{getCategoryConfig(category).icon}</span>
-                      <span>{getCategoryConfig(category).label}</span>
-                      <span className="text-xs opacity-60">
-                        ({statistics?.byCategory[category] || 0})
+              {/* Category Filters - Mega Menu Dropdown */}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full sm:w-auto justify-between"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Filter className="w-4 h-4" />
+                      <span>
+                        Categorías
+                        {selectedCategories.length > 0 &&
+                          ` (${selectedCategories.length})`}
                       </span>
-                    </Badge>
-                  ),
-                )}
-              </div>
+                    </span>
+                    <ChevronRight className="w-4 h-4 rotate-90" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-[600px] p-4"
+                  align="start"
+                  sideOffset={8}
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-sm">
+                        Filtrar por Categorías
+                      </h3>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-auto p-1 text-xs"
+                        onClick={() => {
+                          if (selectedCategories.length === (Object.keys(categorySystem) as EventCategory[]).length) {
+                            setSelectedCategories([]);
+                          } else {
+                            setSelectedCategories(Object.keys(categorySystem) as EventCategory[]);
+                          }
+                        }}
+                      >
+                        {selectedCategories.length === (Object.keys(categorySystem) as EventCategory[]).length
+                          ? "Deseleccionar todo"
+                          : "Seleccionar todo"}
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[400px] overflow-y-auto">
+                      {(Object.keys(categorySystem) as EventCategory[]).map(
+                        (category) => {
+                          const config = getCategoryConfig(category);
+                          const isSelected = selectedCategories.includes(category);
+                          const eventCount = statistics?.byCategory[category] || 0;
+                          return (
+                            <button
+                              key={category}
+                              onClick={() => handleCategoryToggle(category)}
+                              className={cn(
+                                "relative flex items-center gap-3 p-3 rounded-lg border transition-all duration-200 text-left",
+                                "hover:shadow-md hover:scale-[1.02]",
+                                isSelected
+                                  ? cn(
+                                      config.color,
+                                      config.border,
+                                      "border-2"
+                                    )
+                                  : "bg-card border-border hover:border-primary/50"
+                              )}
+                            >
+                              <span className="text-xl">{config.icon}</span>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm truncate">
+                                  {config.label}
+                                </div>
+                                <div className="text-xs opacity-60">
+                                  {eventCount} {eventCount === 1 ? "evento" : "eventos"}
+                                </div>
+                              </div>
+                              {isSelected && (
+                                <Check className="w-4 h-4 shrink-0" />
+                              )}
+                            </button>
+                          );
+                        }
+                      )}
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           </AdaptiveCardContent>
         </AdaptiveCard>

@@ -18,6 +18,8 @@ import type {
 
 /**
  * Get calendar events
+ * NOTE: For client-side usage, use the useCalendarEvents hook from calendar-hooks.ts instead
+ * This function is for server-side API routes only
  */
 export async function getCalendarEvents(
   filters: {
@@ -38,11 +40,13 @@ export async function getCalendarEvents(
     });
 
     return { success: true, data: events };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to fetch calendar events:", error);
+    const errorMessage =
+      error?.message || "No se pudieron cargar los eventos";
     return {
       success: false,
-      error: "No se pudieron cargar los eventos",
+      error: errorMessage,
       data: [],
     };
   }
@@ -50,6 +54,8 @@ export async function getCalendarEvents(
 
 /**
  * Get upcoming events
+ * NOTE: For client-side usage, use the useUpcomingEvents hook from calendar-hooks.ts instead
+ * This function is for server-side API routes only
  */
 export async function getUpcomingEvents(limit?: number) {
   try {
@@ -58,11 +64,13 @@ export async function getUpcomingEvents(limit?: number) {
       limit,
     });
     return { success: true, data: events };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to fetch upcoming events:", error);
+    const errorMessage =
+      error?.message || "No se pudieron cargar los eventos";
     return {
       success: false,
-      error: "No se pudieron cargar los eventos",
+      error: errorMessage,
       data: [],
     };
   }
@@ -215,9 +223,15 @@ export async function getCalendarStatistics(
     );
 
     return stats;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error getting calendar statistics:", error);
-    throw error;
+    // Return empty stats instead of throwing to prevent crashes
+    return {
+      total: 0,
+      upcoming: 0,
+      byCategory: {},
+      byPriority: {},
+    };
   }
 }
 
