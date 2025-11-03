@@ -30,7 +30,7 @@ import {
   ROLE_SPECIFIC_SECTIONS,
   getNavigationGroupsForRole,
 } from "./navigation";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean;
@@ -90,9 +90,9 @@ const renderNavigationItem = (
   isActive: boolean,
   isCollapsed: boolean,
   pathname: string,
+  t: (key: string) => string,
   onToggle?: () => void,
   handleLogout?: () => void,
-  t?: (key: string) => string,
 ) => {
   const handleClick = handleNavigationItemClick(
     item,
@@ -109,11 +109,11 @@ const renderNavigationItem = (
           "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2 w-full text-left",
           "text-muted-foreground hover:text-foreground",
         )}
-        aria-label={`${t ? t(item.title) : item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+        aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
         onClick={handleClick}
       >
         <item.icon className="h-4 w-4 shrink-0" />
-        <span className="flex-1">{t ? t(item.title) : item.title}</span>
+        <span className="flex-1">{t(item.title)}</span>
         {(item as any).shortcut && (
           <span className="ml-auto text-xs text-muted-foreground hidden lg:block">
             {(item as any).shortcut}
@@ -165,7 +165,7 @@ export function Sidebar({
   const router = useRouter();
 
   // Load navigation translations
-  const { t } = useDivineParsing(["navigation"]);
+  const { t } = useLanguage();
 
   // Pulsating icon effect state
   const [pulseCount, setPulseCount] = React.useState(0);
@@ -391,15 +391,15 @@ export function Sidebar({
                                 isActive,
                                 isCollapsed,
                                 pathname,
+                                t,
                                 onToggle,
                                 handleLogout,
-                                t,
                               )}
                             </TooltipTrigger>
                             {!isCollapsed && (
                               <TooltipContent side="right">
                                 <div className="flex items-center gap-2">
-                                  <span>{t ? t(item.title) : item.title}</span>
+                                  <span>{t(item.title)}</span>
                                   {(item as any).shortcut && (
                                     <span className="text-xs opacity-60">
                                       {(item as any).shortcut}
@@ -429,7 +429,7 @@ export function Sidebar({
                           {(item as any).action === "logout" ? (
                             <button
                               className="flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
-                              aria-label={`${t ? t(item.title) : item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+                              aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
                               onClick={handleNavigationItemClick(
                                 item,
                                 pathname,
@@ -450,7 +450,7 @@ export function Sidebar({
                                   : "text-muted-foreground",
                               )}
                               aria-current={isActive ? "page" : undefined}
-                              aria-label={`${t ? t(item.title) : item.title}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+                              aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
                               onClick={handleNavigationItemClick(
                                 item,
                                 pathname,

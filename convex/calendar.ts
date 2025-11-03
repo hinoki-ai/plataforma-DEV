@@ -34,33 +34,37 @@ export const getCalendarEvents = tenantQuery({
     category: v.optional(eventCategoryValidator),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { startDate, endDate, category, isActive }, tenancy) => {
+  handler: async (
+    ctx: any,
+    { startDate, endDate, category, isActive }: any,
+    tenancy: any,
+  ) => {
     // Get all events for this institution first (using the institution index)
     let events = await ctx.db
       .query("calendarEvents")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     // Apply filters in memory (this is much better than loading all events from all institutions)
     if (category !== undefined) {
-      events = events.filter((event) => event.category === category);
+      events = events.filter((event: any) => event.category === category);
     }
 
     if (isActive !== undefined) {
-      events = events.filter((event) => event.isActive === isActive);
+      events = events.filter((event: any) => event.isActive === isActive);
     }
 
     if (startDate !== undefined) {
-      events = events.filter((event) => event.endDate >= startDate);
+      events = events.filter((event: any) => event.endDate >= startDate);
     }
 
     if (endDate !== undefined) {
-      events = events.filter((event) => event.startDate <= endDate);
+      events = events.filter((event: any) => event.startDate <= endDate);
     }
 
-    return events.sort((a, b) => a.startDate - b.startDate);
+    return events.sort((a: any, b: any) => a.startDate - b.startDate);
   },
 });
 
