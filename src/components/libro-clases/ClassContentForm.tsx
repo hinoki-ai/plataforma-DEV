@@ -38,6 +38,7 @@ import { es } from "date-fns/locale";
 import { Calendar as CalendarIcon, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
+import { OASelector } from "./OASelector";
 
 const classContentSchema = z.object({
   date: z.date({
@@ -53,6 +54,7 @@ const classContentSchema = z.object({
   resources: z.string().optional(),
   homework: z.string().optional(),
   period: z.string().optional(),
+  selectedOAIds: z.array(z.string()).optional(), // OA IDs as strings for form
 });
 
 type ClassContentFormData = z.infer<typeof classContentSchema>;
@@ -79,6 +81,7 @@ export function ClassContentForm({
 
   const createContent = useMutation(api.classContent.createClassContent);
   const updateContent = useMutation(api.classContent.updateClassContent);
+  const linkContentToOA = useMutation(api.learningObjectives.linkClassContentToOA);
 
   // Define field order for Enter key navigation
   const fieldOrder = [
@@ -110,6 +113,7 @@ export function ClassContentForm({
       resources: initialData?.resources || "",
       homework: initialData?.homework || "",
       period: initialData?.period || "",
+      selectedOAIds: [],
     },
   });
 
@@ -130,15 +134,41 @@ export function ClassContentForm({
         teacherId,
       };
 
+      let contentId: Id<"classContent">;
+
       if (initialData) {
         await updateContent({
           contentId: initialData._id,
           ...contentData,
         });
+        contentId = initialData._id;
         toast.success("Contenido actualizado exitosamente");
       } else {
-        await createContent(contentData);
+        contentId = await createContent(contentData);
         toast.success("Contenido registrado exitosamente");
+      }
+
+      // Link selected OA to the class content
+      if (data.selectedOAIds && data.selectedOAIds.length > 0) {
+        try {
+          for (const oaId of data.selectedOAIds) {
+            await linkContentToOA({
+              classContentId: contentId,
+              learningObjectiveId: oaId as Id<"learningObjectives">,
+              coverage: "PARCIAL", // Default to partial, can be updated later
+            });
+          }
+          toast.success(
+            `${data.selectedOAIds.length} OA vinculado${
+              data.selectedOAIds.length > 1 ? "s" : ""
+            } exitosamente`,
+          );
+        } catch (oaError: any) {
+          console.error("Error linking OA:", oaError);
+          toast.error(
+            "Contenido guardado, pero hubo un error al vincular algunos OA",
+          );
+        }
       }
 
       form.reset();
@@ -308,13 +338,13 @@ export function ClassContentForm({
           )}
         />
 
-        {/* Objectives */}
+        {/* Objectives (Text field - kept for compatibility) */}
         <FormField
           control={form.control}
           name="objectives"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Objetivos de Aprendizaje</FormLabel>
+              <FormLabel>Objetivos de Aprendizaje (Texto)</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Ej: OA 5: Demostrar que comprenden las fracciones con denominadores 100, 12, 10, 8, 6, 5, 4, 3, 2..."
@@ -324,7 +354,39 @@ export function ClassContentForm({
                 />
               </FormControl>
               <FormDescription>
-                Objetivos de aprendizaje según curriculum MINEDUC
+                Descripción textual de objetivos (se mantiene para compatibilidad)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* OA Selector - New structured OA selection */}
+        <FormField
+          control={form.control}
+          name="selectedOAIds"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Seleccionar Objetivos de Aprendizaje (OA) - Decreto 67
+              </FormLabel>
+              <FormControl>
+                <OASelector
+                  courseId={courseId}
+                  subject={form.watch("subject")}
+                  value={(field.value || []).map(
+                    (id) => id as Id<"learningObjectives">,
+                  )}
+                  onChange={(ids) => {
+                    field.onChange(ids.map((id) => id.toString()));
+                  }}
+                  disabled={!form.watch("subject")}
+                />
+              </FormControl>
+              <FormDescription>
+                Seleccione los OA abordados en esta clase. Esto permite el
+                seguimiento automático de la cobertura curricular según Decreto
+                67.
               </FormDescription>
               <FormMessage />
             </FormItem>

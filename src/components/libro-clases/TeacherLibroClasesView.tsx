@@ -31,15 +31,18 @@ import {
   MessageSquare,
   TrendingUp,
   BookOpenCheck,
+  Target,
 } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { AttendanceRecorder } from "@/components/libro-clases/AttendanceRecorder";
 import { ClassContentForm } from "@/components/libro-clases/ClassContentForm";
+import { ClassContentList } from "@/components/libro-clases/ClassContentList";
 import { ObservationForm } from "@/components/libro-clases/ObservationForm";
 import { GradeEntryForm } from "@/components/libro-clases/GradeEntryForm";
 import { GradesTable } from "@/components/libro-clases/GradesTable";
 import { ParentMeetingTracker } from "@/components/libro-clases/ParentMeetingTracker";
+import { CurriculumCoverageDashboard } from "@/components/libro-clases/CurriculumCoverageDashboard";
 import { Id } from "@/convex/_generated/dataModel";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -49,7 +52,8 @@ type TabValue =
   | "content"
   | "observations"
   | "grades"
-  | "meetings";
+  | "meetings"
+  | "coverage";
 
 interface TeacherLibroClasesViewProps {
   view?: TabValue;
@@ -62,6 +66,7 @@ const TEACHER_TAB_ROUTES: Record<TabValue, string> = {
   observations: "/profesor/libro-clases/observaciones",
   grades: "/profesor/libro-clases/calificaciones",
   meetings: "/profesor/libro-clases/reuniones",
+  coverage: "/profesor/libro-clases/cobertura",
 };
 
 const TEACHER_TAB_HEADERS: Record<
@@ -92,6 +97,10 @@ const TEACHER_TAB_HEADERS: Record<
   meetings: {
     title: "Reuniones con Apoderados",
     subtitle: "Agenda compromisos y seguimiento de reuniones",
+  },
+  coverage: {
+    title: "Cobertura Curricular",
+    subtitle: "Seguimiento de Objetivos de Aprendizaje según Decreto 67",
   },
 };
 
@@ -457,7 +466,7 @@ export function TeacherLibroClasesView({
 
             {/* Tabs for Different Functions */}
             <Tabs value={activeTab} onValueChange={handleTabChange}>
-              <TabsList className="grid w-full grid-cols-6">
+              <TabsList className="grid w-full grid-cols-7">
                 <TabsTrigger value="overview">
                   <BookOpen className="h-4 w-4 mr-2" />
                   Resumen
@@ -481,6 +490,10 @@ export function TeacherLibroClasesView({
                 <TabsTrigger value="meetings">
                   <Users className="h-4 w-4 mr-2" />
                   Reuniones
+                </TabsTrigger>
+                <TabsTrigger value="coverage">
+                  <Target className="h-4 w-4 mr-2" />
+                  Cobertura
                 </TabsTrigger>
               </TabsList>
 
@@ -582,11 +595,30 @@ export function TeacherLibroClasesView({
 
               <TabsContent value="content">
                 {selectedCourseId && currentUser?._id && (
-                  <ClassContentForm
-                    courseId={selectedCourseId}
-                    teacherId={currentUser._id}
-                    onSuccess={() => toast.success("Contenido guardado")}
-                  />
+                  <div className="space-y-6">
+                    <Tabs defaultValue="form" className="w-full">
+                      <TabsList>
+                        <TabsTrigger value="form">Nuevo Contenido</TabsTrigger>
+                        <TabsTrigger value="list">Lista de Contenidos</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="form" className="mt-4">
+                        <ClassContentForm
+                          courseId={selectedCourseId}
+                          teacherId={currentUser._id}
+                          onSuccess={() => {
+                            toast.success("Contenido guardado");
+                            // Refresh the list if it's being viewed
+                          }}
+                        />
+                      </TabsContent>
+                      <TabsContent value="list" className="mt-4">
+                        <ClassContentList
+                          courseId={selectedCourseId}
+                          teacherId={currentUser._id}
+                        />
+                      </TabsContent>
+                    </Tabs>
+                  </div>
                 )}
               </TabsContent>
 
@@ -623,6 +655,12 @@ export function TeacherLibroClasesView({
                     courseId={selectedCourseId}
                     teacherId={currentUser._id}
                   />
+                )}
+              </TabsContent>
+
+              <TabsContent value="coverage">
+                {selectedCourseId && (
+                  <CurriculumCoverageDashboard courseId={selectedCourseId} />
                 )}
               </TabsContent>
             </Tabs>

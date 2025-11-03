@@ -3,47 +3,45 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { tenantQuery, tenantMutation } from "./tenancy";
 
 // ==================== QUERIES ====================
 
-export const getPlanningDocuments = query({
+export const getPlanningDocuments = tenantQuery({
   args: {
     authorId: v.optional(v.id("users")),
     subject: v.optional(v.string()),
     grade: v.optional(v.string()),
   },
-  handler: async (ctx, { authorId, subject, grade }) => {
-    let allDocs;
+  handler: async (ctx, { authorId, subject, grade }, tenancy) => {
+    let queryBuilder = ctx.db
+      .query("planningDocuments")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      );
 
     if (authorId) {
-      allDocs = await ctx.db
-        .query("planningDocuments")
-        .withIndex("by_authorId", (q) => q.eq("authorId", authorId))
-        .collect();
-    } else if (subject) {
-      allDocs = await ctx.db
-        .query("planningDocuments")
-        .withIndex("by_subject", (q) => q.eq("subject", subject))
-        .collect();
-    } else if (grade) {
-      allDocs = await ctx.db
-        .query("planningDocuments")
-        .withIndex("by_grade", (q) => q.eq("grade", grade))
-        .collect();
-    } else {
-      allDocs = await ctx.db.query("planningDocuments").collect();
+      queryBuilder = queryBuilder.filter((q) => q.eq("authorId", authorId));
     }
 
+    if (subject) {
+      queryBuilder = queryBuilder.filter((q) => q.eq("subject", subject));
+    }
+
+    if (grade) {
+      queryBuilder = queryBuilder.filter((q) => q.eq("grade", grade));
+    }
+
+    const allDocs = await queryBuilder.collect();
     return allDocs.sort((a, b) => b.updatedAt - a.updatedAt);
   },
 });
 
-export const getPlanningDocumentById = query({
+export const getPlanningDocumentById = tenantQuery({
   args: { id: v.id("planningDocuments") },
-  handler: async (ctx, { id }) => {
+  handler: async (ctx, { id }, tenancy) => {
     const doc = await ctx.db.get(id);
-    if (!doc) return null;
+    if (!doc || doc.institutionId !== tenancy.institution._id) return null;
 
     // Populate author information
     const author = await ctx.db.get(doc.authorId);
@@ -62,7 +60,7 @@ export const getPlanningDocumentById = query({
 
 // ==================== MUTATIONS ====================
 
-export const createPlanningDocument = mutation({
+export const createPlanningDocument = tenantMutation({
   args: {
     title: v.string(),
     content: v.string(),
@@ -71,10 +69,12 @@ export const createPlanningDocument = mutation({
     authorId: v.id("users"),
     attachments: v.optional(v.any()),
   },
-  handler: async (ctx, args) => {
+  roles: ["ADMIN", "PROFESOR", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
     const now = Date.now();
     return await ctx.db.insert("planningDocuments", {
       ...args,
+      institutionId: tenancy.institution._id,
       createdAt: now,
       updatedAt: now,
     });
