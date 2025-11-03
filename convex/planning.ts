@@ -21,7 +21,9 @@ export const getPlanningDocuments = tenantQuery({
       );
 
     if (authorId) {
-      queryBuilder = queryBuilder.filter((q: any) => q.eq("authorId", authorId));
+      queryBuilder = queryBuilder.filter((q: any) =>
+        q.eq("authorId", authorId),
+      );
     }
 
     if (subject) {

@@ -10,6 +10,8 @@ import type {
   CalendarQuery,
   CalendarStats,
   UnifiedCalendarEvent,
+  EventCategory,
+  EventPriority,
 } from "./types";
 
 // ==================== QUERIES ====================
@@ -187,14 +189,18 @@ export async function getCalendarStatistics(
       byPriority: {},
     };
 
-    events.forEach((event) => {
+    events.forEach((event: { category: EventCategory; priority?: EventPriority; startDate: number }) => {
       // Count by category
-      const category = event.category;
-      stats.byCategory[category] = (stats.byCategory[category] || 0) + 1;
+      const category = event.category as EventCategory;
+      if (category) {
+        stats.byCategory[category] = (stats.byCategory[category] || 0) + 1;
+      }
 
       // Count by priority
-      const priority = event.priority;
-      stats.byPriority[priority] = (stats.byPriority[priority] || 0) + 1;
+      const priority = event.priority as EventPriority | undefined;
+      if (priority) {
+        stats.byPriority[priority] = (stats.byPriority[priority] || 0) + 1;
+      }
 
       // Count upcoming events
       if (event.startDate >= now) {
@@ -250,7 +256,7 @@ export async function exportCalendarEventsInFormat(
           "Location",
           "Is All Day",
         ];
-        const csvRows = events.map((event) => [
+        const csvRows = events.map((event: any) => [
           event._id,
           event.title,
           event.description || "",
@@ -262,13 +268,13 @@ export async function exportCalendarEventsInFormat(
           event.isAllDay ? "Yes" : "No",
         ]);
         exportedData = [csvHeaders, ...csvRows]
-          .map((row) => row.map((field) => `"${field}"`).join(","))
+          .map((row) => row.map((field: any) => `"${field}"`).join(","))
           .join("\n");
         break;
 
       case "ics":
         // Basic iCal format
-        const icsEvents = events.map((event) => {
+        const icsEvents = events.map((event: any) => {
           const startDate =
             new Date(event.startDate)
               .toISOString()
@@ -610,7 +616,7 @@ export async function getCalendarEventsGroupedByDate(
 
   const grouped: Record<string, UnifiedCalendarEvent[]> = {};
 
-  result.data.forEach((event) => {
+  result.data.forEach((event: any) => {
     // Ensure startDate is a Date object
     const startDate = new Date(event.startDate);
     const dateKey = startDate.toISOString().split("T")[0];

@@ -73,7 +73,9 @@ function filterCourses(
 ) {
   let result = courses;
   if (academicYear !== undefined) {
-    result = result.filter((course: any) => course.academicYear === academicYear);
+    result = result.filter(
+      (course: any) => course.academicYear === academicYear,
+    );
   }
   if (isActive !== undefined) {
     result = result.filter((course: any) => course.isActive === isActive);
@@ -166,7 +168,9 @@ export const getCourseById = tenantQuery({
     if (
       tenancy.membershipRole === "PARENT" &&
       !tenancy.isMaster &&
-      !students.some((record: any) => record.student.parentId === tenancy.user._id)
+      !students.some(
+        (record: any) => record.student.parentId === tenancy.user._id,
+      )
     ) {
       throw new Error("No permission to access this course");
     }
@@ -332,7 +336,8 @@ export const createCourse = tenantMutation({
       .collect();
 
     const duplicate = existingCourses.find(
-      (course: any) => course.section === args.section && course.name === args.name,
+      (course: any) =>
+        course.section === args.section && course.name === args.name,
     );
     if (duplicate) {
       throw new Error(
@@ -426,7 +431,8 @@ export const deleteCourse = tenantMutation({
     await Promise.all(
       enrollments
         .filter(
-          (enrollment: any) => enrollment.institutionId === tenancy.institution._id,
+          (enrollment: any) =>
+            enrollment.institutionId === tenancy.institution._id,
         )
         .map((enrollment: any) =>
           ctx.db.patch(enrollment._id, {

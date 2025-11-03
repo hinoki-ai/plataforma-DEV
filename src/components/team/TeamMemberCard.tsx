@@ -453,10 +453,7 @@ export function TeamMemberCard({
                     <Trash2 className="w-4 h-4" />
                   </Button>
 
-                  <Link
-                    href="/equipo-multidisciplinario"
-                    target="_blank"
-                  >
+                  <Link href="/equipo-multidisciplinario" target="_blank">
                     <Button size="sm" variant="ghost">
                       <Eye className="w-4 h-4" />
                     </Button>

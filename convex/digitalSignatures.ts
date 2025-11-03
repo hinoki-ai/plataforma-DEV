@@ -427,8 +427,9 @@ export const createSignature = mutation({
     const now = Date.now();
 
     // Get institutionId from user or record
-    let institutionId: Id<"institutionInfo"> | null = user.currentInstitutionId ?? null;
-    
+    let institutionId: Id<"institutionInfo"> | null =
+      user.currentInstitutionId ?? null;
+
     // If user doesn't have currentInstitutionId, try to get from the record
     if (!institutionId) {
       if (args.recordType === "CLASS_CONTENT") {
@@ -438,7 +439,10 @@ export const createSignature = mutation({
         if (classContent) {
           institutionId = classContent.institutionId;
         }
-      } else if (args.recordType === "ATTENDANCE" || args.recordType === "GRADE") {
+      } else if (
+        args.recordType === "ATTENDANCE" ||
+        args.recordType === "GRADE"
+      ) {
         // For attendance and grades, we might need to get from course
         // Try to extract courseId from recordId if possible
         const courseId = args.recordId.split("-")[0] as Id<"courses">;
@@ -569,8 +573,9 @@ export const createCertification = mutation({
     const now = Date.now();
 
     // Get institutionId from certifier or record
-    let institutionId: Id<"institutionInfo"> | null = certifier.currentInstitutionId ?? null;
-    
+    let institutionId: Id<"institutionInfo"> | null =
+      certifier.currentInstitutionId ?? null;
+
     if (!institutionId) {
       // Try to get from the record based on type
       if (args.recordType === "CLASS_CONTENT") {
@@ -580,7 +585,10 @@ export const createCertification = mutation({
         if (classContent) {
           institutionId = classContent.institutionId;
         }
-      } else if (args.recordType === "ATTENDANCE" || args.recordType === "GRADE") {
+      } else if (
+        args.recordType === "ATTENDANCE" ||
+        args.recordType === "GRADE"
+      ) {
         const courseId = args.recordId.split("-")[0] as Id<"courses">;
         const course = await ctx.db.get(courseId);
         if (course) {
