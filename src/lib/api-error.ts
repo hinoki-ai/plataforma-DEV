@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { apiLogger } from "@/lib/logger";
 
 export interface ApiError {
   message: string;
@@ -67,7 +68,7 @@ export function createSuccessResponse(data: any, statusCode: number = 200) {
  */
 export function handleApiError(error: any, context?: string): NextResponse {
   // Use structured logging
-  import("@/lib/logger").then(({ apiLogger }) => {
+  try {
     if (error instanceof ApiErrorResponse) {
       apiLogger.error(`API Error: ${error.message}`, undefined, {
         context,
@@ -84,7 +85,11 @@ export function handleApiError(error: any, context?: string): NextResponse {
         },
       );
     }
-  });
+  } catch (loggingError) {
+    // Fallback logging if structured logging fails
+    console.error(`API Error${context ? ` in ${context}` : ""}:`, error);
+    console.error("Logging error:", loggingError);
+  }
 
   // If it's already our custom error
   if (error instanceof ApiErrorResponse) {
