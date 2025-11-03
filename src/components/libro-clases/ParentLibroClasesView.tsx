@@ -83,6 +83,7 @@ export function ParentLibroClasesView({
   const [selectedCourseId, setSelectedCourseId] =
     useState<Id<"courses"> | null>(null);
   const [activeTab, setActiveTab] = useState<TabValue>(view);
+  const [loadingTimedOut, setLoadingTimedOut] = useState(false);
 
   useEffect(() => {
     setActiveTab(view);
@@ -125,7 +126,47 @@ export function ParentLibroClasesView({
 
   const isLoading = currentUser === undefined || courses === undefined;
 
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingTimedOut(false);
+      return;
+    }
+
+    const timeout = setTimeout(() => setLoadingTimedOut(true), 6000);
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
+
   if (isLoading) {
+    if (loadingTimedOut) {
+      return (
+        <PageTransition>
+          <div className="space-y-6">
+            <RoleAwareHeader
+              title="Conexión con libro de clases inestable"
+              subtitle="Revisa tu conexión o que el servidor de datos esté disponible"
+            />
+            <Card>
+              <CardContent className="py-10 space-y-4">
+                <p className="text-muted-foreground">
+                  Aún no logramos traer la información del libro de clases. Si estás
+                  trabajando en local, ejecuta el servicio Convex (`npx convex dev`)
+                  junto a la app para habilitar los datos.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => router.refresh()}
+                  >
+                    Reintentar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </PageTransition>
+      );
+    }
+
     return (
       <PageTransition>
         <div className="space-y-6">

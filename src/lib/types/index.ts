@@ -1,9 +1,11 @@
+import type { ExtendedUserRole } from "@/lib/authorization";
+
 // User types
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: "admin" | "profesor" | "parent";
+  role: ExtendedUserRole;
   createdAt: Date;
   updatedAt: Date;
 }

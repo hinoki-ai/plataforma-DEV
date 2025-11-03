@@ -3,16 +3,18 @@ export const APP_NAME = "Plataforma Astral";
 export const APP_DESCRIPTION =
   "Sistema de gestión y comunicación para Plataforma Astral";
 
-// User roles
+// User roles (normalized to match auth system)
 export const USER_ROLES = {
-  MASTER: "master",
-  ADMIN: "admin",
-  PROFESOR: "profesor",
-  PARENT: "parent",
-  PUBLIC: "public",
+  MASTER: "MASTER",
+  ADMIN: "ADMIN",
+  PROFESOR: "PROFESOR",
+  PARENT: "PARENT",
+  PUBLIC: "PUBLIC",
 } as const;
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
+
+export const USER_ROLE_LIST: UserRole[] = Object.values(USER_ROLES);
 
 // Navigation routes
 export const ROUTES = {

@@ -109,6 +109,7 @@ export function TeacherLibroClasesView({
   const [selectedStudentId, setSelectedStudentId] =
     useState<Id<"students"> | null>(null);
   const [selectedStudentName, setSelectedStudentName] = useState<string>("");
+  const [loadingTimedOut, setLoadingTimedOut] = useState(false);
 
   useEffect(() => {
     setActiveTab(view);
@@ -166,7 +167,48 @@ export function TeacherLibroClasesView({
 
   const isLoading = currentUser === undefined || courses === undefined;
 
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingTimedOut(false);
+      return;
+    }
+
+    const timeout = setTimeout(() => setLoadingTimedOut(true), 6000);
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
+
   if (isLoading) {
+    if (loadingTimedOut) {
+      return (
+        <PageTransition>
+          <div className="space-y-6">
+            <RoleAwareHeader
+              title="Conexión con libro de clases inestable"
+              subtitle="Revisa tu conexión o que el servidor de datos esté disponible"
+            />
+            <Card>
+              <CardContent className="py-10 space-y-4">
+                <p className="text-muted-foreground">
+                  Seguimos intentando conectar con el libro de clases pero no hay
+                  respuesta. Si estás trabajando en local, asegúrate de tener el
+                  servicio Convex ejecutándose (`npm run dev` también necesita
+                  `npx convex dev`).
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => router.refresh()}
+                  >
+                    Reintentar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </PageTransition>
+      );
+    }
+
     return (
       <PageTransition>
         <div className="space-y-6">
