@@ -19,7 +19,7 @@ async function userInInstitution(
 ): Promise<boolean> {
   const membership = await ctx.db
     .query("institutionMemberships")
-    .withIndex("by_user_institution", (q) =>
+    .withIndex("by_user_institution", (q: any) =>
       q.eq("userId", userId).eq("institutionId", institutionId),
     )
     .first();
@@ -35,7 +35,7 @@ async function enrichMeetingsWithTeacher<C extends AnyCtx>(
     return meetings;
   }
 
-  const teacherIds = Array.from(new Set(meetings.map((m) => m.assignedTo)));
+  const teacherIds = Array.from(new Set(meetings.map((m: any) => m.assignedTo)));
   const teacherEntries = await Promise.all(
     teacherIds.map(async (id) => {
       const teacher = await ctx.db.get(id);
@@ -49,7 +49,7 @@ async function enrichMeetingsWithTeacher<C extends AnyCtx>(
     ),
   );
 
-  return meetings.map((meeting) => {
+  return meetings.map((meeting: any) => {
     const teacher = teacherMap.get(meeting.assignedTo);
     return {
       ...meeting,
@@ -90,7 +90,7 @@ export const getMeetings = tenantQuery({
 
     let meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
@@ -101,22 +101,22 @@ export const getMeetings = tenantQuery({
         : assignedTo;
 
     if (enforcedAssignedTo) {
-      meetings = meetings.filter((m) => m.assignedTo === enforcedAssignedTo);
+      meetings = meetings.filter((m: any) => m.assignedTo === enforcedAssignedTo);
     }
 
     if (filter?.status) {
-      meetings = meetings.filter((m) => m.status === filter.status);
+      meetings = meetings.filter((m: any) => m.status === filter.status);
     }
 
     if (filter?.type) {
-      meetings = meetings.filter((m) => m.type === filter.type);
+      meetings = meetings.filter((m: any) => m.type === filter.type);
     }
 
     if (parentRequested !== undefined) {
-      meetings = meetings.filter((m) => m.parentRequested === parentRequested);
+      meetings = meetings.filter((m: any) => m.parentRequested === parentRequested);
     }
 
-    meetings.sort((a, b) => b.scheduledDate - a.scheduledDate);
+    meetings.sort((a: any, b: any) => b.scheduledDate - a.scheduledDate);
 
     const total = meetings.length;
     const skip = (safePage - 1) * safeLimit;
@@ -179,11 +179,11 @@ export const getMeetingsByTeacher = tenantQuery({
 
     const meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_assignedTo", (q) => q.eq("assignedTo", effectiveTeacherId))
+      .withIndex("by_assignedTo", (q: any) => q.eq("assignedTo", effectiveTeacherId))
       .collect();
 
     const scoped = meetings.filter(
-      (meeting) => meeting.institutionId === tenancy.institution._id,
+      (meeting: any) => meeting.institutionId === tenancy.institution._id,
     );
 
     return await enrichMeetingsWithTeacher(ctx, scoped);
@@ -196,20 +196,20 @@ export const getMeetingsByStudent = tenantQuery({
   handler: async (ctx, { studentId }, tenancy) => {
     let meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_studentId", (q) => q.eq("studentId", studentId))
+      .withIndex("by_studentId", (q: any) => q.eq("studentId", studentId))
       .collect();
 
     meetings = meetings.filter(
-      (meeting) => meeting.institutionId === tenancy.institution._id,
+      (meeting: any) => meeting.institutionId === tenancy.institution._id,
     );
 
     if (tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster) {
       meetings = meetings.filter(
-        (meeting) => meeting.assignedTo === tenancy.user._id,
+        (meeting: any) => meeting.assignedTo === tenancy.user._id,
       );
     }
 
-    meetings.sort((a, b) => b.scheduledDate - a.scheduledDate);
+    meetings.sort((a: any, b: any) => b.scheduledDate - a.scheduledDate);
 
     return await enrichMeetingsWithTeacher(ctx, meetings);
   },
@@ -223,12 +223,12 @@ export const getUpcomingMeetings = tenantQuery({
 
     let meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
-    meetings = meetings.filter((meeting) => meeting.scheduledDate >= now);
+    meetings = meetings.filter((meeting: any) => meeting.scheduledDate >= now);
 
     const effectiveUserId =
       tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster
@@ -237,11 +237,11 @@ export const getUpcomingMeetings = tenantQuery({
 
     if (effectiveUserId) {
       meetings = meetings.filter(
-        (meeting) => meeting.assignedTo === effectiveUserId,
+        (meeting: any) => meeting.assignedTo === effectiveUserId,
       );
     }
 
-    meetings.sort((a, b) => a.scheduledDate - b.scheduledDate);
+    meetings.sort((a: any, b: any) => a.scheduledDate - b.scheduledDate);
 
     return await enrichMeetingsWithTeacher(ctx, meetings);
   },
@@ -258,14 +258,14 @@ export const getMeetingsByGuardian = tenantQuery({
 
     let meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     meetings = meetings
-      .filter((meeting) => meeting.guardianEmail === effectiveEmail)
-      .sort((a, b) => b.scheduledDate - a.scheduledDate);
+      .filter((meeting: any) => meeting.guardianEmail === effectiveEmail)
+      .sort((a: any, b: any) => b.scheduledDate - a.scheduledDate);
 
     return await enrichMeetingsWithTeacher(ctx, meetings);
   },
@@ -280,17 +280,17 @@ export const getMeetingStats = tenantQuery({
 
     const meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     return {
       total: meetings.length,
-      upcoming: meetings.filter((m) => m.scheduledDate >= now).length,
-      recent: meetings.filter((m) => m.createdAt >= sevenDaysAgo).length,
-      completed: meetings.filter((m) => m.status === "COMPLETED").length,
-      pending: meetings.filter((m) => m.status === "SCHEDULED").length,
+      upcoming: meetings.filter((m: any) => m.scheduledDate >= now).length,
+      recent: meetings.filter((m: any) => m.createdAt >= sevenDaysAgo).length,
+      completed: meetings.filter((m: any) => m.status === "COMPLETED").length,
+      pending: meetings.filter((m: any) => m.status === "SCHEDULED").length,
     };
   },
 });
@@ -320,14 +320,14 @@ export const getMeetingsByParent = tenantQuery({
 
     const meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     const filtered = meetings
-      .filter((meeting) => meeting.guardianEmail === parent.email)
-      .sort((a, b) => b.scheduledDate - a.scheduledDate);
+      .filter((meeting: any) => meeting.guardianEmail === parent.email)
+      .sort((a: any, b: any) => b.scheduledDate - a.scheduledDate);
 
     return await enrichMeetingsWithTeacher(ctx, filtered);
   },
@@ -339,16 +339,16 @@ export const getParentMeetingRequests = tenantQuery({
   handler: async (ctx, _args, tenancy) => {
     const meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     const filtered = meetings
       .filter(
-        (meeting) => meeting.parentRequested && meeting.status === "SCHEDULED",
+        (meeting: any) => meeting.parentRequested && meeting.status === "SCHEDULED",
       )
-      .sort((a, b) => a.scheduledDate - b.scheduledDate);
+      .sort((a: any, b: any) => a.scheduledDate - b.scheduledDate);
 
     return await enrichMeetingsWithTeacher(ctx, filtered);
   },
@@ -617,12 +617,12 @@ export const requestMeeting = tenantMutation({
 
     const memberships = await ctx.db
       .query("institutionMemberships")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
-    const teacherMembership = memberships.find((m) => m.role === "PROFESOR");
+    const teacherMembership = memberships.find((m: any) => m.role === "PROFESOR");
     if (!teacherMembership) {
       throw new Error("No teacher available to assign meeting");
     }

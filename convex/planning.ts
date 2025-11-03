@@ -16,24 +16,24 @@ export const getPlanningDocuments = tenantQuery({
   handler: async (ctx, { authorId, subject, grade }, tenancy) => {
     let queryBuilder = ctx.db
       .query("planningDocuments")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       );
 
     if (authorId) {
-      queryBuilder = queryBuilder.filter((q) => q.eq("authorId", authorId));
+      queryBuilder = queryBuilder.filter((q: any) => q.eq("authorId", authorId));
     }
 
     if (subject) {
-      queryBuilder = queryBuilder.filter((q) => q.eq("subject", subject));
+      queryBuilder = queryBuilder.filter((q: any) => q.eq("subject", subject));
     }
 
     if (grade) {
-      queryBuilder = queryBuilder.filter((q) => q.eq("grade", grade));
+      queryBuilder = queryBuilder.filter((q: any) => q.eq("grade", grade));
     }
 
     const allDocs = await queryBuilder.collect();
-    return allDocs.sort((a, b) => b.updatedAt - a.updatedAt);
+    return allDocs.sort((a: any, b: any) => b.updatedAt - a.updatedAt);
   },
 });
 
@@ -145,7 +145,7 @@ export const getDocumentStats = tenantQuery({
   handler: async (ctx, _args, tenancy) => {
     const docs = await ctx.db
       .query("planningDocuments")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
@@ -154,7 +154,7 @@ export const getDocumentStats = tenantQuery({
 
     return {
       total: docs.length,
-      recent: docs.filter((d) => d.createdAt >= sevenDaysAgo).length,
+      recent: docs.filter((d: any) => d.createdAt >= sevenDaysAgo).length,
     };
   },
 });
@@ -167,13 +167,13 @@ export const getRecentDocumentsCount = tenantQuery({
   handler: async (ctx, _args, tenancy) => {
     const docs = await ctx.db
       .query("planningDocuments")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
     const now = Date.now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
 
-    return docs.filter((d) => d.updatedAt >= sevenDaysAgo).length;
+    return docs.filter((d: any) => d.updatedAt >= sevenDaysAgo).length;
   },
 });

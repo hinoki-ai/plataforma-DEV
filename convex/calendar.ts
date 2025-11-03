@@ -78,14 +78,14 @@ export const getUpcomingEvents = tenantQuery({
     const now = Date.now();
     const events = await ctx.db
       .query("calendarEvents")
-      .withIndex("by_institutionId", (q) =>
+      .withIndex("by_institutionId", (q: any) =>
         q.eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     const upcoming = events
-      .filter((event) => event.startDate >= now && event.isActive)
-      .sort((a, b) => a.startDate - b.startDate);
+      .filter((event: any) => event.startDate >= now && event.isActive)
+      .sort((a: any, b: any) => a.startDate - b.startDate);
 
     return limit ? upcoming.slice(0, limit) : upcoming;
   },
@@ -189,7 +189,7 @@ export const deleteCalendarEvent = tenantMutation({
 
     const recurrenceRule = await ctx.db
       .query("recurrenceRules")
-      .withIndex("by_calendarEventId", (q) => q.eq("calendarEventId", id))
+      .withIndex("by_calendarEventId", (q: any) => q.eq("calendarEventId", id))
       .first();
 
     if (
