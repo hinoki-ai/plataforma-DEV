@@ -114,13 +114,14 @@ function LegacyLanguageAdapter({ children }: { children: React.ReactNode }) {
           "profesor",
           "parent",
           "dashboard",
-          "navigation",
+          "nav", // Use "nav" instead of "navigation" since keys start with "nav."
           "language",
         ];
         for (const ns of knownNamespaces) {
           if (key.startsWith(`${ns}.`)) {
-            targetNamespace = ns;
-            lookupKey = key.substring(ns.length + 1); // Remove "namespace." prefix
+            // Map "nav" to "navigation" namespace
+            targetNamespace = ns === "nav" ? "navigation" : ns;
+            lookupKey = key; // Keep the full key since translation files contain the full key path
             break;
           }
         }
