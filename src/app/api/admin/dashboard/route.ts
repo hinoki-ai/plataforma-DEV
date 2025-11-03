@@ -45,6 +45,70 @@ export async function GET() {
       {},
     );
 
+    // Get all active courses for OA statistics
+    const allCourses = await client.query(api.courses.getCourses, {
+      isActive: true,
+    });
+
+    // Get OA coverage statistics for all courses
+    const coverageStatsByCourse = await Promise.all(
+      allCourses.map(async (course) => {
+        try {
+          const stats = await client.query(
+            api.learningObjectives.getCoverageStatistics,
+            { courseId: course._id },
+          );
+          return {
+            courseId: course._id,
+            courseName: course.name,
+            ...stats,
+          };
+        } catch (error) {
+          console.error(
+            `Error getting coverage stats for course ${course._id}:`,
+            error,
+          );
+          return {
+            courseId: course._id,
+            courseName: course.name,
+            total: 0,
+            noIniciado: 0,
+            enProgreso: 0,
+            cubierto: 0,
+            reforzado: 0,
+            percentage: 0,
+          };
+        }
+      }),
+    );
+
+    // Aggregate OA statistics across all courses
+    const totalOA = coverageStatsByCourse.reduce(
+      (sum, stats) => sum + stats.total,
+      0,
+    );
+    const totalNoIniciado = coverageStatsByCourse.reduce(
+      (sum, stats) => sum + stats.noIniciado,
+      0,
+    );
+    const totalEnProgreso = coverageStatsByCourse.reduce(
+      (sum, stats) => sum + stats.enProgreso,
+      0,
+    );
+    const totalCubierto = coverageStatsByCourse.reduce(
+      (sum, stats) => sum + stats.cubierto,
+      0,
+    );
+    const totalReforzado = coverageStatsByCourse.reduce(
+      (sum, stats) => sum + stats.reforzado,
+      0,
+    );
+    const overallCoveragePercentage =
+      totalOA > 0
+        ? Math.round(((totalCubierto + totalReforzado) / totalOA) * 100 * 100) /
+          100
+        : 0;
+
     const dashboardData = {
       users: userStats,
       meetings: meetingStats,
@@ -55,6 +119,25 @@ export async function GET() {
       },
       planning: {
         recent: recentPlannings,
+      },
+      learningObjectives: {
+        totalCourses: allCourses.length,
+        overallCoverage: overallCoveragePercentage,
+        totalOA,
+        coverageByStatus: {
+          noIniciado: totalNoIniciado,
+          enProgreso: totalEnProgreso,
+          cubierto: totalCubierto,
+          reforzado: totalReforzado,
+        },
+        byCourse: coverageStatsByCourse.map((stats) => ({
+          courseId: stats.courseId,
+          courseName: stats.courseName,
+          total: stats.total,
+          coverage: stats.percentage,
+          cubierto: stats.cubierto,
+          reforzado: stats.reforzado,
+        })),
       },
       system: {
         status: "healthy",
