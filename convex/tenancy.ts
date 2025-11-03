@@ -30,6 +30,7 @@ export interface TenancyContext {
 
 interface TenancyOptions {
   allowedRoles?: MembershipRole[];
+  roles?: MembershipRole[];
   requireMembership?: boolean;
   allowMasterOverride?: boolean;
 }
@@ -80,15 +81,19 @@ export async function requireCurrentInstitution(
 ): Promise<TenancyContext> {
   const {
     allowedRoles,
+    roles,
     requireMembership = true,
     allowMasterOverride = true,
   } = options;
+
+  const effectiveRoles = allowedRoles ?? roles;
 
   const user = await requireActiveUser(ctx);
   const isMaster = user.role === "MASTER";
 
   let membership: Doc<"institutionMemberships"> | null = null;
-  let institutionId: Id<"institutionInfo"> | null = user.currentInstitutionId ?? null;
+  let institutionId: Id<"institutionInfo"> | null =
+    user.currentInstitutionId ?? null;
 
   if (institutionId) {
     membership = await ctx.db
@@ -130,8 +135,8 @@ export async function requireCurrentInstitution(
     ? "MASTER"
     : ((membership?.role as MembershipRole) ?? "PARENT");
 
-  if (allowedRoles && allowedRoles.length > 0) {
-    const allowed = new Set(allowedRoles);
+  if (effectiveRoles && effectiveRoles.length > 0) {
+    const allowed = new Set(effectiveRoles);
     const masterAllowed = allowMasterOverride && allowed.has("MASTER");
     if (!(isMaster && masterAllowed)) {
       if (!membership) {
@@ -204,4 +209,24 @@ export async function ensureMembershipRole(
   if (!allowed.has(tenancy.membership.role as MembershipRole)) {
     throw new Error("Insufficient membership role");
   }
+}
+
+export function ensureInstitutionMatch<
+  DocType extends {
+    institutionId: Id<"institutionInfo">;
+  },
+>(
+  record: DocType | null,
+  tenancy: TenancyContext,
+  notFoundMessage = "Resource not found",
+): DocType {
+  if (!record) {
+    throw new Error(notFoundMessage);
+  }
+
+  if (record.institutionId !== tenancy.institution._id) {
+    throw new Error(notFoundMessage);
+  }
+
+  return record;
 }

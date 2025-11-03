@@ -5,13 +5,24 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
+import type { MutationCtx, QueryCtx } from "./_generated/server";
+import type { Doc, Id } from "./_generated/dataModel";
+import {
+  ensureInstitutionMatch,
+  tenantMutation,
+  tenantQuery,
+  type TenancyContext,
+} from "./tenancy";
 
 // Chilean grade scale constants
 const MIN_GRADE = 1.0;
 const MAX_GRADE = 7.0;
 const PASSING_GRADE = 4.0;
+
+type AnyCtx = QueryCtx | MutationCtx;
+type GradeDoc = Doc<"classGrades">;
+type CourseDoc = Doc<"courses">;
+type StudentDoc = Doc<"students">;
 
 /**
  * Validate grade is within Chilean scale (1.0 - 7.0)
@@ -33,12 +44,93 @@ function validatePercentage(percentage: number | undefined): void {
   }
 }
 
+async function ensureStudentAccess(
+  ctx: AnyCtx,
+  tenancy: TenancyContext,
+  studentId: Id<"students">,
+): Promise<StudentDoc> {
+  const student = ensureInstitutionMatch(
+    await ctx.db.get(studentId),
+    tenancy,
+    "Student not found",
+  );
+
+  if (
+    tenancy.membershipRole === "PARENT" &&
+    !tenancy.isMaster &&
+    student.parentId !== tenancy.user._id
+  ) {
+    throw new Error("No permission to access grades for this student");
+  }
+
+  if (
+    tenancy.membershipRole === "PROFESOR" &&
+    !tenancy.isMaster &&
+    student.teacherId !== tenancy.user._id
+  ) {
+    throw new Error("No permission to access grades for this student");
+  }
+
+  return student;
+}
+
+async function ensureCourseAccess(
+  ctx: AnyCtx,
+  tenancy: TenancyContext,
+  courseId: Id<"courses">,
+): Promise<CourseDoc> {
+  const course = ensureInstitutionMatch(
+    await ctx.db.get(courseId),
+    tenancy,
+    "Course not found",
+  );
+
+  if (
+    tenancy.membershipRole === "PROFESOR" &&
+    !tenancy.isMaster &&
+    course.teacherId !== tenancy.user._id
+  ) {
+    throw new Error("No permission to access this course");
+  }
+
+  return course;
+}
+
+async function ensureTeacherMembership(
+  ctx: AnyCtx,
+  teacherId: Id<"users">,
+  institutionId: Id<"institutionInfo">,
+): Promise<void> {
+  const teacher = await ctx.db.get(teacherId);
+  if (!teacher || teacher.role !== "PROFESOR") {
+    throw new Error("Teacher not found");
+  }
+
+  const membership = await ctx.db
+    .query("institutionMemberships")
+    .withIndex("by_user_institution", (q) =>
+      q.eq("userId", teacherId).eq("institutionId", institutionId),
+    )
+    .first();
+
+  if (!membership) {
+    throw new Error("Teacher is not part of this institution");
+  }
+}
+
+function filterInstitutionGrades(grades: GradeDoc[], tenancy: TenancyContext) {
+  return grades.filter(
+    (grade) => grade.institutionId === tenancy.institution._id,
+  );
+}
+
+function sortGradesByDate(grades: GradeDoc[]) {
+  return grades.sort((a, b) => b.date - a.date);
+}
+
 // ==================== QUERIES ====================
 
-/**
- * Get grades for a student, optionally filtered by subject and period
- */
-export const getStudentGrades = query({
+export const getStudentGrades = tenantQuery({
   args: {
     studentId: v.id("students"),
     courseId: v.optional(v.id("courses")),
@@ -51,58 +143,57 @@ export const getStudentGrades = query({
       ),
     ),
   },
-  handler: async (ctx, { studentId, courseId, subject, period }) => {
-    let grades;
+  handler: async (ctx, { studentId, courseId, subject, period }, tenancy) => {
+    await ensureStudentAccess(ctx, tenancy, studentId);
 
-    // Use the most selective index based on available filters
+    let grades = await ctx.db
+      .query("classGrades")
+      .withIndex("by_studentId_subject", (q) => q.eq("studentId", studentId))
+      .collect();
+
+    grades = filterInstitutionGrades(grades, tenancy);
+
     if (subject) {
-      // Use by_studentId_subject index for student + subject filtering
-      grades = await ctx.db
-        .query("classGrades")
-        .withIndex("by_studentId_subject", (q) =>
-          q.eq("studentId", studentId).eq("subject", subject),
-        )
-        .collect();
-    } else {
-      // Use by_studentId_subject index with just studentId (will return all subjects for student)
-      grades = await ctx.db
-        .query("classGrades")
-        .withIndex("by_studentId_subject", (q) => q.eq("studentId", studentId))
-        .collect();
+      grades = grades.filter((grade) => grade.subject === subject);
     }
 
-    // Filter by course if provided
     if (courseId) {
-      grades = grades.filter((g) => g.courseId === courseId);
+      grades = grades.filter((grade) => grade.courseId === courseId);
     }
 
-    // Filter by period if provided
     if (period) {
-      grades = grades.filter((g) => g.period === period);
+      grades = grades.filter((grade) => grade.period === period);
     }
 
-    // Get teacher and course info
-    const gradesWithDetails = await Promise.all(
-      grades.map(async (grade) => {
-        const teacher = await ctx.db.get(grade.teacherId);
-        const course = await ctx.db.get(grade.courseId);
-        return {
-          ...grade,
-          teacher: teacher,
-          course: course,
-        };
-      }),
+    const detailed = (
+      await Promise.all(
+        grades.map(async (grade) => {
+          const teacher = await ctx.db.get(grade.teacherId);
+          const course = await ctx.db.get(grade.courseId);
+          if (!course || course.institutionId !== tenancy.institution._id) {
+            return null;
+          }
+          return {
+            ...grade,
+            teacher,
+            course,
+          };
+        }),
+      )
+    ).filter(
+      (
+        value,
+      ): value is GradeDoc & {
+        teacher: Doc<"users"> | null;
+        course: CourseDoc;
+      } => value !== null,
     );
 
-    // Sort by date descending
-    return gradesWithDetails.sort((a, b) => b.date - a.date);
+    return sortGradesByDate(detailed);
   },
 });
 
-/**
- * Get grades for a course
- */
-export const getCourseGrades = query({
+export const getCourseGrades = tenantQuery({
   args: {
     courseId: v.id("courses"),
     subject: v.optional(v.string()),
@@ -114,44 +205,50 @@ export const getCourseGrades = query({
       ),
     ),
   },
-  handler: async (ctx, { courseId, subject, period }) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, subject, period }, tenancy) => {
+    const course = await ensureCourseAccess(ctx, tenancy, courseId);
+
     let grades = await ctx.db
       .query("classGrades")
       .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
       .collect();
 
-    // Filter by subject if provided
+    grades = filterInstitutionGrades(grades, tenancy);
+
     if (subject) {
-      grades = grades.filter((g) => g.subject === subject);
+      grades = grades.filter((grade) => grade.subject === subject);
     }
 
-    // Filter by period if provided
     if (period) {
-      grades = grades.filter((g) => g.period === period);
+      grades = grades.filter((grade) => grade.period === period);
     }
 
-    // Get student and teacher info
-    const gradesWithDetails = await Promise.all(
+    const detailed = await Promise.all(
       grades.map(async (grade) => {
         const student = await ctx.db.get(grade.studentId);
+        if (!student || student.institutionId !== tenancy.institution._id) {
+          return null;
+        }
         const teacher = await ctx.db.get(grade.teacherId);
         return {
           ...grade,
-          student: student,
-          teacher: teacher,
+          student,
+          teacher,
         };
       }),
     );
 
-    // Sort by date descending
-    return gradesWithDetails.sort((a, b) => b.date - a.date);
+    return sortGradesByDate(
+      detailed.filter(
+        (value): value is ReturnType<(typeof detailed)[number]> =>
+          value !== null,
+      ),
+    );
   },
 });
 
-/**
- * Calculate period average for a student
- */
-export const calculatePeriodAverage = query({
+export const calculatePeriodAverage = tenantQuery({
   args: {
     studentId: v.id("students"),
     courseId: v.id("courses"),
@@ -162,21 +259,21 @@ export const calculatePeriodAverage = query({
       v.literal("ANUAL"),
     ),
   },
-  handler: async (ctx, { studentId, courseId, subject, period }) => {
-    // Use the by_studentId_subject index with both studentId and subject for efficiency
-    const grades = await ctx.db
-      .query("classGrades")
-      .withIndex("by_studentId_subject", (q) =>
-        q.eq("studentId", studentId).eq("subject", subject),
-      )
-      .collect();
+  handler: async (ctx, { studentId, courseId, subject, period }, tenancy) => {
+    await ensureStudentAccess(ctx, tenancy, studentId);
+    await ensureCourseAccess(ctx, tenancy, courseId);
 
-    // Filter by course and period
-    const relevantGrades = grades.filter(
-      (g) => g.courseId === courseId && g.period === period,
-    );
+    const grades = filterInstitutionGrades(
+      await ctx.db
+        .query("classGrades")
+        .withIndex("by_studentId_subject", (q) =>
+          q.eq("studentId", studentId).eq("subject", subject),
+        )
+        .collect(),
+      tenancy,
+    ).filter((grade) => grade.courseId === courseId && grade.period === period);
 
-    if (relevantGrades.length === 0) {
+    if (grades.length === 0) {
       return {
         average: null,
         count: 0,
@@ -185,16 +282,14 @@ export const calculatePeriodAverage = query({
       };
     }
 
-    // Calculate simple average
-    const sum = relevantGrades.reduce((acc, g) => acc + g.grade, 0);
-    const average = sum / relevantGrades.length;
+    const sum = grades.reduce((acc, grade) => acc + grade.grade, 0);
+    const average = sum / grades.length;
 
-    // Calculate weighted average if percentages are provided
     let weightedSum = 0;
     let totalWeight = 0;
     let hasWeights = false;
 
-    for (const grade of relevantGrades) {
+    for (const grade of grades) {
       if (grade.percentage !== undefined) {
         weightedSum += grade.grade * (grade.percentage / 100);
         totalWeight += grade.percentage / 100;
@@ -210,17 +305,14 @@ export const calculatePeriodAverage = query({
       weightedAverage: weightedAverage
         ? Math.round(weightedAverage * 100) / 100
         : null,
-      count: relevantGrades.length,
+      count: grades.length,
       passing: average >= PASSING_GRADE,
-      grades: relevantGrades,
+      grades,
     };
   },
 });
 
-/**
- * Get subject averages for all students in a course
- */
-export const getSubjectAverages = query({
+export const getSubjectAverages = tenantQuery({
   args: {
     courseId: v.id("courses"),
     subject: v.string(),
@@ -230,41 +322,44 @@ export const getSubjectAverages = query({
       v.literal("ANUAL"),
     ),
   },
-  handler: async (ctx, { courseId, subject, period }) => {
-    // Get all grades for this course/subject/period
-    const grades = await ctx.db
-      .query("classGrades")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
-      .collect();
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, subject, period }, tenancy) => {
+    await ensureCourseAccess(ctx, tenancy, courseId);
 
-    const relevantGrades = grades.filter(
-      (g) => g.subject === subject && g.period === period,
-    );
+    const grades = filterInstitutionGrades(
+      await ctx.db
+        .query("classGrades")
+        .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+        .collect(),
+      tenancy,
+    ).filter((grade) => grade.subject === subject && grade.period === period);
 
-    // Group by student
-    const studentGradesMap = new Map<Id<"students">, typeof relevantGrades>();
-    for (const grade of relevantGrades) {
-      const existing = studentGradesMap.get(grade.studentId) || [];
+    const studentGradesMap = new Map<Id<"students">, GradeDoc[]>();
+    for (const grade of grades) {
+      const existing = studentGradesMap.get(grade.studentId) ?? [];
       existing.push(grade);
       studentGradesMap.set(grade.studentId, existing);
     }
 
-    // Calculate averages for each student
     const averages = await Promise.all(
       Array.from(studentGradesMap.entries()).map(
-        async ([studentId, grades]) => {
+        async ([studentId, studentGrades]) => {
           const student = await ctx.db.get(studentId);
-          if (!student) return null;
+          if (!student || student.institutionId !== tenancy.institution._id) {
+            return null;
+          }
 
-          const sum = grades.reduce((acc, g) => acc + g.grade, 0);
-          const average = sum / grades.length;
+          const sum = studentGrades.reduce(
+            (acc, grade) => acc + grade.grade,
+            0,
+          );
+          const average = sum / studentGrades.length;
 
-          // Calculate weighted average
           let weightedSum = 0;
           let totalWeight = 0;
           let hasWeights = false;
 
-          for (const grade of grades) {
+          for (const grade of studentGrades) {
             if (grade.percentage !== undefined) {
               weightedSum += grade.grade * (grade.percentage / 100);
               totalWeight += grade.percentage / 100;
@@ -285,7 +380,7 @@ export const getSubjectAverages = query({
             weightedAverage: weightedAverage
               ? Math.round(weightedAverage * 100) / 100
               : null,
-            count: grades.length,
+            count: studentGrades.length,
             passing: average >= PASSING_GRADE,
           };
         },
@@ -293,20 +388,16 @@ export const getSubjectAverages = query({
     );
 
     return averages
-      .filter((a) => a !== null)
+      .filter((value): value is NonNullable<typeof value> => value !== null)
       .sort((a, b) => {
-        const avgA = a!.weightedAverage ?? a!.average;
-        const avgB = b!.weightedAverage ?? b!.average;
-        return avgB - avgA; // Sort descending
+        const avgA = a.weightedAverage ?? a.average;
+        const avgB = b.weightedAverage ?? b.average;
+        return avgB - avgA;
       });
   },
 });
 
-/**
- * Get comprehensive grade overview for all students in a course
- * Returns students with their grades organized by subject and period
- */
-export const getCourseGradeOverview = query({
+export const getCourseGradeOverview = tenantQuery({
   args: {
     courseId: v.id("courses"),
     period: v.union(
@@ -315,14 +406,10 @@ export const getCourseGradeOverview = query({
       v.literal("ANUAL"),
     ),
   },
-  handler: async (ctx, { courseId, period }) => {
-    // Get course details to know subjects
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
-    }
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, period }, tenancy) => {
+    const course = await ensureCourseAccess(ctx, tenancy, courseId);
 
-    // Get all students in the course
     const courseStudents = await ctx.db
       .query("courseStudents")
       .withIndex("by_courseId_isActive", (q) =>
@@ -330,21 +417,20 @@ export const getCourseGradeOverview = query({
       )
       .collect();
 
-    // Get all grades for this course and period
-    const allGrades = await ctx.db
-      .query("classGrades")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
-      .collect();
+    const allGrades = filterInstitutionGrades(
+      await ctx.db
+        .query("classGrades")
+        .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+        .collect(),
+      tenancy,
+    ).filter((grade) => grade.period === period);
 
-    const periodGrades = allGrades.filter((g) => g.period === period);
-
-    // Group grades by student and subject
     const studentSubjectGrades = new Map<
       Id<"students">,
-      Map<string, typeof periodGrades>
+      Map<string, GradeDoc[]>
     >();
 
-    for (const grade of periodGrades) {
+    for (const grade of allGrades) {
       if (!studentSubjectGrades.has(grade.studentId)) {
         studentSubjectGrades.set(grade.studentId, new Map());
       }
@@ -355,13 +441,13 @@ export const getCourseGradeOverview = query({
       subjectMap.get(grade.subject)!.push(grade);
     }
 
-    // Calculate subject averages for each student
-    const result = await Promise.all(
+    const report = await Promise.all(
       courseStudents.map(async (enrollment) => {
         const student = await ctx.db.get(enrollment.studentId);
-        if (!student) return null;
+        if (!student || student.institutionId !== tenancy.institution._id) {
+          return null;
+        }
 
-        const studentGrades = studentSubjectGrades.get(enrollment.studentId);
         const subjectAverages: Record<
           string,
           {
@@ -369,19 +455,19 @@ export const getCourseGradeOverview = query({
             weightedAverage: number | null;
             count: number;
             passing: boolean;
-            grades: typeof periodGrades;
+            grades: GradeDoc[];
           }
         > = {};
 
         let overallSum = 0;
         let overallCount = 0;
         let overallWeightedSum = 0;
-        let overallTotalWeight = 0;
+        let overallWeight = 0;
         let hasOverallWeights = false;
 
-        // Calculate averages for each subject
         for (const subject of course.subjects) {
-          const subjectGrades = studentGrades?.get(subject) || [];
+          const subjectGrades =
+            studentSubjectGrades.get(enrollment.studentId)?.get(subject) ?? [];
 
           if (subjectGrades.length === 0) {
             subjectAverages[subject] = {
@@ -394,10 +480,12 @@ export const getCourseGradeOverview = query({
             continue;
           }
 
-          const sum = subjectGrades.reduce((acc, g) => acc + g.grade, 0);
+          const sum = subjectGrades.reduce(
+            (acc, grade) => acc + grade.grade,
+            0,
+          );
           const average = sum / subjectGrades.length;
 
-          // Calculate weighted average for subject
           let weightedSum = 0;
           let totalWeight = 0;
           let hasWeights = false;
@@ -423,22 +511,19 @@ export const getCourseGradeOverview = query({
             grades: subjectGrades,
           };
 
-          // Add to overall calculation
           overallSum += sum;
           overallCount += subjectGrades.length;
-
           if (hasWeights) {
             overallWeightedSum += weightedSum;
-            overallTotalWeight += totalWeight;
+            overallWeight += totalWeight;
             hasOverallWeights = true;
           }
         }
 
-        // Calculate overall average
         const overallAverage = overallCount > 0 ? overallSum / overallCount : 0;
         const overallWeightedAverage =
-          hasOverallWeights && overallTotalWeight > 0
-            ? overallWeightedSum / overallTotalWeight
+          hasOverallWeights && overallWeight > 0
+            ? overallWeightedSum / overallWeight
             : null;
 
         return {
@@ -455,29 +540,26 @@ export const getCourseGradeOverview = query({
             : null,
           totalGrades: overallCount,
           passingSubjects: Object.values(subjectAverages).filter(
-            (subj) => subj.passing,
+            (subject) => subject.passing,
           ).length,
           totalSubjects: course.subjects.length,
         };
       }),
     );
 
-    return result
-      .filter((r) => r !== null)
+    return report
+      .filter((value): value is NonNullable<typeof value> => value !== null)
       .sort((a, b) => {
-        const avgA = a!.overallWeightedAverage ?? a!.overallAverage;
-        const avgB = b!.overallWeightedAverage ?? b!.overallAverage;
-        return avgB - avgA; // Sort descending by average
+        const avgA = a.overallWeightedAverage ?? a.overallAverage;
+        const avgB = b.overallWeightedAverage ?? b.overallAverage;
+        return avgB - avgA;
       });
   },
 });
 
 // ==================== MUTATIONS ====================
 
-/**
- * Create a new grade/evaluation record
- */
-export const createGrade = mutation({
+export const createGrade = tenantMutation({
   args: {
     studentId: v.id("students"),
     courseId: v.id("courses"),
@@ -505,57 +587,47 @@ export const createGrade = mutation({
     ),
     teacherId: v.id("users"),
   },
-  handler: async (ctx, args) => {
-    // Validate grade is within Chilean scale
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
     validateGrade(args.grade);
     validateGrade(args.maxGrade);
-
-    // Validate percentage if provided
     validatePercentage(args.percentage);
 
-    // Validate date (cannot be in the future)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const recordDate = new Date(args.date);
-    recordDate.setHours(0, 0, 0, 0);
-
-    if (recordDate > today) {
-      throw new Error("Cannot record grades for future dates");
-    }
-
-    // Validate student exists
-    const student = await ctx.db.get(args.studentId);
-    if (!student) {
-      throw new Error("Student not found");
-    }
-
-    // Validate course exists
-    const course = await ctx.db.get(args.courseId);
-    if (!course) {
-      throw new Error("Course not found");
-    }
-
-    // Validate subject is in course subjects
-    if (!course.subjects.includes(args.subject)) {
-      throw new Error(
-        `Subject ${args.subject} is not part of this course's subjects`,
-      );
-    }
-
-    // Validate teacher exists and is PROFESOR
-    const teacher = await ctx.db.get(args.teacherId);
-    if (!teacher || teacher.role !== "PROFESOR") {
-      throw new Error("Only teachers can record grades");
-    }
-
-    // Validate grade doesn't exceed maxGrade
     if (args.grade > args.maxGrade) {
-      throw new Error(`Grade cannot exceed maximum grade (${args.maxGrade})`);
+      throw new Error("Grade cannot exceed maximum grade");
+    }
+
+    if (!tenancy.isMaster && tenancy.membershipRole === "PROFESOR") {
+      if (args.teacherId !== tenancy.user._id) {
+        throw new Error("Teachers can only record grades for themselves");
+      }
+    }
+
+    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id);
+
+    const student = await ensureStudentAccess(ctx, tenancy, args.studentId);
+    const course = await ensureCourseAccess(ctx, tenancy, args.courseId);
+
+    if (!course.subjects.includes(args.subject)) {
+      throw new Error("Subject is not part of this course");
+    }
+
+    // Ensure student is enrolled in course
+    const enrollment = await ctx.db
+      .query("courseStudents")
+      .query("courseStudents")
+      .withIndex("by_courseId", (q) => q.eq("courseId", args.courseId))
+      .filter((q) => q.eq("studentId", args.studentId))
+      .filter((q) => q.eq("isActive", true))
+      .first();
+
+    if (!enrollment) {
+      throw new Error("Student is not enrolled in this course");
     }
 
     const now = Date.now();
-
     return await ctx.db.insert("classGrades", {
+      institutionId: tenancy.institution._id,
       studentId: args.studentId,
       courseId: args.courseId,
       subject: args.subject,
@@ -574,39 +646,61 @@ export const createGrade = mutation({
   },
 });
 
-/**
- * Update a grade record
- */
-export const updateGrade = mutation({
+export const updateGrade = tenantMutation({
   args: {
     gradeId: v.id("classGrades"),
     grade: v.optional(v.float64()),
     maxGrade: v.optional(v.float64()),
     percentage: v.optional(v.float64()),
     comments: v.optional(v.string()),
+    evaluationName: v.optional(v.string()),
+    date: v.optional(v.number()),
+    subject: v.optional(v.string()),
+    evaluationType: v.optional(
+      v.union(
+        v.literal("PRUEBA"),
+        v.literal("TRABAJO"),
+        v.literal("EXAMEN"),
+        v.literal("PRESENTACION"),
+        v.literal("PROYECTO"),
+        v.literal("TAREA"),
+        v.literal("PARTICIPACION"),
+        v.literal("OTRO"),
+      ),
+    ),
   },
-  handler: async (ctx, { gradeId, ...updates }) => {
-    const gradeRecord = await ctx.db.get(gradeId);
-    if (!gradeRecord) {
-      throw new Error("Grade record not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { gradeId, ...updates }, tenancy) => {
+    const grade = ensureInstitutionMatch(
+      await ctx.db.get(gradeId),
+      tenancy,
+      "Grade record not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      grade.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to update this grade");
     }
 
-    // Validate grades if being updated
     if (updates.grade !== undefined) {
       validateGrade(updates.grade);
-    }
-    if (updates.maxGrade !== undefined) {
-      validateGrade(updates.maxGrade);
-    }
-    if (updates.percentage !== undefined) {
-      validatePercentage(updates.percentage);
+      if (updates.maxGrade !== undefined && updates.grade > updates.maxGrade) {
+        throw new Error("Grade cannot exceed maximum grade");
+      }
     }
 
-    // Validate grade doesn't exceed maxGrade
-    const finalGrade = updates.grade ?? gradeRecord.grade;
-    const finalMaxGrade = updates.maxGrade ?? gradeRecord.maxGrade;
-    if (finalGrade > finalMaxGrade) {
-      throw new Error(`Grade cannot exceed maximum grade (${finalMaxGrade})`);
+    if (updates.maxGrade !== undefined) {
+      validateGrade(updates.maxGrade);
+      if (grade.grade > updates.maxGrade) {
+        throw new Error("Existing grade exceeds new maximum grade");
+      }
+    }
+
+    if (updates.percentage !== undefined) {
+      validatePercentage(updates.percentage);
     }
 
     await ctx.db.patch(gradeId, {
@@ -618,15 +712,22 @@ export const updateGrade = mutation({
   },
 });
 
-/**
- * Delete a grade record
- */
-export const deleteGrade = mutation({
+export const deleteGrade = tenantMutation({
   args: { gradeId: v.id("classGrades") },
-  handler: async (ctx, { gradeId }) => {
-    const grade = await ctx.db.get(gradeId);
-    if (!grade) {
-      throw new Error("Grade record not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { gradeId }, tenancy) => {
+    const grade = ensureInstitutionMatch(
+      await ctx.db.get(gradeId),
+      tenancy,
+      "Grade record not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      grade.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to delete this grade");
     }
 
     await ctx.db.delete(gradeId);
@@ -634,10 +735,7 @@ export const deleteGrade = mutation({
   },
 });
 
-/**
- * Bulk create grades for multiple students
- */
-export const bulkCreateGrades = mutation({
+export const bulkCreateGrades = tenantMutation({
   args: {
     courseId: v.id("courses"),
     subject: v.string(),
@@ -669,44 +767,52 @@ export const bulkCreateGrades = mutation({
     ),
     teacherId: v.id("users"),
   },
-  handler: async (ctx, args) => {
-    // Validate maxGrade
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
     validateGrade(args.maxGrade);
     validatePercentage(args.percentage);
 
-    // Validate course and teacher
-    const course = await ctx.db.get(args.courseId);
-    if (!course) {
-      throw new Error("Course not found");
+    if (!tenancy.isMaster && tenancy.membershipRole === "PROFESOR") {
+      if (args.teacherId !== tenancy.user._id) {
+        throw new Error("Teachers can only record grades for themselves");
+      }
     }
 
-    // Validate subject is in course subjects
+    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id);
+
+    const course = await ensureCourseAccess(ctx, tenancy, args.courseId);
     if (!course.subjects.includes(args.subject)) {
-      throw new Error(
-        `Subject ${args.subject} is not part of this course's subjects`,
-      );
-    }
-
-    const teacher = await ctx.db.get(args.teacherId);
-    if (!teacher || teacher.role !== "PROFESOR") {
-      throw new Error("Only teachers can record grades");
+      throw new Error("Subject is not part of this course");
     }
 
     const now = Date.now();
-    const results = [];
-    const errors = [];
+    const results: Array<
+      | { studentId: Id<"students">; gradeId: Id<"classGrades">; success: true }
+      | { studentId: Id<"students">; error: string }
+    > = [];
 
     for (const gradeData of args.grades) {
       try {
-        // Validate grade
         validateGrade(gradeData.grade);
         if (gradeData.grade > args.maxGrade) {
-          throw new Error(
-            `Grade cannot exceed maximum grade (${args.maxGrade})`,
-          );
+          throw new Error("Grade cannot exceed maximum grade");
+        }
+
+        await ensureStudentAccess(ctx, tenancy, gradeData.studentId);
+
+        const enrollment = await ctx.db
+          .query("courseStudents")
+          .withIndex("by_courseId", (q) => q.eq("courseId", args.courseId))
+          .filter((q) => q.eq("studentId", gradeData.studentId))
+          .filter((q) => q.eq("isActive", true))
+          .first();
+
+        if (!enrollment) {
+          throw new Error("Student is not enrolled in this course");
         }
 
         const gradeId = await ctx.db.insert("classGrades", {
+          institutionId: tenancy.institution._id,
           studentId: gradeData.studentId,
           courseId: args.courseId,
           subject: args.subject,
@@ -729,10 +835,10 @@ export const bulkCreateGrades = mutation({
           success: true,
         });
       } catch (error: any) {
-        errors.push({ studentId: gradeData.studentId, error: error.message });
+        results.push({ studentId: gradeData.studentId, error: error.message });
       }
     }
 
-    return { results, errors };
+    return { results };
   },
 });

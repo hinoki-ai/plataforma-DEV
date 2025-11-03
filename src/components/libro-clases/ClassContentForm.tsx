@@ -39,6 +39,7 @@ import { Calendar as CalendarIcon, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { OASelector } from "./OASelector";
+import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
 
 const classContentSchema = z.object({
   date: z.date({
@@ -75,13 +76,18 @@ export function ClassContentForm({
   initialData,
 }: ClassContentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [savedContentId, setSavedContentId] =
+    useState<Id<"classContent"> | null>(null);
 
   // Get course details to show available subjects
   const course = useQuery(api.courses.getCourseById, { courseId });
 
   const createContent = useMutation(api.classContent.createClassContent);
   const updateContent = useMutation(api.classContent.updateClassContent);
-  const linkContentToOA = useMutation(api.learningObjectives.linkClassContentToOA);
+  const linkContentToOA = useMutation(
+    api.learningObjectives.linkClassContentToOA,
+  );
 
   // Define field order for Enter key navigation
   const fieldOrder = [
@@ -171,13 +177,34 @@ export function ClassContentForm({
         }
       }
 
-      form.reset();
-      onSuccess?.();
+      // Show signature modal for new content only
+      if (!initialData) {
+        setSavedContentId(contentId);
+        setShowSignatureModal(true);
+        // Don't call onSuccess here - wait for signature
+      } else {
+        form.reset();
+        onSuccess?.();
+        setIsSubmitting(false);
+      }
     } catch (error: any) {
       toast.error(error.message || "Error al guardar el contenido");
-    } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSignatureComplete = () => {
+    setShowSignatureModal(false);
+    form.reset();
+    onSuccess?.();
+    setSavedContentId(null);
+    setIsSubmitting(false);
+  };
+
+  const handleSignatureCancel = () => {
+    setShowSignatureModal(false);
+    setSavedContentId(null);
+    setIsSubmitting(false);
   };
 
   if (course === undefined) {
@@ -354,7 +381,8 @@ export function ClassContentForm({
                 />
               </FormControl>
               <FormDescription>
-                Descripción textual de objetivos (se mantiene para compatibilidad)
+                Descripción textual de objetivos (se mantiene para
+                compatibilidad)
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -506,6 +534,19 @@ export function ClassContentForm({
           </Button>
         </div>
       </form>
+
+      {/* Signature Modal */}
+      {savedContentId && (
+        <SignatureModal
+          isOpen={showSignatureModal}
+          onClose={handleSignatureCancel}
+          onSuccess={handleSignatureComplete}
+          recordType="CLASS_CONTENT"
+          recordId={savedContentId}
+          teacherId={teacherId}
+          recordLabel={course?.name}
+        />
+      )}
     </Form>
   );
 }

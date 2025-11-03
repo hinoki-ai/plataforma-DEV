@@ -4,7 +4,8 @@
 **Análisis basado en**: 50+ búsquedas web sobre requisitos, normativas y mejores prácticas de libros de clases digitales en Chile  
 **Estado actual del sistema**: ~65% completo según estándares de mercado (actualizado Enero 2025)
 
-**Progreso Reciente**: 
+**Progreso Reciente**:
+
 - ✅ Sistema completo de OA y Cobertura Curricular (Decreto 67) - COMPLETADO
 - ✅ Backend de Firmas Digitales (Circular N°30) - COMPLETADO
 - ⏳ Frontend de Firmas Digitales - Pendiente
@@ -17,6 +18,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## ✅ Funcionalidades Ya Implementadas
 
 ### Backend (Convex) - ✅ Completo
+
 - ✅ Cursos y matrícula de estudiantes
 - ✅ Registro de asistencia (5 estados)
 - ✅ Registro de contenidos de clase
@@ -30,6 +32,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - ✅ **NUEVO (Enero 2025)**: Backend de Firmas Digitales y Certificación (Circular N°30)
 
 ### Frontend (React/Next.js) - ✅ Funcional
+
 - ✅ Interfaces de profesor, administrador y apoderado
 - ✅ Formularios de asistencia, contenidos, observaciones, calificaciones
 - ✅ Dashboards básicos
@@ -44,11 +47,13 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS CRÍTICOS - LEGALES Y NORMATIVOS
 
 ### 1. **Cumplimiento Decreto 67** ✅ COMPLETO (Backend + Frontend)
+
 **Requisito**: Sistema de evaluación que cumpla con el Decreto Supremo 67/2018
 
 **Estado**: ✅ COMPLETADO - Enero 2025
 
 **Backend Implementado**:
+
 - ✅ Registro de Objetivos de Aprendizaje (OA) por asignatura, nivel y grado
 - ✅ Registro de Indicadores de Evaluación específicos vinculados a OA
 - ✅ Vinculación entre contenidos de clase y OA/Indicadores
@@ -57,6 +62,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - ✅ Verificación de cumplimiento de OA por período (semestre/anual)
 
 **Frontend Implementado**:
+
 - ✅ `OASelector.tsx` - Componente de selección multi-OA para formularios de contenido
 - ✅ `OALinkedDisplay.tsx` - Visualización de OA vinculados a contenidos de clase
 - ✅ `CurriculumCoverageDashboard.tsx` - Dashboard completo de cobertura curricular
@@ -65,6 +71,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - ✅ Seguimiento automático de cobertura (NO_INICIADO, EN_PROGRESO, CUBIERTO, REFORZADO)
 
 **Archivos Creados/Modificados**:
+
 - `convex/schema.ts` - Tablas: learningObjectives, evaluationIndicators, classContentOA, curriculumCoverage
 - `convex/learningObjectives.ts` - API completa de gestión de OA (650+ líneas)
 - `src/components/libro-clases/OASelector.tsx` - Componente selector
@@ -74,6 +81,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - `src/components/libro-clases/ClassContentForm.tsx` - Integración selector OA
 
 **Funcionalidades**:
+
 - Creación y gestión de OA por asignatura, nivel y grado
 - Creación y gestión de Indicadores de Evaluación (4 niveles de logro)
 - Vinculación automática OA-contenido de clase
@@ -84,9 +92,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ✅ RESUELTO - Requisito legal mínimo CUMPLIDO
 
 ### 2. **Cumplimiento Circular N°30** ⚠️ PARCIAL
+
 **Requisito**: Registros según Circular N°30 sobre libros de clases digitales
 
 **Gaps**:
+
 - ❌ No hay sistema de fiscalización de firmas digitales
 - ❌ Falta registro de firmas de profesores por cada entrada
 - ❌ No hay sistema de certificación de registros
@@ -96,9 +106,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ALTO - Requisito regulatorio
 
 ### 3. **Integración con Sistemas MINEDUC** ❌ FALTANTE
+
 **Requisito**: Interoperabilidad con sistemas oficiales
 
 **Gaps**:
+
 - ❌ No hay integración con SIES (Sistema de Información de Educación Superior)
 - ❌ Falta exportación de datos en formatos estándar MINEDUC
 - ❌ No hay sincronización automática con bases de datos ministeriales
@@ -111,9 +123,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS CRÍTICOS - FUNCIONALIDADES CORE
 
 ### 4. **Exportación e Impresión** ❌ FALTANTE
+
 **Requisito**: Exportar libro de clases a PDF/impresión para auditorías y respaldo físico
 
 **Gaps**:
+
 - ❌ No hay exportación a PDF del libro de clases completo
 - ❌ Falta generación de reportes en formato físico
 - ❌ No hay exportación por períodos (semestres/trimestres)
@@ -124,9 +138,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ALTO - Requisito para auditorías y respaldo legal
 
 ### 5. **Sistema de Rubricas de Evaluación** ❌ FALTANTE
+
 **Requisito**: Evaluación por criterios y desempeño según Decreto 67
 
 **Gaps**:
+
 - ❌ No hay creación/gestión de rubricas
 - ❌ Falta evaluación por criterios de desempeño
 - ❌ No hay niveles de logro (Inicial, Básico, Intermedio, Avanzado)
@@ -136,9 +152,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ALTO - Parte esencial del sistema de evaluación moderno
 
 ### 6. **Portafolio de Evidencias** ❌ FALTANTE
+
 **Requisito**: Registro de evidencias de aprendizaje
 
 **Gaps**:
+
 - ❌ No hay portafolio digital de evidencias por estudiante
 - ❌ Falta subida de archivos/evidencias vinculadas a evaluaciones
 - ❌ No hay portafolio docente con evidencias
@@ -148,9 +166,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO-ALTO - Práctica educativa moderna
 
 ### 7. **Sistema de Retroalimentación Avanzado** ⚠️ PARCIAL
+
 **Requisito**: Retroalimentación formativa continua
 
 **Gaps**:
+
 - ⚠️ Existe campo de comentarios en calificaciones (básico)
 - ❌ Falta sistema de retroalimentación específica por criterio
 - ❌ No hay registro de conversaciones de retroalimentación
@@ -160,9 +180,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Práctica pedagógica moderna
 
 ### 8. **Tipos de Evaluación Avanzados** ⚠️ PARCIAL
+
 **Requisito**: Todos los tipos de evaluación según MINEDUC
 
 **Gaps**:
+
 - ✅ Existe evaluación formativa (implícita)
 - ❌ No hay diferenciación explícita evaluación formativa/sumativa
 - ❌ Falta registro de autoevaluación estudiantil
@@ -177,9 +199,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS CRÍTICOS - GESTIÓN ESTUDIANTIL
 
 ### 9. **Programa de Integración Escolar (PIE)** ⚠️ PARCIAL
+
 **Requisito**: Registro y seguimiento de estudiantes con necesidades educativas especiales
 
 **Gaps**:
+
 - ⚠️ Existe campo `specialNeeds` en schema de students (muy básico)
 - ❌ No hay módulo completo de gestión PIE
 - ❌ Falta registro de adaptaciones curriculares específicas
@@ -191,9 +215,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ALTO - Requisito legal para instituciones con PIE
 
 ### 10. **Convivencia Escolar Avanzada** ⚠️ PARCIAL
+
 **Requisito**: Sistema completo de gestión de convivencia escolar según normativa
 
 **Gaps**:
+
 - ✅ Existe observaciones con categoría CONVIVENCIA (básico)
 - ❌ No hay registro de sanciones disciplinarias estructuradas
 - ❌ Falta registro de medidas formativas aplicadas
@@ -205,9 +231,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ALTO - Requisito normativo obligatorio
 
 ### 11. **Asistencias Justificadas Avanzadas** ⚠️ PARCIAL
+
 **Requisito**: Sistema completo de justificación de inasistencias
 
 **Gaps**:
+
 - ✅ Existe estado JUSTIFICADO (básico)
 - ❌ No hay tipos de justificación (médica, familiar, certificado, etc.)
 - ❌ Falta registro de documentos justificatorios (PDF upload)
@@ -218,9 +246,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Mejora gestión administrativa
 
 ### 12. **Estudiantes Prioritarios (Ley SEP)** ⚠️ PARCIAL
+
 **Requisito**: Identificación y seguimiento de estudiantes prioritarios
 
 **Gaps**:
+
 - ❌ No hay marcado de estudiantes prioritarios
 - ❌ Falta registro de vulnerabilidad socioeconómica
 - ❌ No hay seguimiento específico de estudiantes prioritarios
@@ -234,9 +264,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS CRÍTICOS - PLANIFICACIÓN Y CONTENIDOS
 
 ### 13. **Planificación Didáctica Avanzada** ⚠️ PARCIAL
+
 **Requisito**: Sistema completo de planificación pedagógica
 
 **Gaps**:
+
 - ✅ Existe registro básico de contenidos de clase
 - ❌ No hay planificación anual por asignatura
 - ❌ Falta planificación mensual/semanal estructurada
@@ -247,11 +279,13 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO-ALTO - Práctica docente esencial
 
 ### 14. **Cobertura Curricular** ✅ COMPLETO
+
 **Requisito**: Seguimiento de cobertura de Objetivos de Aprendizaje
 
 **Estado**: ✅ COMPLETADO - Enero 2025
 
 **Implementación**:
+
 - ✅ Registro de OA por asignatura y curso con filtrado automático
 - ✅ Seguimiento de cobertura porcentual con dashboard visual
 - ✅ Estados de cobertura: NO_INICIADO, EN_PROGRESO, CUBIERTO, REFORZADO
@@ -260,6 +294,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - ✅ Integración completa con `CurriculumCoverageDashboard.tsx`
 
 **Componente**: `CurriculumCoverageDashboard.tsx`
+
 - Estadísticas visuales (tarjetas y gráficos)
 - Filtros por asignatura y período
 - Lista detallada de OA con estado individual
@@ -269,9 +304,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ✅ RESUELTO - Requisito MINEDUC CUMPLIDO
 
 ### 15. **Recursos y Material Didáctico** ⚠️ PARCIAL
+
 **Requisito**: Gestión de recursos pedagógicos
 
 **Gaps**:
+
 - ✅ Existe campo "resources" en classContent (básico texto)
 - ❌ No hay biblioteca de recursos compartida
 - ❌ Falta subida de archivos de recursos por clase
@@ -286,9 +323,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS CRÍTICOS - COMUNICACIÓN Y APODERADOS
 
 ### 16. **Portal Apoderados Avanzado** ⚠️ PARCIAL
+
 **Requisito**: Portal completo y funcional para apoderados
 
 **Gaps**:
+
 - ✅ Existe portal básico de apoderados
 - ❌ No hay aplicación móvil nativa para apoderados
 - ❌ Falta notificaciones push en tiempo real
@@ -299,9 +338,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: ALTO - Diferenciador de mercado
 
 ### 17. **Sistema de Mensajería Integrado** ❌ FALTANTE
+
 **Requisito**: Comunicación directa profesor-apoderado
 
 **Gaps**:
+
 - ❌ No hay sistema de mensajería integrado
 - ❌ Falta chat en tiempo real
 - ❌ No hay bandeja de entrada de mensajes
@@ -311,9 +352,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO-ALTO - Expectativa de mercado
 
 ### 18. **Citaciones y Avisos Estructurados** ⚠️ PARCIAL
+
 **Requisito**: Sistema formal de citaciones y avisos
 
 **Gaps**:
+
 - ⚠️ Existe reuniones de apoderados (básico)
 - ❌ No hay sistema de citaciones individuales
 - ❌ Falta registro de avisos masivos
@@ -327,9 +370,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS CRÍTICOS - TECNOLOGÍA Y ACCESIBILIDAD
 
 ### 19. **Modo Offline/Sincronización** ❌ FALTANTE
+
 **Requisito**: Funcionamiento sin conexión a internet
 
 **Gaps**:
+
 - ❌ No hay modo offline
 - ❌ Falta sincronización automática al reconectar
 - ❌ No hay cache local de datos
@@ -339,9 +384,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO-ALTO - Necesario para zonas rurales
 
 ### 20. **Aplicación Móvil Nativa** ❌ FALTANTE
+
 **Requisito**: Apps nativas iOS y Android
 
 **Gaps**:
+
 - ❌ No hay app móvil nativa
 - ❌ Falta versión PWA optimizada
 - ❌ No hay notificaciones push nativas
@@ -350,9 +397,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO-ALTO - Expectativa de mercado
 
 ### 21. **API Pública y Webhooks** ❌ FALTANTE
+
 **Requisito**: Integración con sistemas externos
 
 **Gaps**:
+
 - ❌ No hay API REST pública documentada
 - ❌ Falta autenticación API con tokens
 - ❌ No hay webhooks para eventos
@@ -362,9 +411,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Necesario para integraciones
 
 ### 22. **Sistema de Backup y Exportación Masiva** ⚠️ PARCIAL
+
 **Requisito**: Respaldo y exportación de datos institucionales
 
 **Gaps**:
+
 - ❌ No hay exportación masiva de datos
 - ❌ Falta backup automático programado
 - ❌ No hay exportación en múltiples formatos (CSV, JSON, XML)
@@ -378,9 +429,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS CRÍTICOS - REPORTES Y ANALÍTICAS
 
 ### 23. **Reportes Estadísticos Avanzados** ⚠️ PARCIAL
+
 **Requisito**: Dashboard analítico completo
 
 **Gaps**:
+
 - ✅ Existen estadísticas básicas de asistencia
 - ❌ No hay gráficos de progreso estudiantil
 - ❌ Falta análisis de tendencias
@@ -391,9 +444,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO-ALTO - Valor agregado
 
 ### 24. **Dashboard de Indicadores** ❌ FALTANTE
+
 **Requisito**: Vista ejecutiva de indicadores clave
 
 **Gaps**:
+
 - ❌ No hay dashboard de indicadores institucionales
 - ❌ Falta KPIs educativos visualizados
 - ❌ No hay comparativas con años anteriores
@@ -402,9 +457,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Valor agregado para administradores
 
 ### 25. **Reportes Personalizables** ❌ FALTANTE
+
 **Requisito**: Generación de reportes según necesidades
 
 **Gaps**:
+
 - ❌ No hay constructor de reportes personalizados
 - ❌ Falta selección de campos/variables
 - ❌ No hay filtros avanzados en reportes
@@ -417,9 +474,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🔴 GAPS ADICIONALES - FUNCIONALIDADES ESPECÍFICAS
 
 ### 26. **Horarios y Cronogramas** ❌ FALTANTE
+
 **Requisito**: Gestión de horarios de clases y cronograma académico
 
 **Gaps**:
+
 - ✅ Existe campo `schedule` en cursos (JSON básico)
 - ❌ No hay editor visual de horarios
 - ❌ Falta gestión de períodos/horarios de clase
@@ -429,9 +488,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Mejora organización
 
 ### 27. **Salidas Pedagógicas** ❌ FALTANTE
+
 **Requisito**: Registro de actividades extra-aula
 
 **Gaps**:
+
 - ❌ No hay registro de salidas pedagógicas
 - ❌ Falta autorización de apoderados para salidas
 - ❌ No hay registro de asistencia en salidas
@@ -440,9 +501,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: BAJO-MEDIO - Funcionalidad específica
 
 ### 28. **Trabajo Colaborativo** ❌ FALTANTE
+
 **Requisito**: Registro de trabajos grupales
 
 **Gaps**:
+
 - ❌ No hay registro de grupos de trabajo
 - ❌ Falta evaluación grupal
 - ❌ No hay registro de proyectos colaborativos
@@ -451,9 +514,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: BAJO-MEDIO - Funcionalidad específica
 
 ### 29. **Proyectos e Investigación** ❌ FALTANTE
+
 **Requisito**: Registro de proyectos de investigación estudiantil
 
 **Gaps**:
+
 - ❌ No hay módulo de proyectos
 - ❌ Falta seguimiento de proyectos estudiantiles
 - ❌ No hay registro de investigación escolar
@@ -461,9 +526,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: BAJO - Funcionalidad específica
 
 ### 30. **Habilidades del Siglo XXI** ❌ FALTANTE
+
 **Requisito**: Evaluación de competencias transversales
 
 **Gaps**:
+
 - ❌ No hay registro de habilidades blandas
 - ❌ Falta evaluación de competencias transversales
 - ❌ No hay registro de habilidades del siglo XXI
@@ -472,9 +539,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Práctica educativa moderna
 
 ### 31. **Biblioteca de Recursos Institucional** ❌ FALTANTE
+
 **Requisito**: Compartir recursos entre profesores
 
 **Gaps**:
+
 - ❌ No hay biblioteca central de recursos
 - ❌ Falta compartición de recursos entre profesores
 - ❌ No hay catálogo de materiales didácticos
@@ -483,9 +552,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Mejora colaboración docente
 
 ### 32. **Supervisiones y Visitas Pedagógicas** ❌ FALTANTE
+
 **Requisito**: Registro de supervisiones y evaluaciones docentes
 
 **Gaps**:
+
 - ❌ No hay registro de supervisiones pedagógicas
 - ❌ Falta registro de visitas a aula
 - ❌ No hay evaluación de desempeño docente vinculada
@@ -494,9 +565,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Gestión institucional
 
 ### 33. **Evaluaciones Diagnósticas** ❌ FALTANTE
+
 **Requisito**: Evaluación al inicio de períodos
 
 **Gaps**:
+
 - ❌ No hay módulo de evaluaciones diagnósticas
 - ❌ Falta comparativa diagnóstico vs final
 - ❌ No hay análisis de brechas de aprendizaje
@@ -504,9 +577,11 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: MEDIO - Práctica pedagógica
 
 ### 34. **Metas de Aprendizaje Individuales** ❌ FALTANTE
+
 **Requisito**: Seguimiento de metas por estudiante
 
 **Gaps**:
+
 - ❌ No hay registro de metas individuales
 - ❌ Falta seguimiento de cumplimiento
 - ❌ No hay ajustes de metas
@@ -518,67 +593,80 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🟡 GAPS MENORES - MEJORAS Y OPTIMIZACIONES
 
 ### 35. **Búsqueda Avanzada** ⚠️ PARCIAL
+
 - ⚠️ Existe búsqueda básica en algunos módulos
 - ❌ Falta búsqueda global unificada
 - ❌ No hay filtros avanzados multi-criterio
 - ❌ Falta búsqueda por fecha rango
 
 ### 36. **Importación Masiva de Datos** ❌ FALTANTE
+
 - ❌ No hay importación desde Excel/CSV
 - ❌ Falta plantillas de importación
 - ❌ No hay validación de datos importados
 
 ### 37. **Plantillas de Observaciones** ❌ FALTANTE
+
 - ❌ No hay plantillas reutilizables
 - ❌ Falta biblioteca de observaciones comunes
 
 ### 38. **Sistema de Alertas Configurable** ⚠️ PARCIAL
+
 - ⚠️ Existen alertas básicas
 - ❌ Falta configuración de umbrales
 - ❌ No hay alertas personalizadas
 
 ### 39. **Multi-idioma Completo** ⚠️ PARCIAL
+
 - ⚠️ Existe i18n básico
 - ❌ Falta traducción completa de todos los módulos
 - ❌ No hay soporte multi-idioma en reportes
 
 ### 40. **Temas y Personalización Visual** ❌ FALTANTE
+
 - ❌ No hay temas personalizables
 - ❌ Falta personalización de colores institucionales
 
 ### 41. **Accesibilidad (WCAG)** ⚠️ PARCIAL
+
 - ⚠️ Diseño responsive básico
 - ❌ Falta cumplimiento completo WCAG 2.1
 - ❌ No hay modo alto contraste
 - ❌ Falta soporte lector de pantalla completo
 
 ### 42. **Auditoría y Logs Detallados** ⚠️ PARCIAL
+
 - ⚠️ Existen timestamps básicos
 - ❌ Falta log de auditoría completo
 - ❌ No hay trazabilidad de cambios
 - ❌ Falta exportación de logs
 
 ### 43. **Multi-tenancy Avanzado** ⚠️ PARCIAL
+
 - ⚠️ Existe soporte básico multi-institucional
 - ❌ Falta configuración personalizada por institución
 - ❌ No hay white-label por institución
 
 ### 44. **Gamificación** ❌ FALTANTE
+
 - ❌ No hay sistema de logros/badges
 - ❌ Falta incentivos para estudiantes
 - ❌ No hay rankings (opcionales)
 
 ### 45. **Integración con Calendario Escolar** ⚠️ PARCIAL
+
 - ✅ Existe módulo de calendario separado
 - ❌ Falta integración estrecha con libro de clases
 - ❌ No hay vinculación calendario-asignaturas
 
 ### 46. **Sistema de Permisos Granulares** ⚠️ PARCIAL
+
 - ⚠️ Existe sistema de roles básico
 - ❌ Falta permisos granulares por funcionalidad
 - ❌ No hay permisos por curso/asignatura
 
 ### 47. **Versionado de Contenidos** ❌ FALTANTE
+
 - ❌ No hay historial de cambios
 - ❌ Falta comparación de versiones
 - ❌ No hay rollback de cambios
@@ -588,6 +676,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 📊 Resumen de Gaps por Prioridad
 
 ### 🔴 CRÍTICO (Requisito Legal/Normativo) - 12 gaps
+
 1. ✅ **Cumplimiento Decreto 67 completo** - COMPLETADO (Enero 2025)
 2. ⚠️ Cumplimiento Circular N°30 (firmas, certificación) - Backend completo, Frontend pendiente
 3. ❌ Exportación PDF/impresión completa
@@ -602,6 +691,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 12. ✅ **Indicadores de evaluación vinculados** - COMPLETADO (Enero 2025)
 
 ### 🟠 ALTA PRIORIDAD (Diferenciador de Mercado) - 10 gaps
+
 13. Aplicación móvil nativa apoderados
 14. Portal apoderados avanzado con dashboards
 15. Sistema de mensajería integrado
@@ -614,6 +704,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 22. Dashboard de indicadores
 
 ### 🟡 MEDIA PRIORIDAD (Valor Agregado) - 15 gaps
+
 23. Backup y exportación masiva
 24. Reportes personalizables
 25. Asistencias justificadas avanzadas
@@ -631,6 +722,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 37. Integración calendario-libro de clases
 
 ### 🟢 BAJA PRIORIDAD (Mejoras) - 10 gaps
+
 38. Búsqueda avanzada global
 39. Plantillas de observaciones
 40. Alertas configurables
@@ -649,6 +741,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ### Comparación con Competidores
 
 **Kimche** (Líder de mercado):
+
 - ✅ Cumple Decreto 67 y Circular N°30
 - ✅ Exportación PDF completa
 - ✅ App móvil apoderados
@@ -658,6 +751,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - **Tu sistema**: ~40% de funcionalidades vs Kimche
 
 **Napsis**:
+
 - ✅ Sistema completo de gestión escolar integrado
 - ✅ API y webhooks
 - ✅ Backup automático
@@ -665,6 +759,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - **Tu sistema**: ~50% de funcionalidades vs Napsis
 
 **Lirmi**:
+
 - ✅ Portafolio de evidencias
 - ✅ Evaluaciones diagnósticas
 - ✅ Cobertura curricular automática
@@ -676,6 +771,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 🎯 Recomendaciones Estratégicas
 
 ### Fase 1: Cumplimiento Legal (3-4 meses) 🔴
+
 **Objetivo**: Cumplir requisitos mínimos legales y normativos
 
 1. Implementar sistema de OA e Indicadores (Decreto 67)
@@ -688,6 +784,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: Permitirá validación legal y uso en producción
 
 ### Fase 2: Diferenciadores Clave (4-6 meses) 🟠
+
 **Objetivo**: Competir efectivamente con líderes de mercado
 
 1. App móvil nativa para apoderados
@@ -701,6 +798,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Impacto**: Competitividad de mercado y satisfacción de usuarios
 
 ### Fase 3: Valor Agregado (6-9 meses) 🟡
+
 **Objetivo**: Funcionalidades avanzadas y diferenciación
 
 1. Reportes estadísticos avanzados
@@ -717,16 +815,19 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 📈 Métricas de Éxito
 
 ### Cumplimiento Legal
+
 - ✅ 100% cumplimiento Decreto 67
 - ✅ 100% cumplimiento Circular N°30
 - ✅ Integración con al menos 1 sistema MINEDUC
 
 ### Competitividad de Mercado
+
 - ✅ 80%+ funcionalidades vs Kimche
 - ✅ App móvil con 4+ estrellas
 - ✅ Tiempo de registro asistencia <2 min (✅ ya logrado)
 
 ### Satisfacción de Usuarios
+
 - ✅ NPS >50
 - ✅ Tasa de adopción >70%
 - ✅ Reducción carga administrativa >60% (objetivo: 67% como Kimche)
@@ -736,6 +837,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ## 📚 Referencias y Fuentes
 
 **Investigación realizada**:
+
 - 50+ búsquedas web sobre libro de clases digital Chile
 - Análisis de normativas: Decreto 67, Circular N°30
 - Comparativa con plataformas: Kimche, Napsis, Lirmi, Educapro
@@ -743,6 +845,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - Mejores prácticas internacionales adaptadas a contexto chileno
 
 **Documentación consultada**:
+
 - Decreto Supremo N°67/2018 sobre evaluación
 - Circular N°30 sobre libros de clases digitales
 - Documentación de plataformas competidoras
@@ -757,15 +860,18 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ### ✅ Completado Recientemente
 
 #### Fase 1: Sistema de OA y Cobertura Curricular (Decreto 67) - COMPLETADO
+
 **Fecha de implementación**: Enero 2025
 
 **Backend (100% completo)**:
+
 - ✅ Schema completo: 4 nuevas tablas (learningObjectives, evaluationIndicators, classContentOA, curriculumCoverage)
 - ✅ API completa en `convex/learningObjectives.ts`:
   - Queries: getLearningObjectives, getLearningObjectiveById, getEvaluationIndicators, getCurriculumCoverage, getClassContentOA, getCoverageStatistics
   - Mutations: createLearningObjective, updateLearningObjective, createEvaluationIndicator, updateEvaluationIndicator, linkClassContentToOA, unlinkClassContentFromOA, updateCurriculumCoverage
 
 **Frontend (100% completo)**:
+
 - ✅ `OASelector.tsx` - Componente multi-select con búsqueda y filtrado
 - ✅ `OALinkedDisplay.tsx` - Visualización de OA vinculados (compacto y expandido)
 - ✅ `CurriculumCoverageDashboard.tsx` - Dashboard completo con estadísticas y listas detalladas
@@ -773,6 +879,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - ✅ Integración en `ClassContentForm.tsx` - Selector de OA al crear contenido
 
 **Funcionalidades Clave**:
+
 - Vinculación automática OA-contenido de clase
 - Cálculo automático de cobertura curricular
 - Estados: NO_INICIADO → EN_PROGRESO → CUBIERTO → REFORZADO
@@ -780,12 +887,14 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - Gestión completa de OA e Indicadores de Evaluación
 
 **Archivos Modificados**:
+
 - `convex/schema.ts` - Agregadas 4 tablas nuevas
 - `convex/learningObjectives.ts` - Nuevo archivo (650+ líneas)
 - `src/components/libro-clases/ClassContentForm.tsx` - Integración selector OA
 - Nuevos componentes en `src/components/libro-clases/`
 
 **Próximos Pasos Pendientes**:
+
 - ⏳ Frontend UI para Digital Signatures (Circular N°30) - Backend ya completo
 - ⏳ Exportación PDF del libro de clases
 - ⏳ Módulo PIE completo
@@ -797,6 +906,7 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 ### ✅ Completado en Sesión Actual
 
 **Frontend Integration (100% completo)**:
+
 - ✅ Página admin creada: `/admin/objetivos-aprendizaje/page.tsx` - OAManager integrado
 - ✅ Nueva tab "Cobertura" agregada a vista profesor en libro-clases
 - ✅ Ruta `/profesor/libro-clases/cobertura/page.tsx` creada
@@ -805,11 +915,13 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 - ✅ `OASelector` integrado en `ClassContentForm.tsx` funcionando correctamente
 
 **Archivos Nuevos en Sesión Actual**:
+
 - `src/app/(main)/admin/objetivos-aprendizaje/page.tsx` - Página admin OA
 - `src/app/(main)/profesor/libro-clases/cobertura/page.tsx` - Página cobertura profesor
 - Modificaciones en `TeacherLibroClasesView.tsx` para nueva tab de cobertura
 
 **Estado Final del Sistema OA**:
+
 - ✅ Backend: 100% completo (4 tablas + API completa)
 - ✅ Frontend Admin: 100% completo (OAManager + página)
 - ✅ Frontend Profesor: 100% completo (Selector + Display + Dashboard + Tab)
@@ -818,4 +930,3 @@ Tras una investigación exhaustiva de los requisitos legales, normativos y de me
 **Última actualización**: Enero 2025  
 **Próxima revisión**: Trimestral  
 **Responsable**: Equipo de Desarrollo
-

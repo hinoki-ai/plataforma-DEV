@@ -338,6 +338,7 @@ export const recordAttendance = mutation({
       } else {
         // Create new record
         const attendanceId = await ctx.db.insert("classAttendance", {
+          institutionId: course.institutionId,
           courseId,
           studentId: record.studentId,
           date,
@@ -432,7 +433,13 @@ export const bulkUpdateAttendance = mutation({
         });
         results.push({ studentId, action: "updated" });
       } else {
+        // Get course to retrieve institutionId
+        const course = await ctx.db.get(courseId);
+        if (!course) {
+          throw new Error("Course not found");
+        }
         await ctx.db.insert("classAttendance", {
+          institutionId: course.institutionId,
           courseId,
           studentId,
           date,

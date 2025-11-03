@@ -53,14 +53,18 @@ const oaSchema = z.object({
     message: "Debe seleccionar un nivel",
   }),
   grade: z.string().min(1, "El grado es requerido"),
-  description: z.string().min(10, "La descripción debe tener al menos 10 caracteres"),
+  description: z
+    .string()
+    .min(10, "La descripción debe tener al menos 10 caracteres"),
   unit: z.string().optional(),
   semester: z.enum(["PRIMER_SEMESTRE", "SEGUNDO_SEMESTRE", "ANUAL"]),
 });
 
 const indicatorSchema = z.object({
   code: z.string().min(1, "El código del indicador es requerido"),
-  description: z.string().min(5, "La descripción debe tener al menos 5 caracteres"),
+  description: z
+    .string()
+    .min(5, "La descripción debe tener al menos 5 caracteres"),
   evaluationCriteria: z.string().optional(),
   level: z.enum(["INICIAL", "BASICO", "INTERMEDIO", "AVANZADO"]),
 });
@@ -86,9 +90,13 @@ const GRADES = [
 export function OAManager() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isIndicatorDialogOpen, setIsIndicatorDialogOpen] = useState(false);
-  const [selectedOA, setSelectedOA] = useState<Id<"learningObjectives"> | null>(null);
+  const [selectedOA, setSelectedOA] = useState<Id<"learningObjectives"> | null>(
+    null,
+  );
   const [editingOA, setEditingOA] = useState<any | null>(null);
-  const [filterSubject, setFilterSubject] = useState<string | undefined>(undefined);
+  const [filterSubject, setFilterSubject] = useState<string | undefined>(
+    undefined,
+  );
   const [filterLevel, setFilterLevel] = useState<string | undefined>(undefined);
   const [filterGrade, setFilterGrade] = useState<string | undefined>(undefined);
 
@@ -307,7 +315,10 @@ export function OAManager() {
               </TableRow>
             ) : learningObjectives.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-8 text-muted-foreground"
+                >
                   No hay OA registrados. Cree uno nuevo para comenzar.
                 </TableCell>
               </TableRow>
@@ -518,7 +529,10 @@ export function OAManager() {
                   <FormItem>
                     <FormLabel>Unidad (Opcional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ej: Unidad 1, Unidad 2..." {...field} />
+                      <Input
+                        placeholder="Ej: Unidad 1, Unidad 2..."
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -539,7 +553,8 @@ export function OAManager() {
                       />
                     </FormControl>
                     <FormDescription>
-                      Descripción detallada del objetivo según curriculum MINEDUC
+                      Descripción detallada del objetivo según curriculum
+                      MINEDUC
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -675,4 +690,3 @@ export function OAManager() {
     </div>
   );
 }
-

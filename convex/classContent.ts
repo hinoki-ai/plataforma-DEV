@@ -181,6 +181,7 @@ export const createClassContent = mutation({
     const now = Date.now();
 
     return await ctx.db.insert("classContent", {
+      institutionId: course.institutionId,
       courseId: args.courseId,
       date: args.date,
       subject: args.subject,
@@ -192,6 +193,7 @@ export const createClassContent = mutation({
       homework: args.homework,
       period: args.period,
       teacherId: args.teacherId,
+      isSigned: false,
       createdAt: now,
       updatedAt: now,
     });
