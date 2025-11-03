@@ -7,7 +7,12 @@
   "nav.portal.escolar": "Portal Escolar",
   "nav.logout": "Log out",
   "nav.logout.loading": "Logging out...",
+  "nav.logout.button": "Log out",
   "nav.toggle.menu": "Toggle menu",
+  "nav.sidebar.expand": "Expand sidebar",
+  "nav.sidebar.collapse": "Collapse sidebar",
+  "nav.sidebar.expand.shortcut": "Expand sidebar (Escape)",
+  "nav.sidebar.collapse.shortcut": "Collapse sidebar (Escape)",
   "nav.home": "Home",
   "nav.dashboard": "Dashboard",
   "nav.admin.panel": "Administrative Panel",
@@ -41,5 +46,9 @@
   "nav.main.categories.system": "System",
   "nav.main.categories.personal": "Personal",
   "nav.main.categories.communication": "Communication",
-  "nav.main.categories.information": "Information"
+  "nav.main.categories.information": "Information",
+  "nav.roles.admin": "Administrator",
+  "nav.roles.profesor": "Teacher",
+  "nav.roles.parent": "Parent/Guardian",
+  "nav.main.categories.debug": "Debug & Development"
 }

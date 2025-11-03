@@ -531,11 +531,16 @@ export default function UnifiedCalendarView({
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
 
-        setAnnounceText(`Calendario exportado como ${format} exitosamente`);
+        setAnnounceText(
+          t("calendar.export_success").replace(
+            "{{format}}",
+            format.toUpperCase(),
+          ),
+        );
       }
     } catch (error) {
       console.error("Error exporting calendar:", error);
-      setAnnounceText("Error al exportar el calendario");
+      setAnnounceText(t("calendar.export_generic_error"));
     }
   };
 
@@ -951,7 +956,9 @@ export default function UnifiedCalendarView({
     return (
       <AdaptiveCard variant={context} className={className}>
         <AdaptiveCardHeader className="pb-4">
-          <AdaptiveCardTitle className="text-lg">Calendario</AdaptiveCardTitle>
+          <AdaptiveCardTitle className="text-lg">
+            {t("calendar.title")}
+          </AdaptiveCardTitle>
         </AdaptiveCardHeader>
         <AdaptiveCardContent>
           <Calendar
@@ -1091,7 +1098,7 @@ export default function UnifiedCalendarView({
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <AdaptiveCardTitle className="flex items-center gap-2">
                 <Filter className="w-5 h-5" />
-                Controles del Calendario
+                {t("calendar.controls")}
               </AdaptiveCardTitle>
               <div className="flex items-center gap-2">
                 <Button

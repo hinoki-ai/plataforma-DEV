@@ -14,7 +14,7 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Panel Administrativo",
+        title: "nav.admin.panel",
         href: "/admin",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+H",
@@ -26,7 +26,7 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Usuarios",
+        title: "nav.users",
         href: "/admin/usuarios",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+U",
@@ -38,31 +38,31 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Resumen General",
+        title: "nav.dashboard",
         href: "/admin/libro-clases",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+L",
       },
       {
-        title: "Asistencia",
+        title: "nav.calendar",
         href: "/admin/libro-clases/asistencia",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+A",
       },
       {
-        title: "Calificaciones",
+        title: "nav.planning",
         href: "/admin/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
       },
       {
-        title: "Observaciones",
+        title: "nav.documents",
         href: "/admin/libro-clases/observaciones",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+O",
       },
       {
-        title: "Gestión de Estudiantes",
+        title: "nav.students",
         href: "/admin/libro-clases/estudiantes",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+G",
@@ -74,19 +74,19 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Planificaciones",
+        title: "nav.planning",
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
         shortcut: "Alt+P",
       },
       {
-        title: "Calendario Escolar",
+        title: "nav.calendar",
         href: "/admin/calendario-escolar",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+C",
       },
       {
-        title: "PME Mejoramiento",
+        title: "nav.pme",
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
       },
@@ -97,13 +97,13 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Reuniones",
+        title: "nav.meetings",
         href: "/admin/reuniones",
         icon: NavigationIcons.Meeting,
         shortcut: "Alt+R",
       },
       {
-        title: "Votaciones",
+        title: "nav.voting",
         href: "/admin/votaciones",
         icon: NavigationIcons.Vote,
         shortcut: "Alt+V",
@@ -115,13 +115,13 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Documentos",
+        title: "nav.documents",
         href: "/admin/documentos",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+D",
       },
       {
-        title: "Horarios",
+        title: "nav.schedule",
         href: "/admin/horarios",
         icon: NavigationIcons.Calendar,
       },
@@ -137,7 +137,7 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Enhanced Debug Panel",
+        title: "nav.main.categories.debug",
         href: "/admin/debug-navigation",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+B",
@@ -153,7 +153,7 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Inicio",
+        title: "nav.home",
         href: "/profesor",
         icon: NavigationIcons.Home,
         shortcut: "Alt+H",
@@ -165,36 +165,36 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Resumen General",
+        title: "nav.dashboard",
         href: "/profesor/libro-clases",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+L",
       },
       {
-        title: "Asistencia",
+        title: "nav.calendar",
         href: "/profesor/libro-clases/asistencia",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+A",
       },
       {
-        title: "Contenidos y Planificación",
+        title: "nav.planning",
         href: "/profesor/libro-clases/contenidos",
         icon: NavigationIcons.Planning,
       },
       {
-        title: "Calificaciones",
+        title: "nav.planning",
         href: "/profesor/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
       },
       {
-        title: "Observaciones",
+        title: "nav.documents",
         href: "/profesor/libro-clases/observaciones",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+O",
       },
       {
-        title: "Reuniones con Apoderados",
+        title: "nav.parent.meetings",
         href: "/profesor/libro-clases/reuniones",
         icon: NavigationIcons.Team,
       },
@@ -205,19 +205,19 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Planificaciones",
+        title: "nav.planning",
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
         shortcut: "Alt+P",
       },
       {
-        title: "Calendario Escolar",
+        title: "nav.calendar",
         href: "/profesor/calendario-escolar",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+C",
       },
       {
-        title: "PME Mejoramiento",
+        title: "nav.pme",
         href: "/profesor/pme",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+M",
@@ -229,7 +229,7 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Reuniones Apoderados",
+        title: "nav.parent.meetings",
         href: "/profesor/reuniones",
         icon: NavigationIcons.Team,
         shortcut: "Alt+R",
@@ -241,7 +241,7 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Horarios",
+        title: "nav.schedule",
         href: "/profesor/horarios",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+T",
@@ -253,7 +253,7 @@ export const PROFESOR_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Perfil",
+        title: "nav.profile",
         href: "/profesor/perfil",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+F",
@@ -270,7 +270,7 @@ export const PARENT_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Inicio",
+        title: "nav.home",
         href: "/parent",
         icon: NavigationIcons.Home,
         shortcut: "Alt+H",
@@ -282,30 +282,30 @@ export const PARENT_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Resumen General",
+        title: "nav.dashboard",
         href: "/parent/libro-clases",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+L",
       },
       {
-        title: "Asistencia",
+        title: "nav.calendar",
         href: "/parent/libro-clases/asistencia",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+A",
       },
       {
-        title: "Calificaciones",
+        title: "nav.planning",
         href: "/parent/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
       },
       {
-        title: "Observaciones",
+        title: "nav.documents",
         href: "/parent/libro-clases/observaciones",
         icon: NavigationIcons.Documents,
       },
       {
-        title: "Reuniones",
+        title: "nav.meetings",
         href: "/parent/libro-clases/reuniones",
         icon: NavigationIcons.Team,
       },
@@ -316,13 +316,13 @@ export const PARENT_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Información de Estudiantes",
+        title: "nav.students",
         href: "/parent/estudiantes",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+E",
       },
       {
-        title: "Calendario Escolar",
+        title: "nav.calendar",
         href: "/parent/calendario-escolar",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+C",
@@ -334,13 +334,13 @@ export const PARENT_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Mensajes",
+        title: "nav.communication",
         href: "/parent/comunicacion",
         icon: NavigationIcons.Notifications,
         shortcut: "Alt+M",
       },
       {
-        title: "Reuniones",
+        title: "nav.meetings",
         href: "/parent/reuniones",
         icon: NavigationIcons.Meeting,
         shortcut: "Alt+R",
@@ -352,7 +352,7 @@ export const PARENT_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: ROLE_SPECIFIC_SECTIONS.PARENT.resources,
+        title: "nav.resources",
         href: "/parent/recursos",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+D",
@@ -373,7 +373,7 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Master Dashboard",
+        title: "nav.dashboard",
         href: "/master",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+M",
@@ -385,31 +385,31 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "God Mode",
+        title: "nav.main.categories.debug",
         href: "/master/god-mode",
         icon: NavigationIcons.ServerStack,
         shortcut: "Alt+G",
       },
       {
-        title: "Global Oversight",
+        title: "nav.main.categories.debug",
         href: "/master/global-oversight",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+O",
       },
       {
-        title: "System Config",
+        title: "nav.configuration",
         href: "/master/system-config",
         icon: NavigationIcons.Settings,
         shortcut: "Alt+C",
       },
       {
-        title: "System Monitor",
+        title: "nav.main.categories.debug",
         href: "/master/system-monitor",
         icon: NavigationIcons.ServerStack,
         shortcut: "Alt+S",
       },
       {
-        title: "Audit Master",
+        title: "nav.main.categories.debug",
         href: "/master/audit-master",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+A",
@@ -421,7 +421,7 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Usuarios",
+        title: "nav.users",
         href: "/admin/usuarios",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+U",
@@ -433,31 +433,31 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "Resumen Libro de Clases",
+        title: "nav.dashboard",
         href: "/admin/libro-clases",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+L",
       },
       {
-        title: "Asistencia",
+        title: "nav.calendar",
         href: "/admin/libro-clases/asistencia",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+A",
       },
       {
-        title: "Calificaciones",
+        title: "nav.planning",
         href: "/admin/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
       },
       {
-        title: "Observaciones",
+        title: "nav.documents",
         href: "/admin/libro-clases/observaciones",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+O",
       },
       {
-        title: "Gestión de Estudiantes",
+        title: "nav.students",
         href: "/admin/libro-clases/estudiantes",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+G",
@@ -469,19 +469,19 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Planificaciones",
+        title: "nav.planning",
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
         shortcut: "Alt+P",
       },
       {
-        title: "Calendario Escolar",
+        title: "nav.calendar",
         href: "/admin/calendario-escolar",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+E",
       },
       {
-        title: "PME Mejoramiento",
+        title: "nav.pme",
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
       },
@@ -492,13 +492,13 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Reuniones",
+        title: "nav.meetings",
         href: "/admin/reuniones",
         icon: NavigationIcons.Meeting,
         shortcut: "Alt+R",
       },
       {
-        title: "Votaciones",
+        title: "nav.voting",
         href: "/admin/votaciones",
         icon: NavigationIcons.Vote,
         shortcut: "Alt+V",
@@ -510,13 +510,13 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Documentos",
+        title: "nav.documents",
         href: "/admin/documentos",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+D",
       },
       {
-        title: "Horarios",
+        title: "nav.schedule",
         href: "/admin/horarios",
         icon: NavigationIcons.Calendar,
       },
@@ -532,7 +532,7 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "Enhanced Debug Panel",
+        title: "nav.main.categories.debug",
         href: "/admin/debug-navigation",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+B",
