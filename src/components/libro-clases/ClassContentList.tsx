@@ -132,11 +132,10 @@ export function ClassContentList({
 
               {/* OA Linked Display */}
               <div>
-                <p className="text-sm font-medium mb-2">Objetivos de Aprendizaje:</p>
-                <OALinkedDisplay
-                  classContentId={content._id}
-                  compact={true}
-                />
+                <p className="text-sm font-medium mb-2">
+                  Objetivos de Aprendizaje:
+                </p>
+                <OALinkedDisplay classContentId={content._id} compact={true} />
               </div>
 
               {/* Content Preview */}
@@ -148,7 +147,9 @@ export function ClassContentList({
               </div>
 
               {/* Activities, Resources, Homework - if present */}
-              {(content.activities || content.resources || content.homework) && (
+              {(content.activities ||
+                content.resources ||
+                content.homework) && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t">
                   {content.activities && (
                     <div>
@@ -223,4 +224,3 @@ export function ClassContentList({
     </div>
   );
 }
-

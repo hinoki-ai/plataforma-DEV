@@ -273,8 +273,7 @@ export default defineSchema({
     ),
     createdAt: v.number(),
     updatedAt: v.number(),
-  })
-    .index("by_institutionId", ["institutionId"])
+  }).index("by_institutionId", ["institutionId"]),
 
   // ==================== CALENDAR EVENTS ====================
 

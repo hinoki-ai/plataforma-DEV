@@ -81,7 +81,7 @@ export const createPlanningDocument = tenantMutation({
   },
 });
 
-export const updatePlanningDocument = mutation({
+export const updatePlanningDocument = tenantMutation({
   args: {
     id: v.id("planningDocuments"),
     title: v.optional(v.string()),
@@ -90,7 +90,22 @@ export const updatePlanningDocument = mutation({
     grade: v.optional(v.string()),
     attachments: v.optional(v.any()),
   },
-  handler: async (ctx, { id, ...updates }) => {
+  roles: ["ADMIN", "PROFESOR", "STAFF", "MASTER"],
+  handler: async (ctx, { id, ...updates }, tenancy) => {
+    const existing = await ctx.db.get(id);
+    if (!existing || existing.institutionId !== tenancy.institution._id) {
+      throw new Error("Planning document not found");
+    }
+
+    const canEditAll =
+      tenancy.isMaster ||
+      tenancy.membershipRole === "ADMIN" ||
+      tenancy.membershipRole === "STAFF";
+
+    if (!canEditAll && existing.authorId !== tenancy.user._id) {
+      throw new Error("No permission to edit this document");
+    }
+
     await ctx.db.patch(id, {
       ...updates,
       updatedAt: Date.now(),
@@ -99,9 +114,24 @@ export const updatePlanningDocument = mutation({
   },
 });
 
-export const deletePlanningDocument = mutation({
+export const deletePlanningDocument = tenantMutation({
   args: { id: v.id("planningDocuments") },
-  handler: async (ctx, { id }) => {
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, { id }, tenancy) => {
+    const existing = await ctx.db.get(id);
+    if (!existing || existing.institutionId !== tenancy.institution._id) {
+      throw new Error("Planning document not found");
+    }
+
+    const canDeleteAll =
+      tenancy.isMaster ||
+      tenancy.membershipRole === "ADMIN" ||
+      tenancy.membershipRole === "STAFF";
+
+    if (!canDeleteAll) {
+      throw new Error("No permission to delete planning documents");
+    }
+
     await ctx.db.delete(id);
   },
 });
@@ -109,10 +139,16 @@ export const deletePlanningDocument = mutation({
 /**
  * Get document statistics for admin dashboard
  */
-export const getDocumentStats = query({
+export const getDocumentStats = tenantQuery({
   args: {},
-  handler: async (ctx) => {
-    const docs = await ctx.db.query("planningDocuments").collect();
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, _args, tenancy) => {
+    const docs = await ctx.db
+      .query("planningDocuments")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
     const now = Date.now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
 
@@ -126,10 +162,15 @@ export const getDocumentStats = query({
 /**
  * Get recent documents count (last 7 days)
  */
-export const getRecentDocumentsCount = query({
+export const getRecentDocumentsCount = tenantQuery({
   args: {},
-  handler: async (ctx) => {
-    const docs = await ctx.db.query("planningDocuments").collect();
+  handler: async (ctx, _args, tenancy) => {
+    const docs = await ctx.db
+      .query("planningDocuments")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
     const now = Date.now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
 

@@ -3,38 +3,47 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { tenantMutation, tenantQuery, ensureInstitutionMatch } from "./tenancy";
 
 // ==================== QUERIES ====================
 
-export const getStudents = query({
+export const getStudents = tenantQuery({
   args: {
     teacherId: v.optional(v.id("users")),
     parentId: v.optional(v.id("users")),
     grade: v.optional(v.string()),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { teacherId, parentId, grade, isActive }) => {
-    let allStudents;
+  handler: async (ctx, { teacherId, parentId, grade, isActive }, tenancy) => {
+    let queryBuilder = ctx.db
+      .query("students")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      );
 
-    if (teacherId) {
-      allStudents = await ctx.db
-        .query("students")
-        .withIndex("by_teacherId", (q) => q.eq("teacherId", teacherId))
-        .collect();
-    } else if (parentId) {
-      allStudents = await ctx.db
-        .query("students")
-        .withIndex("by_parentId", (q) => q.eq("parentId", parentId))
-        .collect();
-    } else if (grade) {
-      allStudents = await ctx.db
-        .query("students")
-        .withIndex("by_grade", (q) => q.eq("grade", grade))
-        .collect();
-    } else {
-      allStudents = await ctx.db.query("students").collect();
+    const enforcedTeacherId =
+      tenancy.membershipRole === "PROFESOR" ? tenancy.user._id : teacherId;
+
+    if (enforcedTeacherId) {
+      queryBuilder = queryBuilder.filter((q) =>
+        q.eq("teacherId", enforcedTeacherId),
+      );
     }
+
+    const enforcedParentId =
+      tenancy.membershipRole === "PARENT" ? tenancy.user._id : parentId;
+
+    if (enforcedParentId) {
+      queryBuilder = queryBuilder.filter((q) =>
+        q.eq("parentId", enforcedParentId),
+      );
+    }
+
+    if (grade) {
+      queryBuilder = queryBuilder.filter((q) => q.eq("grade", grade));
+    }
+
+    let allStudents = await queryBuilder.collect();
 
     if (isActive !== undefined) {
       allStudents = allStudents.filter((s) => s.isActive === isActive);
@@ -44,16 +53,17 @@ export const getStudents = query({
   },
 });
 
-export const getStudentById = query({
+export const getStudentById = tenantQuery({
   args: { id: v.id("students") },
-  handler: async (ctx, { id }) => {
-    return await ctx.db.get(id);
+  handler: async (ctx, { id }, tenancy) => {
+    const student = await ctx.db.get(id);
+    return ensureInstitutionMatch(student, tenancy, "Student not found");
   },
 });
 
 // ==================== MUTATIONS ====================
 
-export const createStudent = mutation({
+export const createStudent = tenantMutation({
   args: {
     firstName: v.string(),
     lastName: v.string(),
@@ -67,10 +77,12 @@ export const createStudent = mutation({
     allergies: v.optional(v.string()),
     specialNeeds: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
     const now = Date.now();
     return await ctx.db.insert("students", {
       ...args,
+      institutionId: tenancy.institution._id,
       attendanceRate: 0,
       academicProgress: 0,
       isActive: true,
@@ -80,7 +92,7 @@ export const createStudent = mutation({
   },
 });
 
-export const updateStudent = mutation({
+export const updateStudent = tenantMutation({
   args: {
     id: v.id("students"),
     firstName: v.optional(v.string()),
@@ -96,7 +108,23 @@ export const updateStudent = mutation({
     academicProgress: v.optional(v.float64()),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { id, ...updates }) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { id, ...updates }, tenancy) => {
+    const existing = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Student not found",
+    );
+
+    const canEditAll =
+      tenancy.isMaster ||
+      tenancy.membershipRole === "ADMIN" ||
+      tenancy.membershipRole === "STAFF";
+
+    if (!canEditAll && existing.teacherId !== tenancy.user._id) {
+      throw new Error("No permission to update this student");
+    }
+
     await ctx.db.patch(id, {
       ...updates,
       updatedAt: Date.now(),
@@ -105,9 +133,22 @@ export const updateStudent = mutation({
   },
 });
 
-export const deleteStudent = mutation({
+export const deleteStudent = tenantMutation({
   args: { id: v.id("students") },
-  handler: async (ctx, { id }) => {
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, { id }, tenancy) => {
+    ensureInstitutionMatch(await ctx.db.get(id), tenancy, "Student not found");
+
+    if (
+      !(
+        tenancy.isMaster ||
+        tenancy.membershipRole === "ADMIN" ||
+        tenancy.membershipRole === "STAFF"
+      )
+    ) {
+      throw new Error("No permission to delete students");
+    }
+
     await ctx.db.delete(id);
   },
 });

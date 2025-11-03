@@ -27,9 +27,7 @@ export function OALinkedDisplay({
   });
 
   if (linkedOA === undefined) {
-    return (
-      <div className="text-xs text-muted-foreground">Cargando OA...</div>
-    );
+    return <div className="text-xs text-muted-foreground">Cargando OA...</div>;
   }
 
   if (!linkedOA || linkedOA.length === 0) {
@@ -120,9 +118,7 @@ export function OALinkedDisplay({
                   <Badge variant="default">{link.objective.code}</Badge>
                   <Badge
                     variant={
-                      link.coverage === "COMPLETA"
-                        ? "default"
-                        : "secondary"
+                      link.coverage === "COMPLETA" ? "default" : "secondary"
                     }
                     className="text-xs"
                   >
@@ -198,4 +194,3 @@ export function OALinkedDisplay({
     </Card>
   );
 }
-

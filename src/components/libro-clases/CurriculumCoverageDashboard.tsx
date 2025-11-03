@@ -174,7 +174,10 @@ export function CurriculumCoverageDashboard({
                   setSelectedPeriod(
                     value === "all"
                       ? undefined
-                      : (value as "PRIMER_SEMESTRE" | "SEGUNDO_SEMESTRE" | "ANUAL"),
+                      : (value as
+                          | "PRIMER_SEMESTRE"
+                          | "SEGUNDO_SEMESTRE"
+                          | "ANUAL"),
                   )
                 }
               >
@@ -183,7 +186,9 @@ export function CurriculumCoverageDashboard({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos los períodos</SelectItem>
-                  <SelectItem value="PRIMER_SEMESTRE">Primer Semestre</SelectItem>
+                  <SelectItem value="PRIMER_SEMESTRE">
+                    Primer Semestre
+                  </SelectItem>
                   <SelectItem value="SEGUNDO_SEMESTRE">
                     Segundo Semestre
                   </SelectItem>
@@ -210,11 +215,7 @@ export function CurriculumCoverageDashboard({
                     <p className="text-2xl font-bold mt-1">{stat.value}</p>
                   </div>
                   <div
-                    className={cn(
-                      "p-3 rounded-full",
-                      stat.bgColor,
-                      stat.color,
-                    )}
+                    className={cn("p-3 rounded-full", stat.bgColor, stat.color)}
                   >
                     <Icon className="h-5 w-5" />
                   </div>
@@ -321,8 +322,7 @@ export function CurriculumCoverageDashboard({
               {objectives
                 .filter(
                   (o) =>
-                    !o.coverage ||
-                    o.coverage.coverageStatus === "NO_INICIADO",
+                    !o.coverage || o.coverage.coverageStatus === "NO_INICIADO",
                 )
                 .map((obj) => (
                   <ObjectiveCard key={obj._id} objective={obj} />
@@ -414,9 +414,7 @@ function ObjectiveCard({ objective }: { objective: any }) {
             </p>
             {objective.coverage && (
               <div className="flex flex-wrap gap-4 text-xs text-muted-foreground mt-2">
-                <span>
-                  Veces cubierto: {objective.coverage.timesCovered}
-                </span>
+                <span>Veces cubierto: {objective.coverage.timesCovered}</span>
                 {objective.coverage.lastCoveredDate && (
                   <span>
                     Última vez:{" "}
@@ -438,4 +436,3 @@ function ObjectiveCard({ objective }: { objective: any }) {
     </Card>
   );
 }
-

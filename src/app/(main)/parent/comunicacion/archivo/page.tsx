@@ -301,7 +301,7 @@ export default function ArchivoPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-start gap-3 mb-2">
-                          <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
                             <Mail className="h-4 w-4 text-primary" />
                           </div>
                           <div className="flex-1">

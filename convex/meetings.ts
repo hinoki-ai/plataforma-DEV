@@ -4,14 +4,69 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import type { MutationCtx, QueryCtx } from "./_generated/server";
+import type { Doc, Id } from "./_generated/dataModel";
+import { ensureInstitutionMatch, tenantMutation, tenantQuery } from "./tenancy";
+
+type MeetingDoc = Doc<"meetings">;
+type UserDoc = Doc<"users">;
+type AnyCtx = QueryCtx | MutationCtx;
+
+async function userInInstitution(
+  ctx: AnyCtx,
+  userId: Id<"users">,
+  institutionId: Id<"institutionInfo">,
+): Promise<boolean> {
+  const membership = await ctx.db
+    .query("institutionMemberships")
+    .withIndex("by_user_institution", (q) =>
+      q.eq("userId", userId).eq("institutionId", institutionId),
+    )
+    .first();
+
+  return membership !== null;
+}
+
+async function enrichMeetingsWithTeacher<C extends AnyCtx>(
+  ctx: C,
+  meetings: MeetingDoc[],
+) {
+  if (meetings.length === 0) {
+    return meetings;
+  }
+
+  const teacherIds = Array.from(new Set(meetings.map((m) => m.assignedTo)));
+  const teacherEntries = await Promise.all(
+    teacherIds.map(async (id) => {
+      const teacher = await ctx.db.get(id);
+      return teacher ? ([id, teacher] as const) : null;
+    }),
+  );
+
+  const teacherMap = new Map(
+    teacherEntries.filter(
+      (entry): entry is readonly [Id<"users">, UserDoc] => entry !== null,
+    ),
+  );
+
+  return meetings.map((meeting) => {
+    const teacher = teacherMap.get(meeting.assignedTo);
+    return {
+      ...meeting,
+      teacher: teacher
+        ? {
+            id: teacher._id,
+            name: teacher.name,
+            email: teacher.email,
+          }
+        : null,
+    };
+  });
+}
 
 // ==================== QUERIES ====================
 
-/**
- * Get all meetings with pagination and filtering
- */
-export const getMeetings = query({
+export const getMeetings = tenantQuery({
   args: {
     filter: v.optional(
       v.object({
@@ -24,124 +79,284 @@ export const getMeetings = query({
     assignedTo: v.optional(v.id("users")),
     parentRequested: v.optional(v.boolean()),
   },
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
   handler: async (
     ctx,
     { filter, page = 1, limit = 20, assignedTo, parentRequested },
+    tenancy,
   ) => {
-    let allMeetings = await ctx.db.query("meetings").collect();
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.max(limit, 1);
 
-    // Apply filters
+    let meetings = await ctx.db
+      .query("meetings")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
+
+    const enforcedAssignedTo =
+      tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster
+        ? tenancy.user._id
+        : assignedTo;
+
+    if (enforcedAssignedTo) {
+      meetings = meetings.filter((m) => m.assignedTo === enforcedAssignedTo);
+    }
+
     if (filter?.status) {
-      allMeetings = allMeetings.filter((m) => m.status === filter.status);
+      meetings = meetings.filter((m) => m.status === filter.status);
     }
+
     if (filter?.type) {
-      allMeetings = allMeetings.filter((m) => m.type === filter.type);
+      meetings = meetings.filter((m) => m.type === filter.type);
     }
-    if (assignedTo) {
-      allMeetings = allMeetings.filter((m) => m.assignedTo === assignedTo);
-    }
+
     if (parentRequested !== undefined) {
-      allMeetings = allMeetings.filter(
-        (m) => m.parentRequested === parentRequested,
-      );
+      meetings = meetings.filter((m) => m.parentRequested === parentRequested);
     }
 
-    // Sort by date descending
-    allMeetings.sort((a, b) => b.scheduledDate - a.scheduledDate);
+    meetings.sort((a, b) => b.scheduledDate - a.scheduledDate);
 
-    // Pagination
-    const total = allMeetings.length;
-    const skip = (page - 1) * limit;
-    const meetings = allMeetings.slice(skip, skip + limit);
+    const total = meetings.length;
+    const skip = (safePage - 1) * safeLimit;
+    const pagedMeetings = meetings.slice(skip, skip + safeLimit);
 
-    // Get teacher info for each meeting
-    const meetingsWithTeacher = await Promise.all(
-      meetings.map(async (meeting) => {
-        const teacher = await ctx.db.get(meeting.assignedTo);
-        return {
-          ...meeting,
-          teacher: teacher
-            ? {
-                id: teacher._id,
-                name: teacher.name,
-                email: teacher.email,
-              }
-            : null,
-        };
-      }),
+    const meetingsWithTeacher = await enrichMeetingsWithTeacher(
+      ctx,
+      pagedMeetings,
     );
 
     return {
       meetings: meetingsWithTeacher,
       total,
-      page,
-      limit,
-      pages: Math.ceil(total / limit),
+      page: safePage,
+      limit: safeLimit,
+      pages: Math.ceil(total / safeLimit),
     };
   },
 });
 
-/**
- * Get meeting by ID
- */
-export const getMeetingById = query({
+export const getMeetingById = tenantQuery({
   args: { id: v.id("meetings") },
-  handler: async (ctx, { id }) => {
-    return await ctx.db.get(id);
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
+  handler: async (ctx, { id }, tenancy) => {
+    const meeting = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Meeting not found",
+    );
+
+    if (!tenancy.isMaster) {
+      if (
+        tenancy.membershipRole === "PROFESOR" &&
+        meeting.assignedTo !== tenancy.user._id
+      ) {
+        throw new Error("No permission to view this meeting");
+      }
+
+      if (
+        tenancy.membershipRole === "PARENT" &&
+        meeting.guardianEmail !== (tenancy.user.email ?? "")
+      ) {
+        throw new Error("No permission to view this meeting");
+      }
+    }
+
+    const [enriched] = await enrichMeetingsWithTeacher(ctx, [meeting]);
+    return enriched;
   },
 });
 
-/**
- * Get meetings for a teacher
- */
-export const getMeetingsByTeacher = query({
+export const getMeetingsByTeacher = tenantQuery({
   args: { teacherId: v.id("users") },
-  handler: async (ctx, { teacherId }) => {
-    return await ctx.db
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { teacherId }, tenancy) => {
+    const effectiveTeacherId =
+      tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster
+        ? tenancy.user._id
+        : teacherId;
+
+    const meetings = await ctx.db
       .query("meetings")
-      .withIndex("by_assignedTo", (q) => q.eq("assignedTo", teacherId))
+      .withIndex("by_assignedTo", (q) => q.eq("assignedTo", effectiveTeacherId))
       .collect();
+
+    const scoped = meetings.filter(
+      (meeting) => meeting.institutionId === tenancy.institution._id,
+    );
+
+    return await enrichMeetingsWithTeacher(ctx, scoped);
   },
 });
 
-/**
- * Get meetings for a student
- */
-export const getMeetingsByStudent = query({
+export const getMeetingsByStudent = tenantQuery({
   args: { studentId: v.id("students") },
-  handler: async (ctx, { studentId }) => {
-    return await ctx.db
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { studentId }, tenancy) => {
+    let meetings = await ctx.db
       .query("meetings")
       .withIndex("by_studentId", (q) => q.eq("studentId", studentId))
       .collect();
+
+    meetings = meetings.filter(
+      (meeting) => meeting.institutionId === tenancy.institution._id,
+    );
+
+    if (tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster) {
+      meetings = meetings.filter(
+        (meeting) => meeting.assignedTo === tenancy.user._id,
+      );
+    }
+
+    meetings.sort((a, b) => b.scheduledDate - a.scheduledDate);
+
+    return await enrichMeetingsWithTeacher(ctx, meetings);
   },
 });
 
-/**
- * Get upcoming meetings
- */
-export const getUpcomingMeetings = query({
+export const getUpcomingMeetings = tenantQuery({
   args: { userId: v.optional(v.id("users")) },
-  handler: async (ctx, { userId }) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { userId }, tenancy) => {
     const now = Date.now();
-    let meetings = await ctx.db.query("meetings").collect();
 
-    meetings = meetings.filter((m) => m.scheduledDate >= now);
+    let meetings = await ctx.db
+      .query("meetings")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
 
-    if (userId) {
-      meetings = meetings.filter((m) => m.assignedTo === userId);
+    meetings = meetings.filter((meeting) => meeting.scheduledDate >= now);
+
+    const effectiveUserId =
+      tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster
+        ? tenancy.user._id
+        : userId;
+
+    if (effectiveUserId) {
+      meetings = meetings.filter(
+        (meeting) => meeting.assignedTo === effectiveUserId,
+      );
     }
 
-    return meetings.sort((a, b) => a.scheduledDate - b.scheduledDate);
+    meetings.sort((a, b) => a.scheduledDate - b.scheduledDate);
+
+    return await enrichMeetingsWithTeacher(ctx, meetings);
+  },
+});
+
+export const getMeetingsByGuardian = tenantQuery({
+  args: { guardianEmail: v.string() },
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
+  handler: async (ctx, { guardianEmail }, tenancy) => {
+    const effectiveEmail =
+      tenancy.membershipRole === "PARENT" && !tenancy.isMaster
+        ? (tenancy.user.email ?? guardianEmail)
+        : guardianEmail;
+
+    let meetings = await ctx.db
+      .query("meetings")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
+
+    meetings = meetings
+      .filter((meeting) => meeting.guardianEmail === effectiveEmail)
+      .sort((a, b) => b.scheduledDate - a.scheduledDate);
+
+    return await enrichMeetingsWithTeacher(ctx, meetings);
+  },
+});
+
+export const getMeetingStats = tenantQuery({
+  args: {},
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, _args, tenancy) => {
+    const now = Date.now();
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+
+    const meetings = await ctx.db
+      .query("meetings")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
+
+    return {
+      total: meetings.length,
+      upcoming: meetings.filter((m) => m.scheduledDate >= now).length,
+      recent: meetings.filter((m) => m.createdAt >= sevenDaysAgo).length,
+      completed: meetings.filter((m) => m.status === "COMPLETED").length,
+      pending: meetings.filter((m) => m.status === "SCHEDULED").length,
+    };
+  },
+});
+
+export const getMeetingsByParent = tenantQuery({
+  args: { parentId: v.id("users") },
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
+  handler: async (ctx, { parentId }, tenancy) => {
+    const effectiveParentId =
+      tenancy.membershipRole === "PARENT" && !tenancy.isMaster
+        ? tenancy.user._id
+        : parentId;
+
+    const parent = await ctx.db.get(effectiveParentId);
+    if (!parent) return [];
+
+    if (
+      !tenancy.isMaster &&
+      !(await userInInstitution(
+        ctx,
+        effectiveParentId,
+        tenancy.institution._id,
+      ))
+    ) {
+      throw new Error("Parent is not part of this institution");
+    }
+
+    const meetings = await ctx.db
+      .query("meetings")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
+
+    const filtered = meetings
+      .filter((meeting) => meeting.guardianEmail === parent.email)
+      .sort((a, b) => b.scheduledDate - a.scheduledDate);
+
+    return await enrichMeetingsWithTeacher(ctx, filtered);
+  },
+});
+
+export const getParentMeetingRequests = tenantQuery({
+  args: {},
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, _args, tenancy) => {
+    const meetings = await ctx.db
+      .query("meetings")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
+
+    const filtered = meetings
+      .filter(
+        (meeting) => meeting.parentRequested && meeting.status === "SCHEDULED",
+      )
+      .sort((a, b) => a.scheduledDate - b.scheduledDate);
+
+    return await enrichMeetingsWithTeacher(ctx, filtered);
   },
 });
 
 // ==================== MUTATIONS ====================
 
-/**
- * Create a new meeting
- */
-export const createMeeting = mutation({
+export const createMeeting = tenantMutation({
   args: {
     title: v.string(),
     description: v.optional(v.string()),
@@ -166,27 +381,53 @@ export const createMeeting = mutation({
     parentRequested: v.optional(v.boolean()),
     studentId: v.optional(v.id("students")),
   },
-  handler: async (ctx, args) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      args.assignedTo !== tenancy.user._id
+    ) {
+      throw new Error("Teachers can only assign meetings to themselves");
+    }
+
+    const teacher = await ctx.db.get(args.assignedTo);
+    if (!teacher) {
+      throw new Error("Teacher not found");
+    }
+
+    if (
+      !tenancy.isMaster &&
+      !(await userInInstitution(ctx, args.assignedTo, tenancy.institution._id))
+    ) {
+      throw new Error("Teacher is not part of this institution");
+    }
+
+    if (args.studentId) {
+      const student = await ctx.db.get(args.studentId);
+      if (!student || student.institutionId !== tenancy.institution._id) {
+        throw new Error("Student not found for this institution");
+      }
+    }
+
     const now = Date.now();
 
     return await ctx.db.insert("meetings", {
       ...args,
-      status: "SCHEDULED",
       duration: args.duration ?? 30,
       location: args.location ?? "Sala de Reuniones",
       followUpRequired: false,
       parentRequested: args.parentRequested ?? false,
       source: args.parentRequested ? "PARENT_REQUESTED" : "STAFF_CREATED",
+      status: "SCHEDULED",
       createdAt: now,
       updatedAt: now,
+      institutionId: tenancy.institution._id,
     });
   },
 });
 
-/**
- * Update meeting
- */
-export const updateMeeting = mutation({
+export const updateMeeting = tenantMutation({
   args: {
     id: v.id("meetings"),
     title: v.optional(v.string()),
@@ -208,11 +449,52 @@ export const updateMeeting = mutation({
     notes: v.optional(v.string()),
     outcome: v.optional(v.string()),
     followUpRequired: v.optional(v.boolean()),
+    assignedTo: v.optional(v.id("users")),
+    studentId: v.optional(v.id("students")),
   },
-  handler: async (ctx, { id, ...updates }) => {
-    const meeting = await ctx.db.get(id);
-    if (!meeting) {
-      throw new Error("Meeting not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { id, ...updates }, tenancy) => {
+    const meeting = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Meeting not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      meeting.assignedTo !== tenancy.user._id
+    ) {
+      throw new Error("No permission to update this meeting");
+    }
+
+    if (updates.assignedTo && updates.assignedTo !== meeting.assignedTo) {
+      if (tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster) {
+        throw new Error("Teachers cannot reassign meetings");
+      }
+
+      const newTeacher = await ctx.db.get(updates.assignedTo);
+      if (!newTeacher) {
+        throw new Error("Assigned teacher not found");
+      }
+
+      if (
+        !tenancy.isMaster &&
+        !(await userInInstitution(
+          ctx,
+          updates.assignedTo,
+          tenancy.institution._id,
+        ))
+      ) {
+        throw new Error("Assigned teacher is not part of this institution");
+      }
+    }
+
+    if (updates.studentId && updates.studentId !== meeting.studentId) {
+      const student = await ctx.db.get(updates.studentId);
+      if (!student || student.institutionId !== tenancy.institution._id) {
+        throw new Error("Student not found for this institution");
+      }
     }
 
     await ctx.db.patch(id, {
@@ -224,119 +506,80 @@ export const updateMeeting = mutation({
   },
 });
 
-/**
- * Delete meeting
- */
-export const deleteMeeting = mutation({
+export const deleteMeeting = tenantMutation({
   args: { id: v.id("meetings") },
-  handler: async (ctx, { id }) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { id }, tenancy) => {
+    const meeting = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Meeting not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      meeting.assignedTo !== tenancy.user._id
+    ) {
+      throw new Error("No permission to delete this meeting");
+    }
+
     await ctx.db.delete(id);
   },
 });
 
-/**
- * Cancel meeting
- */
-export const cancelMeeting = mutation({
+export const cancelMeeting = tenantMutation({
   args: {
     id: v.id("meetings"),
     reason: v.optional(v.string()),
   },
-  handler: async (ctx, { id, reason }) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { id, reason }, tenancy) => {
+    const meeting = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Meeting not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      meeting.assignedTo !== tenancy.user._id
+    ) {
+      throw new Error("No permission to cancel this meeting");
+    }
+
     await ctx.db.patch(id, {
       status: "CANCELLED",
-      notes: reason,
+      notes: reason ?? meeting.notes,
       updatedAt: Date.now(),
     });
   },
 });
 
-/**
- * Get meetings by guardian email
- */
-export const getMeetingsByGuardian = query({
-  args: { guardianEmail: v.string() },
-  handler: async (ctx, { guardianEmail }) => {
-    const meetings = await ctx.db.query("meetings").collect();
-    const filtered = meetings
-      .filter((m) => m.guardianEmail === guardianEmail)
-      .sort((a, b) => b.scheduledDate - a.scheduledDate);
-
-    // Get teacher names
-    const withTeachers = await Promise.all(
-      filtered.map(async (meeting) => {
-        const teacher = await ctx.db.get(meeting.assignedTo);
-        return {
-          ...meeting,
-          teacherName: teacher?.name || "Profesor asignado",
-        };
-      }),
-    );
-
-    return withTeachers;
-  },
-});
-
-/**
- * Get meeting statistics for admin dashboard
- */
-export const getMeetingStats = query({
-  args: {},
-  handler: async (ctx) => {
-    const meetings = await ctx.db.query("meetings").collect();
-    const now = Date.now();
-    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
-
-    return {
-      total: meetings.length,
-      upcoming: meetings.filter((m) => m.scheduledDate >= now).length,
-      recent: meetings.filter((m) => m.createdAt >= sevenDaysAgo).length,
-      completed: meetings.filter((m) => m.status === "COMPLETED").length,
-      pending: meetings.filter((m) => m.status === "SCHEDULED").length,
-    };
-  },
-});
-
-/**
- * Get meetings by parent user ID
- */
-export const getMeetingsByParent = query({
-  args: { parentId: v.id("users") },
-  handler: async (ctx, { parentId }) => {
-    // Get parent user to find their email
-    const parent = await ctx.db.get(parentId);
-    if (!parent) return [];
-
-    // Find meetings by guardian email
-    const meetings = await ctx.db.query("meetings").collect();
-    return meetings.filter((m) => m.guardianEmail === parent.email);
-  },
-});
-
-/**
- * Get parent-requested meeting requests (pending approval)
- */
-export const getParentMeetingRequests = query({
-  args: {},
-  handler: async (ctx) => {
-    const meetings = await ctx.db.query("meetings").collect();
-    return meetings.filter(
-      (m) => m.parentRequested === true && m.status === "SCHEDULED",
-    );
-  },
-});
-
-/**
- * Update meeting status
- */
-export const updateMeetingStatus = mutation({
+export const updateMeetingStatus = tenantMutation({
   args: {
     id: v.id("meetings"),
     status: v.string(),
     notes: v.optional(v.string()),
   },
-  handler: async (ctx, { id, status, notes }) => {
-    const updates: any = {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { id, status, notes }, tenancy) => {
+    const meeting = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Meeting not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      meeting.assignedTo !== tenancy.user._id
+    ) {
+      throw new Error("No permission to update this meeting");
+    }
+
+    const updates: Record<string, any> = {
       status,
       updatedAt: Date.now(),
     };
@@ -350,10 +593,7 @@ export const updateMeetingStatus = mutation({
   },
 });
 
-/**
- * Request a meeting (parent-initiated)
- */
-export const requestMeeting = mutation({
+export const requestMeeting = tenantMutation({
   args: {
     studentName: v.string(),
     studentGrade: v.string(),
@@ -371,24 +611,50 @@ export const requestMeeting = mutation({
       v.literal("GRADE_CONFERENCE"),
     ),
   },
-  handler: async (ctx, args) => {
+  roles: ["PARENT", "ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
     const now = Date.now();
 
-    // Find a default teacher to assign (or assign later by admin)
-    const teachers = await ctx.db.query("users").collect();
-    const teacher = teachers.find((u) => u.role === "PROFESOR");
+    const memberships = await ctx.db
+      .query("institutionMemberships")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
 
-    if (!teacher) {
+    const teacherMembership = memberships.find((m) => m.role === "PROFESOR");
+    if (!teacherMembership) {
       throw new Error("No teacher available to assign meeting");
     }
 
+    const teacher = await ctx.db.get(teacherMembership.userId);
+    if (!teacher) {
+      throw new Error("Assigned teacher not found");
+    }
+
+    const guardianEmail =
+      tenancy.membershipRole === "PARENT" && !tenancy.isMaster
+        ? (tenancy.user.email ?? args.guardianEmail)
+        : args.guardianEmail;
+
+    const guardianName =
+      tenancy.membershipRole === "PARENT" && !tenancy.isMaster
+        ? (tenancy.user.name ?? args.guardianName)
+        : args.guardianName;
+
+    const guardianPhone =
+      tenancy.membershipRole === "PARENT" && !tenancy.isMaster
+        ? (tenancy.user.phone ?? args.guardianPhone)
+        : args.guardianPhone;
+
     return await ctx.db.insert("meetings", {
       title: `Reunión solicitada: ${args.studentName}`,
+      description: args.reason,
       studentName: args.studentName,
       studentGrade: args.studentGrade,
-      guardianName: args.guardianName,
-      guardianEmail: args.guardianEmail,
-      guardianPhone: args.guardianPhone,
+      guardianName,
+      guardianEmail,
+      guardianPhone,
       scheduledDate: args.preferredDate,
       scheduledTime: args.preferredTime,
       duration: 30,
@@ -402,6 +668,7 @@ export const requestMeeting = mutation({
       followUpRequired: false,
       createdAt: now,
       updatedAt: now,
+      institutionId: tenancy.institution._id,
     });
   },
 });

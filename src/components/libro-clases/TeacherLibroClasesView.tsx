@@ -43,6 +43,7 @@ import { GradeEntryForm } from "@/components/libro-clases/GradeEntryForm";
 import { GradesTable } from "@/components/libro-clases/GradesTable";
 import { ParentMeetingTracker } from "@/components/libro-clases/ParentMeetingTracker";
 import { CurriculumCoverageDashboard } from "@/components/libro-clases/CurriculumCoverageDashboard";
+import { PdfExportButton } from "@/components/libro-clases/PdfExportButton";
 import { Id } from "@/convex/_generated/dataModel";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -411,19 +412,27 @@ export function TeacherLibroClasesView({
                       {selectedCourse?.academicYear}
                     </CardDescription>
                   </div>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSelectedCourseId(null);
-                      setActiveTab(view);
-                      const target = TEACHER_TAB_ROUTES[view];
-                      if (target && target !== pathname) {
-                        router.push(target);
+                  <div className="flex gap-2">
+                    <PdfExportButton
+                      courseId={selectedCourseId}
+                      academicYear={
+                        selectedCourse?.academicYear || new Date().getFullYear()
                       }
-                    }}
-                  >
-                    ← Volver a Cursos
-                  </Button>
+                    />
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSelectedCourseId(null);
+                        setActiveTab(view);
+                        const target = TEACHER_TAB_ROUTES[view];
+                        if (target && target !== pathname) {
+                          router.push(target);
+                        }
+                      }}
+                    >
+                      ← Volver a Cursos
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -599,7 +608,9 @@ export function TeacherLibroClasesView({
                     <Tabs defaultValue="form" className="w-full">
                       <TabsList>
                         <TabsTrigger value="form">Nuevo Contenido</TabsTrigger>
-                        <TabsTrigger value="list">Lista de Contenidos</TabsTrigger>
+                        <TabsTrigger value="list">
+                          Lista de Contenidos
+                        </TabsTrigger>
                       </TabsList>
                       <TabsContent value="form" className="mt-4">
                         <ClassContentForm

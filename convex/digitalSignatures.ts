@@ -201,6 +201,47 @@ export const getRecordLocks = query({
 });
 
 /**
+ * Get all uncertified signatures for admin review
+ */
+export const getUncertifiedSignatures = query({
+  args: {
+    recordType: v.optional(
+      v.union(
+        v.literal("CLASS_CONTENT"),
+        v.literal("ATTENDANCE"),
+        v.literal("OBSERVATION"),
+        v.literal("GRADE"),
+        v.literal("MEETING"),
+        v.literal("PARENT_MEETING"),
+      ),
+    ),
+  },
+  handler: async (ctx, { recordType }) => {
+    let signatures = await ctx.db
+      .query("digitalSignatures")
+      .withIndex("by_isCertified", (q) => q.eq("isCertified", false))
+      .collect();
+
+    if (recordType) {
+      signatures = signatures.filter((s) => s.recordType === recordType);
+    }
+
+    // Get signer info
+    const signaturesWithDetails = await Promise.all(
+      signatures.map(async (sig) => {
+        const signer = await ctx.db.get(sig.signedBy);
+        return {
+          ...sig,
+          signer,
+        };
+      }),
+    );
+
+    return signaturesWithDetails.sort((a, b) => b.createdAt - a.createdAt);
+  },
+});
+
+/**
  * Get unsigned records for a course
  */
 export const getUnsignedRecords = query({
@@ -256,9 +297,7 @@ export const getUnsignedRecords = query({
         .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
         .collect();
 
-      const uniqueDates = new Set(
-        attendanceDates.map((a) => a.date),
-      );
+      const uniqueDates = new Set(attendanceDates.map((a) => a.date));
 
       // Check which dates don't have signatures
       for (const date of uniqueDates) {
@@ -268,7 +307,9 @@ export const getUnsignedRecords = query({
         const signature = await ctx.db
           .query("digitalSignatures")
           .withIndex("by_recordType_recordId", (q) =>
-            q.eq("recordType", "ATTENDANCE").eq("recordId", `${courseId}-${date}`),
+            q
+              .eq("recordType", "ATTENDANCE")
+              .eq("recordId", `${courseId}-${date}`),
           )
           .first();
 
@@ -321,7 +362,11 @@ export const createSignature = mutation({
       throw new Error("User not found");
     }
 
-    if (user.role !== "PROFESOR" && user.role !== "ADMIN" && user.role !== "MASTER") {
+    if (
+      user.role !== "PROFESOR" &&
+      user.role !== "ADMIN" &&
+      user.role !== "MASTER"
+    ) {
       throw new Error("Only teachers and administrators can sign records");
     }
 
@@ -338,7 +383,10 @@ export const createSignature = mutation({
     }
 
     // Check if record is locked
-    if (args.recordType === "CLASS_CONTENT" || args.recordType === "ATTENDANCE") {
+    if (
+      args.recordType === "CLASS_CONTENT" ||
+      args.recordType === "ATTENDANCE"
+    ) {
       // Extract courseId from recordId (format depends on record type)
       let courseId: Id<"courses"> | null = null;
 
@@ -378,7 +426,35 @@ export const createSignature = mutation({
 
     const now = Date.now();
 
+    // Get institutionId from user or record
+    let institutionId: Id<"institutionInfo"> | null = user.currentInstitutionId ?? null;
+    
+    // If user doesn't have currentInstitutionId, try to get from the record
+    if (!institutionId) {
+      if (args.recordType === "CLASS_CONTENT") {
+        const classContent = await ctx.db.get(
+          args.recordId as Id<"classContent">,
+        );
+        if (classContent) {
+          institutionId = classContent.institutionId;
+        }
+      } else if (args.recordType === "ATTENDANCE" || args.recordType === "GRADE") {
+        // For attendance and grades, we might need to get from course
+        // Try to extract courseId from recordId if possible
+        const courseId = args.recordId.split("-")[0] as Id<"courses">;
+        const course = await ctx.db.get(courseId);
+        if (course) {
+          institutionId = course.institutionId;
+        }
+      }
+    }
+
+    if (!institutionId) {
+      throw new Error("Cannot determine institution for signature");
+    }
+
     const signatureId = await ctx.db.insert("digitalSignatures", {
+      institutionId,
       recordType: args.recordType,
       recordId: args.recordId,
       signedBy: args.signedBy,
@@ -424,10 +500,7 @@ export const certifySignature = mutation({
       throw new Error("Certifier not found");
     }
 
-    if (
-      certifier.role !== "ADMIN" &&
-      certifier.role !== "MASTER"
-    ) {
+    if (certifier.role !== "ADMIN" && certifier.role !== "MASTER") {
       throw new Error("Only administrators can certify signatures");
     }
 
@@ -489,16 +562,39 @@ export const createCertification = mutation({
       throw new Error("Certifier not found");
     }
 
-    if (
-      certifier.role !== "ADMIN" &&
-      certifier.role !== "MASTER"
-    ) {
+    if (certifier.role !== "ADMIN" && certifier.role !== "MASTER") {
       throw new Error("Only administrators can create certifications");
     }
 
     const now = Date.now();
 
+    // Get institutionId from certifier or record
+    let institutionId: Id<"institutionInfo"> | null = certifier.currentInstitutionId ?? null;
+    
+    if (!institutionId) {
+      // Try to get from the record based on type
+      if (args.recordType === "CLASS_CONTENT") {
+        const classContent = await ctx.db.get(
+          args.recordId as Id<"classContent">,
+        );
+        if (classContent) {
+          institutionId = classContent.institutionId;
+        }
+      } else if (args.recordType === "ATTENDANCE" || args.recordType === "GRADE") {
+        const courseId = args.recordId.split("-")[0] as Id<"courses">;
+        const course = await ctx.db.get(courseId);
+        if (course) {
+          institutionId = course.institutionId;
+        }
+      }
+    }
+
+    if (!institutionId) {
+      throw new Error("Cannot determine institution for certification");
+    }
+
     return await ctx.db.insert("recordCertifications", {
+      institutionId,
       recordType: args.recordType,
       recordId: args.recordId,
       period: args.period,
@@ -563,9 +659,16 @@ export const lockRecords = mutation({
       throw new Error("Records are already locked for this period");
     }
 
+    // Get institutionId from course
+    const course = await ctx.db.get(args.courseId);
+    if (!course) {
+      throw new Error("Course not found");
+    }
+
     const now = Date.now();
 
     return await ctx.db.insert("recordLocks", {
+      institutionId: course.institutionId,
       courseId: args.courseId,
       period: args.period,
       recordType: args.recordType,
@@ -619,4 +722,3 @@ export const unlockRecords = mutation({
     return await ctx.db.get(lockId);
   },
 });
-

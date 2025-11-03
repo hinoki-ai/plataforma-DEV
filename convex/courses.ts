@@ -5,234 +5,334 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
+import type { MutationCtx, QueryCtx } from "./_generated/server";
+import type { Doc, Id } from "./_generated/dataModel";
+import { ensureInstitutionMatch, tenantMutation, tenantQuery } from "./tenancy";
+
+interface CourseFilters {
+  academicYear?: number;
+  isActive?: boolean;
+}
+
+type AnyCtx = QueryCtx | MutationCtx;
+type CourseDoc = Doc<"courses">;
+type EnrollmentDoc = Doc<"courseStudents">;
+type StudentDoc = Doc<"students">;
+
+async function userInInstitution(
+  ctx: AnyCtx,
+  userId: Id<"users">,
+  institutionId: Id<"institutionInfo">,
+): Promise<boolean> {
+  const membership = await ctx.db
+    .query("institutionMemberships")
+    .withIndex("by_user_institution", (q) =>
+      q.eq("userId", userId).eq("institutionId", institutionId),
+    )
+    .first();
+  return membership !== null;
+}
+
+async function validateTeacherMembership(
+  ctx: AnyCtx,
+  teacherId: Id<"users">,
+  institutionId: Id<"institutionInfo">,
+  allowMasterBypass: boolean,
+): Promise<void> {
+  const teacher = await ctx.db.get(teacherId);
+  if (!teacher) {
+    throw new Error("Teacher not found");
+  }
+  if (teacher.role !== "PROFESOR") {
+    throw new Error("User is not a teacher");
+  }
+
+  if (
+    !allowMasterBypass &&
+    !(await userInInstitution(ctx, teacherId, institutionId))
+  ) {
+    throw new Error("Teacher is not part of this institution");
+  }
+}
+
+async function validateStudentInInstitution(
+  ctx: AnyCtx,
+  studentId: Id<"students">,
+  institutionId: Id<"institutionInfo">,
+): Promise<StudentDoc> {
+  const student = await ctx.db.get(studentId);
+  if (!student || student.institutionId !== institutionId) {
+    throw new Error("Student not found for this institution");
+  }
+  return student;
+}
+
+function filterCourses(
+  courses: CourseDoc[],
+  { academicYear, isActive }: CourseFilters,
+) {
+  let result = courses;
+  if (academicYear !== undefined) {
+    result = result.filter((course) => course.academicYear === academicYear);
+  }
+  if (isActive !== undefined) {
+    result = result.filter((course) => course.isActive === isActive);
+  }
+  return result.sort((a, b) => {
+    if (a.academicYear !== b.academicYear) {
+      return b.academicYear - a.academicYear;
+    }
+    return a.grade.localeCompare(b.grade);
+  });
+}
 
 // ==================== QUERIES ====================
 
-/**
- * Get all courses for a teacher, optionally filtered by academic year
- */
-export const getCourses = query({
+export const getCourses = tenantQuery({
   args: {
     teacherId: v.optional(v.id("users")),
     academicYear: v.optional(v.number()),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { teacherId, academicYear, isActive }) => {
-    let courses;
+  handler: async (ctx, { teacherId, academicYear, isActive }, tenancy) => {
+    let courses = await ctx.db
+      .query("courses")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
 
-    if (teacherId) {
-      courses = await ctx.db
-        .query("courses")
-        .withIndex("by_teacherId", (q) => q.eq("teacherId", teacherId))
-        .collect();
-    } else {
-      courses = await ctx.db.query("courses").collect();
+    const enforcedTeacherId =
+      tenancy.membershipRole === "PROFESOR" && !tenancy.isMaster
+        ? tenancy.user._id
+        : teacherId;
+
+    if (enforcedTeacherId) {
+      courses = courses.filter(
+        (course) => course.teacherId === enforcedTeacherId,
+      );
     }
 
-    // Filter by academic year if provided
-    if (academicYear !== undefined) {
-      courses = courses.filter((c) => c.academicYear === academicYear);
-    }
-
-    // Filter by active status if provided
-    if (isActive !== undefined) {
-      courses = courses.filter((c) => c.isActive === isActive);
-    }
-
-    // Sort by academic year (descending) and then by grade
-    return courses.sort((a, b) => {
-      if (a.academicYear !== b.academicYear) {
-        return b.academicYear - a.academicYear;
-      }
-      return a.grade.localeCompare(b.grade);
-    });
+    return filterCourses(courses, { academicYear, isActive });
   },
 });
 
-/**
- * Get a single course by ID with enrolled students
- */
-export const getCourseById = query({
+export const getCourseById = tenantQuery({
   args: { courseId: v.id("courses") },
-  handler: async (ctx, { courseId }) => {
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      return null;
+  handler: async (ctx, { courseId }, tenancy) => {
+    const course = ensureInstitutionMatch(
+      await ctx.db.get(courseId),
+      tenancy,
+      "Course not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      course.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to access this course");
     }
 
-    // Get enrolled students
-    const enrollments = await ctx.db
+    let enrollments = await ctx.db
       .query("courseStudents")
       .withIndex("by_courseId_isActive", (q) =>
         q.eq("courseId", courseId).eq("isActive", true),
       )
       .collect();
 
-    const students = await Promise.all(
-      enrollments.map(async (enrollment) => {
-        const student = await ctx.db.get(enrollment.studentId);
-        return {
-          ...enrollment,
-          student: student,
-        };
-      }),
+    enrollments = enrollments.filter(
+      (enrollment) => enrollment.institutionId === tenancy.institution._id,
     );
 
-    // Get teacher info
+    const students = (
+      await Promise.all(
+        enrollments.map(async (enrollment) => {
+          const student = await ctx.db.get(enrollment.studentId);
+          if (!student || student.institutionId !== tenancy.institution._id) {
+            return null;
+          }
+          return {
+            ...enrollment,
+            student,
+          };
+        }),
+      )
+    ).filter(
+      (value): value is EnrollmentDoc & { student: StudentDoc } =>
+        value !== null,
+    );
+
+    if (
+      tenancy.membershipRole === "PARENT" &&
+      !tenancy.isMaster &&
+      !students.some((record) => record.student.parentId === tenancy.user._id)
+    ) {
+      throw new Error("No permission to access this course");
+    }
+
     const teacher = await ctx.db.get(course.teacherId);
 
     return {
       ...course,
-      students: students.filter((s) => s.student),
-      teacher: teacher,
+      students,
+      teacher,
     };
   },
 });
 
-/**
- * Get courses by academic year and grade
- */
-export const getCoursesByGrade = query({
+export const getCoursesByGrade = tenantQuery({
   args: {
     academicYear: v.number(),
     grade: v.string(),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { academicYear, grade, isActive }) => {
-    let courses = await ctx.db
+  handler: async (ctx, { academicYear, grade, isActive }, tenancy) => {
+    const courses = await ctx.db
       .query("courses")
-      .withIndex("by_academicYear_grade", (q) =>
-        q.eq("academicYear", academicYear).eq("grade", grade),
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
       )
+      .filter((q) => q.eq("academicYear", academicYear))
+      .filter((q) => q.eq("grade", grade))
       .collect();
 
-    if (isActive !== undefined) {
-      courses = courses.filter((c) => c.isActive === isActive);
-    }
-
-    return courses.sort((a, b) => a.section.localeCompare(b.section));
+    return filterCourses(courses, { isActive });
   },
 });
 
-/**
- * Get all active courses for the current academic year
- */
-export const getActiveCourses = query({
+export const getActiveCourses = tenantQuery({
   args: {
     academicYear: v.optional(v.number()),
   },
-  handler: async (ctx, { academicYear }) => {
-    const currentYear = academicYear ?? new Date().getFullYear();
-    const allCourses = await ctx.db
-      .query("courses")
-      .withIndex("by_academicYear", (q) => q.eq("academicYear", currentYear))
-      .collect();
+  handler: async (ctx, { academicYear }, tenancy) => {
+    const targetYear = academicYear ?? new Date().getFullYear();
 
-    const courses = allCourses.filter((c) => c.isActive);
+    const courses = await ctx.db
+      .query("courses")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .filter((q) => q.eq("academicYear", targetYear))
+      .filter((q) => q.eq("isActive", true))
+      .collect();
 
     return courses.sort((a, b) => a.grade.localeCompare(b.grade));
   },
 });
 
-/**
- * Get courses for a parent (where their children are enrolled)
- */
-export const getCoursesForParent = query({
+export const getCoursesForParent = tenantQuery({
   args: {
     parentId: v.id("users"),
     academicYear: v.optional(v.number()),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { parentId, academicYear, isActive }) => {
-    // Get all students for this parent
+  roles: ["ADMIN", "STAFF", "PROFESOR", "PARENT", "MASTER"],
+  handler: async (ctx, { parentId, academicYear, isActive }, tenancy) => {
+    const effectiveParentId =
+      tenancy.membershipRole === "PARENT" && !tenancy.isMaster
+        ? tenancy.user._id
+        : parentId;
+
+    if (
+      !tenancy.isMaster &&
+      tenancy.membershipRole !== "PARENT" &&
+      !(await userInInstitution(
+        ctx,
+        effectiveParentId,
+        tenancy.institution._id,
+      ))
+    ) {
+      throw new Error("Parent is not part of this institution");
+    }
+
     const students = await ctx.db
       .query("students")
-      .withIndex("by_parentId", (q) => q.eq("parentId", parentId))
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .filter((q) => q.eq("parentId", effectiveParentId))
       .collect();
 
     if (students.length === 0) {
       return [];
     }
 
-    // Get all enrollments for these students
-    const studentIds = students.map((s) => s._id);
-    const enrollments = await ctx.db.query("courseStudents").collect();
+    const studentIds = new Set(students.map((student) => student._id));
 
-    // Filter enrollments for these students
-    const relevantEnrollments = enrollments.filter(
-      (e) => studentIds.includes(e.studentId) && e.isActive,
+    const enrollments = await ctx.db
+      .query("courseStudents")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .filter((q) => q.eq("isActive", true))
+      .collect();
+
+    const relevantCourseIds = new Set(
+      enrollments
+        .filter((enrollment) => studentIds.has(enrollment.studentId))
+        .map((enrollment) => enrollment.courseId),
     );
 
-    // Get unique course IDs
-    const courseIds = Array.from(
-      new Set(relevantEnrollments.map((e) => e.courseId)),
-    );
+    if (relevantCourseIds.size === 0) {
+      return [];
+    }
 
-    // Get course details and filter valid courses
     const courses = await Promise.all(
-      courseIds.map((courseId) => ctx.db.get(courseId)),
+      Array.from(relevantCourseIds).map((courseId) => ctx.db.get(courseId)),
     );
 
-    // Filter valid courses and apply filters
-    let filteredCourses = courses.filter((c): c is NonNullable<typeof c> => {
-      if (!c) return false;
-      if (academicYear !== undefined && c.academicYear !== academicYear)
+    const filtered = courses.filter((course): course is CourseDoc => {
+      if (!course || course.institutionId !== tenancy.institution._id) {
         return false;
-      if (isActive !== undefined && c.isActive !== isActive) return false;
+      }
+      if (academicYear !== undefined && course.academicYear !== academicYear) {
+        return false;
+      }
+      if (isActive !== undefined && course.isActive !== isActive) {
+        return false;
+      }
       return true;
     });
 
-    // Sort by academic year (descending) and then by grade
-    return filteredCourses.sort((a, b) => {
-      if (a.academicYear !== b.academicYear) {
-        return b.academicYear - a.academicYear;
-      }
-      return a.grade.localeCompare(b.grade);
-    });
+    return filterCourses(filtered, {});
   },
 });
 
 // ==================== MUTATIONS ====================
 
-/**
- * Create a new course/class
- */
-export const createCourse = mutation({
+export const createCourse = tenantMutation({
   args: {
     name: v.string(),
-    level: v.string(), // "BASICA" or "MEDIA"
-    grade: v.string(), // e.g., "8vo", "1ro Medio"
-    section: v.string(), // e.g., "A", "B", "C"
+    level: v.string(),
+    grade: v.string(),
+    section: v.string(),
     academicYear: v.number(),
     teacherId: v.id("users"),
     subjects: v.array(v.string()),
     maxStudents: v.optional(v.number()),
     schedule: v.optional(v.any()),
   },
-  handler: async (ctx, args) => {
-    const now = Date.now();
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
+    await validateTeacherMembership(
+      ctx,
+      args.teacherId,
+      tenancy.institution._id,
+      tenancy.isMaster,
+    );
 
-    // Validate teacher exists and is a PROFESOR
-    const teacher = await ctx.db.get(args.teacherId);
-    if (!teacher) {
-      throw new Error("Teacher not found");
-    }
-    if (teacher.role !== "PROFESOR") {
-      throw new Error("User is not a teacher");
-    }
-
-    // Check if course with same name/year already exists
     const existingCourses = await ctx.db
       .query("courses")
-      .withIndex("by_academicYear_grade", (q) =>
-        q.eq("academicYear", args.academicYear).eq("grade", args.grade),
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
       )
+      .filter((q) => q.eq("academicYear", args.academicYear))
+      .filter((q) => q.eq("grade", args.grade))
       .collect();
 
     const duplicate = existingCourses.find(
-      (c) => c.section === args.section && c.name === args.name,
+      (course) => course.section === args.section && course.name === args.name,
     );
     if (duplicate) {
       throw new Error(
@@ -240,22 +340,15 @@ export const createCourse = mutation({
       );
     }
 
-    // Validate academic year (should be current or future year)
     const currentYear = new Date().getFullYear();
     if (args.academicYear < currentYear - 1) {
       throw new Error("Academic year cannot be more than 1 year in the past");
     }
 
+    const now = Date.now();
     return await ctx.db.insert("courses", {
-      name: args.name,
-      level: args.level,
-      grade: args.grade,
-      section: args.section,
-      academicYear: args.academicYear,
-      teacherId: args.teacherId,
-      subjects: args.subjects,
-      maxStudents: args.maxStudents,
-      schedule: args.schedule,
+      ...args,
+      institutionId: tenancy.institution._id,
       isActive: true,
       createdAt: now,
       updatedAt: now,
@@ -263,10 +356,7 @@ export const createCourse = mutation({
   },
 });
 
-/**
- * Update course details
- */
-export const updateCourse = mutation({
+export const updateCourse = tenantMutation({
   args: {
     courseId: v.id("courses"),
     name: v.optional(v.string()),
@@ -279,18 +369,29 @@ export const updateCourse = mutation({
     schedule: v.optional(v.any()),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { courseId, ...updates }) => {
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, ...updates }, tenancy) => {
+    const course = ensureInstitutionMatch(
+      await ctx.db.get(courseId),
+      tenancy,
+      "Course not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      course.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to update this course");
     }
 
-    // Validate teacher if being updated
     if (updates.teacherId) {
-      const teacher = await ctx.db.get(updates.teacherId);
-      if (!teacher || teacher.role !== "PROFESOR") {
-        throw new Error("Invalid teacher");
-      }
+      await validateTeacherMembership(
+        ctx,
+        updates.teacherId,
+        tenancy.institution._id,
+        tenancy.isMaster,
+      );
     }
 
     await ctx.db.patch(courseId, {
@@ -302,110 +403,140 @@ export const updateCourse = mutation({
   },
 });
 
-/**
- * Soft delete course (deactivate)
- */
-export const deleteCourse = mutation({
+export const deleteCourse = tenantMutation({
   args: { courseId: v.id("courses") },
-  handler: async (ctx, { courseId }) => {
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
-    }
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, { courseId }, tenancy) => {
+    const course = ensureInstitutionMatch(
+      await ctx.db.get(courseId),
+      tenancy,
+      "Course not found",
+    );
 
-    // Soft delete: set isActive to false
-    await ctx.db.patch(courseId, {
+    await ctx.db.patch(course._id, {
       isActive: false,
       updatedAt: Date.now(),
     });
 
-    // Also deactivate all student enrollments
     const enrollments = await ctx.db
       .query("courseStudents")
       .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
       .collect();
 
-    for (const enrollment of enrollments) {
-      await ctx.db.patch(enrollment._id, {
-        isActive: false,
-      });
-    }
+    await Promise.all(
+      enrollments
+        .filter(
+          (enrollment) => enrollment.institutionId === tenancy.institution._id,
+        )
+        .map((enrollment) =>
+          ctx.db.patch(enrollment._id, {
+            isActive: false,
+          }),
+        ),
+    );
 
     return { success: true };
   },
 });
 
-/**
- * Enroll a student in a course
- */
-export const enrollStudent = mutation({
+export const enrollStudent = tenantMutation({
   args: {
     courseId: v.id("courses"),
     studentId: v.id("students"),
   },
-  handler: async (ctx, { courseId, studentId }) => {
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, studentId }, tenancy) => {
+    const course = ensureInstitutionMatch(
+      await ctx.db.get(courseId),
+      tenancy,
+      "Course not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      course.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to modify this course");
     }
 
-    const student = await ctx.db.get(studentId);
-    if (!student) {
-      throw new Error("Student not found");
-    }
+    await validateStudentInInstitution(ctx, studentId, tenancy.institution._id);
 
-    // Check if student is already enrolled
-    const existingEnrollments = await ctx.db
+    const enrollments = await ctx.db
       .query("courseStudents")
       .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
       .collect();
 
-    const existing = existingEnrollments.find(
-      (e) => e.studentId === studentId && e.isActive,
+    const activeEnrollment = enrollments.find(
+      (enrollment) =>
+        enrollment.institutionId === tenancy.institution._id &&
+        enrollment.studentId === studentId &&
+        enrollment.isActive,
     );
-    if (existing) {
+
+    if (activeEnrollment) {
       throw new Error("Student is already enrolled in this course");
     }
 
-    // Check capacity if maxStudents is set
-    const activeEnrollments = existingEnrollments.filter((e) => e.isActive);
-    if (course.maxStudents && activeEnrollments.length >= course.maxStudents) {
+    const activeCount = enrollments.filter(
+      (enrollment) =>
+        enrollment.institutionId === tenancy.institution._id &&
+        enrollment.isActive,
+    ).length;
+
+    if (course.maxStudents && activeCount >= course.maxStudents) {
       throw new Error("Course has reached maximum capacity");
     }
 
+    const now = Date.now();
     return await ctx.db.insert("courseStudents", {
+      institutionId: tenancy.institution._id,
       courseId,
       studentId,
-      enrollmentDate: Date.now(),
+      enrollmentDate: now,
       isActive: true,
-      createdAt: Date.now(),
+      createdAt: now,
     });
   },
 });
 
-/**
- * Remove a student from a course
- */
-export const removeStudent = mutation({
+export const removeStudent = tenantMutation({
   args: {
     courseId: v.id("courses"),
     studentId: v.id("students"),
   },
-  handler: async (ctx, { courseId, studentId }) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, studentId }, tenancy) => {
+    const course = ensureInstitutionMatch(
+      await ctx.db.get(courseId),
+      tenancy,
+      "Course not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      course.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to modify this course");
+    }
+
     const enrollments = await ctx.db
       .query("courseStudents")
       .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
       .collect();
 
     const enrollment = enrollments.find(
-      (e) => e.studentId === studentId && e.isActive,
+      (record) =>
+        record.institutionId === tenancy.institution._id &&
+        record.studentId === studentId &&
+        record.isActive,
     );
 
     if (!enrollment) {
       throw new Error("Student is not enrolled in this course");
     }
 
-    // Soft delete: deactivate enrollment
     await ctx.db.patch(enrollment._id, {
       isActive: false,
     });
@@ -414,89 +545,142 @@ export const removeStudent = mutation({
   },
 });
 
-/**
- * Bulk enroll students in a course
- */
-export const bulkEnrollStudents = mutation({
+export const bulkEnrollStudents = tenantMutation({
   args: {
     courseId: v.id("courses"),
     studentIds: v.array(v.id("students")),
   },
-  handler: async (ctx, { courseId, studentIds }) => {
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, studentIds }, tenancy) => {
+    const course = ensureInstitutionMatch(
+      await ctx.db.get(courseId),
+      tenancy,
+      "Course not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      course.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to modify this course");
     }
 
-    const results = [];
-    const errors = [];
+    const results: Array<
+      | {
+          studentId: Id<"students">;
+          enrollmentId?: Id<"courseStudents">;
+          success: boolean;
+        }
+      | { studentId: Id<"students">; error: string }
+    > = [];
 
     for (const studentId of studentIds) {
       try {
+        await validateStudentInInstitution(
+          ctx,
+          studentId,
+          tenancy.institution._id,
+        );
+
+        const existingEnrollment = await ctx.db
+          .query("courseStudents")
+          .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+          .filter((q) => q.eq("studentId", studentId))
+          .first();
+
+        if (existingEnrollment && existingEnrollment.isActive) {
+          throw new Error("Student is already enrolled in this course");
+        }
+
+        if (course.maxStudents) {
+          const activeCount = await ctx.db
+            .query("courseStudents")
+            .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+            .filter((q) => q.eq("isActive", true))
+            .collect();
+
+          const scopedActive = activeCount.filter(
+            (record) => record.institutionId === tenancy.institution._id,
+          ).length;
+
+          if (scopedActive >= course.maxStudents) {
+            throw new Error("Course has reached maximum capacity");
+          }
+        }
+
+        const now = Date.now();
         const enrollmentId = await ctx.db.insert("courseStudents", {
+          institutionId: tenancy.institution._id,
           courseId,
           studentId,
-          enrollmentDate: Date.now(),
+          enrollmentDate: now,
           isActive: true,
-          createdAt: Date.now(),
+          createdAt: now,
         });
+
         results.push({ studentId, enrollmentId, success: true });
       } catch (error: any) {
-        errors.push({ studentId, error: error.message });
+        results.push({ studentId, error: error.message });
       }
     }
 
-    return { results, errors };
+    return { results };
   },
 });
 
-/**
- * Bulk remove students from a course
- */
-export const bulkRemoveStudents = mutation({
+export const bulkRemoveStudents = tenantMutation({
   args: {
     courseId: v.id("courses"),
     studentIds: v.array(v.id("students")),
   },
-  handler: async (ctx, { courseId, studentIds }) => {
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { courseId, studentIds }, tenancy) => {
+    const course = ensureInstitutionMatch(
+      await ctx.db.get(courseId),
+      tenancy,
+      "Course not found",
+    );
+
+    if (
+      tenancy.membershipRole === "PROFESOR" &&
+      !tenancy.isMaster &&
+      course.teacherId !== tenancy.user._id
+    ) {
+      throw new Error("No permission to modify this course");
     }
 
-    const results = [];
-    const errors = [];
+    const results: Array<
+      | { studentId: Id<"students">; success: boolean }
+      | { studentId: Id<"students">; error: string }
+    > = [];
 
     for (const studentId of studentIds) {
       try {
-        const enrollments = await ctx.db
+        const enrollment = await ctx.db
           .query("courseStudents")
           .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
-          .collect();
+          .filter((q) => q.eq("studentId", studentId))
+          .first();
 
-        const enrollment = enrollments.find(
-          (e) => e.studentId === studentId && e.isActive,
-        );
-
-        if (!enrollment) {
-          errors.push({
-            studentId,
-            error: "Student not enrolled in this course",
-          });
-          continue;
+        if (
+          !enrollment ||
+          enrollment.institutionId !== tenancy.institution._id ||
+          !enrollment.isActive
+        ) {
+          throw new Error("Student not enrolled in this course");
         }
 
-        // Soft delete: deactivate enrollment
         await ctx.db.patch(enrollment._id, {
           isActive: false,
         });
 
         results.push({ studentId, success: true });
       } catch (error: any) {
-        errors.push({ studentId, error: error.message });
+        results.push({ studentId, error: error.message });
       }
     }
 
-    return { results, errors };
+    return { results };
   },
 });

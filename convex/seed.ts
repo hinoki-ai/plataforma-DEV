@@ -25,6 +25,23 @@ export const seedDatabase = mutation({
 
     const now = Date.now();
 
+    // Create primary institution record first
+    const institutionId = await ctx.db.insert("institutionInfo", {
+      name: "Escuela Especial de Lenguaje Plataforma Astral",
+      mission:
+        "Queremos que cada niño y niña crezca feliz, aprenda y se desarrolle en un ambiente de respeto y cariño. Buscamos que todos puedan aprender, convivir y prepararse para la vida, valorando siempre la alegría y la sencillez.",
+      vision:
+        "Soñamos con ser una escuelita reconocida por su trabajo en equipo, donde cada estudiante es valorado y apoyado. Queremos que nuestros estudiantes sean personas responsables, creativas y alegres, preparadas para aportar a su comunidad y al mundo.",
+      address: "Anibal Pinto Nº 160, Los Sauces, Chile",
+      phone: "+56 45 278 3486",
+      email: "contacto@plataformaastral.cl",
+      website: "https://plataforma-astral.vercel.app",
+      institutionType: "PRESCHOOL",
+      createdAt: now,
+      updatedAt: now,
+      isActive: true,
+    });
+
     // Password: 59163476a, admin123, profesor123, parent123
     // Pre-hashed with bcrypt (10 rounds) - UPDATED HASHES
     const hashedMasterPassword =
@@ -49,6 +66,7 @@ export const seedDatabase = mutation({
       emailVerified: now,
       createdAt: now,
       updatedAt: now,
+      currentInstitutionId: institutionId,
     });
 
     // Create Admin User
@@ -64,6 +82,7 @@ export const seedDatabase = mutation({
       emailVerified: now,
       createdAt: now,
       updatedAt: now,
+      currentInstitutionId: institutionId,
     });
 
     // Create Profesor User
@@ -79,6 +98,7 @@ export const seedDatabase = mutation({
       emailVerified: now,
       createdAt: now,
       updatedAt: now,
+      currentInstitutionId: institutionId,
     });
 
     // Create Parent User
@@ -94,20 +114,39 @@ export const seedDatabase = mutation({
       emailVerified: now,
       createdAt: now,
       updatedAt: now,
+      currentInstitutionId: institutionId,
     });
 
-    // Create School Info - Real Institution
-    await ctx.db.insert("institutionInfo", {
-      name: "Escuela Especial de Lenguaje Plataforma Astral",
-      mission:
-        "Queremos que cada niño y niña crezca feliz, aprenda y se desarrolle en un ambiente de respeto y cariño. Buscamos que todos puedan aprender, convivir y prepararse para la vida, valorando siempre la alegría y la sencillez.",
-      vision:
-        "Soñamos con ser una escuelita reconocida por su trabajo en equipo, donde cada estudiante es valorado y apoyado. Queremos que nuestros estudiantes sean personas responsables, creativas y alegres, preparadas para aportar a su comunidad y al mundo.",
-      address: "Anibal Pinto Nº 160, Los Sauces, Chile",
-      phone: "+56 45 278 3486",
-      email: "contacto@plataformaastral.cl",
-      website: "https://plataforma-astral.vercel.app",
-      institutionType: "PRESCHOOL",
+    // Create institution memberships
+    await ctx.db.insert("institutionMemberships", {
+      institutionId,
+      userId: adminId,
+      role: "ADMIN",
+      status: "ACTIVE",
+      invitedBy: masterId,
+      joinedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    await ctx.db.insert("institutionMemberships", {
+      institutionId,
+      userId: profesorId,
+      role: "PROFESOR",
+      status: "ACTIVE",
+      invitedBy: adminId,
+      joinedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    await ctx.db.insert("institutionMemberships", {
+      institutionId,
+      userId: parentId,
+      role: "PARENT",
+      status: "ACTIVE",
+      invitedBy: adminId,
+      joinedAt: now,
       createdAt: now,
       updatedAt: now,
     });
@@ -124,6 +163,7 @@ export const seedDatabase = mutation({
       isActive: true,
       createdAt: now,
       updatedAt: now,
+      institutionId,
     });
 
     // Create a sample meeting
@@ -149,6 +189,7 @@ export const seedDatabase = mutation({
       studentId,
       createdAt: now,
       updatedAt: now,
+      institutionId,
     });
 
     // Create sample calendar event
@@ -168,6 +209,7 @@ export const seedDatabase = mutation({
       version: 1,
       createdAt: now,
       updatedAt: now,
+      institutionId,
     });
 
     return {
@@ -180,6 +222,7 @@ export const seedDatabase = mutation({
         parent: parentId,
       },
       student: studentId,
+      institution: institutionId,
     };
   },
 });

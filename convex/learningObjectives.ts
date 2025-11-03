@@ -83,7 +83,9 @@ export const getLearningObjectives = query({
       }),
     );
 
-    return objectivesWithIndicators.sort((a, b) => a.code.localeCompare(b.code));
+    return objectivesWithIndicators.sort((a, b) =>
+      a.code.localeCompare(b.code),
+    );
   },
 });
 
@@ -275,7 +277,9 @@ export const getCoverageStatistics = query({
       // Filter by period if provided
       if (period) {
         allObjectives.push(
-          ...objectives.filter((o) => o.semester === period || o.semester === "ANUAL"),
+          ...objectives.filter(
+            (o) => o.semester === period || o.semester === "ANUAL",
+          ),
         );
       } else {
         allObjectives.push(...objectives);
@@ -303,20 +307,27 @@ export const getCoverageStatistics = query({
     // Calculate statistics
     const total = allObjectives.length;
     const noIniciado = allObjectives.filter(
-      (o) => !coverageMap.has(o._id) || coverageMap.get(o._id)!.coverageStatus === "NO_INICIADO",
+      (o) =>
+        !coverageMap.has(o._id) ||
+        coverageMap.get(o._id)!.coverageStatus === "NO_INICIADO",
     ).length;
     const enProgreso = allObjectives.filter(
-      (o) => coverageMap.has(o._id) && coverageMap.get(o._id)!.coverageStatus === "EN_PROGRESO",
+      (o) =>
+        coverageMap.has(o._id) &&
+        coverageMap.get(o._id)!.coverageStatus === "EN_PROGRESO",
     ).length;
     const cubierto = allObjectives.filter(
-      (o) => coverageMap.has(o._id) && coverageMap.get(o._id)!.coverageStatus === "CUBIERTO",
+      (o) =>
+        coverageMap.has(o._id) &&
+        coverageMap.get(o._id)!.coverageStatus === "CUBIERTO",
     ).length;
     const reforzado = allObjectives.filter(
-      (o) => coverageMap.has(o._id) && coverageMap.get(o._id)!.coverageStatus === "REFORZADO",
+      (o) =>
+        coverageMap.has(o._id) &&
+        coverageMap.get(o._id)!.coverageStatus === "REFORZADO",
     ).length;
 
-    const percentage =
-      total > 0 ? ((cubierto + reforzado) / total) * 100 : 0;
+    const percentage = total > 0 ? ((cubierto + reforzado) / total) * 100 : 0;
 
     return {
       total,
@@ -360,12 +371,30 @@ export const createLearningObjective = mutation({
       .first();
 
     if (existing) {
-      throw new Error(`Learning objective with code ${args.code} already exists`);
+      throw new Error(
+        `Learning objective with code ${args.code} already exists`,
+      );
+    }
+
+    // Get user from auth to get institutionId
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .first();
+
+    if (!user || !user.currentInstitutionId) {
+      throw new Error("User must have a current institution");
     }
 
     const now = Date.now();
 
     return await ctx.db.insert("learningObjectives", {
+      institutionId: user.currentInstitutionId,
       ...args,
       isActive: true,
       createdAt: now,
@@ -406,7 +435,9 @@ export const updateLearningObjective = mutation({
         .first();
 
       if (existing) {
-        throw new Error(`Learning objective with code ${updates.code} already exists`);
+        throw new Error(
+          `Learning objective with code ${updates.code} already exists`,
+        );
       }
     }
 
@@ -527,9 +558,7 @@ export const linkClassContentToOA = mutation({
     classContentId: v.id("classContent"),
     learningObjectiveId: v.id("learningObjectives"),
     evaluationIndicatorIds: v.optional(v.array(v.id("evaluationIndicators"))),
-    coverage: v.optional(
-      v.union(v.literal("PARCIAL"), v.literal("COMPLETA")),
-    ),
+    coverage: v.optional(v.union(v.literal("PARCIAL"), v.literal("COMPLETA"))),
   },
   handler: async (ctx, args) => {
     // Validate class content exists
@@ -580,7 +609,9 @@ export const linkClassContentToOA = mutation({
     let coverage = await ctx.db
       .query("curriculumCoverage")
       .withIndex("by_courseId_subject", (q) =>
-        q.eq("courseId", classContent.courseId).eq("subject", classContent.subject),
+        q
+          .eq("courseId", classContent.courseId)
+          .eq("subject", classContent.subject),
       )
       .filter((q) =>
         q.eq(q.field("learningObjectiveId"), args.learningObjectiveId),
@@ -682,4 +713,3 @@ export const updateCurriculumCoverage = mutation({
     return await ctx.db.get(coverageId);
   },
 });
-

@@ -35,6 +35,7 @@ import { es } from "date-fns/locale";
 import { Calendar as CalendarIcon, Check, CheckCircle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
+import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
 
 const ATTENDANCE_STATUS = {
   PRESENTE: { label: "Presente", color: "bg-green-500", icon: CheckCircle },
@@ -68,6 +69,7 @@ export function AttendanceRecorder({
     Map<Id<"students">, AttendanceRecord>
   >(new Map());
   const [isSaving, setIsSaving] = useState(false);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
 
   // Enter key navigation for main controls
   const fieldOrder = ["date-picker", "mark-all-btn", "save-btn"];
@@ -154,12 +156,26 @@ export function AttendanceRecorder({
       });
 
       toast.success("Asistencia registrada exitosamente");
-      onSuccess?.();
+
+      // Show signature modal after saving
+      setShowSignatureModal(true);
+
+      // Don't call onSuccess here - wait for signature
     } catch (error: any) {
       toast.error(error.message || "Error al registrar asistencia");
-    } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleSignatureComplete = () => {
+    setShowSignatureModal(false);
+    onSuccess?.();
+    setIsSaving(false);
+  };
+
+  const handleSignatureCancel = () => {
+    setShowSignatureModal(false);
+    setIsSaving(false);
   };
 
   if (existingAttendance === undefined) {
@@ -391,6 +407,17 @@ export function AttendanceRecorder({
           </Button>
         </div>
       )}
+
+      {/* Signature Modal */}
+      <SignatureModal
+        isOpen={showSignatureModal}
+        onClose={handleSignatureCancel}
+        onSuccess={handleSignatureComplete}
+        recordType="ATTENDANCE"
+        recordId={`${courseId}-${selectedDate.setHours(0, 0, 0, 0)}`}
+        teacherId={teacherId}
+        recordLabel={format(selectedDate, "dd/MM/yyyy", { locale: es })}
+      />
     </div>
   );
 }

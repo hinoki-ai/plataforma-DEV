@@ -207,6 +207,21 @@ export const createActivity = mutation({
     maxParticipants: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    // Get user from auth to get institutionId
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .first();
+
+    if (!user || !user.currentInstitutionId) {
+      throw new Error("User must have a current institution");
+    }
+
     // Validate instructor if provided
     if (args.instructorId) {
       const instructor = await ctx.db.get(args.instructorId);
@@ -218,6 +233,7 @@ export const createActivity = mutation({
     const now = Date.now();
 
     return await ctx.db.insert("extraCurricularActivities", {
+      institutionId: user.currentInstitutionId,
       name: args.name,
       description: args.description,
       category: args.category,
@@ -322,9 +338,16 @@ export const enrollStudent = mutation({
       throw new Error("Activity has reached maximum capacity");
     }
 
+    // Get institutionId from activity or course
+    const institutionId = activity.institutionId ?? course.institutionId;
+    if (!institutionId) {
+      throw new Error("Cannot determine institution");
+    }
+
     const now = Date.now();
 
     return await ctx.db.insert("extraCurricularParticipants", {
+      institutionId,
       activityId,
       studentId,
       courseId,

@@ -46,6 +46,7 @@ import {
   Minus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
 
 // Chilean grading scale constants
 const MIN_GRADE = 1.0;
@@ -137,6 +138,10 @@ export function GradeEntryForm({
 }: GradeEntryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useDivineParsing(["common"]);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [savedGradeId, setSavedGradeId] = useState<Id<"classGrades"> | null>(
+    null,
+  );
 
   const fieldOrder = [
     "date",
@@ -202,7 +207,7 @@ export function GradeEntryForm({
   const onSubmit = async (data: GradeFormData) => {
     setIsSubmitting(true);
     try {
-      await createGrade({
+      const gradeId = await createGrade({
         studentId,
         courseId,
         subject: data.subject,
@@ -218,23 +223,40 @@ export function GradeEntryForm({
       });
 
       toast.success(t("grade.registered_success", "common"));
-      form.reset({
-        date: new Date(),
-        subject: "",
-        evaluationType: "PRUEBA",
-        evaluationName: "",
-        grade: 4.0,
-        maxGrade: 7.0,
-        percentage: undefined,
-        period: "PRIMER_SEMESTRE",
-        comments: "",
-      });
-      onSuccess?.();
+
+      // Show signature modal
+      setSavedGradeId(gradeId);
+      setShowSignatureModal(true);
+
+      // Don't call onSuccess here - wait for signature
     } catch (error: any) {
       toast.error(error.message || t("grade.registration_error", "common"));
-    } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSignatureComplete = () => {
+    setShowSignatureModal(false);
+    form.reset({
+      date: new Date(),
+      subject: "",
+      evaluationType: "PRUEBA",
+      evaluationName: "",
+      grade: 4.0,
+      maxGrade: 7.0,
+      percentage: undefined,
+      period: "PRIMER_SEMESTRE",
+      comments: "",
+    });
+    onSuccess?.();
+    setSavedGradeId(null);
+    setIsSubmitting(false);
+  };
+
+  const handleSignatureCancel = () => {
+    setShowSignatureModal(false);
+    setSavedGradeId(null);
+    setIsSubmitting(false);
   };
 
   if (course === undefined) {
@@ -626,6 +648,19 @@ export function GradeEntryForm({
           </Button>
         </div>
       </form>
+
+      {/* Signature Modal */}
+      {savedGradeId && (
+        <SignatureModal
+          isOpen={showSignatureModal}
+          onClose={handleSignatureCancel}
+          onSuccess={handleSignatureComplete}
+          recordType="GRADE"
+          recordId={savedGradeId}
+          teacherId={teacherId}
+          recordLabel={studentName}
+        />
+      )}
     </Form>
   );
 }

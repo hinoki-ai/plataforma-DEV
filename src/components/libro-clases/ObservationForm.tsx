@@ -47,6 +47,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
+import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
 
 const observationSchema = z.object({
   date: z.date({
@@ -135,6 +136,9 @@ export function ObservationForm({
   onCancel,
 }: ObservationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [savedObservationId, setSavedObservationId] =
+    useState<Id<"studentObservations"> | null>(null);
 
   const createObservation = useMutation(api.observations.createObservation);
 
@@ -203,7 +207,7 @@ export function ObservationForm({
 
     setIsSubmitting(true);
     try {
-      await createObservation({
+      const observationId = await createObservation({
         studentId,
         courseId,
         date: data.date.setHours(0, 0, 0, 0),
@@ -225,11 +229,13 @@ export function ObservationForm({
         toast.success("Observación registrada exitosamente");
       }
 
-      form.reset();
-      onSuccess?.();
+      // Show signature modal after saving
+      setSavedObservationId(observationId);
+      setShowSignatureModal(true);
+
+      // Don't call onSuccess here - wait for signature
     } catch (error: any) {
       toast.error(error.message || "Error al registrar observación");
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -534,6 +540,29 @@ export function ObservationForm({
           </Button>
         </div>
       </form>
+
+      {/* Signature Modal */}
+      {savedObservationId && (
+        <SignatureModal
+          isOpen={showSignatureModal}
+          onClose={() => {
+            setShowSignatureModal(false);
+            setSavedObservationId(null);
+            setIsSubmitting(false);
+          }}
+          onSuccess={() => {
+            setShowSignatureModal(false);
+            form.reset();
+            setSavedObservationId(null);
+            setIsSubmitting(false);
+            onSuccess?.();
+          }}
+          recordType="OBSERVATION"
+          recordId={savedObservationId}
+          teacherId={teacherId}
+          recordLabel={studentName}
+        />
+      )}
     </Form>
   );
 }

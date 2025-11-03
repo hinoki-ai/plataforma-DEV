@@ -113,7 +113,10 @@ export function OASelector({
     }
   };
 
-  const handleRemove = (oaId: Id<"learningObjectives">, e: React.MouseEvent) => {
+  const handleRemove = (
+    oaId: Id<"learningObjectives">,
+    e: React.MouseEvent,
+  ) => {
     e.stopPropagation();
     if (!onChange) return;
     onChange(value.filter((id) => id !== oaId));
@@ -269,4 +272,3 @@ export function OASelector({
     </div>
   );
 }
-

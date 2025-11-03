@@ -3,7 +3,7 @@
  */
 
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { ensureInstitutionMatch, tenantMutation, tenantQuery } from "./tenancy";
 
 const eventCategoryValidator = v.union(
   v.literal("ACADEMIC"),
@@ -27,71 +27,73 @@ const priorityValidator = v.union(
 
 // ==================== QUERIES ====================
 
-export const getCalendarEvents = query({
+export const getCalendarEvents = tenantQuery({
   args: {
     startDate: v.optional(v.number()),
     endDate: v.optional(v.number()),
     category: v.optional(eventCategoryValidator),
     isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { startDate, endDate, category, isActive }) => {
-    let allEvents;
+  handler: async (ctx, { startDate, endDate, category, isActive }, tenancy) => {
+    let events = await ctx.db
+      .query("calendarEvents")
+      .withIndex("by_institutionId", (q: any) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
+      .collect();
 
     if (category) {
-      allEvents = await ctx.db
-        .query("calendarEvents")
-        .withIndex("by_category", (q) => q.eq("category", category))
-        .collect();
-    } else {
-      allEvents = await ctx.db.query("calendarEvents").collect();
+      events = events.filter((event: any) => event.category === category);
     }
 
-    // Filter by active status
     if (isActive !== undefined) {
-      allEvents = allEvents.filter((e) => e.isActive === isActive);
+      events = events.filter((event: any) => event.isActive === isActive);
     }
 
-    // Filter by date range
-    if (startDate) {
-      allEvents = allEvents.filter((e) => e.endDate >= startDate);
-    }
-    if (endDate) {
-      allEvents = allEvents.filter((e) => e.startDate <= endDate);
+    if (startDate !== undefined) {
+      events = events.filter((event: any) => event.endDate >= startDate);
     }
 
-    return allEvents.sort((a, b) => a.startDate - b.startDate);
+    if (endDate !== undefined) {
+      events = events.filter((event: any) => event.startDate <= endDate);
+    }
+
+    return events.sort((a: any, b: any) => a.startDate - b.startDate);
   },
 });
 
-export const getCalendarEventById = query({
+export const getCalendarEventById = tenantQuery({
   args: { id: v.id("calendarEvents") },
-  handler: async (ctx, { id }) => {
-    return await ctx.db.get(id);
+  handler: async (ctx, { id }, tenancy) => {
+    const event = await ctx.db.get(id);
+    return ensureInstitutionMatch(event, tenancy, "Event not found");
   },
 });
 
-export const getUpcomingEvents = query({
+export const getUpcomingEvents = tenantQuery({
   args: {
     limit: v.optional(v.number()),
   },
-  handler: async (ctx, { limit }) => {
+  handler: async (ctx, { limit }, tenancy) => {
     const now = Date.now();
-    let events = await ctx.db
+    const events = await ctx.db
       .query("calendarEvents")
-      .withIndex("by_startDate")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", tenancy.institution._id),
+      )
       .collect();
 
-    events = events
-      .filter((e) => e.startDate >= now && e.isActive)
+    const upcoming = events
+      .filter((event) => event.startDate >= now && event.isActive)
       .sort((a, b) => a.startDate - b.startDate);
 
-    return limit ? events.slice(0, limit) : events;
+    return limit ? upcoming.slice(0, limit) : upcoming;
   },
 });
 
 // ==================== MUTATIONS ====================
 
-export const createCalendarEvent = mutation({
+export const createCalendarEvent = tenantMutation({
   args: {
     title: v.string(),
     description: v.optional(v.string()),
@@ -107,8 +109,14 @@ export const createCalendarEvent = mutation({
     createdBy: v.id("users"),
     attendeeIds: v.optional(v.array(v.id("users"))),
   },
-  handler: async (ctx, args) => {
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, args, tenancy) => {
+    if (!tenancy.isMaster && args.createdBy !== tenancy.user._id) {
+      throw new Error("You can only create events for your own account");
+    }
+
     const now = Date.now();
+
     return await ctx.db.insert("calendarEvents", {
       title: args.title,
       description: args.description,
@@ -124,15 +132,16 @@ export const createCalendarEvent = mutation({
       isActive: true,
       createdBy: args.createdBy,
       updatedBy: args.createdBy,
-      version: 1,
       attendeeIds: args.attendeeIds,
+      version: 1,
       createdAt: now,
       updatedAt: now,
+      institutionId: tenancy.institution._id,
     });
   },
 });
 
-export const updateCalendarEvent = mutation({
+export const updateCalendarEvent = tenantMutation({
   args: {
     id: v.id("calendarEvents"),
     title: v.optional(v.string()),
@@ -146,18 +155,25 @@ export const updateCalendarEvent = mutation({
     color: v.optional(v.string()),
     location: v.optional(v.string()),
     isActive: v.optional(v.boolean()),
-    updatedBy: v.id("users"),
+    updatedBy: v.optional(v.id("users")),
   },
-  handler: async (ctx, { id, updatedBy, ...updates }) => {
-    const event = await ctx.db.get(id);
-    if (!event) {
-      throw new Error("Event not found");
+  roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
+  handler: async (ctx, { id, updatedBy, ...updates }, tenancy) => {
+    const existing = ensureInstitutionMatch(
+      await ctx.db.get(id),
+      tenancy,
+      "Event not found",
+    );
+
+    const actor = updatedBy ?? tenancy.user._id;
+    if (!tenancy.isMaster && actor !== tenancy.user._id) {
+      throw new Error("Invalid updater for event");
     }
 
     await ctx.db.patch(id, {
       ...updates,
-      updatedBy,
-      version: event.version + 1,
+      updatedBy: actor,
+      version: existing.version + 1,
       updatedAt: Date.now(),
     });
 
@@ -165,17 +181,22 @@ export const updateCalendarEvent = mutation({
   },
 });
 
-export const deleteCalendarEvent = mutation({
+export const deleteCalendarEvent = tenantMutation({
   args: { id: v.id("calendarEvents") },
-  handler: async (ctx, { id }) => {
-    // Delete associated recurrence rule if exists
-    const rule = await ctx.db
+  roles: ["ADMIN", "STAFF", "MASTER"],
+  handler: async (ctx, { id }, tenancy) => {
+    ensureInstitutionMatch(await ctx.db.get(id), tenancy, "Event not found");
+
+    const recurrenceRule = await ctx.db
       .query("recurrenceRules")
       .withIndex("by_calendarEventId", (q) => q.eq("calendarEventId", id))
       .first();
 
-    if (rule) {
-      await ctx.db.delete(rule._id);
+    if (
+      recurrenceRule &&
+      recurrenceRule.institutionId === tenancy.institution._id
+    ) {
+      await ctx.db.delete(recurrenceRule._id);
     }
 
     await ctx.db.delete(id);
