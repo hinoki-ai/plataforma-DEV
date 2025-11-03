@@ -7,7 +7,7 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { tenantQuery, tenantMutation } from "./tenancy";
-import { Id } from "./_generated/dataModel";
+import { Id, Doc } from "./_generated/dataModel";
 
 // ==================== QUERIES ====================
 
@@ -47,42 +47,52 @@ export const getLearningObjectives = tenantQuery({
       objectives = await ctx.db
         .query("learningObjectives")
         .withIndex("by_subject", (q: any) =>
-          q.eq("subject", args.subject!).eq("institutionId", tenancy.institution._id)
+          q
+            .eq("subject", args.subject!)
+            .eq("institutionId", tenancy.institution._id),
         )
         .collect();
     } else if (args.level) {
       objectives = await ctx.db
         .query("learningObjectives")
         .withIndex("by_level", (q: any) =>
-          q.eq("level", args.level!).eq("institutionId", tenancy.institution._id)
+          q
+            .eq("level", args.level!)
+            .eq("institutionId", tenancy.institution._id),
         )
         .collect();
     } else {
       objectives = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_institutionId", (q: any) => q.eq("institutionId", tenancy.institution._id))
+        .withIndex("by_institutionId", (q: any) =>
+          q.eq("institutionId", tenancy.institution._id),
+        )
         .collect();
     }
 
     // Filter by semester if provided
     if (args.semester) {
-      objectives = objectives.filter((o) => o.semester === args.semester);
+      objectives = objectives.filter(
+        (o: Doc<"learningObjectives">) => o.semester === args.semester,
+      );
     }
 
     // Filter by active status if provided
     if (args.isActive !== undefined) {
-      objectives = objectives.filter((o) => o.isActive === args.isActive);
+      objectives = objectives.filter(
+        (o: Doc<"learningObjectives">) => o.isActive === args.isActive,
+      );
     }
 
     // Get evaluation indicators for each objective
     const objectivesWithIndicators = await Promise.all(
-      objectives.map(async (obj) => {
+      objectives.map(async (obj: Doc<"learningObjectives">) => {
         const indicators = await ctx.db
           .query("evaluationIndicators")
-          .withIndex("by_learningObjectiveId", (q) =>
+          .withIndex("by_learningObjectiveId", (q: any) =>
             q.eq("learningObjectiveId", obj._id),
           )
-          .filter((q) => q.eq(q.field("isActive"), true))
+          .filter((q: any) => q.eq(q.field("isActive"), true))
           .collect();
 
         return {
@@ -111,10 +121,12 @@ export const getLearningObjectiveById = tenantQuery({
 
     const indicators = await ctx.db
       .query("evaluationIndicators")
-      .withIndex("by_learningObjectiveId", (q) =>
-        q.eq("learningObjectiveId", objectiveId).eq("institutionId", tenancy.institution._id),
+      .withIndex("by_learningObjectiveId", (q: any) =>
+        q
+          .eq("learningObjectiveId", objectiveId)
+          .eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq(q.field("isActive"), true))
+      .filter((q: any) => q.eq(q.field("isActive"), true))
       .collect();
 
     return {
@@ -142,18 +154,25 @@ export const getEvaluationIndicators = tenantQuery({
   handler: async (ctx, { learningObjectiveId, level }, tenancy) => {
     let indicators = await ctx.db
       .query("evaluationIndicators")
-      .withIndex("by_learningObjectiveId", (q) =>
-        q.eq("learningObjectiveId", learningObjectiveId).eq("institutionId", tenancy.institution._id),
+      .withIndex("by_learningObjectiveId", (q: any) =>
+        q
+          .eq("learningObjectiveId", learningObjectiveId)
+          .eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq(q.field("isActive"), true))
+      .filter((q: any) => q.eq(q.field("isActive"), true))
       .collect();
 
     // Filter by level if provided
     if (level) {
-      indicators = indicators.filter((i) => i.level === level);
+      indicators = indicators.filter(
+        (i: Doc<"evaluationIndicators">) => i.level === level,
+      );
     }
 
-    return indicators.sort((a, b) => a.code.localeCompare(b.code));
+    return indicators.sort(
+      (a: Doc<"evaluationIndicators">, b: Doc<"evaluationIndicators">) =>
+        a.code.localeCompare(b.code),
+    );
   },
 });
 
@@ -180,24 +199,28 @@ export const getCurriculumCoverage = tenantQuery({
 
     let coverage = await ctx.db
       .query("curriculumCoverage")
-      .withIndex("by_courseId", (q) =>
-        q.eq("courseId", courseId).eq("institutionId", tenancy.institution._id)
+      .withIndex("by_courseId", (q: any) =>
+        q.eq("courseId", courseId).eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     // Filter by subject if provided
     if (subject) {
-      coverage = coverage.filter((c) => c.subject === subject);
+      coverage = coverage.filter(
+        (c: Doc<"curriculumCoverage">) => c.subject === subject,
+      );
     }
 
     // Filter by period if provided
     if (period) {
-      coverage = coverage.filter((c) => c.period === period);
+      coverage = coverage.filter(
+        (c: Doc<"curriculumCoverage">) => c.period === period,
+      );
     }
 
     // Get learning objective details for each coverage entry
     const coverageWithDetails = await Promise.all(
-      coverage.map(async (c) => {
+      coverage.map(async (c: Doc<"curriculumCoverage">) => {
         const objective = await ctx.db.get(c.learningObjectiveId);
         return {
           ...c,
@@ -218,17 +241,21 @@ export const getClassContentOA = tenantQuery({
   handler: async (ctx, { classContentId }, tenancy) => {
     const links = await ctx.db
       .query("classContentOA")
-      .withIndex("by_classContentId", (q) =>
-        q.eq("classContentId", classContentId).eq("institutionId", tenancy.institution._id),
+      .withIndex("by_classContentId", (q: any) =>
+        q
+          .eq("classContentId", classContentId)
+          .eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     const linksWithDetails = await Promise.all(
-      links.map(async (link) => {
+      links.map(async (link: Doc<"classContentOA">) => {
         const objective = await ctx.db.get(link.learningObjectiveId);
         const indicators = link.evaluationIndicatorIds
           ? await Promise.all(
-              link.evaluationIndicatorIds.map((id) => ctx.db.get(id)),
+              link.evaluationIndicatorIds.map(
+                (id: Id<"evaluationIndicators">) => ctx.db.get(id),
+              ),
             )
           : [];
 
@@ -274,14 +301,14 @@ export const getCoverageStatistics = tenantQuery({
       // Get objectives matching subject, level, grade, and institution
       const allObjectivesForSubject = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_subject_level", (q) =>
+        .withIndex("by_subject_level", (q: any) =>
           q
             .eq("subject", subj)
             .eq("level", course.level)
             .eq("grade", course.grade)
             .eq("institutionId", tenancy.institution._id),
         )
-        .filter((q) => q.eq(q.field("isActive"), true))
+        .filter((q: any) => q.eq(q.field("isActive"), true))
         .collect();
 
       const objectives = allObjectivesForSubject;
@@ -290,7 +317,8 @@ export const getCoverageStatistics = tenantQuery({
       if (period) {
         allObjectives.push(
           ...objectives.filter(
-            (o) => o.semester === period || o.semester === "ANUAL",
+            (o: Doc<"learningObjectives">) =>
+              o.semester === period || o.semester === "ANUAL",
           ),
         );
       } else {
@@ -301,45 +329,51 @@ export const getCoverageStatistics = tenantQuery({
     // Get coverage records for this institution
     let coverage = await ctx.db
       .query("curriculumCoverage")
-      .withIndex("by_courseId", (q) =>
-        q.eq("courseId", courseId).eq("institutionId", tenancy.institution._id)
+      .withIndex("by_courseId", (q: any) =>
+        q.eq("courseId", courseId).eq("institutionId", tenancy.institution._id),
       )
       .collect();
 
     if (subject) {
-      coverage = coverage.filter((c) => c.subject === subject);
+      coverage = coverage.filter(
+        (c: Doc<"curriculumCoverage">) => c.subject === subject,
+      );
     }
 
     if (period) {
-      coverage = coverage.filter((c) => c.period === period);
+      coverage = coverage.filter(
+        (c: Doc<"curriculumCoverage">) => c.period === period,
+      );
     }
 
-    const coverageMap = new Map(
-      coverage.map((c) => [c.learningObjectiveId, c]),
+    const coverageMap = new Map<
+      Id<"learningObjectives">,
+      Doc<"curriculumCoverage">
+    >(
+      coverage.map((c: Doc<"curriculumCoverage">) => [
+        c.learningObjectiveId,
+        c,
+      ]),
     );
 
     // Calculate statistics
     const total = allObjectives.length;
-    const noIniciado = allObjectives.filter(
-      (o) =>
-        !coverageMap.has(o._id) ||
-        coverageMap.get(o._id)!.coverageStatus === "NO_INICIADO",
-    ).length;
-    const enProgreso = allObjectives.filter(
-      (o) =>
-        coverageMap.has(o._id) &&
-        coverageMap.get(o._id)!.coverageStatus === "EN_PROGRESO",
-    ).length;
-    const cubierto = allObjectives.filter(
-      (o) =>
-        coverageMap.has(o._id) &&
-        coverageMap.get(o._id)!.coverageStatus === "CUBIERTO",
-    ).length;
-    const reforzado = allObjectives.filter(
-      (o) =>
-        coverageMap.has(o._id) &&
-        coverageMap.get(o._id)!.coverageStatus === "REFORZADO",
-    ).length;
+    const noIniciado = allObjectives.filter((o: Doc<"learningObjectives">) => {
+      const coverage = coverageMap.get(o._id);
+      return !coverage || coverage.coverageStatus === "NO_INICIADO";
+    }).length;
+    const enProgreso = allObjectives.filter((o: Doc<"learningObjectives">) => {
+      const coverage = coverageMap.get(o._id);
+      return coverage?.coverageStatus === "EN_PROGRESO";
+    }).length;
+    const cubierto = allObjectives.filter((o: Doc<"learningObjectives">) => {
+      const coverage = coverageMap.get(o._id);
+      return coverage?.coverageStatus === "CUBIERTO";
+    }).length;
+    const reforzado = allObjectives.filter((o: Doc<"learningObjectives">) => {
+      const coverage = coverageMap.get(o._id);
+      return coverage?.coverageStatus === "REFORZADO";
+    }).length;
 
     const percentage = total > 0 ? ((cubierto + reforzado) / total) * 100 : 0;
 
@@ -381,8 +415,8 @@ export const createLearningObjective = tenantMutation({
     // Check if code already exists for this institution
     const existing = await ctx.db
       .query("learningObjectives")
-      .withIndex("by_code", (q) =>
-        q.eq("code", args.code).eq("institutionId", tenancy.institution._id)
+      .withIndex("by_code", (q: any) =>
+        q.eq("code", args.code).eq("institutionId", tenancy.institution._id),
       )
       .first();
 
@@ -432,8 +466,10 @@ export const updateLearningObjective = tenantMutation({
     if (updates.code && updates.code !== objective.code) {
       const existing = await ctx.db
         .query("learningObjectives")
-        .withIndex("by_code", (q) =>
-          q.eq("code", updates.code!).eq("institutionId", tenancy.institution._id)
+        .withIndex("by_code", (q: any) =>
+          q
+            .eq("code", updates.code!)
+            .eq("institutionId", tenancy.institution._id),
         )
         .first();
 
@@ -479,10 +515,12 @@ export const createEvaluationIndicator = tenantMutation({
     // Check if code already exists for this objective
     const existing = await ctx.db
       .query("evaluationIndicators")
-      .withIndex("by_learningObjectiveId", (q) =>
-        q.eq("learningObjectiveId", args.learningObjectiveId).eq("institutionId", tenancy.institution._id),
+      .withIndex("by_learningObjectiveId", (q: any) =>
+        q
+          .eq("learningObjectiveId", args.learningObjectiveId)
+          .eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) => q.eq(q.field("code"), args.code))
+      .filter((q: any) => q.eq(q.field("code"), args.code))
       .first();
 
     if (existing) {
@@ -532,10 +570,12 @@ export const updateEvaluationIndicator = tenantMutation({
     if (updates.code && updates.code !== indicator.code) {
       const existing = await ctx.db
         .query("evaluationIndicators")
-        .withIndex("by_learningObjectiveId", (q) =>
-          q.eq("learningObjectiveId", indicator.learningObjectiveId).eq("institutionId", tenancy.institution._id),
+        .withIndex("by_learningObjectiveId", (q: any) =>
+          q
+            .eq("learningObjectiveId", indicator.learningObjectiveId)
+            .eq("institutionId", tenancy.institution._id),
         )
-        .filter((q) => q.eq(q.field("code"), updates.code!))
+        .filter((q: any) => q.eq(q.field("code"), updates.code!))
         .first();
 
       if (existing) {
@@ -567,7 +607,10 @@ export const linkClassContentToOA = tenantMutation({
   handler: async (ctx, args, tenancy) => {
     // Validate class content exists and belongs to institution
     const classContent = await ctx.db.get(args.classContentId);
-    if (!classContent || classContent.institutionId !== tenancy.institution._id) {
+    if (
+      !classContent ||
+      classContent.institutionId !== tenancy.institution._id
+    ) {
       throw new Error("Class content not found");
     }
 
@@ -613,13 +656,13 @@ export const linkClassContentToOA = tenantMutation({
     // Get or create coverage record
     let coverage = await ctx.db
       .query("curriculumCoverage")
-      .withIndex("by_courseId_subject", (q) =>
+      .withIndex("by_courseId_subject", (q: any) =>
         q
           .eq("courseId", classContent.courseId)
           .eq("subject", classContent.subject)
           .eq("institutionId", tenancy.institution._id),
       )
-      .filter((q) =>
+      .filter((q: any) =>
         q.eq(q.field("learningObjectiveId"), args.learningObjectiveId),
       )
       .first();

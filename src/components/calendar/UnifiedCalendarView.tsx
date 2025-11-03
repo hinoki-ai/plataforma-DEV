@@ -112,7 +112,7 @@ export default function UnifiedCalendarView({
 }: UnifiedCalendarViewProps) {
   // Context and session
   const isHydrated = useHydrationSafe();
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const { context, isPublicRoute, isAuthRoute } = useAppContext();
   const { t, language } = useDivineParsing(["common"]);
 
@@ -124,6 +124,7 @@ export default function UnifiedCalendarView({
   const actualUserRole = session?.user?.role || userRole;
   const canEdit = forceEditMode || actualUserRole === "ADMIN";
   const canView = !!actualUserRole || !!userRole || isPublicRoute; // Allow viewing for public routes
+  const isAuthenticated = sessionStatus === "authenticated";
 
   // Auto-detect admin controls based on context
   const shouldShowAdminControls =
@@ -150,24 +151,33 @@ export default function UnifiedCalendarView({
     [safeCurrentMonth],
   );
 
-  // Use Convex React hooks for authenticated queries
-  const allEvents = useQuery(api.calendar.getCalendarEvents, {
-    startDate: undefined,
-    endDate: undefined,
-    category: undefined,
-    isActive: true,
-  });
+  // Use Convex React hooks for authenticated queries - only when authenticated
+  const allEvents = useQuery(
+    isAuthenticated ? api.calendar.getCalendarEvents : null,
+    {
+      startDate: undefined,
+      endDate: undefined,
+      category: undefined,
+      isActive: true,
+    },
+  );
 
-  const monthEventsData = useQuery(api.calendar.getCalendarEvents, {
-    startDate: startOfMonthDate.getTime(),
-    endDate: endOfMonthDate.getTime(),
-    category: undefined,
-    isActive: true,
-  });
+  const monthEventsData = useQuery(
+    isAuthenticated ? api.calendar.getCalendarEvents : null,
+    {
+      startDate: startOfMonthDate.getTime(),
+      endDate: endOfMonthDate.getTime(),
+      category: undefined,
+      isActive: true,
+    },
+  );
 
-  const upcomingEventsData = useQuery(api.calendar.getUpcomingEvents, {
-    limit: 10,
-  });
+  const upcomingEventsData = useQuery(
+    isAuthenticated ? api.calendar.getUpcomingEvents : null,
+    {
+      limit: 10,
+    },
+  );
 
   // Process and group events
   const [events, setEvents] = useState<Record<string, UnifiedCalendarEvent[]>>(
