@@ -104,7 +104,7 @@ export const createVote = mutation({
     isActive: v.optional(v.boolean()),
     isPublic: v.optional(v.boolean()),
     allowMultipleVotes: v.optional(v.boolean()),
-    maxVotesPerUser: v.optional(v.number()),
+    maxVotesPerUser: v.union(v.float64(), v.null()),
     requireAuthentication: v.optional(v.boolean()),
     createdBy: v.id("users"),
     options: v.array(v.string()),
@@ -112,16 +112,29 @@ export const createVote = mutation({
   handler: async (ctx, { options, ...args }) => {
     const now = Date.now();
 
-    const voteId = await ctx.db.insert("votes", {
-      ...args,
+    // Create the vote data, filtering out null/undefined optional fields
+    const voteData: any = {
+      title: args.title,
+      endDate: args.endDate,
+      createdBy: args.createdBy,
       category: args.category ?? "GENERAL",
-      isActive: true,
+      isActive: args.isActive ?? true,
       isPublic: args.isPublic ?? true,
       allowMultipleVotes: args.allowMultipleVotes ?? false,
       requireAuthentication: args.requireAuthentication ?? true,
       createdAt: now,
       updatedAt: now,
-    });
+    };
+
+    // Add optional fields
+    if (args.description !== undefined) {
+      voteData.description = args.description;
+    }
+    if (args.maxVotesPerUser !== undefined) {
+      voteData.maxVotesPerUser = args.maxVotesPerUser;
+    }
+
+    const voteId = await ctx.db.insert("votes", voteData);
 
     // Create options
     await Promise.all(
