@@ -474,9 +474,6 @@ export default defineSchema({
   })
     .index("by_institutionId", ["institutionId"])
     .index("by_voteId", ["voteId"])
-    .index("by_voteId_userId", ["voteId", "userId"])
-    .index("by_optionId", ["optionId"])
-    .index("by_voteId", ["voteId"])
     .index("by_optionId", ["optionId"])
     .index("by_userId", ["userId"])
     .index("by_voteId_userId", ["voteId", "userId"]),
