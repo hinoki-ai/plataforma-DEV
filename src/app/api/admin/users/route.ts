@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
       console.error("Auth error:", error);
       return handleApiError(
         new ApiErrorResponse("Error de autenticación", 500, "AUTH_ERROR", {
-          originalError: error instanceof Error ? error.message : String(error)
+          originalError: error instanceof Error ? error.message : String(error),
         }),
         "GET /api/admin/users",
       );
@@ -87,7 +87,10 @@ export async function GET(request: NextRequest) {
           "Error al obtener usuarios del sistema de autenticación",
           500,
           "CLERK_ERROR",
-          { originalError: error instanceof Error ? error.message : String(error) }
+          {
+            originalError:
+              error instanceof Error ? error.message : String(error),
+          },
         ),
         "GET /api/admin/users",
       );
