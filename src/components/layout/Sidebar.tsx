@@ -245,16 +245,31 @@ export function Sidebar({
     () => getNavigationGroupsForRole(session?.user?.role, pathname),
     [session?.user?.role, pathname],
   );
-  const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>(
-    () => {
-      // Initialize groups with their defaultOpen state
-      const initialState: Record<string, boolean> = {};
+
+  // ⚡ Performance: Memoize open groups state initialization
+  const initialOpenGroups = React.useMemo(() => {
+    const initialState: Record<string, boolean> = {};
+    navigationGroups.forEach((group) => {
+      initialState[group.title] = group.defaultOpen ?? false;
+    });
+    return initialState;
+  }, [navigationGroups]);
+
+  const [openGroups, setOpenGroups] =
+    React.useState<Record<string, boolean>>(initialOpenGroups);
+
+  // Update openGroups when navigationGroups changes to ensure new groups are properly initialized
+  React.useEffect(() => {
+    setOpenGroups((prev) => {
+      const newState = { ...prev };
       navigationGroups.forEach((group) => {
-        initialState[group.title] = group.defaultOpen ?? false;
+        if (!(group.title in newState)) {
+          newState[group.title] = group.defaultOpen ?? false;
+        }
       });
-      return initialState;
-    },
-  );
+      return newState;
+    });
+  }, [navigationGroups]);
 
   const toggleGroup = (groupTitle: string) => {
     setOpenGroups((prev) => ({

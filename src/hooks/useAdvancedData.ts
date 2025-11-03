@@ -438,19 +438,27 @@ export function useRealTimeData<T>(
   } = options;
 
   const baseResult = useAdvancedData<T>(url, dataOptions);
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState<boolean | null>(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectAttemptsRef = useRef(0);
+  const maxReconnectAttempts = 5;
 
   const connectWebSocket = useCallback(() => {
     if (!enableWebSocket || !webSocketUrl) return;
+
+    // Close existing connection if any
+    if (wsRef.current) {
+      wsRef.current.close();
+    }
 
     try {
       wsRef.current = new WebSocket(webSocketUrl);
 
       wsRef.current.onopen = () => {
         setIsConnected(true);
+        reconnectAttemptsRef.current = 0; // Reset attempts on successful connection
         console.log("WebSocket connected for real-time data");
       };
 
@@ -468,48 +476,33 @@ export function useRealTimeData<T>(
 
       wsRef.current.onclose = () => {
         setIsConnected(false);
-        console.log("WebSocket disconnected, attempting to reconnect...");
 
-        // Clear any existing timeout
-        if (reconnectTimeoutRef.current) {
-          clearTimeout(reconnectTimeoutRef.current);
-        }
+        // Only attempt reconnection if we haven't exceeded max attempts
+        if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+          reconnectAttemptsRef.current++;
+          const delay = Math.min(
+            reconnectInterval * Math.pow(2, reconnectAttemptsRef.current - 1),
+            30000, // Max 30 seconds
+          );
 
-        // Set up reconnection - we'll handle this in useEffect
-        reconnectTimeoutRef.current = setTimeout(() => {
-          if (enableWebSocket) {
-            // Reconnect by calling the connection logic again
-            const ws = new WebSocket(webSocketUrl);
-            wsRef.current = ws;
+          console.log(
+            `WebSocket disconnected, reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current}/${maxReconnectAttempts})`,
+          );
 
-            ws.onopen = () => {
-              setIsConnected(true);
-              console.log("WebSocket reconnected for real-time data");
-            };
-
-            ws.onmessage = (event) => {
-              try {
-                const update = JSON.parse(event.data);
-                if (update.type === "data_update" && update.payload) {
-                  baseResult.updateCache(update.payload);
-                  setLastUpdate(new Date());
-                }
-              } catch (error) {
-                console.error("Failed to parse WebSocket message:", error);
-              }
-            };
-
-            ws.onclose = () => {
-              setIsConnected(false);
-              console.log("WebSocket disconnected again");
-            };
-
-            ws.onerror = (error) => {
-              console.error("WebSocket reconnection error:", error);
-              setIsConnected(false);
-            };
+          // Clear any existing timeout
+          if (reconnectTimeoutRef.current) {
+            clearTimeout(reconnectTimeoutRef.current);
           }
-        }, reconnectInterval);
+
+          reconnectTimeoutRef.current = setTimeout(() => {
+            if (enableWebSocket && webSocketUrl) {
+              // Trigger reconnection by updating state to cause useEffect to run again
+              setIsConnected((prev) => (prev === false ? null : false));
+            }
+          }, delay);
+        } else {
+          console.log("Max WebSocket reconnection attempts reached");
+        }
       };
 
       wsRef.current.onerror = (error) => {
@@ -517,12 +510,13 @@ export function useRealTimeData<T>(
         setIsConnected(false);
       };
     } catch (error) {
-      console.error("Failed to connect WebSocket:", error);
+      console.error("Failed to create WebSocket connection:", error);
     }
   }, [enableWebSocket, webSocketUrl, reconnectInterval, baseResult]);
 
   useEffect(() => {
-    if (enableWebSocket) {
+    if (enableWebSocket && isConnected !== null) {
+      reconnectAttemptsRef.current = 0; // Reset attempts when enabling WebSocket
       connectWebSocket();
     }
 
@@ -533,8 +527,9 @@ export function useRealTimeData<T>(
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
       }
+      reconnectAttemptsRef.current = 0; // Reset on cleanup
     };
-  }, [connectWebSocket, enableWebSocket]);
+  }, [connectWebSocket, enableWebSocket, isConnected]);
 
   return {
     ...baseResult,
