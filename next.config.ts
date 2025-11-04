@@ -1,8 +1,17 @@
 import fs from "fs";
 import type { NextConfig } from "next";
 import path from "path";
+import dotenv from "dotenv";
 
 const isDevelopment = process.env.NODE_ENV === "development";
+
+// Load environment variables from .env.local in development
+if (isDevelopment) {
+  const envPath = path.join(__dirname, ".env.local");
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+  }
+}
 
 function loadClerkKeylessEnv() {
   const missingPublishable =
