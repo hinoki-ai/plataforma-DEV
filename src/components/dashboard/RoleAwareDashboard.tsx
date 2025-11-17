@@ -653,7 +653,13 @@ export function RoleAwareDashboard() {
                     mode="compact"
                     showAdminControls={false}
                     showExport={false}
-                    initialCategories={["ACADEMIC", "HOLIDAY", "SPECIAL", "MEETING", "EXAM"]}
+                    initialCategories={[
+                      "ACADEMIC",
+                      "HOLIDAY",
+                      "SPECIAL",
+                      "MEETING",
+                      "EXAM",
+                    ]}
                     userRole="PROFESOR"
                   />
                 </div>
@@ -677,8 +683,8 @@ export function RoleAwareDashboard() {
                 description="Seguimiento de objetivos de aprendizaje"
               >
                 <OACoverageWidget
-                  data={stats?.learningObjectives || null}
-                  loading={stats === null}
+                  data={null}
+                  loading={false}
                 />
               </DashboardCard>
             </div>
@@ -749,7 +755,6 @@ export function RoleAwareDashboard() {
                 </div>
               </div>
             </DashboardCard>
-
 
             {/* Votaciones Section */}
             <DashboardCard

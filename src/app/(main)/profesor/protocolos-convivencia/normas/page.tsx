@@ -5,10 +5,22 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, CheckCircle, XCircle, AlertCircle, FileText } from "lucide-react";
+import {
+  Users,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  FileText,
+} from "lucide-react";
 
 function NormasContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -16,7 +28,8 @@ function NormasContent() {
   const normas = [
     {
       title: "Respeto Mutuo",
-      description: "Tratar a todos los miembros de la comunidad con respeto y cortesía",
+      description:
+        "Tratar a todos los miembros de la comunidad con respeto y cortesía",
       status: "active",
       category: "Valores",
     },
@@ -40,7 +53,8 @@ function NormasContent() {
     },
     {
       title: "Uso Apropiado de Tecnología",
-      description: "Utilizar dispositivos tecnológicos de manera responsable y educativa",
+      description:
+        "Utilizar dispositivos tecnológicos de manera responsable y educativa",
       status: "review",
       category: "Tecnología",
     },
@@ -62,11 +76,23 @@ function NormasContent() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Activa</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Activa
+          </Badge>
+        );
       case "inactive":
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Inactiva</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-red-100 text-red-800">
+            Inactiva
+          </Badge>
+        );
       case "review":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">En Revisión</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            En Revisión
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Activa</Badge>;
     }
@@ -87,7 +113,7 @@ function NormasContent() {
           <div className="flex items-center space-x-2">
             <Badge variant="outline">
               <Users className="w-4 h-4 mr-2" />
-              {normas.filter(n => n.status === "active").length} Activas
+              {normas.filter((n) => n.status === "active").length} Activas
             </Badge>
             <Button>
               <FileText className="w-4 h-4 mr-2" />
@@ -124,7 +150,8 @@ function NormasContent() {
           <CardHeader>
             <CardTitle>Marco General de Convivencia</CardTitle>
             <CardDescription>
-              Principios fundamentales que rigen la convivencia en el establecimiento
+              Principios fundamentales que rigen la convivencia en el
+              establecimiento
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -139,7 +166,9 @@ function NormasContent() {
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold mb-3">Derechos de los Estudiantes</h4>
+                <h4 className="font-semibold mb-3">
+                  Derechos de los Estudiantes
+                </h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>• Derecho a la educación</li>
                   <li>• Derecho a la expresión</li>

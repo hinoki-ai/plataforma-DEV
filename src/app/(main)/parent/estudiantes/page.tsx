@@ -96,9 +96,21 @@ function EstudiantesContent() {
         // Transform API data to match Student interface
         const apiStudents: Student[] = result.data.map((child: any) => {
           const defaultSubjects = [
-            { name: "Lenguaje", grade: "-", progress: 0 },
-            { name: "Matemáticas", grade: "-", progress: 0 },
-            { name: "Ciencias", grade: "-", progress: 0 },
+            {
+              name: t("common.subjects.language", "common"),
+              grade: "-",
+              progress: 0,
+            },
+            {
+              name: t("common.subjects.math", "common"),
+              grade: "-",
+              progress: 0,
+            },
+            {
+              name: t("common.subjects.science", "common"),
+              grade: "-",
+              progress: 0,
+            },
           ];
 
           const subjects =
@@ -115,7 +127,7 @@ function EstudiantesContent() {
 
           const upcomingActivities = Array.isArray(child.upcomingActivities)
             ? child.upcomingActivities.map((activity: any) => ({
-                title: activity.title ?? "Actividad",
+                title: activity.title ?? t("parent.students.activity"),
                 date: activity.date ?? new Date().toISOString(),
                 type: activity.type ?? "General",
               }))
@@ -123,7 +135,7 @@ function EstudiantesContent() {
 
           const recentReports = Array.isArray(child.recentReports)
             ? child.recentReports.map((report: any) => ({
-                title: report.title ?? "Reporte",
+                title: report.title ?? t("parent.students.report"),
                 date: report.date ?? new Date().toISOString(),
                 type: report.type ?? "General",
               }))
@@ -142,12 +154,13 @@ function EstudiantesContent() {
           return {
             id: child.id,
             name: child.name,
-            grade: child.grade ?? "Sin grado",
+            grade: child.grade ?? t("parent.students.no_grade"),
             enrollmentDate: child.enrollmentDate,
             attendance,
             academicProgress,
             teacher: {
-              name: child.teacher?.name ?? "Profesor asignado",
+              name:
+                child.teacher?.name ?? t("parent.students.assigned_teacher"),
               email: child.teacher?.email ?? "",
               phone: child.teacher?.phone ?? undefined,
             },
@@ -164,7 +177,7 @@ function EstudiantesContent() {
       }
     } catch (err) {
       console.error("Error fetching students:", err);
-      setError("Error al cargar la información de los estudiantes");
+      setError(t("parent.students.error_loading"));
     } finally {
       setLoading(false);
     }
@@ -194,10 +207,10 @@ function EstudiantesContent() {
       <div className="space-y-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Mis Estudiantes
+            {t("parent.students.page_title")}
           </h1>
           <p className="text-muted-foreground">
-            Información académica y seguimiento de sus estudiantes
+            {t("parent.students.page_description")}
           </p>
         </div>
         <div className="text-center py-16">
@@ -215,11 +228,11 @@ function EstudiantesContent() {
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Error al cargar estudiantes
+            {t("parent.students.error_loading")}
           </h3>
           <p className="text-gray-600">{error}</p>
           <Button onClick={fetchStudents} className="mt-4">
-            Reintentar
+            {t("parent.students.retry")}
           </Button>
         </div>
       </div>
@@ -230,11 +243,10 @@ function EstudiantesContent() {
     <div className="space-y-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          Mis Estudiantes
+          {t("parent.students.page_title")}
         </h1>
         <p className="text-muted-foreground">
-          Información académica, asistencia y seguimiento del progreso de sus
-          estudiantes
+          {t("parent.students.page_description")}
         </p>
       </div>
 
@@ -243,11 +255,10 @@ function EstudiantesContent() {
           <CardContent className="flex flex-col items-center justify-center py-16">
             <Users className="h-16 w-16 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold text-foreground mb-2">
-              No hay estudiantes registrados
+              {t("parent.students.no_students")}
             </h3>
             <p className="text-muted-foreground mb-6 text-center">
-              No se encontraron estudiantes asociados a su cuenta. Contacte a la
-              administración si cree que esto es un error.
+              {t("parent.students.no_students_desc")}
             </p>
           </CardContent>
         </Card>
@@ -259,10 +270,10 @@ function EstudiantesContent() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5" />
-                  Estudiantes
+                  {t("parent.students.students")}
                 </CardTitle>
                 <CardDescription>
-                  Seleccione un estudiante para ver sus detalles
+                  {t("parent.students.select_student")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -293,8 +304,8 @@ function EstudiantesContent() {
                         }
                       >
                         {selectedStudent?.id === student.id
-                          ? "Seleccionado"
-                          : "Ver"}
+                          ? t("parent.students.selected")
+                          : t("parent.students.view")}
                       </Badge>
                     </div>
                   </div>
@@ -315,7 +326,8 @@ function EstudiantesContent() {
                       {selectedStudent.name}
                     </CardTitle>
                     <CardDescription>
-                      {selectedStudent.grade} • Matriculado desde{" "}
+                      {selectedStudent.grade} •{" "}
+                      {t("parent.students.enrolled_since")}{" "}
                       {new Date(
                         selectedStudent.enrollmentDate,
                       ).toLocaleDateString("es-ES", {
@@ -330,7 +342,7 @@ function EstudiantesContent() {
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-medium">
-                            Asistencia
+                            {t("parent.students.attendance")}
                           </span>
                           <span className="text-sm text-muted-foreground">
                             {selectedStudent.attendance}%
@@ -342,10 +354,10 @@ function EstudiantesContent() {
                         />
                         <p className="text-xs text-muted-foreground">
                           {selectedStudent.attendance >= 90
-                            ? "Excelente asistencia"
+                            ? t("parent.students.excellent_attendance")
                             : selectedStudent.attendance >= 80
-                              ? "Buena asistencia"
-                              : "Asistencia regular"}
+                              ? t("parent.students.good_attendance")
+                              : t("parent.students.regular_attendance")}
                         </p>
                       </div>
 
@@ -353,7 +365,7 @@ function EstudiantesContent() {
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-medium">
-                            Progreso Académico
+                            {t("parent.students.academic_progress")}
                           </span>
                           <span className="text-sm text-muted-foreground">
                             {selectedStudent.academicProgress}%
@@ -365,10 +377,10 @@ function EstudiantesContent() {
                         />
                         <p className="text-xs text-muted-foreground">
                           {selectedStudent.academicProgress >= 90
-                            ? "Excelente rendimiento"
+                            ? t("parent.students.excellent_performance")
                             : selectedStudent.academicProgress >= 80
-                              ? "Buen rendimiento"
-                              : "Rendimiento regular"}
+                              ? t("parent.students.good_performance")
+                              : t("parent.students.regular_performance")}
                         </p>
                       </div>
                     </div>
@@ -376,7 +388,7 @@ function EstudiantesContent() {
                     {/* Teacher Info */}
                     <div className="mt-6 pt-6 border-t">
                       <h4 className="font-medium text-foreground mb-3">
-                        Profesor Guía
+                        {t("parent.students.guide_teacher")}
                       </h4>
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -402,7 +414,7 @@ function EstudiantesContent() {
                         <Link href="/parent/comunicacion">
                           <Button size="sm" variant="outline">
                             <MessageSquare className="h-4 w-4 mr-2" />
-                            Contactar
+                            {t("parent.students.contact")}
                           </Button>
                         </Link>
                       </div>
@@ -415,10 +427,10 @@ function EstudiantesContent() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <BookOpen className="h-5 w-5" />
-                      Rendimiento por Asignatura
+                      {t("parent.students.subject_performance")}
                     </CardTitle>
                     <CardDescription>
-                      Calificaciones y progreso en cada materia
+                      {t("parent.students.subject_performance_desc")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -434,10 +446,11 @@ function EstudiantesContent() {
                             </h5>
                             <div className="flex items-center gap-2 mt-1">
                               <Badge variant="outline" className="text-xs">
-                                Nota: {subject.grade}
+                                {t("parent.students.grade")}: {subject.grade}
                               </Badge>
                               <span className="text-xs text-muted-foreground">
-                                Progreso: {subject.progress}%
+                                {t("parent.students.progress")}:{" "}
+                                {subject.progress}%
                               </span>
                             </div>
                           </div>
@@ -456,10 +469,10 @@ function EstudiantesContent() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Calendar className="h-5 w-5" />
-                      Próximas Actividades
+                      {t("parent.students.upcoming_activities")}
                     </CardTitle>
                     <CardDescription>
-                      Eventos, evaluaciones y actividades próximas
+                      {t("parent.students.upcoming_activities_desc")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -510,10 +523,10 @@ function EstudiantesContent() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <FileText className="h-5 w-5" />
-                      Informes Recientes
+                      {t("parent.students.recent_reports")}
                     </CardTitle>
                     <CardDescription>
-                      Evaluaciones, informes y comunicados recientes
+                      {t("parent.students.recent_reports_desc")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -537,7 +550,7 @@ function EstudiantesContent() {
                           <Badge variant="secondary">{report.type}</Badge>
                           <Button size="sm" variant="outline">
                             <Eye className="h-4 w-4 mr-2" />
-                            Ver
+                            {t("parent.students.view_report")}
                           </Button>
                         </div>
                       ))}
@@ -555,9 +568,7 @@ function EstudiantesContent() {
 
 export default function EstudiantesPage() {
   return (
-    <ErrorBoundary
-      fallback={<div>Error al cargar la página de estudiantes</div>}
-    >
+    <ErrorBoundary fallback={<div>Error loading students page</div>}>
       <Suspense fallback={<LoadingState />}>
         <EstudiantesContent />
       </Suspense>

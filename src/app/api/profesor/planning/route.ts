@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 import { createApiRoute } from "@/lib/api-validation";
 import { createSuccessResponse } from "@/lib/api-error";
@@ -26,7 +26,9 @@ export const GET = createApiRoute(
       }
 
       const teacherId = session.user.id as unknown as Id<"users">;
-      const client = getConvexClient();
+      
+      // Get authenticated Convex client (required for tenant queries)
+      const client = await getAuthenticatedConvexClient();
 
       // Query planning documents filtered by teacher ID and optional filters
       let docs;

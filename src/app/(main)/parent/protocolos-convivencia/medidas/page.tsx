@@ -5,9 +5,23 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Clock, Target, CheckCircle, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  AlertTriangle,
+  Clock,
+  Target,
+  CheckCircle,
+  MessageCircle,
+  Users,
+} from "lucide-react";
 
 function MedidasParentContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -27,7 +41,8 @@ function MedidasParentContent() {
     },
     {
       title: "Trabajo de Reflexión",
-      description: "Actividad escrita que promueve la reflexión sobre el comportamiento",
+      description:
+        "Actividad escrita que promueve la reflexión sobre el comportamiento",
       parental: "Seguimiento del cumplimiento en el hogar",
       purpose: "Desarrollo de conciencia y responsabilidad",
     },
@@ -67,13 +82,16 @@ function MedidasParentContent() {
           </CardHeader>
           <CardContent>
             <p className="text-blue-700 mb-4">
-              Tu participación es crucial para el éxito de cualquier medida correctiva:
+              Tu participación es crucial para el éxito de cualquier medida
+              correctiva:
             </p>
             <ul className="text-blue-700 space-y-2">
               <li>• Reforzar el aprendizaje en el hogar</li>
               <li>• Mantener comunicación abierta con tu hijo/a</li>
               <li>• Colaborar con el colegio en el proceso educativo</li>
-              <li>• Participar activamente en reuniones cuando sea requerido</li>
+              <li>
+                • Participar activamente en reuniones cuando sea requerido
+              </li>
             </ul>
           </CardContent>
         </Card>
@@ -96,14 +114,18 @@ function MedidasParentContent() {
                       <Users className="w-4 h-4 mr-2" />
                       Participación de Apoderados
                     </h4>
-                    <p className="text-sm text-muted-foreground">{medida.parental}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {medida.parental}
+                    </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-sm mb-2 flex items-center">
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Propósito Educativo
                     </h4>
-                    <p className="text-sm text-muted-foreground">{medida.purpose}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {medida.purpose}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -122,24 +144,28 @@ function MedidasParentContent() {
           <CardContent>
             <div className="space-y-4">
               <div>
-                <h4 className="font-semibold mb-2">Principio de Proporcionalidad</h4>
+                <h4 className="font-semibold mb-2">
+                  Principio de Proporcionalidad
+                </h4>
                 <p className="text-sm text-muted-foreground">
-                  Las medidas se aplican considerando la gravedad de la falta, las circunstancias
-                  y los antecedentes del estudiante.
+                  Las medidas se aplican considerando la gravedad de la falta,
+                  las circunstancias y los antecedentes del estudiante.
                 </p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">Enfoque Educativo</h4>
                 <p className="text-sm text-muted-foreground">
-                  Todas las medidas buscan formar y educar, promoviendo el desarrollo integral
-                  del estudiante y el aprendizaje de valores.
+                  Todas las medidas buscan formar y educar, promoviendo el
+                  desarrollo integral del estudiante y el aprendizaje de
+                  valores.
                 </p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">Participación Familiar</h4>
                 <p className="text-sm text-muted-foreground">
-                  La familia es parte fundamental del proceso educativo. Tu apoyo y colaboración
-                  son esenciales para el éxito de las medidas aplicadas.
+                  La familia es parte fundamental del proceso educativo. Tu
+                  apoyo y colaboración son esenciales para el éxito de las
+                  medidas aplicadas.
                 </p>
               </div>
             </div>

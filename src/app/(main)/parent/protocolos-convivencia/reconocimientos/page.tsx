@@ -5,7 +5,13 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Award, Star, Trophy, Heart, Users, Calendar, Eye } from "lucide-react";
@@ -16,28 +22,50 @@ function ReconocimientosParentContent() {
   const reconocimientos = [
     {
       title: "Estudiante del Mes",
-      description: "Reconocimiento mensual al estudiante destacado en comportamiento y rendimiento",
+      description:
+        "Reconocimiento mensual al estudiante destacado en comportamiento y rendimiento",
       frequency: "Mensual",
-      benefits: ["Diploma especial", "Mención en asamblea", "Privilegios en biblioteca"],
+      benefits: [
+        "Diploma especial",
+        "Mención en asamblea",
+        "Privilegios en biblioteca",
+      ],
     },
     {
       title: "Equipo Solidario",
-      description: "Premio a cursos que demuestran excelencia en trabajo colaborativo",
+      description:
+        "Premio a cursos que demuestran excelencia en trabajo colaborativo",
       frequency: "Trimestral",
-      benefits: ["Actividad recreativa especial", "Certificado grupal", "Puntos para el curso"],
+      benefits: [
+        "Actividad recreativa especial",
+        "Certificado grupal",
+        "Puntos para el curso",
+      ],
     },
     {
       title: "Ciudadano Ejemplar",
       description: "Reconocimiento al comportamiento cívico excepcional",
       frequency: "Semestral",
-      benefits: ["Medalla especial", "Carta de recomendación", "Beneficios en evaluaciones"],
+      benefits: [
+        "Medalla especial",
+        "Carta de recomendación",
+        "Beneficios en evaluaciones",
+      ],
     },
   ];
 
   const upcomingEvents = [
-    { name: "Estudiante del Mes - Noviembre", date: "2024-12-01", type: "individual" },
+    {
+      name: "Estudiante del Mes - Noviembre",
+      date: "2024-12-01",
+      type: "individual",
+    },
     { name: "Premio Equipo Solidario", date: "2024-12-15", type: "group" },
-    { name: "Ceremonia Ciudadano Ejemplar", date: "2025-01-30", type: "individual" },
+    {
+      name: "Ceremonia Ciudadano Ejemplar",
+      date: "2025-01-30",
+      type: "individual",
+    },
   ];
 
   return (
@@ -68,8 +96,9 @@ function ReconocimientosParentContent() {
           </CardHeader>
           <CardContent>
             <p className="text-green-700 mb-4">
-              Los reconocimientos son una excelente oportunidad para celebrar los logros
-              de tu hijo/a y motivarlo/a a mantener un comportamiento positivo:
+              Los reconocimientos son una excelente oportunidad para celebrar
+              los logros de tu hijo/a y motivarlo/a a mantener un comportamiento
+              positivo:
             </p>
             <ul className="text-green-700 space-y-2">
               <li>• Celebra sus logros y esfuerzos</li>
@@ -125,13 +154,17 @@ function ReconocimientosParentContent() {
               Próximos Eventos de Reconocimiento
             </CardTitle>
             <CardDescription>
-              Ceremonias y eventos programados para reconocer el buen comportamiento
+              Ceremonias y eventos programados para reconocer el buen
+              comportamiento
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {upcomingEvents.map((event, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     {event.type === "individual" ? (
                       <Star className="w-5 h-5 text-yellow-500" />
@@ -140,7 +173,9 @@ function ReconocimientosParentContent() {
                     )}
                     <div>
                       <p className="font-medium">{event.name}</p>
-                      <p className="text-sm text-muted-foreground">{event.date}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {event.date}
+                      </p>
                     </div>
                   </div>
                   <Badge variant="outline">

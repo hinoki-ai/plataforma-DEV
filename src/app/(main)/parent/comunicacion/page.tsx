@@ -529,16 +529,18 @@ export default function ComunicacionPage() {
               {selectedMessage?.subject}
             </DialogTitle>
             <DialogDescription className="flex items-center gap-4">
-              <span>De: {selectedMessage?.from}</span>
               <span>
-                Fecha:{" "}
+                {t("parent.communication.dialog.from")}: {selectedMessage?.from}
+              </span>
+              <span>
+                {t("parent.communication.dialog.date")}:{" "}
                 {selectedMessage
                   ? new Date(selectedMessage.date).toLocaleDateString()
                   : ""}
               </span>
               {selectedMessage?.priority === "high" && (
                 <Badge variant="destructive" className="text-xs">
-                  Alta Prioridad
+                  {t("parent.communication.dialog.high_priority")}
                 </Badge>
               )}
             </DialogDescription>
@@ -552,7 +554,7 @@ export default function ComunicacionPage() {
           </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline" onClick={handleCloseMessageDialog}>
-              Cerrar
+              {t("parent.communication.dialog.close")}
             </Button>
             <Button
               asChild
@@ -564,7 +566,7 @@ export default function ComunicacionPage() {
               <Link
                 href={`/parent/comunicacion/nuevo?reply=${selectedMessage?.id}`}
               >
-                Responder
+                {t("parent.communication.dialog.reply")}
               </Link>
             </Button>
           </div>
@@ -577,10 +579,10 @@ export default function ComunicacionPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Mail className="h-5 w-5" />
-              Todos los Mensajes
+              {t("parent.communication.dialog.all_messages")}
             </DialogTitle>
             <DialogDescription>
-              Lista completa de todas las comunicaciones
+              {t("parent.communication.dialog.all_messages_desc")}
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4 space-y-4">
@@ -601,12 +603,12 @@ export default function ComunicacionPage() {
                       </span>
                       {message.priority === "high" && (
                         <Badge variant="destructive" className="text-xs">
-                          Urgente
+                          {t("parent.communication.urgent")}
                         </Badge>
                       )}
                       {!message.read && (
                         <Badge variant="secondary" className="text-xs">
-                          Nuevo
+                          {t("parent.communication.new")}
                         </Badge>
                       )}
                     </div>
@@ -630,21 +632,21 @@ export default function ComunicacionPage() {
                     }}
                   >
                     <Eye className="h-4 w-4 mr-1" />
-                    Leer Completo
+                    {t("parent.communication.dialog.read_full")}
                   </Button>
                 </div>
               ))
             ) : (
               <div className="text-center py-8">
                 <div className="text-muted-foreground">
-                  No hay mensajes disponibles
+                  {t("parent.communication.no_messages")}
                 </div>
               </div>
             )}
           </div>
           <div className="flex justify-end mt-6">
             <Button variant="outline" onClick={handleCloseAllMessages}>
-              Cerrar
+              {t("parent.communication.dialog.close")}
             </Button>
           </div>
         </DialogContent>

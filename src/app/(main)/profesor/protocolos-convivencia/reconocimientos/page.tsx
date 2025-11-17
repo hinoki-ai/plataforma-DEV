@@ -5,10 +5,24 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Award, Star, Trophy, Heart, Users, FileText, Calendar } from "lucide-react";
+import {
+  Award,
+  Star,
+  Trophy,
+  Heart,
+  Users,
+  FileText,
+  Calendar,
+} from "lucide-react";
 
 function ReconocimientosContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -17,7 +31,11 @@ function ReconocimientosContent() {
     {
       title: "Estudiante del Mes",
       description: "Reconocimiento mensual al estudiante destacado",
-      criteria: ["Excelencia académica", "Comportamiento ejemplar", "Participación activa"],
+      criteria: [
+        "Excelencia académica",
+        "Comportamiento ejemplar",
+        "Participación activa",
+      ],
       benefits: ["Diploma", "Mención en asamblea", "Prioridad en actividades"],
       frequency: "Mensual",
       category: "individual",
@@ -25,8 +43,16 @@ function ReconocimientosContent() {
     {
       title: "Equipo Solidario",
       description: "Reconocimiento a grupos que demuestran solidaridad",
-      criteria: ["Ayuda a compañeros", "Trabajo colaborativo", "Iniciativas solidarias"],
-      benefits: ["Certificado grupal", "Sesión recreativa", "Puntos para curso"],
+      criteria: [
+        "Ayuda a compañeros",
+        "Trabajo colaborativo",
+        "Iniciativas solidarias",
+      ],
+      benefits: [
+        "Certificado grupal",
+        "Sesión recreativa",
+        "Puntos para curso",
+      ],
       frequency: "Trimestral",
       category: "group",
     },
@@ -34,7 +60,11 @@ function ReconocimientosContent() {
       title: "Ciudadano Ejemplar",
       description: "Premio al comportamiento cívico excepcional",
       criteria: ["Respeto a normas", "Cuidado del entorno", "Actitud positiva"],
-      benefits: ["Medalla especial", "Privilegios en biblioteca", "Carta de recomendación"],
+      benefits: [
+        "Medalla especial",
+        "Privilegios en biblioteca",
+        "Carta de recomendación",
+      ],
       frequency: "Anual",
       category: "individual",
     },
@@ -42,7 +72,11 @@ function ReconocimientosContent() {
       title: "Proyecto Innovador",
       description: "Reconocimiento a proyectos creativos y originales",
       criteria: ["Creatividad", "Impacto positivo", "Trabajo en equipo"],
-      benefits: ["Presentación especial", "Recursos adicionales", "Difusión institucional"],
+      benefits: [
+        "Presentación especial",
+        "Recursos adicionales",
+        "Difusión institucional",
+      ],
       frequency: "Semestral",
       category: "project",
     },
@@ -64,11 +98,23 @@ function ReconocimientosContent() {
   const getCategoryBadge = (category: string) => {
     switch (category) {
       case "individual":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Individual</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Individual
+          </Badge>
+        );
       case "group":
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-800">Grupal</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+            Grupal
+          </Badge>
+        );
       case "project":
-        return <Badge variant="secondary" className="bg-purple-100 text-purple-800">Proyecto</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+            Proyecto
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Individual</Badge>;
     }
@@ -172,10 +218,20 @@ function ReconocimientosContent() {
                   Puntos por Categoría
                 </h4>
                 <ul className="space-y-2 text-sm">
-                  <li><span className="font-medium">Académico:</span> 1-5 puntos</li>
-                  <li><span className="font-medium">Comportamiento:</span> 1-3 puntos</li>
-                  <li><span className="font-medium">Participación:</span> 1-2 puntos</li>
-                  <li><span className="font-medium">Solidaridad:</span> 2-4 puntos</li>
+                  <li>
+                    <span className="font-medium">Académico:</span> 1-5 puntos
+                  </li>
+                  <li>
+                    <span className="font-medium">Comportamiento:</span> 1-3
+                    puntos
+                  </li>
+                  <li>
+                    <span className="font-medium">Participación:</span> 1-2
+                    puntos
+                  </li>
+                  <li>
+                    <span className="font-medium">Solidaridad:</span> 2-4 puntos
+                  </li>
                 </ul>
               </div>
               <div>
@@ -184,10 +240,18 @@ function ReconocimientosContent() {
                   Umbrales de Reconocimiento
                 </h4>
                 <ul className="space-y-2 text-sm">
-                  <li><span className="font-medium">Bronce:</span> 10-24 puntos</li>
-                  <li><span className="font-medium">Plata:</span> 25-49 puntos</li>
-                  <li><span className="font-medium">Oro:</span> 50-99 puntos</li>
-                  <li><span className="font-medium">Diamante:</span> 100+ puntos</li>
+                  <li>
+                    <span className="font-medium">Bronce:</span> 10-24 puntos
+                  </li>
+                  <li>
+                    <span className="font-medium">Plata:</span> 25-49 puntos
+                  </li>
+                  <li>
+                    <span className="font-medium">Oro:</span> 50-99 puntos
+                  </li>
+                  <li>
+                    <span className="font-medium">Diamante:</span> 100+ puntos
+                  </li>
                 </ul>
               </div>
               <div>

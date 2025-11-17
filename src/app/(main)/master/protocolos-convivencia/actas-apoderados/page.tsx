@@ -5,7 +5,13 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, Database, Globe, BarChart3, Settings } from "lucide-react";
@@ -32,10 +38,12 @@ function ActasApoderadosMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro - {t("nav.protocolos_convivencia.actas_apoderados", "navigation")}
+              Control Maestro -{" "}
+              {t("nav.protocolos_convivencia.actas_apoderados", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
-              Supervisión global de actas de entrevistas con apoderados en todas las instituciones
+              Supervisión global de actas de entrevistas con apoderados en todas
+              las instituciones
             </p>
           </div>
           <div className="flex items-center space-x-2">
@@ -57,8 +65,12 @@ function ActasApoderadosMasterContent() {
               <div className="flex items-center">
                 <Database className="w-8 h-8 text-blue-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Total Actas</p>
-                  <p className="text-2xl font-bold">{globalStats.totalActas.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Total Actas
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalStats.totalActas.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -68,8 +80,12 @@ function ActasApoderadosMasterContent() {
               <div className="flex items-center">
                 <Globe className="w-8 h-8 text-green-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Instituciones</p>
-                  <p className="text-2xl font-bold">{globalStats.institutions}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Instituciones
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalStats.institutions}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -79,8 +95,12 @@ function ActasApoderadosMasterContent() {
               <div className="flex items-center">
                 <FileText className="w-8 h-8 text-purple-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Promedio por Inst.</p>
-                  <p className="text-2xl font-bold">{globalStats.averagePerInstitution}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Promedio por Inst.
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalStats.averagePerInstitution}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -90,8 +110,12 @@ function ActasApoderadosMasterContent() {
               <div className="flex items-center">
                 <BarChart3 className="w-8 h-8 text-orange-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Tasa de Cumplimiento</p>
-                  <p className="text-2xl font-bold">{globalStats.complianceRate}%</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Tasa de Cumplimiento
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalStats.complianceRate}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -103,20 +127,28 @@ function ActasApoderadosMasterContent() {
           <CardHeader>
             <CardTitle>Rendimiento por Institución</CardTitle>
             <CardDescription>
-              Estado de las actas de entrevistas con apoderados en cada institución
+              Estado de las actas de entrevistas con apoderados en cada
+              institución
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {institutionStats.map((institution, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
                   <div>
                     <p className="font-medium">{institution.name}</p>
-                    <p className="text-sm text-muted-foreground">{institution.actas} actas registradas</p>
+                    <p className="text-sm text-muted-foreground">
+                      {institution.actas} actas registradas
+                    </p>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
-                      <p className="text-sm font-medium">{institution.compliance}% cumplimiento</p>
+                      <p className="text-sm font-medium">
+                        {institution.compliance}% cumplimiento
+                      </p>
                       <Badge variant="outline">{institution.trend}</Badge>
                     </div>
                     <Button size="sm" variant="outline">

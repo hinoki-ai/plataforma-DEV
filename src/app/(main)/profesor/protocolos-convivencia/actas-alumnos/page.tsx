@@ -5,14 +5,42 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Upload, FileText, Download, Eye, Calendar, User, Users } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Upload,
+  FileText,
+  Download,
+  Eye,
+  Calendar,
+  User,
+  Users,
+} from "lucide-react";
 
 function ActasAlumnosContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -67,22 +95,36 @@ function ActasAlumnosContent() {
     },
   ];
 
-  const filteredActas = actas.filter(acta => {
-    const matchesSearch = acta.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         acta.reason.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         acta.interviewer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGrade = selectedGrade === "all" || acta.grade === selectedGrade;
+  const filteredActas = actas.filter((acta) => {
+    const matchesSearch =
+      acta.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      acta.reason.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      acta.interviewer.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGrade =
+      selectedGrade === "all" || acta.grade === selectedGrade;
     return matchesSearch && matchesGrade;
   });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "completado":
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Completado</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Completado
+          </Badge>
+        );
       case "pendiente_revision":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Pendiente Revisión</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Pendiente Revisión
+          </Badge>
+        );
       case "borrador":
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Borrador</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-gray-100 text-gray-800">
+            Borrador
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Completado</Badge>;
     }
@@ -105,7 +147,10 @@ function ActasAlumnosContent() {
               <FileText className="w-4 h-4 mr-2" />
               {filteredActas.length} Actas
             </Badge>
-            <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+            <Dialog
+              open={isUploadDialogOpen}
+              onOpenChange={setIsUploadDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button>
                   <Upload className="w-4 h-4 mr-2" />
@@ -135,16 +180,26 @@ function ActasAlumnosContent() {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Tipo de Entrevista</label>
+                    <label className="text-sm font-medium">
+                      Tipo de Entrevista
+                    </label>
                     <Select>
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccionar tipo" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="orientacion">Entrevista de Orientación</SelectItem>
-                        <SelectItem value="disciplinaria">Entrevista Disciplinaria</SelectItem>
-                        <SelectItem value="seguimiento">Entrevista de Seguimiento</SelectItem>
-                        <SelectItem value="inicial">Entrevista Inicial</SelectItem>
+                        <SelectItem value="orientacion">
+                          Entrevista de Orientación
+                        </SelectItem>
+                        <SelectItem value="disciplinaria">
+                          Entrevista Disciplinaria
+                        </SelectItem>
+                        <SelectItem value="seguimiento">
+                          Entrevista de Seguimiento
+                        </SelectItem>
+                        <SelectItem value="inicial">
+                          Entrevista Inicial
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -158,7 +213,10 @@ function ActasAlumnosContent() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsUploadDialogOpen(false)}
+                  >
                     Cancelar
                   </Button>
                   <Button onClick={() => setIsUploadDialogOpen(false)}>
@@ -212,7 +270,9 @@ function ActasAlumnosContent() {
                       <User className="w-5 h-5 text-blue-500" />
                       <div>
                         <p className="font-medium">{acta.student}</p>
-                        <p className="text-sm text-muted-foreground">Curso: {acta.grade}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Curso: {acta.grade}
+                        </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -262,7 +322,9 @@ function ActasAlumnosContent() {
           <Card>
             <CardContent className="p-12 text-center">
               <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No se encontraron actas</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                No se encontraron actas
+              </h3>
               <p className="text-muted-foreground">
                 No hay actas que coincidan con los criterios de búsqueda.
               </p>
@@ -275,7 +337,8 @@ function ActasAlumnosContent() {
           <CardHeader>
             <CardTitle>Documentos Institucionales Relacionados</CardTitle>
             <CardDescription>
-              Documentos del listado institucional relacionados con entrevistas estudiantiles
+              Documentos del listado institucional relacionados con entrevistas
+              estudiantiles
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -283,7 +346,8 @@ function ActasAlumnosContent() {
               <div className="p-4 border rounded-lg">
                 <h4 className="font-semibold mb-2">50. Documentos PIE</h4>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Programas de Integración Escolar con actas, evaluaciones y derivaciones.
+                  Programas de Integración Escolar con actas, evaluaciones y
+                  derivaciones.
                 </p>
                 <Button size="sm" variant="outline">
                   <Download className="w-4 h-4 mr-2" />
@@ -291,9 +355,12 @@ function ActasAlumnosContent() {
                 </Button>
               </div>
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">52. Fichas de Derivación Psicosocial</h4>
+                <h4 className="font-semibold mb-2">
+                  52. Fichas de Derivación Psicosocial
+                </h4>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Registro de derivaciones y seguimientos psicosociales de estudiantes.
+                  Registro de derivaciones y seguimientos psicosociales de
+                  estudiantes.
                 </p>
                 <Button size="sm" variant="outline">
                   <Download className="w-4 h-4 mr-2" />
@@ -301,9 +368,12 @@ function ActasAlumnosContent() {
                 </Button>
               </div>
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">53. Informes de Seguimiento Individual</h4>
+                <h4 className="font-semibold mb-2">
+                  53. Informes de Seguimiento Individual
+                </h4>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Documentación detallada del seguimiento individual de estudiantes.
+                  Documentación detallada del seguimiento individual de
+                  estudiantes.
                 </p>
                 <Button size="sm" variant="outline">
                   <Download className="w-4 h-4 mr-2" />

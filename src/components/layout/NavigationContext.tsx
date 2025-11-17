@@ -214,7 +214,7 @@ const baseNavigationItems: Record<UserRole, NavigationItem[]> = {
       id: "schedule",
       title: "Horarios",
       href: "/profesor/horarios",
-      category: "informacion",
+      category: "academico",
       description: "Ver horarios",
       permissions: ["profesor:dashboard"],
     },

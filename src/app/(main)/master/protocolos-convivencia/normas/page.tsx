@@ -5,10 +5,23 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Globe, Database, Settings, BarChart3, Sync } from "lucide-react";
+import {
+  Users,
+  Globe,
+  Database,
+  Settings,
+  BarChart3,
+  RefreshCw as Sync,
+} from "lucide-react";
 
 function NormasMasterContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -23,7 +36,12 @@ function NormasMasterContent() {
   const institutions = [
     { name: "Colegio San José", norms: 45, compliance: 92, status: "optimal" },
     { name: "Liceo Nacional", norms: 38, compliance: 85, status: "good" },
-    { name: "Escuela República", norms: 42, compliance: 78, status: "needs_attention" },
+    {
+      name: "Escuela República",
+      norms: 42,
+      compliance: 78,
+      status: "needs_attention",
+    },
     { name: "Instituto Técnico", norms: 20, compliance: 95, status: "optimal" },
   ];
 
@@ -33,10 +51,12 @@ function NormasMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro - {t("nav.protocolos_comportamiento.normas", "navigation")}
+              Control Maestro -{" "}
+              {t("nav.protocolos_comportamiento.normas", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
-              Gestión global de normas de comportamiento en todas las instituciones
+              Gestión global de normas de comportamiento en todas las
+              instituciones
             </p>
           </div>
           <div className="flex items-center space-x-2">
@@ -58,8 +78,12 @@ function NormasMasterContent() {
               <div className="flex items-center">
                 <Database className="w-8 h-8 text-blue-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Normas Totales</p>
-                  <p className="text-2xl font-bold">{globalNormsStats.totalNorms}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Normas Totales
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalNormsStats.totalNorms}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -69,8 +93,12 @@ function NormasMasterContent() {
               <div className="flex items-center">
                 <Globe className="w-8 h-8 text-green-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Instituciones</p>
-                  <p className="text-2xl font-bold">{globalNormsStats.institutions}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Instituciones
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalNormsStats.institutions}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -80,8 +108,12 @@ function NormasMasterContent() {
               <div className="flex items-center">
                 <BarChart3 className="w-8 h-8 text-purple-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Cumplimiento Global</p>
-                  <p className="text-2xl font-bold">{globalNormsStats.compliance}%</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Cumplimiento Global
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalNormsStats.compliance}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -91,8 +123,15 @@ function NormasMasterContent() {
               <div className="flex items-center">
                 <Sync className="w-8 h-8 text-orange-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Estado del Sistema</p>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">Sincronizado</Badge>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Estado del Sistema
+                  </p>
+                  <Badge
+                    variant="secondary"
+                    className="bg-green-100 text-green-800"
+                  >
+                    Sincronizado
+                  </Badge>
                 </div>
               </div>
             </CardContent>
@@ -110,24 +149,39 @@ function NormasMasterContent() {
           <CardContent>
             <div className="space-y-4">
               {institutions.map((institution, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
                   <div className="flex-1">
                     <div className="flex items-center space-x-3">
                       <div>
                         <p className="font-medium">{institution.name}</p>
-                        <p className="text-sm text-muted-foreground">{institution.norms} normas activas</p>
+                        <p className="text-sm text-muted-foreground">
+                          {institution.norms} normas activas
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
-                      <p className="text-sm font-medium">{institution.compliance}% cumplimiento</p>
-                      <Badge variant={
-                        institution.status === 'optimal' ? 'secondary' :
-                        institution.status === 'good' ? 'outline' : 'destructive'
-                      }>
-                        {institution.status === 'optimal' ? 'Óptimo' :
-                         institution.status === 'good' ? 'Bueno' : 'Requiere Atención'}
+                      <p className="text-sm font-medium">
+                        {institution.compliance}% cumplimiento
+                      </p>
+                      <Badge
+                        variant={
+                          institution.status === "optimal"
+                            ? "secondary"
+                            : institution.status === "good"
+                              ? "outline"
+                              : "destructive"
+                        }
+                      >
+                        {institution.status === "optimal"
+                          ? "Óptimo"
+                          : institution.status === "good"
+                            ? "Bueno"
+                            : "Requiere Atención"}
                       </Badge>
                     </div>
                     <Button size="sm" variant="outline">

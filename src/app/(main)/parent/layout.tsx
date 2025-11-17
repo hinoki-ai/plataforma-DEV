@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { getRoleAccess } from "@/lib/role-utils";
 import { DashboardLoader } from "@/components/ui/dashboard-loader";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function ParentLayout({
   children,
@@ -13,6 +14,7 @@ export default function ParentLayout({
 }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const { t } = useDivineParsing(["parent"]);
   const hasRedirectedRef = useRef(false);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -83,11 +85,11 @@ export default function ParentLayout({
   }, []);
 
   if (status === "loading") {
-    return <DashboardLoader text="Verificando acceso..." />;
+    return <DashboardLoader text={t("parent.layout.checking_access")} />;
   }
 
   if (status === "unauthenticated" || !session) {
-    return <DashboardLoader text="Redirigiendo..." />;
+    return <DashboardLoader text={t("parent.layout.redirecting")} />;
   }
 
   return <>{children}</>;

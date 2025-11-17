@@ -5,10 +5,24 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Shield, AlertTriangle, Clock, Users, MessageCircle, Phone } from "lucide-react";
+import {
+  Shield,
+  AlertTriangle,
+  Clock,
+  Users,
+  MessageCircle,
+  Phone,
+  CheckCircle,
+} from "lucide-react";
 
 function DisciplinaParentContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -16,23 +30,40 @@ function DisciplinaParentContent() {
   const procedures = [
     {
       title: "Registro del Incidente",
-      description: "Todo incidente es registrado detalladamente por el profesor o inspectoría",
-      steps: ["Observación del comportamiento", "Registro escrito del hecho", "Información a las partes involucradas"],
+      description:
+        "Todo incidente es registrado detalladamente por el profesor o inspectoría",
+      steps: [
+        "Observación del comportamiento",
+        "Registro escrito del hecho",
+        "Información a las partes involucradas",
+      ],
     },
     {
       title: "Evaluación de la Situación",
       description: "Se evalúa la gravedad y las circunstancias del incidente",
-      steps: ["Análisis de los hechos", "Consideración de antecedentes", "Determinación de la medida apropiada"],
+      steps: [
+        "Análisis de los hechos",
+        "Consideración de antecedentes",
+        "Determinación de la medida apropiada",
+      ],
     },
     {
       title: "Aplicación de Medidas",
       description: "Se implementa la medida correctiva correspondiente",
-      steps: ["Comunicación de la medida", "Aplicación inmediata", "Registro de la acción tomada"],
+      steps: [
+        "Comunicación de la medida",
+        "Aplicación inmediata",
+        "Registro de la acción tomada",
+      ],
     },
     {
       title: "Seguimiento y Evaluación",
       description: "Se monitorea el cumplimiento y efectividad de la medida",
-      steps: ["Verificación del cumplimiento", "Evaluación de resultados", "Registro de lecciones aprendidas"],
+      steps: [
+        "Verificación del cumplimiento",
+        "Evaluación de resultados",
+        "Registro de lecciones aprendidas",
+      ],
     },
   ];
 
@@ -45,7 +76,8 @@ function DisciplinaParentContent() {
               {t("nav.protocolos_comportamiento.disciplina", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
-              Información sobre procedimientos disciplinarios y resolución de conflictos
+              Información sobre procedimientos disciplinarios y resolución de
+              conflictos
             </p>
           </div>
           <Button>
@@ -64,8 +96,9 @@ function DisciplinaParentContent() {
           </CardHeader>
           <CardContent>
             <p className="text-orange-700">
-              Los procedimientos disciplinarios buscan formar y educar, no solo sancionar.
-              La participación activa de los apoderados es fundamental para el éxito de estos procesos.
+              Los procedimientos disciplinarios buscan formar y educar, no solo
+              sancionar. La participación activa de los apoderados es
+              fundamental para el éxito de estos procesos.
             </p>
           </CardContent>
         </Card>
@@ -77,7 +110,9 @@ function DisciplinaParentContent() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-sm font-semibold text-blue-600">{index + 1}</span>
+                    <span className="text-sm font-semibold text-blue-600">
+                      {index + 1}
+                    </span>
                   </div>
                   {procedure.title}
                 </CardTitle>
@@ -140,7 +175,9 @@ function DisciplinaParentContent() {
 export default function DisciplinaParentPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar la página de protocolos de disciplina</div>}
+      fallback={
+        <div>Error al cargar la página de protocolos de disciplina</div>
+      }
     >
       <Suspense fallback={<LoadingState />}>
         <DisciplinaParentContent />

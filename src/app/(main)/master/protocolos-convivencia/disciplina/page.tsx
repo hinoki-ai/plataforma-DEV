@@ -5,10 +5,23 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Shield, AlertTriangle, BarChart3, Globe, Database, TrendingUp } from "lucide-react";
+import {
+  Shield,
+  AlertTriangle,
+  BarChart3,
+  Globe,
+  Database,
+  TrendingUp,
+} from "lucide-react";
 
 function DisciplinaMasterContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -21,9 +34,24 @@ function DisciplinaMasterContent() {
   };
 
   const criticalCases = [
-    { institution: "Colegio San José", cases: 8, severity: "high", trend: "+25%" },
-    { institution: "Liceo Nacional", cases: 6, severity: "medium", trend: "+10%" },
-    { institution: "Escuela República", cases: 9, severity: "high", trend: "+40%" },
+    {
+      institution: "Colegio San José",
+      cases: 8,
+      severity: "high",
+      trend: "+25%",
+    },
+    {
+      institution: "Liceo Nacional",
+      cases: 6,
+      severity: "medium",
+      trend: "+10%",
+    },
+    {
+      institution: "Escuela República",
+      cases: 9,
+      severity: "high",
+      trend: "+40%",
+    },
   ];
 
   return (
@@ -32,10 +60,12 @@ function DisciplinaMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro - {t("nav.protocolos_comportamiento.disciplina", "navigation")}
+              Control Maestro -{" "}
+              {t("nav.protocolos_comportamiento.disciplina", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
-              Supervisión global de casos disciplinarios en todas las instituciones
+              Supervisión global de casos disciplinarios en todas las
+              instituciones
             </p>
           </div>
           <Button>
@@ -51,8 +81,12 @@ function DisciplinaMasterContent() {
               <div className="flex items-center">
                 <AlertTriangle className="w-8 h-8 text-red-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Casos Activos</p>
-                  <p className="text-2xl font-bold">{globalDisciplineStats.activeCases}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Casos Activos
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalDisciplineStats.activeCases}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -62,8 +96,12 @@ function DisciplinaMasterContent() {
               <div className="flex items-center">
                 <TrendingUp className="w-8 h-8 text-green-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Resueltos (Mes)</p>
-                  <p className="text-2xl font-bold">{globalDisciplineStats.resolvedThisMonth}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Resueltos (Mes)
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalDisciplineStats.resolvedThisMonth}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -73,8 +111,12 @@ function DisciplinaMasterContent() {
               <div className="flex items-center">
                 <Shield className="w-8 h-8 text-blue-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Tiempo Promedio</p>
-                  <p className="text-2xl font-bold">{globalDisciplineStats.averageResolutionTime}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Tiempo Promedio
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalDisciplineStats.averageResolutionTime}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -84,8 +126,12 @@ function DisciplinaMasterContent() {
               <div className="flex items-center">
                 <BarChart3 className="w-8 h-8 text-purple-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Eficiencia</p>
-                  <p className="text-2xl font-bold">{globalDisciplineStats.systemEfficiency}%</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Eficiencia
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {globalDisciplineStats.systemEfficiency}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -103,14 +149,27 @@ function DisciplinaMasterContent() {
           <CardContent>
             <div className="space-y-4">
               {criticalCases.map((institution, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-white rounded-lg border">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-4 bg-white rounded-lg border"
+                >
                   <div>
                     <p className="font-medium">{institution.institution}</p>
-                    <p className="text-sm text-muted-foreground">{institution.cases} casos activos</p>
+                    <p className="text-sm text-muted-foreground">
+                      {institution.cases} casos activos
+                    </p>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Badge variant={institution.severity === 'high' ? 'destructive' : 'secondary'}>
-                      {institution.severity === 'high' ? 'Alta Prioridad' : 'Media Prioridad'}
+                    <Badge
+                      variant={
+                        institution.severity === "high"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                    >
+                      {institution.severity === "high"
+                        ? "Alta Prioridad"
+                        : "Media Prioridad"}
                     </Badge>
                     <Badge variant="outline">{institution.trend}</Badge>
                     <Button size="sm" variant="outline">

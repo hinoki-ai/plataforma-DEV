@@ -5,10 +5,24 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, CheckCircle, Heart, AlertCircle, FileText, Download, MessageCircle } from "lucide-react";
+import {
+  Users,
+  CheckCircle,
+  Heart,
+  AlertCircle,
+  FileText,
+  Download,
+  MessageCircle,
+} from "lucide-react";
 
 function NormasParentContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -17,14 +31,24 @@ function NormasParentContent() {
     valores: [
       {
         title: "Respeto Mutuo",
-        description: "Tratar a todos los miembros de la comunidad con respeto y cortesía",
-        examples: ["Saludar a profesores y compañeros", "Escuchar atentamente", "Usar un lenguaje apropiado"],
+        description:
+          "Tratar a todos los miembros de la comunidad con respeto y cortesía",
+        examples: [
+          "Saludar a profesores y compañeros",
+          "Escuchar atentamente",
+          "Usar un lenguaje apropiado",
+        ],
         importance: "high",
       },
       {
         title: "Honestidad",
-        description: "Actuar con sinceridad y responsabilidad en todas las situaciones",
-        examples: ["Decir la verdad", "Reconocer errores", "Cumplir compromisos"],
+        description:
+          "Actuar con sinceridad y responsabilidad en todas las situaciones",
+        examples: [
+          "Decir la verdad",
+          "Reconocer errores",
+          "Cumplir compromisos",
+        ],
         importance: "high",
       },
     ],
@@ -32,13 +56,21 @@ function NormasParentContent() {
       {
         title: "Puntualidad",
         description: "Asistir a clases y actividades en el horario establecido",
-        examples: ["Llegar antes del inicio de clases", "No abandonar temprano sin autorización", "Asistir a todas las actividades programadas"],
+        examples: [
+          "Llegar antes del inicio de clases",
+          "No abandonar temprano sin autorización",
+          "Asistir a todas las actividades programadas",
+        ],
         importance: "high",
       },
       {
         title: "Presentación Personal",
         description: "Mantener una higiene y presentación adecuada",
-        examples: ["Usar uniforme completo", "Mantener cabello y uñas limpios", "Cuidar el material escolar"],
+        examples: [
+          "Usar uniforme completo",
+          "Mantener cabello y uñas limpios",
+          "Cuidar el material escolar",
+        ],
         importance: "medium",
       },
     ],
@@ -46,13 +78,21 @@ function NormasParentContent() {
       {
         title: "Participación Activa",
         description: "Contribuir activamente en las actividades de aprendizaje",
-        examples: ["Participar en clases", "Completar tareas", "Colaborar en trabajos grupales"],
+        examples: [
+          "Participar en clases",
+          "Completar tareas",
+          "Colaborar en trabajos grupales",
+        ],
         importance: "high",
       },
       {
         title: "Cuidado del Entorno",
         description: "Mantener limpio y ordenado el establecimiento",
-        examples: ["No tirar papeles al piso", "Usar basureros", "Cuidar las instalaciones"],
+        examples: [
+          "No tirar papeles al piso",
+          "Usar basureros",
+          "Cuidar las instalaciones",
+        ],
         importance: "medium",
       },
     ],
@@ -61,11 +101,23 @@ function NormasParentContent() {
   const getImportanceBadge = (importance: string) => {
     switch (importance) {
       case "high":
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Muy Importante</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-red-100 text-red-800">
+            Muy Importante
+          </Badge>
+        );
       case "medium":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Importante</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Importante
+          </Badge>
+        );
       case "low":
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Recomendado</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Recomendado
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Importante</Badge>;
     }
@@ -127,8 +179,8 @@ function NormasParentContent() {
           </CardHeader>
           <CardContent>
             <p className="text-blue-700 mb-4">
-              Como apoderado, tu rol es fundamental en el cumplimiento de estas normas.
-              Te invitamos a:
+              Como apoderado, tu rol es fundamental en el cumplimiento de estas
+              normas. Te invitamos a:
             </p>
             <ul className="text-blue-700 space-y-2">
               <li>• Reforzar estas normas en el hogar</li>
@@ -156,9 +208,13 @@ function NormasParentContent() {
                       <h4 className="font-semibold text-lg">{norma.title}</h4>
                       {getImportanceBadge(norma.importance)}
                     </div>
-                    <p className="text-muted-foreground mb-3">{norma.description}</p>
+                    <p className="text-muted-foreground mb-3">
+                      {norma.description}
+                    </p>
                     <div>
-                      <h5 className="font-medium text-sm mb-2">Ejemplos de aplicación:</h5>
+                      <h5 className="font-medium text-sm mb-2">
+                        Ejemplos de aplicación:
+                      </h5>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         {norma.examples.map((example, i) => (
                           <li key={i}>• {example}</li>
@@ -197,9 +253,7 @@ function NormasParentContent() {
 
 export default function NormasParentPage() {
   return (
-    <ErrorBoundary
-      fallback={<div>Error al cargar la página de normas</div>}
-    >
+    <ErrorBoundary fallback={<div>Error al cargar la página de normas</div>}>
       <Suspense fallback={<LoadingState />}>
         <NormasParentContent />
       </Suspense>

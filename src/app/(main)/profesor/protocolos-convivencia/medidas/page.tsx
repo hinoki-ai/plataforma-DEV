@@ -5,10 +5,23 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Clock, Target, CheckCircle, FileText, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  Clock,
+  Target,
+  CheckCircle,
+  FileText,
+  Users,
+} from "lucide-react";
 
 function MedidasContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -64,11 +77,23 @@ function MedidasContent() {
   const getEffectivenessBadge = (effectiveness: string) => {
     switch (effectiveness) {
       case "high":
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Alta</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Alta
+          </Badge>
+        );
       case "medium":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Media</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Media
+          </Badge>
+        );
       case "low":
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Baja</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-red-100 text-red-800">
+            Baja
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Media</Badge>;
     }
@@ -140,7 +165,9 @@ function MedidasContent() {
                         <Users className="w-4 h-4 mr-1" />
                         Responsable:
                       </span>
-                      <p className="text-muted-foreground">{medida.responsible}</p>
+                      <p className="text-muted-foreground">
+                        {medida.responsible}
+                      </p>
                     </div>
                   </div>
 
@@ -149,7 +176,9 @@ function MedidasContent() {
                       <CheckCircle className="w-4 h-4 mr-1" />
                       Seguimiento:
                     </span>
-                    <p className="text-sm text-muted-foreground">{medida.followUp}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {medida.followUp}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -167,7 +196,9 @@ function MedidasContent() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="font-semibold text-blue-800">Proporcionalidad</div>
+                <div className="font-semibold text-blue-800">
+                  Proporcionalidad
+                </div>
                 <p className="text-sm text-blue-600 mt-1">
                   La medida debe corresponder a la gravedad de la falta
                 </p>

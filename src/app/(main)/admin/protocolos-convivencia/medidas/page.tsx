@@ -5,10 +5,25 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Clock, Target, CheckCircle, FileText, Plus, Edit, TrendingUp } from "lucide-react";
+import {
+  AlertTriangle,
+  Clock,
+  Target,
+  CheckCircle,
+  FileText,
+  Plus,
+  Edit,
+  TrendingUp,
+} from "lucide-react";
 
 function MedidasAdminContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -54,11 +69,23 @@ function MedidasAdminContent() {
   const getCategoryBadge = (category: string) => {
     switch (category) {
       case "leve":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Leve</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Leve
+          </Badge>
+        );
       case "medio":
-        return <Badge variant="secondary" className="bg-orange-100 text-orange-800">Medio</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+            Medio
+          </Badge>
+        );
       case "grave":
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Grave</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-red-100 text-red-800">
+            Grave
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Leve</Badge>;
     }
@@ -76,7 +103,8 @@ function MedidasAdminContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Gestión de {t("nav.protocolos_comportamiento.medidas", "navigation")}
+              Gestión de{" "}
+              {t("nav.protocolos_comportamiento.medidas", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Administración y seguimiento de medidas correctivas
@@ -116,10 +144,14 @@ function MedidasAdminContent() {
                 <div className="grid grid-cols-3 gap-4 mb-4">
                   <div className="text-center">
                     <p className="text-2xl font-bold">{medida.applications}</p>
-                    <p className="text-sm text-muted-foreground">Aplicaciones</p>
+                    <p className="text-sm text-muted-foreground">
+                      Aplicaciones
+                    </p>
                   </div>
                   <div className="text-center">
-                    <p className={`text-2xl font-bold ${getEffectivenessColor(medida.effectiveness)}`}>
+                    <p
+                      className={`text-2xl font-bold ${getEffectivenessColor(medida.effectiveness)}`}
+                    >
                       {medida.effectiveness}%
                     </p>
                     <p className="text-sm text-muted-foreground">Efectividad</p>
@@ -133,7 +165,9 @@ function MedidasAdminContent() {
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t">
-                  <span className="text-sm text-muted-foreground">Último mes</span>
+                  <span className="text-sm text-muted-foreground">
+                    Último mes
+                  </span>
                   <Button size="sm" variant="outline">
                     Ver Detalles
                   </Button>

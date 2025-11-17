@@ -86,6 +86,11 @@ export const ADMIN_NAVIGATION = [
         shortcut: "Alt+C",
       },
       {
+        title: "nav.schedule",
+        href: "/admin/horarios",
+        icon: NavigationIcons.Calendar,
+      },
+      {
         title: "nav.pme",
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
@@ -155,11 +160,6 @@ export const ADMIN_NAVIGATION = [
         href: "/admin/documentos",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+D",
-      },
-      {
-        title: "nav.schedule",
-        href: "/admin/horarios",
-        icon: NavigationIcons.Calendar,
       },
     ],
   },
@@ -253,6 +253,12 @@ export const PROFESOR_NAVIGATION = [
         shortcut: "Alt+C",
       },
       {
+        title: "nav.schedule",
+        href: "/profesor/horarios",
+        icon: NavigationIcons.Calendar,
+        shortcut: "Alt+T",
+      },
+      {
         title: "nav.pme",
         href: "/profesor/pme",
         icon: NavigationIcons.Analytics,
@@ -305,18 +311,6 @@ export const PROFESOR_NAVIGATION = [
         href: "/profesor/reuniones",
         icon: NavigationIcons.Team,
         shortcut: "Alt+R",
-      },
-    ],
-  },
-  {
-    title: ROLE_SPECIFIC_SECTIONS.PROFESOR.info,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.schedule",
-        href: "/profesor/horarios",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+T",
       },
     ],
   },
@@ -589,6 +583,11 @@ export const MASTER_NAVIGATION = [
         shortcut: "Alt+E",
       },
       {
+        title: "nav.schedule",
+        href: "/admin/horarios",
+        icon: NavigationIcons.Calendar,
+      },
+      {
         title: "nav.pme",
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
@@ -658,11 +657,6 @@ export const MASTER_NAVIGATION = [
         href: "/admin/documentos",
         icon: NavigationIcons.Documents,
         shortcut: "Alt+D",
-      },
-      {
-        title: "nav.schedule",
-        href: "/admin/horarios",
-        icon: NavigationIcons.Calendar,
       },
     ],
   },

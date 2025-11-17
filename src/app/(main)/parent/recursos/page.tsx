@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/server-auth";
 import { getRoleAccess } from "@/lib/role-utils";
+import { getServerTranslation } from "@/lib/server-translations";
 import {
   Card,
   CardContent,
@@ -35,6 +36,8 @@ export default async function RecursosPage() {
   if (!roleAccess.canAccessParent) {
     redirect("/unauthorized");
   }
+
+  const t = (key: string) => getServerTranslation(key, "parent", "es");
 
   const educationalResources = [
     {
@@ -124,11 +127,10 @@ export default async function RecursosPage() {
     <div className="space-y-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          Recursos Educativos
+          {t("parent.resources.page_title")}
         </h1>
         <p className="text-muted-foreground">
-          Materiales y herramientas para apoyar el aprendizaje de tu estudiante
-          en casa.
+          {t("parent.resources.page_description")}
         </p>
       </div>
 
@@ -138,10 +140,10 @@ export default async function RecursosPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BookOpen className="h-5 w-5" />
-              Materiales Educativos Descargables
+              {t("parent.resources.downloadable_materials")}
             </CardTitle>
             <CardDescription>
-              Guías y actividades preparadas por nuestros profesores
+              {t("parent.resources.downloadable_materials_desc")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -169,7 +171,7 @@ export default async function RecursosPage() {
                   </div>
                   <Button size="sm" className="w-full">
                     <Download className="h-4 w-4 mr-2" />
-                    Descargar
+                    {t("parent.resources.download")}
                   </Button>
                 </div>
               ))}
@@ -184,10 +186,10 @@ export default async function RecursosPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Globe className="h-5 w-5" />
-              Recursos en Línea
+              {t("parent.resources.online_resources")}
             </CardTitle>
             <CardDescription>
-              Enlaces a plataformas educativas recomendadas
+              {t("parent.resources.online_resources_desc")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -221,7 +223,7 @@ export default async function RecursosPage() {
                       rel="noopener noreferrer"
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
-                      Visitar
+                      {t("parent.resources.visit")}
                     </Link>
                   </Button>
                 </div>
@@ -237,10 +239,10 @@ export default async function RecursosPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Guías para Padres
+              {t("parent.resources.parent_guides")}
             </CardTitle>
             <CardDescription>
-              Materiales para apoyar el desarrollo educativo en casa
+              {t("parent.resources.parent_guides_desc")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -286,16 +288,15 @@ export default async function RecursosPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              Talleres para Padres
+              {t("parent.resources.parent_workshops")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Talleres mensuales sobre temas educativos y de desarrollo
-              infantil.
+              {t("parent.resources.parent_workshops_desc")}
             </p>
             <Button asChild variant="outline" className="w-full">
-              <Link href="/parent/calendario-escolar">Ver Cronograma</Link>
+              <Link href="/parent/calendario-escolar">{t("parent.resources.view_schedule")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -305,21 +306,20 @@ export default async function RecursosPage() {
       <div className="mt-8">
         <Card>
           <CardHeader>
-            <CardTitle>¿Necesitas Más Recursos?</CardTitle>
+            <CardTitle>{t("parent.resources.need_more")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center">
               <p className="text-gray-600 mb-4">
-                Si necesitas materiales específicos o tienes sugerencias sobre
-                recursos educativos, no dudes en contactarnos.
+                {t("parent.resources.need_more_desc")}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild>
-                  <Link href="/parent/comunicacion">Enviar Solicitud</Link>
+                  <Link href="/parent/comunicacion">{t("parent.resources.send_request")}</Link>
                 </Button>
                 <Button asChild variant="outline">
                   <Link href="mailto:recursos@plataforma-astral.com">
-                    Email Directo
+                    {t("parent.resources.direct_email")}
                   </Link>
                 </Button>
               </div>
