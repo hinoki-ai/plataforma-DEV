@@ -11,10 +11,12 @@ import { SignatureAuditTrail } from "@/components/digital-signatures/SignatureAu
 import { PeriodLockingControls } from "@/components/digital-signatures/PeriodLockingControls";
 import { Badge } from "@/components/ui/badge";
 import { Shield, FileText, Lock, History } from "lucide-react";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export default function CertificacionPage() {
   const { userId } = useAuth();
   const [activeTab, setActiveTab] = useState("certification");
+  const { t } = useDivineParsing(["admin"]);
 
   // Get current user
   const currentUser = useQuery(
@@ -33,15 +35,14 @@ export default function CertificacionPage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-                Certificación Digital - Circular N°30
+                {t("admin.certificacion.title", "admin")}
                 <Badge className="bg-primary/10 text-primary">
                   <Shield className="w-3 h-3" />
-                  ADMIN
+                  {t("admin.certificacion.badge", "admin")}
                 </Badge>
               </h1>
               <p className="text-muted-foreground">
-                Gestión completa de firmas digitales, certificación y bloqueo de
-                períodos
+                {t("admin.certificacion.subtitle", "admin")}
               </p>
             </div>
           </div>
@@ -56,15 +57,15 @@ export default function CertificacionPage() {
                 className="flex items-center gap-2"
               >
                 <FileText className="h-4 w-4" />
-                Certificación
+                {t("admin.certificacion.tab.certification", "admin")}
               </TabsTrigger>
               <TabsTrigger value="audit" className="flex items-center gap-2">
                 <History className="h-4 w-4" />
-                Historial
+                {t("admin.certificacion.tab.audit", "admin")}
               </TabsTrigger>
               <TabsTrigger value="locking" className="flex items-center gap-2">
                 <Lock className="h-4 w-4" />
-                Bloqueos
+                {t("admin.certificacion.tab.locking", "admin")}
               </TabsTrigger>
             </TabsList>
 

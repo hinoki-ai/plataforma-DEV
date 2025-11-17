@@ -25,47 +25,49 @@ import {
 import Link from "next/link";
 
 function ProtocolosConvivenciaContent() {
-  const { t } = useDivineParsing(["navigation", "common"]);
+  const { t } = useDivineParsing(["navigation", "common", "profesor"]);
+
+  const { t: tp } = useDivineParsing(["profesor"]);
 
   const subcategories = [
     {
       title: t("nav.protocolos_convivencia.normas", "navigation"),
-      description: "Normas y reglas de convivencia escolar",
+      description: tp("profesor.protocolos.normas.description"),
       href: "/profesor/protocolos-convivencia/normas",
       icon: Users,
       color: "bg-blue-500",
     },
     {
       title: t("nav.protocolos_convivencia.disciplina", "navigation"),
-      description: "Protocolos para el manejo de la disciplina",
+      description: tp("profesor.protocolos.disciplina.description"),
       href: "/profesor/protocolos-convivencia/disciplina",
       icon: Shield,
       color: "bg-red-500",
     },
     {
       title: t("nav.protocolos_convivencia.medidas", "navigation"),
-      description: "Medidas correctivas y sanciones",
+      description: tp("profesor.protocolos.medidas.description"),
       href: "/profesor/protocolos-convivencia/medidas",
       icon: AlertTriangle,
       color: "bg-orange-500",
     },
     {
       title: t("nav.protocolos_convivencia.reconocimientos", "navigation"),
-      description: "Sistema de reconocimientos y premios",
+      description: tp("profesor.protocolos.reconocimientos.description"),
       href: "/profesor/protocolos-convivencia/reconocimientos",
       icon: Award,
       color: "bg-green-500",
     },
     {
       title: t("nav.protocolos_convivencia.actas_apoderados", "navigation"),
-      description: "Actas de entrevistas con apoderados",
+      description: tp("profesor.protocolos.actas_apoderados.description"),
       href: "/profesor/protocolos-convivencia/actas-apoderados",
       icon: FileText,
       color: "bg-purple-500",
     },
     {
       title: t("nav.protocolos_convivencia.actas_alumnos", "navigation"),
-      description: "Actas de entrevistas con alumnos",
+      description: tp("profesor.protocolos.actas_alumnos.description"),
       href: "/profesor/protocolos-convivencia/actas-alumnos",
       icon: FileText,
       color: "bg-indigo-500",
@@ -81,12 +83,12 @@ function ProtocolosConvivenciaContent() {
               {t("nav.protocolos_convivencia", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
-              Gestión integral de los protocolos de convivencia escolar
+              {t("profesor.protocolos.description", "profesor")}
             </p>
           </div>
           <Badge variant="secondary" className="px-3 py-1">
             <BookOpen className="w-4 h-4 mr-2" />
-            Académico
+            {t("profesor.protocolos.badge", "profesor")}
           </Badge>
         </div>
 
@@ -111,7 +113,7 @@ function ProtocolosConvivenciaContent() {
                 <Button asChild className="w-full">
                   <Link href={category.href}>
                     <FileText className="w-4 h-4 mr-2" />
-                    Ver Protocolo
+                    {t("profesor.protocolos.view_protocol", "profesor")}
                   </Link>
                 </Button>
               </CardContent>
@@ -123,24 +125,25 @@ function ProtocolosConvivenciaContent() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Shield className="w-5 h-5 mr-2" />
-              Información General
+              {t("profesor.protocolos.general_info", "profesor")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="font-semibold mb-2">Objetivo</h4>
+                <h4 className="font-semibold mb-2">
+                  {t("profesor.protocolos.objective", "profesor")}
+                </h4>
                 <p className="text-sm text-muted-foreground">
-                  Establecer un marco claro de convivencia que promueva el
-                  respeto, la responsabilidad y el desarrollo integral de los
-                  estudiantes.
+                  {t("profesor.protocolos.objective_text", "profesor")}
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold mb-2">Alcance</h4>
+                <h4 className="font-semibold mb-2">
+                  {t("profesor.protocolos.scope", "profesor")}
+                </h4>
                 <p className="text-sm text-muted-foreground">
-                  Aplicable a todos los miembros de la comunidad educativa:
-                  estudiantes, profesores, personal administrativo y apoderados.
+                  {t("profesor.protocolos.scope_text", "profesor")}
                 </p>
               </div>
             </div>

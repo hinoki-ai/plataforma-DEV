@@ -926,7 +926,7 @@ export default function CPMAPage() {
               {t("proyecto_educativo.edit_video_capsule", "common")}
             </DialogTitle>
             <DialogDescription>
-              Edita la información de la cápsula de video seleccionada
+              {t("proyecto_educativo.edit_video_capsule_desc", "common")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

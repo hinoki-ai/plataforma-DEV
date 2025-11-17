@@ -124,7 +124,7 @@ function RecursosContent() {
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Error al cargar recursos
+            {t("profesor.recursos.error_loading", "profesor")}
           </h3>
           <p className="text-gray-600">{error}</p>
         </div>
@@ -171,14 +171,15 @@ function RecursosContent() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4">
-                    {category.items.length} recursos disponibles
+                    {category.items.length}{" "}
+                    {t("profesor.recursos.resources_available", "profesor")}
                   </p>
                   <Button
                     variant="outline"
                     className="w-full"
                     onClick={() => setSelectedCategory(key)}
                   >
-                    Explorar recursos
+                    {t("profesor.recursos.explore", "profesor")}
                   </Button>
                 </CardContent>
               </Card>
@@ -189,7 +190,7 @@ function RecursosContent() {
         <div className="space-y-6">
           <div className="flex items-center gap-4">
             <Button variant="outline" onClick={() => setSelectedCategory(null)}>
-              ← Volver a categorías
+              {t("profesor.recursos.back_categories", "profesor")}
             </Button>
             <div>
               <h2 className="text-2xl font-bold text-foreground">
@@ -235,7 +236,7 @@ function RecursosContent() {
                     }
                   >
                     <ExternalLink className="mr-2 h-4 w-4" />
-                    Visitar recurso
+                    {t("profesor.recursos.visit_resource", "profesor")}
                   </Button>
                 </CardContent>
               </Card>

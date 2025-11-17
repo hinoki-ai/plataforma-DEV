@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -13,16 +14,25 @@ import { PerformanceMonitor } from "@/components/debug/PerformanceMonitor";
 import { ErrorTracker } from "@/components/debug/ErrorTracker";
 import { SessionAnalytics } from "@/components/debug/SessionAnalytics";
 import { DebugPanel } from "@/components/admin/dashboard/DebugPanel";
+import { requireAuth } from "@/lib/server-auth";
+import { hasMasterGodModeAccess } from "@/lib/role-utils";
 
 export const metadata: Metadata = {
   title: "Enhanced Debug Panel - Plataforma Astral",
   description:
-    "Advanced debugging and monitoring dashboard for system administrators.",
+    "Advanced debugging and monitoring dashboard for MASTER administrators only.",
+  robots: "noindex, nofollow", // Only MASTER should find this
 };
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDebugNavigationPage() {
+  const session = await requireAuth();
+
+  // Ensure only MASTER role can access this page
+  if (!hasMasterGodModeAccess(session.user.role)) {
+    redirect("/unauthorized");
+  }
   return (
     <div className="w-full px-4 py-8 sm:px-6 lg:px-8">
       {/* Page Header */}

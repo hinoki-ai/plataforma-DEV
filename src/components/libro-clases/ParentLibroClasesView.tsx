@@ -88,7 +88,8 @@ const PARENT_TAB_HEADERS: Record<
   },
   calendar: {
     title: "Calendario Escolar",
-    subtitle: "Visualiza eventos escolares, reuniones y actividades programadas",
+    subtitle:
+      "Visualiza eventos escolares, reuniones y actividades programadas",
   },
 };
 

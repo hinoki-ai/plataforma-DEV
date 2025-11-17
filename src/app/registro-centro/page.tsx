@@ -54,7 +54,7 @@ function CentroRegistrationContent() {
           registrationData: {
             name: urlParams.get("name") || "",
             email: urlParams.get("email") || "",
-            message: "Registro completado exitosamente",
+            message: t("centro_registration.success_message", "common"),
             success: true,
           } as CentroRegistrationSuccessData,
         };
@@ -250,10 +250,7 @@ function CentroRegistrationContent() {
                 <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
                   <h1 className="text-center text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl lg:text-5xl">
                     <div className="block animate-fade-in-up">
-                      CPMA Centro de Padres, Madres{" "}
-                    </div>
-                    <div className="block animate-fade-in-up animation-delay-200 bg-linear-to-r from-pink-300 to-purple-300 dark:from-pink-200 dark:to-purple-200 bg-clip-text text-transparent">
-                      y Apoderados
+                      {t("centro_registration.cpma_title", "common")}
                     </div>
                   </h1>
                 </div>

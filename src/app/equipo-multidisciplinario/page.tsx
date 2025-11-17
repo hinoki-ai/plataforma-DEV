@@ -1,20 +1,32 @@
 import { Metadata } from "next";
+import { headers } from "next/headers";
 import { Users, Sparkles } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PageTransition } from "@/components/ui/page-transition";
 import { TeamMemberList } from "@/components/team/TeamMemberCard";
 import { getTeamMembers } from "@/services/queries/team-members";
+import { getServerTranslation } from "@/lib/server-translations";
 import type { TeamMember } from "@/lib/prisma-compat-types";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Equipo Multidisciplinario | Plataforma Astral",
-  description:
-    "Conoce al equipo multidisciplinario que acompaña a nuestra comunidad educativa con especialidades en apoyo psicoemocional, orientación y desarrollo integral.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") || "es";
+  const language = acceptLanguage.startsWith("en") ? "en" : "es";
+  const t = (key: string) => getServerTranslation(key, "common", language);
+
+  return {
+    title: `${t("team.title")} | Plataforma Astral`,
+    description: t("team.description"),
+  };
+}
 
 export default async function PublicTeamDirectoryPage() {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") || "es";
+  const language = acceptLanguage.startsWith("en") ? "en" : "es";
+  const t = (key: string) => getServerTranslation(key, "common", language);
   const teamMembersResult = await getTeamMembers(true);
 
   const teamMembers: TeamMember[] = teamMembersResult.success
@@ -44,15 +56,13 @@ export default async function PublicTeamDirectoryPage() {
           <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
             <div className="mb-6 flex items-center gap-3 rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-blue-200">
               <Users className="h-4 w-4" />
-              Nuestro equipo de especialistas
+              {t("team.public.badge")}
             </div>
             <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
-              Profesionales comprometidos con el desarrollo integral
+              {t("team.public.title")}
             </h1>
             <p className="mt-4 max-w-3xl text-lg text-blue-100">
-              Psicólogos, orientadores, educadores diferenciales y especialistas
-              en bienestar que trabajan en conjunto para potenciar la
-              experiencia educativa de cada estudiante.
+              {t("team.public.description")}
             </p>
           </div>
         </section>
@@ -64,10 +74,10 @@ export default async function PublicTeamDirectoryPage() {
                 variant="destructive"
                 className="border-red-500 bg-red-900/40"
               >
-                <AlertTitle>No se pudo cargar el equipo</AlertTitle>
+                <AlertTitle>{t("team.public.error.title")}</AlertTitle>
                 <AlertDescription>
                   {teamMembersResult.error ||
-                    "Estamos actualizando los perfiles. Intenta nuevamente en unos momentos."}
+                    t("team.public.error.description")}
                 </AlertDescription>
               </Alert>
             ) : (
@@ -76,7 +86,7 @@ export default async function PublicTeamDirectoryPage() {
                 variant="public"
                 showContact
                 gridColumns={3}
-                emptyMessage="Pronto compartiremos los perfiles de nuestro equipo multidisciplinario."
+                emptyMessage={t("team.public.empty.message")}
               />
             )}
           </div>
@@ -86,12 +96,10 @@ export default async function PublicTeamDirectoryPage() {
           <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
             <div className="flex items-center gap-2 text-blue-200">
               <Sparkles className="h-4 w-4" />
-              Acompañamiento personalizado
+              {t("team.public.support.badge")}
             </div>
             <p className="text-lg text-blue-100">
-              Cada familia puede solicitar reuniones con el equipo a través de
-              la plataforma para coordinar apoyos, seguimiento académico y
-              acciones preventivas.
+              {t("team.public.support.description")}
             </p>
           </div>
         </section>

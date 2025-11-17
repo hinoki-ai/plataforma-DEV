@@ -75,14 +75,7 @@ interface AdminMeeting {
   };
 }
 
-const statusLabels = {
-  SCHEDULED: "Programada",
-  CONFIRMED: "Confirmada",
-  IN_PROGRESS: "En Progreso",
-  COMPLETED: "Completada",
-  CANCELLED: "Cancelada",
-  RESCHEDULED: "Reprogramada",
-};
+// Status labels will be translated in the component
 
 const statusColors = {
   SCHEDULED: "bg-yellow-100 text-yellow-800",
@@ -93,13 +86,7 @@ const statusColors = {
   RESCHEDULED: "bg-orange-100 text-orange-800",
 };
 
-const typeLabels = {
-  PARENT_TEACHER: "Padre-Profesor",
-  FOLLOW_UP: "Seguimiento",
-  EMERGENCY: "Emergencia",
-  IEP_REVIEW: "Revisión PEI",
-  GRADE_CONFERENCE: "Conferencia de Calificaciones",
-};
+// Type labels will be translated in the component
 
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString("es-ES", {
@@ -117,7 +104,21 @@ function ReunionesContent() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["common", "admin"]);
+
+  // Status and type labels for meetings
+  const statusLabels = {
+    SCHEDULED: t("admin.reuniones.status.scheduled", "admin"),
+    CONFIRMED: t("admin.reuniones.status.confirmed", "admin"),
+    IN_PROGRESS: t("admin.reuniones.status.in_progress", "admin"),
+    COMPLETED: t("admin.reuniones.status.completed", "admin"),
+    CANCELLED: t("admin.reuniones.status.cancelled", "admin"),
+    RESCHEDULED: t("admin.reuniones.status.rescheduled", "admin"),
+  };
+
+  const typeLabels = {
+    PARENT_TEACHER: t("admin.reuniones.type.parent_teacher", "admin"),
+  };
 
   const [meetings, setMeetings] = useState<AdminMeeting[]>([]);
   const [loading, setLoading] = useState(true);
@@ -166,11 +167,11 @@ function ReunionesContent() {
       if (data.success) {
         setMeetings(data.data || []);
       } else {
-        setError(data.error || "Error al cargar reuniones");
+        setError(data.error || t("admin.reuniones.error_loading", "admin"));
       }
     } catch (err) {
       console.error("Error fetching meetings:", err);
-      setError("Error al cargar las reuniones");
+      setError(t("admin.reuniones.error_loading", "admin"));
     } finally {
       setLoading(false);
     }
@@ -197,14 +198,14 @@ function ReunionesContent() {
         const data = await response.json();
         setMeetings([data.data, ...meetings]);
         setShowCreateDialog(false);
-        toast.success("Reunión creada exitosamente");
+        toast.success(t("admin.reuniones.create_success", "admin"));
       } else {
         const error = await response.json();
-        toast.error(error.error || "Error al crear reunión");
+        toast.error(error.error || t("admin.reuniones.create_error", "admin"));
       }
     } catch (err) {
       console.error("Error creating meeting:", err);
-      toast.error("Error al crear reunión");
+      toast.error(t("admin.reuniones.create_error", "admin"));
     } finally {
       setIsCreating(false);
     }
@@ -230,23 +231,19 @@ function ReunionesContent() {
         );
         setShowEditDialog(false);
         setSelectedMeeting(null);
-        toast.success("Reunión actualizada exitosamente");
+        toast.success(t("admin.reuniones.update_success", "admin"));
       } else {
         const error = await response.json();
-        toast.error(error.error || "Error al actualizar reunión");
+        toast.error(error.error || t("admin.reuniones.update_error", "admin"));
       }
     } catch (err) {
       console.error("Error updating meeting:", err);
-      toast.error("Error al actualizar reunión");
+      toast.error(t("admin.reuniones.update_error", "admin"));
     }
   };
 
   const handleDeleteMeeting = async (meetingId: string) => {
-    if (
-      !confirm(
-        "¿Estás seguro de que quieres eliminar esta reunión? Esta acción no se puede deshacer.",
-      )
-    ) {
+    if (!confirm(t("admin.reuniones.delete_confirm", "admin"))) {
       return;
     }
 
@@ -257,13 +254,13 @@ function ReunionesContent() {
 
       if (response.ok) {
         setMeetings(meetings.filter((m) => m.id !== meetingId));
-        toast.success("Reunión eliminada exitosamente");
+        toast.success(t("admin.reuniones.delete_success", "admin"));
       } else {
-        toast.error("Error al eliminar reunión");
+        toast.error(t("admin.reuniones.delete_error", "admin"));
       }
     } catch (err) {
       console.error("Error deleting meeting:", err);
-      toast.error("Error al eliminar reunión");
+      toast.error(t("admin.reuniones.delete_error", "admin"));
     }
   };
 

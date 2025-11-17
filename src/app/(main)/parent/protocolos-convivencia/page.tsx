@@ -130,10 +130,13 @@ function ProtocolosComportamientoParentContent() {
                   <CardTitle className="text-lg">{category.title}</CardTitle>
                 </div>
                 <Badge variant="outline" className="w-fit">
-                  {category.importance === "Fundamental" ? t("parent.protocols.fundamental") :
-                   category.importance === "Importante" ? t("parent.protocols.important") :
-                   category.importance === "Referencial" ? t("parent.protocols.referential") :
-                   t("parent.protocols.motivational")}
+                  {category.importance === "Fundamental"
+                    ? t("parent.protocols.fundamental")
+                    : category.importance === "Importante"
+                      ? t("parent.protocols.important")
+                      : category.importance === "Referencial"
+                        ? t("parent.protocols.referential")
+                        : t("parent.protocols.motivational")}
                 </Badge>
               </CardHeader>
               <CardContent>
@@ -191,7 +194,9 @@ function ProtocolosComportamientoParentContent() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="font-semibold mb-2">{t("parent.protocols.direct_contact")}</h4>
+                <h4 className="font-semibold mb-2">
+                  {t("parent.protocols.direct_contact")}
+                </h4>
                 <p className="text-sm text-muted-foreground mb-2">
                   {t("parent.protocols.direct_contact_desc")}
                 </p>
@@ -202,7 +207,9 @@ function ProtocolosComportamientoParentContent() {
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold mb-2">{t("parent.protocols.attention_hours")}</h4>
+                <h4 className="font-semibold mb-2">
+                  {t("parent.protocols.attention_hours")}
+                </h4>
                 <p className="text-sm text-muted-foreground">
                   {t("parent.protocols.attention_hours_desc")}
                 </p>
@@ -217,11 +224,7 @@ function ProtocolosComportamientoParentContent() {
 
 export default function ProtocolosComportamientoParentPage() {
   return (
-    <ErrorBoundary
-      fallback={
-        <div>Error loading behavior protocols page</div>
-      }
-    >
+    <ErrorBoundary fallback={<div>Error loading behavior protocols page</div>}>
       <Suspense fallback={<LoadingState />}>
         <ProtocolosComportamientoParentContent />
       </Suspense>

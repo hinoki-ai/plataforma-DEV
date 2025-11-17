@@ -55,11 +55,13 @@ function PlanificacionesContent({ searchParams }: Props) {
         if (result.success) {
           setDocuments(result.data || []);
         } else {
-          setError(result.error || "Error al cargar documentos");
+          setError(
+            result.error || t("profesor.planning.error_loading", "profesor"),
+          );
         }
       } catch (err) {
         console.error("Error fetching planning documents:", err);
-        setError("Error al cargar los documentos de planificación");
+        setError(t("profesor.planning.error_loading", "profesor"));
       } finally {
         setLoading(false);
       }
@@ -121,7 +123,7 @@ function PlanificacionesContent({ searchParams }: Props) {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Error al cargar documentos
+              {t("profesor.planning.error_loading", "profesor")}
             </h3>
             <p className="text-gray-600">{error}</p>
           </div>
@@ -146,9 +148,7 @@ function PlanificacionesContent({ searchParams }: Props) {
 
 export default function PlanificacionesPage(props: Props) {
   return (
-    <ErrorBoundary
-      fallback={<div>Error al cargar la página de planificaciones</div>}
-    >
+    <ErrorBoundary fallback={<div>Error al cargar planificaciones</div>}>
       <Suspense fallback={<LoadingState />}>
         <PlanificacionesContent {...props} />
       </Suspense>

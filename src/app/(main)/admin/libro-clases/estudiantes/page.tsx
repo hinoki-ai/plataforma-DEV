@@ -7,7 +7,7 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 import { StudentManagement } from "@/components/libro-clases/StudentManagement";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useAuth } from "@clerk/nextjs";
 import { useSession } from "next-auth/react";
 
@@ -66,7 +66,7 @@ export default function AdminEstudiantesPage() {
     return (
       <PageTransition>
         <div className="flex items-center justify-center min-h-screen">
-          <p>Cargando...</p>
+          <p>{t("admin.libro_clases.estudiantes.loading", "admin")}</p>
         </div>
       </PageTransition>
     );
@@ -75,20 +75,22 @@ export default function AdminEstudiantesPage() {
   // Determine which courses and students to show based on role
   let displayCourses = courses || [];
   let displayStudents = allStudents || [];
-  let pageTitle = "Gestión de Estudiantes por Curso";
-  let pageSubtitle =
-    "Administra la matrícula de estudiantes en cada curso del libro de clases";
+  let pageTitle = t("admin.libro_clases.estudiantes.title", "admin");
+  let pageSubtitle = t("admin.libro_clases.estudiantes.subtitle", "admin");
   let showAddStudents = true;
 
   if (userRole === "PROFESOR") {
-    pageTitle = "Mis Cursos - Gestión de Estudiantes";
-    pageSubtitle = "Administra los estudiantes de tus cursos asignados";
+    pageTitle = t("admin.libro_clases.estudiantes.profesor.title", "admin");
+    pageSubtitle = t(
+      "admin.libro_clases.estudiantes.profesor.subtitle",
+      "admin",
+    );
     displayCourses = courses || [];
     displayStudents = []; // Teachers can't add arbitrary students
     showAddStudents = false;
   } else if (userRole === "PARENT") {
-    pageTitle = "Cursos de Mis Estudiantes";
-    pageSubtitle = "Ve los cursos y estudiantes de tus estudiantes";
+    pageTitle = t("admin.libro_clases.estudiantes.parent.title", "admin");
+    pageSubtitle = t("admin.libro_clases.estudiantes.parent.subtitle", "admin");
     displayCourses = parentCourses || [];
     displayStudents = []; // Parents can't modify enrollments
     showAddStudents = false;
@@ -111,10 +113,18 @@ export default function AdminEstudiantesPage() {
                     )
                   }
                   className="px-3 py-2 border border-input rounded-md bg-background text-sm"
-                  aria-label="Año académico"
-                  title="Año académico"
+                  aria-label={t(
+                    "admin.libro_clases.estudiantes.year_label",
+                    "admin",
+                  )}
+                  title={t(
+                    "admin.libro_clases.estudiantes.year_label",
+                    "admin",
+                  )}
                 >
-                  <option value="">Todos los años</option>
+                  <option value="">
+                    {t("admin.libro_clases.estudiantes.year_all", "admin")}
+                  </option>
                   {Array.from({ length: 5 }, (_, i) => {
                     const year = new Date().getFullYear() - i;
                     return (

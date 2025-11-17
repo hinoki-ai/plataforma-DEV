@@ -417,7 +417,7 @@ Todos los componentes UI están completamente implementados con validaciones y m
 
 - **Sistema Completo**: `docs/AI_KNOWLEDGE_BASE.md` - **PRIMARY**: Complete system architecture
 - **Roles**: `docs/ROLE_SYSTEM.md`
-- **Autenticación**: `docs/AUTHENTICATION_COMPLETE_GUIDE.md`
+- **Autenticación**: `docs/AI_KNOWLEDGE_BASE.md` (Sistema Clerk + Convex)
 
 ## 🎓 Capacitación
 
@@ -453,7 +453,7 @@ Todos los componentes UI están completamente implementados con validaciones y m
 
 Para reportar problemas o solicitar mejoras:
 
-- Revisar `/docs/TROUBLESHOOTING_AUTH.md`
+- Revisar sección de autenticación en `/docs/AI_KNOWLEDGE_BASE.md`
 - Verificar `/docs/EMERGENCY_ACCESS_PROCEDURES.md`
 - Contactar al equipo de desarrollo
 

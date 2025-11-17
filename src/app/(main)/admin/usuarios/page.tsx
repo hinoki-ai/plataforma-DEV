@@ -41,7 +41,7 @@ export default function UsersPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["common", "admin"]);
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -108,14 +108,17 @@ export default function UsersPage() {
         const newUser = await response.json();
         setUsers([...users, newUser]);
         setIsCreateDialogOpen(false);
-        toast.success(`✅ Usuario ${newUser.name} creado exitosamente`, {
-          description: `Email: ${newUser.email} | Rol: ${newUser.role}`,
-        });
+        toast.success(
+          `✅ ${t("admin.usuarios.create_success", "admin").replace("{name}", newUser.name)}`,
+          {
+            description: `Email: ${newUser.email} | Rol: ${newUser.role}`,
+          },
+        );
       }
     } catch (error) {
       console.error("Error creating user:", error);
-      toast.error("❌ Error al crear el usuario", {
-        description: "Por favor verifica los datos e intenta nuevamente",
+      toast.error(`❌ ${t("admin.usuarios.create_error", "admin")}`, {
+        description: t("admin.usuarios.verify_data", "admin"),
       });
     }
   };
@@ -136,14 +139,17 @@ export default function UsersPage() {
         const newUser = await response.json();
         setUsers([...users, newUser]);
         setIsCreateParentDialogOpen(false);
-        toast.success(`✅ Usuario padre creado exitosamente`, {
-          description: `Nombre: ${newUser.name} | Estudiante: ${parentData.studentName}`,
-        });
+        toast.success(
+          `✅ ${t("admin.usuarios.create_parent_success", "admin")}`,
+          {
+            description: `Nombre: ${newUser.name} | Estudiante: ${parentData.studentName}`,
+          },
+        );
       }
     } catch (error) {
       console.error("Error creating parent user:", error);
-      toast.error("❌ Error al crear usuario padre", {
-        description: "Por favor verifica los datos e intenta nuevamente",
+      toast.error(`❌ ${t("admin.usuarios.create_parent_error", "admin")}`, {
+        description: t("admin.usuarios.verify_data", "admin"),
       });
     }
   };
@@ -252,7 +258,7 @@ export default function UsersPage() {
                   className="bg-primary hover:bg-primary-90 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Crear Usuario
+                  {t("admin.usuarios.create_user", "admin")}
                 </Button>
                 <Button
                   onClick={() => setIsCreateParentDialogOpen(true)}
@@ -260,7 +266,7 @@ export default function UsersPage() {
                   className="border-primary text-primary hover:bg-primary hover:text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Crear Padre
+                  {t("admin.usuarios.create_parent", "admin")}
                 </Button>
               </div>
             </div>

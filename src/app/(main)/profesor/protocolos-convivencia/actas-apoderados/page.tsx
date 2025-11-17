@@ -219,7 +219,10 @@ function ActasApoderadosContent() {
                 <div className="relative">
                   <FileText className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Buscar por estudiante, apoderado o motivo..."
+                    placeholder={t(
+                      "search.protocolos.actas_apoderados.profesor",
+                      "common",
+                    )}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"

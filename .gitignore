@@ -75,3 +75,4 @@ scripts/*password*
 
 # User export files (contain sensitive user data)
 scripts/exports/
+.vercel

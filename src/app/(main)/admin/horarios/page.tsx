@@ -6,11 +6,13 @@ import { HorariosDashboardReal } from "@/components/horarios/HorariosDashboardRe
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronRight, Sparkles } from "lucide-react";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export const dynamic = "force-dynamic";
 
 export default function AdminHorariosPage() {
   const { data: session } = useSession();
+  const { t } = useDivineParsing(["admin"]);
 
   return (
     <PageTransition skeletonType="page" duration={700}>
@@ -23,15 +25,18 @@ export default function AdminHorariosPage() {
                 <div className="space-y-2">
                   <Badge className="gap-1 rounded-full bg-primary/10 text-primary">
                     <Sparkles className="h-3.5 w-3.5" />
-                    Modo administrador
+                    {t("admin.horarios.badge", "admin")}
                   </Badge>
                   <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                    Coordinación integral de horarios
+                    {t("admin.horarios.title", "admin")}
                   </h1>
                   <p className="text-sm text-muted-foreground sm:text-base">
                     {session?.user?.name
-                      ? `Hola ${session.user.name.split(" ")[0]}, administra la malla horaria con indicadores estratégicos, cobertura JEC y focos UTP en un mismo tablero.`
-                      : "Administra la malla horaria con indicadores estratégicos, cobertura JEC y focos UTP en un mismo tablero."}
+                      ? t("admin.horarios.subtitle_greeting", "admin").replace(
+                          "{name}",
+                          session.user.name.split(" ")[0],
+                        )
+                      : t("admin.horarios.subtitle", "admin")}
                   </p>
                 </div>
 
@@ -41,9 +46,11 @@ export default function AdminHorariosPage() {
                       <ChevronRight className="h-5 w-5" />
                     </div>
                     <div className="text-sm">
-                      <p className="font-semibold">Panel Astral 360</p>
+                      <p className="font-semibold">
+                        {t("admin.horarios.panel_title", "admin")}
+                      </p>
                       <p className="text-muted-foreground">
-                        Integrado con Convex y reportes Mineduc
+                        {t("admin.horarios.panel_description", "admin")}
                       </p>
                     </div>
                   </CardContent>

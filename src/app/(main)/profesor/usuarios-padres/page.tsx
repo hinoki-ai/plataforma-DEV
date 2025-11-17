@@ -68,7 +68,7 @@ interface ParentUser {
 function UsuariosPadresContent() {
   const { data: session } = useSession();
   const router = useRouter();
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["common", "profesor"]);
   const [parents, setParents] = useState<ParentUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -122,7 +122,7 @@ function UsuariosPadresContent() {
       setParents(mockParents);
     } catch (err) {
       console.error("Error fetching parents:", err);
-      setError("Error al cargar los usuarios padres");
+      setError(t("profesor.usuarios_padres.error_loading", "profesor"));
     } finally {
       setLoading(false);
     }
@@ -139,44 +139,48 @@ function UsuariosPadresContent() {
 
       if (response.ok) {
         const newUser = await response.json();
-        toast.success(`✅ Usuario padre creado exitosamente`, {
-          description: `Nombre: ${newUser.name} | Estudiante: ${newUser.studentInfo.studentName}`,
-        });
+        toast.success(
+          `✅ ${t("profesor.usuarios_padres.create_success", "profesor")}`,
+          {
+            description: `Nombre: ${newUser.name} | Estudiante: ${newUser.studentInfo.studentName}`,
+          },
+        );
         setShowCreateForm(false);
         fetchParents(); // Refresh the list
       } else {
         const error = await response.json();
-        toast.error("❌ Error al crear usuario padre", {
-          description:
-            error.error || "Por favor verifica los datos e intenta nuevamente",
-        });
+        toast.error(
+          `❌ ${t("profesor.usuarios_padres.create_error", "profesor")}`,
+          {
+            description: error.error || t("common.error.retry_later", "common"),
+          },
+        );
       }
     } catch (error) {
       console.error("Error creating parent user:", error);
-      toast.error("❌ Error al crear usuario padre", {
-        description: "Por favor intenta nuevamente",
-      });
+      toast.error(
+        `❌ ${t("profesor.usuarios_padres.create_error", "profesor")}`,
+        {
+          description: t("common.retry", "common"),
+        },
+      );
     } finally {
       setIsCreating(false);
     }
   };
 
   const handleDeleteParent = async (parentId: string) => {
-    if (
-      !confirm(
-        "¿Estás seguro de que quieres eliminar este usuario padre? Esta acción no se puede deshacer.",
-      )
-    ) {
+    if (!confirm(t("profesor.usuarios_padres.delete_confirm", "profesor"))) {
       return;
     }
 
     try {
       // In a real implementation, you'd call a DELETE API endpoint
-      toast.success("Usuario padre eliminado exitosamente");
+      toast.success(t("profesor.usuarios_padres.delete_success", "profesor"));
       setParents(parents.filter((parent) => parent.id !== parentId));
     } catch (error) {
       console.error("Error deleting parent:", error);
-      toast.error("Error al eliminar el usuario padre");
+      toast.error(t("profesor.usuarios_padres.delete_error", "profesor"));
     }
   };
 
@@ -222,11 +226,11 @@ function UsuariosPadresContent() {
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Error al cargar usuarios
+            {t("profesor.usuarios_padres.error_loading", "profesor")}
           </h3>
           <p className="text-gray-600">{error}</p>
           <Button onClick={fetchParents} className="mt-4">
-            Reintentar
+            {t("profesor.usuarios_padres.retry", "profesor")}
           </Button>
         </div>
       </div>
@@ -239,10 +243,10 @@ function UsuariosPadresContent() {
         <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              Usuarios Padres
+              {t("profesor.usuarios_padres.title", "profesor")}
             </h1>
             <p className="text-muted-foreground">
-              Gestiona los usuarios padres registrados en el sistema
+              {t("profesor.usuarios_padres.description", "profesor")}
             </p>
           </div>
           <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
@@ -272,8 +276,13 @@ function UsuariosPadresContent() {
         </div>
 
         <div className="flex gap-4 text-sm text-muted-foreground">
-          <span>Total: {parents.length}</span>
-          <span>Activos: {parents.filter((p) => p.isActive).length}</span>
+          <span>
+            {t("profesor.usuarios_padres.total", "profesor")}: {parents.length}
+          </span>
+          <span>
+            {t("profesor.usuarios_padres.active", "profesor")}:{" "}
+            {parents.filter((p) => p.isActive).length}
+          </span>
         </div>
       </div>
 
@@ -282,15 +291,14 @@ function UsuariosPadresContent() {
           <CardContent className="flex flex-col items-center justify-center py-16">
             <Users className="h-16 w-16 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold text-foreground mb-2">
-              No hay usuarios padres registrados
+              {t("profesor.usuarios_padres.empty.title", "profesor")}
             </h3>
             <p className="text-muted-foreground mb-6 text-center">
-              Crea tu primer usuario padre para comenzar a gestionar las
-              relaciones con los padres de familia
+              {t("profesor.usuarios_padres.empty.description", "profesor")}
             </p>
             <Button onClick={() => setShowCreateForm(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Crear Primer Usuario Padre
+              {t("profesor.usuarios_padres.empty.create_button", "profesor")}
             </Button>
           </CardContent>
         </Card>
@@ -313,7 +321,12 @@ function UsuariosPadresContent() {
                     </CardDescription>
                   </div>
                   <Badge variant={parent.isActive ? "default" : "secondary"}>
-                    {parent.isActive ? "Activo" : "Inactivo"}
+                    {parent.isActive
+                      ? t("profesor.usuarios_padres.active_badge", "profesor")
+                      : t(
+                          "profesor.usuarios_padres.inactive_badge",
+                          "profesor",
+                        )}
                   </Badge>
                 </div>
               </CardHeader>
@@ -329,29 +342,36 @@ function UsuariosPadresContent() {
                     <div className="space-y-2">
                       <div className="flex items-center text-sm text-muted-foreground">
                         <User className="w-4 h-4 mr-2 flex-shrink-0" />
-                        Estudiante: {parent.studentInfo.studentName}
+                        {t(
+                          "profesor.usuarios_padres.student",
+                          "profesor",
+                        )}: {parent.studentInfo.studentName}
                       </div>
                       <div className="flex items-center text-sm text-muted-foreground">
-                        📚 Grado: {parent.studentInfo.studentGrade}
+                        📚 {t("profesor.usuarios_padres.grade", "profesor")}:{" "}
+                        {parent.studentInfo.studentGrade}
                       </div>
                       <div className="flex items-center text-sm text-muted-foreground">
-                        👨‍👩‍👧‍👦 Relación: {parent.studentInfo.relationship}
+                        👨‍👩‍👧‍👦{" "}
+                        {t("profesor.usuarios_padres.relationship", "profesor")}
+                        : {parent.studentInfo.relationship}
                       </div>
                     </div>
                   )}
                   <div className="flex items-center text-sm text-muted-foreground">
-                    📅 Registrado: {formatDate(parent.createdAt)}
+                    📅 {t("profesor.usuarios_padres.registered", "profesor")}:{" "}
+                    {formatDate(parent.createdAt)}
                   </div>
                 </div>
 
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline" className="flex-1">
                     <Eye className="mr-2 h-4 w-4" />
-                    Ver
+                    {t("profesor.usuarios_padres.view", "profesor")}
                   </Button>
                   <Button size="sm" variant="outline" className="flex-1">
                     <Edit className="mr-2 h-4 w-4" />
-                    Editar
+                    {t("profesor.usuarios_padres.edit", "profesor")}
                   </Button>
                   <Button
                     size="sm"

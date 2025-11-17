@@ -258,7 +258,7 @@ export default function PreciosPage() {
                             </div>
                             <div className="flex items-center justify-center gap-2 mb-2">
                               <span className="text-xs font-semibold text-green-500">
-                                Ahorro de{" "}
+                                {tp("pricing.savings_label")}{" "}
                                 {(getDiscount(billingCycle) * 100).toFixed(0)}%
                               </span>
                             </div>
@@ -269,7 +269,7 @@ export default function PreciosPage() {
                           </div>
                         )}
                         <div className="text-xs text-muted-foreground font-medium">
-                          por estudiante/mes
+                          {tp("billing.per_student_per_month")}
                         </div>
                       </div>
                     </div>
@@ -280,38 +280,41 @@ export default function PreciosPage() {
                     <div className="space-y-3 mb-4">
                       <div className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                         <Zap className="w-4 h-4 text-primary" />
-                        Características Principales
+                        {tp("pricing.key_features")}
                       </div>
                       <ul className="space-y-2.5 text-sm">
                         {[
                           {
                             key: "courses",
-                            label: `${plan.features.courses} cursos/asignaturas`,
+                            label: `${plan.features.courses} ${tp("pricing.courses_subjects")}`,
                             icon: BookOpen,
                           },
                           {
                             key: "storage",
-                            label: `${plan.features.storage} almacenamiento`,
+                            label: `${plan.features.storage} ${tp("pricing.storage_label")}`,
                             icon: HardDrive,
                           },
                           {
                             key: "meetings",
-                            label: `${plan.features.meetings} reuniones virtuales/mes`,
+                            label: `${plan.features.meetings} ${tp("pricing.virtual_meetings_per_month")}`,
                             icon: Video,
                           },
                           {
                             key: "users",
-                            label: `${plan.features.users} usuarios administrativos`,
+                            label: `${plan.features.users} ${tp("pricing.admin_users")}`,
                             icon: Users,
                           },
                           {
                             key: "support",
-                            label: `Soporte: ${plan.features.support}`,
+                            label: `${tp("pricing.support_label")}: ${plan.features.support}`,
                             icon: Headphones,
                           },
                           {
                             key: "sla",
-                            label: `SLA ${plan.features.sla} disponibilidad`,
+                            label: tp("pricing.sla_availability").replace(
+                              "{sla}",
+                              plan.features.sla,
+                            ),
                             icon: Shield,
                           },
                         ].map((feature) => {
@@ -342,8 +345,8 @@ export default function PreciosPage() {
                         <span className="flex items-center gap-2">
                           <Info className="w-4 h-4" />
                           {isExpanded
-                            ? "Ocultar detalles completos"
-                            : "Ver todas las características"}
+                            ? tp("pricing.hide_all_features")
+                            : tp("pricing.view_all_features")}
                         </span>
                         {isExpanded ? (
                           <ChevronUp className="w-4 h-4" />
@@ -364,12 +367,12 @@ export default function PreciosPage() {
                           <div>
                             <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
                               <Zap className="w-4 h-4 text-primary" />
-                              Plataforma
+                              {tp("pricing.platform")}
                             </h4>
                             <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
-                              <li>✓ Acceso completo a plataforma educativa</li>
-                              <li>✓ Materiales de estudio básicos</li>
-                              <li>✓ Seguimiento académico completo</li>
+                              <li>✓ {tp("pricing.full_platform_access")}</li>
+                              <li>✓ {tp("pricing.basic_materials")}</li>
+                              <li>✓ {tp("pricing.academic_tracking")}</li>
                             </ul>
                           </div>
 
@@ -377,66 +380,66 @@ export default function PreciosPage() {
                           <div>
                             <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
                               <TrendingUp className="w-4 h-4 text-primary" />
-                              Características Avanzadas
+                              {tp("pricing.advanced_features")}
                             </h4>
                             <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
                               <li>
-                                Capacitación del personal:{" "}
+                                {tp("pricing.training")}:{" "}
                                 {plan.features.training ? (
                                   <span className="text-green-500 font-semibold">
-                                    Incluida
+                                    {tp("pricing.included")}
                                   </span>
                                 ) : (
                                   <span className="text-red-500">
-                                    No incluida
+                                    {tp("pricing.not_included")}
                                   </span>
                                 )}
                               </li>
                               <li>
-                                Reportes avanzados:{" "}
+                                {tp("pricing.advanced_reports")}:{" "}
                                 {plan.features.advancedReports ? (
                                   <span className="text-green-500 font-semibold">
-                                    Disponible
+                                    {tp("pricing.available")}
                                   </span>
                                 ) : (
                                   <span className="text-red-500">
-                                    No disponible
+                                    {tp("pricing.not_available")}
                                   </span>
                                 )}
                               </li>
                               <li>
-                                Integraciones (SIGE, etc.):{" "}
+                                {tp("pricing.integrations")}:{" "}
                                 {plan.features.integrations ? (
                                   <span className="text-green-500 font-semibold">
-                                    Disponible
+                                    {tp("pricing.available")}
                                   </span>
                                 ) : (
                                   <span className="text-red-500">
-                                    No disponible
+                                    {tp("pricing.not_available")}
                                   </span>
                                 )}
                               </li>
                               <li>
-                                API y Webhooks:{" "}
+                                {tp("pricing.api_webhooks")}:{" "}
                                 {plan.features.api ? (
                                   <span className="text-green-500 font-semibold">
-                                    Disponible
+                                    {tp("pricing.available")}
                                   </span>
                                 ) : (
                                   <span className="text-red-500">
-                                    No disponible
+                                    {tp("pricing.not_available")}
                                   </span>
                                 )}
                               </li>
                               <li>
-                                Gerente de cuenta dedicado:{" "}
+                                {tp("pricing.dedicated_manager")}:{" "}
                                 {plan.features.dedicatedManager ? (
                                   <span className="text-green-500 font-semibold">
-                                    Incluido
+                                    {tp("pricing.included")}
                                   </span>
                                 ) : (
                                   <span className="text-red-500">
-                                    No incluido
+                                    {tp("pricing.not_included")}
                                   </span>
                                 )}
                               </li>
@@ -447,26 +450,33 @@ export default function PreciosPage() {
                           <div>
                             <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
                               <Database className="w-4 h-4 text-primary" />
-                              Límites y Capacidad
+                              {tp("pricing.limits_capacity")}
                             </h4>
                             <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
                               <li>
-                                Estudiantes: {plan.minStudents} -{" "}
+                                {tp("pricing.students_range")}:{" "}
+                                {plan.minStudents} -{" "}
                                 {plan.maxStudents
                                   ? `${plan.maxStudents.toLocaleString()}`
-                                  : "Ilimitado"}
+                                  : tp("common.unlimited")}
                               </li>
                               <li>
-                                Usuarios administrativos: {plan.features.users}
+                                {tp("pricing.admin_users")}:{" "}
+                                {plan.features.users}
                               </li>
-                              <li>Almacenamiento: {plan.features.storage}</li>
                               <li>
-                                Reuniones virtuales:{" "}
+                                {tp("pricing.storage")}: {plan.features.storage}
+                              </li>
+                              <li>
+                                {tp("pricing.virtual_meetings")}:{" "}
                                 {typeof plan.features.meetings === "number"
-                                  ? `${plan.features.meetings}/mes`
+                                  ? `${plan.features.meetings}/${tp("billing.per_month")}`
                                   : plan.features.meetings}
                               </li>
-                              <li>Cursos máximos: {plan.features.courses}</li>
+                              <li>
+                                {tp("pricing.max_courses")}:{" "}
+                                {plan.features.courses}
+                              </li>
                             </ul>
                           </div>
 
@@ -474,17 +484,21 @@ export default function PreciosPage() {
                           <div>
                             <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-2">
                               <Headphones className="w-4 h-4 text-primary" />
-                              Soporte Técnico
+                              {tp("pricing.support_details")}
                             </h4>
                             <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
-                              <li>Tipo: {plan.features.support}</li>
                               <li>
-                                SLA de disponibilidad: {plan.features.sla}
+                                {tp("pricing.support_type")}:{" "}
+                                {plan.features.support}
+                              </li>
+                              <li>
+                                {tp("pricing.availability_sla")}:{" "}
+                                {plan.features.sla}
                               </li>
                               <li>
                                 {plan.features.dedicatedManager
-                                  ? "Incluye gerente de cuenta dedicado"
-                                  : "Soporte estándar"}
+                                  ? tp("pricing.dedicated_account_manager")
+                                  : tp("pricing.standard_support")}
                               </li>
                             </ul>
                           </div>

@@ -34,27 +34,9 @@ import {
   calculateBillingPrice,
   formatCLP,
 } from "@/data/pricing-plans";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
-const billingMetadata: Record<
-  BillingCycle,
-  { label: string; description: string; months: number }
-> = {
-  semestral: {
-    label: "Semestral",
-    description: "Contrato 6 meses",
-    months: 6,
-  },
-  annual: {
-    label: "Anual",
-    description: "Contrato 12 meses (-15%)",
-    months: 12,
-  },
-  biannual: {
-    label: "Bianual",
-    description: "Contrato 24 meses (-25%)",
-    months: 24,
-  },
-};
+// billingMetadata will be created inside the component to use translations
 
 const developerContacts = [
   {
@@ -104,6 +86,9 @@ interface PricingCalculatorPageProps {
 export default function PricingCalculatorPage({
   searchParams,
 }: PricingCalculatorPageProps) {
+  const { t } = useDivineParsing(["common", "planes"]);
+  const tc = (key: string) =>
+    t(key.startsWith("calculator.") ? key.slice(11) : key, "planes");
   const [resolvedSearchParams, setResolvedSearchParams] = useState<{
     plan?: string;
     billing?: string;
@@ -182,6 +167,43 @@ export default function PricingCalculatorPage({
     });
   }, [selectedPlan.id]); // Only when plan changes
 
+  // Create billingMetadata with translations
+  const billingMetadata: Record<
+    BillingCycle,
+    { label: string; description: string; months: number }
+  > = {
+    semestral: {
+      label: tc("billing.semestral"),
+      description:
+        tc("billing.semestral") +
+        " - " +
+        tc("calculator.months").replace("{count}", "6"),
+      months: 6,
+    },
+    annual: {
+      label: tc("billing.annual"),
+      description:
+        tc("billing.annual") +
+        " - " +
+        tc("calculator.months").replace("{count}", "12") +
+        " (" +
+        tc("billing.discount_annual") +
+        ")",
+      months: 12,
+    },
+    biannual: {
+      label: tc("billing.biannual"),
+      description:
+        tc("billing.biannual") +
+        " - " +
+        tc("calculator.months").replace("{count}", "24") +
+        " (" +
+        tc("billing.discount_biannual") +
+        ")",
+      months: 24,
+    },
+  };
+
   const billingInfo = billingMetadata[billingCycle];
   const discountPercentage = billingCycleDiscount[billingCycle];
   const basePrice = selectedPlan.pricePerStudent * students;
@@ -202,7 +224,7 @@ export default function PricingCalculatorPage({
     selectedPlan.maxStudents
       ? ` - ${numberFormatter.format(selectedPlan.maxStudents)}`
       : "+"
-  } estudiantes`;
+  } ${tc("calculator.students_count").replace("{count}", "")}`;
 
   const cycleOptions = (
     Object.keys(billingMetadata) as Array<BillingCycle>
@@ -215,27 +237,38 @@ export default function PricingCalculatorPage({
   const studentsFormatted = numberFormatter.format(students);
   const periodLabel =
     billingInfo.months === 1
-      ? "mes"
-      : `${billingInfo.months} meses (${billingInfo.label})`;
+      ? tc("calculator.month")
+      : tc("calculator.months").replace("{count}", String(billingInfo.months)) +
+        ` (${billingInfo.label})`;
+
+  const monthlyPriceFormatted = formatCLP(
+    Math.round(periodPrice / billingInfo.months),
+  );
+  const totalFormatted = formatCLP(periodTotal);
 
   const whatsappMessage = encodeURIComponent(
-    `Hola equipo Astral, necesito activar ${selectedPlan.name} para ${studentsFormatted} estudiantes. ` +
-      `Ciclo de facturación: ${billingInfo.label}. ` +
-      `Valor mensual estimado: ${formatCLP(Math.round(periodPrice / billingInfo.months))}. ` +
-      `Total del período (${periodLabel}): ${formatCLP(periodTotal)}. ` +
-      "Hablemos ahora mismo para confirmarlo.",
+    tc("calculator.whatsapp_message")
+      .replace("{plan}", selectedPlan.name)
+      .replace("{students}", studentsFormatted)
+      .replace("{cycle}", billingInfo.label)
+      .replace("{monthly_price}", monthlyPriceFormatted)
+      .replace("{period}", periodLabel)
+      .replace("{total}", totalFormatted),
   );
 
   const emailSubject = encodeURIComponent(
-    `[Astral] ${selectedPlan.name} - ${studentsFormatted} estudiantes`,
+    tc("calculator.email_subject")
+      .replace("{plan}", selectedPlan.name)
+      .replace("{students}", studentsFormatted),
   );
   const emailBody = encodeURIComponent(
-    `Hola equipo Astral,%0A%0A` +
-      `Quiero avanzar con ${selectedPlan.name} para ${studentsFormatted} estudiantes.%0A` +
-      `Ciclo de facturación: ${billingInfo.label}.%0A` +
-      `Valor mensual estimado: ${formatCLP(Math.round(periodPrice / billingInfo.months))}.%0A` +
-      `Total del período (${periodLabel}): ${formatCLP(periodTotal)}.%0A%0A` +
-      "Por favor contáctenme hoy para activarlo.%0A%0AGracias!",
+    tc("calculator.email_body")
+      .replace("{plan}", selectedPlan.name)
+      .replace("{students}", studentsFormatted)
+      .replace("{cycle}", billingInfo.label)
+      .replace("{monthly_price}", monthlyPriceFormatted)
+      .replace("{period}", periodLabel)
+      .replace("{total}", totalFormatted),
   );
 
   const updateStudents = (value: number) => {
@@ -276,21 +309,21 @@ export default function PricingCalculatorPage({
 
   const highlightItems = [
     {
-      label: "Rango recomendado",
+      label: tc("calculator.recommended_range"),
       value: selectedPlan.maxStudents
-        ? `${numberFormatter.format(selectedPlan.minStudents)} - ${numberFormatter.format(selectedPlan.maxStudents)} estudiantes`
-        : `${numberFormatter.format(selectedPlan.minStudents)}+ estudiantes`,
+        ? `${numberFormatter.format(selectedPlan.minStudents)} - ${numberFormatter.format(selectedPlan.maxStudents)} ${tc("calculator.students_count").replace("{count}", "")}`
+        : `${numberFormatter.format(selectedPlan.minStudents)}+ ${tc("calculator.students_count").replace("{count}", "")}`,
     },
     {
-      label: "Valor por estudiante",
-      value: `${formatCLP(selectedPlan.pricePerStudent)} / mes`,
+      label: tc("calculator.price_per_student"),
+      value: `${formatCLP(selectedPlan.pricePerStudent)} / ${tc("calculator.month")}`,
     },
     {
-      label: "Usuarios administrativos",
+      label: tc("calculator.admin_users"),
       value: `${selectedPlan.features.users}`,
     },
     {
-      label: "Soporte",
+      label: tc("calculator.support"),
       value: selectedPlan.features.support,
     },
   ];
@@ -303,16 +336,16 @@ export default function PricingCalculatorPage({
           <div className="flex flex-col gap-3 text-white">
             <Button variant="ghost" className="w-fit" asChild>
               <Link href="/planes" className="flex items-center gap-2">
-                <ArrowLeft className="w-4 h-4" /> Volver a planes
+                <ArrowLeft className="w-4 h-4" />{" "}
+                {tc("calculator.back_to_plans")}
               </Link>
             </Button>
             <div>
               <h1 className="mt-3 text-4xl md:text-5xl font-bold">
-                Calculadora de {selectedPlan.name}
+                {tc("calculator.title").replace("{plan}", selectedPlan.name)}
               </h1>
               <p className="mt-2 text-lg text-gray-200 max-w-2xl">
-                Ajusta la cantidad de estudiantes y descubre la inversión real.
-                Estamos listos para activar tu plan en minutos.
+                {tc("calculator.subtitle")}
               </p>
             </div>
           </div>
@@ -338,7 +371,7 @@ export default function PricingCalculatorPage({
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-gray-400">
-                      Valor por estudiante
+                      {tc("calculator.price_per_student")}
                     </div>
                     <div className="text-2xl font-bold text-primary">
                       {formatCLP(selectedPlan.pricePerStudent)}
@@ -364,7 +397,8 @@ export default function PricingCalculatorPage({
                 </div>
                 <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5">
                   <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gray-300">
-                    <Users className="w-4 h-4" /> Configura estudiantes
+                    <Users className="w-4 h-4" />{" "}
+                    {tc("calculator.configure_students")}
                   </div>
                   <div className="mt-4 flex flex-col gap-4">
                     <div className="flex flex-wrap items-center gap-3">
@@ -389,7 +423,7 @@ export default function PricingCalculatorPage({
                           size="icon"
                           onClick={() => adjustStudents(-10)}
                           disabled={students <= selectedPlan.minStudents}
-                          aria-label="Disminuir 10 estudiantes"
+                          aria-label={tc("calculator.decrease_10")}
                         >
                           -10
                         </Button>
@@ -397,7 +431,7 @@ export default function PricingCalculatorPage({
                           variant="outline"
                           size="icon"
                           onClick={() => adjustStudents(10)}
-                          aria-label="Aumentar 10 estudiantes"
+                          aria-label={tc("calculator.increase_10")}
                         >
                           +10
                         </Button>
@@ -424,10 +458,10 @@ export default function PricingCalculatorPage({
                   <Calculator className="w-6 h-6 text-primary" />
                   <div>
                     <CardTitle className="text-2xl">
-                      Tu inversión estimada
+                      {tc("calculator.estimated_investment")}
                     </CardTitle>
                     <CardDescription className="text-gray-300">
-                      Calculamos valores en CLP con IVA no incluido
+                      {tc("calculator.calculation_note")}
                     </CardDescription>
                   </div>
                 </div>
@@ -450,24 +484,33 @@ export default function PricingCalculatorPage({
               </CardHeader>
               <CardContent className="space-y-5">
                 <div className="rounded-2xl border border-gray-800 bg-black/40 p-5">
-                  <div className="text-sm text-gray-300">Pago semestral</div>
+                  <div className="text-sm text-gray-300">
+                    {tc("calculator.semestral_payment")}
+                  </div>
                   <div className="mt-2 text-4xl font-bold text-primary">
                     {formatCLP(periodPrice)}
                   </div>
                   <p className="mt-2 text-sm text-gray-400">
-                    {studentsFormatted} estudiantes • {billingInfo.label}
+                    {studentsFormatted}{" "}
+                    {tc("calculator.students_count").replace("{count}", "")} •{" "}
+                    {billingInfo.label}
                   </p>
                   {discountPercentage > 0 && savingsPeriodPrice > 0 && (
                     <p className="mt-2 text-sm text-green-400">
-                      Ahorro por período: {formatCLP(savingsPeriodPrice)} (
-                      {Math.round(discountPercentage * 100)}% menos)
+                      {tc("calculator.savings_per_period")}:{" "}
+                      {formatCLP(savingsPeriodPrice)} (
+                      {Math.round(discountPercentage * 100)}%{" "}
+                      {tc("calculator.less")})
                     </p>
                   )}
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">
                     <div className="text-xs uppercase tracking-wide text-gray-400">
-                      Total por {periodLabel}
+                      {tc("calculator.total_per_period").replace(
+                        "{period}",
+                        periodLabel,
+                      )}
                     </div>
                     <div className="mt-2 text-2xl font-semibold text-white">
                       {formatCLP(periodTotal)}
@@ -475,7 +518,7 @@ export default function PricingCalculatorPage({
                   </div>
                   <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">
                     <div className="text-xs uppercase tracking-wide text-gray-400">
-                      Ahorro en el período
+                      {tc("calculator.savings_in_period")}
                     </div>
                     <div className="mt-2 text-2xl font-semibold text-green-400">
                       {savingsPeriod > 0 ? formatCLP(savingsPeriod) : "$0"}
@@ -484,11 +527,10 @@ export default function PricingCalculatorPage({
                 </div>
                 <div className="rounded-xl border border-primary/30 bg-primary/10 p-4">
                   <p className="text-sm text-primary font-semibold">
-                    ¿Listo para activarlo?
+                    {tc("calculator.ready_to_activate")}
                   </p>
                   <p className="text-sm text-gray-200 mt-1">
-                    Compartiremos esta simulación de inmediato con el equipo
-                    para iniciar la implementación sin demoras.
+                    {tc("calculator.ready_description")}
                   </p>
                   <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                     <Button asChild className="flex-1">
@@ -497,14 +539,14 @@ export default function PricingCalculatorPage({
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Contacto Express por WhatsApp
+                        {tc("calculator.contact_express")}
                       </a>
                     </Button>
                     <Button asChild variant="outline" className="flex-1">
                       <a
                         href={`mailto:${developerContacts[0].email}?subject=${emailSubject}&body=${emailBody}`}
                       >
-                        Solicitar activación por Email
+                        {tc("calculator.request_activation")}
                       </a>
                     </Button>
                   </div>
@@ -516,11 +558,10 @@ export default function PricingCalculatorPage({
           <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/60 text-white">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold">
-                Contacta directo al equipo de desarrollo
+                {tc("calculator.contact_team")}
               </CardTitle>
               <CardDescription className="text-gray-300 text-base">
-                Estamos en modo reacción inmediata. Escríbenos y comencemos hoy
-                mismo.
+                {tc("calculator.contact_description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -546,7 +587,7 @@ export default function PricingCalculatorPage({
                     <div className="mt-4 space-y-3 text-sm text-gray-300">
                       <div>
                         <span className="block text-xs uppercase tracking-wide text-gray-500">
-                          Email directo
+                          {tc("calculator.direct_email")}
                         </span>
                         <a
                           href={`mailto:${contact.email}?subject=${emailSubject}&body=${emailBody}`}
@@ -557,7 +598,7 @@ export default function PricingCalculatorPage({
                       </div>
                       <div>
                         <span className="block text-xs uppercase tracking-wide text-gray-500">
-                          WhatsApp inmediato
+                          {tc("calculator.whatsapp_immediate")}
                         </span>
                         <a
                           href={`${contact.whatsappLink}?text=${whatsappMessage}`}
@@ -577,7 +618,7 @@ export default function PricingCalculatorPage({
                           rel="noopener noreferrer"
                         >
                           <MessageCircle className="w-4 h-4" />
-                          WhatsApp Ahora
+                          {tc("calculator.whatsapp_now")}
                         </a>
                       </Button>
                       <Button asChild variant="outline" className="flex-1">
@@ -585,7 +626,7 @@ export default function PricingCalculatorPage({
                           href={`mailto:${contact.email}?subject=${emailSubject}&body=${emailBody}`}
                         >
                           <Mail className="w-4 h-4" />
-                          Enviar Email
+                          {tc("calculator.send_email")}
                         </a>
                       </Button>
                     </div>

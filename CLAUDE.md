@@ -14,10 +14,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Primary Documentation Reference
 
-- **⭐ `docs/AI_KNOWLEDGE_BASE.md`** - **PRIMARY**: Complete system documentation optimized for AI assistants (comprehensive reference)
+- **⭐ `docs/AI_KNOWLEDGE_BASE.md`** - **PRIMARY**: Complete system documentation optimized for AI assistants (includes Clerk + Convex authentication)
 - `DOCUMENTATION_INDEX.md` - Complete documentation catalog
-- `docs/AUTHENTICATION_COMPLETE_GUIDE.md` - Authentication system details
-- `docs/TROUBLESHOOTING_AUTH.md` - Authentication troubleshooting
+- `docs/CLERK_SETUP.md` - Clerk authentication setup guide
 - `DEPLOYMENT.md` - Deployment procedures
 - `START_HERE.md` - Quick start guide
 
@@ -117,7 +116,7 @@ The system uses a strict role-based access model with proxy enforcement:
 - `src/services/actions/clerk-users.ts` - Clerk user management actions
 - `src/proxy.ts` - Route protection and role-based redirects
 
-**Note**: System migrated from NextAuth.js v5 to Clerk. See `docs/AUTHENTICATION_COMPLETE_GUIDE.md` for details.
+**Note**: System uses Clerk for authentication (migrated from NextAuth.js v5). See `docs/AI_KNOWLEDGE_BASE.md` for complete authentication system details.
 
 ### Data Layer Architecture
 

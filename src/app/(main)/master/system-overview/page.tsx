@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
@@ -21,10 +22,12 @@ const systemOverviewFallback = (
 );
 
 export default function SystemOverviewPage() {
+  const { t } = useDivineParsing(["master"]);
+
   return (
     <MasterPageTemplate
-      title="🔍 System Overview"
-      subtitle="Comprehensive system monitoring and performance analytics"
+      title={`🔍 ${t("master.system_overview.title", "master")}`}
+      subtitle={t("master.system_overview.subtitle", "master")}
       context="SYSTEM_OVERVIEW"
       errorContext="SystemOverviewPage"
       fallbackContent={systemOverviewFallback}
@@ -33,18 +36,26 @@ export default function SystemOverviewPage() {
         {/* System Health */}
         <Card className="border-green-200 dark:border-green-800">
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">System Health</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("master.system_overview.health.title", "master")}
+            </h3>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>Overall Status</span>
-                <span className="text-green-600 font-medium">Excellent</span>
+                <span>
+                  {t("master.system_overview.health.overall", "master")}
+                </span>
+                <span className="text-green-600 font-medium">
+                  {t("master.system_overview.health.excellent", "master")}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span>Database</span>
+                <span>
+                  {t("master.system_overview.health.database", "master")}
+                </span>
                 <span className="text-green-600 font-medium">99.2%</span>
               </div>
               <div className="flex justify-between">
-                <span>API Performance</span>
+                <span>{t("master.system_overview.health.api", "master")}</span>
                 <span className="text-green-600 font-medium">97.8%</span>
               </div>
             </div>
@@ -54,18 +65,26 @@ export default function SystemOverviewPage() {
         {/* System Statistics */}
         <Card className="border-blue-200 dark:border-blue-800">
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">System Statistics</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("master.system_overview.stats.title", "master")}
+            </h3>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>Total Users</span>
+                <span>
+                  {t("master.system_overview.stats.total_users", "master")}
+                </span>
                 <span className="font-medium">1,247</span>
               </div>
               <div className="flex justify-between">
-                <span>Active Sessions</span>
+                <span>
+                  {t("master.system_overview.stats.active_sessions", "master")}
+                </span>
                 <span className="font-medium">89</span>
               </div>
               <div className="flex justify-between">
-                <span>Queries/hour</span>
+                <span>
+                  {t("master.system_overview.stats.queries_hour", "master")}
+                </span>
                 <span className="font-medium">15.4K</span>
               </div>
             </div>
@@ -75,18 +94,29 @@ export default function SystemOverviewPage() {
         {/* Performance Metrics */}
         <Card className="border-purple-200 dark:border-purple-800">
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("master.system_overview.performance.title", "master")}
+            </h3>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>Response Time</span>
+                <span>
+                  {t(
+                    "master.system_overview.performance.response_time",
+                    "master",
+                  )}
+                </span>
                 <span className="font-medium">45ms</span>
               </div>
               <div className="flex justify-between">
-                <span>Throughput</span>
+                <span>
+                  {t("master.system_overview.performance.throughput", "master")}
+                </span>
                 <span className="font-medium">1,200 req/s</span>
               </div>
               <div className="flex justify-between">
-                <span>Uptime</span>
+                <span>
+                  {t("master.system_overview.performance.uptime", "master")}
+                </span>
                 <span className="text-green-600 font-medium">99.98%</span>
               </div>
             </div>
@@ -97,11 +127,15 @@ export default function SystemOverviewPage() {
       {/* Real-time Monitoring */}
       <Card className="border-orange-200 dark:border-orange-800">
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Real-time Monitoring</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            {t("master.system_overview.monitoring.title", "master")}
+          </h3>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>CPU Usage</span>
+                <span>
+                  {t("master.system_overview.monitoring.cpu", "master")}
+                </span>
                 <span>23%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -110,7 +144,9 @@ export default function SystemOverviewPage() {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Memory Usage</span>
+                <span>
+                  {t("master.system_overview.monitoring.memory", "master")}
+                </span>
                 <span>67%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">

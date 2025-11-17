@@ -80,6 +80,8 @@ const translationRegistry: Record<string, TranslationStrings> = {
 
 ### Step 3: Update Page Component
 
+#### Client Component Pattern
+
 In your page component (`src/app/your-page/page.tsx`):
 
 ```typescript
@@ -90,6 +92,29 @@ import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider"
 export default function YourPage() {
   // Load your page-specific namespace
   const { t } = useDivineParsing(["your-page"]);
+
+  return (
+    <div>
+      <h1>{t("page.title")}</h1>
+      <p>{t("page.description")}</p>
+    </div>
+  );
+}
+```
+
+#### Server Component Pattern
+
+For server components, use `getServerTranslation`:
+
+```typescript
+import { getServerTranslation } from "@/lib/server-translations";
+import { requireAuth } from "@/lib/server-auth";
+
+export default async function YourPage() {
+  const session = await requireAuth();
+
+  // Create translation function
+  const t = (key: string) => getServerTranslation(key, "your-namespace", "es");
 
   return (
     <div>
@@ -232,6 +257,39 @@ export default function ContactPage() {
 }
 ```
 
+## Implementation Checklist
+
+When implementing i18n for a page, verify:
+
+- [ ] All hardcoded Spanish strings replaced
+- [ ] All hardcoded English strings replaced
+- [ ] Translation keys added to both `es` and `en` files
+- [ ] Namespace registered in ChunkedLanguageProvider (if new)
+- [ ] Correct hook/function used (client vs server)
+- [ ] Key naming follows conventions
+- [ ] Error messages translated
+- [ ] Loading states translated
+- [ ] Empty states translated
+- [ ] Button labels translated
+- [ ] Form labels and placeholders translated
+- [ ] Dialog/modal content translated
+- [ ] Page metadata (title, description) translated
+- [ ] No linting errors
+- [ ] Language switching works correctly
+
+## Common Pitfalls to Avoid
+
+1. **Don't forget error messages** - Often in catch blocks or error states
+2. **Don't forget loading states** - "Cargando...", "Loading..." etc.
+3. **Don't forget empty states** - "No hay datos", "No data available"
+4. **Don't forget button labels** - Even simple "Guardar", "Cancelar"
+5. **Don't forget dialog content** - Titles, descriptions, button labels
+6. **Don't forget form labels** - Input labels, placeholders, help text
+7. **Don't forget table headers** - Column names
+8. **Don't mix patterns** - Use server translations for server components, client hooks for client components
+9. **Don't create duplicate keys** - Check existing namespaces first
+10. **Don't forget metadata** - Page titles in metadata objects
+
 ## Testing Translations
 
 ### Development Mode Features
@@ -247,6 +305,14 @@ Run translation validation:
 ```bash
 npm run validate-translations
 ```
+
+### Visual Testing
+
+1. View page in browser, switch languages
+2. Verify all text changes when language switches
+3. Check for any remaining hardcoded strings
+4. Test error states and loading states
+5. Verify dialog/modal content translates
 
 ## Troubleshooting
 

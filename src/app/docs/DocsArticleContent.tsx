@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 interface DocsArticleContentProps {
   htmlContent: string;
@@ -17,6 +18,8 @@ export function DocsArticleContent({
   fileName,
   githubUrl,
 }: DocsArticleContentProps) {
+  const { t } = useDivineParsing(["common"]);
+
   return (
     <div className="min-h-screen bg-responsive-desktop bg-docs flex flex-col">
       <Header />
@@ -28,7 +31,7 @@ export function DocsArticleContent({
                 {fileName}
               </h1>
               <p className="text-center text-base md:text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3">
-                Especificación técnica desde la carpeta docs del proyecto
+                {t("docs.article.subtitle", "common")}
               </p>
             </div>
           </div>
@@ -36,7 +39,7 @@ export function DocsArticleContent({
           <Card className="backdrop-blur-xl bg-card/85 border border-border/80 rounded-2xl shadow-2xl">
             <CardHeader className="pb-4">
               <CardTitle className="text-foreground text-lg font-semibold">
-                Contenido del documento
+                {t("docs.article.content_title", "common")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -46,7 +49,7 @@ export function DocsArticleContent({
                   className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
                 >
                   <span aria-hidden>←</span>
-                  Volver al índice
+                  {t("docs.article.back_index", "common")}
                 </Link>
               </nav>
               <div
@@ -58,7 +61,7 @@ export function DocsArticleContent({
 
           <div className="backdrop-blur-xl bg-card/70 border border-border/70 rounded-2xl shadow-lg p-6 text-sm text-muted-foreground">
             <p>
-              Archivo:{" "}
+              {t("docs.article.file", "common")}{" "}
               <code className="bg-muted px-2 py-1 rounded">{fileName}</code>
             </p>
             <p className="mt-2">
@@ -68,7 +71,7 @@ export function DocsArticleContent({
                 rel="noopener noreferrer"
                 className="text-primary hover:text-primary/80 underline"
               >
-                Ver en GitHub →
+                {t("docs.article.view_github", "common")} →
               </a>
             </p>
           </div>
