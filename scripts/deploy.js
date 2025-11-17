@@ -289,7 +289,10 @@ class DeploymentManager {
         await this.runCommand("npm install -g vercel", "Installing Vercel CLI");
       }
 
-      await this.runCommand("vercel --prod --yes", "Deploying to Vercel");
+      await this.runCommand(
+        "vercel --prod --yes",
+        "Deploying to Vercel (plataforma-aramac)",
+      );
 
       this.success("Vercel deployment completed");
       return true;
