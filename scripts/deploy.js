@@ -104,16 +104,19 @@ class DeploymentManager {
 
     try {
       // Get current production build ID
-      const response = execSync("curl -s https://plataforma.aramac.dev | grep -o 'build_[0-9]*' | head -1", {
-        encoding: "utf8",
-      }).trim();
+      const response = execSync(
+        "curl -s https://plataforma.aramac.dev | grep -o 'build_[0-9]*' | head -1",
+        {
+          encoding: "utf8",
+        },
+      ).trim();
 
       if (!response) {
         this.warning("Could not fetch production build ID");
         return;
       }
 
-      const prodBuildId = response.replace('build_', '');
+      const prodBuildId = response.replace("build_", "");
       const prodTimestamp = parseInt(prodBuildId);
 
       // Get last git commit timestamp (rough approximation)
@@ -128,7 +131,9 @@ class DeploymentManager {
       if (driftHours > 24) {
         this.error(`🚨 PRODUCTION DRIFT DETECTED! 🚨`);
         this.error(`Production is ${driftHours.toFixed(1)} hours ahead of git`);
-        this.error(`Production build: ${new Date(prodTimestamp).toISOString()}`);
+        this.error(
+          `Production build: ${new Date(prodTimestamp).toISOString()}`,
+        );
         this.error(`Last git commit: ${new Date(gitTimestamp).toISOString()}`);
         this.error(``);
         this.error(`CRITICAL: Do NOT deploy until you resolve this drift!`);

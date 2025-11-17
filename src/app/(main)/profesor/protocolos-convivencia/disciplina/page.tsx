@@ -5,10 +5,23 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Shield, AlertTriangle, Clock, Users, FileText, Eye } from "lucide-react";
+import {
+  Shield,
+  AlertTriangle,
+  Clock,
+  Users,
+  FileText,
+  Eye,
+} from "lucide-react";
 
 function DisciplinaContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -16,23 +29,46 @@ function DisciplinaContent() {
   const protocolos = [
     {
       title: "Faltas Leves",
-      description: "Amonestaciones verbales y escritas por incumplimiento de normas básicas",
-      examples: ["Llegada tarde", "Falta de material", "Comportamiento disruptivo"],
-      measures: ["Amonestación verbal", "Registro en libro de clases", "Citación con apoderado"],
+      description:
+        "Amonestaciones verbales y escritas por incumplimiento de normas básicas",
+      examples: [
+        "Llegada tarde",
+        "Falta de material",
+        "Comportamiento disruptivo",
+      ],
+      measures: [
+        "Amonestación verbal",
+        "Registro en libro de clases",
+        "Citación con apoderado",
+      ],
       severity: "low",
     },
     {
       title: "Faltas Graves",
-      description: "Incumplimientos que afectan significativamente el proceso educativo",
+      description:
+        "Incumplimientos que afectan significativamente el proceso educativo",
       examples: ["Agresiones físicas", "Daño a propiedad", "Faltas reiteradas"],
-      measures: ["Suspensión temporal", "Reunión disciplinaria", "Plan de corrección"],
+      measures: [
+        "Suspensión temporal",
+        "Reunión disciplinaria",
+        "Plan de corrección",
+      ],
       severity: "high",
     },
     {
       title: "Faltas Muy Graves",
-      description: "Conductas que ponen en riesgo la integridad de la comunidad educativa",
-      examples: ["Violencia extrema", "Consumo de sustancias", "Acoso sistemático"],
-      measures: ["Expulsión temporal", "Consejo de profesores", "Intervención especializada"],
+      description:
+        "Conductas que ponen en riesgo la integridad de la comunidad educativa",
+      examples: [
+        "Violencia extrema",
+        "Consumo de sustancias",
+        "Acoso sistemático",
+      ],
+      measures: [
+        "Expulsión temporal",
+        "Consejo de profesores",
+        "Intervención especializada",
+      ],
       severity: "critical",
     },
   ];
@@ -40,11 +76,23 @@ function DisciplinaContent() {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "low":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Leve</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Leve
+          </Badge>
+        );
       case "high":
-        return <Badge variant="secondary" className="bg-orange-100 text-orange-800">Grave</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+            Grave
+          </Badge>
+        );
       case "critical":
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Muy Grave</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-red-100 text-red-800">
+            Muy Grave
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Leve</Badge>;
     }
@@ -146,7 +194,8 @@ function DisciplinaContent() {
                 <div>
                   <h4 className="font-semibold">Registro de la Falta</h4>
                   <p className="text-sm text-muted-foreground">
-                    Documentar detalladamente el incidente, incluyendo fecha, hora, involucrados y testigos.
+                    Documentar detalladamente el incidente, incluyendo fecha,
+                    hora, involucrados y testigos.
                   </p>
                 </div>
               </div>
@@ -157,7 +206,8 @@ function DisciplinaContent() {
                 <div>
                   <h4 className="font-semibold">Aplicación de Medidas</h4>
                   <p className="text-sm text-muted-foreground">
-                    Implementar las medidas correspondientes según la gravedad de la falta.
+                    Implementar las medidas correspondientes según la gravedad
+                    de la falta.
                   </p>
                 </div>
               </div>
@@ -168,7 +218,8 @@ function DisciplinaContent() {
                 <div>
                   <h4 className="font-semibold">Seguimiento</h4>
                   <p className="text-sm text-muted-foreground">
-                    Monitorear el cumplimiento de las medidas y evaluar la efectividad del proceso.
+                    Monitorear el cumplimiento de las medidas y evaluar la
+                    efectividad del proceso.
                   </p>
                 </div>
               </div>
@@ -183,7 +234,9 @@ function DisciplinaContent() {
 export default function DisciplinaPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar la página de protocolos de disciplina</div>}
+      fallback={
+        <div>Error al cargar la página de protocolos de disciplina</div>
+      }
     >
       <Suspense fallback={<LoadingState />}>
         <DisciplinaContent />

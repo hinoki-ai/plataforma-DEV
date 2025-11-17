@@ -58,6 +58,7 @@ const PARENT_TAB_ROUTES: Record<TabValue, string> = {
   grades: "/parent/libro-clases/calificaciones",
   observations: "/parent/libro-clases/observaciones",
   meetings: "/parent/libro-clases/reuniones",
+  calendar: "/parent/calendario-escolar",
 };
 
 const PARENT_TAB_HEADERS: Record<
@@ -70,7 +71,8 @@ const PARENT_TAB_HEADERS: Record<
   },
   attendance: {
     title: "Calendario Académico",
-    subtitle: "Calendario escolar completo con eventos, reuniones y seguimiento de asistencia",
+    subtitle:
+      "Calendario escolar completo con eventos, reuniones y seguimiento de asistencia",
   },
   grades: {
     title: "Calificaciones y Evaluaciones",
@@ -83,6 +85,10 @@ const PARENT_TAB_HEADERS: Record<
   meetings: {
     title: "Reuniones y Entrevistas",
     subtitle: "Confirma y registra acuerdos con profesorado e inspectoría",
+  },
+  calendar: {
+    title: "Calendario Escolar",
+    subtitle: "Visualiza eventos escolares, reuniones y actividades programadas",
   },
 };
 
@@ -588,8 +594,9 @@ export function ParentLibroClasesView({
                     <CardHeader>
                       <CardTitle>Calendario Académico y Asistencia</CardTitle>
                       <CardDescription>
-                        Visualiza el calendario escolar completo con eventos académicos,
-                        reuniones de apoderados y seguimiento de asistencia de tus hijos.
+                        Visualiza el calendario escolar completo con eventos
+                        académicos, reuniones de apoderados y seguimiento de
+                        asistencia de tus hijos.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -609,7 +616,9 @@ export function ParentLibroClasesView({
                           <p className="text-xs uppercase text-muted-foreground">
                             Eventos del Mes
                           </p>
-                          <p className="text-lg font-semibold">Calendario Integrado</p>
+                          <p className="text-lg font-semibold">
+                            Calendario Integrado
+                          </p>
                           <p className="text-xs text-muted-foreground">
                             Eventos académicos, reuniones y actividades
                           </p>
@@ -618,7 +627,9 @@ export function ParentLibroClasesView({
                           <p className="text-xs uppercase text-muted-foreground">
                             Asistencia Familiar
                           </p>
-                          <p className="text-lg font-semibold">Seguimiento en Tiempo Real</p>
+                          <p className="text-lg font-semibold">
+                            Seguimiento en Tiempo Real
+                          </p>
                           <p className="text-xs text-muted-foreground">
                             Notificaciones automáticas de ausencias
                           </p>

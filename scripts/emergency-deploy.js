@@ -42,16 +42,19 @@ class EmergencyDeployer {
     this.log("Checking production drift...", "🔍");
 
     try {
-      const response = execSync("curl -s https://plataforma.aramac.dev | grep -o 'build_[0-9]*' | head -1", {
-        encoding: "utf8",
-      }).trim();
+      const response = execSync(
+        "curl -s https://plataforma.aramac.dev | grep -o 'build_[0-9]*' | head -1",
+        {
+          encoding: "utf8",
+        },
+      ).trim();
 
       if (!response) {
         this.warning("Could not fetch production build ID");
         return false;
       }
 
-      const prodBuildId = response.replace('build_', '');
+      const prodBuildId = response.replace("build_", "");
       const prodTimestamp = parseInt(prodBuildId);
 
       const lastCommit = execSync("git log -1 --format=%ct", {
@@ -131,7 +134,9 @@ class EmergencyDeployer {
 
   async getGitStatus() {
     try {
-      const status = execSync("git status --porcelain", { encoding: "utf8" }).trim();
+      const status = execSync("git status --porcelain", {
+        encoding: "utf8",
+      }).trim();
       return status.length === 0 ? "Clean ✅" : "Uncommitted changes ⚠️";
     } catch {
       return "Unknown";
@@ -141,7 +146,9 @@ class EmergencyDeployer {
   async runEmergencyDeploy() {
     try {
       console.log("\n🚨 EMERGENCY DEPLOYMENT MODE 🚨");
-      console.log("This script is for solo developers when production/git are out of sync");
+      console.log(
+        "This script is for solo developers when production/git are out of sync",
+      );
       console.log("=".repeat(70));
 
       // Step 1: Check for drift
@@ -161,7 +168,6 @@ class EmergencyDeployer {
 
       this.success("Emergency deployment completed");
       this.warning("Monitor production closely for issues");
-
     } catch (error) {
       this.error(`Emergency deployment failed: ${error.message}`);
       process.exit(1);
@@ -181,7 +187,9 @@ async function main() {
     console.log("  --skip-drift-check   Skip production drift detection");
     console.log("  --help, -h          Show this help");
     console.log("");
-    console.log("WARNING: Only use this when production and git are out of sync!");
+    console.log(
+      "WARNING: Only use this when production and git are out of sync!",
+    );
     process.exit(0);
   }
 

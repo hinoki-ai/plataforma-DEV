@@ -4,6 +4,7 @@ import { ParentMeetingTabs } from "@/components/meetings/ParentMeetingTabs";
 import { requireAuth } from "@/lib/server-auth";
 import { getRoleAccess } from "@/lib/role-utils";
 import { redirect } from "next/navigation";
+import { getServerTranslation } from "@/lib/server-translations";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,8 @@ export default async function ParentReunionesPage() {
     redirect("/unauthorized");
   }
 
+  const t = (key: string) => getServerTranslation(key, "parent", "es");
+
   return (
     <PageTransition skeletonType="page" duration={700}>
       <div className="min-h-screen bg-background">
@@ -57,12 +60,10 @@ export default async function ParentReunionesPage() {
                 </svg>
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
-                Reuniones de Apoderados
+                {t("parent.meetings.page_title")}
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Mantén una comunicación efectiva con los profesores de tu
-                estudiante. Visualiza las reuniones programadas y solicita
-                nuevas citas cuando sea necesario.
+                {t("parent.meetings.page_description")}
               </p>
             </div>
           </div>

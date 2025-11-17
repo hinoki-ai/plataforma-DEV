@@ -1,6 +1,7 @@
 # 🚨 Solo Developer Emergency Guide
 
 ## Current Situation
+
 - **Production**: Working perfectly ✅ (build_1762217516467 - Nov 17, 2025)
 - **Git Repository**: 13 days behind ❌ (last commit Nov 4, 2025)
 - **Status**: Production contains uncommitted changes
@@ -8,12 +9,14 @@
 ## Immediate Action Plan
 
 ### 1. DO NOT DEPLOY YET
+
 ```bash
 # ❌ DON'T DO THIS
 npm run deploy
 ```
 
 ### 2. Preserve Production Code
+
 ```bash
 # Create comprehensive backup
 mkdir -p emergency-backup
@@ -26,14 +29,17 @@ curl -s https://plataforma.aramac.dev/api/health >> PRODUCTION_STATE.md
 ```
 
 ### 3. Extract Production Source Code
+
 Since you lost your local files, you need to recover the production code:
 
 **Option A: Contact Vercel Support**
+
 - Go to Vercel dashboard → Support
 - Request deployment source code access
 - Explain: "Lost local files, need to recover production source"
 
 **Option B: Reverse Engineer (Complex)**
+
 ```bash
 # Extract built JavaScript from production
 curl -s https://plataforma.aramac.dev/_next/static/chunks/ | grep -o '"[^"]*\.js"' | head -10
@@ -41,6 +47,7 @@ curl -s https://plataforma.aramac.dev/_next/static/chunks/ | grep -o '"[^"]*\.js
 ```
 
 **Option C: Recreate from Memory**
+
 - Start with your current git state (Nov 4)
 - Manually add the features you remember implementing
 - Test against production behavior
@@ -48,18 +55,21 @@ curl -s https://plataforma.aramac.dev/_next/static/chunks/ | grep -o '"[^"]*\.js
 ## Medium-Term Recovery (1-2 Days)
 
 ### 4. Set Up Deployment Safeguards
+
 ```bash
 # Test the new drift detection
 npm run deploy  # Should now block due to drift
 ```
 
 ### 5. Create Multiple Backup Strategies
+
 ```bash
 # Set up automatic backups
 echo "0 2 * * * rsync -av /path/to/project user@backup-server:/backups/" | crontab -
 ```
 
 ### 6. Implement Version Control Best Practices
+
 ```bash
 # Create feature branches even when solo
 git checkout -b emergency-recovery
@@ -70,6 +80,7 @@ git commit -m "emergency: recover production code state"
 ## Long-Term Prevention (1-2 Weeks)
 
 ### 7. Solo Developer Deployment Workflow
+
 ```bash
 # New workflow - ALWAYS follow this
 git checkout main
@@ -81,12 +92,14 @@ npm run deploy  # Now includes drift detection
 ```
 
 ### 8. Set Up Automated Monitoring
+
 ```bash
 # Create health check cron job
 echo "*/30 * * * * curl -s https://plataforma.aramac.dev/api/health || echo 'Site down!' | mail -s 'Site Alert' your@email.com" | crontab -
 ```
 
 ### 9. Create Emergency Recovery Scripts
+
 ```bash
 # Test emergency deployment
 npm run deploy:emergency  # Will warn about drift and require confirmation
@@ -95,6 +108,7 @@ npm run deploy:emergency  # Will warn about drift and require confirmation
 ## Critical Solo Developer Rules
 
 ### ✅ DO:
+
 - Always check `npm run deploy` before major changes
 - Keep detailed commit messages
 - Use feature branches even when solo
@@ -102,6 +116,7 @@ npm run deploy:emergency  # Will warn about drift and require confirmation
 - Test deployments in staging first
 
 ### ❌ DON'T:
+
 - Deploy without drift check
 - Work directly on main branch
 - Skip backups
@@ -111,6 +126,7 @@ npm run deploy:emergency  # Will warn about drift and require confirmation
 ## Emergency Contact Protocol
 
 When things go wrong:
+
 1. **Don't panic** - your production site is working
 2. **Check health**: `curl https://plataforma.aramac.dev/api/health`
 3. **Use emergency deploy**: `npm run deploy:emergency`
@@ -134,7 +150,9 @@ npm run verify-deployment # Check deployment readiness
 ```
 
 ## Remember
+
 You're not alone in this - many solo developers face this exact situation. The key is:
+
 1. **Preserve what's working** (production site)
 2. **Implement safeguards** (drift detection)
 3. **Create recovery procedures** (emergency scripts)

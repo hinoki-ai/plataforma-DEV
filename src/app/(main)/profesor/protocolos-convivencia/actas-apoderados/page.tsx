@@ -5,14 +5,42 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Upload, FileText, Download, Eye, Calendar, User, Users } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Upload,
+  FileText,
+  Download,
+  Eye,
+  Calendar,
+  User,
+  Users,
+} from "lucide-react";
 
 function ActasApoderadosContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -56,22 +84,36 @@ function ActasApoderadosContent() {
     },
   ];
 
-  const filteredActas = actas.filter(acta => {
-    const matchesSearch = acta.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         acta.parent.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         acta.reason.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStudent = selectedStudent === "all" || acta.student === selectedStudent;
+  const filteredActas = actas.filter((acta) => {
+    const matchesSearch =
+      acta.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      acta.parent.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      acta.reason.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStudent =
+      selectedStudent === "all" || acta.student === selectedStudent;
     return matchesSearch && matchesStudent;
   });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "completado":
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Completado</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Completado
+          </Badge>
+        );
       case "pendiente_revision":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Pendiente Revisión</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Pendiente Revisión
+          </Badge>
+        );
       case "borrador":
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Borrador</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-gray-100 text-gray-800">
+            Borrador
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Completado</Badge>;
     }
@@ -94,7 +136,10 @@ function ActasApoderadosContent() {
               <FileText className="w-4 h-4 mr-2" />
               {filteredActas.length} Actas
             </Badge>
-            <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+            <Dialog
+              open={isUploadDialogOpen}
+              onOpenChange={setIsUploadDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button>
                   <Upload className="w-4 h-4 mr-2" />
@@ -123,15 +168,21 @@ function ActasApoderadosContent() {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Tipo de Entrevista</label>
+                    <label className="text-sm font-medium">
+                      Tipo de Entrevista
+                    </label>
                     <Select>
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccionar tipo" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="inicial">Entrevista Inicial</SelectItem>
+                        <SelectItem value="inicial">
+                          Entrevista Inicial
+                        </SelectItem>
                         <SelectItem value="seguimiento">Seguimiento</SelectItem>
-                        <SelectItem value="disciplinaria">Entrevista Disciplinaria</SelectItem>
+                        <SelectItem value="disciplinaria">
+                          Entrevista Disciplinaria
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -145,7 +196,10 @@ function ActasApoderadosContent() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsUploadDialogOpen(false)}
+                  >
                     Cancelar
                   </Button>
                   <Button onClick={() => setIsUploadDialogOpen(false)}>
@@ -172,14 +226,19 @@ function ActasApoderadosContent() {
                   />
                 </div>
               </div>
-              <Select value={selectedStudent} onValueChange={setSelectedStudent}>
+              <Select
+                value={selectedStudent}
+                onValueChange={setSelectedStudent}
+              >
                 <SelectTrigger className="w-full md:w-48">
                   <SelectValue placeholder="Estudiante" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos los estudiantes</SelectItem>
                   <SelectItem value="María González">María González</SelectItem>
-                  <SelectItem value="Carlos Rodríguez">Carlos Rodríguez</SelectItem>
+                  <SelectItem value="Carlos Rodríguez">
+                    Carlos Rodríguez
+                  </SelectItem>
                   <SelectItem value="Pedro Martínez">Pedro Martínez</SelectItem>
                 </SelectContent>
               </Select>
@@ -198,7 +257,9 @@ function ActasApoderadosContent() {
                       <User className="w-5 h-5 text-blue-500" />
                       <div>
                         <p className="font-medium">{acta.student}</p>
-                        <p className="text-sm text-muted-foreground">Apoderado: {acta.parent}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Apoderado: {acta.parent}
+                        </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -215,7 +276,9 @@ function ActasApoderadosContent() {
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium">Subido por: {acta.uploadedBy}</p>
+                        <p className="text-sm font-medium">
+                          Subido por: {acta.uploadedBy}
+                        </p>
                       </div>
                     </div>
                     <div className="mt-3">
@@ -245,7 +308,9 @@ function ActasApoderadosContent() {
           <Card>
             <CardContent className="p-12 text-center">
               <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No se encontraron actas</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                No se encontraron actas
+              </h3>
               <p className="text-muted-foreground">
                 No hay actas que coincidan con los criterios de búsqueda.
               </p>
@@ -258,15 +323,19 @@ function ActasApoderadosContent() {
           <CardHeader>
             <CardTitle>Documentos Institucionales Relacionados</CardTitle>
             <CardDescription>
-              Documentos del listado institucional relacionados con entrevistas y convivencia
+              Documentos del listado institucional relacionados con entrevistas
+              y convivencia
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">51. Registros de Entrevistas con Familias</h4>
+                <h4 className="font-semibold mb-2">
+                  51. Registros de Entrevistas con Familias
+                </h4>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Documentación sistemática de todas las entrevistas realizadas con apoderados y familias.
+                  Documentación sistemática de todas las entrevistas realizadas
+                  con apoderados y familias.
                 </p>
                 <Button size="sm" variant="outline">
                   <Download className="w-4 h-4 mr-2" />
@@ -274,9 +343,12 @@ function ActasApoderadosContent() {
                 </Button>
               </div>
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">66. Actas de Reuniones de Apoderados</h4>
+                <h4 className="font-semibold mb-2">
+                  66. Actas de Reuniones de Apoderados
+                </h4>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Registro oficial de reuniones y entrevistas grupales con apoderados.
+                  Registro oficial de reuniones y entrevistas grupales con
+                  apoderados.
                 </p>
                 <Button size="sm" variant="outline">
                   <Download className="w-4 h-4 mr-2" />

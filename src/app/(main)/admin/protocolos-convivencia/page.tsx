@@ -5,10 +5,25 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Shield, Award, AlertTriangle, Users, BookOpen, Settings, BarChart3 } from "lucide-react";
+import {
+  FileText,
+  Shield,
+  Award,
+  AlertTriangle,
+  Users,
+  BookOpen,
+  Settings,
+  BarChart3,
+} from "lucide-react";
 import Link from "next/link";
 
 function ProtocolosConvivenciaAdminContent() {
@@ -66,9 +81,21 @@ function ProtocolosConvivenciaAdminContent() {
   ];
 
   const recentActivity = [
-    { action: "Nueva norma creada", user: "María González", time: "2 horas atrás" },
-    { action: "Medida correctiva aplicada", user: "Carlos Rodríguez", time: "5 horas atrás" },
-    { action: "Reconocimiento otorgado", user: "Ana López", time: "1 día atrás" },
+    {
+      action: "Nueva norma creada",
+      user: "María González",
+      time: "2 horas atrás",
+    },
+    {
+      action: "Medida correctiva aplicada",
+      user: "Carlos Rodríguez",
+      time: "5 horas atrás",
+    },
+    {
+      action: "Reconocimiento otorgado",
+      user: "Ana López",
+      time: "1 día atrás",
+    },
   ];
 
   return (
@@ -80,7 +107,8 @@ function ProtocolosConvivenciaAdminContent() {
               {t("nav.protocolos_convivencia", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
-              Panel administrativo para gestión integral de protocolos de convivencia
+              Panel administrativo para gestión integral de protocolos de
+              convivencia
             </p>
           </div>
           <div className="flex items-center space-x-2">
@@ -102,7 +130,9 @@ function ProtocolosConvivenciaAdminContent() {
               <div className="flex items-center">
                 <Users className="w-8 h-8 text-blue-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Normas Activas</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Normas Activas
+                  </p>
                   <p className="text-2xl font-bold">12</p>
                 </div>
               </div>
@@ -113,7 +143,9 @@ function ProtocolosConvivenciaAdminContent() {
               <div className="flex items-center">
                 <AlertTriangle className="w-8 h-8 text-orange-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Casos este Mes</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Casos este Mes
+                  </p>
                   <p className="text-2xl font-bold">23</p>
                 </div>
               </div>
@@ -124,7 +156,9 @@ function ProtocolosConvivenciaAdminContent() {
               <div className="flex items-center">
                 <Award className="w-8 h-8 text-green-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Reconocimientos</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Reconocimientos
+                  </p>
                   <p className="text-2xl font-bold">156</p>
                 </div>
               </div>
@@ -135,7 +169,9 @@ function ProtocolosConvivenciaAdminContent() {
               <div className="flex items-center">
                 <BarChart3 className="w-8 h-8 text-purple-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Tasa de Éxito</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Tasa de Éxito
+                  </p>
                   <p className="text-2xl font-bold">87%</p>
                 </div>
               </div>
@@ -146,7 +182,10 @@ function ProtocolosConvivenciaAdminContent() {
         {/* Subcategories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {subcategories.map((category, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card
+              key={index}
+              className="hover:shadow-lg transition-shadow cursor-pointer"
+            >
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
                   <div className={`p-2 rounded-lg ${category.color}`}>
@@ -186,10 +225,15 @@ function ProtocolosConvivenciaAdminContent() {
           <CardContent>
             <div className="space-y-4">
               {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center justify-between py-2 border-b last:border-b-0">
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-2 border-b last:border-b-0"
+                >
                   <div>
                     <p className="font-medium">{activity.action}</p>
-                    <p className="text-sm text-muted-foreground">por {activity.user}</p>
+                    <p className="text-sm text-muted-foreground">
+                      por {activity.user}
+                    </p>
                   </div>
                   <Badge variant="outline">{activity.time}</Badge>
                 </div>
@@ -205,7 +249,11 @@ function ProtocolosConvivenciaAdminContent() {
 export default function ProtocolosComportamientoAdminPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar el panel administrativo de protocolos de convivencia</div>}
+      fallback={
+        <div>
+          Error al cargar el panel administrativo de protocolos de convivencia
+        </div>
+      }
     >
       <Suspense fallback={<LoadingState />}>
         <ProtocolosConvivenciaAdminContent />

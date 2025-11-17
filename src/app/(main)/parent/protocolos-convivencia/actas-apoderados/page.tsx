@@ -5,7 +5,13 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, Download, Eye, MessageCircle } from "lucide-react";
@@ -60,9 +66,10 @@ function ActasApoderadosParentContent() {
           </CardHeader>
           <CardContent>
             <p className="text-blue-700">
-              Las actas de entrevistas documentan las conversaciones mantenidas entre el colegio
-              y los apoderados. Estas actas son confidenciales y solo pueden ser accedidas por
-              las partes involucradas según las normativas de protección de datos.
+              Las actas de entrevistas documentan las conversaciones mantenidas
+              entre el colegio y los apoderados. Estas actas son confidenciales
+              y solo pueden ser accedidas por las partes involucradas según las
+              normativas de protección de datos.
             </p>
           </CardContent>
         </Card>
@@ -78,7 +85,10 @@ function ActasApoderadosParentContent() {
           <CardContent>
             <div className="space-y-4">
               {myInterviews.map((interview) => (
-                <div key={interview.id} className="flex items-center justify-between p-4 border rounded-lg">
+                <div
+                  key={interview.id}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
                   <div>
                     <p className="font-medium">{interview.student}</p>
                     <p className="text-sm text-muted-foreground">
@@ -89,8 +99,13 @@ function ActasApoderadosParentContent() {
                     </p>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      {interview.status === 'completado' ? 'Completada' : 'Pendiente'}
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-100 text-green-800"
+                    >
+                      {interview.status === "completado"
+                        ? "Completada"
+                        : "Pendiente"}
                     </Badge>
                     <div className="flex space-x-1">
                       <Button size="sm" variant="outline">
@@ -112,13 +127,16 @@ function ActasApoderadosParentContent() {
           <CardHeader>
             <CardTitle>Documentos Relacionados</CardTitle>
             <CardDescription>
-              Documentos institucionales que complementan las actas de entrevistas
+              Documentos institucionales que complementan las actas de
+              entrevistas
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">Reglamento de Convivencia Escolar</h4>
+                <h4 className="font-semibold mb-2">
+                  Reglamento de Convivencia Escolar
+                </h4>
                 <p className="text-sm text-muted-foreground mb-3">
                   Marco normativo que regula la convivencia escolar.
                 </p>
@@ -128,7 +146,9 @@ function ActasApoderadosParentContent() {
                 </Button>
               </div>
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">Protocolos de Comunicación</h4>
+                <h4 className="font-semibold mb-2">
+                  Protocolos de Comunicación
+                </h4>
                 <p className="text-sm text-muted-foreground mb-3">
                   Guías para una comunicación efectiva con el colegio.
                 </p>

@@ -5,10 +5,26 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Award, Star, Trophy, Heart, Users, FileText, Plus, Calendar, TrendingUp } from "lucide-react";
+import {
+  Award,
+  Star,
+  Trophy,
+  Heart,
+  Users,
+  FileText,
+  Plus,
+  Calendar,
+  TrendingUp,
+} from "lucide-react";
 
 function ReconocimientosAdminContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
@@ -45,9 +61,24 @@ function ReconocimientosAdminContent() {
   ];
 
   const recentAwards = [
-    { recipient: "Ana García", type: "Estudiante del Mes", date: "2024-11-15", category: "individual" },
-    { recipient: "Curso 8°A", type: "Equipo Solidario", date: "2024-11-10", category: "group" },
-    { recipient: "Proyecto Reciclaje", type: "Proyecto Innovador", date: "2024-11-08", category: "project" },
+    {
+      recipient: "Ana García",
+      type: "Estudiante del Mes",
+      date: "2024-11-15",
+      category: "individual",
+    },
+    {
+      recipient: "Curso 8°A",
+      type: "Equipo Solidario",
+      date: "2024-11-10",
+      category: "group",
+    },
+    {
+      recipient: "Proyecto Reciclaje",
+      type: "Proyecto Innovador",
+      date: "2024-11-08",
+      category: "project",
+    },
   ];
 
   const getCategoryIcon = (category: string) => {
@@ -66,11 +97,23 @@ function ReconocimientosAdminContent() {
   const getCategoryBadge = (category: string) => {
     switch (category) {
       case "individual":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Individual</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+            Individual
+          </Badge>
+        );
       case "group":
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-800">Grupal</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+            Grupal
+          </Badge>
+        );
       case "project":
-        return <Badge variant="secondary" className="bg-purple-100 text-purple-800">Proyecto</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+            Proyecto
+          </Badge>
+        );
       default:
         return <Badge variant="secondary">Individual</Badge>;
     }
@@ -82,7 +125,8 @@ function ReconocimientosAdminContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Gestión de {t("nav.protocolos_comportamiento.reconocimientos", "navigation")}
+              Gestión de{" "}
+              {t("nav.protocolos_comportamiento.reconocimientos", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Administración del sistema de reconocimientos y premios
@@ -91,7 +135,8 @@ function ReconocimientosAdminContent() {
           <div className="flex items-center space-x-2">
             <Badge variant="outline">
               <Award className="w-4 h-4 mr-2" />
-              {reconocimientos.reduce((sum, r) => sum + r.awarded, 0)} Reconocimientos
+              {reconocimientos.reduce((sum, r) => sum + r.awarded, 0)}{" "}
+              Reconocimientos
             </Badge>
             <Button>
               <Plus className="w-4 h-4 mr-2" />
@@ -116,7 +161,9 @@ function ReconocimientosAdminContent() {
               <CardContent>
                 <div className="grid grid-cols-3 gap-4 mb-4">
                   <div className="text-center">
-                    <p className="text-2xl font-bold">{reconocimiento.awarded}</p>
+                    <p className="text-2xl font-bold">
+                      {reconocimiento.awarded}
+                    </p>
                     <p className="text-sm text-muted-foreground">Otorgados</p>
                   </div>
                   <div className="text-center">
@@ -127,12 +174,16 @@ function ReconocimientosAdminContent() {
                     <p className="text-sm text-muted-foreground">Tendencia</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-bold">{reconocimiento.nextAward}</p>
+                    <p className="text-sm font-bold">
+                      {reconocimiento.nextAward}
+                    </p>
                     <p className="text-sm text-muted-foreground">Próximo</p>
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t">
-                  <span className="text-sm text-muted-foreground">Este año</span>
+                  <span className="text-sm text-muted-foreground">
+                    Este año
+                  </span>
                   <Button size="sm" variant="outline">
                     Gestionar
                   </Button>
@@ -156,12 +207,17 @@ function ReconocimientosAdminContent() {
           <CardContent>
             <div className="space-y-4">
               {recentAwards.map((award, index) => (
-                <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     {getCategoryIcon(award.category)}
                     <div>
                       <p className="font-medium">{award.recipient}</p>
-                      <p className="text-sm text-muted-foreground">{award.type}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {award.type}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
@@ -206,7 +262,9 @@ function ReconocimientosAdminContent() {
 export default function ReconocimientosAdminPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar la página de gestión de reconocimientos</div>}
+      fallback={
+        <div>Error al cargar la página de gestión de reconocimientos</div>
+      }
     >
       <Suspense fallback={<LoadingState />}>
         <ReconocimientosAdminContent />

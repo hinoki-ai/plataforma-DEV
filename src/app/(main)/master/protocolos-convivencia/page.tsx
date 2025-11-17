@@ -5,10 +5,27 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Shield, Award, AlertTriangle, Users, BookOpen, Settings, BarChart3, Globe, Database } from "lucide-react";
+import {
+  FileText,
+  Shield,
+  Award,
+  AlertTriangle,
+  Users,
+  BookOpen,
+  Settings,
+  BarChart3,
+  Globe,
+  Database,
+} from "lucide-react";
 import Link from "next/link";
 
 function ProtocolosComportamientoMasterContent() {
@@ -24,10 +41,25 @@ function ProtocolosComportamientoMasterContent() {
   };
 
   const globalStats = [
-    { label: "Casos Resueltos (Mes)", value: "156", change: "+12%", trend: "up" },
+    {
+      label: "Casos Resueltos (Mes)",
+      value: "156",
+      change: "+12%",
+      trend: "up",
+    },
     { label: "Tasa de Éxito", value: "94.2%", change: "+2.1%", trend: "up" },
-    { label: "Tiempo Promedio Resolución", value: "3.2 días", change: "-0.5 días", trend: "up" },
-    { label: "Satisfacción Institucional", value: "96%", change: "+1.5%", trend: "up" },
+    {
+      label: "Tiempo Promedio Resolución",
+      value: "3.2 días",
+      change: "-0.5 días",
+      trend: "up",
+    },
+    {
+      label: "Satisfacción Institucional",
+      value: "96%",
+      change: "+1.5%",
+      trend: "up",
+    },
   ];
 
   const subcategories = [
@@ -42,7 +74,8 @@ function ProtocolosComportamientoMasterContent() {
     },
     {
       title: t("nav.protocolos_comportamiento.disciplina", "navigation"),
-      description: "Supervisión de casos disciplinarios en todas las instituciones",
+      description:
+        "Supervisión de casos disciplinarios en todas las instituciones",
       href: "/master/protocolos-comportamiento/disciplina",
       icon: Shield,
       color: "bg-red-500",
@@ -70,9 +103,21 @@ function ProtocolosComportamientoMasterContent() {
   ];
 
   const criticalAlerts = [
-    { institution: "Colegio San José", issue: "Aumento de casos disciplinarios", severity: "high" },
-    { institution: "Liceo Nacional", issue: "Sistema de reconocimientos inactivo", severity: "medium" },
-    { institution: "Escuela República", issue: "Normas desactualizadas", severity: "low" },
+    {
+      institution: "Colegio San José",
+      issue: "Aumento de casos disciplinarios",
+      severity: "high",
+    },
+    {
+      institution: "Liceo Nacional",
+      issue: "Sistema de reconocimientos inactivo",
+      severity: "medium",
+    },
+    {
+      institution: "Escuela República",
+      issue: "Normas desactualizadas",
+      severity: "low",
+    },
   ];
 
   return (
@@ -84,7 +129,8 @@ function ProtocolosComportamientoMasterContent() {
               Protocolos de Comportamiento - Control Maestro
             </h1>
             <p className="text-muted-foreground mt-2">
-              Supervisión global del sistema de comportamiento en todas las instituciones
+              Supervisión global del sistema de comportamiento en todas las
+              instituciones
             </p>
           </div>
           <div className="flex items-center space-x-2">
@@ -106,8 +152,12 @@ function ProtocolosComportamientoMasterContent() {
               <div className="flex items-center">
                 <Database className="w-8 h-8 text-blue-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Instituciones</p>
-                  <p className="text-2xl font-bold">{systemOverview.institutions}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Instituciones
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {systemOverview.institutions}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -117,8 +167,12 @@ function ProtocolosComportamientoMasterContent() {
               <div className="flex items-center">
                 <Users className="w-8 h-8 text-green-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Estudiantes</p>
-                  <p className="text-2xl font-bold">{systemOverview.totalStudents.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Estudiantes
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {systemOverview.totalStudents.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -128,8 +182,12 @@ function ProtocolosComportamientoMasterContent() {
               <div className="flex items-center">
                 <Shield className="w-8 h-8 text-orange-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Casos Activos</p>
-                  <p className="text-2xl font-bold">{systemOverview.activeCases}</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Casos Activos
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {systemOverview.activeCases}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -139,8 +197,12 @@ function ProtocolosComportamientoMasterContent() {
               <div className="flex items-center">
                 <BarChart3 className="w-8 h-8 text-purple-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Salud del Sistema</p>
-                  <p className="text-2xl font-bold">{systemOverview.systemHealth}%</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Salud del Sistema
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {systemOverview.systemHealth}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -158,10 +220,18 @@ function ProtocolosComportamientoMasterContent() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {globalStats.map((stat, index) => (
-                <div key={index} className="text-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  key={index}
+                  className="text-center p-4 bg-gray-50 rounded-lg"
+                >
                   <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground mb-1">{stat.label}</div>
-                  <Badge variant={stat.trend === 'up' ? 'secondary' : 'outline'} className="text-xs">
+                  <div className="text-sm text-muted-foreground mb-1">
+                    {stat.label}
+                  </div>
+                  <Badge
+                    variant={stat.trend === "up" ? "secondary" : "outline"}
+                    className="text-xs"
+                  >
                     {stat.change}
                   </Badge>
                 </div>
@@ -181,13 +251,30 @@ function ProtocolosComportamientoMasterContent() {
           <CardContent>
             <div className="space-y-3">
               {criticalAlerts.map((alert, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border"
+                >
                   <div>
                     <p className="font-medium">{alert.institution}</p>
-                    <p className="text-sm text-muted-foreground">{alert.issue}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {alert.issue}
+                    </p>
                   </div>
-                  <Badge variant={alert.severity === 'high' ? 'destructive' : alert.severity === 'medium' ? 'secondary' : 'outline'}>
-                    {alert.severity === 'high' ? 'Alta' : alert.severity === 'medium' ? 'Media' : 'Baja'}
+                  <Badge
+                    variant={
+                      alert.severity === "high"
+                        ? "destructive"
+                        : alert.severity === "medium"
+                          ? "secondary"
+                          : "outline"
+                    }
+                  >
+                    {alert.severity === "high"
+                      ? "Alta"
+                      : alert.severity === "medium"
+                        ? "Media"
+                        : "Baja"}
                   </Badge>
                 </div>
               ))}
@@ -198,7 +285,10 @@ function ProtocolosComportamientoMasterContent() {
         {/* Subcategories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {subcategories.map((category, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card
+              key={index}
+              className="hover:shadow-lg transition-shadow cursor-pointer"
+            >
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
                   <div className={`p-2 rounded-lg ${category.color}`}>
@@ -237,7 +327,8 @@ function ProtocolosComportamientoMasterContent() {
           <CardHeader>
             <CardTitle>Controles Maestros del Sistema</CardTitle>
             <CardDescription>
-              Herramientas avanzadas para gestión global del sistema de comportamiento
+              Herramientas avanzadas para gestión global del sistema de
+              comportamiento
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -269,7 +360,11 @@ function ProtocolosComportamientoMasterContent() {
 export default function ProtocolosComportamientoMasterPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar el panel maestro de protocolos de comportamiento</div>}
+      fallback={
+        <div>
+          Error al cargar el panel maestro de protocolos de comportamiento
+        </div>
+      }
     >
       <Suspense fallback={<LoadingState />}>
         <ProtocolosComportamientoMasterContent />

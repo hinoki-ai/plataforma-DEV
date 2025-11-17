@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 import { createApiRoute } from "@/lib/api-validation";
 import { createSuccessResponse } from "@/lib/api-error";
@@ -16,7 +16,7 @@ export const GET = createApiRoute(
     }
 
     const teacherId = session.user.id as unknown as Id<"users">;
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Optimized parallel queries for teacher data with error handling
     const [teacherInfo, studentsData, planningData, meetingsData, coursesData] =

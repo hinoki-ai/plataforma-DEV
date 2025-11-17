@@ -130,7 +130,7 @@ function VotacionesContent() {
       }
     } catch (err) {
       console.error("Error fetching voting sessions:", err);
-      setError("Error al cargar las votaciones");
+      setError(t("parent.voting.error_loading"));
     } finally {
       setLoading(false);
     }
@@ -138,7 +138,7 @@ function VotacionesContent() {
 
   const handleVoteSubmit = async () => {
     if (!selectedSession || selectedOptions.length === 0) {
-      toast.error("Por favor selecciona al menos una opción");
+      toast.error(t("parent.voting.select_at_least_one"));
       return;
     }
 
@@ -161,17 +161,17 @@ function VotacionesContent() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Error al registrar el voto");
+        throw new Error(error.error || t("parent.voting.error_registering"));
       }
 
-      toast.success("¡Voto registrado exitosamente!");
+      toast.success(t("parent.voting.vote_registered"));
 
       // Refresh voting sessions to get updated data
       await fetchVotingSessions();
       setSelectedOptions([]);
     } catch (err: any) {
       console.error("Error submitting vote:", err);
-      toast.error(err.message || "Error al registrar el voto");
+      toast.error(err.message || t("parent.voting.error_registering"));
     } finally {
       setSubmitting(false);
     }
@@ -182,14 +182,14 @@ function VotacionesContent() {
     const now = new Date();
     const diff = end.getTime() - now.getTime();
 
-    if (diff <= 0) return "Finalizada";
+    if (diff <= 0) return t("parent.voting.finished");
 
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-    if (days > 0) return `${days} días`;
-    if (hours > 0) return `${hours} horas`;
-    return "Menos de 1 hora";
+    if (days > 0) return `${days} ${t("parent.voting.time.days")}`;
+    if (hours > 0) return `${hours} ${t("parent.voting.time.hours")}`;
+    return t("parent.voting.time.less_than_hour");
   };
 
   const getCategoryColor = (category: string) => {
@@ -245,10 +245,10 @@ function VotacionesContent() {
       <div className="space-y-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Votaciones Escolares
+            {t("parent.voting.page_title")}
           </h1>
           <p className="text-muted-foreground">
-            Participa en las decisiones que afectan a la comunidad escolar
+            {t("parent.voting.page_description")}
           </p>
         </div>
         <div className="text-center py-16">
@@ -266,11 +266,11 @@ function VotacionesContent() {
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Error al cargar votaciones
+            {t("parent.voting.error_loading")}
           </h3>
           <p className="text-gray-600">{error}</p>
           <Button onClick={fetchVotingSessions} className="mt-4">
-            Reintentar
+            {t("parent.voting.retry")}
           </Button>
         </div>
       </div>
@@ -284,10 +284,10 @@ function VotacionesContent() {
     <div className="space-y-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          Votaciones Escolares
+          {t("parent.voting.page_title")}
         </h1>
         <p className="text-muted-foreground">
-          Participa en las decisiones que afectan a la comunidad escolar
+          {t("parent.voting.page_description")}
         </p>
       </div>
 
@@ -299,10 +299,10 @@ function VotacionesContent() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Vote className="h-5 w-5" />
-                Votaciones Disponibles
+                {t("parent.voting.available")}
               </CardTitle>
               <CardDescription>
-                Selecciona una votación para participar
+                {t("parent.voting.select_to_participate")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -330,7 +330,7 @@ function VotacionesContent() {
                       }
                       className="text-xs"
                     >
-                      {session.status === "active" ? "Activa" : "Cerrada"}
+                      {session.status === "active" ? t("parent.voting.active") : t("parent.voting.closed")}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -340,7 +340,7 @@ function VotacionesContent() {
                   {session.hasVoted && (
                     <div className="flex items-center gap-1 mt-1">
                       <CheckCircle className="h-3 w-3 text-green-500" />
-                      <span className="text-xs text-green-600">Votaste</span>
+                      <span className="text-xs text-green-600">{t("parent.voting.voted")}</span>
                     </div>
                   )}
                 </div>
@@ -353,20 +353,20 @@ function VotacionesContent() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <BarChart3 className="h-5 w-5" />
-                Estadísticas
+                {t("parent.voting.statistics")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm">Votaciones activas</span>
+                <span className="text-sm">{t("parent.voting.active_votes")}</span>
                 <Badge variant="default">{activeVotes.length}</Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">Votaciones cerradas</span>
+                <span className="text-sm">{t("parent.voting.closed_votes")}</span>
                 <Badge variant="secondary">{closedVotes.length}</Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">Tu participación</span>
+                <span className="text-sm">{t("parent.voting.your_participation")}</span>
                 <Badge variant="outline">
                   {votingSessions.filter((v) => v.hasVoted).length}/
                   {votingSessions.length}
@@ -405,7 +405,7 @@ function VotacionesContent() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Vote className="h-4 w-4" />
-                        {selectedSession.totalVotes} votos
+                        {selectedSession.totalVotes} {t("parent.voting.votes")}
                       </span>
                     </div>
                   </div>
@@ -417,7 +417,7 @@ function VotacionesContent() {
                         onClick={() => setShowResults(!showResults)}
                       >
                         <BarChart3 className="h-4 w-4 mr-2" />
-                        {showResults ? "Ocultar" : "Ver"} Resultados
+                        {showResults ? t("parent.voting.hide_results") : t("parent.voting.view_results")}
                       </Button>
                     )}
                   </div>
@@ -432,8 +432,8 @@ function VotacionesContent() {
                       <Info className="h-5 w-5 text-blue-600" />
                       <p className="text-sm text-blue-800 dark:text-blue-200">
                         {selectedSession.allowMultipleVotes
-                          ? "Puedes seleccionar múltiples opciones"
-                          : "Selecciona una opción"}
+                          ? t("parent.voting.select_multiple")
+                          : t("parent.voting.select_option")}
                       </p>
                     </div>
 
@@ -501,14 +501,14 @@ function VotacionesContent() {
                       disabled={selectedOptions.length === 0 || submitting}
                       className="w-full"
                     >
-                      {submitting ? "Registrando voto..." : "Enviar Voto"}
+                      {submitting ? t("parent.voting.submitting") : t("parent.voting.submit")}
                     </Button>
                   </div>
                 ) : selectedSession.status === "closed" || showResults ? (
                   // Results View
                   <div className="space-y-4">
                     <h4 className="font-semibold text-foreground">
-                      Resultados
+                      {t("parent.voting.results")}
                     </h4>
                     <div className="space-y-3">
                       {selectedSession.options.map((option, index) => (
@@ -522,12 +522,12 @@ function VotacionesContent() {
                                 option.id,
                               ) && (
                                 <Badge variant="outline" className="text-xs">
-                                  Tu voto
+                                  {t("parent.voting.your_vote")}
                                 </Badge>
                               )}
                             </div>
                             <span className="text-sm text-muted-foreground">
-                              {option.votes} votos{" "}
+                              {option.votes} {t("parent.voting.votes")}{" "}
                               {option.percentage && `(${option.percentage}%)`}
                             </span>
                           </div>
@@ -542,7 +542,7 @@ function VotacionesContent() {
                     </div>
                     <div className="mt-4 p-3 bg-muted/30 rounded-lg">
                       <p className="text-sm text-muted-foreground text-center">
-                        Total de votos: {selectedSession.totalVotes}
+                        {t("parent.voting.total_votes")}: {selectedSession.totalVotes}
                       </p>
                     </div>
                   </div>
@@ -551,18 +551,17 @@ function VotacionesContent() {
                   <div className="text-center py-8">
                     <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-foreground mb-2">
-                      ¡Ya has votado!
+                      {t("parent.voting.already_voted_title")}
                     </h3>
                     <p className="text-muted-foreground mb-4">
-                      Tu participación es muy importante para la comunidad
-                      escolar
+                      {t("parent.voting.already_voted_desc")}
                     </p>
                     <Button
                       variant="outline"
                       onClick={() => setShowResults(true)}
                     >
                       <BarChart3 className="h-4 w-4 mr-2" />
-                      Ver Resultados Parciales
+                      {t("parent.voting.view_partial_results")}
                     </Button>
                   </div>
                 )}
@@ -574,11 +573,10 @@ function VotacionesContent() {
               <CardContent className="flex flex-col items-center justify-center py-16">
                 <Vote className="h-16 w-16 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Selecciona una votación
+                  {t("parent.voting.select_voting")}
                 </h3>
                 <p className="text-muted-foreground text-center">
-                  Haz clic en una votación de la lista para participar o ver los
-                  resultados
+                  {t("parent.voting.select_voting_desc")}
                 </p>
               </CardContent>
             </Card>
@@ -592,7 +590,7 @@ function VotacionesContent() {
 export default function ParentVotacionesPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar la página de votaciones</div>}
+      fallback={<div>Error loading voting page</div>}
     >
       <Suspense fallback={<LoadingState />}>
         <VotacionesContent />

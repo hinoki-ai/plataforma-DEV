@@ -5,10 +5,23 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Shield, Award, AlertTriangle, Users, BookOpen } from "lucide-react";
+import {
+  FileText,
+  Shield,
+  Award,
+  AlertTriangle,
+  Users,
+  BookOpen,
+} from "lucide-react";
 import Link from "next/link";
 
 function ProtocolosConvivenciaContent() {
@@ -79,7 +92,10 @@ function ProtocolosConvivenciaContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {subcategories.map((category, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card
+              key={index}
+              className="hover:shadow-lg transition-shadow cursor-pointer"
+            >
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
                   <div className={`p-2 rounded-lg ${category.color}`}>
@@ -115,15 +131,16 @@ function ProtocolosConvivenciaContent() {
               <div>
                 <h4 className="font-semibold mb-2">Objetivo</h4>
                 <p className="text-sm text-muted-foreground">
-                  Establecer un marco claro de convivencia que promueva
-                  el respeto, la responsabilidad y el desarrollo integral de los estudiantes.
+                  Establecer un marco claro de convivencia que promueva el
+                  respeto, la responsabilidad y el desarrollo integral de los
+                  estudiantes.
                 </p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">Alcance</h4>
                 <p className="text-sm text-muted-foreground">
-                  Aplicable a todos los miembros de la comunidad educativa: estudiantes,
-                  profesores, personal administrativo y apoderados.
+                  Aplicable a todos los miembros de la comunidad educativa:
+                  estudiantes, profesores, personal administrativo y apoderados.
                 </p>
               </div>
             </div>
@@ -137,7 +154,9 @@ function ProtocolosConvivenciaContent() {
 export default function ProtocolosConvivenciaPage() {
   return (
     <ErrorBoundary
-      fallback={<div>Error al cargar la página de protocolos de convivencia</div>}
+      fallback={
+        <div>Error al cargar la página de protocolos de convivencia</div>
+      }
     >
       <Suspense fallback={<LoadingState />}>
         <ProtocolosConvivenciaContent />
