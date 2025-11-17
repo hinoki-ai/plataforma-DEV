@@ -26,7 +26,7 @@ export const GET = createApiRoute(
       }
 
       const teacherId = session.user.id as unknown as Id<"users">;
-      
+
       // Get authenticated Convex client (required for tenant queries)
       const client = await getAuthenticatedConvexClient();
 

@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import { PageTransition } from "@/components/ui/page-transition";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import {
@@ -29,10 +29,15 @@ import Link from "next/link";
 function ProtocolosConvivenciaAdminContent() {
   const { t } = useDivineParsing(["navigation", "common"]);
 
+  const { t: tAdmin } = useDivineParsing(["admin"]);
+
   const subcategories = [
     {
       title: t("nav.protocolos_convivencia.normas", "navigation"),
-      description: "Gestión de normas y reglas de convivencia escolar",
+      description: tAdmin(
+        "admin.protocolos.subcategories.normas_desc",
+        "admin",
+      ),
       href: "/admin/protocolos-convivencia/normas",
       icon: Users,
       color: "bg-blue-500",
@@ -40,7 +45,10 @@ function ProtocolosConvivenciaAdminContent() {
     },
     {
       title: t("nav.protocolos_convivencia.disciplina", "navigation"),
-      description: "Configuración de protocolos de disciplina y procedimientos",
+      description: tAdmin(
+        "admin.protocolos.subcategories.disciplina_desc",
+        "admin",
+      ),
       href: "/admin/protocolos-convivencia/disciplina",
       icon: Shield,
       color: "bg-red-500",
@@ -48,7 +56,10 @@ function ProtocolosConvivenciaAdminContent() {
     },
     {
       title: t("nav.protocolos_convivencia.medidas", "navigation"),
-      description: "Administración de medidas correctivas y sanciones",
+      description: tAdmin(
+        "admin.protocolos.subcategories.medidas_desc",
+        "admin",
+      ),
       href: "/admin/protocolos-convivencia/medidas",
       icon: AlertTriangle,
       color: "bg-orange-500",
@@ -56,7 +67,10 @@ function ProtocolosConvivenciaAdminContent() {
     },
     {
       title: t("nav.protocolos_convivencia.reconocimientos", "navigation"),
-      description: "Sistema de reconocimientos y premios",
+      description: tAdmin(
+        "admin.protocolos.subcategories.reconocimientos_desc",
+        "admin",
+      ),
       href: "/admin/protocolos-convivencia/reconocimientos",
       icon: Award,
       color: "bg-green-500",
@@ -64,7 +78,10 @@ function ProtocolosConvivenciaAdminContent() {
     },
     {
       title: t("nav.protocolos_convivencia.actas_apoderados", "navigation"),
-      description: "Gestión de actas de entrevistas con apoderados",
+      description: tAdmin(
+        "admin.protocolos.subcategories.actas_apoderados_desc",
+        "admin",
+      ),
       href: "/admin/protocolos-convivencia/actas-apoderados",
       icon: FileText,
       color: "bg-purple-500",
@@ -72,7 +89,10 @@ function ProtocolosConvivenciaAdminContent() {
     },
     {
       title: t("nav.protocolos_convivencia.actas_alumnos", "navigation"),
-      description: "Gestión de actas de entrevistas con alumnos",
+      description: tAdmin(
+        "admin.protocolos.subcategories.actas_alumnos_desc",
+        "admin",
+      ),
       href: "/admin/protocolos-convivencia/actas-alumnos",
       icon: FileText,
       color: "bg-indigo-500",
@@ -114,11 +134,11 @@ function ProtocolosConvivenciaAdminContent() {
           <div className="flex items-center space-x-2">
             <Badge variant="secondary" className="px-3 py-1">
               <BookOpen className="w-4 h-4 mr-2" />
-              Académico
+              {tAdmin("admin.protocolos.badge.academico", "admin")}
             </Badge>
             <Button>
               <Settings className="w-4 h-4 mr-2" />
-              Configuración General
+              {tAdmin("admin.protocolos.settings", "admin")}
             </Button>
           </div>
         </div>
@@ -131,7 +151,7 @@ function ProtocolosConvivenciaAdminContent() {
                 <Users className="w-8 h-8 text-blue-500" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-muted-foreground">
-                    Normas Activas
+                    {tAdmin("admin.protocolos.stats.normas_activas", "admin")}
                   </p>
                   <p className="text-2xl font-bold">12</p>
                 </div>
@@ -144,7 +164,7 @@ function ProtocolosConvivenciaAdminContent() {
                 <AlertTriangle className="w-8 h-8 text-orange-500" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-muted-foreground">
-                    Casos este Mes
+                    {tAdmin("admin.protocolos.stats.casos_mes", "admin")}
                   </p>
                   <p className="text-2xl font-bold">23</p>
                 </div>
@@ -157,7 +177,7 @@ function ProtocolosConvivenciaAdminContent() {
                 <Award className="w-8 h-8 text-green-500" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-muted-foreground">
-                    Reconocimientos
+                    {tAdmin("admin.protocolos.stats.reconocimientos", "admin")}
                   </p>
                   <p className="text-2xl font-bold">156</p>
                 </div>
@@ -170,7 +190,7 @@ function ProtocolosConvivenciaAdminContent() {
                 <BarChart3 className="w-8 h-8 text-purple-500" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-muted-foreground">
-                    Tasa de Éxito
+                    {tAdmin("admin.protocolos.stats.tasa_exito", "admin")}
                   </p>
                   <p className="text-2xl font-bold">87%</p>
                 </div>
@@ -205,7 +225,7 @@ function ProtocolosConvivenciaAdminContent() {
                   <Button asChild size="sm">
                     <Link href={category.href}>
                       <FileText className="w-4 h-4 mr-2" />
-                      Gestionar
+                      {tAdmin("admin.protocolos.subcategories.manage", "admin")}
                     </Link>
                   </Button>
                 </div>
@@ -217,9 +237,11 @@ function ProtocolosConvivenciaAdminContent() {
         {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle>Actividad Reciente</CardTitle>
+            <CardTitle>
+              {tAdmin("admin.protocolos.recent_activity", "admin")}
+            </CardTitle>
             <CardDescription>
-              Últimas acciones realizadas en el sistema de protocolos
+              {tAdmin("admin.protocolos.recent_activity_desc", "admin")}
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -14,7 +14,7 @@ Historical authentication testing documentation:
 
 - **AUTH_TEST_CREDENTIALS.md** - Test credentials used for authentication testing
 
-**Why archived**: Authentication issues resolved. Current comprehensive auth documentation is in `docs/AUTHENTICATION_COMPLETE_GUIDE.md`.
+**Why archived**: Authentication issues resolved. Current auth documentation is in `docs/AI_KNOWLEDGE_BASE.md` and `docs/CLERK_SETUP.md`.
 
 ---
 
@@ -30,16 +30,8 @@ Historical incident reports:
 
 ### Root Level Files
 
-Archived outdated documentation files:
-
-- **ARCHITECTURE.md** - Legacy architecture overview (Prisma + NextAuth.js)  
-  **Why archived**: Superseded by `docs/AI_KNOWLEDGE_BASE.md` with current Convex + Clerk architecture
-
-- **API_DOCUMENTATION.md** - Legacy REST API documentation (Prisma-based)  
-  **Why archived**: Superseded by `docs/AI_KNOWLEDGE_BASE.md` with current Convex query/mutation patterns
-
-- **FRONTEND.md** - Legacy frontend patterns  
-  **Why archived**: Superseded by `docs/AI_KNOWLEDGE_BASE.md` and `docs/ANIMATION_GUIDE.md`
+- **MIGRATION.md** - Historical Prisma to Convex migration guide  
+  **Why archived**: Migration complete. Kept for historical reference of the migration process.
 
 ---
 
@@ -67,17 +59,35 @@ These documents are useful for:
 
 ---
 
+## 🗑️ Deleted Documentation (January 2025)
+
+The following deprecated documentation files were **permanently deleted** as they were completely superseded and had no historical value:
+
+- **ARCHITECTURE.md** - Legacy Prisma + NextAuth.js architecture (superseded by `docs/AI_KNOWLEDGE_BASE.md`)
+- **API_DOCUMENTATION.md** - Legacy Prisma REST API docs (superseded by `docs/AI_KNOWLEDGE_BASE.md`)
+- **FRONTEND.md** - Legacy frontend patterns (superseded by `docs/AI_KNOWLEDGE_BASE.md` and `docs/ANIMATION_GUIDE.md`)
+- **AUTHENTICATION_COMPLETE_GUIDE.md** - Legacy NextAuth.js v5 guide (system uses Clerk, superseded by `docs/AI_KNOWLEDGE_BASE.md`)
+- **TROUBLESHOOTING_AUTH.md** - Legacy NextAuth.js troubleshooting (superseded by `docs/AI_KNOWLEDGE_BASE.md`)
+- **I18N_COMPLETION_PROMPT.md** - Task-specific prompt (consolidated into `docs/PAGE_I18N_GUIDE.md`)
+- **FIX_TYPESCRIPT_ERRORS.md** - One-time fix documentation (no longer relevant)
+
+---
+
 ## 🗑️ Archival Policy
 
 Documents are archived when:
 
-1. **Issue resolved** - The problem described no longer exists
-2. **Feature complete** - Implementation finished and documented elsewhere
-3. **Technology deprecated** - Replaced by new stack (e.g., Prisma → Convex)
-4. **Duplicate removed** - Consolidated into canonical documentation
-5. **Historical value** - Worth keeping for reference but not actively maintained
+1. **Historical value** - Worth keeping for reference (e.g., migration guides, incident reports)
+2. **Compliance** - Required for audit trails or legal purposes
+
+Documents are **deleted** when:
+
+1. **Completely superseded** - All content replaced by current documentation
+2. **No historical value** - No need to reference old implementations
+3. **Technology deprecated** - Old stack completely replaced (e.g., NextAuth → Clerk)
+4. **Task-specific** - Temporary work-in-progress documents
 
 ---
 
 **Maintained by**: Development team  
-**Archive retention**: Indefinite (until no longer needed for reference)
+**Archive retention**: Only documents with historical or compliance value

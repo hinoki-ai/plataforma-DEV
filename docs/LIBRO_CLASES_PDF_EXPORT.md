@@ -405,7 +405,7 @@ For issues or questions:
 
 - [Libro de Clases Guide](./LIBRO_DE_CLASES_GUIDE.md)
 - [Implementation Status](./LIBRO_CLASES_IMPLEMENTATION_STATUS.md)
-- [Authentication Guide](./AUTHENTICATION_COMPLETE_GUIDE.md)
+- [Authentication Guide](./AI_KNOWLEDGE_BASE.md) (Clerk + Convex auth system)
 - [Role System](./ROLE_SYSTEM.md)
 
 ## 🎓 Compliance Notes

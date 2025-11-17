@@ -1,22 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getActiveTeamMembers } from "@/services/queries/team-members";
+import {
+  getTeamMembers,
+  getActiveTeamMembers,
+} from "@/services/queries/team-members";
 
 export async function GET(request: NextRequest) {
   try {
-    const teamMembers = await getActiveTeamMembers();
+    const { searchParams } = new URL(request.url);
+    const activeOnly = searchParams.get("active") === "true";
+
+    const teamMembers = activeOnly
+      ? await getActiveTeamMembers()
+      : await getTeamMembers();
 
     if (!teamMembers.success) {
       return NextResponse.json(
-        { error: teamMembers.error || "Failed to fetch team members" },
+        {
+          success: false,
+          error: teamMembers.error || "Failed to fetch team members",
+        },
         { status: 500 },
       );
     }
 
-    return NextResponse.json({ data: teamMembers.data });
+    return NextResponse.json({ success: true, data: teamMembers.data });
   } catch (error) {
     console.error("API Error fetching team members:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { success: false, error: "Internal server error" },
       { status: 500 },
     );
   }

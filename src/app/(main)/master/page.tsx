@@ -13,7 +13,7 @@ import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider"
 export const dynamic = "force-dynamic";
 
 export default function MasterDashboardPage() {
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["master", "common"]);
 
   // Handle critical failures gracefully
   try {
@@ -28,7 +28,7 @@ export default function MasterDashboardPage() {
 
   return (
     <AdvancedErrorBoundary
-      context={t("master.dashboard.title", "common")}
+      context={t("master.dashboard.title", "master")}
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

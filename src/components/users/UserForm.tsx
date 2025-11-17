@@ -81,20 +81,22 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
 
   const handleSubmit = async (data: UserFormData) => {
     setIsSubmitting(true);
-    announce(user ? "Actualizando usuario..." : "Creando usuario...", "polite");
+    announce(
+      user
+        ? t("user.announce.updating", "common")
+        : t("user.announce.creating", "common"),
+      "polite",
+    );
     try {
       await onSubmit(data);
       announce(
         user
-          ? "Usuario actualizado exitosamente"
-          : "Usuario creado exitosamente",
+          ? t("user.announce.updated", "common")
+          : t("user.announce.created", "common"),
         "polite",
       );
     } catch (error) {
-      announce(
-        "Error al guardar el usuario. Por favor intenta nuevamente.",
-        "assertive",
-      );
+      announce(t("user.announce.error", "common"), "assertive");
     } finally {
       setIsSubmitting(false);
     }
@@ -126,7 +128,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("common.email", "common")}</FormLabel>
+              <FormLabel>{t("user.email.label", "common")}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -152,17 +154,12 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t("user.password.label", "common") || "Contraseña"}
-                </FormLabel>
+                <FormLabel>{t("user.password.label", "common")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder={
-                        t("user.password.placeholder", "common") ||
-                        "Ingrese una contraseña"
-                      }
+                      placeholder={t("user.password.placeholder", "common")}
                       {...field}
                       className="pr-10"
                       onKeyDown={(e) => handleKeyDown(e, "password")}
@@ -175,8 +172,8 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={
                         showPassword
-                          ? "Ocultar contraseña"
-                          : "Mostrar contraseña"
+                          ? t("user.password.hide", "common")
+                          : t("user.password.show", "common")
                       }
                     >
                       {showPassword ? (
@@ -188,8 +185,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
                   </div>
                 </FormControl>
                 <FormDescription>
-                  {t("user.password.description", "common") ||
-                    "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales"}
+                  {t("user.password.description", "common")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>

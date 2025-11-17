@@ -44,14 +44,7 @@ interface Activity {
   };
 }
 
-const activityTypeLabels = {
-  CLASS: "Clase",
-  EVENT: "Evento",
-  WORKSHOP: "Taller",
-  EXCURSION: "Excursión",
-  MEETING: "Reunión",
-  OTHER: "Otro",
-};
+// Activity type labels will be translated in the component
 
 const activityTypeColors = {
   CLASS: "bg-blue-100 text-blue-800",
@@ -83,6 +76,18 @@ function isUpcoming(dateString: string, timeString: string) {
 function ActividadesContent() {
   const { t } = useDivineParsing(["common", "profesor"]);
   const router = useRouter();
+
+  // Activity type labels
+  const activityTypeLabels = {
+    CLASS: t("profesor.activities.type.class", "profesor") || "Clase",
+    EVENT: t("profesor.activities.type.event", "profesor") || "Evento",
+    WORKSHOP: t("profesor.activities.type.workshop", "profesor") || "Taller",
+    EXCURSION:
+      t("profesor.activities.type.excursion", "profesor") || "Excursión",
+    MEETING: t("profesor.activities.type.meeting", "profesor") || "Reunión",
+    OTHER: t("profesor.activities.type.other", "profesor") || "Otro",
+  };
+
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -108,18 +113,25 @@ function ActividadesContent() {
       if (data.success) {
         setActivities(data.data || []);
       } else {
-        setError(data.error || "Error al cargar actividades");
+        setError(
+          data.error || t("profesor.activities.error_loading", "profesor"),
+        );
       }
     } catch (err) {
       console.error("Error fetching activities:", err);
-      setError("Error al cargar las actividades");
+      setError(t("profesor.activities.error_loading", "profesor"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteActivity = async (activityId: string) => {
-    if (!confirm("¿Estás seguro de que quieres eliminar esta actividad?")) {
+    if (
+      !confirm(
+        t("common.delete.confirm", "common") ||
+          "¿Estás seguro de que quieres eliminar esta actividad?",
+      )
+    ) {
       return;
     }
 
@@ -137,7 +149,7 @@ function ActividadesContent() {
       }
     } catch (err) {
       console.error("Error deleting activity:", err);
-      alert("Error al eliminar la actividad");
+      alert(t("profesor.activities.delete_error", "profesor"));
     }
   };
 

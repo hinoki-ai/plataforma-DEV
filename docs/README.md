@@ -23,11 +23,10 @@
 
 ### Authentication & Security
 
-- **[AUTHENTICATION_COMPLETE_GUIDE.md](./AUTHENTICATION_COMPLETE_GUIDE.md)** - Complete auth system documentation
+- **[AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete Clerk + Convex auth system documentation
 - **[ROLE_SYSTEM.md](./ROLE_SYSTEM.md)** - Role-based access control (RBAC)
 - **[protected-paths.md](./protected-paths.md)** - List of protected routes
 - **[EMERGENCY_ACCESS_PROCEDURES.md](./EMERGENCY_ACCESS_PROCEDURES.md)** - Emergency access protocols
-- **[TROUBLESHOOTING_AUTH.md](./TROUBLESHOOTING_AUTH.md)** - Auth troubleshooting guide
 - **[CLERK_SETUP.md](./CLERK_SETUP.md)** - Clerk authentication setup guide
 
 ### Configuration & Environment
@@ -55,10 +54,9 @@
 
 ### Authentication Issues?
 
-1. **Troubleshooting** → [TROUBLESHOOTING_AUTH.md](./TROUBLESHOOTING_AUTH.md)
-2. **System Overview** → [AUTHENTICATION_COMPLETE_GUIDE.md](./AUTHENTICATION_COMPLETE_GUIDE.md)
+1. **System Overview** → [AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md) - Authentication section
+2. **Clerk Setup** → [CLERK_SETUP.md](./CLERK_SETUP.md)
 3. **Emergency Access** → [EMERGENCY_ACCESS_PROCEDURES.md](./EMERGENCY_ACCESS_PROCEDURES.md)
-4. **Clerk Setup** → [CLERK_SETUP.md](./CLERK_SETUP.md)
 
 ### Deployment Issues?
 
@@ -85,9 +83,9 @@
 
 For questions or issues:
 
-1. Check [TROUBLESHOOTING_AUTH.md](./TROUBLESHOOTING_AUTH.md) first
-2. Review [AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md) for system overview
-3. See [../CLAUDE.md](../CLAUDE.md) for development guidelines
+1. Review [AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md) for system overview and troubleshooting
+2. See [../CLAUDE.md](../CLAUDE.md) for development guidelines
+3. Check [CLERK_SETUP.md](./CLERK_SETUP.md) for authentication setup issues
 
 ---
 

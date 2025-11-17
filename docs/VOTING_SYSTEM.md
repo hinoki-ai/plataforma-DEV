@@ -388,7 +388,7 @@ vercel --prod
 ## 📚 Related Documentation
 
 - **System Architecture**: `docs/AI_KNOWLEDGE_BASE.md` - **PRIMARY**: Complete system documentation
-- **Authentication**: `docs/AUTHENTICATION_COMPLETE_GUIDE.md`
+- **Authentication**: `docs/AI_KNOWLEDGE_BASE.md` (Clerk + Convex auth system)
 - **Testing**: `docs/TESTING_GUIDE.md`
 - **Environment Setup**: `docs/ENVIRONMENT.md`
 

@@ -127,10 +127,12 @@ export default function PerfilPage() {
   useEffect(() => {
     if (session?.user) {
       setUserProfile({
-        name: session.user.name || "Nombre del Profesor",
-        email: session.user.email || "profesor@plataforma-astral.com",
-        phone: "+56 9 1234 5678",
-        bio: "Apasionado por la educación y el desarrollo de los niños. Siempre aprendiendo y compartiendo.",
+        name:
+          session.user.name || t("profesor.perfil.default_name", "profesor"),
+        email:
+          session.user.email || t("profesor.perfil.default_email", "profesor"),
+        phone: t("profesor.perfil.default_phone", "profesor"),
+        bio: t("profesor.perfil.default_bio", "profesor"),
         avatar: "/public/images/avatar-placeholder.png",
       });
     }
@@ -141,10 +143,10 @@ export default function PerfilPage() {
     try {
       // In a real implementation, you'd save to an API
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      toast.success("Perfil actualizado exitosamente");
+      toast.success(t("profesor.perfil.profile_updated", "profesor"));
       setShowEditDialog(false);
     } catch (error) {
-      toast.error("Error al guardar el perfil");
+      toast.error(t("profesor.perfil.profile_error", "profesor"));
     } finally {
       setIsSaving(false);
     }
@@ -155,9 +157,9 @@ export default function PerfilPage() {
     try {
       // In a real implementation, you'd save to an API
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      toast.success("Configuración guardada exitosamente");
+      toast.success(t("profesor.perfil.settings_saved", "profesor"));
     } catch (error) {
-      toast.error("Error al guardar la configuración");
+      toast.error(t("profesor.perfil.settings_error", "profesor"));
     } finally {
       setIsSaving(false);
     }
@@ -165,7 +167,7 @@ export default function PerfilPage() {
 
   const handleDownloadCertificate = (certificateId: number) => {
     // In a real implementation, you'd trigger a download
-    toast.success("Descargando certificado...");
+    toast.success(t("profesor.perfil.downloading_certificate", "profesor"));
   };
 
   const getTaskStatusIcon = (status: string) => {
@@ -185,13 +187,21 @@ export default function PerfilPage() {
     switch (status) {
       case "completed":
         return (
-          <Badge className="bg-green-100 text-green-800">Completada</Badge>
+          <Badge className="bg-green-100 text-green-800">
+            {t("profesor.perfil.task_completed", "profesor")}
+          </Badge>
         );
       case "in_progress":
-        return <Badge className="bg-blue-100 text-blue-800">En Progreso</Badge>;
+        return (
+          <Badge className="bg-blue-100 text-blue-800">
+            {t("profesor.perfil.task_in_progress", "profesor")}
+          </Badge>
+        );
       case "pending":
         return (
-          <Badge className="bg-orange-100 text-orange-800">Pendiente</Badge>
+          <Badge className="bg-orange-100 text-orange-800">
+            {t("profesor.perfil.task_pending", "profesor")}
+          </Badge>
         );
       default:
         return <Badge variant="secondary">{status}</Badge>;
@@ -218,7 +228,7 @@ export default function PerfilPage() {
                       : userProfile.avatar ||
                         "/public/images/avatar-placeholder.png"
                   }
-                  alt="Avatar del profesor"
+                  alt={t("profesor.perfil.avatar_alt", "profesor")}
                   className="w-full h-full object-cover"
                   width={96}
                   height={96}
@@ -231,7 +241,8 @@ export default function PerfilPage() {
               {userProfile.name}
             </CardTitle>
             <span className="text-sm text-muted-foreground mb-2">
-              {session?.user?.role || "Profesor"}
+              {session?.user?.role ||
+                t("profesor.perfil.role_profesor", "profesor")}
             </span>
             <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
               <DialogTrigger asChild>
@@ -242,14 +253,18 @@ export default function PerfilPage() {
               </DialogTrigger>
               <DialogContent className="max-w-md">
                 <DialogHeader>
-                  <DialogTitle>Editar Perfil</DialogTitle>
+                  <DialogTitle>
+                    {t("profesor.perfil.edit_profile_dialog", "profesor")}
+                  </DialogTitle>
                   <DialogDescription>
-                    Actualiza tu información personal
+                    {t("profesor.perfil.update_personal_info", "profesor")}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="name">Nombre completo</Label>
+                    <Label htmlFor="name">
+                      {t("profesor.perfil.full_name", "profesor")}
+                    </Label>
                     <Input
                       id="name"
                       value={userProfile.name}
@@ -276,7 +291,9 @@ export default function PerfilPage() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone">Teléfono</Label>
+                    <Label htmlFor="phone">
+                      {t("profesor.perfil.phone", "profesor")}
+                    </Label>
                     <Input
                       id="phone"
                       value={userProfile.phone}
@@ -289,7 +306,9 @@ export default function PerfilPage() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="bio">Biografía</Label>
+                    <Label htmlFor="bio">
+                      {t("profesor.perfil.bio", "profesor")}
+                    </Label>
                     <Textarea
                       id="bio"
                       value={userProfile.bio}
@@ -308,13 +327,15 @@ export default function PerfilPage() {
                       disabled={isSaving}
                       className="flex-1"
                     >
-                      {isSaving ? "Guardando..." : "Guardar Cambios"}
+                      {isSaving
+                        ? t("common.saving", "common")
+                        : t("profesor.perfil.save_profile", "profesor")}
                     </Button>
                     <Button
                       variant="outline"
                       onClick={() => setShowEditDialog(false)}
                     >
-                      Cancelar
+                      {t("common.cancel", "common")}
                     </Button>
                   </div>
                 </div>
@@ -373,10 +394,11 @@ export default function PerfilPage() {
                         <User className="h-4 w-4 text-muted-foreground" />
                         <div className="flex-1">
                           <span className="text-muted-foreground block text-xs">
-                            Rol
+                            {t("profesor.perfil.role", "profesor")}
                           </span>
                           <span className="text-foreground">
-                            {session?.user?.role || "Profesor"}
+                            {session?.user?.role ||
+                              t("profesor.perfil.role_profesor", "profesor")}
                           </span>
                         </div>
                       </div>

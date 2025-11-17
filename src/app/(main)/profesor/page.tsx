@@ -6,11 +6,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { dbLogger } from "@/lib/logger";
 import { RoleAwareDashboard } from "@/components/dashboard/RoleAwareDashboard";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
 
 export default function ProfesorDashboardPage() {
+  const { t } = useDivineParsing(["common", "profesor"]);
+
   // 🚨 EMERGENCY: Handle database failures gracefully
   try {
     // Dashboard will show empty state but remain functional
@@ -25,7 +28,7 @@ export default function ProfesorDashboardPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="Panel del Profesor"
+      context={t("profesor.dashboard.title", "profesor")}
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

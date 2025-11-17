@@ -330,7 +330,9 @@ function VotacionesContent() {
                       }
                       className="text-xs"
                     >
-                      {session.status === "active" ? t("parent.voting.active") : t("parent.voting.closed")}
+                      {session.status === "active"
+                        ? t("parent.voting.active")
+                        : t("parent.voting.closed")}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -340,7 +342,9 @@ function VotacionesContent() {
                   {session.hasVoted && (
                     <div className="flex items-center gap-1 mt-1">
                       <CheckCircle className="h-3 w-3 text-green-500" />
-                      <span className="text-xs text-green-600">{t("parent.voting.voted")}</span>
+                      <span className="text-xs text-green-600">
+                        {t("parent.voting.voted")}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -358,15 +362,21 @@ function VotacionesContent() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm">{t("parent.voting.active_votes")}</span>
+                <span className="text-sm">
+                  {t("parent.voting.active_votes")}
+                </span>
                 <Badge variant="default">{activeVotes.length}</Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">{t("parent.voting.closed_votes")}</span>
+                <span className="text-sm">
+                  {t("parent.voting.closed_votes")}
+                </span>
                 <Badge variant="secondary">{closedVotes.length}</Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">{t("parent.voting.your_participation")}</span>
+                <span className="text-sm">
+                  {t("parent.voting.your_participation")}
+                </span>
                 <Badge variant="outline">
                   {votingSessions.filter((v) => v.hasVoted).length}/
                   {votingSessions.length}
@@ -417,7 +427,9 @@ function VotacionesContent() {
                         onClick={() => setShowResults(!showResults)}
                       >
                         <BarChart3 className="h-4 w-4 mr-2" />
-                        {showResults ? t("parent.voting.hide_results") : t("parent.voting.view_results")}
+                        {showResults
+                          ? t("parent.voting.hide_results")
+                          : t("parent.voting.view_results")}
                       </Button>
                     )}
                   </div>
@@ -501,7 +513,9 @@ function VotacionesContent() {
                       disabled={selectedOptions.length === 0 || submitting}
                       className="w-full"
                     >
-                      {submitting ? t("parent.voting.submitting") : t("parent.voting.submit")}
+                      {submitting
+                        ? t("parent.voting.submitting")
+                        : t("parent.voting.submit")}
                     </Button>
                   </div>
                 ) : selectedSession.status === "closed" || showResults ? (
@@ -542,7 +556,8 @@ function VotacionesContent() {
                     </div>
                     <div className="mt-4 p-3 bg-muted/30 rounded-lg">
                       <p className="text-sm text-muted-foreground text-center">
-                        {t("parent.voting.total_votes")}: {selectedSession.totalVotes}
+                        {t("parent.voting.total_votes")}:{" "}
+                        {selectedSession.totalVotes}
                       </p>
                     </div>
                   </div>
@@ -589,9 +604,7 @@ function VotacionesContent() {
 
 export default function ParentVotacionesPage() {
   return (
-    <ErrorBoundary
-      fallback={<div>Error loading voting page</div>}
-    >
+    <ErrorBoundary fallback={<div>Error loading voting page</div>}>
       <Suspense fallback={<LoadingState />}>
         <VotacionesContent />
       </Suspense>

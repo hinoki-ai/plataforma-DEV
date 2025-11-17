@@ -682,10 +682,7 @@ export function RoleAwareDashboard() {
                 title="🎯 Cobertura de OA"
                 description="Seguimiento de objetivos de aprendizaje"
               >
-                <OACoverageWidget
-                  data={null}
-                  loading={false}
-                />
+                <OACoverageWidget data={null} loading={false} />
               </DashboardCard>
             </div>
           }

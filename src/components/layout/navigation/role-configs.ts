@@ -10,7 +10,7 @@ import { NavigationIcons } from "@/components/icons/hero-icons";
 // ADMIN Navigation Configuration
 export const ADMIN_NAVIGATION = [
   {
-    title: STANDARD_SECTION_ORDER.PRIMARY,
+    title: STANDARD_SECTION_ORDER.USER_MANAGEMENT,
     defaultOpen: true,
     items: [
       {
@@ -19,12 +19,6 @@ export const ADMIN_NAVIGATION = [
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+H",
       },
-    ],
-  },
-  {
-    title: STANDARD_SECTION_ORDER.USER_MANAGEMENT,
-    defaultOpen: true,
-    items: [
       {
         title: "nav.users",
         href: "/admin/usuarios",
@@ -50,7 +44,7 @@ export const ADMIN_NAVIGATION = [
         shortcut: "Alt+A",
       },
       {
-        title: "nav.planning",
+        title: "nav.calificaciones",
         href: "/admin/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
@@ -95,6 +89,12 @@ export const ADMIN_NAVIGATION = [
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
       },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.CONVIVENCIA,
+    defaultOpen: false,
+    items: [
       {
         title: "nav.protocolos_convivencia",
         href: "/admin/protocolos-convivencia",
@@ -168,18 +168,6 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [SHARED_NAVIGATION_ITEMS.SETTINGS],
   },
-  {
-    title: STANDARD_SECTION_ORDER.DEBUG,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.main.categories.debug",
-        href: "/admin/debug-navigation",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+B",
-      },
-    ],
-  },
 ];
 
 // PROFESOR Navigation Configuration
@@ -213,12 +201,12 @@ export const PROFESOR_NAVIGATION = [
         shortcut: "Alt+A",
       },
       {
-        title: "nav.planning",
+        title: "nav.class_content",
         href: "/profesor/libro-clases/contenidos",
         icon: NavigationIcons.Planning,
       },
       {
-        title: "nav.planning",
+        title: "nav.calificaciones",
         href: "/profesor/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
@@ -264,6 +252,12 @@ export const PROFESOR_NAVIGATION = [
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+M",
       },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.CONVIVENCIA,
+    defaultOpen: false,
+    items: [
       {
         title: "nav.protocolos_convivencia",
         href: "/profesor/protocolos-convivencia",
@@ -360,7 +354,7 @@ export const PARENT_NAVIGATION = [
         shortcut: "Alt+A",
       },
       {
-        title: "nav.planning",
+        title: "nav.calificaciones",
         href: "/parent/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
@@ -393,6 +387,12 @@ export const PARENT_NAVIGATION = [
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+C",
       },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.CONVIVENCIA,
+    defaultOpen: false,
+    items: [
       {
         title: "nav.protocolos_convivencia",
         href: "/parent/protocolos-convivencia",
@@ -471,7 +471,7 @@ export const PARENT_NAVIGATION = [
 // MASTER Navigation Configuration
 export const MASTER_NAVIGATION = [
   {
-    title: ROLE_SPECIFIC_SECTIONS.MASTER.primary,
+    title: ROLE_SPECIFIC_SECTIONS.MASTER.system,
     defaultOpen: true,
     items: [
       {
@@ -480,12 +480,6 @@ export const MASTER_NAVIGATION = [
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+M",
       },
-    ],
-  },
-  {
-    title: ROLE_SPECIFIC_SECTIONS.MASTER.system,
-    defaultOpen: true,
-    items: [
       {
         title: "nav.main.categories.debug",
         href: "/master/god-mode",
@@ -523,6 +517,12 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
+        title: "nav.admin.panel",
+        href: "/admin",
+        icon: NavigationIcons.Analytics,
+        shortcut: "Alt+H",
+      },
+      {
         title: "nav.users",
         href: "/admin/usuarios",
         icon: NavigationIcons.Profile,
@@ -547,7 +547,7 @@ export const MASTER_NAVIGATION = [
         shortcut: "Alt+A",
       },
       {
-        title: "nav.planning",
+        title: "nav.calificaciones",
         href: "/admin/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
@@ -592,6 +592,12 @@ export const MASTER_NAVIGATION = [
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
       },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.CONVIVENCIA,
+    defaultOpen: false,
+    items: [
       {
         title: "nav.protocolos_convivencia",
         href: "/master/protocolos-convivencia",

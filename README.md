@@ -62,20 +62,20 @@ Plataforma Astral is a comprehensive educational management platform that provid
 
 ### Quick Navigation
 
-| I want to...                     | Go to...                                                                         |
-| -------------------------------- | -------------------------------------------------------------------------------- |
-| **Start developing**             | [START_HERE.md](./START_HERE.md)                                                 |
-| **Deploy to production**         | [DEPLOYMENT.md](./DEPLOYMENT.md)                                                 |
-| **Understand authentication**    | [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md) |
-| **Learn system architecture**    | [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)                         |
-| **Troubleshoot issues**          | [docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md)                   |
-| **Complete documentation index** | [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)                               |
+| I want to...                     | Go to...                                                                                |
+| -------------------------------- | --------------------------------------------------------------------------------------- |
+| **Start developing**             | [START_HERE.md](./START_HERE.md)                                                        |
+| **Deploy to production**         | [DEPLOYMENT.md](./DEPLOYMENT.md)                                                        |
+| **Understand authentication**    | [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) (Clerk + Convex auth)          |
+| **Learn system architecture**    | [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)                                |
+| **Troubleshoot issues**          | [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) (see troubleshooting sections) |
+| **Complete documentation index** | [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)                                      |
 
 ### Key Documentation Files
 
 - **[START_HERE.md](./START_HERE.md)** - First-time setup and development guide
 - **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete deployment procedures
-- **[docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)** - Comprehensive auth system guide
+- **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - Complete system documentation including Clerk + Convex auth
 - **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Full documentation catalog
 
 ## 🎯 Key Features
@@ -131,7 +131,7 @@ npx convex deploy       # Deploy Convex backend
 
 - **📖 Documentation**: [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)
 - **🚀 Setup Guide**: [START_HERE.md](./START_HERE.md)
-- **🔐 Authentication**: [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)
+- **🔐 Authentication**: [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) (Clerk + Convex auth system)
 - **🚢 Deployment**: [DEPLOYMENT.md](./DEPLOYMENT.md)
 - **🏗️ Architecture**: [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)
 

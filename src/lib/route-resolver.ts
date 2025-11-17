@@ -49,19 +49,33 @@ export function requiresAuth(path: string): boolean {
 
 /**
  * Check if user has access to specific route
+ * MASTER has access to all routes - Supreme Authority
  */
 export function hasRouteAccess(
   path: string,
   userRole: ExtendedUserRole,
 ): boolean {
+  // MASTER has access to everything
+  if (userRole === "MASTER") {
+    return true;
+  }
+
+  // Master-only routes
+  if (path.startsWith("/master")) {
+    return false;
+  }
+
+  // Admin routes
   if (path.startsWith("/admin")) {
     return userRole === "ADMIN";
   }
 
+  // Profesor routes
   if (path.startsWith("/profesor")) {
     return userRole === "ADMIN" || userRole === "PROFESOR";
   }
 
+  // Parent routes
   if (path.startsWith("/parent")) {
     return (
       userRole === "ADMIN" || userRole === "PROFESOR" || userRole === "PARENT"

@@ -37,37 +37,69 @@ import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
 // Import standardized password schema
 import { passwordSchema } from "@/lib/user-creation";
 
-// Parent creation schema with student information
-const createParentSchema = z
-  .object({
-    // Parent information
-    name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-    email: z.string().email("Ingrese un email válido"),
-    password: passwordSchema,
-    confirmPassword: z.string().min(1, "Confirma la contraseña"),
-    phone: z.string().optional(),
-    // Student information
-    studentName: z.string().min(2, "El nombre del estudiante es requerido"),
-    studentGrade: z.string().min(1, "El grado del estudiante es requerido"),
-    studentEmail: z
-      .string()
-      .email("El email del estudiante debe ser válido")
-      .optional()
-      .or(z.literal("")),
-    guardianPhone: z.string().optional(),
-    relationship: z.string().min(1, "La relación familiar es requerida"),
-  })
-  .superRefine((data, ctx) => {
-    if (data.password !== data.confirmPassword) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Las contraseñas no coinciden",
-        path: ["confirmPassword"],
-      });
-    }
-  });
+// Helper function to create parent schema with translations
+const createParentSchemaWithTranslations = (
+  t: (key: string, namespace?: string) => string,
+) => {
+  return z
+    .object({
+      // Parent information
+      name: z
+        .string()
+        .min(2, t("admin.parent_form.validation.name_min", "admin")),
+      email: z
+        .string()
+        .email(t("admin.parent_form.validation.email_invalid", "admin")),
+      password: passwordSchema,
+      confirmPassword: z
+        .string()
+        .min(
+          1,
+          t("admin.parent_form.validation.confirm_password_required", "admin"),
+        ),
+      phone: z
+        .string()
+        .min(1, t("admin.parent_form.validation.phone_required", "admin")),
+      // Student information
+      studentName: z
+        .string()
+        .min(
+          2,
+          t("admin.parent_form.validation.student_name_required", "admin"),
+        ),
+      studentGrade: z
+        .string()
+        .min(
+          1,
+          t("admin.parent_form.validation.student_grade_required", "admin"),
+        ),
+      studentEmail: z
+        .string()
+        .email(t("admin.parent_form.validation.student_email_invalid", "admin"))
+        .optional()
+        .or(z.literal("")),
+      guardianPhone: z.string().optional(),
+      relationship: z
+        .string()
+        .min(
+          1,
+          t("admin.parent_form.validation.relationship_required", "admin"),
+        ),
+    })
+    .superRefine((data, ctx) => {
+      if (data.password !== data.confirmPassword) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("admin.parent_form.validation.password_mismatch", "admin"),
+          path: ["confirmPassword"],
+        });
+      }
+    });
+};
 
-type ParentFormValues = z.infer<typeof createParentSchema>;
+type ParentFormValues = z.infer<
+  ReturnType<typeof createParentSchemaWithTranslations>
+>;
 type ParentFormOutput = Omit<ParentFormValues, "confirmPassword">;
 
 interface ParentCreationFormProps {
@@ -78,32 +110,6 @@ interface ParentCreationFormProps {
   description?: string;
   className?: string;
 }
-
-const gradeOptions = [
-  "Pre-Kinder",
-  "Kinder",
-  "1° Básico",
-  "2° Básico",
-  "3° Básico",
-  "4° Básico",
-  "5° Básico",
-  "6° Básico",
-  "7° Básico",
-  "8° Básico",
-  "1° Medio",
-  "2° Medio",
-  "3° Medio",
-  "4° Medio",
-];
-
-const relationshipOptions = [
-  "Padre",
-  "Madre",
-  "Tutor Legal",
-  "Abuelo/a",
-  "Tío/a",
-  "Otro Familiar",
-];
 
 interface StepIndicatorProps {
   currentStep: number;
@@ -140,14 +146,50 @@ export function ParentCreationForm({
   onSubmit,
   onCancel,
   isLoading = false,
-  title = "Crear Usuario Padre",
-  description = "Registra un nuevo usuario padre con información del estudiante",
+  title,
+  description,
   className,
 }: ParentCreationFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["admin", "common"]);
+
+  // Create schema with translations
+  const createParentSchema = createParentSchemaWithTranslations(t);
+
+  // Grade options with translations
+  const gradeOptions = [
+    t("admin.parent_form.grades.pre_kinder", "admin"),
+    t("admin.parent_form.grades.kinder", "admin"),
+    t("admin.parent_form.grades.grade_1", "admin"),
+    t("admin.parent_form.grades.grade_2", "admin"),
+    t("admin.parent_form.grades.grade_3", "admin"),
+    t("admin.parent_form.grades.grade_4", "admin"),
+    t("admin.parent_form.grades.grade_5", "admin"),
+    t("admin.parent_form.grades.grade_6", "admin"),
+    t("admin.parent_form.grades.grade_7", "admin"),
+    t("admin.parent_form.grades.grade_8", "admin"),
+    t("admin.parent_form.grades.medium_1", "admin"),
+    t("admin.parent_form.grades.medium_2", "admin"),
+    t("admin.parent_form.grades.medium_3", "admin"),
+    t("admin.parent_form.grades.medium_4", "admin"),
+  ];
+
+  // Relationship options with translations
+  const relationshipOptions = [
+    t("admin.parent_form.relationships.father", "admin"),
+    t("admin.parent_form.relationships.mother", "admin"),
+    t("admin.parent_form.relationships.legal_guardian", "admin"),
+    t("admin.parent_form.relationships.grandparent", "admin"),
+    t("admin.parent_form.relationships.uncle_aunt", "admin"),
+    t("admin.parent_form.relationships.other_family", "admin"),
+  ];
+
+  // Default title and description with translations
+  const defaultTitle = title || t("admin.parent_form.title", "admin");
+  const defaultDescription =
+    description || t("admin.parent_form.description", "admin");
 
   const form = useForm<ParentFormValues>({
     resolver: zodResolver(createParentSchema),
@@ -225,7 +267,6 @@ export function ParentCreationForm({
     const cleanedData = {
       ...formValues,
       studentEmail: data.studentEmail || undefined,
-      phone: data.phone || undefined,
       guardianPhone: data.guardianPhone || undefined,
     } satisfies ParentFormOutput;
     await onSubmit(cleanedData);
@@ -244,17 +285,17 @@ export function ParentCreationForm({
   };
 
   const stepTitles = [
-    "Información Personal",
-    "Crear Contraseña",
-    "Verificar Contraseña",
-    "Datos del Estudiante",
+    t("admin.parent_form.step.personal_info", "admin"),
+    t("admin.parent_form.step.create_password", "admin"),
+    t("admin.parent_form.step.confirm_password", "admin"),
+    t("admin.parent_form.step.student_data", "admin"),
   ];
 
   const stepDescriptions = [
-    "Tus datos básicos de contacto",
-    "Crea una contraseña segura",
-    "Confirma tu contraseña",
-    "Información de tu estudiante",
+    t("admin.parent_form.step_desc.personal_info", "admin"),
+    t("admin.parent_form.step_desc.create_password", "admin"),
+    t("admin.parent_form.step_desc.confirm_password", "admin"),
+    t("admin.parent_form.step_desc.student_data", "admin"),
   ];
 
   return (
@@ -262,9 +303,9 @@ export function ParentCreationForm({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <UserPlus className="h-5 w-5" />
-          {title}
+          {defaultTitle}
         </CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription>{defaultDescription}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -282,10 +323,15 @@ export function ParentCreationForm({
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nombre Completo</FormLabel>
+                        <FormLabel>
+                          {t("admin.parent_form.field.name", "admin")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ej: María González"
+                            placeholder={t(
+                              "admin.parent_form.field.name_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             onKeyDown={(e) => handleKeyDown(e, "name")}
                           />
@@ -300,11 +346,16 @@ export function ParentCreationForm({
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>
+                          {t("admin.parent_form.field.email", "admin")}
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="padre@email.com"
+                            placeholder={t(
+                              "admin.parent_form.field.email_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             onKeyDown={(e) => handleKeyDown(e, "email")}
                           />
@@ -321,10 +372,15 @@ export function ParentCreationForm({
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Teléfono (Opcional)</FormLabel>
+                        <FormLabel>
+                          {t("admin.parent_form.field.phone", "admin")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="+569 1234 5678"
+                            placeholder={t(
+                              "admin.parent_form.field.phone_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             onKeyDown={(e) => handleKeyDown(e, "phone")}
                           />
@@ -339,7 +395,9 @@ export function ParentCreationForm({
                     name="relationship"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Relación Familiar</FormLabel>
+                        <FormLabel>
+                          {t("admin.parent_form.field.relationship", "admin")}
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -350,7 +408,12 @@ export function ParentCreationForm({
                                 handleKeyDown(e, "relationship")
                               }
                             >
-                              <SelectValue placeholder="Seleccione relación" />
+                              <SelectValue
+                                placeholder={t(
+                                  "admin.parent_form.field.relationship_placeholder",
+                                  "admin",
+                                )}
+                              />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -376,12 +439,17 @@ export function ParentCreationForm({
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Crear Contraseña</FormLabel>
+                      <FormLabel>
+                        {t("admin.parent_form.field.password", "admin")}
+                      </FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
                             type={showPassword ? "text" : "password"}
-                            placeholder="Contraseña segura"
+                            placeholder={t(
+                              "admin.parent_form.field.password_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             className="pr-10"
                             onKeyDown={(e) => handleKeyDown(e, "password")}
@@ -394,8 +462,14 @@ export function ParentCreationForm({
                             onClick={() => setShowPassword(!showPassword)}
                             aria-label={
                               showPassword
-                                ? "Ocultar contraseña"
-                                : "Mostrar contraseña"
+                                ? t(
+                                    "admin.parent_form.aria.hide_password",
+                                    "admin",
+                                  )
+                                : t(
+                                    "admin.parent_form.aria.show_password",
+                                    "admin",
+                                  )
                             }
                           >
                             {showPassword ? (
@@ -407,9 +481,10 @@ export function ParentCreationForm({
                         </div>
                       </FormControl>
                       <FormDescription>
-                        La contraseña debe tener al menos 8 caracteres,
-                        incluyendo mayúsculas, minúsculas, números y caracteres
-                        especiales
+                        {t(
+                          "admin.parent_form.field.password_description",
+                          "admin",
+                        )}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -425,12 +500,17 @@ export function ParentCreationForm({
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirmar Contraseña</FormLabel>
+                      <FormLabel>
+                        {t("admin.parent_form.field.confirm_password", "admin")}
+                      </FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
                             type={showConfirmPassword ? "text" : "password"}
-                            placeholder="Confirma la contraseña"
+                            placeholder={t(
+                              "admin.parent_form.field.confirm_password_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             className="pr-10"
                             onKeyDown={(e) =>
@@ -447,8 +527,14 @@ export function ParentCreationForm({
                             }
                             aria-label={
                               showConfirmPassword
-                                ? "Ocultar confirmación de contraseña"
-                                : "Mostrar confirmación de contraseña"
+                                ? t(
+                                    "admin.parent_form.aria.hide_confirm_password",
+                                    "admin",
+                                  )
+                                : t(
+                                    "admin.parent_form.aria.show_confirm_password",
+                                    "admin",
+                                  )
                             }
                           >
                             {showConfirmPassword ? (
@@ -474,10 +560,15 @@ export function ParentCreationForm({
                     name="studentName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nombre del Estudiante</FormLabel>
+                        <FormLabel>
+                          {t("admin.parent_form.field.student_name", "admin")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ej: Juan Pérez"
+                            placeholder={t(
+                              "admin.parent_form.field.student_name_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             onKeyDown={(e) => handleKeyDown(e, "studentName")}
                           />
@@ -492,7 +583,9 @@ export function ParentCreationForm({
                     name="studentGrade"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Grado/Curso</FormLabel>
+                        <FormLabel>
+                          {t("admin.parent_form.field.student_grade", "admin")}
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -503,7 +596,12 @@ export function ParentCreationForm({
                                 handleKeyDown(e, "studentGrade")
                               }
                             >
-                              <SelectValue placeholder="Seleccione grado" />
+                              <SelectValue
+                                placeholder={t(
+                                  "admin.parent_form.field.student_grade_placeholder",
+                                  "admin",
+                                )}
+                              />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -526,11 +624,16 @@ export function ParentCreationForm({
                     name="studentEmail"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email del Estudiante (Opcional)</FormLabel>
+                        <FormLabel>
+                          {t("admin.parent_form.field.student_email", "admin")}
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="estudiante@email.com"
+                            placeholder={t(
+                              "admin.parent_form.field.student_email_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             onKeyDown={(e) => handleKeyDown(e, "studentEmail")}
                           />
@@ -546,11 +649,14 @@ export function ParentCreationForm({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          Teléfono de Contacto Adicional (Opcional)
+                          {t("admin.parent_form.field.guardian_phone", "admin")}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="+569 8765 4321"
+                            placeholder={t(
+                              "admin.parent_form.field.guardian_phone_placeholder",
+                              "admin",
+                            )}
                             {...field}
                             onKeyDown={(e) => handleKeyDown(e, "guardianPhone")}
                           />
@@ -572,7 +678,7 @@ export function ParentCreationForm({
                   onClick={onCancel}
                   disabled={isLoading}
                 >
-                  Cancelar
+                  {t("admin.parent_form.button.cancel", "admin")}
                 </Button>
                 {currentStep > 1 && (
                   <Button
@@ -583,7 +689,7 @@ export function ParentCreationForm({
                     className="flex items-center gap-2"
                   >
                     <ChevronLeft className="h-4 w-4" />
-                    Anterior
+                    {t("admin.parent_form.button.previous", "admin")}
                   </Button>
                 )}
               </div>
@@ -595,12 +701,14 @@ export function ParentCreationForm({
                   disabled={isLoading}
                   className="flex items-center gap-2"
                 >
-                  Siguiente
+                  {t("admin.parent_form.button.next", "admin")}
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               ) : (
                 <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Creando..." : "Crear Usuario Padre"}
+                  {isLoading
+                    ? t("admin.parent_form.button.creating", "admin")
+                    : t("admin.parent_form.button.submit", "admin")}
                 </Button>
               )}
             </div>

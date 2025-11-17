@@ -296,7 +296,9 @@ export default async function RecursosPage() {
               {t("parent.resources.parent_workshops_desc")}
             </p>
             <Button asChild variant="outline" className="w-full">
-              <Link href="/parent/calendario-escolar">{t("parent.resources.view_schedule")}</Link>
+              <Link href="/parent/calendario-escolar">
+                {t("parent.resources.view_schedule")}
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -315,7 +317,9 @@ export default async function RecursosPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild>
-                  <Link href="/parent/comunicacion">{t("parent.resources.send_request")}</Link>
+                  <Link href="/parent/comunicacion">
+                    {t("parent.resources.send_request")}
+                  </Link>
                 </Button>
                 <Button asChild variant="outline">
                   <Link href="mailto:recursos@plataforma-astral.com">

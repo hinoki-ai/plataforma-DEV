@@ -198,8 +198,7 @@ npx convex deploy
 
 ### Technical Documentation
 
-- **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete system documentation (AI-optimized)
-- **[docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)** - Authentication system details
+- **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete system documentation (AI-optimized) including Clerk + Convex authentication
 - **All documentation**: See [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for complete list
 
 ---
@@ -266,7 +265,7 @@ const meetings = await client.query(api.meetings.getMeetings, {});
 
 ### Authentication Issues
 
-**Solution**: See [docs/TROUBLESHOOTING_AUTH.md](./docs/TROUBLESHOOTING_AUTH.md) or [docs/AUTHENTICATION_COMPLETE_GUIDE.md](./docs/AUTHENTICATION_COMPLETE_GUIDE.md)
+**Solution**: See [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) authentication section or [docs/CLERK_SETUP.md](./docs/CLERK_SETUP.md)
 
 ### Clerk Configuration Issues
 

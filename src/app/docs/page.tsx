@@ -1,11 +1,7 @@
-import { Metadata } from "next";
-import DocsLandingContent from "./DocsLandingContent";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Documentation - Plataforma Astral",
-  description:
-    "Complete documentation for Plataforma Astral - SaaS educational platform",
-};
+import DocsLandingContent from "./DocsLandingContent";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Simple markdown to HTML converter (basic implementation)
 function markdownToHtml(markdown: string): string {
@@ -53,61 +49,62 @@ function markdownToHtml(markdown: string): string {
     .replace(/^(.+?)(<br\/>|$)/gm, "<p>$1</p>");
 }
 
-// Static content for the docs page
-const staticMarkdown = `# Technical Documentation
+export default function DocsPage() {
+  const { t, language } = useDivineParsing(["common"]);
 
-**Plataforma Astral Educational Management System**  
-**Last Updated**: October 13, 2025  
-**Status**: Production ready with full Convex integration ✅
+  // Generate markdown content based on language
+  const staticMarkdown = `# ${t("docs.content.title", "common")}
 
----
-
-## 📚 Documentation Index
-
-### Core Systems
-- **[AI Knowledge Base](AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete system architecture and design
-- **[Authentication](AUTHENTICATION_COMPLETE_GUIDE.md)** - Login, roles, and security
-- **[Animation Guide](ANIMATION_GUIDE.md)** - UI components and user experience patterns
-
-### Specialized Features
-- **[Voting System](VOTING_SYSTEM.md)** - Democratic decision-making tools
-- **[Role System](ROLE_SYSTEM.md)** - User permissions and access control
-
-### Operations & Troubleshooting
-- **[Environment Setup](ENVIRONMENT.md)** - Development and deployment configs
-- **[Troubleshooting](TROUBLESHOOTING_AUTH.md)** - Common issues and solutions
-- **[Emergency Procedures](EMERGENCY_ACCESS_PROCEDURES.md)** - Critical system recovery
+**${t("docs.content.system_name", "common")}**  
+**${t("docs.content.last_updated", "common")}**: October 13, 2025  
+**${t("docs.content.status", "common")}**: ${t("docs.content.status_value", "common")}
 
 ---
 
-## 🚀 Quick Start
+## ${t("docs.content.index_title", "common")}
 
-1. **Development**: \`npm run dev\` - Start local development server
-2. **Build**: \`npm run build\` - Create production build
-3. **Deploy**: \`npm run deploy\` - Full automated deployment
+### ${t("docs.content.core_systems", "common")}
+- **[${t("docs.content.ai_kb", "common")}](AI_KNOWLEDGE_BASE.md)** - **${t("docs.content.ai_kb_desc", "common")}** (includes authentication)
+- **[${t("docs.content.animation_guide", "common")}](ANIMATION_GUIDE.md)** - ${t("docs.content.animation_guide_desc", "common")}
 
-## 📖 Key Features
+### ${t("docs.content.specialized_features", "common")}
+- **[${t("docs.content.voting_system", "common")}](VOTING_SYSTEM.md)** - ${t("docs.content.voting_system_desc", "common")}
+- **[${t("docs.content.role_system", "common")}](ROLE_SYSTEM.md)** - ${t("docs.content.role_system_desc", "common")}
 
-- **Multi-role Authentication** - Admin, Teacher, Parent, and Master roles
-- **Real-time Collaboration** - Live updates with Convex backend
-- **Responsive Design** - Mobile-first educational platform
-- **Comprehensive APIs** - REST and GraphQL endpoints
-- **Advanced Security** - Role-based access control and encryption
-
-## 🔧 Technology Stack
-
-- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
-- **Backend**: Convex (real-time database and functions)
-- **Authentication**: Clerk (OAuth + custom flows)
-- **Deployment**: Vercel (frontend), Convex Cloud (backend)
-- **Monitoring**: Custom analytics and error tracking
+### ${t("docs.content.operations", "common")}
+- **[${t("docs.content.env_setup", "common")}](ENVIRONMENT.md)** - ${t("docs.content.env_setup_desc", "common")}
+- **[${t("docs.content.troubleshooting", "common")}](AI_KNOWLEDGE_BASE.md)** - ${t("docs.content.troubleshooting_desc", "common")} (see troubleshooting sections)
+- **[${t("docs.content.emergency", "common")}](EMERGENCY_ACCESS_PROCEDURES.md)** - ${t("docs.content.emergency_desc", "common")}
 
 ---
 
-*For detailed information, please refer to the specific documentation files linked above.*
+## ${t("docs.content.quick_start", "common")}
+
+1. **${t("docs.content.dev", "common")}**: \`npm run dev\` - ${t("docs.content.dev_desc", "common")}
+2. **${t("docs.content.build", "common")}**: \`npm run build\` - ${t("docs.content.build_desc", "common")}
+3. **${t("docs.content.deploy", "common")}**: \`npm run deploy\` - ${t("docs.content.deploy_desc", "common")}
+
+## ${t("docs.content.key_features", "common")}
+
+- **${t("docs.content.multi_role", "common")}** - ${t("docs.content.multi_role_desc", "common")}
+- **${t("docs.content.realtime", "common")}** - ${t("docs.content.realtime_desc", "common")}
+- **${t("docs.content.responsive", "common")}** - ${t("docs.content.responsive_desc", "common")}
+- **${t("docs.content.apis", "common")}** - ${t("docs.content.apis_desc", "common")}
+- **${t("docs.content.security", "common")}** - ${t("docs.content.security_desc", "common")}
+
+## ${t("docs.content.tech_stack", "common")}
+
+- **${t("docs.content.frontend", "common")}**: ${t("docs.content.frontend_value", "common")}
+- **${t("docs.content.backend", "common")}**: ${t("docs.content.backend_value", "common")}
+- **${t("docs.content.auth_tech", "common")}**: ${t("docs.content.auth_tech_value", "common")}
+- **${t("docs.content.deployment_tech", "common")}**: ${t("docs.content.deployment_tech_value", "common")}
+- **${t("docs.content.monitoring", "common")}**: ${t("docs.content.monitoring_value", "common")}
+
+---
+
+*${t("docs.content.detailed_info", "common")}*
 `;
 
-export default function DocsPage() {
   const htmlContent = markdownToHtml(staticMarkdown);
 
   return <DocsLandingContent htmlContent={htmlContent} />;

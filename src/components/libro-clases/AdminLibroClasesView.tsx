@@ -36,6 +36,7 @@ import {
 import { toast } from "sonner";
 import { CourseForm } from "@/components/libro-clases/CourseForm";
 import { CourseManagementDashboard } from "@/components/libro-clases/CourseManagementDashboard";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 type AdminView =
   | "overview"
@@ -48,65 +49,30 @@ interface AdminLibroClasesViewProps {
   view?: AdminView;
 }
 
-const ADMIN_HEADERS: Record<AdminView, { title: string; subtitle: string }> = {
-  overview: {
-    title: "Libro de Clases - Administración",
-    subtitle: "Gestión centralizada de libros de clases de toda la institución",
-  },
-  attendance: {
-    title: "Asistencia Institucional",
-    subtitle:
-      "Supervisa inasistencias, atrasos y justificativos en todos los cursos",
-  },
-  grades: {
-    title: "Calificaciones Institucionales",
-    subtitle: "Controla notas, promedios y tendencias académicas",
-  },
-  observations: {
-    title: "Observaciones y Convivencia Escolar",
-    subtitle: "Revisa anotaciones positivas, medidas formativas y protocolos",
-  },
-  students: {
-    title: "Gestión de Estudiantes",
-    subtitle: "Administra matrículas, traslados y cupos disponibles por curso",
-  },
-};
-
-const ADMIN_VIEW_ACTIONS: Partial<
-  Record<AdminView, { label: string; toast: string }>
-> = {
-  attendance: {
-    label: "Descargar reporte general",
-    toast:
-      "Generaremos un reporte consolidado de asistencia cuando cierres el periodo.",
-  },
-  grades: {
-    label: "Exportar libro de notas",
-    toast:
-      "La exportación consolidada permitirá compartir calificaciones con supervisión.",
-  },
-  observations: {
-    label: "Exportar anotaciones",
-    toast:
-      "Próximamente podrás descargar registros de convivencia y comunicaciones.",
-  },
-  students: {
-    label: "Sincronizar con SIGE",
-    toast:
-      "La integración SIGE estará disponible para sincronizar matrículas oficiales.",
-  },
-};
+// Translation keys will be used dynamically in the component
 
 export function AdminLibroClasesView({
   view = "overview",
 }: AdminLibroClasesViewProps) {
+  const { t } = useDivineParsing(["libro-clases", "common"]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<number | undefined>(
     new Date().getFullYear(),
   );
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const header = ADMIN_HEADERS[view];
-  const secondaryAction = ADMIN_VIEW_ACTIONS[view];
+
+  const header = {
+    title: t(`admin.${view}.title`, "libro-clases"),
+    subtitle: t(`admin.${view}.subtitle`, "libro-clases"),
+  };
+
+  const secondaryAction =
+    view !== "overview"
+      ? {
+          label: t(`admin.actions.${view}.label`, "libro-clases"),
+          toast: t(`admin.actions.${view}.toast`, "libro-clases"),
+        }
+      : undefined;
 
   // Fetch courses
   const courses = useQuery(
@@ -174,20 +140,20 @@ export function AdminLibroClasesView({
       <DialogTrigger asChild>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
-          Nuevo Curso
+          {t("create.course", "libro-clases")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Crear Nuevo Curso</DialogTitle>
+          <DialogTitle>{t("create.course", "libro-clases")}</DialogTitle>
           <DialogDescription>
-            Complete la información para crear un nuevo libro de clases
+            {t("common.description", "common")}
           </DialogDescription>
         </DialogHeader>
         <CourseForm
           onSuccess={() => {
             setIsCreateDialogOpen(false);
-            toast.success("Curso creado exitosamente");
+            toast.success(t("common.success", "common"));
           }}
           onCancel={() => setIsCreateDialogOpen(false)}
         />
@@ -324,7 +290,7 @@ export function AdminLibroClasesView({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Buscar cursos..."
+              placeholder={t("search.placeholder", "libro-clases")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -339,10 +305,10 @@ export function AdminLibroClasesView({
                 )
               }
               className="px-3 py-2 border border-input rounded-md bg-background text-sm"
-              aria-label="Año académico"
-              title="Año académico"
+              aria-label={t("year.filter", "libro-clases")}
+              title={t("year.filter", "libro-clases")}
             >
-              <option value="">Todos los años</option>
+              <option value="">{t("common.all", "common")}</option>
               {Array.from({ length: 5 }, (_, i) => {
                 const year = new Date().getFullYear() - i;
                 return (
@@ -363,7 +329,7 @@ export function AdminLibroClasesView({
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Cursos en Vista
+                {t("metrics.total_courses", "libro-clases")}
               </CardTitle>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -374,7 +340,7 @@ export function AdminLibroClasesView({
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Cursos Activos
+                {t("metrics.active_courses", "libro-clases")}
               </CardTitle>
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -384,19 +350,21 @@ export function AdminLibroClasesView({
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Año en Foco</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                {t("year.filter", "libro-clases")}
+              </CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {selectedYear ?? "Todos"}
+                {selectedYear ?? t("common.all", "common")}
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Niveles Escolares
+                {t("metrics.distinct_levels", "libro-clases")}
               </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -414,17 +382,17 @@ export function AdminLibroClasesView({
             <CardContent className="py-12 text-center">
               <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">
-                No hay cursos disponibles
+                {t("no_courses", "libro-clases")}
               </h3>
               <p className="text-muted-foreground mb-4">
                 {searchQuery
-                  ? "No se encontraron cursos que coincidan con la búsqueda"
-                  : "Cree un nuevo curso para comenzar"}
+                  ? t("common.no_results", "common")
+                  : t("no_courses.description", "libro-clases")}
               </p>
               {!searchQuery && (
                 <Button onClick={() => setIsCreateDialogOpen(true)}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Crear Primer Curso
+                  {t("create.course", "libro-clases")}
                 </Button>
               )}
             </CardContent>
@@ -447,6 +415,7 @@ export function AdminLibroClasesView({
 }
 
 function CourseCard({ course }: { course: any }) {
+  const { t } = useDivineParsing(["libro-clases", "common"]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const courseData = useQuery(
@@ -468,7 +437,9 @@ function CourseCard({ course }: { course: any }) {
             ) : (
               <XCircle className="h-3 w-3 mr-1" />
             )}
-            {course.isActive ? "Activo" : "Inactivo"}
+            {course.isActive
+              ? t("course.active", "libro-clases")
+              : t("course.inactive", "libro-clases")}
           </Badge>
         </div>
         <CardDescription>
@@ -478,20 +449,26 @@ function CourseCard({ course }: { course: any }) {
       <CardContent>
         <div className="space-y-2 mb-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Profesor:</span>
+            <span className="text-muted-foreground">
+              {t("course.teacher", "libro-clases")}:
+            </span>
             <span className="font-medium">
-              {course.teacher?.name || "Sin asignar"}
+              {course.teacher?.name || t("common.not_assigned", "common")}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Estudiantes:</span>
+            <span className="text-muted-foreground">
+              {t("course.students", "libro-clases")}:
+            </span>
             <span className="font-medium">
               {courseData?.students?.length || 0}
               {course.maxStudents && ` / ${course.maxStudents}`}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Asignaturas:</span>
+            <span className="text-muted-foreground">
+              {t("common.subjects", "common")}:
+            </span>
             <span className="font-medium">{course.subjects.length}</span>
           </div>
         </div>
@@ -502,7 +479,7 @@ function CourseCard({ course }: { course: any }) {
             className="flex-1"
             onClick={() => setIsDialogOpen(true)}
           >
-            Ver Detalles
+            {t("common.view_details", "common")}
           </Button>
         </div>
       </CardContent>
@@ -511,9 +488,9 @@ function CourseCard({ course }: { course: any }) {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Detalles del Curso</DialogTitle>
+            <DialogTitle>{t("common.details", "common")}</DialogTitle>
             <DialogDescription>
-              Información completa del curso y estudiantes
+              {t("common.description", "common")}
             </DialogDescription>
           </DialogHeader>
           {courseData && <CourseManagementDashboard courses={[courseData]} />}

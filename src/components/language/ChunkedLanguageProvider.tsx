@@ -75,6 +75,12 @@ import terminosES from "../../locales/es/terminos.json";
 import terminosEN from "../../locales/en/terminos.json";
 import privacidadES from "../../locales/es/privacidad.json";
 import privacidadEN from "../../locales/en/privacidad.json";
+import libroClasesES from "../../locales/es/libro-clases.json";
+import libroClasesEN from "../../locales/en/libro-clases.json";
+import meetingsES from "../../locales/es/meetings.json";
+import meetingsEN from "../../locales/en/meetings.json";
+import masterES from "../../locales/es/master.json";
+import masterEN from "../../locales/en/master.json";
 
 // Inline planes translations to fix production loading issues
 const planesESInline = {
@@ -256,6 +262,9 @@ const translations = {
     dpa: dpaES,
     terminos: terminosES,
     privacidad: privacidadES,
+    "libro-clases": libroClasesES,
+    meetings: meetingsES,
+    master: masterES,
   },
   en: {
     common: commonEN,
@@ -271,6 +280,9 @@ const translations = {
     dpa: dpaEN,
     terminos: terminosEN,
     privacidad: privacidadEN,
+    "libro-clases": libroClasesEN,
+    meetings: meetingsEN,
+    master: masterEN,
   },
 } as const;
 
@@ -302,6 +314,12 @@ const translationRegistry: Record<string, TranslationStrings> = {
   "en-terminos": terminosEN,
   "es-privacidad": privacidadES,
   "en-privacidad": privacidadEN,
+  "es-libro-clases": libroClasesES,
+  "en-libro-clases": libroClasesEN,
+  "es-meetings": meetingsES,
+  "en-meetings": meetingsEN,
+  "es-master": masterES,
+  "en-master": masterEN,
 };
 
 // Registry is populated with all translation files

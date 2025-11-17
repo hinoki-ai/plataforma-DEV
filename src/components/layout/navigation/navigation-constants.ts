@@ -29,6 +29,7 @@ export const STANDARD_SECTION_ORDER = {
   USER_MANAGEMENT: "nav.main.categories.management",
   ACADEMIC: "nav.main.categories.academic",
   LIBRO_CLASES: "nav.main.categories.libro_clases",
+  CONVIVENCIA: "nav.main.categories.convivencia",
   COMMUNICATION: "nav.main.categories.communication",
   RESOURCES: "nav.main.categories.resources",
   PERSONAL: "nav.main.categories.personal",
