@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getAuthenticatedConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { createApiRoute } from "@/lib/api-validation";
 import { createSuccessResponse } from "@/lib/api-error";

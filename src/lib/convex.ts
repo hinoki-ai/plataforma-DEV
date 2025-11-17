@@ -42,18 +42,4 @@ export function getConvexClient(token?: string): ConvexHttpClient {
   return convexHttpClient;
 }
 
-// Helper function to get authenticated Convex client from Clerk
-// Use this in API routes that need to call tenant queries
-export async function getAuthenticatedConvexClient(): Promise<ConvexHttpClient> {
-  const { auth } = await import("@clerk/nextjs/server");
-  const { getToken } = await auth();
-  const token = await getToken();
-
-  if (!token) {
-    throw new Error("Failed to get authentication token for Convex");
-  }
-
-  return getConvexClient(token);
-}
-
 export { convexHttpClient };
