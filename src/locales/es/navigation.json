@@ -62,5 +62,12 @@
   "nav.observaciones": "Observaciones",
   "nav.observaciones.description": "Gestionar anotaciones y retroalimentación",
   "nav.reuniones_apoderados": "Reuniones con Apoderados",
-  "nav.reuniones_apoderados.description": "Planificar y registrar reuniones con familias"
+  "nav.reuniones_apoderados.description": "Planificar y registrar reuniones con familias",
+  "nav.protocolos_convivencia": "Protocolos de Convivencia",
+  "nav.protocolos_convivencia.normas": "Normas de Convivencia",
+  "nav.protocolos_convivencia.disciplina": "Protocolos de Disciplina",
+  "nav.protocolos_convivencia.medidas": "Medidas Correctivas",
+  "nav.protocolos_convivencia.reconocimientos": "Reconocimientos",
+  "nav.protocolos_convivencia.actas_apoderados": "Actas de Entrevistas Apoderados",
+  "nav.protocolos_convivencia.actas_alumnos": "Actas de Entrevistas Alumnos"
 }

@@ -51,6 +51,8 @@ import {
 import { useNavigation } from "@/components/layout/NavigationContext";
 import { usePathname } from "next/navigation";
 import { useDashboardData } from "@/hooks/useDashboardData";
+import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
+import { OACoverageWidget } from "@/components/dashboard/OACoverageWidget";
 
 interface DashboardStats {
   total: number;
@@ -166,6 +168,13 @@ const quickActions: Record<UserRole, QuickAction[]> = {
       href: "/admin/equipo-multidisciplinario",
     },
     {
+      id: "calendar",
+      title: "Calendario Escolar",
+      description: "Gestionar calendario académico",
+      icon: Calendar,
+      href: "/admin/calendario-escolar",
+    },
+    {
       id: "notifications",
       title: "Notificaciones",
       description: "Gestionar notificaciones",
@@ -217,13 +226,6 @@ const quickActions: Record<UserRole, QuickAction[]> = {
       description: "Con profesor",
       icon: Calendar,
       href: "/parent/reuniones",
-    },
-    {
-      id: "view-calendar",
-      title: "Calendario Escolar",
-      description: "Fechas importantes",
-      icon: Calendar,
-      href: "/parent/calendario-escolar",
     },
     {
       id: "contact-teacher",
@@ -640,31 +642,46 @@ export function RoleAwareDashboard() {
             </div>
           }
           profesor={
-            <DashboardCard
-              title="Próximas Clases"
-              description="Tu horario de hoy"
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm font-medium">Matemáticas 3A</p>
-                    <p className="text-xs text-muted-foreground">
-                      9:00 AM - 10:30 AM
-                    </p>
-                  </div>
+            <div className="space-y-6">
+              {/* Calendar Section */}
+              <DashboardCard
+                title="📅 Calendario Académico"
+                description="Vista completa del calendario escolar"
+              >
+                <div className="h-96 overflow-hidden rounded-lg border">
+                  <UnifiedCalendarView
+                    mode="compact"
+                    showAdminControls={false}
+                    showExport={false}
+                    initialCategories={["ACADEMIC", "HOLIDAY", "SPECIAL", "MEETING", "EXAM"]}
+                    userRole="PROFESOR"
+                  />
                 </div>
-                <div className="flex items-center gap-3">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm font-medium">Lenguaje 2B</p>
-                    <p className="text-xs text-muted-foreground">
-                      11:00 AM - 12:30 PM
-                    </p>
-                  </div>
+                <div className="pt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    asChild
+                  >
+                    <Link href="/profesor/calendario-escolar">
+                      Ver Calendario Completo
+                    </Link>
+                  </Button>
                 </div>
-              </div>
-            </DashboardCard>
+              </DashboardCard>
+
+              {/* OA Coverage Widget */}
+              <DashboardCard
+                title="🎯 Cobertura de OA"
+                description="Seguimiento de objetivos de aprendizaje"
+              >
+                <OACoverageWidget
+                  data={stats?.learningObjectives || null}
+                  loading={stats === null}
+                />
+              </DashboardCard>
+            </div>
           }
           parent={
             <DashboardCard
@@ -733,44 +750,6 @@ export function RoleAwareDashboard() {
               </div>
             </DashboardCard>
 
-            {/* Calendar Section */}
-            <DashboardCard
-              title="📅 Calendario Escolar"
-              description="Eventos, reuniones y actividades"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
-                  <Calendar className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">Próxima Reunión</p>
-                    <p className="text-xs text-muted-foreground">
-                      Mañana 10:00 AM
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
-                  <Clock className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">Evento Especial</p>
-                    <p className="text-xs text-muted-foreground">
-                      Viernes 2:00 PM
-                    </p>
-                  </div>
-                </div>
-                <div className="pt-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    asChild
-                  >
-                    <Link href="/parent/calendario-escolar">
-                      Ver Calendario
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </DashboardCard>
 
             {/* Votaciones Section */}
             <DashboardCard

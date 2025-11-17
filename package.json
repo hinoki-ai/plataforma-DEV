@@ -17,6 +17,7 @@
     "convex:dashboard": "convex dashboard",
     "deploy": "node scripts/deploy.js",
     "deploy:fast": "node scripts/deploy.js --skip-checks",
+    "deploy:emergency": "node scripts/emergency-deploy.js",
     "verify-deployment": "node scripts/verify-deployment.js",
     "migrate-users-to-clerk": "tsx scripts/migrate-users-to-clerk.ts",
     "import-convex-to-clerk": "tsx scripts/import-convex-users-to-clerk.ts",

@@ -51,14 +51,6 @@ export const CalendarComponents = {
       ssr: false, // Disable SSR for now to avoid hydration issues
     },
   ),
-
-  AdminCalendarView: createDynamicComponent(
-    () => import("@/components/calendar/AdminCalendarView"),
-    {
-      loading: () => <CalendarSkeleton />,
-      displayName: "AdminCalendarView",
-    },
-  ),
 };
 
 // ⚡ Performance: Dashboard components - role-based lazy loading
