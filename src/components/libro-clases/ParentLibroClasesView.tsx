@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import { GradesTable } from "@/components/libro-clases/GradesTable";
+import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
 import { Id } from "@/convex/_generated/dataModel";
 import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 import { usePathname, useRouter } from "next/navigation";
@@ -34,7 +35,8 @@ type TabValue =
   | "grades"
   | "attendance"
   | "observations"
-  | "meetings";
+  | "meetings"
+  | "calendar";
 
 type CourseEnrollment = {
   _id: Id<"courseStudents">;
@@ -67,8 +69,8 @@ const PARENT_TAB_HEADERS: Record<
     subtitle: "Monitorea el progreso integral de tus hijos",
   },
   attendance: {
-    title: "Asistencia y Puntualidad",
-    subtitle: "Revisa ausencias, atrasos y justificativos enviados al colegio",
+    title: "Calendario Académico",
+    subtitle: "Calendario escolar completo con eventos, reuniones y seguimiento de asistencia",
   },
   grades: {
     title: "Calificaciones y Evaluaciones",
@@ -468,7 +470,7 @@ export function ParentLibroClasesView({
 
             {/* Tabs for Different Functions */}
             <Tabs value={activeTab} onValueChange={handleTabChange}>
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="overview">
                   <BookOpen className="h-4 w-4 mr-2" />
                   Resumen
@@ -479,7 +481,7 @@ export function ParentLibroClasesView({
                 </TabsTrigger>
                 <TabsTrigger value="attendance">
                   <Calendar className="h-4 w-4 mr-2" />
-                  Asistencia
+                  Calendario
                 </TabsTrigger>
                 <TabsTrigger value="observations">
                   <Eye className="h-4 w-4 mr-2" />
@@ -580,56 +582,69 @@ export function ParentLibroClasesView({
               </TabsContent>
 
               <TabsContent value="attendance">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Seguimiento de asistencia</CardTitle>
-                    <CardDescription>
-                      Visualiza ausencias, atrasos y justificaciones asociadas a
-                      la familia.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-3">
-                      <div className="rounded-lg border border-dashed p-4">
-                        <p className="text-xs uppercase text-muted-foreground">
-                          Curso
-                        </p>
-                        <p className="text-lg font-semibold">
-                          {selectedCourse?.name || "Selecciona un curso"}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {selectedCourse?.grade} {selectedCourse?.section}
-                        </p>
-                      </div>
-                      <div className="rounded-lg border border-dashed p-4">
-                        <p className="text-xs uppercase text-muted-foreground">
-                          Última actualización
-                        </p>
-                        <p className="text-lg font-semibold">Libro digital</p>
-                        <p className="text-xs text-muted-foreground">
-                          Se notificará cuando exista una nueva marcación
-                        </p>
-                      </div>
-                      <div className="rounded-lg border border-dashed p-4">
-                        <p className="text-xs uppercase text-muted-foreground">
-                          Canales rápidos
-                        </p>
-                        <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-                          <span>• Justificar inasistencias desde el móvil</span>
-                          <span>
-                            • Alertas automáticas por ausentismo reiterado
-                          </span>
-                          <span>• Coordinación con Inspectoría General</span>
+                <div className="space-y-6">
+                  {/* Course Context Header */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Calendario Académico y Asistencia</CardTitle>
+                      <CardDescription>
+                        Visualiza el calendario escolar completo con eventos académicos,
+                        reuniones de apoderados y seguimiento de asistencia de tus hijos.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-4 md:grid-cols-3">
+                        <div className="rounded-lg border p-4">
+                          <p className="text-xs uppercase text-muted-foreground">
+                            Curso Actual
+                          </p>
+                          <p className="text-lg font-semibold">
+                            {selectedCourse?.name || "Selecciona un curso"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {selectedCourse?.grade} {selectedCourse?.section}
+                          </p>
+                        </div>
+                        <div className="rounded-lg border p-4">
+                          <p className="text-xs uppercase text-muted-foreground">
+                            Eventos del Mes
+                          </p>
+                          <p className="text-lg font-semibold">Calendario Integrado</p>
+                          <p className="text-xs text-muted-foreground">
+                            Eventos académicos, reuniones y actividades
+                          </p>
+                        </div>
+                        <div className="rounded-lg border p-4">
+                          <p className="text-xs uppercase text-muted-foreground">
+                            Asistencia Familiar
+                          </p>
+                          <p className="text-lg font-semibold">Seguimiento en Tiempo Real</p>
+                          <p className="text-xs text-muted-foreground">
+                            Notificaciones automáticas de ausencias
+                          </p>
                         </div>
                       </div>
-                    </div>
+                    </CardContent>
+                  </Card>
 
-                    <p className="text-sm text-muted-foreground">
-                      El registro se alinea con el Libro de Clases Digital del
-                      MINEDUC y mantiene historial histórico por estudiante.
-                    </p>
-                  </CardContent>
-                </Card>
+                  {/* Integrated Calendar */}
+                  <div className="rounded-lg border bg-card">
+                    <UnifiedCalendarView
+                      mode="full"
+                      showAdminControls={false}
+                      showExport={true}
+                      initialCategories={[
+                        "ACADEMIC",
+                        "HOLIDAY",
+                        "SPECIAL",
+                        "PARENT",
+                        "MEETING",
+                        "EXAM",
+                      ]}
+                      userRole="PARENT"
+                    />
+                  </div>
+                </div>
               </TabsContent>
 
               <TabsContent value="observations">

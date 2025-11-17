@@ -99,6 +99,55 @@ class DeploymentManager {
     }
   }
 
+  async checkProductionDrift() {
+    this.log("Checking for production drift...", "🔍");
+
+    try {
+      // Get current production build ID
+      const response = execSync("curl -s https://plataforma.aramac.dev | grep -o 'build_[0-9]*' | head -1", {
+        encoding: "utf8",
+      }).trim();
+
+      if (!response) {
+        this.warning("Could not fetch production build ID");
+        return;
+      }
+
+      const prodBuildId = response.replace('build_', '');
+      const prodTimestamp = parseInt(prodBuildId);
+
+      // Get last git commit timestamp (rough approximation)
+      const lastCommit = execSync("git log -1 --format=%ct", {
+        encoding: "utf8",
+      }).trim();
+
+      const gitTimestamp = parseInt(lastCommit) * 1000; // Convert to milliseconds
+
+      const driftHours = (prodTimestamp - gitTimestamp) / (1000 * 60 * 60);
+
+      if (driftHours > 24) {
+        this.error(`🚨 PRODUCTION DRIFT DETECTED! 🚨`);
+        this.error(`Production is ${driftHours.toFixed(1)} hours ahead of git`);
+        this.error(`Production build: ${new Date(prodTimestamp).toISOString()}`);
+        this.error(`Last git commit: ${new Date(gitTimestamp).toISOString()}`);
+        this.error(``);
+        this.error(`CRITICAL: Do NOT deploy until you resolve this drift!`);
+        this.error(`Your production contains uncommitted changes.`);
+        throw new Error("Production drift detected - deployment blocked");
+      } else if (driftHours > 1) {
+        this.warning(`Minor production drift: ${driftHours.toFixed(1)} hours`);
+        this.info("This is normal for recent deployments");
+      } else {
+        this.success("Production and git are in sync");
+      }
+    } catch (error) {
+      if (error.message.includes("Production drift detected")) {
+        throw error;
+      }
+      this.warning(`Could not check production drift: ${error.message}`);
+    }
+  }
+
   async runQualityChecks() {
     if (this.skipQualityChecks) {
       this.warning("Skipping quality checks (--skip-checks flag)");
@@ -132,6 +181,9 @@ class DeploymentManager {
 
   async gitCommitAndPush() {
     this.log("Starting Git operations...", "🔄");
+
+    // CRITICAL: Always check for production drift before deploying
+    await this.checkProductionDrift();
 
     const hasChanges = !(await this.checkGitStatus());
 

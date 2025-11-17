@@ -90,6 +90,42 @@ export const ADMIN_NAVIGATION = [
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
       },
+      {
+        title: "nav.protocolos_convivencia",
+        href: "/admin/protocolos-convivencia",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+B",
+      },
+      {
+        title: "nav.protocolos_convivencia.normas",
+        href: "/admin/protocolos-convivencia/normas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.disciplina",
+        href: "/admin/protocolos-convivencia/disciplina",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.medidas",
+        href: "/admin/protocolos-convivencia/medidas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.reconocimientos",
+        href: "/admin/protocolos-convivencia/reconocimientos",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_apoderados",
+        href: "/admin/protocolos-convivencia/actas-apoderados",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_alumnos",
+        href: "/admin/protocolos-convivencia/actas-alumnos",
+        icon: NavigationIcons.Documents,
+      },
     ],
   },
   {
@@ -222,6 +258,42 @@ export const PROFESOR_NAVIGATION = [
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+M",
       },
+      {
+        title: "nav.protocolos_convivencia",
+        href: "/profesor/protocolos-convivencia",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+B",
+      },
+      {
+        title: "nav.protocolos_convivencia.normas",
+        href: "/profesor/protocolos-convivencia/normas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.disciplina",
+        href: "/profesor/protocolos-convivencia/disciplina",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.medidas",
+        href: "/profesor/protocolos-convivencia/medidas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.reconocimientos",
+        href: "/profesor/protocolos-convivencia/reconocimientos",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_apoderados",
+        href: "/profesor/protocolos-convivencia/actas-apoderados",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_alumnos",
+        href: "/profesor/protocolos-convivencia/actas-alumnos",
+        icon: NavigationIcons.Documents,
+      },
     ],
   },
   {
@@ -326,6 +398,42 @@ export const PARENT_NAVIGATION = [
         href: "/parent/calendario-escolar",
         icon: NavigationIcons.Calendar,
         shortcut: "Alt+C",
+      },
+      {
+        title: "nav.protocolos_convivencia",
+        href: "/parent/protocolos-convivencia",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+B",
+      },
+      {
+        title: "nav.protocolos_convivencia.normas",
+        href: "/parent/protocolos-convivencia/normas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.disciplina",
+        href: "/parent/protocolos-convivencia/disciplina",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.medidas",
+        href: "/parent/protocolos-convivencia/medidas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.reconocimientos",
+        href: "/parent/protocolos-convivencia/reconocimientos",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_apoderados",
+        href: "/parent/protocolos-convivencia/actas-apoderados",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_alumnos",
+        href: "/parent/protocolos-convivencia/actas-alumnos",
+        icon: NavigationIcons.Documents,
       },
     ],
   },
@@ -484,6 +592,42 @@ export const MASTER_NAVIGATION = [
         title: "nav.pme",
         href: "/admin/pme",
         icon: NavigationIcons.Analytics,
+      },
+      {
+        title: "nav.protocolos_convivencia",
+        href: "/master/protocolos-convivencia",
+        icon: NavigationIcons.Documents,
+        shortcut: "Alt+B",
+      },
+      {
+        title: "nav.protocolos_convivencia.normas",
+        href: "/master/protocolos-convivencia/normas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.disciplina",
+        href: "/master/protocolos-convivencia/disciplina",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.medidas",
+        href: "/master/protocolos-convivencia/medidas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.reconocimientos",
+        href: "/master/protocolos-convivencia/reconocimientos",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_apoderados",
+        href: "/master/protocolos-convivencia/actas-apoderados",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_alumnos",
+        href: "/master/protocolos-convivencia/actas-alumnos",
+        icon: NavigationIcons.Documents,
       },
     ],
   },

@@ -62,5 +62,12 @@
   "nav.observaciones": "Observations",
   "nav.observaciones.description": "Manage notes and feedback",
   "nav.reuniones_apoderados": "Parent Meetings",
-  "nav.reuniones_apoderados.description": "Plan and record meetings with families"
+  "nav.reuniones_apoderados.description": "Plan and record meetings with families",
+  "nav.protocolos_convivencia": "Coexistence Protocols",
+  "nav.protocolos_convivencia.normas": "Coexistence Rules",
+  "nav.protocolos_convivencia.disciplina": "Discipline Protocols",
+  "nav.protocolos_convivencia.medidas": "Corrective Measures",
+  "nav.protocolos_convivencia.reconocimientos": "Recognitions",
+  "nav.protocolos_convivencia.actas_apoderados": "Parent Interview Minutes",
+  "nav.protocolos_convivencia.actas_alumnos": "Student Interview Minutes"
 }
