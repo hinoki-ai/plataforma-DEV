@@ -367,21 +367,25 @@ export default function PricingCalculatorPage({
       <Header />
       <main className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-6xl mx-auto space-y-8">
-          <div className="flex flex-col gap-3 text-white">
-            <Button variant="ghost" className="w-fit" asChild>
-              <Link href="/planes" className="flex items-center gap-2">
-                <ArrowLeft className="w-4 h-4" />{" "}
-                {tc("calculator.back_to_plans")}
-              </Link>
-            </Button>
-            <div>
-              <h1 className="mt-3 text-4xl md:text-5xl font-bold">
+          <div className="flex items-center justify-between text-white">
+            <div className="flex-1">
+              <h1 className="text-4xl md:text-5xl font-bold">
                 {tc("calculator.title").replace("{plan}", selectedPlan.name)}
               </h1>
-              <p className="mt-2 text-lg text-gray-200 max-w-2xl">
+              <p className="text-lg text-gray-200 max-w-2xl">
                 {tc("calculator.subtitle")}
               </p>
             </div>
+            <Button
+              variant="ghost"
+              className="h-auto py-3 px-4 shrink-0"
+              asChild
+            >
+              <Link href="/planes" className="flex items-center gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                {tc("calculator.back_to_plans")}
+              </Link>
+            </Button>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
