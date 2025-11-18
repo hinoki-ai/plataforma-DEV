@@ -243,7 +243,7 @@ const planesESInline = {
       "Hola equipo Astral, necesito activar {plan} para {students} estudiantes. Ciclo de facturación: {cycle}. Valor mensual estimado: {monthly_price}. Total del período ({period}): {total}. Hablemos ahora mismo para confirmarlo.",
     email_subject: "[Astral] {plan} - {students} estudiantes",
     email_body:
-      "Hola equipo Astral,%0A%0AQuiero avanzar con {plan} para {students} estudiantes.%0ACiclo de facturación: {cycle}.%0AValor mensual estimado: {monthly_price}.%0ATotal del período ({period}): {total}.%0A%0APor favor contáctenme hoy para activarlo.%0A%0AGracias!",
+      "Hola equipo Astral,\n\nQuiero proceder con la activación del siguiente plan:\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📋 DETALLES DEL PLAN\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPlan: {plan}\nEstudiantes: {students}\nCiclo de facturación: {cycle}\n\n💵 INVERSIÓN ESTIMADA\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nValor mensual: {monthly_price}\nTotal del período ({period}): {total}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPor favor contáctenme hoy para activar el plan.\n\nQuedo atento a su respuesta.\n\nSaludos cordiales,\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nHello Astral team,\n\nI would like to proceed with the activation of the following plan:\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📋 PLAN DETAILS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPlan: {plan}\nStudents: {students}\nBilling cycle: {cycle}\n\n💵 ESTIMATED INVESTMENT\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nMonthly value: {monthly_price}\nTotal for period ({period}): {total}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPlease contact me today to activate the plan.\n\nLooking forward to your response.\n\nBest regards,",
     billing_cycle_label: "Ciclo de facturación",
     estimated_monthly_price: "Valor mensual estimado",
     total_period: "Total del período",
@@ -412,7 +412,7 @@ const planesENInline = {
       "Hello Astral team, I need to activate {plan} for {students} students. Billing cycle: {cycle}. Estimated monthly price: {monthly_price}. Total for the period ({period}): {total}. Let's talk right now to confirm it.",
     email_subject: "[Astral] {plan} - {students} students",
     email_body:
-      "Hello Astral team,%0A%0AI want to proceed with {plan} for {students} students.%0ABilling cycle: {cycle}.%0AEstimated monthly price: {monthly_price}.%0ATotal for the period ({period}): {total}.%0A%0APlease contact me today to activate it.%0A%0AThanks!",
+      "Hello Astral team,\n\nI would like to proceed with the activation of the following plan:\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📋 PLAN DETAILS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPlan: {plan}\nStudents: {students}\nBilling cycle: {cycle}\n\n💵 ESTIMATED INVESTMENT\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nMonthly value: {monthly_price}\nTotal for period ({period}): {total}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPlease contact me today to activate the plan.\n\nLooking forward to your response.\n\nBest regards,\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nHola equipo Astral,\n\nQuiero proceder con la activación del siguiente plan:\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📋 DETALLES DEL PLAN\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPlan: {plan}\nEstudiantes: {students}\nCiclo de facturación: {cycle}\n\n💵 INVERSIÓN ESTIMADA\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nValor mensual: {monthly_price}\nTotal del período ({period}): {total}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nPor favor contáctenme hoy para activar el plan.\n\nQuedo atento a su respuesta.\n\nSaludos cordiales,",
     billing_cycle_label: "Billing cycle",
     estimated_monthly_price: "Estimated monthly price",
     total_period: "Total for the period",
