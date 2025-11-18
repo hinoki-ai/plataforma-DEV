@@ -29,6 +29,7 @@ export const migrateInstitutionIds = mutation({
 
     // Tables to migrate (add more as needed)
     const tablesToMigrate = [
+      "institutionMemberships",
       "calendarEvents",
       "meetings",
       "students",

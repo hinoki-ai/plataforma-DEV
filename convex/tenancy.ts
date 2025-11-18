@@ -98,9 +98,7 @@ export async function requireCurrentInstitution(
   if (institutionId) {
     membership = await ctx.db
       .query("institutionMemberships")
-      .withIndex("by_user_institution")
-      .filter((q) => q.eq(q.field("userId"), user._id))
-      .filter((q) => q.eq(q.field("institutionId"), institutionId!))
+      .withIndex("by_user_institution", (q: any) => q.eq("userId", user._id).eq("institutionId", institutionId))
       .first();
   }
 
