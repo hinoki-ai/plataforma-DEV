@@ -21,7 +21,7 @@
     "verify-deployment": "node scripts/verify-deployment.js",
     "migrate-users-to-clerk": "tsx scripts/migrate-users-to-clerk.ts",
     "import-convex-to-clerk": "tsx scripts/import-convex-users-to-clerk.ts",
-    "prebuild": "node scripts/verify-deployment.js || echo 'Skipping deployment verification for build'",
+    "prebuild": "node scripts/verify-deployment.js || true",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
   },
