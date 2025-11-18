@@ -221,7 +221,7 @@ export default function PreciosPage() {
           </div>
 
           {/* Pricing Cards - Enhanced with Detailed Information */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12 grid-rows-[1fr]">
             {plans.map((plan) => {
               const monthlyPrice = getMonthlyPrice(
                 plan.pricePerStudent,
