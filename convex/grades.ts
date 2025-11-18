@@ -49,11 +49,12 @@ async function ensureStudentAccess(
   tenancy: TenancyContext,
   studentId: Id<"students">,
 ): Promise<StudentDoc> {
+  const studentDoc = await ctx.db.get(studentId);
   const student = ensureInstitutionMatch(
-    await ctx.db.get(studentId),
+    studentDoc as StudentDoc & { institutionId: Id<"institutionInfo"> },
     tenancy,
     "Student not found",
-  );
+  ) as StudentDoc;
 
   if (
     tenancy.membershipRole === "PARENT" &&
@@ -79,11 +80,12 @@ async function ensureCourseAccess(
   tenancy: TenancyContext,
   courseId: Id<"courses">,
 ): Promise<CourseDoc> {
+  const courseDoc = await ctx.db.get(courseId);
   const course = ensureInstitutionMatch(
-    await ctx.db.get(courseId),
+    courseDoc as CourseDoc & { institutionId: Id<"institutionInfo"> },
     tenancy,
     "Course not found",
-  );
+  ) as CourseDoc;
 
   if (
     tenancy.membershipRole === "PROFESOR" &&
@@ -609,7 +611,7 @@ export const createGrade = tenantMutation({
       }
     }
 
-    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id);
+    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id as Id<"institutionInfo">);
 
     const student = await ensureStudentAccess(ctx, tenancy, args.studentId);
     const course = await ensureCourseAccess(ctx, tenancy, args.courseId);
@@ -784,7 +786,7 @@ export const bulkCreateGrades = tenantMutation({
       }
     }
 
-    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id);
+    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id as Id<"institutionInfo">);
 
     const course = await ensureCourseAccess(ctx, tenancy, args.courseId);
     if (!course.subjects.includes(args.subject)) {

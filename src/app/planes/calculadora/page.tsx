@@ -311,6 +311,12 @@ export default function PricingCalculatorPage({
 
   const totalSavingsPeriod = savingsFromPlanDiscountPeriod + savingsFromUpfront;
 
+  // Calculate final per-student values after all discounts
+  const finalPerStudentMonthly = paymentFrequency === "upfront"
+    ? periodTotal / billingInfo.months / students
+    : monthlyPriceWithPlanDiscount / students;
+  const savingsPerStudent = selectedPlan.pricePerStudent - finalPerStudentMonthly;
+
   const sliderUpperBound = selectedPlan.maxStudents
     ? selectedPlan.maxStudents
     : Math.max(selectedPlan.minStudents * 4, students, 2000);
@@ -661,7 +667,7 @@ export default function PricingCalculatorPage({
                     </div>
                   </div>
                 )}
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-3">
                   <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">
                     <div className="text-xs uppercase tracking-wide text-gray-400">
                       {tc("calculator.total_per_period").replace(
@@ -671,6 +677,17 @@ export default function PricingCalculatorPage({
                     </div>
                     <div className="mt-2 text-2xl font-semibold text-white">
                       {formatCLP(periodTotal)}
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">
+                    <div className="text-xs uppercase tracking-wide text-gray-400">
+                      Valor final estudiante
+                    </div>
+                    <div className="mt-2 text-2xl font-semibold text-white">
+                      {formatCLP(Math.round(finalPerStudentMonthly))}
+                    </div>
+                    <div className="mt-1 text-sm text-green-400">
+                      Ahorro: {formatCLP(Math.round(savingsPerStudent))}
                     </div>
                   </div>
                   <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">

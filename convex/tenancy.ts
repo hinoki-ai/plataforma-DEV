@@ -65,7 +65,7 @@ async function findActiveMembership(
 ): Promise<Doc<"institutionMemberships"> | null> {
   const memberships = await ctx.db
     .query("institutionMemberships")
-    .withIndex("by_userId", (q) => q.eq("userId", userId))
+    .filter(q => q.eq(q.field("userId"), userId))
     .collect();
 
   return (
@@ -98,14 +98,14 @@ export async function requireCurrentInstitution(
   if (institutionId) {
     membership = await ctx.db
       .query("institutionMemberships")
-      .withIndex("by_user_institution", (q) =>
-        q.eq("userId", user._id).eq("institutionId", institutionId!),
-      )
+      .withIndex("by_user_institution")
+      .filter(q => q.eq(q.field("userId"), user._id))
+      .filter(q => q.eq(q.field("institutionId"), institutionId!))
       .first();
   }
 
   if ((!institutionId || (!membership && !isMaster)) && requireMembership) {
-    const fallbackMembership = await findActiveMembership(ctx, user._id);
+    const fallbackMembership = await findActiveMembership(ctx, user._id as Id<"users">);
     if (fallbackMembership) {
       institutionId = fallbackMembership.institutionId ?? null;
       membership = fallbackMembership;
@@ -116,7 +116,7 @@ export async function requireCurrentInstitution(
   if (!institutionId && isMaster && allowMasterOverride) {
     const anyInstitution = await ctx.db.query("institutionInfo").first();
     if (anyInstitution) {
-      institutionId = anyInstitution._id;
+      institutionId = anyInstitution._id as Id<"institutionInfo">;
       // MASTER users don't need membership, so membership can remain null
     }
   }
