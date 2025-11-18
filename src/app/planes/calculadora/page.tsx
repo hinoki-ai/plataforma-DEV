@@ -439,7 +439,7 @@ export default function PricingCalculatorPage({
       <Header />
       <main className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-6xl mx-auto space-y-8">
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+          <div className="grid gap-6 xl:grid-cols-[1.1fr_1fr] lg:grid-cols-1">
             <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/60 text-white">
               <CardHeader>
                 <div className="flex items-start justify-between gap-3">
@@ -490,42 +490,44 @@ export default function PricingCalculatorPage({
                     {tc("calculator.configure_students")}
                   </div>
                   <div className="mt-4 flex flex-col gap-4">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <Input
-                        type="text"
-                        inputMode="numeric"
-                        value={inputValue}
-                        onChange={(event) =>
-                          handleStudentInputChange(event.target.value)
-                        }
-                        onBlur={handleStudentInputBlur}
-                        onKeyDown={(event) => {
-                          if (event.key === "Enter") {
-                            event.currentTarget.blur();
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <Input
+                          type="text"
+                          inputMode="numeric"
+                          value={inputValue}
+                          onChange={(event) =>
+                            handleStudentInputChange(event.target.value)
                           }
-                        }}
-                        className="w-32 bg-gray-800 border-gray-700 text-lg font-semibold text-white"
-                      />
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => adjustStudents(-10)}
-                          disabled={students <= selectedPlan.minStudents}
-                          aria-label={tc("calculator.decrease_10")}
-                        >
-                          {tc("calculator.decrease_10_short")}
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => adjustStudents(10)}
-                          aria-label={tc("calculator.increase_10")}
-                        >
-                          {tc("calculator.increase_10_short")}
-                        </Button>
+                          onBlur={handleStudentInputBlur}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter") {
+                              event.currentTarget.blur();
+                            }
+                          }}
+                          className="flex-1 sm:flex-none sm:w-32 bg-gray-800 border-gray-700 text-lg font-semibold text-white"
+                        />
+                        <div className="flex items-center gap-2 shrink-0">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => adjustStudents(-10)}
+                            disabled={students <= selectedPlan.minStudents}
+                            aria-label={tc("calculator.decrease_10")}
+                          >
+                            {tc("calculator.decrease_10_short")}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => adjustStudents(10)}
+                            aria-label={tc("calculator.increase_10")}
+                          >
+                            {tc("calculator.increase_10_short")}
+                          </Button>
+                        </div>
                       </div>
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-gray-400 text-center sm:text-left">
                         {studentsLabel}
                       </span>
                     </div>
@@ -683,13 +685,14 @@ export default function PricingCalculatorPage({
                   </div>
                   <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">
                     <div className="text-xs uppercase tracking-wide text-gray-400">
-                      Valor final estudiante
+                      {tc("calculator.final_student_price")}
                     </div>
                     <div className="mt-2 text-2xl font-semibold text-white">
                       {formatCLP(Math.round(finalPerStudentMonthly))}
                     </div>
                     <div className="mt-1 text-sm text-green-400">
-                      Ahorro: {formatCLP(Math.round(savingsPerStudent))}
+                      {tc("calculator.savings")}:{" "}
+                      {formatCLP(Math.round(savingsPerStudent))}
                     </div>
                   </div>
                   <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">

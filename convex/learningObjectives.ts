@@ -359,19 +359,19 @@ export const getCoverageStatistics = tenantQuery({
     // Calculate statistics
     const total = allObjectives.length;
     const noIniciado = allObjectives.filter((o: Doc<"learningObjectives">) => {
-      const coverage = coverageMap.get(o._id);
+      const coverage = coverageMap.get(o._id as Id<"learningObjectives">);
       return !coverage || coverage.coverageStatus === "NO_INICIADO";
     }).length;
     const enProgreso = allObjectives.filter((o: Doc<"learningObjectives">) => {
-      const coverage = coverageMap.get(o._id);
+      const coverage = coverageMap.get(o._id as Id<"learningObjectives">);
       return coverage?.coverageStatus === "EN_PROGRESO";
     }).length;
     const cubierto = allObjectives.filter((o: Doc<"learningObjectives">) => {
-      const coverage = coverageMap.get(o._id);
+      const coverage = coverageMap.get(o._id as Id<"learningObjectives">);
       return coverage?.coverageStatus === "CUBIERTO";
     }).length;
     const reforzado = allObjectives.filter((o: Doc<"learningObjectives">) => {
-      const coverage = coverageMap.get(o._id);
+      const coverage = coverageMap.get(o._id as Id<"learningObjectives">);
       return coverage?.coverageStatus === "REFORZADO";
     }).length;
 

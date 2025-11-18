@@ -21,9 +21,9 @@ export const getMeetingAttendance = query({
   handler: async (ctx, { courseId, meetingDate }) => {
     const attendanceRecords = await ctx.db
       .query("parentMeetingAttendance")
-      .withIndex("by_courseId_meetingDate", (q) =>
-        q.eq("courseId", courseId).eq("meetingDate", meetingDate),
-      )
+      .withIndex("by_courseId_meetingDate")
+      .filter((q) => q.eq(q.field("courseId"), courseId))
+      .filter((q) => q.eq(q.field("meetingDate"), meetingDate))
       .collect();
 
     // Get full details for each record
@@ -55,7 +55,7 @@ export const getCourseMeetingAttendance = query({
   handler: async (ctx, { courseId }) => {
     const attendanceRecords = await ctx.db
       .query("parentMeetingAttendance")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .filter((q) => q.eq(q.field("courseId"), courseId))
       .collect();
 
     // Get full details
@@ -75,8 +75,10 @@ export const getCourseMeetingAttendance = query({
 
     // Sort by meeting date descending
     return recordsWithDetails
-      .filter((r) => r.student !== null)
-      .sort((a, b) => b.meetingDate - a.meetingDate);
+      .filter((r: any) => r.student !== null)
+      .sort(
+        (a: any, b: any) => (b as any).meetingDate - (a as any).meetingDate,
+      );
   },
 });
 
@@ -91,7 +93,7 @@ export const getStudentMeetingAttendance = query({
   handler: async (ctx, { studentId, courseId }) => {
     let attendanceRecords = await ctx.db
       .query("parentMeetingAttendance")
-      .withIndex("by_studentId", (q) => q.eq("studentId", studentId))
+      .filter((q) => q.eq(q.field("studentId"), studentId))
       .collect();
 
     // Filter by course if provided
@@ -117,7 +119,9 @@ export const getStudentMeetingAttendance = query({
     );
 
     // Sort by meeting date descending
-    return recordsWithDetails.sort((a, b) => b.meetingDate - a.meetingDate);
+    return recordsWithDetails.sort(
+      (a: any, b: any) => (b as any).meetingDate - (a as any).meetingDate,
+    );
   },
 });
 
@@ -132,7 +136,7 @@ export const getMeetingAgreements = query({
   handler: async (ctx, { courseId, meetingDate }) => {
     let attendanceRecords = await ctx.db
       .query("parentMeetingAttendance")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .filter((q) => q.eq(q.field("courseId"), courseId))
       .collect();
 
     // Filter by meeting date if provided
@@ -178,15 +182,15 @@ export const getMeetingStatistics = query({
     // Get all enrolled students
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId_isActive", (q) =>
-        q.eq("courseId", courseId).eq("isActive", true),
-      )
+      .withIndex("by_courseId_isActive")
+      .filter((q) => q.eq(q.field("courseId"), courseId))
+      .filter((q) => q.eq(q.field("isActive"), true))
       .collect();
 
     // Get all attendance records for this course
     const attendanceRecords = await ctx.db
       .query("parentMeetingAttendance")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .filter((q) => q.eq(q.field("courseId"), courseId))
       .collect();
 
     // Calculate statistics
@@ -300,9 +304,9 @@ export const recordMeetingAttendance = mutation({
     // Check if record already exists
     const existing = await ctx.db
       .query("parentMeetingAttendance")
-      .withIndex("by_courseId_meetingDate", (q) =>
-        q.eq("courseId", args.courseId).eq("meetingDate", args.meetingDate),
-      )
+      .withIndex("by_courseId_meetingDate")
+      .filter((q) => q.eq(q.field("courseId"), args.courseId))
+      .filter((q) => q.eq(q.field("meetingDate"), args.meetingDate))
       .collect();
 
     const existingRecord = existing.find(
@@ -384,7 +388,7 @@ export const bulkRecordMeetingAttendance = mutation({
         // Check if record exists
         const existing = await ctx.db
           .query("parentMeetingAttendance")
-          .withIndex("by_courseId_meetingDate", (q) =>
+          .withIndex("by_courseId_meetingDate", (q: any) =>
             q.eq("courseId", args.courseId).eq("meetingDate", args.meetingDate),
           )
           .collect();

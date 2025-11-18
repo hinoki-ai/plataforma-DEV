@@ -540,7 +540,7 @@ export default function PreciosPage() {
 
                     {/* CTA Button */}
                     <Button
-                      className="w-full mt-6 font-semibold"
+                      className="w-full mt-auto font-semibold"
                       size="lg"
                       onClick={() =>
                         router.push(

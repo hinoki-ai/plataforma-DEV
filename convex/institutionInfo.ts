@@ -469,7 +469,9 @@ export const switchUserInstitution = mutation({
     // Verify the user has an active membership in the target institution
     const membership = await ctx.db
       .query("institutionMemberships")
-      .withIndex("by_user_institution", (q: any) => q.eq("userId", userId).eq("institutionId", institutionId))
+      .withIndex("by_user_institution", (q: any) =>
+        q.eq("userId", userId).eq("institutionId", institutionId),
+      )
       .first();
 
     if (!membership) {

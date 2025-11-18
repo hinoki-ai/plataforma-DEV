@@ -140,6 +140,8 @@
     "less": "less",
     "total_per_period": "Total per {period}",
     "savings_in_period": "Savings in the period",
+    "final_student_price": "Final student price",
+    "savings": "Savings",
     "ready_to_activate": "Ready to activate?",
     "ready_description": "We'll share this simulation immediately with the team to start implementation without delays.",
     "contact_express": "Express Contact via WhatsApp",

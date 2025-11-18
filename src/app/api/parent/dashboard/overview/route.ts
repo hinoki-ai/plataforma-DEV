@@ -72,7 +72,7 @@ export async function GET() {
       },
       votings: {
         total: votings.length,
-        active: votings.filter((v) => v.status === "active").length,
+        active: votings.filter((v: any) => v.status === "active").length,
       },
       resources: {
         total: 25, // Mock data - would need to implement actual resource counting

@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       const convexUser = await client.query(api.users.getUserByEmail, {
         email: session.user.email,
       });
-      createdByUserId = convexUser?._id;
+      createdByUserId = convexUser?._id as Id<"users"> | undefined;
     } catch (error) {
       console.warn("Unable to resolve Convex user for MASTER session", {
         email: session.user.email,

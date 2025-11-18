@@ -111,14 +111,12 @@ async function getInstitutionRecipientIds(
 ): Promise<Id<"users">[]> {
   const memberships = await ctx.db
     .query("institutionMemberships")
-    .withIndex("by_institutionId", (q: any) =>
-      q.eq("institutionId", institutionId),
-    )
+    .filter((q) => q.eq(q.field("institutionId"), institutionId))
     .collect();
   const recipientSet = new Set<Id<"users">>(
     memberships.map((membership) => membership.userId as Id<"users">),
   );
-  return [...recipientSet];
+  return Array.from(recipientSet);
 }
 
 function ensureRecipientAccess(
@@ -159,7 +157,7 @@ export const createNotification = tenantMutation({
     if (args.isBroadcast) {
       const broadcastRecipients = await getInstitutionRecipientIds(
         ctx,
-        tenancy.institution._id,
+        tenancy.institution._id as Id<"institutionInfo">,
       );
       targetRecipients.push(...broadcastRecipients);
     } else if (args.recipientIds && args.recipientIds.length > 0) {
@@ -168,10 +166,10 @@ export const createNotification = tenantMutation({
         targetRecipients.push(recipient);
       }
     } else {
-      targetRecipients.push(tenancy.user._id);
+      targetRecipients.push(tenancy.user._id as Id<"users">);
     }
 
-    const uniqueRecipients = [...new Set(targetRecipients)];
+    const uniqueRecipients = Array.from(new Set(targetRecipients));
 
     // Handle broadcast or specific recipients
     await Promise.all(
