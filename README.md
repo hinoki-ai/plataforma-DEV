@@ -138,5 +138,5 @@ npx convex deploy       # Deploy Convex backend
 ---
 
 **Plataforma Astral** - Educational Management SaaS  
-**Version**: 1.0.0 | **Last Updated**: January 2025  
+**Version**: 0.1.0 | **Last Updated**: November 2025  
 **Status**: Production Ready ✅

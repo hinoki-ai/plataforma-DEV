@@ -66,7 +66,7 @@ export const getStudentObservations = query({
     );
 
     // Sort by date descending
-    return observationsWithDetails.sort((a, b) => b.date - a.date);
+    return observationsWithDetails.sort((a: any, b: any) => b.date - a.date);
   },
 });
 
@@ -119,7 +119,7 @@ export const getCourseObservations = query({
     );
 
     // Sort by date descending
-    return observationsWithDetails.sort((a, b) => b.date - a.date);
+    return observationsWithDetails.sort((a: any, b: any) => b.date - a.date);
   },
 });
 

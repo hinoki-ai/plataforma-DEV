@@ -179,7 +179,7 @@ export function AdminCertificationDashboard({
     );
   };
 
-  const filteredSignatures = uncertifiedSignatures?.filter((sig) => {
+  const filteredSignatures = uncertifiedSignatures?.filter((sig: any) => {
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       return (
@@ -230,7 +230,7 @@ export function AdminCertificationDashboard({
           <CardContent>
             <div className="text-2xl font-bold">
               {uncertifiedSignatures?.filter(
-                (c) => c.recordType === "CLASS_CONTENT",
+                (c: any) => c.recordType === "CLASS_CONTENT",
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -247,7 +247,7 @@ export function AdminCertificationDashboard({
           <CardContent>
             <div className="text-2xl font-bold">
               {uncertifiedSignatures?.filter(
-                (c) => c.recordType === "ATTENDANCE",
+                (c: any) => c.recordType === "ATTENDANCE",
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -265,8 +265,9 @@ export function AdminCertificationDashboard({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {uncertifiedSignatures?.filter((c) => c.recordType === "GRADE")
-                .length || 0}
+              {uncertifiedSignatures?.filter(
+                (c: any) => c.recordType === "GRADE",
+              ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
               Pendientes de certificar

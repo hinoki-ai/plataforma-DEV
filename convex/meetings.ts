@@ -200,7 +200,7 @@ export const getMeetingsByTeacher = tenantQuery({
       !(await userInInstitution(
         ctx,
         effectiveTeacherId,
-        tenancy.institution._id,
+        tenancy.institution._id as Id<"institutionInfo">,
       ))
     ) {
       throw new Error("Teacher is not part of this institution");
@@ -343,7 +343,7 @@ export const getMeetingsByParent = tenantQuery({
       !(await userInInstitution(
         ctx,
         effectiveParentId,
-        tenancy.institution._id,
+        tenancy.institution._id as Id<"institutionInfo">,
       ))
     ) {
       throw new Error("Parent is not part of this institution");
@@ -430,7 +430,11 @@ export const createMeeting = tenantMutation({
 
     if (
       !tenancy.isMaster &&
-      !(await userInInstitution(ctx, args.assignedTo, tenancy.institution._id))
+      !(await userInInstitution(
+        ctx,
+        args.assignedTo,
+        tenancy.institution._id as Id<"institutionInfo">,
+      ))
     ) {
       throw new Error("Teacher is not part of this institution");
     }
@@ -515,7 +519,7 @@ export const updateMeeting = tenantMutation({
         !(await userInInstitution(
           ctx,
           updates.assignedTo,
-          tenancy.institution._id,
+          tenancy.institution._id as Id<"institutionInfo">,
         ))
       ) {
         throw new Error("Assigned teacher is not part of this institution");

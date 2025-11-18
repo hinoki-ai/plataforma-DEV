@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import { PageTransition } from "@/components/ui/page-transition";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminCertificationDashboard } from "@/components/digital-signatures/AdminCertificationDashboard";
@@ -70,7 +71,9 @@ export default function CertificacionPage() {
             </TabsList>
 
             <TabsContent value="certification" className="space-y-6">
-              <AdminCertificationDashboard userId={currentUser._id} />
+              <AdminCertificationDashboard
+                userId={currentUser._id as Id<"users">}
+              />
             </TabsContent>
 
             <TabsContent value="audit" className="space-y-6">
@@ -78,7 +81,7 @@ export default function CertificacionPage() {
             </TabsContent>
 
             <TabsContent value="locking" className="space-y-6">
-              <PeriodLockingControls userId={currentUser._id} />
+              <PeriodLockingControls userId={currentUser._id as Id<"users">} />
             </TabsContent>
           </Tabs>
         )}

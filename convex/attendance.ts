@@ -48,7 +48,7 @@ export const getAttendanceByDate = query({
     // Build map of student attendance
     const attendanceMap = new Map<Id<"students">, Id<"classAttendance">>();
     for (const record of attendanceRecords) {
-      attendanceMap.set(record.studentId, record._id);
+      attendanceMap.set(record.studentId, record._id as Id<"classAttendance">);
     }
 
     // Return attendance for all enrolled students

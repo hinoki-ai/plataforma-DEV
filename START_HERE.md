@@ -11,7 +11,7 @@
 | I want to...                              | Go to...                                           |
 | ----------------------------------------- | -------------------------------------------------- |
 | **Set up the project for the first time** | [First Time Setup](#-first-time-setup-10-minutes)  |
-| **Understand the Convex migration**       | [MIGRATION.md](./MIGRATION.md)                     |
+| **Understand the Convex migration**       | [archive/MIGRATION.md](./archive/MIGRATION.md)     |
 | **See all documentation**                 | [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) |
 | **Deploy to production**                  | [DEPLOYMENT.md](./DEPLOYMENT.md)                   |
 | **Work on the codebase (AI)**             | [CLAUDE.md](./CLAUDE.md)                           |

@@ -62,7 +62,7 @@ export const getExtraCurricularActivities = query({
 
     // Sort by name
     return activitiesWithInstructor.sort((a, b) =>
-      a.name.localeCompare(b.name),
+      (a as any).name.localeCompare((b as any).name),
     );
   },
 });
@@ -81,7 +81,7 @@ export const getActivityById = query({
     // Get participants
     const participants = await ctx.db
       .query("extraCurricularParticipants")
-      .filter(q => q.eq(q.field("activityId"), activityId))
+      .filter((q) => q.eq(q.field("activityId"), activityId))
       .collect();
 
     const activeParticipants = participants.filter((p) => p.isActive);
@@ -124,7 +124,7 @@ export const getStudentActivities = query({
   handler: async (ctx, { studentId, isActive }) => {
     let participations = await ctx.db
       .query("extraCurricularParticipants")
-      .filter(q => q.eq(q.field("studentId"), studentId))
+      .filter((q) => q.eq(q.field("studentId"), studentId))
       .collect();
 
     // Filter by active status if provided
@@ -159,7 +159,7 @@ export const getCourseActivities = query({
   handler: async (ctx, { courseId }) => {
     const participations = await ctx.db
       .query("extraCurricularParticipants")
-      .filter(q => q.eq(q.field("courseId"), courseId))
+      .filter((q) => q.eq(q.field("courseId"), courseId))
       .collect();
 
     const activeParticipations = participations.filter((p) => p.isActive);
@@ -215,7 +215,7 @@ export const createActivity = mutation({
 
     const user = await ctx.db
       .query("users")
-      .filter(q => q.eq(q.field("clerkId"), identity.subject))
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
       .first();
 
     if (!user || !user.currentInstitutionId) {
@@ -319,7 +319,7 @@ export const enrollStudent = mutation({
     // Check if student is already enrolled
     const existingEnrollments = await ctx.db
       .query("extraCurricularParticipants")
-      .filter(q => q.eq(q.field("activityId"), activityId))
+      .filter((q) => q.eq(q.field("activityId"), activityId))
       .collect();
 
     const existing = existingEnrollments.find(
@@ -370,7 +370,7 @@ export const removeStudent = mutation({
   handler: async (ctx, { activityId, studentId }) => {
     const participations = await ctx.db
       .query("extraCurricularParticipants")
-      .filter(q => q.eq(q.field("activityId"), activityId))
+      .filter((q) => q.eq(q.field("activityId"), activityId))
       .collect();
 
     const participation = participations.find(
