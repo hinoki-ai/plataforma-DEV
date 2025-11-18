@@ -32,17 +32,17 @@ export const getAttendanceByDate = query({
     // Get all attendance records for this course and date
     const attendanceRecords = await ctx.db
       .query("classAttendance")
-      .withIndex("by_courseId_date", (q) =>
-        q.eq("courseId", courseId).eq("date", date),
-      )
+      .withIndex("by_courseId_date")
+      .filter(q => q.eq(q.field("courseId"), courseId))
+      .filter(q => q.eq(q.field("date"), date))
       .collect();
 
     // Get enrolled students for this course
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId_isActive", (q) =>
-        q.eq("courseId", courseId).eq("isActive", true),
-      )
+      .withIndex("by_courseId_isActive")
+      .filter(q => q.eq(q.field("courseId"), courseId))
+      .filter(q => q.eq(q.field("isActive"), true))
       .collect();
 
     // Build map of student attendance
@@ -84,7 +84,7 @@ export const getStudentAttendance = query({
   handler: async (ctx, { studentId, courseId, startDate, endDate }) => {
     let records = await ctx.db
       .query("classAttendance")
-      .withIndex("by_studentId_date", (q) => q.eq("studentId", studentId))
+      .filter(q => q.eq(q.field("studentId"), studentId))
       .collect();
 
     // Filter by course
@@ -115,7 +115,7 @@ export const getStudentAttendanceSummary = query({
   handler: async (ctx, { studentId, startDate, endDate }) => {
     let records = await ctx.db
       .query("classAttendance")
-      .withIndex("by_studentId", (q) => q.eq("studentId", studentId))
+      .filter(q => q.eq(q.field("studentId"), studentId))
       .collect();
 
     if (startDate !== undefined) {
@@ -191,7 +191,7 @@ export const getAttendanceReport = query({
     // Get all attendance records in date range
     const allRecords = await ctx.db
       .query("classAttendance")
-      .withIndex("by_courseId_date", (q) => q.eq("courseId", courseId))
+      .filter(q => q.eq(q.field("courseId"), courseId))
       .collect();
 
     const recordsInRange = allRecords.filter(
@@ -201,9 +201,9 @@ export const getAttendanceReport = query({
     // Get enrolled students
     const enrollments = await ctx.db
       .query("courseStudents")
-      .withIndex("by_courseId_isActive", (q) =>
-        q.eq("courseId", courseId).eq("isActive", true),
-      )
+      .withIndex("by_courseId_isActive")
+      .filter(q => q.eq(q.field("courseId"), courseId))
+      .filter(q => q.eq(q.field("isActive"), true))
       .collect();
 
     // Calculate attendance stats per student

@@ -42,14 +42,39 @@ export async function GET() {
       },
     );
 
+    // Get voting data
+    const votings = await client.query(api.votes.getVotes, {
+      isActive: true,
+    });
+
+    // Get unread communications count
+    const unreadCommunications = await client.query(api.notifications.getNotifications, {
+      recipientId: session.user.id as any,
+      read: false,
+      limit: 100,
+    });
+
     const data = {
-      students,
-      upcomingMeetings,
-      recentNotifications,
-      overview: {
-        totalStudents: students.length,
-        upcomingMeetingsCount: upcomingMeetings.length,
-        recentNotificationsCount: recentNotifications.length,
+      children: {
+        total: students.length,
+        enrolled: students.filter(s => s.isActive).length,
+      },
+      meetings: {
+        total: upcomingMeetings.length,
+        upcoming: upcomingMeetings.length,
+      },
+      communications: {
+        total: recentNotifications.length,
+        unread: unreadCommunications.length,
+      },
+      votings: {
+        total: votings.length,
+        active: votings.filter(v => v.status === "active").length,
+      },
+      resources: {
+        total: 25, // Mock data - would need to implement actual resource counting
+        shared: 12,
+        downloaded: 8,
       },
     };
 
