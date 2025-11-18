@@ -22,7 +22,7 @@ export default function MinEducFooter() {
               <div className="bg-[#1a69b1] h-full w-2/5 group-hover:opacity-80 transition" />
               <div className="bg-[#E73C48] h-full w-3/5 group-hover:opacity-80 transition" />
             </div>
-            <div className="text-2xl font-bold group-hover:underline">
+            <div className="text-2xl font-bold">
               {t("footer.mineduc", "common")}
             </div>
           </a>
@@ -143,7 +143,7 @@ export default function MinEducFooter() {
             href="https://www.gob.cl/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-start text-left text-lg font-bold hover:underline focus:outline-none gap-1"
+            className="flex flex-col items-start text-left text-lg font-bold focus:outline-none gap-1"
             aria-label="Gobierno de Chile"
           >
             <span>GOBIERNO</span>
@@ -156,7 +156,7 @@ export default function MinEducFooter() {
             href="https://www.mineduc.cl/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-end text-right text-lg font-bold hover:underline focus:outline-none gap-1"
+            className="flex flex-col items-end text-right text-lg font-bold focus:outline-none gap-1"
             aria-label="Chile Avanza Contigo"
           >
             <span>

@@ -13,7 +13,7 @@ export default function CompactFooter() {
             © {new Date().getFullYear()} Plataforma Astral. Todos los derechos
             reservados.
           </div>
-          <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-400">
+          <div className="flex flex-wrap justify-center items-center gap-6 text-xs text-gray-400">
             <a
               href="/terminos"
               className="hover:text-primary transition-colors underline"
@@ -39,6 +39,15 @@ export default function CompactFooter() {
               Contacto
             </a>
           </div>
+          <a
+            href="https://aramac.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-red-500 hover:text-red-400 transition-colors font-bold text-sm"
+            aria-label={t("home.footer.aria.developer", "common")}
+          >
+            ΛRΛMΛC
+          </a>
         </div>
       </div>
     </div>

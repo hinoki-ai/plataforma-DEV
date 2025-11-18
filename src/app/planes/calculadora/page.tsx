@@ -43,7 +43,7 @@ const developerContacts = [
     id: "principal",
     name: "Tu Equipo Astral",
     role: "Lead Developer & Onboarding",
-    email: "directoaccion@astral.school",
+    email: "plataforma@astral.cl",
     whatsappDisplay: "+56 9 7500 1234",
     whatsappLink: "https://wa.me/56975001234",
   },
@@ -67,9 +67,9 @@ const developerContacts = [
     id: "salesman",
     name: "Equipo de Ventas",
     role: "Sales Representative",
-    email: "ventas@astral.school",
-    whatsappDisplay: "+56 9 0000 0000",
-    whatsappLink: "https://wa.me/56900000000",
+    email: "ventas@astral.cl",
+    whatsappDisplay: "+56 9 8008 8008",
+    whatsappLink: "https://wa.me/56980088008",
   },
 ] as const;
 
