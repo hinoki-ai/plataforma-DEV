@@ -50,7 +50,7 @@ const developerContacts = [
   {
     id: "loreto",
     name: "Loreto",
-    role: "Desarrolladora Senior",
+    role: "Onboarding Chief",
     email: "loreto@astral.cl",
     whatsappDisplay: "+56 9 6854 3210",
     whatsappLink: "https://wa.me/56968543210",

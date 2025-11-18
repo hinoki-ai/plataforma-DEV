@@ -1064,7 +1064,11 @@ export default defineSchema({
       v.literal("REVIEW"),
     ),
     examples: v.optional(v.array(v.string())),
-    importance: v.union(v.literal("HIGH"), v.literal("MEDIUM"), v.literal("LOW")),
+    importance: v.union(
+      v.literal("HIGH"),
+      v.literal("MEDIUM"),
+      v.literal("LOW"),
+    ),
     createdBy: v.id("users"),
     createdAt: v.number(),
     updatedAt: v.number(),
@@ -1082,7 +1086,11 @@ export default defineSchema({
     normaId: v.optional(v.id("convivenciaNormas")),
     date: v.number(),
     description: v.string(),
-    severity: v.union(v.literal("LEVE"), v.literal("GRAVE"), v.literal("GRAVISIMA")),
+    severity: v.union(
+      v.literal("LEVE"),
+      v.literal("GRAVE"),
+      v.literal("GRAVISIMA"),
+    ),
     medidaId: v.optional(v.id("convivenciaMedidas")),
     status: v.union(
       v.literal("PENDING"),

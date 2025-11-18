@@ -108,6 +108,21 @@ export default function PreciosPage() {
     }
   };
 
+  const getMonthlyPriceWithoutDiscount = (
+    pricePerStudent: number,
+    students: number = 1,
+    cycle: BillingCycle,
+  ) => {
+    const baseTotal = pricePerStudent * students;
+    if (cycle === "semestral") {
+      return baseTotal / 6; // 6 months per semester
+    } else if (cycle === "annual") {
+      return baseTotal / 12;
+    } else {
+      return baseTotal / 24; // biannual = 24 months
+    }
+  };
+
   const getTotalPrice = (
     pricePerStudent: number,
     students: number,
@@ -213,6 +228,12 @@ export default function PreciosPage() {
                 1,
                 billingCycle,
               );
+              const monthlyPriceWithoutDiscount =
+                getMonthlyPriceWithoutDiscount(
+                  plan.pricePerStudent,
+                  1,
+                  billingCycle,
+                );
               const isExpanded = expandedPlans.has(plan.id);
 
               return (
@@ -253,7 +274,13 @@ export default function PreciosPage() {
                                 {formatCLP(plan.pricePerStudent)}
                               </div>
                               <div className="text-4xl font-bold text-primary">
-                                {formatCLP(Math.round(monthlyPrice))}
+                                {formatCLP(
+                                  calculateBillingPrice(
+                                    plan.pricePerStudent,
+                                    1,
+                                    billingCycle,
+                                  ),
+                                )}
                               </div>
                             </div>
                             <div className="flex items-center justify-center gap-2 mb-2">
