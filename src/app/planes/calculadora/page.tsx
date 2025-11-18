@@ -51,7 +51,7 @@ const developerContacts = [
     id: "loreto",
     name: "Loreto",
     role: "Desarrolladora Senior",
-    email: "directoloreto@astral.school",
+    email: "loreto@astral.cl",
     whatsappDisplay: "+56 9 6854 3210",
     whatsappLink: "https://wa.me/56968543210",
   },
@@ -59,9 +59,9 @@ const developerContacts = [
     id: "agustin",
     name: "Agustin",
     role: "Lead Developer",
-    email: "agustin@astral.school",
-    whatsappDisplay: "+56 9 0000 0000",
-    whatsappLink: "https://wa.me/56900000000",
+    email: "agustin@astral.cl",
+    whatsappDisplay: "+56 9 8889 6773",
+    whatsappLink: "https://wa.me/56988896773",
   },
   {
     id: "salesman",
@@ -126,6 +126,9 @@ export default function PricingCalculatorPage({
     : "semestral";
   const [billingCycle, setBillingCycle] =
     useState<BillingCycle>(initialBilling);
+  const [paymentFrequency, setPaymentFrequency] = useState<
+    "monthly" | "upfront"
+  >("monthly");
 
   const clampStudents = (value: number) => {
     const min = selectedPlan.minStudents;
@@ -206,15 +209,43 @@ export default function PricingCalculatorPage({
 
   const billingInfo = billingMetadata[billingCycle];
   const discountPercentage = billingCycleDiscount[billingCycle];
+  const upfrontDiscount = 0.05; // 5% additional discount for upfront payment
   const basePrice = selectedPlan.pricePerStudent * students;
-  const periodPrice = calculateBillingPrice(
+
+  // Calculate monthly price with plan period discount
+  const monthlyPriceWithPlanDiscount = calculateBillingPrice(
     selectedPlan.pricePerStudent,
     students,
     billingCycle,
   );
-  const periodTotal = periodPrice * billingInfo.months;
-  const savingsPeriodPrice = basePrice - periodPrice;
-  const savingsPeriod = savingsPeriodPrice * billingInfo.months;
+
+  // Calculate period total with plan discount
+  const periodTotalWithPlanDiscount =
+    monthlyPriceWithPlanDiscount * billingInfo.months;
+
+  // Apply upfront discount to total if selected (5% off total period amount)
+  const periodTotal =
+    paymentFrequency === "upfront"
+      ? Math.round(periodTotalWithPlanDiscount * (1 - upfrontDiscount))
+      : periodTotalWithPlanDiscount;
+
+  // Monthly price (for display when paying monthly)
+  const monthlyPrice = monthlyPriceWithPlanDiscount;
+
+  // Upfront total (for display when paying upfront)
+  const upfrontTotal = paymentFrequency === "upfront" ? periodTotal : null;
+
+  // Savings calculations
+  const savingsFromPlanDiscount = basePrice - monthlyPriceWithPlanDiscount;
+  const savingsFromPlanDiscountPeriod =
+    savingsFromPlanDiscount * billingInfo.months;
+
+  const savingsFromUpfront =
+    paymentFrequency === "upfront"
+      ? Math.round(periodTotalWithPlanDiscount * upfrontDiscount)
+      : 0;
+
+  const totalSavingsPeriod = savingsFromPlanDiscountPeriod + savingsFromUpfront;
 
   const sliderUpperBound = selectedPlan.maxStudents
     ? selectedPlan.maxStudents
@@ -241,10 +272,12 @@ export default function PricingCalculatorPage({
       : tc("calculator.months").replace("{count}", String(billingInfo.months)) +
         ` (${billingInfo.label})`;
 
-  const monthlyPriceFormatted = formatCLP(
-    Math.round(periodPrice / billingInfo.months),
-  );
+  const monthlyPriceFormatted = formatCLP(monthlyPrice);
   const totalFormatted = formatCLP(periodTotal);
+  const paymentFrequencyLabel =
+    paymentFrequency === "monthly"
+      ? tc("calculator.pay_monthly")
+      : tc("calculator.pay_upfront");
 
   const whatsappMessage = encodeURIComponent(
     tc("calculator.whatsapp_message")
@@ -253,7 +286,8 @@ export default function PricingCalculatorPage({
       .replace("{cycle}", billingInfo.label)
       .replace("{monthly_price}", monthlyPriceFormatted)
       .replace("{period}", periodLabel)
-      .replace("{total}", totalFormatted),
+      .replace("{total}", totalFormatted)
+      .replace("{payment_frequency}", paymentFrequencyLabel),
   );
 
   const emailSubject = encodeURIComponent(
@@ -481,29 +515,105 @@ export default function PricingCalculatorPage({
                     </Button>
                   ))}
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <div className="rounded-2xl border border-gray-800 bg-black/40 p-5">
-                  <div className="text-sm text-gray-300">
-                    {tc("calculator.semestral_payment")}
+                {/* Payment Frequency Selector */}
+                <div className="space-y-2">
+                  <div className="text-sm font-semibold text-gray-300">
+                    {tc("calculator.payment_frequency")}
                   </div>
-                  <div className="mt-2 text-4xl font-bold text-primary">
-                    {formatCLP(periodPrice)}
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant={
+                        paymentFrequency === "monthly" ? "default" : "outline"
+                      }
+                      className="justify-center py-2"
+                      onClick={() => setPaymentFrequency("monthly")}
+                    >
+                      <span className="text-sm font-semibold">
+                        {tc("calculator.pay_monthly")}
+                      </span>
+                    </Button>
+                    <Button
+                      variant={
+                        paymentFrequency === "upfront" ? "default" : "outline"
+                      }
+                      className="justify-center py-2 relative"
+                      onClick={() => setPaymentFrequency("upfront")}
+                    >
+                      <span className="text-sm font-semibold">
+                        {tc("calculator.pay_upfront")}
+                      </span>
+                      <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                        -5%
+                      </span>
+                    </Button>
                   </div>
-                  <p className="mt-2 text-sm text-gray-400">
-                    {studentsFormatted}{" "}
-                    {tc("calculator.students_count").replace("{count}", "")} •{" "}
-                    {billingInfo.label}
-                  </p>
-                  {discountPercentage > 0 && savingsPeriodPrice > 0 && (
-                    <p className="mt-2 text-sm text-green-400">
-                      {tc("calculator.savings_per_period")}:{" "}
-                      {formatCLP(savingsPeriodPrice)} (
-                      {Math.round(discountPercentage * 100)}%{" "}
-                      {tc("calculator.less")})
+                  {paymentFrequency === "upfront" && (
+                    <p className="text-xs text-gray-400 italic">
+                      {tc("calculator.upfront_discount_disclosure")}
                     </p>
                   )}
                 </div>
+              </CardHeader>
+              <CardContent className="space-y-5">
+                {paymentFrequency === "monthly" ? (
+                  <div className="rounded-2xl border border-gray-800 bg-black/40 p-5">
+                    <div className="text-sm text-gray-300">
+                      {tc("calculator.monthly_payment")}
+                    </div>
+                    <div className="mt-2 text-4xl font-bold text-primary">
+                      {formatCLP(monthlyPrice)}
+                    </div>
+                    <p className="mt-2 text-sm text-gray-400">
+                      {studentsFormatted}{" "}
+                      {tc("calculator.students_count").replace("{count}", "")} •{" "}
+                      {billingInfo.label}
+                    </p>
+                    {discountPercentage > 0 && savingsFromPlanDiscount > 0 && (
+                      <p className="mt-2 text-sm text-green-400">
+                        {tc("calculator.savings_per_month")}:{" "}
+                        {formatCLP(savingsFromPlanDiscount)} (
+                        {Math.round(discountPercentage * 100)}%{" "}
+                        {tc("calculator.less")})
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="rounded-2xl border border-gray-800 bg-black/40 p-5">
+                    <div className="text-sm text-gray-300">
+                      {tc("calculator.full_payment")}
+                    </div>
+                    <div className="mt-2 text-4xl font-bold text-primary">
+                      {formatCLP(upfrontTotal!)}
+                    </div>
+                    <p className="mt-2 text-sm text-gray-400">
+                      {studentsFormatted}{" "}
+                      {tc("calculator.students_count").replace("{count}", "")} •{" "}
+                      {billingInfo.label} • {tc("calculator.pay_upfront")}
+                    </p>
+                    <div className="mt-3 space-y-1">
+                      {discountPercentage > 0 &&
+                        savingsFromPlanDiscountPeriod > 0 && (
+                          <p className="text-sm text-green-400">
+                            {tc("calculator.savings_from_plan")} (
+                            {Math.round(discountPercentage * 100)}%):{" "}
+                            {formatCLP(savingsFromPlanDiscountPeriod)}
+                          </p>
+                        )}
+                      {savingsFromUpfront > 0 && (
+                        <p className="text-sm text-green-400">
+                          {tc("calculator.upfront_discount")}:{" "}
+                          {formatCLP(savingsFromUpfront)}
+                        </p>
+                      )}
+                      {totalSavingsPeriod > 0 && (
+                        <p className="text-sm font-semibold text-green-400 mt-2 pt-2 border-t border-gray-700">
+                          {tc("calculator.total_savings")}:{" "}
+                          {formatCLP(totalSavingsPeriod)}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-4">
                     <div className="text-xs uppercase tracking-wide text-gray-400">
@@ -521,7 +631,9 @@ export default function PricingCalculatorPage({
                       {tc("calculator.savings_in_period")}
                     </div>
                     <div className="mt-2 text-2xl font-semibold text-green-400">
-                      {savingsPeriod > 0 ? formatCLP(savingsPeriod) : "$0"}
+                      {totalSavingsPeriod > 0
+                        ? formatCLP(totalSavingsPeriod)
+                        : "$0"}
                     </div>
                   </div>
                 </div>
