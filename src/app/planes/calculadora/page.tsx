@@ -369,10 +369,13 @@ export default function PricingCalculatorPage({
           <div className="flex items-center justify-between text-white">
             <div className="flex-1">
               <h1 className="text-4xl md:text-5xl font-bold">
-                {tc("calculator.title").replace("{plan}", selectedPlan.name)}
+                {t("calculator.title", "planes").replace(
+                  "{plan}",
+                  selectedPlan.name,
+                )}
               </h1>
               <p className="text-lg text-gray-200 max-w-2xl">
-                {tc("calculator.subtitle")}
+                {t("calculator.subtitle", "planes")}
               </p>
             </div>
             <Button
@@ -382,7 +385,7 @@ export default function PricingCalculatorPage({
             >
               <Link href="/planes" className="flex items-center gap-2">
                 <ArrowLeft className="w-4 h-4" />
-                {tc("calculator.back_to_plans")}
+                {t("calculator.back_to_plans", "planes")}
               </Link>
             </Button>
           </div>
