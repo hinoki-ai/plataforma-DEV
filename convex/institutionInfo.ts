@@ -5,6 +5,38 @@ import { api } from "./_generated/api";
 
 // ==================== QUERIES ====================
 
+/**
+ * Public query: Get institution branding by email (for login page)
+ * No authentication required - safe for public use
+ */
+export const getInstitutionBranding = query({
+  args: { email: v.string() },
+  handler: async (ctx, { email }) => {
+    // Find user by email
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", email))
+      .first();
+
+    if (!user || !user.currentInstitutionId) {
+      return null;
+    }
+
+    // Fetch institution details
+    const institution = await ctx.db.get(user.currentInstitutionId);
+    if (!institution || !institution.isActive) {
+      return null;
+    }
+
+    // Return only safe branding info (no private data)
+    return {
+      name: institution.name,
+      logoUrl: institution.logoUrl ?? null,
+      institutionType: institution.institutionType,
+    };
+  },
+});
+
 export const getSchoolInfo = query({
   args: {},
   handler: async (ctx) => {
@@ -437,9 +469,8 @@ export const switchUserInstitution = mutation({
     // Verify the user has an active membership in the target institution
     const membership = await ctx.db
       .query("institutionMemberships")
-      .withIndex("by_user_institution", (q) =>
-        q.eq("userId", userId).eq("institutionId", institutionId),
-      )
+      .withIndex("by_user_institution", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("institutionId"), institutionId))
       .first();
 
     if (!membership) {

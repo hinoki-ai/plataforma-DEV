@@ -3,6 +3,14 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import type { Doc } from "@/convex/_generated/dataModel";
+
+// Course type based on Convex schema
+type Course = Doc<"courses">;
+type CourseWithEnrollment = Course & {
+  studentCount?: number;
+  teacherName?: string;
+};
 import { PageTransition } from "@/components/ui/page-transition";
 import {
   Card,
@@ -457,7 +465,7 @@ export function AdminLibroClasesView({
   );
 }
 
-function CourseCard({ course }: { course: any }) {
+function CourseCard({ course }: { course: CourseWithEnrollment }) {
   const { t } = useDivineParsing(["libro-clases", "common"]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

@@ -72,7 +72,6 @@ export async function GET(request: NextRequest) {
         }
       },
       cancel() {
-        console.log("SSE stream cancelled for user:", session.user.id);
         if (heartbeat) {
           clearInterval(heartbeat);
           heartbeat = null;

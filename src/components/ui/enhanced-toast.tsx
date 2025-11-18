@@ -72,5 +72,5 @@ export function EnhancedToast({
 export default EnhancedToast;
 
 export function enhancedToast(type: string, message: string) {
-  console.log(`Toast: ${type} - ${message}`);
+  // Toast function - actual implementation would show a toast notification
 }

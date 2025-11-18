@@ -1,9 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import type { TeamMember } from "@/lib/prisma-compat-types";
 
 interface ContactButtonProps {
-  members: any[];
+  members: TeamMember[];
 }
 
 export function ContactButton({ members }: ContactButtonProps) {
@@ -12,14 +13,15 @@ export function ContactButton({ members }: ContactButtonProps) {
       const specialties = m.specialties;
       if (Array.isArray(specialties)) {
         return specialties.some(
-          (n: any) => typeof n === "string" && n.includes("Psicología"),
+          (specialty) =>
+            typeof specialty === "string" && specialty.includes("Psicología"),
         );
       }
       return false;
     });
     if (memberToContact) {
       // Handle contact logic here
-      console.log("Contacting member:", memberToContact);
+      // TODO: Implement contact functionality
     }
   };
 
