@@ -33,14 +33,16 @@ Users are linked to institutions through memberships:
 
 - **Role**: ADMIN, PROFESOR, PARENT, STAFF, MENTOR
 - **Status**: INVITED, ACTIVE, SUSPENDED, LEFT
-- A user can have multiple memberships (belong to multiple institutions)
+- **Regular users belong to ONE institution only** - each user has a single active membership
+- **MASTER users can access any institution** - they don't need memberships
 - Each membership tracks when the user joined, last accessed, etc.
 
 #### 3. User Current Institution (`users.currentInstitutionId`)
 
 - Each user has a `currentInstitutionId` field
 - This determines which institution context the user sees
-- Users can switch between institutions if they have multiple memberships
+- Regular users are locked to their single institution membership
+- MASTER users can switch between any institution
 
 #### 4. Data Isolation
 
