@@ -48,16 +48,19 @@ export async function GET() {
     });
 
     // Get unread communications count
-    const unreadCommunications = await client.query(api.notifications.getNotifications, {
-      recipientId: session.user.id as any,
-      read: false,
-      limit: 100,
-    });
+    const unreadCommunications = await client.query(
+      api.notifications.getNotifications,
+      {
+        recipientId: session.user.id as any,
+        read: false,
+        limit: 100,
+      },
+    );
 
     const data = {
       children: {
         total: students.length,
-        enrolled: students.filter(s => s.isActive).length,
+        enrolled: students.filter((s) => s.isActive).length,
       },
       meetings: {
         total: upcomingMeetings.length,
@@ -69,7 +72,7 @@ export async function GET() {
       },
       votings: {
         total: votings.length,
-        active: votings.filter(v => v.status === "active").length,
+        active: votings.filter((v) => v.status === "active").length,
       },
       resources: {
         total: 25, // Mock data - would need to implement actual resource counting

@@ -611,7 +611,11 @@ export const createGrade = tenantMutation({
       }
     }
 
-    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id as Id<"institutionInfo">);
+    await ensureTeacherMembership(
+      ctx,
+      args.teacherId,
+      tenancy.institution._id as Id<"institutionInfo">,
+    );
 
     const student = await ensureStudentAccess(ctx, tenancy, args.studentId);
     const course = await ensureCourseAccess(ctx, tenancy, args.courseId);
@@ -786,7 +790,11 @@ export const bulkCreateGrades = tenantMutation({
       }
     }
 
-    await ensureTeacherMembership(ctx, args.teacherId, tenancy.institution._id as Id<"institutionInfo">);
+    await ensureTeacherMembership(
+      ctx,
+      args.teacherId,
+      tenancy.institution._id as Id<"institutionInfo">,
+    );
 
     const course = await ensureCourseAccess(ctx, tenancy, args.courseId);
     if (!course.subjects.includes(args.subject)) {

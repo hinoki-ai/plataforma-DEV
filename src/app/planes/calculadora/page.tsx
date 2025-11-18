@@ -312,10 +312,12 @@ export default function PricingCalculatorPage({
   const totalSavingsPeriod = savingsFromPlanDiscountPeriod + savingsFromUpfront;
 
   // Calculate final per-student values after all discounts
-  const finalPerStudentMonthly = paymentFrequency === "upfront"
-    ? periodTotal / billingInfo.months / students
-    : monthlyPriceWithPlanDiscount / students;
-  const savingsPerStudent = selectedPlan.pricePerStudent - finalPerStudentMonthly;
+  const finalPerStudentMonthly =
+    paymentFrequency === "upfront"
+      ? periodTotal / billingInfo.months / students
+      : monthlyPriceWithPlanDiscount / students;
+  const savingsPerStudent =
+    selectedPlan.pricePerStudent - finalPerStudentMonthly;
 
   const sliderUpperBound = selectedPlan.maxStudents
     ? selectedPlan.maxStudents
