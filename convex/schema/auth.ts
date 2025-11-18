@@ -71,7 +71,7 @@ export const users = defineTable({
  * - Belongs to: institutionInfo (N:1)
  */
 export const institutionMemberships = defineTable({
-  institutionId: v.optional(v.id("institutionInfo")),
+  institutionId: v.id("institutionInfo"),
   userId: v.id("users"),
   role: v.union(
     v.literal("ADMIN"),
