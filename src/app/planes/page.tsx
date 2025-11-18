@@ -286,12 +286,17 @@ export default function PreciosPage() {
                         {[
                           {
                             key: "courses",
-                            label: `${plan.features.courses} ${tp("pricing.courses_subjects")}`,
+                            label: `${plan.features.courses} cursos`,
+                            icon: BookOpen,
+                          },
+                          {
+                            key: "subjects",
+                            label: `${plan.features.subjects} asignaturas`,
                             icon: BookOpen,
                           },
                           {
                             key: "storage",
-                            label: `${plan.features.storage} ${tp("pricing.storage_label")}`,
+                            label: `${plan.features.storage} de almacenamiento`,
                             icon: HardDrive,
                           },
                           {
@@ -475,7 +480,7 @@ export default function PreciosPage() {
                               </li>
                               <li>
                                 {tp("pricing.max_courses")}:{" "}
-                                {plan.features.courses}
+                                {plan.features.courses + plan.features.subjects}
                               </li>
                             </ul>
                           </div>
