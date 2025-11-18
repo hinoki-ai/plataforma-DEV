@@ -35,7 +35,7 @@ import {
   formatCLP,
 } from "@/data/pricing-plans";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
 // billingMetadata will be created inside the component to use translations
@@ -91,7 +91,6 @@ export default function PricingCalculatorPage({
   const { t } = useDivineParsing(["common", "planes"]);
   const tc = (key: string) => t(key, "planes");
   const router = useRouter();
-  const searchParamsHook = useSearchParams();
   const [resolvedSearchParams, setResolvedSearchParams] = useState<{
     plan?: string;
     billing?: string;
@@ -109,7 +108,18 @@ export default function PricingCalculatorPage({
   // Function to update URL with current state
   const updateUrl = useCallback(
     (newBillingCycle?: BillingCycle, newStudents?: number) => {
-      const params = new URLSearchParams(searchParamsHook.toString());
+      const params = new URLSearchParams();
+
+      // Set current resolved params
+      if (resolvedSearchParams.plan) {
+        params.set("plan", resolvedSearchParams.plan);
+      }
+      if (resolvedSearchParams.billing) {
+        params.set("billing", resolvedSearchParams.billing);
+      }
+      if (resolvedSearchParams.students) {
+        params.set("students", resolvedSearchParams.students);
+      }
 
       if (newBillingCycle) {
         params.set("billing", newBillingCycle);
@@ -119,17 +129,11 @@ export default function PricingCalculatorPage({
         params.set("students", newStudents.toString());
       }
 
-      // Keep the plan parameter as is
-      const currentPlan = resolvedSearchParams.plan;
-      if (currentPlan) {
-        params.set("plan", currentPlan);
-      }
-
       router.replace(`/planes/calculadora?${params.toString()}`, {
         scroll: false,
       });
     },
-    [router, searchParamsHook, resolvedSearchParams.plan],
+    [router, resolvedSearchParams],
   );
 
   // Map legacy or alternative plan names to correct plan IDs
