@@ -107,25 +107,30 @@ export default function PricingCalculatorPage({
   }, [searchParams]);
 
   // Function to update URL with current state
-  const updateUrl = useCallback((newBillingCycle?: BillingCycle, newStudents?: number) => {
-    const params = new URLSearchParams(searchParamsHook.toString());
+  const updateUrl = useCallback(
+    (newBillingCycle?: BillingCycle, newStudents?: number) => {
+      const params = new URLSearchParams(searchParamsHook.toString());
 
-    if (newBillingCycle) {
-      params.set('billing', newBillingCycle);
-    }
+      if (newBillingCycle) {
+        params.set("billing", newBillingCycle);
+      }
 
-    if (newStudents !== undefined) {
-      params.set('students', newStudents.toString());
-    }
+      if (newStudents !== undefined) {
+        params.set("students", newStudents.toString());
+      }
 
-    // Keep the plan parameter as is
-    const currentPlan = resolvedSearchParams.plan;
-    if (currentPlan) {
-      params.set('plan', currentPlan);
-    }
+      // Keep the plan parameter as is
+      const currentPlan = resolvedSearchParams.plan;
+      if (currentPlan) {
+        params.set("plan", currentPlan);
+      }
 
-    router.replace(`/planes/calculadora?${params.toString()}`, { scroll: false });
-  }, [router, searchParamsHook, resolvedSearchParams.plan]);
+      router.replace(`/planes/calculadora?${params.toString()}`, {
+        scroll: false,
+      });
+    },
+    [router, searchParamsHook, resolvedSearchParams.plan],
+  );
 
   // Map legacy or alternative plan names to correct plan IDs
   const planMappings: Record<string, string> = {
@@ -171,11 +176,19 @@ export default function PricingCalculatorPage({
       return selectedPlan.minStudents;
     }
     return clampStudents(parsed);
-  }, [resolvedSearchParams.students, selectedPlan.minStudents, selectedPlan.maxStudents]);
+  }, [
+    resolvedSearchParams.students,
+    selectedPlan.minStudents,
+    selectedPlan.maxStudents,
+  ]);
 
-  const [students, setStudentsState] = useState<number>(selectedPlan.minStudents);
+  const [students, setStudentsState] = useState<number>(
+    selectedPlan.minStudents,
+  );
   // Separate input state to allow temporary invalid values while typing
-  const [inputValue, setInputValue] = useState<string>(String(selectedPlan.minStudents));
+  const [inputValue, setInputValue] = useState<string>(
+    String(selectedPlan.minStudents),
+  );
 
   // Update students state when initialStudents changes (e.g., when URL params change)
   useEffect(() => {
@@ -184,15 +197,21 @@ export default function PricingCalculatorPage({
   }, [initialStudents]);
 
   // Wrapper functions to update state and URL
-  const setBillingCycle = useCallback((cycle: BillingCycle) => {
-    setBillingCycleState(cycle);
-    updateUrl(cycle, students);
-  }, [updateUrl, students]);
+  const setBillingCycle = useCallback(
+    (cycle: BillingCycle) => {
+      setBillingCycleState(cycle);
+      updateUrl(cycle, students);
+    },
+    [updateUrl, students],
+  );
 
-  const setStudents = useCallback((newStudents: number) => {
-    setStudentsState(newStudents);
-    updateUrl(billingCycle, newStudents);
-  }, [updateUrl, billingCycle]);
+  const setStudents = useCallback(
+    (newStudents: number) => {
+      setStudentsState(newStudents);
+      updateUrl(billingCycle, newStudents);
+    },
+    [updateUrl, billingCycle],
+  );
 
   // Sync inputValue when students changes externally (slider, buttons, plan change)
   useEffect(() => {
@@ -412,10 +431,7 @@ export default function PricingCalculatorPage({
             <div className="max-w-4xl mx-auto">
               <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
                 <h1 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out">
-                  {t("calculator.title", "planes").replace(
-                    "{plan}",
-                    selectedPlan.name,
-                  )}
+                  {tc("calculator.title").replace("{plan}", selectedPlan.name)}
                 </h1>
                 <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out md:text-xl">
                   {tc("calculator.subtitle")}
@@ -423,14 +439,10 @@ export default function PricingCalculatorPage({
               </div>
             </div>
             <div className="flex justify-center mt-6">
-              <Button
-                variant="outline"
-                className="h-auto py-3 px-4"
-                asChild
-              >
+              <Button variant="outline" className="h-auto py-3 px-4" asChild>
                 <Link href="/planes" className="flex items-center gap-2">
                   <ArrowLeft className="w-4 h-4" />
-                  {t("calculator.back_to_plans", "planes")}
+                  {tc("calculator.back_to_plans")}
                 </Link>
               </Button>
             </div>
@@ -511,7 +523,7 @@ export default function PricingCalculatorPage({
                           disabled={students <= selectedPlan.minStudents}
                           aria-label={tc("calculator.decrease_10")}
                         >
-                          -10
+                          {tc("calculator.decrease_10_short")}
                         </Button>
                         <Button
                           variant="outline"
@@ -519,7 +531,7 @@ export default function PricingCalculatorPage({
                           onClick={() => adjustStudents(10)}
                           aria-label={tc("calculator.increase_10")}
                         >
-                          +10
+                          {tc("calculator.increase_10_short")}
                         </Button>
                       </div>
                       <span className="text-sm text-gray-400">
