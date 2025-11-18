@@ -431,27 +431,6 @@ export default function PricingCalculatorPage({
       <Header />
       <main className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-6xl mx-auto space-y-8">
-          <div className="text-center mb-8">
-            <div className="max-w-4xl mx-auto">
-              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
-                <h1 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out">
-                  {tc("calculator.title").replace("{plan}", selectedPlan.name)}
-                </h1>
-                <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out md:text-xl">
-                  {tc("calculator.subtitle")}
-                </p>
-              </div>
-            </div>
-            <div className="flex justify-center mt-6">
-              <Button variant="outline" className="h-auto py-3 px-4" asChild>
-                <Link href="/planes" className="flex items-center gap-2">
-                  <ArrowLeft className="w-4 h-4" />
-                  {tc("calculator.back_to_plans")}
-                </Link>
-              </Button>
-            </div>
-          </div>
-
           <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
             <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/60 text-white">
               <CardHeader>

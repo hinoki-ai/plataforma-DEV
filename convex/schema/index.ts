@@ -18,7 +18,7 @@ export * from "./institution";
 export * from "./educational";
 
 // Libro de Clases (Chilean Class Book)
-export * from "./libro-clases";
+export * from "./libro_clases";
 
 // Convivencia Escolar (School Coexistence)
 export * from "./convivencia";
