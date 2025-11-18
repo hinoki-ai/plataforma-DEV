@@ -21,9 +21,9 @@ export const getClassContentByDate = query({
   handler: async (ctx, { courseId, date }) => {
     const content = await ctx.db
       .query("classContent")
-      .withIndex("by_courseId_date", (q) =>
-        q.eq("courseId", courseId).eq("date", date),
-      )
+      .withIndex("by_courseId_date")
+      .filter(q => q.eq(q.field("courseId"), courseId))
+      .filter(q => q.eq(q.field("date"), date))
       .collect();
 
     // Get teacher info for each content entry

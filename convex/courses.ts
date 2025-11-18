@@ -244,7 +244,7 @@ export const getCoursesForParent = tenantQuery({
       !(await userInInstitution(
         ctx,
         effectiveParentId,
-        tenancy.institution._id,
+        tenancy.institution._id as Id<"institutionInfo">,
       ))
     ) {
       throw new Error("Parent is not part of this institution");
@@ -322,7 +322,7 @@ export const createCourse = tenantMutation({
     await validateTeacherMembership(
       ctx,
       args.teacherId,
-      tenancy.institution._id,
+      tenancy.institution._id as Id<"institutionInfo">,
       tenancy.isMaster,
     );
 
@@ -394,7 +394,7 @@ export const updateCourse = tenantMutation({
       await validateTeacherMembership(
         ctx,
         updates.teacherId,
-        tenancy.institution._id,
+        tenancy.institution._id as Id<"institutionInfo">,
         tenancy.isMaster,
       );
     }
@@ -466,7 +466,7 @@ export const enrollStudent = tenantMutation({
       throw new Error("No permission to modify this course");
     }
 
-    await validateStudentInInstitution(ctx, studentId, tenancy.institution._id);
+    await validateStudentInInstitution(ctx, studentId, tenancy.institution._id as Id<"institutionInfo">);
 
     const enrollments = await ctx.db
       .query("courseStudents")
@@ -586,7 +586,7 @@ export const bulkEnrollStudents = tenantMutation({
         await validateStudentInInstitution(
           ctx,
           studentId,
-          tenancy.institution._id,
+          tenancy.institution._id as Id<"institutionInfo">,
         );
 
         const existingEnrollment = await ctx.db

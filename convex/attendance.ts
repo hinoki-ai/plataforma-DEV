@@ -48,7 +48,7 @@ export const getAttendanceByDate = query({
     // Build map of student attendance
     const attendanceMap = new Map<Id<"students">, Id<"classAttendance">>();
     for (const record of attendanceRecords) {
-      attendanceMap.set(record.studentId, record._id);
+      attendanceMap.set(record.studentId, record._id as Id<"classAttendance">);
     }
 
     // Return attendance for all enrolled students
@@ -319,9 +319,9 @@ export const recordAttendance = mutation({
       // Check if attendance already exists for this student/date
       const existing = await ctx.db
         .query("classAttendance")
-        .withIndex("by_studentId_date", (q) =>
-          q.eq("studentId", record.studentId).eq("date", date),
-        )
+        .withIndex("by_studentId_date")
+        .filter(q => q.eq(q.field("studentId"), record.studentId))
+        .filter(q => q.eq(q.field("date"), date))
         .first();
 
       if (existing) {
@@ -420,9 +420,9 @@ export const bulkUpdateAttendance = mutation({
       // Check if record exists
       const existing = await ctx.db
         .query("classAttendance")
-        .withIndex("by_studentId_date", (q) =>
-          q.eq("studentId", studentId).eq("date", date),
-        )
+        .withIndex("by_studentId_date")
+        .filter(q => q.eq(q.field("studentId"), studentId))
+        .filter(q => q.eq(q.field("date"), date))
         .first();
 
       if (existing) {
