@@ -35,6 +35,8 @@ import {
   formatCLP,
 } from "@/data/pricing-plans";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo } from "react";
 
 // billingMetadata will be created inside the component to use translations
 
@@ -88,6 +90,8 @@ export default function PricingCalculatorPage({
 }: PricingCalculatorPageProps) {
   const { t } = useDivineParsing(["common", "planes"]);
   const tc = (key: string) => t(key, "planes");
+  const router = useRouter();
+  const searchParamsHook = useSearchParams();
   const [resolvedSearchParams, setResolvedSearchParams] = useState<{
     plan?: string;
     billing?: string;
@@ -101,6 +105,27 @@ export default function PricingCalculatorPage({
     };
     resolveParams();
   }, [searchParams]);
+
+  // Function to update URL with current state
+  const updateUrl = useCallback((newBillingCycle?: BillingCycle, newStudents?: number) => {
+    const params = new URLSearchParams(searchParamsHook.toString());
+
+    if (newBillingCycle) {
+      params.set('billing', newBillingCycle);
+    }
+
+    if (newStudents !== undefined) {
+      params.set('students', newStudents.toString());
+    }
+
+    // Keep the plan parameter as is
+    const currentPlan = resolvedSearchParams.plan;
+    if (currentPlan) {
+      params.set('plan', currentPlan);
+    }
+
+    router.replace(`/planes/calculadora?${params.toString()}`, { scroll: false });
+  }, [router, searchParamsHook, resolvedSearchParams.plan]);
 
   // Map legacy or alternative plan names to correct plan IDs
   const planMappings: Record<string, string> = {
@@ -123,7 +148,7 @@ export default function PricingCalculatorPage({
   )
     ? (resolvedSearchParams.billing as BillingCycle)
     : "semestral";
-  const [billingCycle, setBillingCycle] =
+  const [billingCycle, setBillingCycleState] =
     useState<BillingCycle>(initialBilling);
   const [paymentFrequency, setPaymentFrequency] = useState<
     "monthly" | "upfront"
@@ -138,7 +163,7 @@ export default function PricingCalculatorPage({
     return rounded;
   };
 
-  const initialStudents = (() => {
+  const initialStudents = useMemo(() => {
     const parsed = resolvedSearchParams.students
       ? Number.parseInt(resolvedSearchParams.students, 10)
       : NaN;
@@ -146,11 +171,28 @@ export default function PricingCalculatorPage({
       return selectedPlan.minStudents;
     }
     return clampStudents(parsed);
-  })();
+  }, [resolvedSearchParams.students, selectedPlan.minStudents, selectedPlan.maxStudents]);
 
-  const [students, setStudents] = useState<number>(initialStudents);
+  const [students, setStudentsState] = useState<number>(selectedPlan.minStudents);
   // Separate input state to allow temporary invalid values while typing
-  const [inputValue, setInputValue] = useState<string>(String(initialStudents));
+  const [inputValue, setInputValue] = useState<string>(String(selectedPlan.minStudents));
+
+  // Update students state when initialStudents changes (e.g., when URL params change)
+  useEffect(() => {
+    setStudentsState(initialStudents);
+    setInputValue(String(initialStudents));
+  }, [initialStudents]);
+
+  // Wrapper functions to update state and URL
+  const setBillingCycle = useCallback((cycle: BillingCycle) => {
+    setBillingCycleState(cycle);
+    updateUrl(cycle, students);
+  }, [updateUrl, students]);
+
+  const setStudents = useCallback((newStudents: number) => {
+    setStudentsState(newStudents);
+    updateUrl(billingCycle, newStudents);
+  }, [updateUrl, billingCycle]);
 
   // Sync inputValue when students changes externally (slider, buttons, plan change)
   useEffect(() => {
@@ -159,14 +201,14 @@ export default function PricingCalculatorPage({
 
   // Ensure students is valid when plan changes
   useEffect(() => {
-    setStudents((currentStudents) => {
-      const clamped = clampStudents(currentStudents);
-      if (clamped !== currentStudents) {
-        setInputValue(String(clamped));
-        return clamped;
-      }
-      return currentStudents;
-    });
+    const currentStudents = students;
+    const clamped = clampStudents(currentStudents);
+    if (clamped !== currentStudents) {
+      setInputValue(String(clamped));
+      setStudentsState(clamped);
+      // Update URL after clamping
+      updateUrl(billingCycle, clamped);
+    }
   }, [selectedPlan.id]); // Only when plan changes
 
   // Create billingMetadata with translations
@@ -366,28 +408,32 @@ export default function PricingCalculatorPage({
       <Header />
       <main className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-6xl mx-auto space-y-8">
-          <div className="flex items-center justify-between text-white">
-            <div className="flex-1">
-              <h1 className="text-4xl md:text-5xl font-bold">
-                {t("calculator.title", "planes").replace(
-                  "{plan}",
-                  selectedPlan.name,
-                )}
-              </h1>
-              <p className="text-lg text-gray-200 max-w-2xl">
-                {t("calculator.subtitle", "planes")}
-              </p>
+          <div className="text-center mb-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                <h1 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center transition-all duration-700 ease-out">
+                  {t("calculator.title", "planes").replace(
+                    "{plan}",
+                    selectedPlan.name,
+                  )}
+                </h1>
+                <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out md:text-xl">
+                  {tc("calculator.subtitle")}
+                </p>
+              </div>
             </div>
-            <Button
-              variant="outline"
-              className="h-auto py-3 px-4 shrink-0"
-              asChild
-            >
-              <Link href="/planes" className="flex items-center gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                {t("calculator.back_to_plans", "planes")}
-              </Link>
-            </Button>
+            <div className="flex justify-center mt-6">
+              <Button
+                variant="outline"
+                className="h-auto py-3 px-4"
+                asChild
+              >
+                <Link href="/planes" className="flex items-center gap-2">
+                  <ArrowLeft className="w-4 h-4" />
+                  {t("calculator.back_to_plans", "planes")}
+                </Link>
+              </Button>
+            </div>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
