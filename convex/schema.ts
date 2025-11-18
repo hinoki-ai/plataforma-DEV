@@ -1,5 +1,5 @@
 import { defineSchema } from "convex/server";
-import * as schema from "./schema";
+import { schemaObject } from "./schema/index";
 
 /**
  * Convex Schema for Plataforma Astral Educational Management System
@@ -14,5 +14,4 @@ import * as schema from "./schema";
  * @see ./schema/ for domain-specific schema definitions
  */
 
-const schemaDefinition = schema as any;
-export default defineSchema(schemaDefinition);
+export default defineSchema(schemaObject);
