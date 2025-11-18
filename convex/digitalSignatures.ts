@@ -29,8 +29,8 @@ export const getSignature = query({
     const signature = await ctx.db
       .query("digitalSignatures")
       .withIndex("by_recordType_recordId")
-      .filter(q => q.eq(q.field("recordType"), recordType))
-      .filter(q => q.eq(q.field("recordId"), recordId))
+      .filter((q) => q.eq(q.field("recordType"), recordType))
+      .filter((q) => q.eq(q.field("recordId"), recordId))
       .first();
 
     if (!signature) {
@@ -62,7 +62,7 @@ export const getSignaturesByUser = query({
   handler: async (ctx, { userId, isCertified }) => {
     let signatures = await ctx.db
       .query("digitalSignatures")
-      .filter(q => q.eq(q.field("signedBy"), userId))
+      .filter((q) => q.eq(q.field("signedBy"), userId))
       .collect();
 
     if (isCertified !== undefined) {
@@ -84,7 +84,9 @@ export const getSignaturesByUser = query({
       }),
     );
 
-    return signaturesWithDetails.sort((a, b) => (b as any).createdAt - (a as any).createdAt);
+    return signaturesWithDetails.sort(
+      (a, b) => (b as any).createdAt - (a as any).createdAt,
+    );
   },
 });
 
@@ -108,7 +110,7 @@ export const getPendingCertifications = query({
   handler: async (ctx, { recordType }) => {
     let certifications = await ctx.db
       .query("recordCertifications")
-      .filter(q => q.eq(q.field("status"), "PENDING"))
+      .filter((q) => q.eq(q.field("status"), "PENDING"))
       .collect();
 
     if (recordType) {
@@ -154,8 +156,8 @@ export const getCertification = query({
     const certification = await ctx.db
       .query("recordCertifications")
       .withIndex("by_recordType_recordId")
-      .filter(q => q.eq(q.field("recordType"), recordType))
-      .filter(q => q.eq(q.field("recordId"), recordId))
+      .filter((q) => q.eq(q.field("recordType"), recordType))
+      .filter((q) => q.eq(q.field("recordId"), recordId))
       .first();
 
     if (!certification) {
@@ -189,8 +191,8 @@ export const getRecordLocks = query({
     let locks = await ctx.db
       .query("recordLocks")
       .withIndex("by_courseId")
-      .filter(q => q.eq(q.field("courseId"), courseId))
-      .filter(q => q.eq(q.field("isLocked"), true))
+      .filter((q) => q.eq(q.field("courseId"), courseId))
+      .filter((q) => q.eq(q.field("isLocked"), true))
       .collect();
 
     if (period) {
@@ -235,7 +237,7 @@ export const getUncertifiedSignatures = query({
   handler: async (ctx, { recordType }) => {
     let signatures = await ctx.db
       .query("digitalSignatures")
-      .filter(q => q.eq(q.field("isCertified"), false))
+      .filter((q) => q.eq(q.field("isCertified"), false))
       .collect();
 
     if (recordType) {
@@ -253,7 +255,9 @@ export const getUncertifiedSignatures = query({
       }),
     );
 
-    return signaturesWithDetails.sort((a, b) => (b as any).createdAt - (a as any).createdAt);
+    return signaturesWithDetails.sort(
+      (a, b) => (b as any).createdAt - (a as any).createdAt,
+    );
   },
 });
 
@@ -282,8 +286,8 @@ export const getUnsignedRecords = query({
       let classContent = await ctx.db
         .query("classContent")
         .withIndex("by_courseId")
-        .filter(q => q.eq(q.field("courseId"), courseId))
-        .filter(q => q.eq(q.field("isSigned"), false))
+        .filter((q) => q.eq(q.field("courseId"), courseId))
+        .filter((q) => q.eq(q.field("isSigned"), false))
         .collect();
 
       if (startDate) {
@@ -311,7 +315,7 @@ export const getUnsignedRecords = query({
       // Get unique dates with attendance
       const attendanceDates = await ctx.db
         .query("classAttendance")
-        .filter(q => q.eq(q.field("courseId"), courseId))
+        .filter((q) => q.eq(q.field("courseId"), courseId))
         .collect();
 
       const uniqueDates = new Set(attendanceDates.map((a) => a.date));
@@ -324,8 +328,8 @@ export const getUnsignedRecords = query({
         const signature = await ctx.db
           .query("digitalSignatures")
           .withIndex("by_recordType_recordId")
-          .filter(q => q.eq(q.field("recordType"), "ATTENDANCE"))
-          .filter(q => q.eq(q.field("recordId"), `${courseId}-${date}`))
+          .filter((q) => q.eq(q.field("recordType"), "ATTENDANCE"))
+          .filter((q) => q.eq(q.field("recordId"), `${courseId}-${date}`))
           .first();
 
         if (!signature) {
@@ -389,8 +393,8 @@ export const createSignature = mutation({
     const existing = await ctx.db
       .query("digitalSignatures")
       .withIndex("by_recordType_recordId")
-      .filter(q => q.eq(q.field("recordType"), args.recordType))
-      .filter(q => q.eq(q.field("recordId"), args.recordId))
+      .filter((q) => q.eq(q.field("recordType"), args.recordType))
+      .filter((q) => q.eq(q.field("recordId"), args.recordId))
       .first();
 
     if (existing) {
@@ -424,8 +428,8 @@ export const createSignature = mutation({
         const locks = await ctx.db
           .query("recordLocks")
           .withIndex("by_courseId")
-          .filter(q => q.eq(q.field("courseId"), courseId!))
-          .filter(q => q.eq(q.field("isLocked"), true))
+          .filter((q) => q.eq(q.field("courseId"), courseId!))
+          .filter((q) => q.eq(q.field("isLocked"), true))
           .collect();
 
         const relevantLock = locks.find(
@@ -668,15 +672,15 @@ export const lockRecords = mutation({
     const existingLock = await ctx.db
       .query("recordLocks")
       .withIndex("by_courseId_period")
-      .filter(q => q.eq(q.field("courseId"), args.courseId))
-      .filter(q => q.eq(q.field("period"), args.period))
-      .filter(q =>
+      .filter((q) => q.eq(q.field("courseId"), args.courseId))
+      .filter((q) => q.eq(q.field("period"), args.period))
+      .filter((q) =>
         q.or(
           q.eq(q.field("recordType"), args.recordType),
           q.eq(q.field("recordType"), "ALL"),
         ),
       )
-      .filter(q => q.eq(q.field("isLocked"), true))
+      .filter((q) => q.eq(q.field("isLocked"), true))
       .first();
 
     if (existingLock) {

@@ -466,7 +466,11 @@ export const enrollStudent = tenantMutation({
       throw new Error("No permission to modify this course");
     }
 
-    await validateStudentInInstitution(ctx, studentId, tenancy.institution._id as Id<"institutionInfo">);
+    await validateStudentInInstitution(
+      ctx,
+      studentId,
+      tenancy.institution._id as Id<"institutionInfo">,
+    );
 
     const enrollments = await ctx.db
       .query("courseStudents")

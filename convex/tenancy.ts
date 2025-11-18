@@ -65,7 +65,7 @@ async function findActiveMembership(
 ): Promise<Doc<"institutionMemberships"> | null> {
   const memberships = await ctx.db
     .query("institutionMemberships")
-    .filter(q => q.eq(q.field("userId"), userId))
+    .filter((q) => q.eq(q.field("userId"), userId))
     .collect();
 
   return (
@@ -99,13 +99,16 @@ export async function requireCurrentInstitution(
     membership = await ctx.db
       .query("institutionMemberships")
       .withIndex("by_user_institution")
-      .filter(q => q.eq(q.field("userId"), user._id))
-      .filter(q => q.eq(q.field("institutionId"), institutionId!))
+      .filter((q) => q.eq(q.field("userId"), user._id))
+      .filter((q) => q.eq(q.field("institutionId"), institutionId!))
       .first();
   }
 
   if ((!institutionId || (!membership && !isMaster)) && requireMembership) {
-    const fallbackMembership = await findActiveMembership(ctx, user._id as Id<"users">);
+    const fallbackMembership = await findActiveMembership(
+      ctx,
+      user._id as Id<"users">,
+    );
     if (fallbackMembership) {
       institutionId = fallbackMembership.institutionId ?? null;
       membership = fallbackMembership;
