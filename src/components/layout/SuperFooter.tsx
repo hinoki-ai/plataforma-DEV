@@ -6,7 +6,7 @@ export default function HomepageFooter() {
   const { t } = useDivineParsing(["common"]);
 
   return (
-    <footer className="relative bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 border-t border-slate-700/50 overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-t border-slate-700/50 overflow-hidden">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 footer-bg-pattern" />
 
@@ -16,7 +16,7 @@ export default function HomepageFooter() {
           {/* Brand & Contact - Compact */}
           <div className="space-y-6">
             <div>
-              <h3 className="font-bold text-xl mb-2 bg-linear-to-r from-white to-slate-300 bg-clip-text text-transparent">
+              <h3 className="font-bold text-xl mb-2 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
                 {t("home.footer.school.name", "common")}
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
@@ -109,7 +109,7 @@ export default function HomepageFooter() {
                 className="flex items-center gap-3 text-slate-400 hover:text-white transition-all duration-200 group p-2 rounded-lg hover:bg-slate-800/30"
                 aria-label={t("home.footer.aria.team", "common")}
               >
-                <div className="w-6 h-6 rounded-md bg-linear-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all">
+                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all">
                   <svg
                     className="w-3.5 h-3.5"
                     fill="none"
@@ -134,7 +134,7 @@ export default function HomepageFooter() {
                 className="flex items-center gap-3 text-slate-400 hover:text-white transition-all duration-200 group p-2 rounded-lg hover:bg-slate-800/30"
                 aria-label={t("home.footer.aria.portal", "common")}
               >
-                <div className="w-6 h-6 rounded-md bg-linear-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center group-hover:from-green-500/30 group-hover:to-emerald-500/30 transition-all">
+                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center group-hover:from-green-500/30 group-hover:to-emerald-500/30 transition-all">
                   <svg
                     className="w-3.5 h-3.5"
                     fill="none"
@@ -161,7 +161,7 @@ export default function HomepageFooter() {
                 className="flex items-center gap-3 text-slate-400 hover:text-white transition-all duration-200 group p-2 rounded-lg hover:bg-slate-800/30"
                 aria-label={t("home.footer.aria.mineduc", "common")}
               >
-                <div className="w-6 h-6 rounded-md bg-linear-to-br from-red-500/20 to-blue-500/20 flex items-center justify-center group-hover:from-red-500/30 group-hover:to-blue-500/30 transition-all">
+                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-red-500/20 to-blue-500/20 flex items-center justify-center group-hover:from-red-500/30 group-hover:to-blue-500/30 transition-all">
                   <svg
                     className="w-3.5 h-3.5"
                     fill="none"
@@ -225,24 +225,10 @@ export default function HomepageFooter() {
                 href="https://aramac.dev"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-medium text-sm group"
+                className="text-slate-400 hover:text-white transition-colors font-medium text-sm"
                 aria-label={t("home.footer.aria.developer", "common")}
               >
-                <span className="text-lg">Λ</span>
-                <span>ARAMAC</span>
-                <svg
-                  className="w-3 h-3 group-hover:translate-x-0.5 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
+                ΛRΛMΛC
               </a>
             </div>
           </div>
@@ -262,13 +248,13 @@ export default function HomepageFooter() {
 
             {/* Status Badges - Modern Design */}
             <div className="flex flex-wrap justify-center gap-3">
-              <span className="px-4 py-1.5 bg-linear-to-r from-slate-800 to-slate-700 border border-slate-600/50 rounded-full text-xs text-slate-300 font-medium">
+              <span className="px-4 py-1.5 bg-gradient-to-r from-slate-800 to-slate-700 border border-slate-600/50 rounded-full text-xs text-slate-300 font-medium">
                 {t("home.footer.rbd", "common")}
               </span>
-              <span className="px-4 py-1.5 bg-linear-to-r from-green-900/50 to-green-800/50 border border-green-700/30 rounded-full text-xs text-green-300 font-medium">
+              <span className="px-4 py-1.5 bg-gradient-to-r from-green-900/50 to-green-800/50 border border-green-700/30 rounded-full text-xs text-green-300 font-medium">
                 24/7 Support
               </span>
-              <span className="px-4 py-1.5 bg-linear-to-r from-blue-900/50 to-blue-800/50 border border-blue-700/30 rounded-full text-xs text-blue-300 font-medium">
+              <span className="px-4 py-1.5 bg-gradient-to-r from-blue-900/50 to-blue-800/50 border border-blue-700/30 rounded-full text-xs text-blue-300 font-medium">
                 Multi-institucional
               </span>
             </div>

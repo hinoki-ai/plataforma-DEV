@@ -66,7 +66,7 @@ function MedidasMasterContent() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">
               Control Maestro -{" "}
-              {t("nav.protocolos_comportamiento.medidas", "navigation")}
+              {t("nav.protocolos_convivencia.medidas", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Gestión global y analytics de medidas correctivas
@@ -197,9 +197,9 @@ function MedidasMasterContent() {
                   Medidas Altamente Efectivas
                 </h4>
                 <p className="text-sm text-green-700 mt-1">
-                  El &quot;Trabajo de Reflexión&quot; y &quot;Servicio
-                  Comunitario&quot; muestran efectividad superior al 85%.
-                  Recomendamos aumentar su uso en 15-20%.
+                  El &quot;Trabajo de Reflexión&quot; y &quot;Servicio Comunitario&quot; muestran
+                  efectividad superior al 85%. Recomendamos aumentar su uso en
+                  15-20%.
                 </p>
               </div>
               <div className="p-4 bg-yellow-50 rounded-lg">
@@ -207,9 +207,8 @@ function MedidasMasterContent() {
                   Medidas a Revisar
                 </h4>
                 <p className="text-sm text-yellow-700 mt-1">
-                  La &quot;Suspensión de Clases&quot; tiene efectividad por
-                  debajo del promedio. Sugerimos revisar criterios de
-                  aplicación.
+                  La &quot;Suspensión de Clases&quot; tiene efectividad por debajo del
+                  promedio. Sugerimos revisar criterios de aplicación.
                 </p>
               </div>
               <div className="p-4 bg-blue-50 rounded-lg">

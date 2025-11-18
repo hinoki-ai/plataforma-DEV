@@ -61,7 +61,7 @@ function DisciplinaMasterContent() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">
               Control Maestro -{" "}
-              {t("nav.protocolos_comportamiento.disciplina", "navigation")}
+              {t("nav.protocolos_convivencia.disciplina", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Supervisión global de casos disciplinarios en todas las

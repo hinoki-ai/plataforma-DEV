@@ -46,7 +46,7 @@ function ReconocimientosMasterContent() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">
               Control Maestro -{" "}
-              {t("nav.protocolos_comportamiento.reconocimientos", "navigation")}
+              {t("nav.protocolos_convivencia.reconocimientos", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Sistema global de reconocimientos y premios en todas las

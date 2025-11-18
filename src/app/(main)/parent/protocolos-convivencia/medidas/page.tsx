@@ -60,7 +60,7 @@ function MedidasParentContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              {t("nav.protocolos_comportamiento.medidas", "navigation")}
+              {t("nav.protocolos_convivencia.medidas", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Información sobre medidas correctivas y criterios de aplicación

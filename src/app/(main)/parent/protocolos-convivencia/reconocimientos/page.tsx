@@ -74,7 +74,7 @@ function ReconocimientosParentContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              {t("nav.protocolos_comportamiento.reconocimientos", "navigation")}
+              {t("nav.protocolos_convivencia.reconocimientos", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Sistema de reconocimientos que motiva el buen comportamiento

@@ -31,39 +31,57 @@ function ProtocolosComportamientoParentContent() {
 
   const subcategories = [
     {
-      title: t("nav.protocolos_comportamiento.normas", "navigation"),
+      title: t("nav.protocolos_convivencia.normas", "navigation"),
       description:
         "Conoce las normas y reglas que rigen la convivencia escolar",
-      href: "/parent/protocolos-comportamiento/normas",
+      href: "/parent/protocolos-convivencia/normas",
       icon: Users,
       color: "bg-blue-500",
       importance: "Fundamental",
     },
     {
-      title: t("nav.protocolos_comportamiento.disciplina", "navigation"),
+      title: t("nav.protocolos_convivencia.disciplina", "navigation"),
       description:
         "Información sobre procedimientos disciplinarios y protocolos",
-      href: "/parent/protocolos-comportamiento/disciplina",
+      href: "/parent/protocolos-convivencia/disciplina",
       icon: Shield,
       color: "bg-red-500",
       importance: "Importante",
     },
     {
-      title: t("nav.protocolos_comportamiento.medidas", "navigation"),
+      title: t("nav.protocolos_convivencia.medidas", "navigation"),
       description: "Medidas correctivas aplicables y criterios de aplicación",
-      href: "/parent/protocolos-comportamiento/medidas",
+      href: "/parent/protocolos-convivencia/medidas",
       icon: AlertTriangle,
       color: "bg-orange-500",
       importance: "Referencial",
     },
     {
-      title: t("nav.protocolos_comportamiento.reconocimientos", "navigation"),
+      title: t("nav.protocolos_convivencia.reconocimientos", "navigation"),
       description:
         "Sistema de reconocimientos y premios por buen comportamiento",
-      href: "/parent/protocolos-comportamiento/reconocimientos",
+      href: "/parent/protocolos-convivencia/reconocimientos",
       icon: Award,
       color: "bg-green-500",
       importance: "Motivacional",
+    },
+    {
+      title: t("nav.protocolos_convivencia.actas_apoderados", "navigation"),
+      description:
+        "Consulta las actas de reuniones de apoderados relacionadas con convivencia",
+      href: "/parent/protocolos-convivencia/actas-apoderados",
+      icon: FileText,
+      color: "bg-purple-500",
+      importance: "Referencial",
+    },
+    {
+      title: t("nav.protocolos_convivencia.actas_alumnos", "navigation"),
+      description:
+        "Consulta las actas de reuniones de alumnos relacionadas con convivencia",
+      href: "/parent/protocolos-convivencia/actas-alumnos",
+      icon: FileText,
+      color: "bg-indigo-500",
+      importance: "Referencial",
     },
   ];
 
@@ -88,7 +106,7 @@ function ProtocolosComportamientoParentContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              {t("nav.protocolos_comportamiento", "navigation")}
+              {t("nav.protocolos_convivencia", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               {t("parent.protocols.page_description")}
