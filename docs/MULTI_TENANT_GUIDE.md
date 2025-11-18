@@ -6,16 +6,12 @@ Plataforma Astral is a **multi-tenant** educational management platform. This me
 
 ## Current Institutions
 
-The platform currently supports **2 real institutions**:
+The platform currently supports **2 institutions**:
 
-1. **Plataforma Astral** (Escuela Especial de Lenguaje Plataforma Astral)
-   - Demo/development version
+1. **Plataforma Astral**
    - Institution Type: PRESCHOOL
-   - Located: Anibal Pinto Nº 160, Los Sauces, Chile
 
-2. **Manitos Pintadas**
-   - First real production user
-   - Institution Type: PRESCHOOL
+2. **Manitos Pintadas** - Escuela Especial de Lenguaje
 
 ## Architecture
 

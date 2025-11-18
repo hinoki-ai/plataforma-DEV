@@ -22,6 +22,14 @@ export const getAllInstitutions = query({
   },
 });
 
+export const getInstitutionCount = query({
+  args: {},
+  handler: async (ctx) => {
+    const institutions = await ctx.db.query("institutionInfo").collect();
+    return institutions.length;
+  },
+});
+
 export const getInstitutionById = query({
   args: { institutionId: v.id("institutionInfo") },
   handler: async (ctx, args) => {

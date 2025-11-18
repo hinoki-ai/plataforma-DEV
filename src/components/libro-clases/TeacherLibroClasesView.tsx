@@ -153,6 +153,12 @@ export function TeacherLibroClasesView({
       : "skip",
   );
 
+  // Check for tenancy errors using a debug query
+  const tenancyCheck = useQuery(
+    api.tenancy.getCurrentTenancy,
+    currentUser?._id ? {} : "skip",
+  );
+
   // Get selected course details - must be called before early returns
   const selectedCourse = useQuery(
     api.courses.getCourseById,
@@ -160,8 +166,12 @@ export function TeacherLibroClasesView({
   );
 
   const isCurrentUserLoading = currentUser === undefined;
+  const isTenancyLoading = tenancyCheck === undefined;
+  const hasTenancyError = tenancyCheck && "error" in tenancyCheck;
   const isLoading =
-    isCurrentUserLoading || (currentUser ? courses === undefined : false);
+    isCurrentUserLoading ||
+    isTenancyLoading ||
+    (currentUser ? courses === undefined : false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -243,6 +253,56 @@ export function TeacherLibroClasesView({
     setIsGradeDialogOpen(true);
   };
 
+  // Show tenancy error if present
+  if (hasTenancyError && tenancyCheck) {
+    const errorMessage =
+      typeof tenancyCheck.error === "string"
+        ? tenancyCheck.error
+        : "Error de configuración de institución";
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Configuración de institución requerida"
+            subtitle="Necesitas estar asociado a una institución para usar el libro de clases"
+          />
+          <Card>
+            <CardContent className="py-10 space-y-4">
+              <p className="text-muted-foreground mb-4">{errorMessage}</p>
+              {errorMessage.includes("No institution selected") && (
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p>
+                    Para usar el libro de clases, tu cuenta debe estar asociada
+                    a una institución educativa.
+                  </p>
+                  <p>Por favor contacta al administrador para:</p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Crear o asignar tu cuenta a una institución</li>
+                    <li>
+                      Configurar tu membresía con el rol apropiado (PROFESOR,
+                      ADMIN, etc.)
+                    </li>
+                  </ul>
+                </div>
+              )}
+              <div className="flex flex-wrap gap-3 mt-4">
+                <Button variant="outline" onClick={() => router.refresh()}>
+                  Reintentar
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/contacto")}
+                >
+                  Contactar administrador
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </PageTransition>
+    );
+  }
+
   if (isLoading) {
     if (loadingTimedOut) {
       return (
@@ -260,6 +320,23 @@ export function TeacherLibroClasesView({
                   tener el servicio Convex ejecutándose (`npm run dev` también
                   necesita `npx convex dev`).
                 </p>
+                {tenancyCheck && "error" in tenancyCheck && (
+                  <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                    <p className="text-sm font-medium text-destructive mb-2">
+                      Error detectado:
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {(() => {
+                        const error = (
+                          tenancyCheck as unknown as { error?: unknown }
+                        ).error;
+                        return typeof error === "string"
+                          ? error
+                          : "Error desconocido";
+                      })()}
+                    </p>
+                  </div>
+                )}
                 <div className="flex flex-wrap gap-3">
                   <Button variant="outline" onClick={() => router.refresh()}>
                     Reintentar

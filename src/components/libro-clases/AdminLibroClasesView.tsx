@@ -74,6 +74,9 @@ export function AdminLibroClasesView({
         }
       : undefined;
 
+  // Check for tenancy errors using a debug query
+  const tenancyCheck = useQuery(api.tenancy.getCurrentTenancy, {});
+
   // Fetch courses
   const courses = useQuery(
     api.courses.getCourses,
@@ -117,8 +120,48 @@ export function AdminLibroClasesView({
     };
   }, [filteredCourses]);
 
+  const hasTenancyError = tenancyCheck && "error" in tenancyCheck;
+
+  // Show tenancy error if present
+  if (hasTenancyError && tenancyCheck) {
+    const errorMessage =
+      typeof tenancyCheck.error === "string"
+        ? tenancyCheck.error
+        : "Error de configuración de institución";
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Configuración de institución requerida"
+            subtitle="Necesitas estar asociado a una institución para usar el libro de clases"
+          />
+          <Card>
+            <CardContent className="py-10 space-y-4">
+              <p className="text-muted-foreground mb-4">{errorMessage}</p>
+              {errorMessage.includes("No institution selected") && (
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p>
+                    Para usar el libro de clases, tu cuenta debe estar asociada
+                    a una institución educativa.
+                  </p>
+                  <p>Por favor contacta al administrador para:</p>
+                  <ul className="list-disc list-inside ml-4 space-y-1">
+                    <li>Crear o asignar tu cuenta a una institución</li>
+                    <li>
+                      Configurar tu membresía con el rol apropiado (ADMIN, etc.)
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </PageTransition>
+    );
+  }
+
   // Loading state
-  if (courses === undefined) {
+  if (courses === undefined || tenancyCheck === undefined) {
     return (
       <PageTransition>
         <div className="space-y-6">

@@ -112,6 +112,15 @@ export async function requireCurrentInstitution(
     }
   }
 
+  // For MASTER users, try to find any institution if none is set
+  if (!institutionId && isMaster && allowMasterOverride) {
+    const anyInstitution = await ctx.db.query("institutionInfo").first();
+    if (anyInstitution) {
+      institutionId = anyInstitution._id;
+      // MASTER users don't need membership, so membership can remain null
+    }
+  }
+
   if (!institutionId) {
     throw new Error("No institution selected");
   }
@@ -123,11 +132,15 @@ export async function requireCurrentInstitution(
 
   if (requireMembership && !isMaster) {
     if (!membership) {
-      throw new Error("Membership required for institution access");
+      throw new Error(
+        `Membership required for institution access. User ${user.email} (${user.role}) needs an active institution membership.`,
+      );
     }
 
     if (membership.status !== "ACTIVE") {
-      throw new Error("Membership is not active");
+      throw new Error(
+        `Membership is not active. Current status: ${membership.status}`,
+      );
     }
   }
 
