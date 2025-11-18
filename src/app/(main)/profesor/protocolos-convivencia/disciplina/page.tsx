@@ -104,7 +104,7 @@ function DisciplinaContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              {t("nav.protocolos_comportamiento.disciplina", "navigation")}
+              {t("nav.protocolos_convivencia.disciplina", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Protocolos para el manejo de la disciplina y faltas

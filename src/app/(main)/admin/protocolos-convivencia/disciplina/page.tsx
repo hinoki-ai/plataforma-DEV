@@ -129,7 +129,7 @@ function DisciplinaAdminContent() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">
               Gestión de{" "}
-              {t("nav.protocolos_comportamiento.disciplina", "navigation")}
+              {t("nav.protocolos_convivencia.disciplina", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Panel administrativo para gestión de casos disciplinarios

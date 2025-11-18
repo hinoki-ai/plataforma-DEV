@@ -184,7 +184,7 @@ function NormasAdminContent() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">
               Gestión de{" "}
-              {t("nav.protocolos_comportamiento.normas", "navigation")}
+              {t("nav.protocolos_convivencia.normas", "navigation")}
             </h1>
             <p className="text-muted-foreground mt-2">
               Administración de normas y reglas de convivencia escolar
