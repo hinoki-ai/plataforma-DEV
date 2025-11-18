@@ -148,7 +148,7 @@ export default function ContactosPage() {
 
   const handleContactClick = (contact: Contact) => {
     // You could implement a quick message feature here
-    console.log("Contact clicked:", contact);
+    // TODO: Implement contact functionality
   };
 
   return (

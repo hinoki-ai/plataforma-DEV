@@ -39,6 +39,29 @@ interface VoteOption {
   percentage?: number;
 }
 
+interface VoteApiResponse {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  endDate: string;
+  status: "active" | "closed";
+  isPublic: boolean;
+  allowMultipleVotes: boolean;
+  totalVotes: number;
+  totalOptions: number;
+  hasVoted: boolean;
+  userVotes?: string[];
+  options: {
+    id: string;
+    text: string;
+    votes: number;
+  }[];
+  creator: {
+    name: string;
+  };
+}
+
 interface VotingSession {
   id: string;
   title: string;
@@ -88,12 +111,12 @@ function VotacionesContent() {
       }
 
       const result = await response.json();
-      const votes: any[] = result.data || [];
+      const votes: VoteApiResponse[] = result.data || [];
 
       // Transform API data to match VotingSession interface
       const sessions: VotingSession[] = votes.map((vote) => {
         // Calculate percentages for options
-        const optionsWithPercentages = vote.options.map((opt: any) => {
+        const optionsWithPercentages = vote.options.map((opt) => {
           const percentage =
             vote.totalVotes > 0
               ? Math.round((opt.votes / vote.totalVotes) * 100)
@@ -116,7 +139,7 @@ function VotacionesContent() {
           totalVotes: vote.totalVotes || 0,
           totalOptions: vote.options?.length || 0,
           hasVoted: vote.hasVoted || false,
-          userVotes: vote.userVote ? [vote.userVote] : [],
+          userVotes: vote.userVotes || [],
           options: optionsWithPercentages,
           creator: {
             name: "Administración Escolar",

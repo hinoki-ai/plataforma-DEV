@@ -31,38 +31,24 @@ export async function authenticateUser(
   password: string,
 ): Promise<User | null> {
   try {
-    console.log("🔍 authenticateUser() called", {
-      email,
-      passwordLength: password?.length ?? 0,
-      timestamp: new Date().toISOString(),
-    });
     const client = getConvexClient();
 
     // Get user by email
     const user = await client.query(api.users.getUserByEmail, { email });
 
     if (!user) {
-      console.warn("👤 No user found for email", { email });
-    } else {
-      console.log("👤 User record fetched", {
-        email: user.email,
-        hasPassword: Boolean(user.password),
-        isActive: user.isActive,
-        role: user.role,
-        userId: user._id,
-      });
+      return null;
     }
 
     if (!user || !user.password) {
       return null;
     }
 
+    // Cast the user ID to the proper type
+    const userId = user._id as Id<"users">;
+
     // Verify password
     const isValidPassword = await bcryptjs.compare(password, user.password);
-    console.log("🧪 Password comparison result", {
-      email,
-      isValidPassword,
-    });
 
     if (!isValidPassword || !user.isActive) {
       console.warn("🚫 Authentication rejected", {
@@ -81,7 +67,7 @@ export async function authenticateUser(
         const parentProfile = await client.query(
           api.users.getParentProfileByUserId,
           {
-            userId: user._id,
+            userId: userId,
           },
         );
         needsRegistration = !parentProfile?.registrationComplete;
@@ -99,14 +85,8 @@ export async function authenticateUser(
     }
 
     // Return user without password
-    console.log("✅ authenticateUser() success", {
-      email,
-      role: user.role,
-      needsRegistration,
-      isOAuthUser: user.isOAuthUser,
-    });
     return {
-      _id: user._id,
+      _id: user._id as Id<"users">,
       id: user._id,
       email: user.email,
       name: user.name ?? null,
@@ -137,9 +117,12 @@ export async function findUserByEmail(email: string): Promise<User | null> {
       return null;
     }
 
+    // Cast the user ID to the proper type
+    const userId = user._id as Id<"users">;
+
     return {
-      _id: user._id,
-      id: user._id,
+      _id: userId,
+      id: userId,
       email: user.email,
       name: user.name ?? null,
       role: user.role,
@@ -169,7 +152,7 @@ export async function findUserById(
     }
 
     return {
-      _id: user._id,
+      _id: user._id as Id<"users">,
       id: user._id,
       email: user.email,
       name: user.name ?? null,
@@ -214,14 +197,14 @@ export async function createUser(data: {
     isOAuthUser: data.isOAuthUser ?? false,
   });
 
-  const user = await client.query(api.users.getUserById, { userId: userId });
+  const user = await client.query(api.users.getUserById, { userId });
 
   if (!user) {
     throw new Error("Failed to create user");
   }
 
   return {
-    _id: user._id,
+    _id: userId,
     id: user._id,
     email: user.email,
     name: user.name ?? null,

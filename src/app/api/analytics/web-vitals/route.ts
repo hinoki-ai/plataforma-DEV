@@ -61,28 +61,8 @@ export async function POST(request: NextRequest) {
     if (process.env.NODE_ENV === "production") {
       // Example: Send to external analytics service
       // await sendToAnalyticsService(analyticsEvent);
-
       // Example: Store in database for internal analysis
       // await storeWebVitalsData(analyticsEvent);
-
-      console.log("📊 Web Vitals collected:", {
-        metric: data.metric.name,
-        value: data.metric.value,
-        level: data.level,
-        url: referer,
-      });
-    }
-
-    // Development logging with detailed info
-    if (process.env.NODE_ENV === "development") {
-      console.log("🔥 Web Vitals Development Report:", {
-        metric: data.metric.name,
-        value: `${data.metric.value}ms`,
-        level: data.level,
-        budget: data.budget,
-        url: referer,
-        timestamp: new Date(data.timestamp).toLocaleTimeString(),
-      });
     }
 
     return NextResponse.json({

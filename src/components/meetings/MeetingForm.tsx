@@ -153,16 +153,13 @@ export function MeetingForm({
     const fetchUsers = async () => {
       try {
         setUsersLoading(true);
-        console.log("Fetching professors...");
         const response = await fetch("/api/profesores");
-        console.log("Response status:", response.status);
         if (!response.ok) {
           const errorText = await response.text();
           console.error("Failed to fetch users:", response.status, errorText);
           throw new Error(`Failed to fetch users: ${response.status}`);
         }
         const data = await response.json();
-        console.log("Fetched users data:", data);
         setUsers(Array.isArray(data.data) ? data.data : []);
       } catch (error) {
         console.error("Error fetching users:", error);

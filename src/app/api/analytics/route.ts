@@ -5,14 +5,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { event, properties, userId, traits } = body;
 
-    console.log("Analytics Event:", {
-      event,
-      properties,
-      userId,
-      traits,
-      timestamp: new Date().toISOString(),
-    });
-
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Analytics error:", error);
