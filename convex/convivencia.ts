@@ -243,7 +243,11 @@ export const createDisciplinaCase = tenantMutation({
     normaId: v.optional(v.id("convivenciaNormas")),
     date: v.number(),
     description: v.string(),
-    severity: v.union(v.literal("LEVE"), v.literal("GRAVE"), v.literal("GRAVISIMA")),
+    severity: v.union(
+      v.literal("LEVE"),
+      v.literal("GRAVE"),
+      v.literal("GRAVISIMA"),
+    ),
     medidaId: v.optional(v.id("convivenciaMedidas")),
     status: v.optional(
       v.union(
@@ -351,20 +355,28 @@ export const getMedidas = tenantQuery({
       .collect();
 
     if (args.category) {
-      medidas = medidas.filter((m: Doc<"convivenciaMedidas">) => m.category === args.category);
+      medidas = medidas.filter(
+        (m: Doc<"convivenciaMedidas">) => m.category === args.category,
+      );
     }
 
     if (args.applicableTo) {
       medidas = medidas.filter(
-        (m: Doc<"convivenciaMedidas">) => m.applicableTo === args.applicableTo || m.applicableTo === "ALL",
+        (m: Doc<"convivenciaMedidas">) =>
+          m.applicableTo === args.applicableTo || m.applicableTo === "ALL",
       );
     }
 
     if (args.status) {
-      medidas = medidas.filter((m: Doc<"convivenciaMedidas">) => m.status === args.status);
+      medidas = medidas.filter(
+        (m: Doc<"convivenciaMedidas">) => m.status === args.status,
+      );
     }
 
-    return medidas.sort((a: Doc<"convivenciaMedidas">, b: Doc<"convivenciaMedidas">) => b.createdAt - a.createdAt);
+    return medidas.sort(
+      (a: Doc<"convivenciaMedidas">, b: Doc<"convivenciaMedidas">) =>
+        b.createdAt - a.createdAt,
+    );
   },
 });
 
@@ -465,7 +477,8 @@ export const updateMedida = tenantMutation({
     if (args.title !== undefined) updates.title = args.title;
     if (args.description !== undefined) updates.description = args.description;
     if (args.category !== undefined) updates.category = args.category;
-    if (args.applicableTo !== undefined) updates.applicableTo = args.applicableTo;
+    if (args.applicableTo !== undefined)
+      updates.applicableTo = args.applicableTo;
     if (args.status !== undefined) updates.status = args.status;
     if (args.criteria !== undefined) updates.criteria = args.criteria;
     if (args.duration !== undefined) updates.duration = args.duration;
@@ -504,7 +517,8 @@ export const getReconocimientos = tenantQuery({
 
     if (args.studentId) {
       reconocimientos = reconocimientos.filter(
-        (r: Doc<"convivenciaReconocimientos">) => r.studentId === args.studentId,
+        (r: Doc<"convivenciaReconocimientos">) =>
+          r.studentId === args.studentId,
       );
     }
 
@@ -515,7 +529,9 @@ export const getReconocimientos = tenantQuery({
     }
 
     if (args.category) {
-      reconocimientos = reconocimientos.filter((r: Doc<"convivenciaReconocimientos">) => r.category === args.category);
+      reconocimientos = reconocimientos.filter(
+        (r: Doc<"convivenciaReconocimientos">) => r.category === args.category,
+      );
     }
 
     if (args.startDate) {
@@ -525,10 +541,17 @@ export const getReconocimientos = tenantQuery({
     }
 
     if (args.endDate) {
-      reconocimientos = reconocimientos.filter((r: Doc<"convivenciaReconocimientos">) => r.date <= args.endDate!);
+      reconocimientos = reconocimientos.filter(
+        (r: Doc<"convivenciaReconocimientos">) => r.date <= args.endDate!,
+      );
     }
 
-    return reconocimientos.sort((a: Doc<"convivenciaReconocimientos">, b: Doc<"convivenciaReconocimientos">) => b.date - a.date);
+    return reconocimientos.sort(
+      (
+        a: Doc<"convivenciaReconocimientos">,
+        b: Doc<"convivenciaReconocimientos">,
+      ) => b.date - a.date,
+    );
   },
 });
 
@@ -601,22 +624,38 @@ export const getActasApoderados = tenantQuery({
       .collect();
 
     if (args.courseId) {
-      actas = actas.filter((a: Doc<"convivenciaActasApoderados">) => a.courseId === args.courseId);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasApoderados">) => a.courseId === args.courseId,
+      );
     }
 
     if (args.relatedTo) {
-      actas = actas.filter((a: Doc<"convivenciaActasApoderados">) => a.relatedTo === args.relatedTo);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasApoderados">) =>
+          a.relatedTo === args.relatedTo,
+      );
     }
 
     if (args.startDate) {
-      actas = actas.filter((a: Doc<"convivenciaActasApoderados">) => a.meetingDate >= args.startDate!);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasApoderados">) =>
+          a.meetingDate >= args.startDate!,
+      );
     }
 
     if (args.endDate) {
-      actas = actas.filter((a: Doc<"convivenciaActasApoderados">) => a.meetingDate <= args.endDate!);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasApoderados">) =>
+          a.meetingDate <= args.endDate!,
+      );
     }
 
-    return actas.sort((a: Doc<"convivenciaActasApoderados">, b: Doc<"convivenciaActasApoderados">) => b.meetingDate - a.meetingDate);
+    return actas.sort(
+      (
+        a: Doc<"convivenciaActasApoderados">,
+        b: Doc<"convivenciaActasApoderados">,
+      ) => b.meetingDate - a.meetingDate,
+    );
   },
 });
 
@@ -644,22 +683,33 @@ export const getActasAlumnos = tenantQuery({
       .collect();
 
     if (args.courseId) {
-      actas = actas.filter((a: Doc<"convivenciaActasAlumnos">) => a.courseId === args.courseId);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasAlumnos">) => a.courseId === args.courseId,
+      );
     }
 
     if (args.relatedTo) {
-      actas = actas.filter((a: Doc<"convivenciaActasAlumnos">) => a.relatedTo === args.relatedTo);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasAlumnos">) => a.relatedTo === args.relatedTo,
+      );
     }
 
     if (args.startDate) {
-      actas = actas.filter((a: Doc<"convivenciaActasAlumnos">) => a.meetingDate >= args.startDate!);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasAlumnos">) => a.meetingDate >= args.startDate!,
+      );
     }
 
     if (args.endDate) {
-      actas = actas.filter((a: Doc<"convivenciaActasAlumnos">) => a.meetingDate <= args.endDate!);
+      actas = actas.filter(
+        (a: Doc<"convivenciaActasAlumnos">) => a.meetingDate <= args.endDate!,
+      );
     }
 
-    return actas.sort((a: Doc<"convivenciaActasAlumnos">, b: Doc<"convivenciaActasAlumnos">) => b.meetingDate - a.meetingDate);
+    return actas.sort(
+      (a: Doc<"convivenciaActasAlumnos">, b: Doc<"convivenciaActasAlumnos">) =>
+        b.meetingDate - a.meetingDate,
+    );
   },
 });
 
@@ -752,4 +802,3 @@ export const createActaAlumnos = tenantMutation({
     return actaId;
   },
 });
-
