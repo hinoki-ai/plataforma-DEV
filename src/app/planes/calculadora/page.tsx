@@ -87,8 +87,7 @@ export default function PricingCalculatorPage({
   searchParams,
 }: PricingCalculatorPageProps) {
   const { t } = useDivineParsing(["common", "planes"]);
-  const tc = (key: string) =>
-    t(key.startsWith("calculator.") ? key.slice(11) : key, "planes");
+  const tc = (key: string) => t(key, "planes");
   const [resolvedSearchParams, setResolvedSearchParams] = useState<{
     plan?: string;
     billing?: string;
@@ -377,7 +376,7 @@ export default function PricingCalculatorPage({
               </p>
             </div>
             <Button
-              variant="ghost"
+              variant="outline"
               className="h-auto py-3 px-4 shrink-0"
               asChild
             >
