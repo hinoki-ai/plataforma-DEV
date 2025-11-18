@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id, Doc } from "@/convex/_generated/dataModel";
 import {
   Card,
   CardContent,
@@ -67,6 +67,10 @@ type RecordType =
   | "MEETING"
   | "PARENT_MEETING";
 
+type UncertifiedSignature = Doc<"digitalSignatures"> & {
+  signer: Doc<"users"> | null;
+};
+
 interface AdminCertificationDashboardProps {
   userId: Id<"users">;
 }
@@ -127,6 +131,28 @@ export function AdminCertificationDashboard({
     }
   };
 
+  const certifySignatureWithToast = async (
+    signatureId: Id<"digitalSignatures">,
+    successMessage: string,
+    errorPrefix: string = "Error al certificar",
+  ) => {
+    setIsCertifying(true);
+    try {
+      await certifySignature({
+        signatureId,
+        certifiedBy: userId,
+      });
+      toast.success(successMessage);
+      return true;
+    } catch (error: any) {
+      console.error(`${errorPrefix} ${signatureId}:`, error);
+      toast.error(error.message || errorPrefix);
+      return false;
+    } finally {
+      setIsCertifying(false);
+    }
+  };
+
   const handleBulkCertify = async () => {
     if (selectedRecords.length === 0) {
       toast.error("Debe seleccionar al menos un registro");
@@ -134,20 +160,18 @@ export function AdminCertificationDashboard({
     }
 
     setIsCertifying(true);
+    let successCount = 0;
+
     try {
       for (const signatureId of selectedRecords) {
-        try {
-          await certifySignature({
-            signatureId: signatureId as Id<"digitalSignatures">,
-            certifiedBy: userId,
-          });
-        } catch (error: any) {
-          console.error(`Error certifying signature ${signatureId}:`, error);
-        }
+        const success = await certifySignature({
+          signatureId: signatureId as Id<"digitalSignatures">,
+          certifiedBy: userId,
+        }).then(() => true).catch(() => false);
+        if (success) successCount++;
       }
-      toast.success(
-        `${selectedRecords.length} registro(s) certificado(s) exitosamente`,
-      );
+
+      toast.success(`${successCount} de ${selectedRecords.length} registro(s) certificado(s) exitosamente`);
       setSelectedRecords([]);
     } catch (error: any) {
       toast.error(error.message || "Error al certificar registros");
@@ -157,29 +181,22 @@ export function AdminCertificationDashboard({
   };
 
   const handleCertifySingle = async (signatureId: Id<"digitalSignatures">) => {
-    setIsCertifying(true);
-    try {
-      await certifySignature({
-        signatureId,
-        certifiedBy: userId,
-      });
-      toast.success("Registro certificado exitosamente");
-    } catch (error: any) {
-      toast.error(error.message || "Error al certificar el registro");
-    } finally {
-      setIsCertifying(false);
-    }
+    await certifySignatureWithToast(
+      signatureId,
+      "Registro certificado exitosamente",
+      "Error al certificar el registro"
+    );
   };
 
   const toggleRecordSelection = (signatureId: string) => {
-    setSelectedRecords((prev) =>
+    setSelectedRecords((prev: string[]) =>
       prev.includes(signatureId)
-        ? prev.filter((id) => id !== signatureId)
+        ? prev.filter((id: string) => id !== signatureId)
         : [...prev, signatureId],
     );
   };
 
-  const filteredSignatures = uncertifiedSignatures?.filter((sig: any) => {
+  const filteredSignatures = uncertifiedSignatures?.filter((sig: UncertifiedSignature) => {
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       return (
@@ -230,7 +247,7 @@ export function AdminCertificationDashboard({
           <CardContent>
             <div className="text-2xl font-bold">
               {uncertifiedSignatures?.filter(
-                (c: any) => c.recordType === "CLASS_CONTENT",
+                (c: UncertifiedSignature) => c.recordType === "CLASS_CONTENT",
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -247,7 +264,7 @@ export function AdminCertificationDashboard({
           <CardContent>
             <div className="text-2xl font-bold">
               {uncertifiedSignatures?.filter(
-                (c: any) => c.recordType === "ATTENDANCE",
+                (c: UncertifiedSignature) => c.recordType === "ATTENDANCE",
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -266,7 +283,7 @@ export function AdminCertificationDashboard({
           <CardContent>
             <div className="text-2xl font-bold">
               {uncertifiedSignatures?.filter(
-                (c: any) => c.recordType === "GRADE",
+                (c: UncertifiedSignature) => c.recordType === "GRADE",
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -290,7 +307,7 @@ export function AdminCertificationDashboard({
               <label className="text-sm font-medium">Tipo de Registro</label>
               <Select
                 value={selectedRecordType}
-                onValueChange={(value) => setSelectedRecordType(value as any)}
+                onValueChange={(value: string) => setSelectedRecordType(value as RecordType | "ALL")}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -311,7 +328,7 @@ export function AdminCertificationDashboard({
               <Input
                 placeholder="Buscar por ID o nombre..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               />
             </div>
 
@@ -319,8 +336,8 @@ export function AdminCertificationDashboard({
               <label className="text-sm font-medium">Curso</label>
               <Select
                 value={selectedCourseId || "ALL"}
-                onValueChange={(value) =>
-                  setSelectedCourseId(value === "ALL" ? null : (value as any))
+                onValueChange={(value: string) =>
+                  setSelectedCourseId(value === "ALL" ? null : (value as Id<"courses">))
                 }
               >
                 <SelectTrigger>
@@ -328,7 +345,7 @@ export function AdminCertificationDashboard({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ALL">Todos los cursos</SelectItem>
-                  {courses?.map((course) => (
+                  {courses?.map((course: Doc<"courses">) => (
                     <SelectItem key={course._id} value={course._id}>
                       {course.name} - {course.grade} {course.section}
                     </SelectItem>
@@ -386,10 +403,10 @@ export function AdminCertificationDashboard({
                         checked={
                           selectedRecords.length === filteredSignatures.length
                         }
-                        onCheckedChange={(checked) => {
+                        onCheckedChange={(checked: boolean) => {
                           if (checked) {
                             setSelectedRecords(
-                              filteredSignatures.map((c) => c._id),
+                              filteredSignatures.map((c: UncertifiedSignature) => c._id),
                             );
                           } else {
                             setSelectedRecords([]);
@@ -406,12 +423,12 @@ export function AdminCertificationDashboard({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredSignatures.map((sig) => (
+                  {filteredSignatures.map((sig: UncertifiedSignature) => (
                     <TableRow key={sig._id}>
                       <TableCell>
                         <Checkbox
                           checked={selectedRecords.includes(sig._id)}
-                          onCheckedChange={() => toggleRecordSelection(sig._id)}
+                          onCheckedChange={(checked: boolean) => toggleRecordSelection(sig._id)}
                         />
                       </TableCell>
                       <TableCell>
@@ -442,7 +459,7 @@ export function AdminCertificationDashboard({
                       <TableCell className="text-right">
                         <Button
                           size="sm"
-                          onClick={() => handleCertifySingle(sig._id)}
+                          onClick={() => handleCertifySingle(sig._id as Id<"digitalSignatures">)}
                           disabled={isCertifying}
                         >
                           <CheckCircle className="h-4 w-4 mr-2" />

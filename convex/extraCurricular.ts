@@ -7,6 +7,8 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
+import { EXTRA_CURRICULAR_CATEGORIES, EXTRA_CURRICULAR_CATEGORY_SCHEMA } from "./constants";
+import { getAuthenticatedUser, validateEntityOwnership, now, filterActive } from "./validation";
 
 // ==================== QUERIES ====================
 
@@ -15,17 +17,7 @@ import { Id } from "./_generated/dataModel";
  */
 export const getExtraCurricularActivities = query({
   args: {
-    category: v.optional(
-      v.union(
-        v.literal("DEPORTIVA"),
-        v.literal("ARTISTICA"),
-        v.literal("CULTURAL"),
-        v.literal("CIENTIFICA"),
-        v.literal("SOCIAL"),
-        v.literal("ACADEMICA"),
-        v.literal("OTRA"),
-      ),
-    ),
+    category: v.optional(EXTRA_CURRICULAR_CATEGORY_SCHEMA),
     isActive: v.optional(v.boolean()),
     instructorId: v.optional(v.id("users")),
   },
@@ -84,7 +76,7 @@ export const getActivityById = query({
       .filter((q) => q.eq(q.field("activityId"), activityId))
       .collect();
 
-    const activeParticipants = participants.filter((p) => p.isActive);
+    const activeParticipants = filterActive(participants);
 
     // Get full participant details
     const participantsWithDetails = await Promise.all(
@@ -162,7 +154,7 @@ export const getCourseActivities = query({
       .filter((q) => q.eq(q.field("courseId"), courseId))
       .collect();
 
-    const activeParticipations = participations.filter((p) => p.isActive);
+    const activeParticipations = filterActive(participations);
 
     // Get activity and student details
     const activitiesWithDetails = await Promise.all(
@@ -192,45 +184,22 @@ export const createActivity = mutation({
   args: {
     name: v.string(),
     description: v.string(),
-    category: v.union(
-      v.literal("DEPORTIVA"),
-      v.literal("ARTISTICA"),
-      v.literal("CULTURAL"),
-      v.literal("CIENTIFICA"),
-      v.literal("SOCIAL"),
-      v.literal("ACADEMICA"),
-      v.literal("OTRA"),
-    ),
+    category: EXTRA_CURRICULAR_CATEGORY_SCHEMA,
     schedule: v.optional(v.string()),
     instructorId: v.optional(v.id("users")),
     location: v.optional(v.string()),
     maxParticipants: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    // Get user from auth to get institutionId
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Authentication required");
-    }
-
-    const user = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
-      .first();
-
-    if (!user || !user.currentInstitutionId) {
-      throw new Error("User must have a current institution");
-    }
+    // Get authenticated user
+    const user = await getAuthenticatedUser(ctx);
 
     // Validate instructor if provided
     if (args.instructorId) {
-      const instructor = await ctx.db.get(args.instructorId);
-      if (!instructor) {
-        throw new Error("Instructor not found");
-      }
+      await validateEntityOwnership(ctx, args.instructorId, "Instructor", user.currentInstitutionId);
     }
 
-    const now = Date.now();
+    const currentTime = now();
 
     return await ctx.db.insert("extraCurricularActivities", {
       institutionId: user.currentInstitutionId,
@@ -242,8 +211,8 @@ export const createActivity = mutation({
       location: args.location,
       maxParticipants: args.maxParticipants,
       isActive: true,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: currentTime,
+      updatedAt: currentTime,
     });
   },
 });
@@ -263,22 +232,20 @@ export const updateActivity = mutation({
     isActive: v.optional(v.boolean()),
   },
   handler: async (ctx, { activityId, ...updates }) => {
-    const activity = await ctx.db.get(activityId);
-    if (!activity) {
-      throw new Error("Activity not found");
-    }
+    // Get authenticated user
+    const user = await getAuthenticatedUser(ctx);
+
+    // Validate activity exists and belongs to user's institution
+    const activity = await validateEntityOwnership(ctx, activityId, "Activity", user.currentInstitutionId);
 
     // Validate instructor if being updated
     if (updates.instructorId) {
-      const instructor = await ctx.db.get(updates.instructorId);
-      if (!instructor) {
-        throw new Error("Instructor not found");
-      }
+      await validateEntityOwnership(ctx, updates.instructorId, "Instructor", user.currentInstitutionId);
     }
 
     await ctx.db.patch(activityId, {
       ...updates,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return await ctx.db.get(activityId);
@@ -295,26 +262,18 @@ export const enrollStudent = mutation({
     courseId: v.id("courses"),
   },
   handler: async (ctx, { activityId, studentId, courseId }) => {
-    // Validate activity exists and is active
-    const activity = await ctx.db.get(activityId);
-    if (!activity) {
-      throw new Error("Activity not found");
-    }
+    // Get authenticated user
+    const user = await getAuthenticatedUser(ctx);
+
+    // Validate activity exists, is active, and belongs to user's institution
+    const activity = await validateEntityOwnership(ctx, activityId, "Activity", user.currentInstitutionId);
     if (!activity.isActive) {
       throw new Error("Activity is not active");
     }
 
-    // Validate student exists
-    const student = await ctx.db.get(studentId);
-    if (!student) {
-      throw new Error("Student not found");
-    }
-
-    // Validate course exists
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
-    }
+    // Validate student and course exist and belong to user's institution
+    await validateEntityOwnership(ctx, studentId, "Student", user.currentInstitutionId);
+    const course = await validateEntityOwnership(ctx, courseId, "Course", user.currentInstitutionId);
 
     // Check if student is already enrolled
     const existingEnrollments = await ctx.db
@@ -338,23 +297,17 @@ export const enrollStudent = mutation({
       throw new Error("Activity has reached maximum capacity");
     }
 
-    // Get institutionId from activity or course
-    const institutionId = activity.institutionId ?? course.institutionId;
-    if (!institutionId) {
-      throw new Error("Cannot determine institution");
-    }
-
-    const now = Date.now();
+    const currentTime = now();
 
     return await ctx.db.insert("extraCurricularParticipants", {
-      institutionId,
+      institutionId: user.currentInstitutionId,
       activityId,
       studentId,
       courseId,
-      enrollmentDate: now,
+      enrollmentDate: currentTime,
       isActive: true,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: currentTime,
+      updatedAt: currentTime,
     });
   },
 });
@@ -384,7 +337,7 @@ export const removeStudent = mutation({
     // Soft delete: deactivate enrollment
     await ctx.db.patch(participation._id, {
       isActive: false,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return { success: true };
@@ -429,7 +382,7 @@ export const recordActivityAttendance = mutation({
     await ctx.db.patch(participationId, {
       attendance: filteredAttendance,
       performance: performance || participation.performance,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return await ctx.db.get(participationId);
@@ -452,7 +405,7 @@ export const updateActivityPerformance = mutation({
 
     await ctx.db.patch(participationId, {
       performance,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return await ctx.db.get(participationId);

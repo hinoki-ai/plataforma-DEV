@@ -7,25 +7,13 @@ import { v } from "convex/values";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import type { Doc, Id } from "./_generated/dataModel";
 import { ensureInstitutionMatch, tenantMutation, tenantQuery } from "./tenancy";
+import { MEETING_TYPE_SCHEMA } from "./constants";
+import { now, userInInstitution } from "./validation";
 
 type MeetingDoc = Doc<"meetings">;
 type UserDoc = Doc<"users">;
 type AnyCtx = QueryCtx | MutationCtx;
 
-async function userInInstitution(
-  ctx: AnyCtx,
-  userId: Id<"users">,
-  institutionId: Id<"institutionInfo">,
-): Promise<boolean> {
-  const membership = await ctx.db
-    .query("institutionMemberships")
-    .withIndex("by_user_institution", (q: any) =>
-      q.eq("userId", userId).eq("institutionId", institutionId),
-    )
-    .first();
-
-  return membership !== null;
-}
 
 async function enrichMeetingsWithTeacher<C extends AnyCtx>(
   ctx: C,
@@ -250,7 +238,7 @@ export const getUpcomingMeetings = tenantQuery({
   args: { userId: v.optional(v.id("users")) },
   roles: ["ADMIN", "STAFF", "PROFESOR", "MASTER"],
   handler: async (ctx, { userId }, tenancy) => {
-    const now = Date.now();
+    const currentTime = now();
 
     let meetings = await ctx.db
       .query("meetings")
@@ -306,7 +294,7 @@ export const getMeetingStats = tenantQuery({
   args: {},
   roles: ["ADMIN", "STAFF", "MASTER"],
   handler: async (ctx, _args, tenancy) => {
-    const now = Date.now();
+    const currentTime = now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
 
     const meetings = await ctx.db
@@ -401,13 +389,7 @@ export const createMeeting = tenantMutation({
     scheduledTime: v.string(),
     duration: v.optional(v.number()),
     location: v.optional(v.string()),
-    type: v.union(
-      v.literal("PARENT_TEACHER"),
-      v.literal("FOLLOW_UP"),
-      v.literal("EMERGENCY"),
-      v.literal("IEP_REVIEW"),
-      v.literal("GRADE_CONFERENCE"),
-    ),
+    type: MEETING_TYPE_SCHEMA,
     assignedTo: v.id("users"),
     reason: v.optional(v.string()),
     parentRequested: v.optional(v.boolean()),
@@ -446,7 +428,7 @@ export const createMeeting = tenantMutation({
       }
     }
 
-    const now = Date.now();
+    const currentTime = now();
 
     return await ctx.db.insert("meetings", {
       ...args,
@@ -535,7 +517,7 @@ export const updateMeeting = tenantMutation({
 
     await ctx.db.patch(id, {
       ...updates,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return await ctx.db.get(id);
@@ -588,7 +570,7 @@ export const cancelMeeting = tenantMutation({
     await ctx.db.patch(id, {
       status: "CANCELLED",
       notes: reason ?? meeting.notes,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
   },
 });
@@ -617,7 +599,7 @@ export const updateMeetingStatus = tenantMutation({
 
     const updates: Record<string, any> = {
       status,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     };
 
     if (notes) {
@@ -639,18 +621,12 @@ export const requestMeeting = tenantMutation({
     preferredDate: v.number(),
     preferredTime: v.string(),
     reason: v.string(),
-    type: v.union(
-      v.literal("PARENT_TEACHER"),
-      v.literal("FOLLOW_UP"),
-      v.literal("EMERGENCY"),
-      v.literal("IEP_REVIEW"),
-      v.literal("GRADE_CONFERENCE"),
-    ),
+    type: MEETING_TYPE_SCHEMA,
     teacherId: v.optional(v.id("users")),
   },
   roles: ["PARENT", "ADMIN", "STAFF", "MASTER"],
   handler: async (ctx, args, tenancy) => {
-    const now = Date.now();
+    const currentTime = now();
 
     const guardianEmail =
       tenancy.membershipRole === "PARENT" && !tenancy.isMaster

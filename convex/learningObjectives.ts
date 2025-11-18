@@ -8,6 +8,8 @@ import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { tenantQuery, tenantMutation } from "./tenancy";
 import { Id, Doc } from "./_generated/dataModel";
+import { SEMESTER_SCHEMA, EVALUATION_LEVEL_SCHEMA, COVERAGE_STATUS_SCHEMA, COVERAGE_TYPE_SCHEMA } from "./constants";
+import { now } from "./validation";
 
 // ==================== QUERIES ====================
 
@@ -19,13 +21,7 @@ export const getLearningObjectives = tenantQuery({
     subject: v.optional(v.string()),
     level: v.optional(v.string()),
     grade: v.optional(v.string()),
-    semester: v.optional(
-      v.union(
-        v.literal("PRIMER_SEMESTRE"),
-        v.literal("SEGUNDO_SEMESTRE"),
-        v.literal("ANUAL"),
-      ),
-    ),
+    semester: v.optional(SEMESTER_SCHEMA),
     isActive: v.optional(v.boolean()),
   },
   handler: async (ctx, args, tenancy) => {
@@ -142,14 +138,7 @@ export const getLearningObjectiveById = tenantQuery({
 export const getEvaluationIndicators = tenantQuery({
   args: {
     learningObjectiveId: v.id("learningObjectives"),
-    level: v.optional(
-      v.union(
-        v.literal("INICIAL"),
-        v.literal("BASICO"),
-        v.literal("INTERMEDIO"),
-        v.literal("AVANZADO"),
-      ),
-    ),
+    level: v.optional(EVALUATION_LEVEL_SCHEMA),
   },
   handler: async (ctx, { learningObjectiveId, level }, tenancy) => {
     let indicators = await ctx.db
@@ -405,11 +394,7 @@ export const createLearningObjective = tenantMutation({
     grade: v.string(),
     description: v.string(),
     unit: v.optional(v.string()),
-    semester: v.union(
-      v.literal("PRIMER_SEMESTRE"),
-      v.literal("SEGUNDO_SEMESTRE"),
-      v.literal("ANUAL"),
-    ),
+    semester: SEMESTER_SCHEMA,
   },
   handler: async (ctx, args, tenancy) => {
     // Check if code already exists for this institution
@@ -426,7 +411,7 @@ export const createLearningObjective = tenantMutation({
       );
     }
 
-    const now = Date.now();
+    const currentTime = now();
 
     return await ctx.db.insert("learningObjectives", {
       institutionId: tenancy.institution._id,
@@ -447,13 +432,7 @@ export const updateLearningObjective = tenantMutation({
     code: v.optional(v.string()),
     description: v.optional(v.string()),
     unit: v.optional(v.string()),
-    semester: v.optional(
-      v.union(
-        v.literal("PRIMER_SEMESTRE"),
-        v.literal("SEGUNDO_SEMESTRE"),
-        v.literal("ANUAL"),
-      ),
-    ),
+    semester: v.optional(SEMESTER_SCHEMA),
     isActive: v.optional(v.boolean()),
   },
   handler: async (ctx, { objectiveId, ...updates }, tenancy) => {
@@ -482,7 +461,7 @@ export const updateLearningObjective = tenantMutation({
 
     await ctx.db.patch(objectiveId, {
       ...updates,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return await ctx.db.get(objectiveId);
@@ -498,12 +477,7 @@ export const createEvaluationIndicator = tenantMutation({
     code: v.string(),
     description: v.string(),
     evaluationCriteria: v.optional(v.string()),
-    level: v.union(
-      v.literal("INICIAL"),
-      v.literal("BASICO"),
-      v.literal("INTERMEDIO"),
-      v.literal("AVANZADO"),
-    ),
+    level: EVALUATION_LEVEL_SCHEMA,
   },
   handler: async (ctx, args, tenancy) => {
     // Validate learning objective exists and belongs to institution
@@ -529,7 +503,7 @@ export const createEvaluationIndicator = tenantMutation({
       );
     }
 
-    const now = Date.now();
+    const currentTime = now();
 
     return await ctx.db.insert("evaluationIndicators", {
       institutionId: tenancy.institution._id,
@@ -550,14 +524,7 @@ export const updateEvaluationIndicator = tenantMutation({
     code: v.optional(v.string()),
     description: v.optional(v.string()),
     evaluationCriteria: v.optional(v.string()),
-    level: v.optional(
-      v.union(
-        v.literal("INICIAL"),
-        v.literal("BASICO"),
-        v.literal("INTERMEDIO"),
-        v.literal("AVANZADO"),
-      ),
-    ),
+    level: v.optional(EVALUATION_LEVEL_SCHEMA),
     isActive: v.optional(v.boolean()),
   },
   handler: async (ctx, { indicatorId, ...updates }, tenancy) => {
@@ -587,7 +554,7 @@ export const updateEvaluationIndicator = tenantMutation({
 
     await ctx.db.patch(indicatorId, {
       ...updates,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return await ctx.db.get(indicatorId);
@@ -602,7 +569,7 @@ export const linkClassContentToOA = tenantMutation({
     classContentId: v.id("classContent"),
     learningObjectiveId: v.id("learningObjectives"),
     evaluationIndicatorIds: v.optional(v.array(v.id("evaluationIndicators"))),
-    coverage: v.optional(v.union(v.literal("PARCIAL"), v.literal("COMPLETA"))),
+    coverage: v.optional(COVERAGE_TYPE_SCHEMA),
   },
   handler: async (ctx, args, tenancy) => {
     // Validate class content exists and belongs to institution
@@ -635,7 +602,7 @@ export const linkClassContentToOA = tenantMutation({
       }
     }
 
-    const now = Date.now();
+    const currentTime = now();
 
     // Create link
     const linkId = await ctx.db.insert("classContentOA", {
@@ -742,12 +709,7 @@ export const unlinkClassContentFromOA = tenantMutation({
 export const updateCurriculumCoverage = tenantMutation({
   args: {
     coverageId: v.id("curriculumCoverage"),
-    coverageStatus: v.union(
-      v.literal("NO_INICIADO"),
-      v.literal("EN_PROGRESO"),
-      v.literal("CUBIERTO"),
-      v.literal("REFORZADO"),
-    ),
+    coverageStatus: COVERAGE_STATUS_SCHEMA,
   },
   handler: async (ctx, { coverageId, coverageStatus }, tenancy) => {
     const coverage = await ctx.db.get(coverageId);
@@ -757,7 +719,7 @@ export const updateCurriculumCoverage = tenantMutation({
 
     await ctx.db.patch(coverageId, {
       coverageStatus,
-      updatedAt: Date.now(),
+      updatedAt: now(),
     });
 
     return await ctx.db.get(coverageId);

@@ -7,16 +7,8 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
-
-const ATTENDANCE_STATUS_VALUES = [
-  "PRESENTE",
-  "AUSENTE",
-  "ATRASADO",
-  "JUSTIFICADO",
-  "RETIRADO",
-] as const;
-
-type AttendanceStatus = (typeof ATTENDANCE_STATUS_VALUES)[number];
+import { ATTENDANCE_STATUS_VALUES, ATTENDANCE_STATUS_SCHEMA, type AttendanceStatus } from "./constants";
+import { getAuthenticatedUser, validateTeacherRole, validateDateNotInFuture, now, validateEntityOwnership } from "./validation";
 
 // ==================== QUERIES ====================
 
@@ -275,13 +267,7 @@ export const recordAttendance = mutation({
     attendanceRecords: v.array(
       v.object({
         studentId: v.id("students"),
-        status: v.union(
-          v.literal("PRESENTE"),
-          v.literal("AUSENTE"),
-          v.literal("ATRASADO"),
-          v.literal("JUSTIFICADO"),
-          v.literal("RETIRADO"),
-        ),
+        status: ATTENDANCE_STATUS_SCHEMA,
         subject: v.optional(v.string()),
         period: v.optional(v.string()),
         observation: v.optional(v.string()),
@@ -291,28 +277,20 @@ export const recordAttendance = mutation({
   },
   handler: async (ctx, { courseId, date, attendanceRecords, registeredBy }) => {
     // Validate date (cannot be in the future)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const recordDate = new Date(date);
-    recordDate.setHours(0, 0, 0, 0);
+    validateDateNotInFuture(date);
 
-    if (recordDate > today) {
-      throw new Error("Cannot record attendance for future dates");
-    }
-
-    // Validate course exists
-    const course = await ctx.db.get(courseId);
-    if (!course) {
-      throw new Error("Course not found");
-    }
+    // Validate course exists and get authenticated user
+    const user = await getAuthenticatedUser(ctx);
+    const course = await validateEntityOwnership(ctx, courseId, "Course", user.currentInstitutionId);
 
     // Validate registeredBy is a teacher
     const teacher = await ctx.db.get(registeredBy);
-    if (!teacher || teacher.role !== "PROFESOR") {
-      throw new Error("Only teachers can record attendance");
+    if (!teacher) {
+      throw new Error("Teacher not found");
     }
+    validateTeacherRole(teacher);
 
-    const now = Date.now();
+    const currentTime = now();
     const results = [];
 
     for (const record of attendanceRecords) {
@@ -364,15 +342,7 @@ export const recordAttendance = mutation({
 export const updateAttendanceRecord = mutation({
   args: {
     attendanceId: v.id("classAttendance"),
-    status: v.optional(
-      v.union(
-        v.literal("PRESENTE"),
-        v.literal("AUSENTE"),
-        v.literal("ATRASADO"),
-        v.literal("JUSTIFICADO"),
-        v.literal("RETIRADO"),
-      ),
-    ),
+    status: v.optional(ATTENDANCE_STATUS_SCHEMA),
     subject: v.optional(v.string()),
     period: v.optional(v.string()),
     observation: v.optional(v.string()),
@@ -385,7 +355,7 @@ export const updateAttendanceRecord = mutation({
 
     await ctx.db.patch(attendanceId, {
       ...updates,
-      updatedAt: Date.now(),
+          updatedAt: currentTime,
     });
 
     return await ctx.db.get(attendanceId);
@@ -400,20 +370,14 @@ export const bulkUpdateAttendance = mutation({
     courseId: v.id("courses"),
     date: v.number(),
     studentIds: v.array(v.id("students")),
-    status: v.union(
-      v.literal("PRESENTE"),
-      v.literal("AUSENTE"),
-      v.literal("ATRASADO"),
-      v.literal("JUSTIFICADO"),
-      v.literal("RETIRADO"),
-    ),
+    status: ATTENDANCE_STATUS_SCHEMA,
     registeredBy: v.id("users"),
   },
   handler: async (
     ctx,
     { courseId, date, studentIds, status, registeredBy },
   ) => {
-    const now = Date.now();
+    const currentTime = now();
     const results = [];
 
     for (const studentId of studentIds) {

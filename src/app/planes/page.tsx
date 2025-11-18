@@ -99,13 +99,8 @@ export default function PreciosPage() {
     cycle: BillingCycle,
   ) => {
     const total = calculateBillingPrice(pricePerStudent, students, cycle);
-    if (cycle === "semestral") {
-      return total / 6; // 6 months per semester
-    } else if (cycle === "annual") {
-      return total / 12;
-    } else {
-      return total / 24; // biannual = 24 months
-    }
+    const divisor = cycle === "semestral" ? 6 : cycle === "annual" ? 12 : 24;
+    return total / divisor;
   };
 
   const getMonthlyPriceWithoutDiscount = (
@@ -114,13 +109,8 @@ export default function PreciosPage() {
     cycle: BillingCycle,
   ) => {
     const baseTotal = pricePerStudent * students;
-    if (cycle === "semestral") {
-      return baseTotal / 6; // 6 months per semester
-    } else if (cycle === "annual") {
-      return baseTotal / 12;
-    } else {
-      return baseTotal / 24; // biannual = 24 months
-    }
+    const divisor = cycle === "semestral" ? 6 : cycle === "annual" ? 12 : 24;
+    return baseTotal / divisor;
   };
 
   const getTotalPrice = (
@@ -150,6 +140,26 @@ export default function PreciosPage() {
     api: Database,
     dedicatedManager: Users,
   };
+
+  const renderFeatureAvailability = (
+    isAvailable: boolean,
+    availableText: string = tp("pricing.available"),
+    notAvailableText: string = tp("pricing.not_available"),
+  ) => (
+    isAvailable ? (
+      <span className="text-green-500 font-semibold">{availableText}</span>
+    ) : (
+      <span className="text-red-500">{notAvailableText}</span>
+    )
+  );
+
+  const renderFeatureIncluded = (isIncluded: boolean) => (
+    isIncluded ? (
+      <span className="text-green-500 font-semibold">{tp("pricing.included")}</span>
+    ) : (
+      <span className="text-red-500">{tp("pricing.not_included")}</span>
+    )
+  );
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-planes">
@@ -417,63 +427,23 @@ export default function PreciosPage() {
                             <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
                               <li>
                                 {tp("pricing.training")}:{" "}
-                                {plan.features.training ? (
-                                  <span className="text-green-500 font-semibold">
-                                    {tp("pricing.included")}
-                                  </span>
-                                ) : (
-                                  <span className="text-red-500">
-                                    {tp("pricing.not_included")}
-                                  </span>
-                                )}
+                                {renderFeatureIncluded(plan.features.training)}
                               </li>
                               <li>
                                 {tp("pricing.advanced_reports")}:{" "}
-                                {plan.features.advancedReports ? (
-                                  <span className="text-green-500 font-semibold">
-                                    {tp("pricing.available")}
-                                  </span>
-                                ) : (
-                                  <span className="text-red-500">
-                                    {tp("pricing.not_available")}
-                                  </span>
-                                )}
+                                {renderFeatureAvailability(plan.features.advancedReports)}
                               </li>
                               <li>
                                 {tp("pricing.integrations")}:{" "}
-                                {plan.features.integrations ? (
-                                  <span className="text-green-500 font-semibold">
-                                    {tp("pricing.available")}
-                                  </span>
-                                ) : (
-                                  <span className="text-red-500">
-                                    {tp("pricing.not_available")}
-                                  </span>
-                                )}
+                                {renderFeatureAvailability(plan.features.integrations)}
                               </li>
                               <li>
                                 {tp("pricing.api_webhooks")}:{" "}
-                                {plan.features.api ? (
-                                  <span className="text-green-500 font-semibold">
-                                    {tp("pricing.available")}
-                                  </span>
-                                ) : (
-                                  <span className="text-red-500">
-                                    {tp("pricing.not_available")}
-                                  </span>
-                                )}
+                                {renderFeatureAvailability(plan.features.api)}
                               </li>
                               <li>
                                 {tp("pricing.dedicated_manager")}:{" "}
-                                {plan.features.dedicatedManager ? (
-                                  <span className="text-green-500 font-semibold">
-                                    {tp("pricing.included")}
-                                  </span>
-                                ) : (
-                                  <span className="text-red-500">
-                                    {tp("pricing.not_included")}
-                                  </span>
-                                )}
+                                {renderFeatureIncluded(plan.features.dedicatedManager)}
                               </li>
                             </ul>
                           </div>
