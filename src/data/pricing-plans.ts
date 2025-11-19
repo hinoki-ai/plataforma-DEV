@@ -309,25 +309,34 @@ export const calculatePriceBreakdown = (
   // Per month calculations
   const totalPerMonth = total / billingCycleMonths;
 
-  // Savings calculations (on subtotal, before VAT)
-  // Calculate base price for the period (no discounts)
-  const basePeriodTotal = basePrice * billingCycleMonths;
+  // Savings calculations (Gross / Including VAT)
+  // To show the user the actual amount of money they are saving from their pocket
 
-  // Calculate what the subtotal would be with only billing cycle discount
+  // 1. Calculate what the total (incl. VAT) would be without ANY discounts
+  const basePeriodTotalNet = basePrice * billingCycleMonths;
+  const basePeriodTotalGross = Math.round(
+    basePeriodTotalNet * (1 + vatPercent),
+  );
+
+  // 2. Calculate what the total (incl. VAT) would be with ONLY billing cycle discount
   const subtotalWithBillingDiscountOnly = periodTotalBeforeUpfront;
+  const totalWithBillingDiscountOnly = Math.round(
+    subtotalWithBillingDiscountOnly * (1 + vatPercent),
+  );
 
-  // Calculate final subtotal with all discounts
-  const finalSubtotal = subtotal;
+  // 3. Calculate final total (incl. VAT)
+  const finalTotalGross = total;
 
-  // Savings from billing cycle discount (compared to base, before VAT)
+  // Savings from billing cycle discount (Gross)
   const savingsFromBillingCycle =
-    basePeriodTotal - subtotalWithBillingDiscountOnly;
+    basePeriodTotalGross - totalWithBillingDiscountOnly;
 
-  // Savings from upfront discount (additional savings on top of billing discount, before VAT)
-  const savingsFromUpfront = subtotalWithBillingDiscountOnly - finalSubtotal;
+  // Savings from upfront discount (Gross)
+  // Difference between "Total with only billing discount" and "Final Total"
+  const savingsFromUpfront = totalWithBillingDiscountOnly - finalTotalGross;
 
-  // Total savings (before VAT)
-  const totalSavings = basePeriodTotal - finalSubtotal;
+  // Total savings (Gross)
+  const totalSavings = basePeriodTotalGross - finalTotalGross;
 
   return {
     basePrice: Math.round(basePrice),

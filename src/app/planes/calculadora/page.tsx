@@ -148,7 +148,27 @@ export default function PricingCalculatorPage({
           }
           return currentId;
         });
-        setManualPlanOverride(true);
+
+        // Determine if this should be treated as a manual override
+        // If the plan matches the recommended plan for the student count,
+        // we treat it as "auto" mode (allow switching), unless it explicitly mismatches.
+        const studentsParam = resolvedSearchParams.students;
+        const parsedStudents = studentsParam
+          ? parseInt(studentsParam, 10)
+          : NaN;
+        const effectiveStudents = Number.isNaN(parsedStudents)
+          ? fallbackPlan.minStudents
+          : parsedStudents;
+
+        const recommendedForParams = findPlanByStudentCount(effectiveStudents);
+
+        // If the param plan is the same as what we'd recommend, allow auto-switching
+        // This prevents "locking" the plan when the system auto-updates the URL
+        if (recommendedForParams.id === plan.id) {
+          setManualPlanOverride(false);
+        } else {
+          setManualPlanOverride(true);
+        }
         return;
       }
     }
@@ -165,6 +185,7 @@ export default function PricingCalculatorPage({
     resolvedSearchParams.plan,
     resolvedSearchParams.billing,
     resolvedSearchParams.students,
+    fallbackPlan.minStudents,
   ]);
 
   // Get initial students to determine auto-plan
@@ -205,17 +226,11 @@ export default function PricingCalculatorPage({
     "monthly" | "upfront"
   >("monthly");
 
-  const clampStudents = useCallback(
-    (value: number) => {
-      const min = selectedPlan.minStudents;
-      const rounded = Math.max(min, Math.round(value));
-      if (selectedPlan.maxStudents) {
-        return Math.min(selectedPlan.maxStudents, rounded);
-      }
-      return rounded;
-    },
-    [selectedPlan.minStudents, selectedPlan.maxStudents],
-  );
+  const clampStudents = useCallback((value: number) => {
+    // Only clamp to global minimum, allowing values outside plan range
+    // to trigger plan switching or validation warnings
+    return Math.max(1, Math.round(value));
+  }, []);
 
   // Calculate initial students - use autoSelectedPlan to avoid circular dependency
   const initialStudents = useMemo(() => {
