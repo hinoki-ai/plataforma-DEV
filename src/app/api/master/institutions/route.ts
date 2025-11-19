@@ -61,7 +61,9 @@ const institutionSchema = z.object({
     })
     .optional(),
   billingPlan: z.string().optional(),
-  billingStatus: z.enum(["TRIAL", "ACTIVE", "PAST_DUE", "CANCELLED"]).optional(),
+  billingStatus: z
+    .enum(["TRIAL", "ACTIVE", "PAST_DUE", "CANCELLED"])
+    .optional(),
   billingPeriodEndsAt: z.number().optional(),
   isActive: z.boolean().optional(),
 });

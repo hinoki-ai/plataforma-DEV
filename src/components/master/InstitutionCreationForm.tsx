@@ -252,7 +252,6 @@ export function InstitutionCreationForm() {
       form.setValue(`admins.0.isPrimary`, true, {
         shouldDirty: true,
         shouldValidate: true,
-        shouldValidate: true,
       });
     }
   };
@@ -370,21 +369,21 @@ export function InstitutionCreationForm() {
                     Plan Comercial
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    {Object.values(BILLING_PLANS).map((plan) => (
+                    {Object.entries(BILLING_PLANS).map(([key, plan]) => (
                       <div
                         key={plan.id}
                         className={`cursor-pointer border rounded-lg p-4 flex flex-col gap-2 transition-all ${
-                          selectedPlan === plan.id
+                          selectedPlan === key
                             ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-1 ring-blue-500"
                             : "hover:border-blue-300"
                         }`}
                         onClick={() =>
-                          form.setValue("billingPlan", plan.id as any)
+                          form.setValue("billingPlan", key as any)
                         }
                       >
                         <div className="flex justify-between items-center">
                           <span className="font-semibold">{plan.name}</span>
-                          {selectedPlan === plan.id && (
+                          {selectedPlan === key && (
                             <Check className="h-4 w-4 text-blue-600" />
                           )}
                         </div>

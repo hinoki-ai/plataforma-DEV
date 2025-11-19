@@ -19,7 +19,7 @@ export const getNavigationGroupsForRole = (
   const userRole = role as ExtendedUserRole;
   const isMaster = hasMasterGodModeAccess(userRole);
 
-  type NavigationGroup = (typeof NAVIGATION_CONFIGS.ADMIN)[number];
+  type NavigationGroup = (typeof NAVIGATION_CONFIGS)[keyof typeof NAVIGATION_CONFIGS][number];
   let rawGroups: NavigationGroup[] = [];
 
   // If user is MASTER and navigating in specific role contexts, show that role's navigation
