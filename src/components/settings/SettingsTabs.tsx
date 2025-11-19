@@ -27,6 +27,8 @@ import { useSession } from "@/lib/auth-client";
 
 interface SettingsTabsProps {
   children?: React.ReactNode;
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
 }
 
 const PREFERENCES_KEY = "plataforma_user_preferences";
@@ -45,11 +47,26 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   shareActivity: false,
 };
 
-export function SettingsTabs({ children }: SettingsTabsProps) {
+export function SettingsTabs({ 
+  children, 
+  activeTab: controlledActiveTab,
+  onTabChange 
+}: SettingsTabsProps) {
   const { t } = useDivineParsing(["common"]);
+  const [internalActiveTab, setInternalActiveTab] = useState("profile");
+  
+  // Use controlled tab if provided, otherwise use internal state
+  const activeTab = controlledActiveTab ?? internalActiveTab;
+  
+  const handleTabChange = (value: string) => {
+    if (!controlledActiveTab) {
+      setInternalActiveTab(value);
+    }
+    onTabChange?.(value);
+  };
 
   return (
-    <Tabs defaultValue="profile" className="w-full">
+    <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
       <TabsList className="grid w-full grid-cols-5">
         <TabsTrigger value="profile">
           {t("settings.tabs.profile", "common")}
