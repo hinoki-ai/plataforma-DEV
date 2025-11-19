@@ -45,6 +45,7 @@ import { toast } from "sonner";
 import { CourseForm } from "@/components/libro-clases/CourseForm";
 import { CourseManagementDashboard } from "@/components/libro-clases/CourseManagementDashboard";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+import { useConvexConnection } from "@/hooks/useConvexConnection";
 
 type AdminView =
   | "overview"
@@ -69,6 +70,8 @@ export function AdminLibroClasesView({
   );
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
+  const { isConnected, connectionError, hasConnectionIssue } =
+    useConvexConnection();
 
   const header = {
     title: t(`admin.${view}.title`, "libro-clases"),
@@ -186,7 +189,7 @@ export function AdminLibroClasesView({
 
   // Loading state with connection timeout detection
   if (courses === undefined || tenancyCheck === undefined) {
-    if (loadingTimedOut) {
+    if (loadingTimedOut || hasConnectionIssue) {
       return (
         <PageTransition>
           <div className="space-y-6">
@@ -205,6 +208,16 @@ export function AdminLibroClasesView({
                   <li>El servidor de datos no está disponible</li>
                   <li>Problemas de configuración del servicio Convex</li>
                 </ul>
+                {connectionError && (
+                  <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                    <p className="text-sm font-medium text-destructive mb-2">
+                      Detalle del error:
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {connectionError}
+                    </p>
+                  </div>
+                )}
                 <div className="flex flex-wrap gap-3 mt-6">
                   <Button onClick={() => window.location.reload()}>
                     Recargar página
@@ -221,7 +234,7 @@ export function AdminLibroClasesView({
                   </Button>
                 </div>
                 {process.env.NODE_ENV === "development" && (
-                  <div className="mt-4 p-4 bg-muted rounded-lg text-xs">
+                  <div className="mt-4 p-4 bg-muted rounded-lg text-xs space-y-2">
                     <p className="font-medium mb-2">
                       Información de desarrollo:
                     </p>
@@ -229,6 +242,24 @@ export function AdminLibroClasesView({
                       Asegúrate de que el servicio Convex esté ejecutándose:
                       ejecuta <code>npx convex dev</code> en una terminal
                       separada.
+                    </p>
+                    <p className="mt-2">
+                      Estado de conexión:{" "}
+                      <span
+                        className={
+                          isConnected
+                            ? "text-green-600 font-medium"
+                            : "text-red-600 font-medium"
+                        }
+                      >
+                        {isConnected ? "Conectado" : "Desconectado"}
+                      </span>
+                    </p>
+                    <p>
+                      NEXT_PUBLIC_CONVEX_URL:{" "}
+                      {process.env.NEXT_PUBLIC_CONVEX_URL
+                        ? "✅ Configurado"
+                        : "❌ No configurado"}
                     </p>
                   </div>
                 )}

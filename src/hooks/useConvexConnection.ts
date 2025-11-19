@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useConvex } from "convex/react";
 
 /**
@@ -11,37 +11,76 @@ export function useConvexConnection() {
   const convex = useConvex();
   const [isConnected, setIsConnected] = useState(true);
   const [connectionError, setConnectionError] = useState<string | null>(null);
+  const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
-    // Check connection status by attempting a simple query
-    // If queries are stuck, it's likely a connection issue
-    let timeoutId: NodeJS.Timeout;
-    let mounted = true;
+    mountedRef.current = true;
 
-    const checkConnection = async () => {
+    // First, check if NEXT_PUBLIC_CONVEX_URL is configured
+    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+    if (!convexUrl) {
+      if (mountedRef.current) {
+        setIsConnected(false);
+        setConnectionError(
+          "Error de configuración: NEXT_PUBLIC_CONVEX_URL no está configurado. Contacta al administrador.",
+        );
+      }
+      return;
+    }
+
+    // Check connection status periodically
+    const checkConnection = () => {
+      if (!mountedRef.current) return;
+
       try {
-        // Use a simple health check - if this fails or times out, connection is bad
-        timeoutId = setTimeout(() => {
-          if (mounted) {
+        // Access the connection state from the Convex client
+        // The ConvexReactClient exposes connectionState as a getter
+        const client = convex as any;
+
+        // Check if client has connectionState method or property
+        let connectionState: string | undefined;
+
+        if (typeof client.connectionState === "function") {
+          connectionState = client.connectionState();
+        } else if (client.connectionState !== undefined) {
+          connectionState = client.connectionState;
+        } else if (client._connectionState !== undefined) {
+          // Fallback to private property if public API not available
+          connectionState = client._connectionState;
+        }
+
+        // Connection states in Convex: "Connecting" | "Connected" | "Disconnected"
+        if (connectionState === "Connected") {
+          if (mountedRef.current) {
+            setIsConnected(true);
+            setConnectionError(null);
+          }
+        } else if (connectionState === "Disconnected") {
+          if (mountedRef.current) {
             setIsConnected(false);
             setConnectionError(
               "No se pudo conectar con el servidor de datos. Verifica tu conexión a internet o contacta al administrador.",
             );
           }
-        }, 10000); // 10 second timeout
-
-        // Try to get connection state from Convex client
-        // The client should have connection info available
-        const clientState = (convex as any)?._connectionState;
-        if (clientState) {
-          clearTimeout(timeoutId);
-          if (mounted) {
-            setIsConnected(true);
-            setConnectionError(null);
-          }
+        } else if (connectionState === "Connecting") {
+          // Still connecting, keep current state
+          // But set a timeout to detect if it's stuck connecting
+          setTimeout(() => {
+            if (mountedRef.current && connectionState === "Connecting") {
+              setIsConnected(false);
+              setConnectionError(
+                "La conexión está tardando demasiado. Verifica tu conexión a internet.",
+              );
+            }
+          }, 15000); // 15 second timeout for connecting state
+        } else {
+          // Unknown state, assume connected but log warning
+          console.warn("Unknown Convex connection state:", connectionState);
         }
       } catch (error) {
-        if (mounted) {
+        console.error("Error checking Convex connection:", error);
+        if (mountedRef.current) {
           setIsConnected(false);
           setConnectionError(
             "Error de conexión con el servidor de datos. Por favor, recarga la página.",
@@ -50,12 +89,43 @@ export function useConvexConnection() {
       }
     };
 
+    // Check immediately
     checkConnection();
 
+    // Check periodically (every 5 seconds)
+    checkIntervalRef.current = setInterval(checkConnection, 5000);
+
+    // Also listen for online/offline events
+    const handleOnline = () => {
+      if (mountedRef.current) {
+        setIsConnected(true);
+        setConnectionError(null);
+        checkConnection(); // Re-check immediately when coming online
+      }
+    };
+
+    const handleOffline = () => {
+      if (mountedRef.current) {
+        setIsConnected(false);
+        setConnectionError(
+          "No tienes conexión a internet. Algunas funciones pueden no estar disponibles.",
+        );
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", handleOnline);
+      window.addEventListener("offline", handleOffline);
+    }
+
     return () => {
-      mounted = false;
-      if (timeoutId) {
-        clearTimeout(timeoutId);
+      mountedRef.current = false;
+      if (checkIntervalRef.current) {
+        clearInterval(checkIntervalRef.current);
+      }
+      if (typeof window !== "undefined") {
+        window.removeEventListener("online", handleOnline);
+        window.removeEventListener("offline", handleOffline);
       }
     };
   }, [convex]);

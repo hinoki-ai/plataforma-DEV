@@ -17,7 +17,6 @@ export default function AdminHorariosPage() {
   return (
     <PageTransition skeletonType="page" duration={700}>
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-slate-100 via-white to-slate-50 dark:from-slate-950 dark:via-slate-950/70 dark:to-slate-900" />
         <div className="relative">
           <div className="container mx-auto space-y-8 px-4 py-8">
             <div className="flex flex-col gap-4">
