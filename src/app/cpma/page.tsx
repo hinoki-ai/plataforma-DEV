@@ -435,10 +435,34 @@ export default function CPMAPage() {
         }`}
       >
         <div className={`${layout.container(isDesktopForced)}`}>
-          <SignupStyleSection
-            title={t("cfmg.subtitle", "common")}
-            subtitle={t("cfmg.description", "common")}
-          >
+          <div className="max-w-4xl mx-auto text-center mb-8">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className={`transition-all duration-700 ease-out ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h2
+                    className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center`}
+                  >
+                    {t("cfmg.subtitle", "common")}
+                  </h2>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-600 dark:text-gray-200 mt-3 transition-all duration-700 ease-out">
+                    {t("cfmg.description", "common")}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
             <SignupStyleGrid columns={3} gap="md">
               {features.map((feature, index) => (
                 <motion.div key={index} variants={fadeInUp}>
@@ -465,7 +489,6 @@ export default function CPMAPage() {
                 </motion.div>
               ))}
             </SignupStyleGrid>
-          </SignupStyleSection>
         </div>
       </section>
 
@@ -584,11 +607,35 @@ export default function CPMAPage() {
           </SignupStylePanel>
 
           {/* Philosophical Foundation */}
-          <SignupStyleSection
-            title={t("proyecto_educativo.philosophy_title", "common")}
-            subtitle={t("proyecto_educativo.philosophy_subtitle", "common")}
-          >
-            <SignupStylePanel variant="info">
+          <div className="max-w-4xl mx-auto text-center mb-8">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className={`transition-all duration-700 ease-out ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h2
+                    className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center`}
+                  >
+                    {t("proyecto_educativo.philosophy_title", "common")}
+                  </h2>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-600 dark:text-gray-200 mt-3 transition-all duration-700 ease-out">
+                    {t("proyecto_educativo.philosophy_subtitle", "common")}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+          <SignupStylePanel variant="info">
               <div className="space-y-6">
                 <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
                   <p className="text-lg leading-relaxed text-foreground">
@@ -665,14 +712,37 @@ export default function CPMAPage() {
                   ))}
                 </SignupStyleGrid>
               </div>
-            </SignupStylePanel>
-          </SignupStyleSection>
+              </SignupStylePanel>
 
           {/* Educational Objectives */}
-          <SignupStyleSection
-            title={t("proyecto_educativo.objectives_title", "common")}
-            subtitle={t("proyecto_educativo.objectives_subtitle", "common")}
-          >
+          <div className="max-w-4xl mx-auto text-center mb-8">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className={`transition-all duration-700 ease-out ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h2
+                    className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center`}
+                  >
+                    {t("proyecto_educativo.objectives_title", "common")}
+                  </h2>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-600 dark:text-gray-200 mt-3 transition-all duration-700 ease-out">
+                    {t("proyecto_educativo.objectives_subtitle", "common")}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
             <SignupStyleGrid columns={2} gap="md">
               <SignupStylePanel variant="action">
                 <div className="space-y-4">
@@ -750,12 +820,36 @@ export default function CPMAPage() {
                 </div>
               </SignupStylePanel>
             </SignupStyleGrid>
-          </SignupStyleSection>
 
           {/* Methodological Approach */}
-          <SignupStyleSection
-            title={t("proyecto_educativo.methodology_title", "common")}
-          >
+          <div className="max-w-4xl mx-auto text-center mb-8">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className={`transition-all duration-700 ease-out ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h2
+                    className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center`}
+                  >
+                    {t("proyecto_educativo.methodology_title", "common")}
+                  </h2>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-600 dark:text-gray-200 mt-3 transition-all duration-700 ease-out">
+                    {t("proyecto_educativo.methodology_subtitle", "common")}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
             <SignupStyleGrid columns={3} gap="md">
               <SignupStyleCard
                 variant="info"
@@ -820,13 +914,36 @@ export default function CPMAPage() {
                 </div>
               </SignupStyleCard>
             </SignupStyleGrid>
-          </SignupStyleSection>
 
           {/* Team */}
-          <SignupStyleSection
-            title={t("proyecto_educativo.multidisciplinary_team", "common")}
-            subtitle={t("proyecto_educativo.team_subtitle", "common")}
-          >
+          <div className="max-w-4xl mx-auto text-center mb-8">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={staggerChildren}
+              className="max-w-4xl mx-auto"
+            >
+              <motion.div
+                variants={fadeInUp}
+                className={`transition-all duration-700 ease-out ${
+                  mounted
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+              >
+                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+                  <h2
+                    className={`${typography.heading(isDesktopForced)} font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl text-center`}
+                  >
+                    {t("proyecto_educativo.multidisciplinary_team", "common")}
+                  </h2>
+                  <p className="text-center text-lg font-medium leading-relaxed text-gray-600 dark:text-gray-200 mt-3 transition-all duration-700 ease-out">
+                    {t("proyecto_educativo.team_subtitle", "common")}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
             <SignupStyleGrid columns={2} gap="md">
               {[
                 {
@@ -914,7 +1031,6 @@ export default function CPMAPage() {
                 {t("proyecto_educativo.team_meetings", "common")}
               </p>
             </SignupStyleCard>
-          </SignupStyleSection>
         </div>
       </section>
 
