@@ -44,54 +44,9 @@ export function DocsLandingContent({ htmlContent }: DocsLandingContentProps) {
           </div>
 
           {/* Main Content Card with Enhanced Design */}
-          <div className="grid gap-8 md:grid-cols-3">
-            {/* Quick Actions Sidebar */}
-            <div className="md:col-span-1">
-              <Card className="backdrop-blur-xl bg-white/70 dark:bg-slate-800/70 border border-white/20 dark:border-slate-700/30 rounded-2xl shadow-xl sticky top-8">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <span className="text-2xl">🚀</span>
-                    Quick Actions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Link
-                    href="/"
-                    className="flex items-center gap-3 p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-all duration-200 group"
-                  >
-                    <span className="text-blue-600 dark:text-blue-400">←</span>
-                    <span className="font-medium text-blue-700 dark:text-blue-300 group-hover:translate-x-1 transition-transform">
-                      {t("docs.back_home", "common")}
-                    </span>
-                  </Link>
-                  <Link
-                    href="#quick-start"
-                    className="flex items-center gap-3 p-3 rounded-xl bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 transition-all duration-200 group"
-                  >
-                    <span className="text-green-600 dark:text-green-400">
-                      ⚡
-                    </span>
-                    <span className="font-medium text-green-700 dark:text-green-300 group-hover:translate-x-1 transition-transform">
-                      Quick Start
-                    </span>
-                  </Link>
-                  <Link
-                    href="#tech-stack"
-                    className="flex items-center gap-3 p-3 rounded-xl bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-all duration-200 group"
-                  >
-                    <span className="text-purple-600 dark:text-purple-400">
-                      🔧
-                    </span>
-                    <span className="font-medium text-purple-700 dark:text-purple-300 group-hover:translate-x-1 transition-transform">
-                      Tech Stack
-                    </span>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-
+          <div className="max-w-4xl mx-auto">
             {/* Main Content */}
-            <div className="md:col-span-2">
+            <div>
               <Card className="backdrop-blur-xl bg-white/90 dark:bg-slate-800/90 border border-white/30 dark:border-slate-700/50 rounded-2xl shadow-2xl">
                 <CardHeader className="pb-6">
                   <CardTitle className="text-2xl font-bold flex items-center gap-3">
@@ -100,10 +55,300 @@ export function DocsLandingContent({ htmlContent }: DocsLandingContentProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-8">
-                  <div
-                    className="prose prose-slate dark:prose-invert max-w-none text-base leading-relaxed prose-headings:text-slate-800 dark:prose-headings:text-slate-200 prose-headings:font-semibold prose-p:text-slate-600 dark:prose-p:text-slate-300 prose-strong:text-slate-900 dark:prose-strong:text-slate-100 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline"
-                    dangerouslySetInnerHTML={{ __html: htmlContent }}
-                  />
+                  {/* Header Section */}
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200">
+                      Índice de documentación
+                    </h2>
+                    <h3 className="text-lg font-medium text-slate-700 dark:text-slate-300">
+                      Documentación Técnica
+                    </h3>
+                    <h4 className="text-base font-medium text-slate-600 dark:text-slate-400">
+                      Sistema de Gestión Educativa Plataforma Astral
+                    </h4>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                      <span>Última actualización: October 13, 2025</span>
+                      <span className="hidden sm:block">•</span>
+                      <span>
+                        Estado: Listo para producción con integración completa
+                        de Convex ✅
+                      </span>
+                    </div>
+                  </div>
+
+                  <hr className="border-slate-200 dark:border-slate-700" />
+
+                  {/* Documentation Index */}
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                      <span className="text-2xl">📚</span>
+                      Índice de Documentación
+                    </h3>
+
+                    {/* Main Systems */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                        Sistemas Principales
+                      </h4>
+                      <div className="space-y-2 pl-4">
+                        <div className="text-slate-600 dark:text-slate-400">
+                          <Link
+                            href="/docs/AI_KNOWLEDGE_BASE"
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            Base de Conocimiento IA
+                          </Link>
+                          <span className="block text-sm text-slate-500 dark:text-slate-500 mt-1">
+                            Arquitectura y diseño completo del sistema (includes
+                            authentication) - PRINCIPAL
+                          </span>
+                        </div>
+                        <div className="text-slate-600 dark:text-slate-400">
+                          <Link
+                            href="/docs/ANIMATION_GUIDE"
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            Guía de Animación
+                          </Link>
+                          <span className="block text-sm text-slate-500 dark:text-slate-500 mt-1">
+                            Componentes UI y patrones de experiencia de usuario
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Specialized Features */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                        Características Especializadas
+                      </h4>
+                      <div className="space-y-2 pl-4">
+                        <div className="text-slate-600 dark:text-slate-400">
+                          <Link
+                            href="/docs/VOTING_SYSTEM"
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            Sistema de Votación
+                          </Link>
+                          <span className="block text-sm text-slate-500 dark:text-slate-500 mt-1">
+                            Herramientas de toma de decisiones democráticas
+                          </span>
+                        </div>
+                        <div className="text-slate-600 dark:text-slate-400">
+                          <Link
+                            href="/docs/ROLE_SYSTEM"
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            Sistema de Roles
+                          </Link>
+                          <span className="block text-sm text-slate-500 dark:text-slate-500 mt-1">
+                            Permisos de usuario y control de acceso
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Operations and Troubleshooting */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                        Operaciones y Solución de Problemas
+                      </h4>
+                      <div className="space-y-2 pl-4">
+                        <div className="text-slate-600 dark:text-slate-400">
+                          <Link
+                            href="/docs/ENVIRONMENT"
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            Configuración del Entorno
+                          </Link>
+                          <span className="block text-sm text-slate-500 dark:text-slate-500 mt-1">
+                            Configuraciones de desarrollo y despliegue
+                          </span>
+                        </div>
+                        <div className="text-slate-600 dark:text-slate-400">
+                          <Link
+                            href="/docs/AI_KNOWLEDGE_BASE#troubleshooting"
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            Solución de Problemas
+                          </Link>
+                          <span className="block text-sm text-slate-500 dark:text-slate-500 mt-1">
+                            Problemas comunes y soluciones (see troubleshooting
+                            sections)
+                          </span>
+                        </div>
+                        <div className="text-slate-600 dark:text-slate-400">
+                          <Link
+                            href="/docs/EMERGENCY_ACCESS_PROCEDURES"
+                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          >
+                            Procedimientos de Emergencia
+                          </Link>
+                          <span className="block text-sm text-slate-500 dark:text-slate-500 mt-1">
+                            Recuperación crítica del sistema
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr className="border-slate-200 dark:border-slate-700" />
+
+                  {/* Quick Start */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                      <span className="text-2xl">🚀</span>
+                      Inicio Rápido
+                    </h3>
+                    <div className="space-y-2 font-mono text-sm bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border">
+                      <div className="text-slate-700 dark:text-slate-300">
+                        <span className="text-slate-600 dark:text-slate-400">
+                          Desarrollo:
+                        </span>{" "}
+                        npm run dev
+                        <span className="text-slate-500 dark:text-slate-500 ml-2">
+                          - Iniciar servidor de desarrollo local
+                        </span>
+                      </div>
+                      <div className="text-slate-700 dark:text-slate-300">
+                        <span className="text-slate-600 dark:text-slate-400">
+                          Compilación:
+                        </span>{" "}
+                        npm run build
+                        <span className="text-slate-500 dark:text-slate-500 ml-2">
+                          - Crear compilación de producción
+                        </span>
+                      </div>
+                      <div className="text-slate-700 dark:text-slate-300">
+                        <span className="text-slate-600 dark:text-slate-400">
+                          Despliegue:
+                        </span>{" "}
+                        npm run deploy
+                        <span className="text-slate-500 dark:text-slate-500 ml-2">
+                          - Despliegue automatizado completo
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Main Features */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                      <span className="text-2xl">📖</span>
+                      Características Principales
+                    </h3>
+                    <ul className="space-y-2 text-slate-600 dark:text-slate-400">
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>
+                          <strong className="text-slate-700 dark:text-slate-300">
+                            Autenticación Multi-rol
+                          </strong>{" "}
+                          - Roles de Administrador, Profesor, Apoderado y Master
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>
+                          <strong className="text-slate-700 dark:text-slate-300">
+                            Colaboración en Tiempo Real
+                          </strong>{" "}
+                          - Actualizaciones en vivo con backend Convex
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>
+                          <strong className="text-slate-700 dark:text-slate-300">
+                            Diseño Responsivo
+                          </strong>{" "}
+                          - Plataforma educativa mobile-first
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>
+                          <strong className="text-slate-700 dark:text-slate-300">
+                            APIs Completas
+                          </strong>{" "}
+                          - Endpoints REST y GraphQL
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>
+                          <strong className="text-slate-700 dark:text-slate-300">
+                            Seguridad Avanzada
+                          </strong>{" "}
+                          - Control de acceso basado en roles y cifrado
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Tech Stack */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                      <span className="text-2xl">🔧</span>
+                      Stack Tecnológico
+                    </h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                          Frontend
+                        </h4>
+                        <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                          <li>• Next.js 16, React 19, TypeScript</li>
+                          <li>• Tailwind CSS</li>
+                        </ul>
+                      </div>
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                          Backend
+                        </h4>
+                        <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                          <li>
+                            • Convex (base de datos y funciones en tiempo real)
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                          Autenticación
+                        </h4>
+                        <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                          <li>• Clerk (OAuth + flujos personalizados)</li>
+                        </ul>
+                      </div>
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                          Despliegue
+                        </h4>
+                        <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                          <li>• Vercel (frontend)</li>
+                          <li>• Convex Cloud (backend)</li>
+                        </ul>
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <h4 className="font-semibold text-slate-700 dark:text-slate-300">
+                          Monitoreo
+                        </h4>
+                        <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                          <li>
+                            • Analíticas personalizadas y seguimiento de errores
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer Note */}
+                  <div className="mt-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border-l-4 border-blue-500">
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">
+                      Para información detallada, consulta los archivos de
+                      documentación específicos vinculados arriba.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>

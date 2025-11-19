@@ -454,10 +454,7 @@ export function Sidebar({
             {isCollapsed ? (
               <div className="flex flex-col items-center gap-2">
                 {flattenedNavigationItems.map((item) => {
-                  const isActive = item.href
-                    ? pathname === item.href ||
-                      pathname.startsWith(item.href + "/")
-                    : false;
+                  const isActive = item.href ? pathname === item.href : false;
 
                   return renderCollapsedNavigationItem(
                     item,
@@ -507,8 +504,7 @@ export function Sidebar({
                     >
                       {group.items.map((item) => {
                         const isActive = item.href
-                          ? pathname === item.href ||
-                            pathname.startsWith(item.href + "/")
+                          ? pathname === item.href
                           : false;
 
                         return (
