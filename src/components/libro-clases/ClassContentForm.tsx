@@ -167,10 +167,10 @@ export function ClassContentForm({
           ...contentData,
         });
         contentId = initialData._id;
-        toast.success("Contenido actualizado exitosamente");
+        toast.success(t("libro-clases.form.class_content.success_update"));
       } else {
         contentId = await createContent(contentData);
-        toast.success("Contenido registrado exitosamente");
+        toast.success(t("libro-clases.form.class_content.success_save"));
       }
 
       // Link selected OA to the class content
