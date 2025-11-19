@@ -182,9 +182,7 @@ export function useDashboardData() {
             "Dashboard endpoint returned non-OK status:",
             response.status,
           );
-          setError(
-            `${t("error.server_unavailable")} (${response.status}).`,
-          );
+          setError(`${t("error.server_unavailable")} (${response.status}).`);
           setStats(getMockData(session?.user?.role));
           setLoading(false);
           return;
@@ -194,9 +192,7 @@ export function useDashboardData() {
         setStats(data);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
-        setError(
-          t("dashboard.error.loading"),
-        );
+        setError(t("dashboard.error.loading"));
 
         // Fallback to mock data on error
         setStats(getMockData(session?.user?.role));

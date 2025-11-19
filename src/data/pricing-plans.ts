@@ -223,7 +223,11 @@ export const findPlanByStudentCount = (studentCount: number): PricingPlan => {
 export const validatePlanForStudents = (
   plan: PricingPlan,
   studentCount: number,
-): { isValid: boolean; reasonKey?: string; reasonParams?: Record<string, any> } => {
+): {
+  isValid: boolean;
+  reasonKey?: string;
+  reasonParams?: Record<string, any>;
+} => {
   if (studentCount < plan.minStudents) {
     return {
       isValid: false,
@@ -308,19 +312,20 @@ export const calculatePriceBreakdown = (
   // Savings calculations (on subtotal, before VAT)
   // Calculate base price for the period (no discounts)
   const basePeriodTotal = basePrice * billingCycleMonths;
-  
+
   // Calculate what the subtotal would be with only billing cycle discount
   const subtotalWithBillingDiscountOnly = periodTotalBeforeUpfront;
-  
+
   // Calculate final subtotal with all discounts
   const finalSubtotal = subtotal;
-  
+
   // Savings from billing cycle discount (compared to base, before VAT)
-  const savingsFromBillingCycle = basePeriodTotal - subtotalWithBillingDiscountOnly;
-  
+  const savingsFromBillingCycle =
+    basePeriodTotal - subtotalWithBillingDiscountOnly;
+
   // Savings from upfront discount (additional savings on top of billing discount, before VAT)
   const savingsFromUpfront = subtotalWithBillingDiscountOnly - finalSubtotal;
-  
+
   // Total savings (before VAT)
   const totalSavings = basePeriodTotal - finalSubtotal;
 
@@ -377,15 +382,15 @@ export const compareBillingCycles = (
     // Calculate base total for the SAME period (normalize to 24 months for fair comparison)
     const months = cycle === "semestral" ? 6 : cycle === "annual" ? 12 : 24;
     const normalizedMonths = 24; // Compare all cycles over 24 months
-    
+
     // Calculate what the cost would be for 24 months with this cycle
     const cyclesNeeded = normalizedMonths / months; // How many cycles needed for 24 months
     const totalCostFor24Months = breakdown.total * cyclesNeeded;
-    
+
     // Calculate base cost for 24 months (no discounts, with VAT)
     const baseTotalFor24Months = basePrice * normalizedMonths;
     const baseTotalWithVAT = Math.round(baseTotalFor24Months * 1.19);
-    
+
     // Savings compared to semestral (most expensive, no discount)
     const semestralCostFor24Months = baseTotalWithVAT; // Semestral has no discount
     const savings = semestralCostFor24Months - totalCostFor24Months;

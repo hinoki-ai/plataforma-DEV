@@ -225,7 +225,9 @@ export default function PricingCalculatorPage({
   ]);
 
   // Initialize with fallback plan initially, will be updated when params resolve
-  const [students, setStudentsState] = useState<number>(fallbackPlan.minStudents);
+  const [students, setStudentsState] = useState<number>(
+    fallbackPlan.minStudents,
+  );
   // Separate input state to allow temporary invalid values while typing
   const [inputValue, setInputValue] = useState<string>(
     String(fallbackPlan.minStudents),

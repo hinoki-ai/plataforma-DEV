@@ -120,8 +120,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const convex = await getAuthenticatedConvexClient();
-    const body = await request.json();
+    // Parse request body with better error handling
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      console.error("Error parsing request body:", parseError);
+      return NextResponse.json(
+        { error: "Invalid request body format" },
+        { status: 400 },
+      );
+    }
+
     const {
       title,
       description,
@@ -143,11 +153,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate endDate is valid
+    const endDateTimestamp = new Date(endDate).getTime();
+    if (isNaN(endDateTimestamp)) {
+      return NextResponse.json(
+        { error: "Invalid end date format" },
+        { status: 400 },
+      );
+    }
+
     // Validate options
     // Handle both array of strings and array of objects with text property
-    const optionTexts = options.map((opt: any) => 
-      typeof opt === 'string' ? opt : opt.text
-    );
+    const optionTexts = options
+      .map((opt: any) => (typeof opt === "string" ? opt : opt?.text))
+      .filter(Boolean);
+
+    if (optionTexts.length < 2) {
+      return NextResponse.json(
+        { error: "At least 2 valid options are required" },
+        { status: 400 },
+      );
+    }
 
     if (optionTexts.some((opt: string) => !opt || !opt.trim())) {
       return NextResponse.json(
@@ -156,12 +182,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get authenticated Convex client
+    let convex;
+    try {
+      convex = await getAuthenticatedConvexClient();
+    } catch (authError) {
+      console.error("Error getting Convex client:", authError);
+      return NextResponse.json(
+        { error: "Authentication failed. Please log in again." },
+        { status: 401 },
+      );
+    }
+
     // Create vote in Convex
     const voteId = await convex.mutation(api.votes.createVote, {
       title: title.trim(),
       description: description?.trim() || undefined,
       category: category || "GENERAL",
-      endDate: new Date(endDate).getTime(),
+      endDate: endDateTimestamp,
       isActive: isActive ?? true,
       isPublic: isPublic ?? true,
       allowMultipleVotes: allowMultipleVotes ?? false,
@@ -177,16 +215,29 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error creating vote:", error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined,
+    });
 
     // Provide more helpful error messages
     if (error instanceof Error) {
-      if (error.message.includes("Authentication required")) {
+      const errorMessage = error.message.toLowerCase();
+
+      if (
+        errorMessage.includes("authentication required") ||
+        errorMessage.includes("failed to get authentication token")
+      ) {
         return NextResponse.json(
           { error: "Authentication required. Please log in again." },
           { status: 401 },
         );
       }
-      if (error.message.includes("User record not found")) {
+      if (
+        errorMessage.includes("user record not found") ||
+        errorMessage.includes("user not found")
+      ) {
         return NextResponse.json(
           {
             error:
@@ -195,7 +246,10 @@ export async function POST(request: NextRequest) {
           { status: 403 },
         );
       }
-      if (error.message.includes("No institution selected")) {
+      if (
+        errorMessage.includes("no institution selected") ||
+        errorMessage.includes("institution not found")
+      ) {
         return NextResponse.json(
           {
             error:
@@ -204,15 +258,28 @@ export async function POST(request: NextRequest) {
           { status: 403 },
         );
       }
-      if (error.message.includes("Membership required")) {
+      if (
+        errorMessage.includes("membership required") ||
+        errorMessage.includes("membership role required") ||
+        errorMessage.includes("insufficient membership role")
+      ) {
         return NextResponse.json(
           { error: "You must have an active membership to create votes." },
           { status: 403 },
         );
       }
-      if (error.message.includes("User is inactive")) {
+      if (
+        errorMessage.includes("user is inactive") ||
+        errorMessage.includes("inactive")
+      ) {
         return NextResponse.json(
           { error: "Your account is inactive. Please contact support." },
+          { status: 403 },
+        );
+      }
+      if (errorMessage.includes("membership is not active")) {
+        return NextResponse.json(
+          { error: "Your membership is not active. Please contact support." },
           { status: 403 },
         );
       }
@@ -263,17 +330,17 @@ export async function PUT(request: NextRequest) {
 
     if (options) {
       // Handle both array of strings and array of objects with text property
-      const optionTexts = options.map((opt: any) => 
-        typeof opt === 'string' ? opt : opt.text
+      const optionTexts = options.map((opt: any) =>
+        typeof opt === "string" ? opt : opt.text,
       );
-      
+
       if (optionTexts.some((opt: string) => !opt || !opt.trim())) {
         return NextResponse.json(
           { error: "All options must be non-empty" },
           { status: 400 },
         );
       }
-      
+
       args.options = optionTexts.map((opt: string) => opt.trim());
     }
 
@@ -285,18 +352,22 @@ export async function PUT(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error updating vote:", error);
-    
+
     if (error instanceof Error) {
-        if (error.message.includes("Cannot modify options")) {
-            return NextResponse.json(
-                { error: "Cannot modify options because voting has already started." },
-                { status: 400 }
-            );
-        }
+      if (error.message.includes("Cannot modify options")) {
+        return NextResponse.json(
+          {
+            error: "Cannot modify options because voting has already started.",
+          },
+          { status: 400 },
+        );
+      }
     }
 
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      {
+        error: error instanceof Error ? error.message : "Internal server error",
+      },
       { status: 500 },
     );
   }

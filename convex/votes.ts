@@ -258,7 +258,7 @@ export const updateVote = tenantMutation({
     isActive: v.optional(v.boolean()),
     isPublic: v.optional(v.boolean()),
     allowMultipleVotes: v.optional(v.boolean()),
-    maxVotesPerUser: v.union(v.float64(), v.null(), v.optional(v.any())), // Relaxed type to handle undefined
+    maxVotesPerUser: v.optional(v.union(v.float64(), v.null())), // Optional union to handle undefined
     requireAuthentication: v.optional(v.boolean()),
     options: v.optional(v.array(v.string())),
   },
@@ -287,7 +287,8 @@ export const updateVote = tenantMutation({
         .collect();
 
       const hasResponses = responses.some(
-        (r: Doc<"voteResponses">) => r.institutionId === tenancy.institution._id,
+        (r: Doc<"voteResponses">) =>
+          r.institutionId === tenancy.institution._id,
       );
 
       if (hasResponses) {
@@ -298,20 +299,25 @@ export const updateVote = tenantMutation({
           .query("voteOptions")
           .withIndex("by_voteId", (q: any) => q.eq("voteId", vote._id))
           .collect();
-        
+
         const currentOptionTexts = currentOptions
-          .filter((o: Doc<"voteOptions">) => o.institutionId === tenancy.institution._id)
+          .filter(
+            (o: Doc<"voteOptions">) =>
+              o.institutionId === tenancy.institution._id,
+          )
           .map((o: Doc<"voteOptions">) => o.text)
           .sort();
-        
+
         const newOptionTexts = [...options].sort();
-        
-        const optionsChanged = 
+
+        const optionsChanged =
           currentOptionTexts.length !== newOptionTexts.length ||
-          !currentOptionTexts.every((val, index) => val === newOptionTexts[index]);
+          !currentOptionTexts.every(
+            (val: string, index: number) => val === newOptionTexts[index],
+          );
 
         if (optionsChanged) {
-           throw new Error("Cannot modify options after voting has started");
+          throw new Error("Cannot modify options after voting has started");
         }
       } else {
         // No responses, safe to replace options
@@ -322,7 +328,9 @@ export const updateVote = tenantMutation({
 
         // Delete old options
         await Promise.all(
-          currentOptions.map((opt: Doc<"voteOptions">) => ctx.db.delete(opt._id))
+          currentOptions.map((opt: Doc<"voteOptions">) =>
+            ctx.db.delete(opt._id),
+          ),
         );
 
         // Create new options
@@ -393,12 +401,14 @@ export const castVote = tenantMutation({
         `Maximum votes per user limit reached (${vote.maxVotesPerUser})`,
       );
     }
-    
+
     // Check if user already voted for THIS option (prevent duplicate votes for same option if that's desired?)
     // Usually in multiple choice, you can't vote for the same option twice.
-    const hasVotedForOption = existingResponses.some(r => r.optionId === optionId);
+    const hasVotedForOption = existingResponses.some(
+      (r: Doc<"voteResponses">) => r.optionId === optionId,
+    );
     if (hasVotedForOption) {
-        throw new Error("You have already voted for this option");
+      throw new Error("You have already voted for this option");
     }
 
     return await ctx.db.insert("voteResponses", {
@@ -431,13 +441,13 @@ export const castVotes = tenantMutation({
 
     // Validate all options
     for (const optionId of optionIds) {
-        const option = await ctx.db.get(optionId);
-        if (!option || option.voteId !== vote._id) {
-            throw new Error(`Invalid vote option: ${optionId}`);
-        }
-        if (option.institutionId !== tenancy.institution._id) {
-            throw new Error("Vote option not available in this institution");
-        }
+      const option = await ctx.db.get(optionId);
+      if (!option || option.voteId !== vote._id) {
+        throw new Error(`Invalid vote option: ${optionId}`);
+      }
+      if (option.institutionId !== tenancy.institution._id) {
+        throw new Error("Vote option not available in this institution");
+      }
     }
 
     // Get all existing responses for this user and vote
@@ -451,14 +461,17 @@ export const castVotes = tenantMutation({
     // Check if user already voted and multiple votes are not allowed
     // If multiple votes are NOT allowed, user can only vote ONCE (one option).
     // So if optionIds.length > 1 and !allowMultipleVotes, fail.
-    if (!vote.allowMultipleVotes && (existingResponses.length > 0 || optionIds.length > 1)) {
+    if (
+      !vote.allowMultipleVotes &&
+      (existingResponses.length > 0 || optionIds.length > 1)
+    ) {
       throw new Error("User has already voted or multiple votes not allowed");
     }
 
     // Check max votes per user constraint
     if (
       vote.maxVotesPerUser &&
-      (existingResponses.length + optionIds.length) > vote.maxVotesPerUser
+      existingResponses.length + optionIds.length > vote.maxVotesPerUser
     ) {
       throw new Error(
         `Maximum votes per user limit reached (${vote.maxVotesPerUser})`,
@@ -468,27 +481,31 @@ export const castVotes = tenantMutation({
     // Check for duplicates in new votes
     const uniqueOptionIds = new Set(optionIds);
     if (uniqueOptionIds.size !== optionIds.length) {
-        throw new Error("Duplicate options selected");
+      throw new Error("Duplicate options selected");
     }
 
     // Check if user already voted for any of these options
     for (const optionId of optionIds) {
-        if (existingResponses.some(r => r.optionId === optionId)) {
-            throw new Error("You have already voted for one of these options");
-        }
+      if (
+        existingResponses.some(
+          (r: Doc<"voteResponses">) => r.optionId === optionId,
+        )
+      ) {
+        throw new Error("You have already voted for one of these options");
+      }
     }
 
     // Insert votes
     const results = [];
     for (const optionId of optionIds) {
-        const id = await ctx.db.insert("voteResponses", {
-            institutionId: tenancy.institution._id,
-            voteId,
-            optionId,
-            userId,
-            createdAt: Date.now(),
-        });
-        results.push(id);
+      const id = await ctx.db.insert("voteResponses", {
+        institutionId: tenancy.institution._id,
+        voteId,
+        optionId,
+        userId,
+        createdAt: Date.now(),
+      });
+      results.push(id);
     }
 
     return results;
