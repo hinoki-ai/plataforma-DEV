@@ -463,32 +463,32 @@ export default function CPMAPage() {
               </motion.div>
             </motion.div>
           </div>
-            <SignupStyleGrid columns={3} gap="md">
-              {features.map((feature, index) => (
-                <motion.div key={index} variants={fadeInUp}>
-                  <SignupStyleCard
-                    variant="feature"
-                    className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-                  >
-                    <div className="flex flex-col items-center text-center space-y-4">
-                      <div
-                        className={`p-3 bg-white/5 dark:bg-black/10 rounded-xl ${feature.color} shadow-lg`}
-                      >
-                        <feature.icon className="w-8 h-8" />
-                      </div>
-                      <div className="space-y-2">
-                        <h4 className="font-bold text-foreground text-lg leading-tight">
-                          {feature.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          {feature.description}
-                        </p>
-                      </div>
+          <SignupStyleGrid columns={3} gap="md">
+            {features.map((feature, index) => (
+              <motion.div key={index} variants={fadeInUp}>
+                <SignupStyleCard
+                  variant="feature"
+                  className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+                >
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div
+                      className={`p-3 bg-white/5 dark:bg-black/10 rounded-xl ${feature.color} shadow-lg`}
+                    >
+                      <feature.icon className="w-8 h-8" />
                     </div>
-                  </SignupStyleCard>
-                </motion.div>
-              ))}
-            </SignupStyleGrid>
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-foreground text-lg leading-tight">
+                        {feature.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </SignupStyleCard>
+              </motion.div>
+            ))}
+          </SignupStyleGrid>
         </div>
       </section>
 
@@ -636,83 +636,80 @@ export default function CPMAPage() {
             </motion.div>
           </div>
           <SignupStylePanel variant="info">
-              <div className="space-y-6">
-                <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
-                  <p className="text-lg leading-relaxed text-foreground">
-                    {t("proyecto_educativo.philosophy_description", "common")}
-                  </p>
-                </div>
-
-                <SignupStyleGrid columns={2} gap="md">
-                  {[
-                    {
-                      title: t(
-                        "proyecto_educativo.respect_development",
-                        "common",
-                      ),
-                      description: t(
-                        "proyecto_educativo.respect_development_desc",
-                        "common",
-                      ),
-                      icon: "⏰",
-                    },
-                    {
-                      title: t(
-                        "proyecto_educativo.enhance_capabilities",
-                        "common",
-                      ),
-                      description: t(
-                        "proyecto_educativo.enhance_capabilities_desc",
-                        "common",
-                      ),
-                      icon: "✨",
-                    },
-                    {
-                      title: t(
-                        "proyecto_educativo.integral_development",
-                        "common",
-                      ),
-                      description: t(
-                        "proyecto_educativo.integral_development_desc",
-                        "common",
-                      ),
-                      icon: "🌱",
-                    },
-                    {
-                      title: t(
-                        "proyecto_educativo.collaborative_work",
-                        "common",
-                      ),
-                      description: t(
-                        "proyecto_educativo.collaborative_work_desc",
-                        "common",
-                      ),
-                      icon: "🤝",
-                    },
-                  ].map((item, index) => (
-                    <SignupStyleCard
-                      key={index}
-                      variant="info"
-                      className="h-full"
-                    >
-                      <div className="flex flex-col items-center text-center space-y-4">
-                        <div className="p-3 bg-white/10 rounded-xl shadow-lg">
-                          <div className="text-3xl">{item.icon}</div>
-                        </div>
-                        <div className="space-y-2">
-                          <h4 className="font-bold text-foreground text-lg leading-tight">
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    </SignupStyleCard>
-                  ))}
-                </SignupStyleGrid>
+            <div className="space-y-6">
+              <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                <p className="text-lg leading-relaxed text-foreground">
+                  {t("proyecto_educativo.philosophy_description", "common")}
+                </p>
               </div>
-              </SignupStylePanel>
+
+              <SignupStyleGrid columns={2} gap="md">
+                {[
+                  {
+                    title: t(
+                      "proyecto_educativo.respect_development",
+                      "common",
+                    ),
+                    description: t(
+                      "proyecto_educativo.respect_development_desc",
+                      "common",
+                    ),
+                    icon: "⏰",
+                  },
+                  {
+                    title: t(
+                      "proyecto_educativo.enhance_capabilities",
+                      "common",
+                    ),
+                    description: t(
+                      "proyecto_educativo.enhance_capabilities_desc",
+                      "common",
+                    ),
+                    icon: "✨",
+                  },
+                  {
+                    title: t(
+                      "proyecto_educativo.integral_development",
+                      "common",
+                    ),
+                    description: t(
+                      "proyecto_educativo.integral_development_desc",
+                      "common",
+                    ),
+                    icon: "🌱",
+                  },
+                  {
+                    title: t("proyecto_educativo.collaborative_work", "common"),
+                    description: t(
+                      "proyecto_educativo.collaborative_work_desc",
+                      "common",
+                    ),
+                    icon: "🤝",
+                  },
+                ].map((item, index) => (
+                  <SignupStyleCard
+                    key={index}
+                    variant="info"
+                    className="h-full"
+                  >
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                        <div className="text-3xl">{item.icon}</div>
+                      </div>
+                      <div className="space-y-2">
+                        <h4 className="font-bold text-foreground text-lg leading-tight">
+                          {item.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
+                    </div>
+                  </SignupStyleCard>
+                ))}
+              </SignupStyleGrid>
+            </div>
+          </SignupStylePanel>
 
           {/* Educational Objectives */}
           <div className="max-w-4xl mx-auto text-center mb-8">
@@ -743,83 +740,75 @@ export default function CPMAPage() {
               </motion.div>
             </motion.div>
           </div>
-            <SignupStyleGrid columns={2} gap="md">
-              <SignupStylePanel variant="action">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-4 bg-linear-to-r from-white/5 to-white/10 rounded-xl">
-                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
-                      🎯
-                    </div>
-                    <h3 className="font-semibold text-lg text-foreground">
-                      {t("proyecto_educativo.general_objectives", "common")}
-                    </h3>
+          <SignupStyleGrid columns={2} gap="md">
+            <SignupStylePanel variant="action">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-linear-to-r from-white/5 to-white/10 rounded-xl">
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
+                    🎯
                   </div>
-
-                  <div className="space-y-3">
-                    {[
-                      t("proyecto_educativo.objective_1", "common"),
-                      t("proyecto_educativo.objective_2", "common"),
-                      t("proyecto_educativo.objective_3", "common"),
-                      t("proyecto_educativo.objective_4", "common"),
-                      t("proyecto_educativo.objective_5", "common"),
-                    ].map((item, index) => (
-                      <SignupStyleCard
-                        key={index}
-                        variant="info"
-                        className="p-3"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                            <span className="text-xs font-medium text-foreground">
-                              {index + 1}
-                            </span>
-                          </div>
-                          <p className="text-sm text-foreground">{item}</p>
-                        </div>
-                      </SignupStyleCard>
-                    ))}
-                  </div>
+                  <h3 className="font-semibold text-lg text-foreground">
+                    {t("proyecto_educativo.general_objectives", "common")}
+                  </h3>
                 </div>
-              </SignupStylePanel>
 
-              <SignupStylePanel variant="action">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-4 bg-linear-to-r from-white/5 to-white/10 rounded-xl">
-                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
-                      📝
-                    </div>
-                    <h3 className="font-semibold text-lg text-foreground">
-                      {t("proyecto_educativo.specific_objectives", "common")}
-                    </h3>
-                  </div>
-
-                  <div className="space-y-3">
-                    {[
-                      t("proyecto_educativo.specific_objective_1", "common"),
-                      t("proyecto_educativo.specific_objective_2", "common"),
-                      t("proyecto_educativo.specific_objective_3", "common"),
-                      t("proyecto_educativo.specific_objective_4", "common"),
-                      t("proyecto_educativo.specific_objective_5", "common"),
-                    ].map((item, index) => (
-                      <SignupStyleCard
-                        key={index}
-                        variant="info"
-                        className="p-3"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                            <span className="text-xs font-medium text-foreground">
-                              {index + 1}
-                            </span>
-                          </div>
-                          <p className="text-sm text-foreground">{item}</p>
+                <div className="space-y-3">
+                  {[
+                    t("proyecto_educativo.objective_1", "common"),
+                    t("proyecto_educativo.objective_2", "common"),
+                    t("proyecto_educativo.objective_3", "common"),
+                    t("proyecto_educativo.objective_4", "common"),
+                    t("proyecto_educativo.objective_5", "common"),
+                  ].map((item, index) => (
+                    <SignupStyleCard key={index} variant="info" className="p-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                          <span className="text-xs font-medium text-foreground">
+                            {index + 1}
+                          </span>
                         </div>
-                      </SignupStyleCard>
-                    ))}
-                  </div>
+                        <p className="text-sm text-foreground">{item}</p>
+                      </div>
+                    </SignupStyleCard>
+                  ))}
                 </div>
-              </SignupStylePanel>
-            </SignupStyleGrid>
+              </div>
+            </SignupStylePanel>
+
+            <SignupStylePanel variant="action">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-linear-to-r from-white/5 to-white/10 rounded-xl">
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
+                    📝
+                  </div>
+                  <h3 className="font-semibold text-lg text-foreground">
+                    {t("proyecto_educativo.specific_objectives", "common")}
+                  </h3>
+                </div>
+
+                <div className="space-y-3">
+                  {[
+                    t("proyecto_educativo.specific_objective_1", "common"),
+                    t("proyecto_educativo.specific_objective_2", "common"),
+                    t("proyecto_educativo.specific_objective_3", "common"),
+                    t("proyecto_educativo.specific_objective_4", "common"),
+                    t("proyecto_educativo.specific_objective_5", "common"),
+                  ].map((item, index) => (
+                    <SignupStyleCard key={index} variant="info" className="p-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                          <span className="text-xs font-medium text-foreground">
+                            {index + 1}
+                          </span>
+                        </div>
+                        <p className="text-sm text-foreground">{item}</p>
+                      </div>
+                    </SignupStyleCard>
+                  ))}
+                </div>
+              </div>
+            </SignupStylePanel>
+          </SignupStyleGrid>
 
           {/* Methodological Approach */}
           <div className="max-w-4xl mx-auto text-center mb-8">
@@ -850,70 +839,70 @@ export default function CPMAPage() {
               </motion.div>
             </motion.div>
           </div>
-            <SignupStyleGrid columns={3} gap="md">
-              <SignupStyleCard
-                variant="info"
-                className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-              >
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="p-3 bg-white/10 rounded-xl shadow-lg">
-                    <div className="text-3xl">🌱</div>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-bold text-foreground text-lg leading-tight">
-                      {t("proyecto_educativo.early_stimulation", "common")}
-                    </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {t("proyecto_educativo.early_stimulation_desc", "common")}
-                    </p>
-                  </div>
+          <SignupStyleGrid columns={3} gap="md">
+            <SignupStyleCard
+              variant="info"
+              className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                  <div className="text-3xl">🌱</div>
                 </div>
-              </SignupStyleCard>
+                <div className="space-y-2">
+                  <h4 className="font-bold text-foreground text-lg leading-tight">
+                    {t("proyecto_educativo.early_stimulation", "common")}
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {t("proyecto_educativo.early_stimulation_desc", "common")}
+                  </p>
+                </div>
+              </div>
+            </SignupStyleCard>
 
-              <SignupStyleCard
-                variant="info"
-                className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-              >
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="p-3 bg-white/10 rounded-xl shadow-lg">
-                    <div className="text-3xl">👤</div>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-bold text-foreground text-lg leading-tight">
-                      {t("proyecto_educativo.individual_attention", "common")}
-                    </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {t(
-                        "proyecto_educativo.individual_attention_desc",
-                        "common",
-                      )}
-                    </p>
-                  </div>
+            <SignupStyleCard
+              variant="info"
+              className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                  <div className="text-3xl">👤</div>
                 </div>
-              </SignupStyleCard>
+                <div className="space-y-2">
+                  <h4 className="font-bold text-foreground text-lg leading-tight">
+                    {t("proyecto_educativo.individual_attention", "common")}
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {t(
+                      "proyecto_educativo.individual_attention_desc",
+                      "common",
+                    )}
+                  </p>
+                </div>
+              </div>
+            </SignupStyleCard>
 
-              <SignupStyleCard
-                variant="info"
-                className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-              >
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="p-3 bg-white/10 rounded-xl shadow-lg">
-                    <div className="text-3xl">📊</div>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-bold text-foreground text-lg leading-tight">
-                      {t("proyecto_educativo.continuous_evaluation", "common")}
-                    </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {t(
-                        "proyecto_educativo.continuous_evaluation_desc",
-                        "common",
-                      )}
-                    </p>
-                  </div>
+            <SignupStyleCard
+              variant="info"
+              className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                  <div className="text-3xl">📊</div>
                 </div>
-              </SignupStyleCard>
-            </SignupStyleGrid>
+                <div className="space-y-2">
+                  <h4 className="font-bold text-foreground text-lg leading-tight">
+                    {t("proyecto_educativo.continuous_evaluation", "common")}
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {t(
+                      "proyecto_educativo.continuous_evaluation_desc",
+                      "common",
+                    )}
+                  </p>
+                </div>
+              </div>
+            </SignupStyleCard>
+          </SignupStyleGrid>
 
           {/* Team */}
           <div className="max-w-4xl mx-auto text-center mb-8">
@@ -944,93 +933,93 @@ export default function CPMAPage() {
               </motion.div>
             </motion.div>
           </div>
-            <SignupStyleGrid columns={2} gap="md">
-              {[
-                {
-                  title: t("proyecto_educativo.team_parvularia", "common"),
-                  subtitle: t(
-                    "proyecto_educativo.team_parvularia_subtitle",
-                    "common",
-                  ),
-                  icon: "👩‍🏫",
-                  description: t(
-                    "proyecto_educativo.team_parvularia_desc",
-                    "common",
-                  ),
-                },
-                {
-                  title: t("proyecto_educativo.team_therapist", "common"),
-                  subtitle: t(
-                    "proyecto_educativo.team_therapist_subtitle",
-                    "common",
-                  ),
-                  icon: "🗣️",
-                  description: t(
-                    "proyecto_educativo.team_therapist_desc",
-                    "common",
-                  ),
-                },
-                {
-                  title: t("proyecto_educativo.team_psychologist", "common"),
-                  subtitle: t(
-                    "proyecto_educativo.team_psychologist_subtitle",
-                    "common",
-                  ),
-                  icon: "🧠",
-                  description: t(
-                    "proyecto_educativo.team_psychologist_desc",
-                    "common",
-                  ),
-                },
-                {
-                  title: t("proyecto_educativo.team_occupational", "common"),
-                  subtitle: t(
-                    "proyecto_educativo.team_occupational_subtitle",
-                    "common",
-                  ),
-                  icon: "🤲",
-                  description: t(
-                    "proyecto_educativo.team_occupational_desc",
-                    "common",
-                  ),
-                },
-              ].map((member, index) => (
-                <SignupStyleCard
-                  key={index}
-                  variant="info"
-                  className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-                >
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="p-3 bg-white/10 rounded-xl shadow-lg">
-                      <div className="text-3xl">{member.icon}</div>
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="font-bold text-foreground text-lg leading-tight">
-                        {member.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground font-medium">
-                        {member.subtitle}
-                      </p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {member.description}
-                      </p>
-                    </div>
+          <SignupStyleGrid columns={2} gap="md">
+            {[
+              {
+                title: t("proyecto_educativo.team_parvularia", "common"),
+                subtitle: t(
+                  "proyecto_educativo.team_parvularia_subtitle",
+                  "common",
+                ),
+                icon: "👩‍🏫",
+                description: t(
+                  "proyecto_educativo.team_parvularia_desc",
+                  "common",
+                ),
+              },
+              {
+                title: t("proyecto_educativo.team_therapist", "common"),
+                subtitle: t(
+                  "proyecto_educativo.team_therapist_subtitle",
+                  "common",
+                ),
+                icon: "🗣️",
+                description: t(
+                  "proyecto_educativo.team_therapist_desc",
+                  "common",
+                ),
+              },
+              {
+                title: t("proyecto_educativo.team_psychologist", "common"),
+                subtitle: t(
+                  "proyecto_educativo.team_psychologist_subtitle",
+                  "common",
+                ),
+                icon: "🧠",
+                description: t(
+                  "proyecto_educativo.team_psychologist_desc",
+                  "common",
+                ),
+              },
+              {
+                title: t("proyecto_educativo.team_occupational", "common"),
+                subtitle: t(
+                  "proyecto_educativo.team_occupational_subtitle",
+                  "common",
+                ),
+                icon: "🤲",
+                description: t(
+                  "proyecto_educativo.team_occupational_desc",
+                  "common",
+                ),
+              },
+            ].map((member, index) => (
+              <SignupStyleCard
+                key={index}
+                variant="info"
+                className="h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+              >
+                <div className="flex flex-col items-center text-center space-y-4">
+                  <div className="p-3 bg-white/10 rounded-xl shadow-lg">
+                    <div className="text-3xl">{member.icon}</div>
                   </div>
-                </SignupStyleCard>
-              ))}
-            </SignupStyleGrid>
+                  <div className="space-y-2">
+                    <h4 className="font-bold text-foreground text-lg leading-tight">
+                      {member.title}
+                    </h4>
+                    <p className="text-sm text-muted-foreground font-medium">
+                      {member.subtitle}
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {member.description}
+                    </p>
+                  </div>
+                </div>
+              </SignupStyleCard>
+            ))}
+          </SignupStyleGrid>
 
-            <SignupStyleCard
-              variant="info"
-              className="mt-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-            >
-              <p className="text-center text-sm text-muted-foreground">
-                <strong className="text-foreground">
-                  {t("proyecto_educativo.collaborative_work_note", "common")}
-                </strong>{" "}
-                {t("proyecto_educativo.team_meetings", "common")}
-              </p>
-            </SignupStyleCard>
+          <SignupStyleCard
+            variant="info"
+            className="mt-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+          >
+            <p className="text-center text-sm text-muted-foreground">
+              <strong className="text-foreground">
+                {t("proyecto_educativo.collaborative_work_note", "common")}
+              </strong>{" "}
+              {t("proyecto_educativo.team_meetings", "common")}
+            </p>
+          </SignupStyleCard>
         </div>
       </section>
 

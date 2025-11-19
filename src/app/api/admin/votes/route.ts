@@ -89,7 +89,10 @@ export async function GET(request: NextRequest) {
           })),
         });
       } catch (voteError) {
-        console.error(`Error processing vote ${vote._id} (${vote.title}):`, voteError);
+        console.error(
+          `Error processing vote ${vote._id} (${vote.title}):`,
+          voteError,
+        );
         console.error("Vote data:", {
           institutionId: vote.institutionId,
           createdBy: vote.createdBy,
@@ -106,14 +109,20 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error fetching votes:", error);
-    console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace");
+    console.error(
+      "Error stack:",
+      error instanceof Error ? error.stack : "No stack trace",
+    );
     console.error("Error details:", {
       message: error instanceof Error ? error.message : String(error),
       name: error instanceof Error ? error.name : "Unknown",
       cause: error instanceof Error ? error.cause : undefined,
     });
     return NextResponse.json(
-      { error: "Internal server error", details: error instanceof Error ? error.message : String(error) },
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

@@ -51,7 +51,24 @@ export function useConvexConnection() {
         }
 
         // Connection states in Convex: "Connecting" | "Connected" | "Disconnected"
-        if (connectionState === "Connected") {
+        // Or an object with isWebSocketConnected property
+        if (
+          typeof connectionState === "object" &&
+          connectionState !== null &&
+          "isWebSocketConnected" in connectionState
+        ) {
+          const isConnected = (connectionState as any).isWebSocketConnected;
+          if (mountedRef.current) {
+            setIsConnected(isConnected);
+            if (isConnected) {
+              setConnectionError(null);
+            } else {
+              setConnectionError(
+                "Conexión perdida con el servidor. Intentando reconectar...",
+              );
+            }
+          }
+        } else if (connectionState === "Connected") {
           if (mountedRef.current) {
             setIsConnected(true);
             setConnectionError(null);

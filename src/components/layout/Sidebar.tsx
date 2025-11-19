@@ -475,7 +475,7 @@ export function Sidebar({
                   aria-labelledby={`group-${group.title}`}
                 >
                   <Collapsible
-                    open={openGroups[group.title]}
+                    open={!!openGroups[group.title]}
                     onOpenChange={() => toggleGroup(group.title)}
                   >
                     <CollapsibleTrigger asChild>

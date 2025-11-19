@@ -53,7 +53,9 @@ export const getVoteById = tenantQuery({
   args: { id: v.id("votes") },
   roles: ["ADMIN", "PROFESOR", "PARENT", "MASTER"],
   handler: async (ctx, { id }, tenancy) => {
-    console.log(`getVoteById called for vote: ${id}, institution: ${tenancy.institution._id}`);
+    console.log(
+      `getVoteById called for vote: ${id}, institution: ${tenancy.institution._id}`,
+    );
 
     const vote = ensureInstitutionMatch(
       await ctx.db.get(id),
@@ -61,7 +63,9 @@ export const getVoteById = tenantQuery({
       "Vote not found",
     );
 
-    console.log(`Vote found: ${vote._id}, title: ${vote.title}, institutionId: ${vote.institutionId}`);
+    console.log(
+      `Vote found: ${vote._id}, title: ${vote.title}, institutionId: ${vote.institutionId}`,
+    );
 
     const options = await ctx.db
       .query("voteOptions")
@@ -86,14 +90,18 @@ export const getVoteById = tenantQuery({
           .withIndex("by_optionId", (q: any) => q.eq("optionId", option._id))
           .collect();
 
-        console.log(`Found ${responses.length} responses for option ${option._id}`);
+        console.log(
+          `Found ${responses.length} responses for option ${option._id}`,
+        );
 
         const scopedResponses = responses.filter(
           (response: Doc<"voteResponses">) =>
             response.institutionId === tenancy.institution._id,
         );
 
-        console.log(`After institution filter: ${scopedResponses.length} responses`);
+        console.log(
+          `After institution filter: ${scopedResponses.length} responses`,
+        );
 
         return {
           ...option,
