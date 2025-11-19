@@ -81,10 +81,13 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Internal server error",
-        details: process.env.NODE_ENV === 'development' ? {
-          message: error instanceof Error ? error.message : String(error),
-          type: error instanceof Error ? error.name : typeof error,
-        } : undefined
+        details:
+          process.env.NODE_ENV === "development"
+            ? {
+                message: error instanceof Error ? error.message : String(error),
+                type: error instanceof Error ? error.name : typeof error,
+              }
+            : undefined,
       },
       { status: 500 },
     );

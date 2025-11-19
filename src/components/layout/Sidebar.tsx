@@ -88,7 +88,6 @@ const handleNavigationItemClick = (
 const renderNavigationItem = (
   item: NavigationItem,
   isActive: boolean,
-  isCollapsed: boolean,
   pathname: string,
   t: (key: string) => string,
   onToggle?: () => void,
@@ -151,6 +150,82 @@ const renderNavigationItem = (
         </span>
       )}
     </Link>
+  );
+};
+
+const renderCollapsedNavigationItem = (
+  item: NavigationItem,
+  isActive: boolean,
+  pathname: string,
+  t: (key: string) => string,
+  onToggle?: () => void,
+  handleLogout?: () => void,
+) => {
+  const handleClick = handleNavigationItemClick(
+    item,
+    pathname,
+    onToggle,
+    handleLogout,
+  );
+
+  const baseClasses =
+    "flex h-10 w-10 items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
+  const stateClasses = isActive
+    ? "bg-accent text-accent-foreground shadow-sm"
+    : "text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground";
+
+  const label = t ? t(item.title) : item.title;
+
+  if (item.action === "logout") {
+    return (
+      <Tooltip key={`collapsed-${item.title}`}>
+        <TooltipTrigger asChild>
+          <button
+            className={cn(baseClasses, stateClasses, "mx-auto")}
+            aria-label={`${label}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+            onClick={handleClick}
+          >
+            <item.icon className="h-4 w-4" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <div className="flex items-center gap-2">
+            <span>{label}</span>
+            {(item as any).shortcut && (
+              <span className="text-xs opacity-60">
+                {(item as any).shortcut}
+              </span>
+            )}
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return (
+    <Tooltip key={`collapsed-${item.href || item.title}`}>
+      <TooltipTrigger asChild>
+        <Link
+          href={item.href || "#"}
+          prefetch={false}
+          className={cn(baseClasses, stateClasses, "mx-auto")}
+          aria-current={isActive ? "page" : undefined}
+          aria-label={`${label}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+          onClick={handleClick}
+        >
+          <item.icon className="h-4 w-4" />
+        </Link>
+      </TooltipTrigger>
+      <TooltipContent side="right">
+        <div className="flex items-center gap-2">
+          <span>{label}</span>
+          {(item as any).shortcut && (
+            <span className="text-xs opacity-60">{(item as any).shortcut}</span>
+          )}
+        </div>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -277,11 +352,38 @@ export function Sidebar({
   }, [navigationGroups]);
 
   const toggleGroup = (groupTitle: string) => {
-    setOpenGroups((prev) => ({
-      ...prev,
-      [groupTitle]: !prev[groupTitle],
-    }));
+    setOpenGroups((prev) => {
+      const isCurrentlyOpen = prev[groupTitle];
+
+      // If the group is currently open, close it
+      if (isCurrentlyOpen) {
+        return {
+          ...prev,
+          [groupTitle]: false,
+        };
+      }
+
+      // If the group is closed, close all groups and open this one
+      const newState = Object.keys(prev).reduce(
+        (acc, key) => {
+          acc[key] = false;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+
+      newState[groupTitle] = true;
+      return newState;
+    });
   };
+
+  const flattenedNavigationItems = React.useMemo(
+    () =>
+      navigationGroups.flatMap((group) =>
+        group.items.map((item) => ({ ...item })),
+      ),
+    [navigationGroups],
+  );
 
   return (
     <TooltipProvider
@@ -317,7 +419,7 @@ export function Sidebar({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 mb-1"
+            className="h-8 w-8"
             onClick={onToggle}
             aria-label={
               isCollapsed ? t("nav.sidebar.expand") : t("nav.sidebar.collapse")
@@ -329,26 +431,52 @@ export function Sidebar({
             }
           >
             <NavigationIcons.ChevronRight
-              className="h-4 w-4 transition-transform"
+              className={cn(
+                "h-4 w-4 transition-transform duration-200",
+                isCollapsed && "rotate-180",
+              )}
               aria-hidden="true"
             />
           </Button>
         </div>
 
         <ScrollArea
-          className="flex-1 px-3 py-4"
+          className={cn(
+            "flex-1 py-4 max-h-[calc(100vh-10rem)] min-h-[200px]",
+            isCollapsed ? "px-1" : "px-3",
+          )}
           aria-label="Contenido de navegación"
         >
-          <nav className="space-y-2" aria-label="Menú de navegación principal">
-            {navigationGroups.map((group, groupIndex) => (
-              <div
-                key={group.title}
-                className="space-y-1"
-                role="group"
-                aria-labelledby={`group-${group.title}`}
-              >
-                {/* Group Header */}
-                {!isCollapsed && (
+          <nav
+            className={cn("space-y-2", isCollapsed && "space-y-0")}
+            aria-label="Menú de navegación principal"
+          >
+            {isCollapsed ? (
+              <div className="flex flex-col items-center gap-2">
+                {flattenedNavigationItems.map((item) => {
+                  const isActive = item.href
+                    ? pathname === item.href ||
+                      pathname.startsWith(item.href + "/")
+                    : false;
+
+                  return renderCollapsedNavigationItem(
+                    item,
+                    isActive,
+                    pathname,
+                    t,
+                    onToggle,
+                    handleLogout,
+                  );
+                })}
+              </div>
+            ) : (
+              navigationGroups.map((group, groupIndex) => (
+                <div
+                  key={group.title}
+                  className="space-y-1"
+                  role="group"
+                  aria-labelledby={`group-${group.title}`}
+                >
                   <Collapsible
                     open={openGroups[group.title]}
                     onOpenChange={() => toggleGroup(group.title)}
@@ -389,99 +517,34 @@ export function Sidebar({
                               {renderNavigationItem(
                                 item,
                                 isActive,
-                                isCollapsed,
                                 pathname,
                                 t,
                                 onToggle,
                                 handleLogout,
                               )}
                             </TooltipTrigger>
-                            {!isCollapsed && (
-                              <TooltipContent side="right">
-                                <div className="flex items-center gap-2">
-                                  <span>{t(item.title)}</span>
-                                  {(item as any).shortcut && (
-                                    <span className="text-xs opacity-60">
-                                      {(item as any).shortcut}
-                                    </span>
-                                  )}
-                                </div>
-                              </TooltipContent>
-                            )}
+                            <TooltipContent side="right">
+                              <div className="flex items-center gap-2">
+                                <span>{t(item.title)}</span>
+                                {(item as any).shortcut && (
+                                  <span className="text-xs opacity-60">
+                                    {(item as any).shortcut}
+                                  </span>
+                                )}
+                              </div>
+                            </TooltipContent>
                           </Tooltip>
                         );
                       })}
                     </CollapsibleContent>
                   </Collapsible>
-                )}
 
-                {/* Collapsed Mode - Show All Items Directly */}
-                {isCollapsed &&
-                  group.items.map((item) => {
-                    const isActive = item.href
-                      ? pathname === item.href ||
-                        pathname.startsWith(item.href + "/")
-                      : false;
-
-                    return (
-                      <Tooltip key={item.href || item.title}>
-                        <TooltipTrigger asChild>
-                          {(item as any).action === "logout" ? (
-                            <button
-                              className="flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
-                              aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
-                              onClick={handleNavigationItemClick(
-                                item,
-                                pathname,
-                                onToggle,
-                                handleLogout,
-                              )}
-                            >
-                              <item.icon className="h-4 w-4 shrink-0" />
-                            </button>
-                          ) : (
-                            <Link
-                              href={item.href || "#"}
-                              prefetch={false}
-                              className={cn(
-                                "flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                                isActive
-                                  ? "bg-accent text-accent-foreground"
-                                  : "text-muted-foreground",
-                              )}
-                              aria-current={isActive ? "page" : undefined}
-                              aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
-                              onClick={handleNavigationItemClick(
-                                item,
-                                pathname,
-                                onToggle,
-                                handleLogout,
-                              )}
-                            >
-                              <item.icon className="h-4 w-4 shrink-0" />
-                            </Link>
-                          )}
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                          <div className="flex items-center gap-2">
-                            <span>{t ? t(item.title) : item.title}</span>
-                            {(item as any).shortcut && (
-                              <span className="text-xs opacity-60">
-                                {(item as any).shortcut}
-                              </span>
-                            )}
-                          </div>
-                        </TooltipContent>
-                      </Tooltip>
-                    );
-                  })}
-
-                {/* Add separator between groups (except last one) */}
-                {!isCollapsed && groupIndex < navigationGroups.length - 1 && (
-                  <div className="border-t border-border/50 my-2" />
-                )}
-              </div>
-            ))}
+                  {groupIndex < navigationGroups.length - 1 && (
+                    <div className="border-t border-border/50 my-2" />
+                  )}
+                </div>
+              ))
+            )}
           </nav>
         </ScrollArea>
 

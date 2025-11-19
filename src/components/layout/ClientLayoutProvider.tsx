@@ -87,7 +87,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
       <Suspense fallback={<NavigationSkeleton />}>
         <Header />
       </Suspense>
-      <div className="flex flex-1 relative overflow-hidden">
+      <div className="flex flex-1 relative">
         {/* Desktop Sidebar */}
         <Sidebar
           isCollapsed={isSidebarCollapsed}
@@ -105,12 +105,12 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
         />
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           <main
             className={cn(
               "flex-1 w-full transition-all duration-300",
               "p-4 md:p-6 lg:p-8",
-              "max-w-full overflow-x-auto",
+              "max-w-full overflow-y-auto",
             )}
           >
             {children}

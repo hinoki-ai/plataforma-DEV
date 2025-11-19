@@ -1,10 +1,5 @@
 {
   "node": {
-    "externalPackages": [
-      "bcryptjs",
-      "svix",
-      "@clerk/backend",
-      "convex/server"
-    ]
+    "externalPackages": ["bcryptjs", "svix", "@clerk/backend", "convex/server"]
   }
 }
