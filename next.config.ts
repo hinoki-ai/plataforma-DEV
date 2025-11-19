@@ -146,10 +146,14 @@ const nextConfig: NextConfig = {
   // Temporarily disabled due to missing babel-plugin-react-compiler
   // reactCompiler: true,
 
-  // Turbopack configuration for Next.js 16
-  turbopack: {
-    rules: undefined,
+  // Explicitly use webpack instead of Turbopack for stability with large codebase
+  experimental: {
+    webpackBuildWorker: false, // Disable webpack build workers to avoid memory issues
   },
+
+  // Disable source maps in production build to reduce memory usage
+  productionBrowserSourceMaps: false,
+
 
   // Development optimizations
   ...(isDevelopment && {
@@ -166,6 +170,37 @@ const nextConfig: NextConfig = {
       "next-auth/react": path.resolve(__dirname, "src/lib/auth-client.tsx"),
       "next-auth": path.resolve(__dirname, "src/lib/auth-server.ts"),
     };
+
+    // Performance optimizations for large codebase
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 10,
+          },
+          convex: {
+            test: /[\\/]convex[\\/]/,
+            name: 'convex',
+            chunks: 'all',
+            priority: 20,
+          },
+        },
+      },
+    };
+
+    // Reduce parallelism to avoid memory issues
+    config.parallelism = 2;
+
+    // Add performance hints
+    config.performance = {
+      hints: false, // Disable performance hints for large builds
+    };
+
     return config;
   },
 

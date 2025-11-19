@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery } from "convex/react";
@@ -180,8 +180,14 @@ export function GradeEntryForm({
     },
   });
 
-  const watchedGrade = form.watch("grade");
-  const watchedMaxGrade = form.watch("maxGrade");
+  const watchedGrade = useWatch({
+    control: form.control,
+    name: "grade",
+  });
+  const watchedMaxGrade = useWatch({
+    control: form.control,
+    name: "maxGrade",
+  });
 
   const getGradeStatus = (grade: number) => {
     if (grade >= 6.0) {

@@ -7,6 +7,8 @@ const eslintConfig = [
       "src/generated/**/*",
       "convex/_generated/**/*",
       "**/*.d.ts",
+      // Ignore CSS files (handled by PostCSS/Tailwind, not ESLint)
+      "**/*.css",
       // Ignore test reports and traces
       "playwright-report/**/*",
       "test-results/**/*",

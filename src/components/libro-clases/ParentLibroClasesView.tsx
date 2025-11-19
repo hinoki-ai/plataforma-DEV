@@ -29,6 +29,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 import { usePathname, useRouter } from "next/navigation";
 import { useConvexConnection } from "@/hooks/useConvexConnection";
+import { useLanguage } from "@/components/language/LanguageContext";
 import Link from "next/link";
 
 type TabValue =
@@ -97,6 +98,7 @@ const PARENT_TAB_HEADERS: Record<
 export function ParentLibroClasesView({
   view = "overview",
 }: ParentLibroClasesViewProps) {
+  const { t } = useLanguage();
   const { userId, isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -185,17 +187,17 @@ export function ParentLibroClasesView({
       <PageTransition>
         <div className="space-y-6">
           <RoleAwareHeader
-            title="Autenticación requerida"
-            subtitle="Debes iniciar sesión para acceder al libro de clases"
+            title={t("parent.libro_clases.errors.auth_required")}
+            subtitle={t("parent.libro_clases.errors.auth_required_desc")}
           />
           <Card>
             <CardContent className="py-10">
               <p className="text-muted-foreground">
-                Por favor, inicia sesión para continuar.
+                {t("parent.libro_clases.errors.auth_required_desc")}
               </p>
               <div className="flex flex-wrap gap-3 mt-4">
                 <Button onClick={() => router.push("/login")}>
-                  Ir a iniciar sesión
+                  {t("parent.libro_clases.errors.login")}
                 </Button>
               </div>
             </CardContent>
@@ -224,8 +226,8 @@ export function ParentLibroClasesView({
       <PageTransition>
         <div className="space-y-6">
           <RoleAwareHeader
-            title="Configuración de institución requerida"
-            subtitle="Necesitas estar asociado a una institución para usar el libro de clases"
+            title={t("parent.libro_clases.errors.tenancy_error")}
+            subtitle={t("parent.libro_clases.errors.tenancy_error_desc")}
           />
           <Card>
             <CardContent className="py-10 space-y-4">
@@ -233,28 +235,19 @@ export function ParentLibroClasesView({
               {errorMessage.includes("No institution selected") && (
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p>
-                    Para usar el libro de clases, tu cuenta debe estar asociada
-                    a una institución educativa.
+                    {t("parent.libro_clases.errors.institution_selection_desc")}
                   </p>
-                  <p>Por favor contacta al administrador para:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Crear o asignar tu cuenta a una institución</li>
-                    <li>
-                      Configurar tu membresía con el rol apropiado (PARENT,
-                      etc.)
-                    </li>
-                  </ul>
                 </div>
               )}
               <div className="flex flex-wrap gap-3 mt-4">
                 <Button variant="outline" onClick={() => router.refresh()}>
-                  Reintentar
+                  {t("parent.libro_clases.errors.retry")}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => router.push("/contacto")}
                 >
-                  Contactar administrador
+                  {t("parent.libro_clases.errors.contact_admin")}
                 </Button>
               </div>
             </CardContent>
@@ -270,24 +263,18 @@ export function ParentLibroClasesView({
         <PageTransition>
           <div className="space-y-6">
             <RoleAwareHeader
-              title="Error de conexión"
-              subtitle="No se pudo conectar con el servidor de datos"
+              title={t("parent.libro_clases.loading.connection_error")}
+              subtitle={t("parent.libro_clases.loading.connection_error_desc")}
             />
             <Card>
               <CardContent className="py-10 space-y-4">
                 <p className="text-muted-foreground mb-4">
-                  El libro de clases no puede cargar porque no hay conexión con
-                  el servidor de datos. Esto puede deberse a:
+                  {t("parent.libro_clases.loading.connection_error_desc")}
                 </p>
-                <ul className="list-disc list-inside ml-4 space-y-2 text-sm text-muted-foreground">
-                  <li>Problemas de conexión a internet</li>
-                  <li>El servidor de datos no está disponible</li>
-                  <li>Problemas de configuración del servicio Convex</li>
-                </ul>
                 {connectionError && (
                   <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                     <p className="text-sm font-medium text-destructive mb-2">
-                      Detalle del error:
+                      {t("parent.libro_clases.loading.connection_error_detail")}:
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {connectionError}
@@ -297,7 +284,7 @@ export function ParentLibroClasesView({
                 {tenancyCheck && "error" in tenancyCheck && (
                   <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                     <p className="text-sm font-medium text-destructive mb-2">
-                      Error de configuración:
+                      {t("parent.libro_clases.errors.tenancy_error")}:
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {(() => {
@@ -306,31 +293,29 @@ export function ParentLibroClasesView({
                         ).error;
                         return typeof error === "string"
                           ? error
-                          : "Error desconocido";
+                          : t("parent.libro_clases.errors.tenancy_error");
                       })()}
                     </p>
                   </div>
                 )}
                 <div className="flex flex-wrap gap-3 mt-6">
                   <Button onClick={() => window.location.reload()}>
-                    Recargar página
+                    {t("parent.libro_clases.loading.reload_page")}
                   </Button>
                   <Button variant="outline" onClick={() => router.refresh()}>
-                    Reintentar conexión
+                    {t("parent.libro_clases.loading.reconnect")}
                   </Button>
                 </div>
                 {process.env.NODE_ENV === "development" && (
                   <div className="mt-4 p-4 bg-muted rounded-lg text-xs space-y-2">
                     <p className="font-medium mb-2">
-                      Información de desarrollo:
+                      {t("parent.libro_clases.loading.development_info")}:
                     </p>
                     <p>
-                      Asegúrate de que el servicio Convex esté ejecutándose:
-                      ejecuta <code>npx convex dev</code> en una terminal
-                      separada.
+                      {t("parent.libro_clases.loading.convex_dev_note")}
                     </p>
                     <p className="mt-2">
-                      Estado de conexión:{" "}
+                      {t("parent.libro_clases.loading.connection_status")}:{" "}
                       <span
                         className={
                           isConnected
@@ -338,14 +323,14 @@ export function ParentLibroClasesView({
                             : "text-red-600 font-medium"
                         }
                       >
-                        {isConnected ? "Conectado" : "Desconectado"}
+                        {isConnected ? t("parent.libro_clases.loading.connected") : t("parent.libro_clases.loading.disconnected")}
                       </span>
                     </p>
                     <p>
-                      NEXT_PUBLIC_CONVEX_URL:{" "}
+                      {t("parent.libro_clases.loading.next_public_convex")}:{" "}
                       {process.env.NEXT_PUBLIC_CONVEX_URL
-                        ? "✅ Configurado"
-                        : "❌ No configurado"}
+                        ? `✅ ${t("parent.libro_clases.loading.configured")}`
+                        : `❌ ${t("parent.libro_clases.loading.not_configured")}`}
                     </p>
                   </div>
                 )}
@@ -377,15 +362,13 @@ export function ParentLibroClasesView({
       <PageTransition>
         <div className="space-y-6">
           <RoleAwareHeader
-            title="Perfil familiar no encontrado"
-            subtitle="Contacta al establecimiento para habilitar el acceso"
+            title={t("parent.libro_clases.errors.profile_not_found")}
+            subtitle={t("parent.libro_clases.errors.profile_not_found_desc")}
           />
           <Card>
             <CardContent className="py-10">
               <p className="text-muted-foreground">
-                No pudimos asociar tu cuenta a un apoderado registrado. Por
-                favor confirma con el colegio que tu usuario esté vinculado a un
-                estudiante.
+                {t("parent.libro_clases.errors.profile_not_found_desc")}
               </p>
             </CardContent>
           </Card>
@@ -412,7 +395,7 @@ export function ParentLibroClasesView({
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Cursos Activos
+                    {t("parent.libro_clases.course_selection.active_courses")}
                   </CardTitle>
                   <BookOpen className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
@@ -426,7 +409,7 @@ export function ParentLibroClasesView({
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Total Estudiantes
+                    {t("parent.libro_clases.course_selection.total_students")}
                   </CardTitle>
                   <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
@@ -441,7 +424,7 @@ export function ParentLibroClasesView({
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Año Académico
+                    {t("parent.libro_clases.course_selection.academic_year")}
                   </CardTitle>
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
@@ -455,7 +438,7 @@ export function ParentLibroClasesView({
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Asignaturas
+                    {t("parent.libro_clases.course_selection.subjects")}
                   </CardTitle>
                   <FileText className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
@@ -469,7 +452,7 @@ export function ParentLibroClasesView({
 
             {/* Course List */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Seleccione un Curso</h2>
+              <h2 className="text-xl font-semibold">{t("parent.libro_clases.course_selection.select_course")}</h2>
               {courses && courses.length > 0 ? (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {courses.map((course) => (
@@ -496,7 +479,7 @@ export function ParentLibroClasesView({
                         <div className="space-y-2">
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">
-                              Asignaturas:
+                              {t("parent.libro_clases.course_selection.subjects")}:
                             </span>
                             <span className="font-medium">
                               {course.subjects.length}
@@ -529,10 +512,10 @@ export function ParentLibroClasesView({
                   <CardContent className="py-12 text-center">
                     <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <h3 className="text-lg font-semibold mb-2">
-                      No hay cursos disponibles
+                      {t("parent.libro_clases.course_selection.no_courses")}
                     </h3>
                     <p className="text-muted-foreground">
-                      No se encontraron cursos activos para sus estudiantes
+                      {t("parent.libro_clases.course_selection.no_courses_desc")}
                     </p>
                   </CardContent>
                 </Card>
@@ -552,14 +535,14 @@ export function ParentLibroClasesView({
                     </CardTitle>
                     <CardDescription>
                       {selectedCourse?.grade} {selectedCourse?.section} -{" "}
-                      {selectedCourse?.level} | Año{" "}
+                      {selectedCourse?.level} | {t("parent.libro_clases.course_selection.academic_year")}{" "}
                       {selectedCourse?.academicYear}
                     </CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     <Eye className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">
-                      Vista de Solo Lectura
+                      {t("parent.libro_clases.course_details.read_only_view")}
                     </span>
                   </div>
                 </div>
@@ -571,7 +554,7 @@ export function ParentLibroClasesView({
                       {selectedCourse?.students?.length || 0}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Estudiantes
+                      {t("parent.libro_clases.course_details.students")}
                     </div>
                   </div>
                   <div className="text-center">
@@ -579,7 +562,7 @@ export function ParentLibroClasesView({
                       {selectedCourse?.subjects?.length || 0}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Asignaturas
+                      {t("parent.libro_clases.course_details.subjects")}
                     </div>
                   </div>
                   <div className="text-center">
@@ -587,7 +570,7 @@ export function ParentLibroClasesView({
                       {selectedCourse?.teacher?.name || "N/A"}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Profesor Jefe
+                      {t("parent.libro_clases.course_details.head_teacher")}
                     </div>
                   </div>
                   <div className="text-center">
@@ -595,7 +578,7 @@ export function ParentLibroClasesView({
                       {selectedCourse?.academicYear}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Año Académico
+                      {t("parent.libro_clases.course_details.academic_year")}
                     </div>
                   </div>
                 </div>
@@ -607,23 +590,23 @@ export function ParentLibroClasesView({
               <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="overview">
                   <BookOpen className="h-4 w-4 mr-2" />
-                  Resumen
+                  {t("parent.libro_clases.tabs.overview")}
                 </TabsTrigger>
                 <TabsTrigger value="grades">
                   <TrendingUp className="h-4 w-4 mr-2" />
-                  Calificaciones
+                  {t("parent.libro_clases.tabs.grades")}
                 </TabsTrigger>
                 <TabsTrigger value="attendance">
                   <Calendar className="h-4 w-4 mr-2" />
-                  Calendario
+                  {t("parent.libro_clases.tabs.attendance")}
                 </TabsTrigger>
                 <TabsTrigger value="observations">
                   <Eye className="h-4 w-4 mr-2" />
-                  Observaciones
+                  {t("parent.libro_clases.tabs.observations")}
                 </TabsTrigger>
                 <TabsTrigger value="meetings">
                   <Users className="h-4 w-4 mr-2" />
-                  Reuniones
+                  {t("parent.libro_clases.tabs.meetings")}
                 </TabsTrigger>
               </TabsList>
 
@@ -631,9 +614,9 @@ export function ParentLibroClasesView({
                 <div className="grid gap-4 md:grid-cols-2">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Mis Estudiantes en este Curso</CardTitle>
+                      <CardTitle>{t("parent.libro_clases.overview.my_students")}</CardTitle>
                       <CardDescription>
-                        Lista de sus estudiantes inscritos en este curso
+                        {t("parent.libro_clases.overview.my_students_desc")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -655,14 +638,14 @@ export function ParentLibroClasesView({
                               </div>
                               <Badge variant="outline" className="text-xs">
                                 <Eye className="h-3 w-3 mr-1" />
-                                Solo Vista
+                                {t("parent.libro_clases.status.read_only")}
                               </Badge>
                             </div>
                           ))}
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                          Ninguno de sus estudiantes está inscrito en este curso
+                          {t("parent.libro_clases.overview.no_students")}
                         </div>
                       )}
                     </CardContent>
@@ -670,8 +653,8 @@ export function ParentLibroClasesView({
 
                   <Card>
                     <CardHeader>
-                      <CardTitle>Asignaturas</CardTitle>
-                      <CardDescription>Asignaturas del curso</CardDescription>
+                      <CardTitle>{t("parent.libro_clases.overview.subjects")}</CardTitle>
+                      <CardDescription>{t("parent.libro_clases.overview.subjects_desc")}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
@@ -699,8 +682,7 @@ export function ParentLibroClasesView({
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Eye className="h-4 w-4" />
                         <span className="text-sm">
-                          Vista de solo lectura - Puede ver las calificaciones
-                          de sus estudiantes
+                          {t("parent.libro_clases.grades.read_only_notice")}
                         </span>
                       </div>
                     </CardContent>
@@ -720,21 +702,19 @@ export function ParentLibroClasesView({
                   {/* Course Context Header */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>Calendario Académico y Asistencia</CardTitle>
+                      <CardTitle>{t("parent.libro_clases.attendance.calendar_title")}</CardTitle>
                       <CardDescription>
-                        Visualiza el calendario escolar completo con eventos
-                        académicos, reuniones de apoderados y seguimiento de
-                        asistencia de tus hijos.
+                        {t("parent.libro_clases.attendance.calendar_desc")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="grid gap-4 md:grid-cols-3">
                         <div className="rounded-lg border p-4">
                           <p className="text-xs uppercase text-muted-foreground">
-                            Curso Actual
+                            {t("parent.libro_clases.attendance.current_course")}
                           </p>
                           <p className="text-lg font-semibold">
-                            {selectedCourse?.name || "Selecciona un curso"}
+                            {selectedCourse?.name || t("parent.libro_clases.course_selection.select_course")}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {selectedCourse?.grade} {selectedCourse?.section}
@@ -742,24 +722,24 @@ export function ParentLibroClasesView({
                         </div>
                         <div className="rounded-lg border p-4">
                           <p className="text-xs uppercase text-muted-foreground">
-                            Eventos del Mes
+                            {t("parent.libro_clases.attendance.events_this_month")}
                           </p>
                           <p className="text-lg font-semibold">
-                            Calendario Integrado
+                            {t("parent.libro_clases.attendance.integrated_calendar")}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            Eventos académicos, reuniones y actividades
+                            {t("parent.libro_clases.attendance.academic_events")}
                           </p>
                         </div>
                         <div className="rounded-lg border p-4">
                           <p className="text-xs uppercase text-muted-foreground">
-                            Asistencia Familiar
+                            {t("parent.libro_clases.attendance.family_attendance")}
                           </p>
                           <p className="text-lg font-semibold">
-                            Seguimiento en Tiempo Real
+                            {t("parent.libro_clases.attendance.real_time_tracking")}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            Notificaciones automáticas de ausencias
+                            {t("parent.libro_clases.attendance.automatic_notifications")}
                           </p>
                         </div>
                       </div>
@@ -789,33 +769,29 @@ export function ParentLibroClasesView({
               <TabsContent value="observations">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Observaciones y comunicaciones</CardTitle>
+                    <CardTitle>{t("parent.libro_clases.observations.title")}</CardTitle>
                     <CardDescription>
-                      Accede a anotaciones positivas, acuerdos y
-                      retroalimentación formativa.
+                      {t("parent.libro_clases.observations.desc")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid gap-3 md:grid-cols-2">
                       <div className="rounded-lg border p-4">
-                        <p className="text-sm font-semibold">Reconocimientos</p>
+                        <p className="text-sm font-semibold">{t("parent.libro_clases.observations.recognitions")}</p>
                         <p className="text-sm text-muted-foreground">
-                          Registrarás felicitaciones y logros destacados
-                          compartidos por el profesorado.
+                          {t("parent.libro_clases.observations.recognitions_desc")}
                         </p>
                       </div>
                       <div className="rounded-lg border p-4">
-                        <p className="text-sm font-semibold">Compromisos</p>
+                        <p className="text-sm font-semibold">{t("parent.libro_clases.observations.commitments")}</p>
                         <p className="text-sm text-muted-foreground">
-                          Documenta acuerdos de entrevistas y planes de apoyo
-                          familiar.
+                          {t("parent.libro_clases.observations.commitments_desc")}
                         </p>
                       </div>
                     </div>
 
                     <p className="text-sm text-muted-foreground">
-                      Las anotaciones respetan los protocolos de convivencia
-                      escolar y se sincronizan con Inspectoría General.
+                      {t("parent.libro_clases.observations.school_regulations")}
                     </p>
                   </CardContent>
                 </Card>
@@ -824,24 +800,22 @@ export function ParentLibroClasesView({
               <TabsContent value="meetings">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Reuniones y entrevistas</CardTitle>
+                    <CardTitle>{t("parent.libro_clases.meetings.title")}</CardTitle>
                     <CardDescription>
-                      Gestiona reuniones de apoderados, entrevistas PIE y
-                      compromisos pendientes.
+                      {t("parent.libro_clases.meetings.desc")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-sm text-muted-foreground">
-                      Revisa el calendario institucional y confirma asistencia a
-                      entrevistas desde la sección de reuniones.
+                      {t("parent.libro_clases.meetings.calendar_access")}
                     </p>
                     <div className="flex flex-wrap gap-3">
                       <Link href="/parent/reuniones" className="inline-flex">
-                        <Button variant="secondary">Ir a reuniones</Button>
+                        <Button variant="secondary">{t("parent.libro_clases.meetings.actions.go_to_meetings")}</Button>
                       </Link>
                       <Link href="/parent/comunicacion" className="inline-flex">
                         <Button variant="outline">
-                          Contactar a Inspectoría
+                          {t("parent.libro_clases.meetings.actions.contact_inspection")}
                         </Button>
                       </Link>
                     </div>

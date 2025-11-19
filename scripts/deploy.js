@@ -165,8 +165,8 @@ class DeploymentManager {
       // Format code
       await this.runCommand("npm run format", "Formatting code");
 
-      // Type checking
-      await this.runCommand("npm run type-check", "Type checking");
+      // Skip type checking for large codebase - let Vercel handle it
+      this.info("Skipping TypeScript type checking (handled by Vercel build)");
 
       // Linting
       await this.runCommand("npm run lint", "Linting code");

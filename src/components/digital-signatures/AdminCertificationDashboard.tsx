@@ -57,6 +57,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 type RecordType =
   | "CLASS_CONTENT"
@@ -77,6 +78,7 @@ interface AdminCertificationDashboardProps {
 export function AdminCertificationDashboard({
   userId,
 }: AdminCertificationDashboardProps) {
+  const { t } = useLanguage();
   const [selectedRecordType, setSelectedRecordType] = useState<
     RecordType | "ALL"
   >("ALL");
@@ -105,12 +107,12 @@ export function AdminCertificationDashboard({
 
   const getRecordTypeLabel = (type: RecordType): string => {
     const labels: Record<RecordType, string> = {
-      CLASS_CONTENT: "Contenido",
-      ATTENDANCE: "Asistencia",
-      OBSERVATION: "Observación",
-      GRADE: "Calificación",
-      MEETING: "Reunión",
-      PARENT_MEETING: "Reunión Apoderado",
+      CLASS_CONTENT: t("digital-signatures.certification.content"),
+      ATTENDANCE: t("digital-signatures.certification.attendance"),
+      OBSERVATION: t("digital-signatures.certification.observation"),
+      GRADE: t("digital-signatures.certification.grade"),
+      MEETING: t("digital-signatures.certification.meeting"),
+      PARENT_MEETING: t("digital-signatures.certification.parent_meeting"),
     };
     return labels[type];
   };
@@ -133,7 +135,7 @@ export function AdminCertificationDashboard({
   const certifySignatureWithToast = async (
     signatureId: Id<"digitalSignatures">,
     successMessage: string,
-    errorPrefix: string = "Error al certificar",
+    errorPrefix: string = t("digital-signatures.certification.certify_error"),
   ) => {
     setIsCertifying(true);
     try {
@@ -154,7 +156,7 @@ export function AdminCertificationDashboard({
 
   const handleBulkCertify = async () => {
     if (selectedRecords.length === 0) {
-      toast.error("Debe seleccionar al menos un registro");
+      toast.error(t("digital-signatures.certification.select_at_least_one"));
       return;
     }
 
@@ -173,11 +175,11 @@ export function AdminCertificationDashboard({
       }
 
       toast.success(
-        `${successCount} de ${selectedRecords.length} registro(s) certificado(s) exitosamente`,
+        `${successCount} de ${selectedRecords.length} ${t("digital-signatures.certification.records_certified_success")}`,
       );
       setSelectedRecords([]);
     } catch (error: any) {
-      toast.error(error.message || "Error al certificar registros");
+      toast.error(error.message || t("digital-signatures.certification.bulk_certify_error"));
     } finally {
       setIsCertifying(false);
     }
@@ -186,8 +188,8 @@ export function AdminCertificationDashboard({
   const handleCertifySingle = async (signatureId: Id<"digitalSignatures">) => {
     await certifySignatureWithToast(
       signatureId,
-      "Registro certificado exitosamente",
-      "Error al certificar el registro",
+      t("digital-signatures.certification.certify_success"),
+      t("digital-signatures.certification.certify_error"),
     );
   };
 
@@ -219,10 +221,10 @@ export function AdminCertificationDashboard({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
-            Certificación de Registros
+            {t("digital-signatures.certification.title")}
           </h2>
           <p className="text-muted-foreground">
-            Gestión de firmas digitales y certificación según Circular N°30
+            {t("digital-signatures.certification.description")}
           </p>
         </div>
       </div>
@@ -231,7 +233,7 @@ export function AdminCertificationDashboard({
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pendientes</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("digital-signatures.certification.pending")}</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -239,14 +241,14 @@ export function AdminCertificationDashboard({
               {uncertifiedSignatures?.length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
-              Registros sin certificar
+              {t("digital-signatures.certification.pending_records")}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Contenidos</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("digital-signatures.certification.content")}</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -256,14 +258,14 @@ export function AdminCertificationDashboard({
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
-              Pendientes de certificar
+              {t("digital-signatures.certification.pending_records")}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Asistencias</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("digital-signatures.certification.attendance")}</CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -273,7 +275,7 @@ export function AdminCertificationDashboard({
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
-              Pendientes de certificar
+              {t("digital-signatures.certification.pending_records")}
             </p>
           </CardContent>
         </Card>
@@ -281,7 +283,7 @@ export function AdminCertificationDashboard({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Calificaciones
+              {t("digital-signatures.certification.grade")}
             </CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -292,7 +294,7 @@ export function AdminCertificationDashboard({
               ).length || 0}
             </div>
             <p className="text-xs text-muted-foreground">
-              Pendientes de certificar
+              {t("digital-signatures.certification.pending_records")}
             </p>
           </CardContent>
         </Card>
@@ -301,15 +303,15 @@ export function AdminCertificationDashboard({
       {/* Filters and Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Filtros y Búsqueda</CardTitle>
+          <CardTitle>{t("digital-signatures.certification.filters_and_search")}</CardTitle>
           <CardDescription>
-            Busque y filtre registros pendientes de certificación
+            {t("digital-signatures.certification.search_records")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Tipo de Registro</label>
+              <label className="text-sm font-medium">{t("digital-signatures.certification.record_type")}</label>
               <Select
                 value={selectedRecordType}
                 onValueChange={(value: string) =>
@@ -320,20 +322,20 @@ export function AdminCertificationDashboard({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">Todos</SelectItem>
-                  <SelectItem value="CLASS_CONTENT">Contenidos</SelectItem>
-                  <SelectItem value="ATTENDANCE">Asistencias</SelectItem>
-                  <SelectItem value="GRADE">Calificaciones</SelectItem>
-                  <SelectItem value="OBSERVATION">Observaciones</SelectItem>
-                  <SelectItem value="MEETING">Reuniones</SelectItem>
+                  <SelectItem value="ALL">{t("digital-signatures.certification.all")}</SelectItem>
+                  <SelectItem value="CLASS_CONTENT">{t("digital-signatures.certification.contents")}</SelectItem>
+                  <SelectItem value="ATTENDANCE">{t("digital-signatures.certification.attendances")}</SelectItem>
+                  <SelectItem value="GRADE">{t("digital-signatures.certification.grades")}</SelectItem>
+                  <SelectItem value="OBSERVATION">{t("digital-signatures.certification.observations")}</SelectItem>
+                  <SelectItem value="MEETING">{t("digital-signatures.certification.meetings")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Búsqueda</label>
+              <label className="text-sm font-medium">{t("common.search", "Buscar")}</label>
               <Input
-                placeholder="Buscar por ID o nombre..."
+                placeholder={t("digital-signatures.certification.search_placeholder")}
                 value={searchTerm}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setSearchTerm(e.target.value)
@@ -342,7 +344,7 @@ export function AdminCertificationDashboard({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Curso</label>
+              <label className="text-sm font-medium">{t("digital-signatures.certification.course")}</label>
               <Select
                 value={selectedCourseId || "ALL"}
                 onValueChange={(value: string) =>
@@ -355,7 +357,7 @@ export function AdminCertificationDashboard({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">Todos los cursos</SelectItem>
+                  <SelectItem value="ALL">{t("digital-signatures.certification.all_courses")}</SelectItem>
                   {courses?.map((course: Doc<"courses">) => (
                     <SelectItem key={course._id} value={course._id}>
                       {course.name} - {course.grade} {course.section}
@@ -372,8 +374,8 @@ export function AdminCertificationDashboard({
                 className="w-full"
               >
                 {isCertifying
-                  ? "Certificando..."
-                  : `Certificar ${selectedRecords.length} seleccionado(s)`}
+                  ? t("digital-signatures.certification.certifying")
+                  : `${t("digital-signatures.certification.certify_selected")} (${selectedRecords.length})`}
               </Button>
             </div>
           </div>
@@ -383,17 +385,16 @@ export function AdminCertificationDashboard({
       {/* Pending Certifications Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Registros Pendientes de Certificación</CardTitle>
+          <CardTitle>{t("digital-signatures.certification.pending_certifications")}</CardTitle>
           <CardDescription>
-            Lista de registros firmados que requieren certificación por
-            administrador
+            {t("digital-signatures.certification.pending_certifications_desc")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {uncertifiedSignatures === undefined ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-pulse text-muted-foreground">
-                Cargando certificaciones...
+                {t("digital-signatures.certification.loading_certifications")}
               </div>
             </div>
           ) : filteredSignatures && filteredSignatures.length > 0 ? (
@@ -401,8 +402,7 @@ export function AdminCertificationDashboard({
               <Alert>
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Seleccione uno o varios registros y certifique su firma
-                  digital para cumplir con la normativa Circular N°30.
+                  {t("digital-signatures.certification.select_records_alert")}
                 </AlertDescription>
               </Alert>
 
@@ -427,12 +427,12 @@ export function AdminCertificationDashboard({
                         }}
                       />
                     </TableHead>
-                    <TableHead>Tipo</TableHead>
-                    <TableHead>ID Registro</TableHead>
-                    <TableHead>Firmado Por</TableHead>
-                    <TableHead>Fecha</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead className="text-right">Acciones</TableHead>
+                    <TableHead>{t("digital-signatures.certification.type")}</TableHead>
+                    <TableHead>{t("digital-signatures.certification.record_id")}</TableHead>
+                    <TableHead>{t("digital-signatures.certification.signed_by")}</TableHead>
+                    <TableHead>{t("digital-signatures.certification.date")}</TableHead>
+                    <TableHead>{t("digital-signatures.certification.status")}</TableHead>
+                    <TableHead className="text-right">{t("digital-signatures.certification.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -458,7 +458,7 @@ export function AdminCertificationDashboard({
                         {sig.recordId.substring(0, 16)}...
                       </TableCell>
                       <TableCell>
-                        {sig.signer?.name || sig.signer?.email || "Desconocido"}
+                        {sig.signer?.name || sig.signer?.email || t("digital-signatures.certification.unknown")}
                       </TableCell>
                       <TableCell>
                         {format(sig.createdAt, "dd/MM/yyyy HH:mm", {
@@ -468,7 +468,7 @@ export function AdminCertificationDashboard({
                       <TableCell>
                         <Badge variant="secondary" className="bg-yellow-500">
                           <Clock className="h-3 w-3 mr-1" />
-                          Pendiente
+                          {t("digital-signatures.certification.pending")}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -482,7 +482,7 @@ export function AdminCertificationDashboard({
                           disabled={isCertifying}
                         >
                           <CheckCircle className="h-4 w-4 mr-2" />
-                          Certificar
+                          {t("digital-signatures.certification.certify")}
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -493,8 +493,8 @@ export function AdminCertificationDashboard({
           ) : (
             <div className="text-center py-12 text-muted-foreground">
               <CheckCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">Sin registros pendientes</p>
-              <p className="text-sm">Todos los registros están certificados</p>
+              <p className="text-lg font-medium">{t("digital-signatures.certification.no_pending_records")}</p>
+              <p className="text-sm">{t("digital-signatures.certification.all_records_certified")}</p>
             </div>
           )}
         </CardContent>

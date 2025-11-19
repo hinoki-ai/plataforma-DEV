@@ -57,5 +57,100 @@
   "students.name": "Nombre",
   "students.rut": "RUT",
   "students.grade": "Grado",
-  "students.status": "Estado"
+  "students.status": "Estado",
+  "observations": {
+    "form": {
+      "title": "Registro de Observación",
+      "student_label": "Estudiante",
+      "date_label": "Fecha",
+      "date_placeholder": "Seleccionar fecha",
+      "type_label": "Tipo de Observación",
+      "type_placeholder": "Seleccione tipo",
+      "category_label": "Categoría",
+      "category_placeholder": "Seleccione categoría",
+      "subject_label": "Asignatura (Opcional)",
+      "subject_placeholder": "ej: Matemáticas",
+      "subject_description": "Si aplica a una asignatura específica",
+      "severity_label": "Nivel de Gravedad",
+      "severity_placeholder": "Seleccione nivel",
+      "severity_description": "Requerido para observaciones negativas según reglamento MINEDUC",
+      "observation_label": "Observación",
+      "observation_placeholder": "Describa la observación de forma clara y objetiva...",
+      "observation_description": "Sea específico y objetivo. Describa hechos concretos.",
+      "actions_taken_label": "Acciones Tomadas",
+      "actions_taken_placeholder": "Describa las medidas o acciones tomadas...",
+      "actions_taken_description": "Requerido para observaciones graves y gravísimas",
+      "notify_parent_label": "Notificar al Apoderado",
+      "notify_parent_description": "Enviar notificación automática al apoderado del estudiante",
+      "save_button": "Registrar Observación",
+      "saving_button": "Guardando...",
+      "cancel_button": "Cancelar",
+      "success_message": "Observación registrada exitosamente",
+      "success_with_notification": "Observación registrada y notificación enviada al apoderado",
+      "error_save": "Error al registrar observación",
+      "validation": {
+        "date_required": "Debe seleccionar una fecha",
+        "type_required": "Debe seleccionar un tipo de observación",
+        "category_required": "Debe seleccionar una categoría",
+        "severity_required_negative": "Debe seleccionar el nivel de gravedad para observaciones negativas",
+        "actions_required_serious": "Debe describir las acciones tomadas para observaciones graves o gravísimas",
+        "observation_min_length": "La observación debe tener al menos 10 caracteres"
+      }
+    },
+    "types": {
+      "positive": "Positiva",
+      "negative": "Negativa",
+      "neutral": "Neutra"
+    },
+    "categories": {
+      "behavior": "Comportamiento",
+      "academic_performance": "Rendimiento Académico",
+      "attendance": "Asistencia",
+      "participation": "Participación",
+      "responsibility": "Responsabilidad",
+      "school_coexistence": "Convivencia Escolar",
+      "other": "Otro"
+    },
+    "severity": {
+      "leve": "Leve",
+      "grave": "Grave",
+      "gravísima": "Gravísima",
+      "label_leve": "Leve",
+      "label_grave": "Grave",
+      "label_gravisima": "Gravísima"
+    },
+    "alerts": {
+      "serious_observation_title": "Observación Gravísima",
+      "serious_observation_description": "Las observaciones gravísimas requieren notificación obligatoria al apoderado y pueden requerir seguimiento adicional según el reglamento de convivencia escolar."
+    }
+  },
+  "form": {
+    "class_content": {
+      "title": "Registro de Contenido de Clase",
+      "loading_course": "Cargando información del curso...",
+      "course_not_found": "Curso no encontrado",
+      "date_label": "Fecha de la Clase",
+      "date_placeholder": "Seleccionar fecha",
+      "date_description": "No se puede registrar contenido para fechas futuras",
+      "subject_label": "Asignatura",
+      "subject_placeholder": "Seleccione asignatura",
+      "period_label": "Período (Opcional)",
+      "topic_label": "Tema",
+      "objectives_label": "Objetivos de Aprendizaje",
+      "content_label": "Contenido de la Clase",
+      "activities_label": "Actividades (Opcional)",
+      "resources_label": "Recursos (Opcional)",
+      "homework_label": "Tarea (Opcional)",
+      "learning_objectives_label": "Objetivos de Aprendizaje",
+      "learning_objectives_description": "Vincula este contenido a objetivos de aprendizaje específicos",
+      "save_button": "Guardar Contenido",
+      "saving_button": "Guardando...",
+      "cancel_button": "Cancelar",
+      "success_save": "Contenido registrado exitosamente",
+      "success_update": "Contenido actualizado exitosamente",
+      "oa_linked_success": "OA vinculado exitosamente",
+      "oa_link_error": "Contenido guardado, pero hubo un error al vincular algunos OA",
+      "save_error": "Error al guardar el contenido"
+    }
+  }
 }

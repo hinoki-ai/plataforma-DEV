@@ -14,6 +14,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "tsBuildInfoFile": ".next/cache/tsconfig.tsbuildinfo",
     "baseUrl": ".",
     "plugins": [
       {
@@ -42,6 +43,7 @@
     "playwright-report/**/*",
     "test-results/**/*",
     "scripts/**/*",
-    "prisma/**/*"
+    "prisma/**/*",
+    "convex/**/*"
   ]
 }

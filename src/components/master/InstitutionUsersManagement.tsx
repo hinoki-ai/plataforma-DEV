@@ -30,6 +30,7 @@ import {
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useParams } from "next/navigation";
+import { useLanguage } from "@/components/language/LanguageContext";
 
 const ROLE_ICONS: Record<string, React.ReactNode> = {
   MASTER: <Shield className="h-4 w-4 text-red-500" />,
@@ -39,7 +40,16 @@ const ROLE_ICONS: Record<string, React.ReactNode> = {
   PUBLIC: <User className="h-4 w-4 text-gray-500" />,
 };
 
+const ROLE_LABELS: Record<string, string> = {
+  MASTER: "master.institution_users.role_master",
+  ADMIN: "master.institution_users.role_admin",
+  PROFESOR: "master.institution_users.role_teacher",
+  PARENT: "master.institution_users.role_parent",
+  PUBLIC: "master.institution_users.role_public",
+};
+
 export function InstitutionUsersManagement() {
+  const { t } = useLanguage();
   const params = useParams();
   const institutionId = params.institutionId as Id<"institutionInfo">;
 
@@ -55,6 +65,7 @@ export function InstitutionUsersManagement() {
     return (
       <div className="flex justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="mt-2 text-muted-foreground">{t("master.institution_users.loading")}</p>
       </div>
     );
   }
@@ -68,10 +79,10 @@ export function InstitutionUsersManagement() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5 text-blue-600" />
-          Usuarios - {institution.name}
+          {t("master.institution_users.title")} - {institution.name}
         </CardTitle>
         <CardDescription>
-          Gestión de usuarios para {institution.name}
+          {t("master.institution_users.subtitle").replace("{institutionName}", institution.name)}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -79,11 +90,11 @@ export function InstitutionUsersManagement() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Usuario</TableHead>
-                <TableHead>Rol en Institución</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Estado Membresía</TableHead>
-                <TableHead>Registrado</TableHead>
+                <TableHead>{t("master.institution_users.user")}</TableHead>
+                <TableHead>{t("master.institution_users.role_in_institution")}</TableHead>
+                <TableHead>{t("master.institution_users.email")}</TableHead>
+                <TableHead>{t("master.institution_users.membership_status")}</TableHead>
+                <TableHead>{t("master.institution_users.registered_date")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -99,7 +110,7 @@ export function InstitutionUsersManagement() {
                       {ROLE_ICONS[user.role as string] || (
                         <User className="h-4 w-4" />
                       )}
-                      <Badge variant="outline">{user.role}</Badge>
+                      <Badge variant="outline">{t(ROLE_LABELS[user.role as string] || "master.institution_users.role_public")}</Badge>
                     </div>
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
@@ -114,7 +125,10 @@ export function InstitutionUsersManagement() {
                           : ""
                       }
                     >
-                      {user.status}
+                      {user.status === "ACTIVE"
+                        ? t("master.institution_users.status_active")
+                        : t("master.institution_users.status_inactive")
+                      }
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -130,7 +144,7 @@ export function InstitutionUsersManagement() {
                     colSpan={5}
                     className="text-center py-8 text-muted-foreground"
                   >
-                    No hay usuarios registrados en esta institución
+                    {t("master.institution_users.no_users")}
                   </TableCell>
                 </TableRow>
               )}

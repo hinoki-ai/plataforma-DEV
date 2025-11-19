@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery } from "convex/react";
@@ -40,25 +40,20 @@ import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { OASelector } from "./OASelector";
 import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
+import { useLanguage } from "@/components/language/LanguageContext";
 
-const classContentSchema = z.object({
-  date: z.date({
-    message: "Debe seleccionar una fecha",
-  }),
-  subject: z.string().min(1, "La asignatura es requerida"),
-  topic: z.string().min(3, "El tema debe tener al menos 3 caracteres"),
-  objectives: z
-    .string()
-    .min(10, "Los objetivos deben tener al menos 10 caracteres"),
-  content: z.string().min(20, "El contenido debe tener al menos 20 caracteres"),
-  activities: z.string().optional(),
-  resources: z.string().optional(),
-  homework: z.string().optional(),
-  period: z.string().optional(),
-  selectedOAIds: z.array(z.string()).optional(), // OA IDs as strings for form
-});
-
-type ClassContentFormData = z.infer<typeof classContentSchema>;
+type ClassContentFormData = {
+  date: Date;
+  subject: string;
+  topic: string;
+  objectives: string;
+  content: string;
+  activities?: string;
+  resources?: string;
+  homework?: string;
+  period?: string;
+  selectedOAIds?: string[];
+};
 
 interface ClassContentFormProps {
   courseId: Id<"courses">;
@@ -75,6 +70,7 @@ export function ClassContentForm({
   onCancel,
   initialData,
 }: ClassContentFormProps) {
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSignatureModal, setShowSignatureModal] = useState(false);
   const [savedContentId, setSavedContentId] =
@@ -82,6 +78,24 @@ export function ClassContentForm({
 
   // Get course details to show available subjects
   const course = useQuery(api.courses.getCourseById, { courseId });
+
+  // Define schema with translations
+  const classContentSchema = z.object({
+    date: z.date({
+      message: t("form.validation.date_required"),
+    }),
+    subject: z.string().min(1, t("form.validation.subject_required")),
+    topic: z.string().min(3, t("form.validation.topic_min_length")),
+    objectives: z
+      .string()
+      .min(10, t("form.validation.objectives_min_length")),
+    content: z.string().min(20, t("form.validation.content_min_length")),
+    activities: z.string().optional(),
+    resources: z.string().optional(),
+    homework: z.string().optional(),
+    period: z.string().optional(),
+    selectedOAIds: z.array(z.string()).optional(), // OA IDs as strings for form
+  });
 
   const createContent = useMutation(api.classContent.createClassContent);
   const updateContent = useMutation(api.classContent.updateClassContent);
@@ -121,6 +135,11 @@ export function ClassContentForm({
       period: initialData?.period || "",
       selectedOAIds: [],
     },
+  });
+
+  const watchedSubject = useWatch({
+    control: form.control,
+    name: "subject",
   });
 
   const onSubmit = async (data: ClassContentFormData) => {
@@ -211,7 +230,7 @@ export function ClassContentForm({
     return (
       <div className="flex items-center justify-center p-12">
         <div className="animate-pulse text-muted-foreground">
-          Cargando información del curso...
+          {t("libro-clases.form.class_content.loading_course")}
         </div>
       </div>
     );
@@ -220,7 +239,7 @@ export function ClassContentForm({
   if (!course) {
     return (
       <div className="text-center p-12 text-muted-foreground">
-        Curso no encontrado
+        {t("libro-clases.form.class_content.course_not_found")}
       </div>
     );
   }
@@ -235,7 +254,7 @@ export function ClassContentForm({
           </div>
           <div>
             <h3 className="text-lg font-semibold">
-              Registro de Contenido de Clase
+              {t("libro-clases.form.class_content.title")}
             </h3>
             <p className="text-sm text-muted-foreground">
               {course.name} - {course.grade} {course.section}
@@ -250,7 +269,7 @@ export function ClassContentForm({
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Fecha de la Clase</FormLabel>
+                <FormLabel>{t("libro-clases.form.class_content.date_label")}</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -265,7 +284,7 @@ export function ClassContentForm({
                         {field.value ? (
                           format(field.value, "PPP", { locale: es })
                         ) : (
-                          <span>Seleccionar fecha</span>
+                          <span>{t("libro-clases.form.class_content.date_placeholder")}</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -283,7 +302,7 @@ export function ClassContentForm({
                   </PopoverContent>
                 </Popover>
                 <FormDescription>
-                  No se puede registrar contenido para fechas futuras
+                  {t("libro-clases.form.class_content.date_description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -295,7 +314,7 @@ export function ClassContentForm({
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Asignatura</FormLabel>
+                <FormLabel>{t("libro-clases.form.class_content.subject_label")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -304,7 +323,7 @@ export function ClassContentForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "subject")}
                     >
-                      <SelectValue placeholder="Seleccione asignatura" />
+                      <SelectValue placeholder={t("libro-clases.form.class_content.subject_placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -401,14 +420,14 @@ export function ClassContentForm({
               <FormControl>
                 <OASelector
                   courseId={courseId}
-                  subject={form.watch("subject")}
+                  subject={watchedSubject}
                   value={(field.value || []).map(
                     (id) => id as Id<"learningObjectives">,
                   )}
                   onChange={(ids) => {
                     field.onChange(ids.map((id) => id.toString()));
                   }}
-                  disabled={!form.watch("subject")}
+                  disabled={!watchedSubject}
                 />
               </FormControl>
               <FormDescription>

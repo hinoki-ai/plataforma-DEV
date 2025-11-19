@@ -898,12 +898,12 @@ export default function PricingCalculatorPage({
                   <div className="text-sm font-semibold text-gray-300">
                     {tc("calculator.payment_frequency")}
                   </div>
-                  <div className="flex">
+                  <div className="flex gap-1">
                     <Button
                       variant={
                         paymentFrequency === "monthly" ? "default" : "outline"
                       }
-                      className="justify-center py-2 flex-1 min-w-[200px]"
+                      className="justify-center py-2 flex-1 min-w-[175px]"
                       onClick={() => setPaymentFrequency("monthly")}
                       aria-label={tc("calculator.aria.monthly_payment")}
                       aria-pressed={paymentFrequency === "monthly"}
@@ -916,7 +916,7 @@ export default function PricingCalculatorPage({
                       variant={
                         paymentFrequency === "upfront" ? "default" : "outline"
                       }
-                      className="justify-center py-2 relative flex-[0.9] pr-8"
+                      className="justify-center py-2 relative flex-[1.0] pr-8"
                       onClick={() => setPaymentFrequency("upfront")}
                       aria-label={tc("calculator.aria.upfront_payment")}
                       aria-pressed={paymentFrequency === "upfront"}

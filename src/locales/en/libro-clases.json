@@ -57,5 +57,100 @@
   "students.name": "Name",
   "students.rut": "ID Number",
   "students.grade": "Grade",
-  "students.status": "Status"
+  "students.status": "Status",
+  "observations": {
+    "form": {
+      "title": "Observation Registration",
+      "student_label": "Student",
+      "date_label": "Date",
+      "date_placeholder": "Select date",
+      "type_label": "Observation Type",
+      "type_placeholder": "Select type",
+      "category_label": "Category",
+      "category_placeholder": "Select category",
+      "subject_label": "Subject (Optional)",
+      "subject_placeholder": "e.g. Mathematics",
+      "subject_description": "If it applies to a specific subject",
+      "severity_label": "Severity Level",
+      "severity_placeholder": "Select level",
+      "severity_description": "Required for negative observations according to MINEDUC regulations",
+      "observation_label": "Observation",
+      "observation_placeholder": "Describe the observation clearly and objectively...",
+      "observation_description": "Be specific and objective. Describe concrete facts.",
+      "actions_taken_label": "Actions Taken",
+      "actions_taken_placeholder": "Describe the measures or actions taken...",
+      "actions_taken_description": "Required for serious and very serious observations",
+      "notify_parent_label": "Notify Parent",
+      "notify_parent_description": "Send automatic notification to the student's parent",
+      "save_button": "Register Observation",
+      "saving_button": "Saving...",
+      "cancel_button": "Cancel",
+      "success_message": "Observation registered successfully",
+      "success_with_notification": "Observation registered and notification sent to parent",
+      "error_save": "Error registering observation",
+      "validation": {
+        "date_required": "Please select a date",
+        "type_required": "Please select an observation type",
+        "category_required": "Please select a category",
+        "severity_required_negative": "Please select severity level for negative observations",
+        "actions_required_serious": "Please describe actions taken for serious or very serious observations",
+        "observation_min_length": "Observation must be at least 10 characters"
+      }
+    },
+    "types": {
+      "positive": "Positive",
+      "negative": "Negative",
+      "neutral": "Neutral"
+    },
+    "categories": {
+      "behavior": "Behavior",
+      "academic_performance": "Academic Performance",
+      "attendance": "Attendance",
+      "participation": "Participation",
+      "responsibility": "Responsibility",
+      "school_coexistence": "School Coexistence",
+      "other": "Other"
+    },
+    "severity": {
+      "leve": "Minor",
+      "grave": "Serious",
+      "gravísima": "Very Serious",
+      "label_leve": "Minor",
+      "label_grave": "Serious",
+      "label_gravisima": "Very Serious"
+    },
+    "alerts": {
+      "serious_observation_title": "Very Serious Observation",
+      "serious_observation_description": "Very serious observations require mandatory parent notification and may require additional follow-up according to school coexistence regulations."
+    }
+  },
+  "form": {
+    "class_content": {
+      "title": "Class Content Registration",
+      "loading_course": "Loading course information...",
+      "course_not_found": "Course not found",
+      "date_label": "Class Date",
+      "date_placeholder": "Select date",
+      "date_description": "Content cannot be registered for future dates",
+      "subject_label": "Subject",
+      "subject_placeholder": "Select subject",
+      "period_label": "Period (Optional)",
+      "topic_label": "Topic",
+      "objectives_label": "Learning Objectives",
+      "content_label": "Class Content",
+      "activities_label": "Activities (Optional)",
+      "resources_label": "Resources (Optional)",
+      "homework_label": "Homework (Optional)",
+      "learning_objectives_label": "Learning Objectives",
+      "learning_objectives_description": "Link this content to specific learning objectives",
+      "save_button": "Save Content",
+      "saving_button": "Saving...",
+      "cancel_button": "Cancel",
+      "success_save": "Content registered successfully",
+      "success_update": "Content updated successfully",
+      "oa_linked_success": "OA linked successfully",
+      "oa_link_error": "Content saved, but there was an error linking some OA",
+      "save_error": "Error saving content"
+    }
+  }
 }

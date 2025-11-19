@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "convex/react";
@@ -48,38 +48,9 @@ import {
 import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
+import { useLanguage } from "@/components/language/LanguageContext";
 
-const observationSchema = z.object({
-  date: z.date({
-    message: "Debe seleccionar una fecha",
-  }),
-  type: z.enum(["POSITIVA", "NEGATIVA", "NEUTRA"], {
-    message: "Debe seleccionar un tipo de observación",
-  }),
-  category: z.enum(
-    [
-      "COMPORTAMIENTO",
-      "RENDIMIENTO",
-      "ASISTENCIA",
-      "PARTICIPACION",
-      "RESPONSABILIDAD",
-      "CONVIVENCIA",
-      "OTRO",
-    ],
-    {
-      message: "Debe seleccionar una categoría",
-    },
-  ),
-  observation: z
-    .string()
-    .min(10, "La observación debe tener al menos 10 caracteres"),
-  subject: z.string().optional(),
-  severity: z.enum(["LEVE", "GRAVE", "GRAVISIMA"]).optional(),
-  actionTaken: z.string().optional(),
-  notifyParent: z.boolean(),
-});
-
-type ObservationFormData = z.infer<typeof observationSchema>;
+// Schema and types will be defined inside the component
 
 interface ObservationFormProps {
   courseId: Id<"courses">;
@@ -90,42 +61,7 @@ interface ObservationFormProps {
   onCancel?: () => void;
 }
 
-const TYPE_CONFIG = {
-  POSITIVA: {
-    label: "Positiva",
-    color: "text-green-600",
-    bgColor: "bg-green-50",
-    icon: CheckCircle,
-  },
-  NEGATIVA: {
-    label: "Negativa",
-    color: "text-red-600",
-    bgColor: "bg-red-50",
-    icon: AlertTriangle,
-  },
-  NEUTRA: {
-    label: "Neutra",
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
-    icon: Info,
-  },
-} as const;
-
-const CATEGORY_LABELS = {
-  COMPORTAMIENTO: "Comportamiento",
-  RENDIMIENTO: "Rendimiento Académico",
-  ASISTENCIA: "Asistencia",
-  PARTICIPACION: "Participación",
-  RESPONSABILIDAD: "Responsabilidad",
-  CONVIVENCIA: "Convivencia Escolar",
-  OTRO: "Otro",
-};
-
-const SEVERITY_CONFIG = {
-  LEVE: { label: "Leve", color: "bg-yellow-100 text-yellow-800" },
-  GRAVE: { label: "Grave", color: "bg-orange-100 text-orange-800" },
-  GRAVISIMA: { label: "Gravísima", color: "bg-red-100 text-red-800" },
-};
+// Constants will be defined inside the component
 
 export function ObservationForm({
   courseId,
@@ -135,6 +71,77 @@ export function ObservationForm({
   onSuccess,
   onCancel,
 }: ObservationFormProps) {
+  const { t } = useLanguage();
+
+  const observationSchema = z.object({
+    date: z.date({
+      message: t("libro-clases.observations.form.validation.date_required"),
+    }),
+    type: z.enum(["POSITIVA", "NEGATIVA", "NEUTRA"], {
+      message: t("libro-clases.observations.form.validation.type_required"),
+    }),
+    category: z.enum(
+      [
+        "COMPORTAMIENTO",
+        "RENDIMIENTO",
+        "ASISTENCIA",
+        "PARTICIPACION",
+        "RESPONSABILIDAD",
+        "CONVIVENCIA",
+        "OTRO",
+      ],
+      {
+        message: t("libro-clases.observations.form.validation.category_required"),
+      },
+    ),
+    observation: z
+      .string()
+      .min(10, t("libro-clases.observations.form.validation.observation_min_length")),
+    subject: z.string().optional(),
+    severity: z.enum(["LEVE", "GRAVE", "GRAVISIMA"]).optional(),
+    actionTaken: z.string().optional(),
+    notifyParent: z.boolean(),
+  });
+
+  type ObservationFormData = z.infer<typeof observationSchema>;
+
+  const TYPE_CONFIG = {
+    POSITIVA: {
+      label: t("libro-clases.observations.types.positive"),
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+      icon: CheckCircle,
+    },
+    NEGATIVA: {
+      label: t("libro-clases.observations.types.negative"),
+      color: "text-red-600",
+      bgColor: "bg-red-50",
+      icon: AlertTriangle,
+    },
+    NEUTRA: {
+      label: t("libro-clases.observations.types.neutral"),
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+      icon: Info,
+    },
+  } as const;
+
+  const CATEGORY_LABELS = {
+    COMPORTAMIENTO: t("libro-clases.observations.categories.behavior"),
+    RENDIMIENTO: t("libro-clases.observations.categories.academic_performance"),
+    ASISTENCIA: t("libro-clases.observations.categories.attendance"),
+    PARTICIPACION: t("libro-clases.observations.categories.participation"),
+    RESPONSABILIDAD: t("libro-clases.observations.categories.responsibility"),
+    CONVIVENCIA: t("libro-clases.observations.categories.school_coexistence"),
+    OTRO: t("libro-clases.observations.categories.other"),
+  };
+
+  const SEVERITY_CONFIG = {
+    LEVE: { label: t("libro-clases.observations.severity.label_leve"), color: "bg-yellow-100 text-yellow-800" },
+    GRAVE: { label: t("libro-clases.observations.severity.label_grave"), color: "bg-orange-100 text-orange-800" },
+    GRAVISIMA: { label: t("libro-clases.observations.severity.label_gravisima"), color: "bg-red-100 text-red-800" },
+  };
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSignatureModal, setShowSignatureModal] = useState(false);
   const [savedObservationId, setSavedObservationId] =
@@ -154,8 +161,14 @@ export function ObservationForm({
     },
   });
 
-  const watchedType = form.watch("type");
-  const watchedSeverity = form.watch("severity");
+  const watchedType = useWatch({
+    control: form.control,
+    name: "type",
+  });
+  const watchedSeverity = useWatch({
+    control: form.control,
+    name: "severity",
+  });
 
   // Dynamic field order based on form state
   const fieldOrder = React.useMemo(() => {
@@ -187,7 +200,7 @@ export function ObservationForm({
     // Validate severity for negative observations
     if (data.type === "NEGATIVA" && !data.severity) {
       toast.error(
-        "Debe seleccionar el nivel de gravedad para observaciones negativas",
+        t("libro-clases.observations.form.validation.severity_required_negative"),
       );
       return;
     }
@@ -199,7 +212,7 @@ export function ObservationForm({
     ) {
       if (!data.actionTaken || data.actionTaken.trim().length === 0) {
         toast.error(
-          "Debe describir las acciones tomadas para observaciones graves o gravísimas",
+          t("libro-clases.observations.form.validation.actions_required_serious"),
         );
         return;
       }
@@ -223,10 +236,10 @@ export function ObservationForm({
 
       if (data.notifyParent) {
         toast.success(
-          "Observación registrada y notificación enviada al apoderado",
+          t("libro-clases.observations.form.success_with_notification"),
         );
       } else {
-        toast.success("Observación registrada exitosamente");
+        toast.success(t("libro-clases.observations.form.success_message"));
       }
 
       // Show signature modal after saving
@@ -235,7 +248,7 @@ export function ObservationForm({
 
       // Don't call onSuccess here - wait for signature
     } catch (error: any) {
-      toast.error(error.message || "Error al registrar observación");
+      toast.error(error.message || t("libro-clases.observations.form.error_save"));
       setIsSubmitting(false);
     }
   };
@@ -248,9 +261,9 @@ export function ObservationForm({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b">
           <div>
-            <h3 className="text-lg font-semibold">Registro de Observación</h3>
+            <h3 className="text-lg font-semibold">{t("libro-clases.observations.form.title")}</h3>
             <p className="text-sm text-muted-foreground">
-              Estudiante: <span className="font-medium">{studentName}</span>
+              {t("libro-clases.observations.form.student_label")}: <span className="font-medium">{studentName}</span>
             </p>
           </div>
           {typeConfig && (
@@ -271,7 +284,7 @@ export function ObservationForm({
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Fecha</FormLabel>
+                <FormLabel>{t("libro-clases.observations.form.date_label")}</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -286,7 +299,7 @@ export function ObservationForm({
                         {field.value ? (
                           format(field.value, "PPP", { locale: es })
                         ) : (
-                          <span>Seleccionar fecha</span>
+                          <span>{t("libro-clases.observations.form.date_placeholder")}</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -313,14 +326,14 @@ export function ObservationForm({
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tipo de Observación</FormLabel>
+                <FormLabel>{t("libro-clases.observations.form.type_label")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Seleccione tipo" />
+                      <SelectValue placeholder={t("libro-clases.observations.form.type_placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -349,7 +362,7 @@ export function ObservationForm({
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Categoría</FormLabel>
+                <FormLabel>{t("libro-clases.observations.form.category_label")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -358,7 +371,7 @@ export function ObservationForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "category")}
                     >
-                      <SelectValue placeholder="Seleccione categoría" />
+                      <SelectValue placeholder={t("libro-clases.observations.form.category_placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -379,16 +392,16 @@ export function ObservationForm({
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Asignatura (Opcional)</FormLabel>
+                <FormLabel>{t("libro-clases.observations.form.subject_label")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Ej: Matemáticas"
+                    placeholder={t("libro-clases.observations.form.subject_placeholder")}
                     {...field}
                     onKeyDown={(e) => handleKeyDown(e, "subject")}
                   />
                 </FormControl>
                 <FormDescription>
-                  Si aplica a una asignatura específica
+                  {t("libro-clases.observations.form.subject_description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -403,7 +416,7 @@ export function ObservationForm({
             name="severity"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nivel de Gravedad</FormLabel>
+                <FormLabel>{t("libro-clases.observations.form.severity_label")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -412,7 +425,7 @@ export function ObservationForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "severity")}
                     >
-                      <SelectValue placeholder="Seleccione nivel" />
+                      <SelectValue placeholder={t("libro-clases.observations.form.severity_placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -426,8 +439,7 @@ export function ObservationForm({
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Requerido para observaciones negativas según reglamento
-                  MINEDUC
+                  {t("libro-clases.observations.form.severity_description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -441,17 +453,17 @@ export function ObservationForm({
           name="observation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Observación</FormLabel>
+              <FormLabel>{t("libro-clases.observations.form.observation_label")}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Describa la observación de forma clara y objetiva..."
+                  placeholder={t("libro-clases.observations.form.observation_placeholder")}
                   rows={5}
                   {...field}
                   onKeyDown={(e) => handleKeyDown(e, "observation")}
                 />
               </FormControl>
               <FormDescription>
-                Sea específico y objetivo. Describa hechos concretos.
+                {t("libro-clases.observations.form.observation_description")}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -466,17 +478,17 @@ export function ObservationForm({
               name="actionTaken"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Acciones Tomadas</FormLabel>
+                  <FormLabel>{t("libro-clases.observations.form.actions_taken_label")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Describa las medidas o acciones tomadas..."
+                      placeholder={t("libro-clases.observations.form.actions_taken_placeholder")}
                       rows={3}
                       {...field}
                       onKeyDown={(e) => handleKeyDown(e, "actionTaken")}
                     />
                   </FormControl>
                   <FormDescription>
-                    Requerido para observaciones graves y gravísimas
+                    {t("libro-clases.observations.form.actions_taken_description")}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -493,10 +505,10 @@ export function ObservationForm({
               <div className="space-y-0.5">
                 <FormLabel className="text-base flex items-center gap-2">
                   <Bell className="h-4 w-4" />
-                  Notificar al Apoderado
+                  {t("libro-clases.observations.form.notify_parent_label")}
                 </FormLabel>
                 <FormDescription>
-                  Enviar notificación automática al apoderado del estudiante
+                  {t("libro-clases.observations.form.notify_parent_description")}
                 </FormDescription>
               </div>
               <FormControl>
@@ -514,11 +526,9 @@ export function ObservationForm({
         {watchedSeverity === "GRAVISIMA" && (
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Observación Gravísima</AlertTitle>
+            <AlertTitle>{t("libro-clases.observations.alerts.serious_observation_title")}</AlertTitle>
             <AlertDescription>
-              Las observaciones gravísimas requieren notificación obligatoria al
-              apoderado y pueden requerir seguimiento adicional según el
-              reglamento de convivencia escolar.
+              {t("libro-clases.observations.alerts.serious_observation_description")}
             </AlertDescription>
           </Alert>
         )}
@@ -532,11 +542,11 @@ export function ObservationForm({
               onClick={onCancel}
               disabled={isSubmitting}
             >
-              Cancelar
+              {t("libro-clases.observations.form.cancel_button")}
             </Button>
           )}
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Guardando..." : "Registrar Observación"}
+            {isSubmitting ? t("libro-clases.observations.form.saving_button") : t("libro-clases.observations.form.save_button")}
           </Button>
         </div>
       </form>

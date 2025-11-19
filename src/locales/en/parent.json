@@ -248,5 +248,113 @@
   "parent.protocols.fundamental": "Fundamental",
   "parent.protocols.important": "Important",
   "parent.protocols.referential": "Referential",
-  "parent.protocols.motivational": "Motivational"
+  "parent.protocols.motivational": "Motivational",
+  "parent.libro_clases": {
+    "title": "Family Class Book",
+    "subtitle": "Monitor the comprehensive progress of your children",
+    "tabs": {
+      "overview": "Summary",
+      "grades": "Grades and Evaluations",
+      "attendance": "Academic Calendar",
+      "observations": "Observations and Communications",
+      "meetings": "Meetings and Interviews"
+    },
+    "tab_descriptions": {
+      "overview": "Centralized view of all your children's academic information",
+      "grades": "Consult grades by subject and weighted averages",
+      "attendance": "Complete school calendar with events, meetings and attendance tracking",
+      "observations": "Access formative notes, recognitions and commitments",
+      "meetings": "Confirm and record agreements with teaching staff and inspection"
+    },
+    "course_selection": {
+      "select_course": "Select a Course",
+      "active_courses": "Active Courses",
+      "total_students": "Total Students",
+      "academic_year": "Academic Year",
+      "subjects": "Subjects",
+      "no_courses": "No courses available",
+      "no_courses_desc": "No active courses were found for your students",
+      "course_details": {
+        "students": "Students",
+        "subjects": "Subjects",
+        "head_teacher": "Head Teacher",
+        "academic_year": "Academic Year",
+        "read_only_view": "Read Only View"
+      }
+    },
+    "overview": {
+      "my_students": "My Students in this Course",
+      "my_students_desc": "List of your students enrolled in this course",
+      "subjects": "Subjects",
+      "subjects_desc": "Course subjects",
+      "no_students": "None of your students is enrolled in this course"
+    },
+    "grades": {
+      "read_only_notice": "Read-only view - You can view your students' grades",
+      "view_grades": "View Grades"
+    },
+    "attendance": {
+      "calendar_title": "Academic Calendar and Attendance",
+      "calendar_desc": "Visualize the complete school calendar with academic events, parent meetings and attendance tracking for your children.",
+      "current_course": "Current Course",
+      "events_this_month": "Events This Month",
+      "integrated_calendar": "Integrated Calendar",
+      "academic_events": "Academic events, meetings and activities",
+      "family_attendance": "Family Attendance",
+      "real_time_tracking": "Real-time tracking",
+      "automatic_notifications": "Automatic notifications of absences"
+    },
+    "observations": {
+      "title": "Observations and communications",
+      "desc": "Access positive notes, agreements and formative feedback.",
+      "recognitions": "Recognitions",
+      "recognitions_desc": "You will receive congratulations and outstanding achievements shared by teaching staff.",
+      "commitments": "Commitments",
+      "commitments_desc": "Record agreements from interviews and family support plans.",
+      "school_regulations": "School coexistence regulations and synchronized with General Inspection."
+    },
+    "meetings": {
+      "title": "Meetings and interviews",
+      "desc": "Manage parent meetings, PIE interviews and pending commitments.",
+      "calendar_access": "Access the institutional calendar and confirm attendance to interviews from the meetings section.",
+      "actions": "Quick Actions",
+      "go_to_meetings": "Go to meetings",
+      "contact_inspection": "Contact Inspection"
+    },
+    "status": {
+      "read_only": "Read Only",
+      "enrolled_since": "Enrolled since"
+    },
+    "loading": {
+      "checking_auth": "Checking authentication...",
+      "loading_data": "Loading class book data...",
+      "connection_error": "Connection Error",
+      "connection_error_desc": "Unable to connect to data server. This may be due to internet connection problems, unavailable server or Convex service configuration issues.",
+      "connection_error_detail": "Detail",
+      "retry": "Retry",
+      "reconnect": "Reconnect",
+      "reload_page": "Reload Page",
+      "development_info": "Development Information",
+      "convex_dev_note": "Make sure Convex service is running: run 'npx convex dev' in a separate terminal.",
+      "connection_status": "Connection Status",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "next_public_convex": "NEXT_PUBLIC_CONVEX_URL",
+      "configured": "Configured",
+      "not_configured": "Not configured"
+    },
+    "errors": {
+      "auth_required": "Authentication required",
+      "auth_required_desc": "You must log in to access the class book",
+      "login": "Go to login",
+      "tenancy_error": "Institution configuration required",
+      "tenancy_error_desc": "You need to be associated with an educational institution to use the class book",
+      "contact_admin": "Contact administrator",
+      "retry": "Retry",
+      "profile_not_found": "Family profile not found",
+      "profile_not_found_desc": "Contact the school to enable access",
+      "institution_selection": "No institution selected",
+      "institution_selection_desc": "To use the class book, your account must be associated with an educational establishment. Please contact the administrator to: Create or assign your account to an institution. Configure your membership with the appropriate role (PARENT, etc.)"
+    }
+  }
 }

@@ -248,5 +248,113 @@
   "parent.protocols.fundamental": "Fundamental",
   "parent.protocols.important": "Importante",
   "parent.protocols.referential": "Referencial",
-  "parent.protocols.motivational": "Motivacional"
+  "parent.protocols.motivational": "Motivacional",
+  "parent.libro_clases": {
+    "title": "Libro de Clases Familiar",
+    "subtitle": "Monitorea el progreso integral de tus hijos",
+    "tabs": {
+      "overview": "Resumen",
+      "grades": "Calificaciones y Evaluaciones",
+      "attendance": "Calendario Académico",
+      "observations": "Observaciones y Comunicaciones",
+      "meetings": "Reuniones y Entrevistas"
+    },
+    "tab_descriptions": {
+      "overview": "Vista centralizada de toda la información académica de tus hijos",
+      "grades": "Consulta notas por asignatura y promedios ponderados",
+      "attendance": "Calendario escolar completo con eventos, reuniones y seguimiento de asistencia",
+      "observations": "Accede a anotaciones formativas, reconocimientos y compromisos",
+      "meetings": "Confirma y registra acuerdos con profesorado e inspectoría"
+    },
+    "course_selection": {
+      "select_course": "Seleccione un Curso",
+      "active_courses": "Cursos Activos",
+      "total_students": "Total Estudiantes",
+      "academic_year": "Año Académico",
+      "subjects": "Asignaturas",
+      "no_courses": "No hay cursos disponibles",
+      "no_courses_desc": "No se encontraron cursos activos para sus estudiantes",
+      "course_details": {
+        "students": "Estudiantes",
+        "subjects": "Asignaturas",
+        "head_teacher": "Profesor Jefe",
+        "academic_year": "Año Académico",
+        "read_only_view": "Vista de Solo Lectura"
+      }
+    },
+    "overview": {
+      "my_students": "Mis Estudiantes en este Curso",
+      "my_students_desc": "Lista de sus estudiantes inscritos en este curso",
+      "subjects": "Asignaturas",
+      "subjects_desc": "Asignaturas del curso",
+      "no_students": "Ninguno de sus estudiantes está inscrito en este curso"
+    },
+    "grades": {
+      "read_only_notice": "Vista de solo lectura - Puede ver las calificaciones de sus estudiantes",
+      "view_grades": "Ver Calificaciones"
+    },
+    "attendance": {
+      "calendar_title": "Calendario Académico y Asistencia",
+      "calendar_desc": "Visualiza el calendario escolar completo con eventos académicos, reuniones de apoderados y seguimiento de asistencia de tus hijos.",
+      "current_course": "Curso Actual",
+      "events_this_month": "Eventos del Mes",
+      "integrated_calendar": "Calendario Integrado",
+      "academic_events": "Eventos académicos, reuniones y actividades",
+      "family_attendance": "Asistencia Familiar",
+      "real_time_tracking": "Seguimiento en Tiempo Real",
+      "automatic_notifications": "Notificaciones automáticas de ausencias"
+    },
+    "observations": {
+      "title": "Observaciones y comunicaciones",
+      "desc": "Accede a anotaciones positivas, acuerdos y retroalimentación formativa.",
+      "recognitions": "Reconocimientos",
+      "recognitions_desc": "Registrarás felicitaciones y logros destacados compartidos por el profesorado.",
+      "commitments": "Compromisos",
+      "commitments_desc": "Documenta acuerdos de entrevistas y planes de apoyo familiar.",
+      "school_regulations": "Las anotaciones respetan los protocolos de convivencia escolar y se sincronizan con Inspectoría General."
+    },
+    "meetings": {
+      "title": "Reuniones y entrevistas",
+      "desc": "Gestiona reuniones de apoderados, entrevistas PIE y compromisos pendientes.",
+      "calendar_access": "Revisa el calendario institucional y confirma asistencia a entrevistas desde la sección de reuniones.",
+      "actions": "Acciones Rápidas",
+      "go_to_meetings": "Ir a reuniones",
+      "contact_inspection": "Contactar a Inspectoría"
+    },
+    "status": {
+      "read_only": "Solo Vista",
+      "enrolled_since": "Inscrito desde"
+    },
+    "loading": {
+      "checking_auth": "Verificando autenticación...",
+      "loading_data": "Cargando datos del libro de clases...",
+      "connection_error": "Error de Conexión",
+      "connection_error_desc": "No se pudo conectar con el servidor de datos. Esto puede deberse a problemas de conexión a internet, servidor no disponible o problemas de configuración del servicio Convex.",
+      "connection_error_detail": "Detalle del error",
+      "retry": "Reintentar",
+      "reconnect": "Reconectar",
+      "reload_page": "Recargar Página",
+      "development_info": "Información de Desarrollo",
+      "convex_dev_note": "Asegúrese de que el servicio Convex esté ejecutándose: ejecute 'npx convex dev' en una terminal separada.",
+      "connection_status": "Estado de Conexión",
+      "connected": "Conectado",
+      "disconnected": "Desconectado",
+      "next_public_convex": "NEXT_PUBLIC_CONVEX_URL",
+      "configured": "Configurado",
+      "not_configured": "No configurado"
+    },
+    "errors": {
+      "auth_required": "Autenticación requerida",
+      "auth_required_desc": "Debes iniciar sesión para acceder al libro de clases",
+      "login": "Ir a iniciar sesión",
+      "tenancy_error": "Configuración de institución requerida",
+      "tenancy_error_desc": "Necesitas estar asociado a una institución educativa para usar el libro de clases",
+      "contact_admin": "Contactar administrador",
+      "retry": "Reintentar",
+      "profile_not_found": "Perfil familiar no encontrado",
+      "profile_not_found_desc": "Contacta al establecimiento para habilitar el acceso",
+      "institution_selection": "No se seleccionó institución",
+      "institution_selection_desc": "Para usar el libro de clases, tu cuenta debe estar asociada a un establecimiento educativo. Por favor contacta al administrador para: Crear o asignar tu cuenta a una institución. Configurar tu membresía con el rol apropiado (PARENT, etc.)"
+    }
+  }
 }

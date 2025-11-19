@@ -265,6 +265,37 @@ const planesESInline = {
     lets_talk: "Hablemos ahora mismo para confirmarlo.",
     please_contact: "Por favor contáctenme hoy para activarlo.",
     thanks: "Gracias!",
+    plan_not_compatible: "Plan no compatible",
+    plan_min_students_error: "El plan {plan} requiere mínimo {min} estudiantes",
+    plan_max_students_error: "El plan {plan} admite máximo {max} estudiantes",
+    change_to: "Cambiar a {plan}",
+    change_to_cycle: "Cambiar a ciclo {cycle}",
+    recommended_plan_available: "Plan recomendado disponible",
+    recommended_plan_description: "Para {students} estudiantes, el <strong>{plan}</strong> es más adecuado y puede ahorrarte dinero.",
+    best_option_available: "Mejor opción disponible",
+    best_option_description: "El ciclo {cycle} te ahorraría {amount} por {months} meses ({percent}% menos)",
+    price_includes_vat: "* Precio incluye IVA (19%)",
+    subtotal: "Subtotal:",
+    vat: "IVA (19%):",
+    total: "Total:",
+    institution_type_label: "Tipo de Institución",
+    aria: {
+      student_selector: "Selector de cantidad de estudiantes",
+      monthly_payment: "Pago mensual",
+      upfront_payment: "Pago completo por adelantado con 5% de descuento",
+      discount_5_percent: "5% de descuento",
+      student_count_range: "Número de estudiantes (rango: {min}{max})"
+    },
+    contacts: {
+      team_astral: "Tu Equipo Astral",
+      lead_developer_onboarding: "Lead Developer & Onboarding",
+      loreto: "Loreto",
+      onboarding_chief: "Onboarding Chief",
+      agustin: "Agustin",
+      lead_developer: "Lead Developer",
+      sales_team: "Equipo de Ventas",
+      sales_representative: "Sales Representative"
+    }
   },
 };
 
@@ -449,6 +480,37 @@ const planesENInline = {
     lets_talk: "Let's talk right now to confirm it.",
     please_contact: "Please contact me today to activate it.",
     thanks: "Thanks!",
+    plan_not_compatible: "Plan not compatible",
+    plan_min_students_error: "The {plan} plan requires a minimum of {min} students",
+    plan_max_students_error: "The {plan} plan allows a maximum of {max} students",
+    change_to: "Switch to {plan}",
+    change_to_cycle: "Switch to {cycle} cycle",
+    recommended_plan_available: "Recommended plan available",
+    recommended_plan_description: "For {students} students, the <strong>{plan}</strong> is more suitable and can save you money.",
+    best_option_available: "Best option available",
+    best_option_description: "The {cycle} cycle would save you {amount} for {months} months ({percent}% less)",
+    price_includes_vat: "* Price includes VAT (19%)",
+    subtotal: "Subtotal:",
+    vat: "VAT (19%):",
+    total: "Total:",
+    institution_type_label: "Institution Type",
+    aria: {
+      student_selector: "Student count selector",
+      monthly_payment: "Monthly payment",
+      upfront_payment: "Full upfront payment with 5% discount",
+      discount_5_percent: "5% discount",
+      student_count_range: "Number of students (range: {min}{max})"
+    },
+    contacts: {
+      team_astral: "Your Astral Team",
+      lead_developer_onboarding: "Lead Developer & Onboarding",
+      loreto: "Loreto",
+      onboarding_chief: "Onboarding Chief",
+      agustin: "Agustin",
+      lead_developer: "Lead Developer",
+      sales_team: "Sales Team",
+      sales_representative: "Sales Representative"
+    }
   },
 };
 

@@ -46,7 +46,6 @@ import { CurriculumCoverageDashboard } from "@/components/libro-clases/Curriculu
 import { PdfExportButton } from "@/components/libro-clases/PdfExportButton";
 import { Id } from "@/convex/_generated/dataModel";
 import { usePathname, useRouter } from "next/navigation";
-import { useConvexConnection } from "@/hooks/useConvexConnection";
 
 type TabValue =
   | "overview"
@@ -81,41 +80,7 @@ const TEACHER_TAB_ROUTES: Record<TabValue, string> = {
   coverage: "/profesor/libro-clases/cobertura",
 };
 
-const TEACHER_TAB_HEADERS: Record<
-  TabValue,
-  { title: string; subtitle: string }
-> = {
-  overview: {
-    title: "Mis Libros de Clases",
-    subtitle:
-      "Gestión diaria de asistencia, contenidos, observaciones y calificaciones",
-  },
-  attendance: {
-    title: "Registro de Asistencia",
-    subtitle: "Control diario de asistencia, atrasos y justificaciones",
-  },
-  content: {
-    title: "Contenidos y Planificación",
-    subtitle: "Documenta la cobertura curricular y los objetivos abordados",
-  },
-  observations: {
-    title: "Observaciones y Retroalimentación",
-    subtitle: "Registra anotaciones formativas y comunicaciones a familias",
-  },
-  grades: {
-    title: "Calificaciones del Curso",
-    subtitle: "Gestiona evaluaciones, notas y promedios",
-  },
-  meetings: {
-    title: "Reuniones con Apoderados",
-    subtitle: "Agenda compromisos y seguimiento de reuniones",
-  },
-  coverage: {
-    title: "Cobertura Curricular",
-    subtitle: "Seguimiento de Objetivos de Aprendizaje según Decreto 67",
-  },
-};
-
+// Tab headers are now handled through i18n keys directly in the component
 export function TeacherLibroClasesView({
   view = "overview",
 }: TeacherLibroClasesViewProps) {
@@ -131,8 +96,6 @@ export function TeacherLibroClasesView({
     useState<Id<"students"> | null>(null);
   const [selectedStudentName, setSelectedStudentName] = useState<string>("");
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
-  const { isConnected, connectionError, hasConnectionIssue } =
-    useConvexConnection();
 
   useEffect(() => {
     setActiveTab(view);
@@ -156,12 +119,6 @@ export function TeacherLibroClasesView({
       : "skip",
   );
 
-  // Check for tenancy errors using a debug query
-  const tenancyCheck = useQuery(
-    api.tenancy.getCurrentTenancy,
-    currentUser?._id ? {} : "skip",
-  );
-
   // Get selected course details - must be called before early returns
   const selectedCourse = useQuery(
     api.courses.getCourseById,
@@ -169,12 +126,8 @@ export function TeacherLibroClasesView({
   );
 
   const isCurrentUserLoading = currentUser === undefined;
-  const isTenancyLoading = tenancyCheck === undefined;
-  const hasTenancyError = tenancyCheck && "error" in tenancyCheck;
   const isLoading =
-    isCurrentUserLoading ||
-    isTenancyLoading ||
-    (currentUser ? courses === undefined : false);
+    isCurrentUserLoading || (currentUser ? courses === undefined : false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -186,7 +139,24 @@ export function TeacherLibroClasesView({
     return () => clearTimeout(timeout);
   }, [isLoading]);
 
-  const header = TEACHER_TAB_HEADERS[activeTab] ?? TEACHER_TAB_HEADERS.overview;
+  const getTabHeader = (tab: TabValue) => {
+    const tabKeys = {
+      overview: { title: "profesor.libro_clases.title", subtitle: "profesor.libro_clases.tab_descriptions.overview" },
+      attendance: { title: "profesor.libro_clases.tabs.attendance", subtitle: "profesor.libro_clases.tab_descriptions.attendance" },
+      content: { title: "profesor.libro_clases.tabs.content", subtitle: "profesor.libro_clases.tab_descriptions.content" },
+      observations: { title: "profesor.libro_clases.tabs.observations", subtitle: "profesor.libro_clases.tab_descriptions.observations" },
+      grades: { title: "profesor.libro_clases.tabs.grades", subtitle: "profesor.libro_clases.tab_descriptions.grades" },
+      meetings: { title: "profesor.libro_clases.tabs.meetings", subtitle: "profesor.libro_clases.tab_descriptions.meetings" },
+      coverage: { title: "profesor.libro_clases.tabs.coverage", subtitle: "profesor.libro_clases.tab_descriptions.coverage" },
+    };
+    return tabKeys[tab] || tabKeys.overview;
+  };
+
+  const headerConfig = getTabHeader(activeTab);
+  const header = {
+    title: t(headerConfig.title),
+    subtitle: t(headerConfig.subtitle),
+  };
 
   // Wait for Clerk auth to load
   if (!isLoaded) {
@@ -256,141 +226,28 @@ export function TeacherLibroClasesView({
     setIsGradeDialogOpen(true);
   };
 
-  // Show tenancy error if present
-  if (hasTenancyError && tenancyCheck) {
-    const errorMessage =
-      typeof tenancyCheck.error === "string"
-        ? tenancyCheck.error
-        : "Error de configuración de institución";
-    return (
-      <PageTransition>
-        <div className="space-y-6">
-          <RoleAwareHeader
-            title="Configuración de institución requerida"
-            subtitle="Necesitas estar asociado a una institución para usar el libro de clases"
-          />
-          <Card>
-            <CardContent className="py-10 space-y-4">
-              <p className="text-muted-foreground mb-4">{errorMessage}</p>
-              {errorMessage.includes("No institution selected") && (
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>
-                    Para usar el libro de clases, tu cuenta debe estar asociada
-                    a una institución educativa.
-                  </p>
-                  <p>Por favor contacta al administrador para:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li>Crear o asignar tu cuenta a una institución</li>
-                    <li>
-                      Configurar tu membresía con el rol apropiado (PROFESOR,
-                      ADMIN, etc.)
-                    </li>
-                  </ul>
-                </div>
-              )}
-              <div className="flex flex-wrap gap-3 mt-4">
-                <Button variant="outline" onClick={() => router.refresh()}>
-                  Reintentar
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => router.push("/contacto")}
-                >
-                  Contactar administrador
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </PageTransition>
-    );
-  }
-
   if (isLoading) {
-    if (loadingTimedOut || hasConnectionIssue) {
+    if (loadingTimedOut) {
       return (
         <PageTransition>
           <div className="space-y-6">
             <RoleAwareHeader
-              title="Error de conexión"
-              subtitle="No se pudo conectar con el servidor de datos"
+              title="Conexión con libro de clases inestable"
+              subtitle="Revisa tu conexión o que el servidor de datos esté disponible"
             />
             <Card>
               <CardContent className="py-10 space-y-4">
-                <p className="text-muted-foreground mb-4">
-                  El libro de clases no puede cargar porque no hay conexión con
-                  el servidor de datos. Esto puede deberse a:
+                <p className="text-muted-foreground">
+                  Seguimos intentando conectar con el libro de clases pero no
+                  hay respuesta. Si estás trabajando en local, asegúrate de
+                  tener el servicio Convex ejecutándose (`npm run dev` también
+                  necesita `npx convex dev`).
                 </p>
-                <ul className="list-disc list-inside ml-4 space-y-2 text-sm text-muted-foreground">
-                  <li>Problemas de conexión a internet</li>
-                  <li>El servidor de datos no está disponible</li>
-                  <li>Problemas de configuración del servicio Convex</li>
-                </ul>
-                {connectionError && (
-                  <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-                    <p className="text-sm font-medium text-destructive mb-2">
-                      Detalle del error:
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {connectionError}
-                    </p>
-                  </div>
-                )}
-                {tenancyCheck && "error" in tenancyCheck && (
-                  <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-                    <p className="text-sm font-medium text-destructive mb-2">
-                      Error de configuración:
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {(() => {
-                        const error = (
-                          tenancyCheck as unknown as { error?: unknown }
-                        ).error;
-                        return typeof error === "string"
-                          ? error
-                          : "Error desconocido";
-                      })()}
-                    </p>
-                  </div>
-                )}
-                <div className="flex flex-wrap gap-3 mt-6">
-                  <Button onClick={() => window.location.reload()}>
-                    Recargar página
-                  </Button>
+                <div className="flex flex-wrap gap-3">
                   <Button variant="outline" onClick={() => router.refresh()}>
-                    Reintentar conexión
+                    Reintentar
                   </Button>
                 </div>
-                {process.env.NODE_ENV === "development" && (
-                  <div className="mt-4 p-4 bg-muted rounded-lg text-xs space-y-2">
-                    <p className="font-medium mb-2">
-                      Información de desarrollo:
-                    </p>
-                    <p>
-                      Asegúrate de que el servicio Convex esté ejecutándose:
-                      ejecuta <code>npx convex dev</code> en una terminal
-                      separada.
-                    </p>
-                    <p className="mt-2">
-                      Estado de conexión:{" "}
-                      <span
-                        className={
-                          isConnected
-                            ? "text-green-600 font-medium"
-                            : "text-red-600 font-medium"
-                        }
-                      >
-                        {isConnected ? "Conectado" : "Desconectado"}
-                      </span>
-                    </p>
-                    <p>
-                      NEXT_PUBLIC_CONVEX_URL:{" "}
-                      {process.env.NEXT_PUBLIC_CONVEX_URL
-                        ? "✅ Configurado"
-                        : "❌ No configurado"}
-                    </p>
-                  </div>
-                )}
               </CardContent>
             </Card>
           </div>
@@ -612,7 +469,7 @@ export function TeacherLibroClasesView({
                         }
                       }}
                     >
-                      ← Volver a Cursos
+                      ← {t("profesor.libro_clases.overview.back_to_courses")}
                     </Button>
                   </div>
                 </div>
@@ -727,7 +584,7 @@ export function TeacherLibroClasesView({
                                       )
                                     }
                                   >
-                                    Observación
+                                    {t("profesor.libro_clases.overview.observation_button")}
                                   </Button>
                                   <Button
                                     size="sm"
@@ -739,7 +596,7 @@ export function TeacherLibroClasesView({
                                       )
                                     }
                                   >
-                                    Nota
+                                    {t("profesor.libro_clases.overview.grade_button")}
                                   </Button>
                                 </div>
                               </div>
@@ -748,7 +605,7 @@ export function TeacherLibroClasesView({
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                          No hay estudiantes inscritos
+                          {t("profesor.libro_clases.overview.no_students_enrolled")}
                         </div>
                       )}
                     </CardContent>
@@ -756,8 +613,8 @@ export function TeacherLibroClasesView({
 
                   <Card>
                     <CardHeader>
-                      <CardTitle>Asignaturas</CardTitle>
-                      <CardDescription>Asignaturas del curso</CardDescription>
+                      <CardTitle>{t("profesor.libro_clases.overview.subjects_title")}</CardTitle>
+                      <CardDescription>{t("profesor.libro_clases.overview.subjects_description")}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
@@ -793,9 +650,9 @@ export function TeacherLibroClasesView({
                   <div className="space-y-6">
                     <Tabs defaultValue="form" className="w-full">
                       <TabsList>
-                        <TabsTrigger value="form">Nuevo Contenido</TabsTrigger>
+                        <TabsTrigger value="form">{t("profesor.libro_clases.content.add_content")}</TabsTrigger>
                         <TabsTrigger value="list">
-                          Lista de Contenidos
+                          {t("profesor.libro_clases.content.view_content")}
                         </TabsTrigger>
                       </TabsList>
                       <TabsContent value="form" className="mt-4">
@@ -871,9 +728,9 @@ export function TeacherLibroClasesView({
         >
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Nueva Observación</DialogTitle>
+              <DialogTitle>{t("profesor.libro_clases.observations.add_observation")}</DialogTitle>
               <DialogDescription>
-                Registrar observación para {selectedStudentName}
+                {t("profesor.libro_clases.observations.register_for_student", { studentName: selectedStudentName })}
               </DialogDescription>
             </DialogHeader>
             {selectedCourseId && selectedStudentId && currentUser?._id && (
@@ -884,7 +741,7 @@ export function TeacherLibroClasesView({
                 teacherId={currentUser._id}
                 onSuccess={() => {
                   setIsObservationDialogOpen(false);
-                  toast.success("Observación registrada");
+                  toast.success(t("profesor.libro_clases.observations.observation_saved"));
                 }}
                 onCancel={() => setIsObservationDialogOpen(false)}
               />
@@ -896,9 +753,9 @@ export function TeacherLibroClasesView({
         <Dialog open={isGradeDialogOpen} onOpenChange={setIsGradeDialogOpen}>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Registrar Calificación</DialogTitle>
+              <DialogTitle>{t("profesor.libro_clases.grades.enter_grades")}</DialogTitle>
               <DialogDescription>
-                Registrar nota para {selectedStudentName}
+                {t("profesor.libro_clases.grades.register_grade_for_student", { studentName: selectedStudentName })}
               </DialogDescription>
             </DialogHeader>
             {selectedCourseId && selectedStudentId && currentUser?._id && (
@@ -909,7 +766,7 @@ export function TeacherLibroClasesView({
                 teacherId={currentUser._id}
                 onSuccess={() => {
                   setIsGradeDialogOpen(false);
-                  toast.success("Calificación registrada");
+                  toast.success(t("profesor.libro_clases.grades.grade_saved"));
                 }}
                 onCancel={() => setIsGradeDialogOpen(false)}
               />

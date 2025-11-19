@@ -1,0 +1,55 @@
+{
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@custom-variant",
+      "description": "Define custom CSS variants for Tailwind CSS v4",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/v4-beta"
+        }
+      ]
+    },
+    {
+      "name": "@apply",
+      "description": "Apply Tailwind utility classes to custom CSS",
+      "references": [
+        {
+          "name": "Tailwind CSS @apply Directive",
+          "url": "https://tailwindcss.com/docs/functions-and-directives#apply"
+        }
+      ]
+    },
+    {
+      "name": "@theme",
+      "description": "Define theme values and CSS custom properties for Tailwind CSS v4",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Theme Configuration",
+          "url": "https://tailwindcss.com/docs/v4-beta"
+        }
+      ]
+    },
+    {
+      "name": "@layer",
+      "description": "Define CSS cascade layers for better specificity control",
+      "references": [
+        {
+          "name": "CSS Cascade Layers",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@layer"
+        }
+      ]
+    },
+    {
+      "name": "@import",
+      "description": "Import CSS files and Tailwind CSS",
+      "references": [
+        {
+          "name": "CSS @import",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@import"
+        }
+      ]
+    }
+  ]
+}
