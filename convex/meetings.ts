@@ -294,7 +294,7 @@ export const getMeetingStats = tenantQuery({
   roles: ["ADMIN", "STAFF", "MASTER"],
   handler: async (ctx, _args, tenancy) => {
     const currentTime = now();
-    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+    const sevenDaysAgo = now() - 7 * 24 * 60 * 60 * 1000;
 
     const meetings = await ctx.db
       .query("meetings")

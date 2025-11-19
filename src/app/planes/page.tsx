@@ -317,7 +317,7 @@ export default function PreciosPage() {
 
                   <CardContent className="flex-1 flex flex-col px-6">
                     {/* Key Features List */}
-                    <div className="space-y-3 mb-4">
+                    <div className="space-y-3 mb-4 flex-1">
                       <div className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                         <Zap className="w-4 h-4 text-primary" />
                         {tp("pricing.key_features")}
@@ -384,19 +384,21 @@ export default function PreciosPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="w-full justify-between text-xs"
+                        className="w-full justify-between text-xs h-10 min-h-[2.5rem]"
                         onClick={() => togglePlanExpansion(plan.id)}
                       >
                         <span className="flex items-center gap-2">
-                          <Info className="w-4 h-4" />
-                          {isExpanded
-                            ? tp("pricing.hide_all_features")
-                            : tp("pricing.view_all_features")}
+                          <Info className="w-4 h-4 shrink-0" />
+                          <span className="text-left">
+                            {isExpanded
+                              ? tp("pricing.hide_all_features")
+                              : tp("pricing.view_all_features")}
+                          </span>
                         </span>
                         {isExpanded ? (
-                          <ChevronUp className="w-4 h-4" />
+                          <ChevronUp className="w-4 h-4 shrink-0" />
                         ) : (
-                          <ChevronDown className="w-4 h-4" />
+                          <ChevronDown className="w-4 h-4 shrink-0" />
                         )}
                       </Button>
 

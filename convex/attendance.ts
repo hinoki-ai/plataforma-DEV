@@ -6,7 +6,7 @@
 
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
+import { Id, Doc } from "./_generated/dataModel";
 import {
   ATTENDANCE_STATUS_VALUES,
   ATTENDANCE_STATUS_SCHEMA,
@@ -294,7 +294,7 @@ export const recordAttendance = mutation({
     if (!user.currentInstitutionId) {
       throw new Error("User must be associated with an institution");
     }
-    const course = await validateEntityOwnership(
+    const course = await validateEntityOwnership<Doc<"courses">>(
       ctx,
       courseId,
       "Course",

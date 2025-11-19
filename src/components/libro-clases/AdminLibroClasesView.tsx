@@ -504,7 +504,7 @@ function CourseCard({ course }: { course: CourseWithEnrollment }) {
               {t("course.teacher", "libro-clases")}:
             </span>
             <span className="font-medium">
-              {course.teacher?.name || t("common.not_assigned", "common")}
+              {course.teacherName || t("common.not_assigned", "common")}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">

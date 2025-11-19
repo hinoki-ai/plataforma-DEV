@@ -88,7 +88,8 @@ const SoundToggle = ({ className, size = "md" }: SoundToggleProps) => {
 
 const StyledWrapper = styled.div<{ $sizeMultiplier: number }>`
   .sound-switch {
-    --toggle-size: ${(props) => 30 * props.$sizeMultiplier}px;
+    --toggle-size: ${(props: { $sizeMultiplier: number }) =>
+      30 * props.$sizeMultiplier}px;
     --container-width: 5.625em;
     --container-height: 2.5em;
     --container-radius: 6.25em;
