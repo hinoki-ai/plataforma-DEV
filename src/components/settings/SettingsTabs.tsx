@@ -71,8 +71,8 @@ export function SettingsTabs({
         <TabsTrigger value="profile">
           {t("settings.tabs.profile", "common")}
         </TabsTrigger>
-        <TabsTrigger value="account">
-          {t("settings.tabs.account", "common")}
+        <TabsTrigger value="security">
+          {t("settings.tabs.security", "common")}
         </TabsTrigger>
         <TabsTrigger value="notifications">
           {t("settings.tabs.notifications", "common")}
@@ -89,7 +89,7 @@ export function SettingsTabs({
         <ProfileTab />
       </TabsContent>
 
-      <TabsContent value="account">
+      <TabsContent value="security">
         <PasswordChangeForm />
       </TabsContent>
 

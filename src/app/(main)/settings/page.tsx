@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const stepToTabMap: Record<number, string> = {
     1: "profile",
     2: "notifications",
-    3: "account",
+    3: "security",
     4: "profile",
   };
 
@@ -29,7 +29,7 @@ export default function SettingsPage() {
   const tabToStepMap: Record<string, number[]> = {
     profile: [1, 4],
     notifications: [2],
-    account: [3],
+    security: [3],
     appearance: [],
     privacy: [],
   };

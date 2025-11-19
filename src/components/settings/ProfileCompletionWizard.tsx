@@ -71,11 +71,10 @@ export function ProfileCompletionWizard({
       // ignore localStorage errors
     }
 
-    // Step 3: Security settings (password changed or OAuth user)
-    if (session?.user?.isOAuthUser) {
-      completed.push(3); // OAuth users don't need password
+    // Step 3: Security settings (all authenticated users can access security settings)
+    if (session?.user) {
+      completed.push(3); // All authenticated users have access to security settings
     }
-    // For password users, we can't know if they changed it, so we'll leave it optional
 
     // Step 4: Verification (always complete for now)
     if (totalSteps >= 4) {
