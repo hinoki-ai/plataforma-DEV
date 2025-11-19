@@ -639,21 +639,21 @@ export default function PricingCalculatorPage({
                     <CardDescription className="text-gray-300 text-base mt-2">
                       {selectedPlan.description}
                     </CardDescription>
-                    <div className="mt-3 flex flex-wrap items-center gap-2">
-                      <span className="text-xs uppercase tracking-wide text-gray-500 font-medium">
-                        Disponible para:
-                      </span>
-                      {Object.entries(INSTITUTION_TYPE_INFO).map(([key, info]) => (
-                        <Badge
-                          key={key}
-                          variant="outline"
-                          className="bg-gray-800/50 border-gray-700 text-gray-300 text-xs font-normal px-2.5 py-0.5"
-                        >
-                          <span className="mr-1.5">{info.icon}</span>
-                          {info.chileanName}
-                        </Badge>
-                      ))}
-                    </div>
+                    <CardDescription className="text-gray-400 text-sm mt-3 leading-relaxed">
+                      {Object.entries(INSTITUTION_TYPE_INFO).map(
+                        ([key, info], index) => (
+                          <span key={key}>
+                            <span className="font-medium text-gray-300">
+                              {info.chileanName}
+                            </span>
+                            : {info.description}
+                            {index < Object.keys(INSTITUTION_TYPE_INFO).length - 1 && (
+                              <span className="mx-2 text-gray-500">•</span>
+                            )}
+                          </span>
+                        ),
+                      )}
+                    </CardDescription>
 
                     {/* Plan Validation Warning */}
                     {!planValidation.isValid && (

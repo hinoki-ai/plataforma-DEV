@@ -377,9 +377,7 @@ export function InstitutionCreationForm() {
                             ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-1 ring-blue-500"
                             : "hover:border-blue-300"
                         }`}
-                        onClick={() =>
-                          form.setValue("billingPlan", key as any)
-                        }
+                        onClick={() => form.setValue("billingPlan", key as any)}
                       >
                         <div className="flex justify-between items-center">
                           <span className="font-semibold">{plan.name}</span>
