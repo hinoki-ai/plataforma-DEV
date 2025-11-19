@@ -53,40 +53,56 @@ export const getVoteById = tenantQuery({
   args: { id: v.id("votes") },
   roles: ["ADMIN", "PROFESOR", "PARENT", "MASTER"],
   handler: async (ctx, { id }, tenancy) => {
+    console.log(`getVoteById called for vote: ${id}, institution: ${tenancy.institution._id}`);
+
     const vote = ensureInstitutionMatch(
       await ctx.db.get(id),
       tenancy,
       "Vote not found",
     );
 
+    console.log(`Vote found: ${vote._id}, title: ${vote.title}, institutionId: ${vote.institutionId}`);
+
     const options = await ctx.db
       .query("voteOptions")
       .withIndex("by_voteId", (q: any) => q.eq("voteId", id))
       .collect();
 
-    const optionsWithCounts = await Promise.all(
-      options
-        .filter(
-          (option: Doc<"voteOptions">) =>
-            option.institutionId === tenancy.institution._id,
-        )
-        .map(async (option: Doc<"voteOptions">) => {
-          const responses = await ctx.db
-            .query("voteResponses")
-            .withIndex("by_optionId", (q: any) => q.eq("optionId", option._id))
-            .collect();
+    console.log(`Found ${options.length} options for vote ${id}`);
 
-          const scopedResponses = responses.filter(
-            (response: Doc<"voteResponses">) =>
-              response.institutionId === tenancy.institution._id,
-          );
-
-          return {
-            ...option,
-            voteCount: scopedResponses.length,
-          };
-        }),
+    const filteredOptions = options.filter(
+      (option: Doc<"voteOptions">) =>
+        option.institutionId === tenancy.institution._id,
     );
+
+    console.log(`After institution filter: ${filteredOptions.length} options`);
+
+    const optionsWithCounts = await Promise.all(
+      filteredOptions.map(async (option: Doc<"voteOptions">) => {
+        console.log(`Processing option: ${option._id}, text: ${option.text}`);
+
+        const responses = await ctx.db
+          .query("voteResponses")
+          .withIndex("by_optionId", (q: any) => q.eq("optionId", option._id))
+          .collect();
+
+        console.log(`Found ${responses.length} responses for option ${option._id}`);
+
+        const scopedResponses = responses.filter(
+          (response: Doc<"voteResponses">) =>
+            response.institutionId === tenancy.institution._id,
+        );
+
+        console.log(`After institution filter: ${scopedResponses.length} responses`);
+
+        return {
+          ...option,
+          voteCount: scopedResponses.length,
+        };
+      }),
+    );
+
+    console.log(`Returning vote with ${optionsWithCounts.length} options`);
 
     return {
       ...vote,

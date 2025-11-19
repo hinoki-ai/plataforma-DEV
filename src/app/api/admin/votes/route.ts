@@ -21,20 +21,32 @@ export async function GET(request: NextRequest) {
 
     const convex = await getAuthenticatedConvexClient();
 
+    console.log("Session user:", {
+      id: session.user.id,
+      clerkId: session.user.clerkId,
+      email: session.user.email,
+      role: session.user.role,
+    });
+
     // Get query parameters
     const { searchParams } = new URL(request.url);
     const isActive = searchParams.get("isActive");
     const category = searchParams.get("category");
+
+    console.log("Query parameters:", { isActive, category });
 
     // Fetch votes from Convex
     const votes = await convex.query(api.votes.getVotes, {
       isActive: isActive ? isActive === "true" : undefined,
       category: (category as any) || undefined,
     });
+    console.log(`Found ${votes.length} votes`);
 
     // Transform votes to include calculated status and enhanced data
-    const transformedVotes = await Promise.all(
-      votes.map(async (vote: any) => {
+    const transformedVotes: any[] = [];
+    for (const vote of votes) {
+      try {
+        console.log(`Processing vote: ${vote._id}, title: ${vote.title}`);
         const options = await convex.query(api.votes.getVoteById, {
           id: vote._id,
         });
@@ -45,7 +57,7 @@ export async function GET(request: NextRequest) {
         const isExpired = endDate < now;
         const status = vote.isActive && !isExpired ? "active" : "closed";
 
-        return {
+        transformedVotes.push({
           id: vote._id,
           title: vote.title,
           description: vote.description,
@@ -75,9 +87,18 @@ export async function GET(request: NextRequest) {
             text: opt.text,
             votes: opt.voteCount,
           })),
-        };
-      }),
-    );
+        });
+      } catch (voteError) {
+        console.error(`Error processing vote ${vote._id} (${vote.title}):`, voteError);
+        console.error("Vote data:", {
+          institutionId: vote.institutionId,
+          createdBy: vote.createdBy,
+          isActive: vote.isActive,
+        });
+        // Skip this vote instead of failing the entire request
+        console.log(`Skipping problematic vote: ${vote._id}`);
+      }
+    }
 
     return NextResponse.json({
       data: transformedVotes,
@@ -85,8 +106,14 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error fetching votes:", error);
+    console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace");
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : String(error),
+      name: error instanceof Error ? error.name : "Unknown",
+      cause: error instanceof Error ? error.cause : undefined,
+    });
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }
