@@ -47,17 +47,17 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   shareActivity: false,
 };
 
-export function SettingsTabs({ 
-  children, 
+export function SettingsTabs({
+  children,
   activeTab: controlledActiveTab,
-  onTabChange 
+  onTabChange,
 }: SettingsTabsProps) {
   const { t } = useDivineParsing(["common"]);
   const [internalActiveTab, setInternalActiveTab] = useState("profile");
-  
+
   // Use controlled tab if provided, otherwise use internal state
   const activeTab = controlledActiveTab ?? internalActiveTab;
-  
+
   const handleTabChange = (value: string) => {
     if (!controlledActiveTab) {
       setInternalActiveTab(value);
@@ -251,20 +251,15 @@ function ProfileTab() {
       <CardContent>
         {alert && (
           <Alert
-            className={`mb-4 ${alert.type === "success" ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}
+            variant={alert.type === "success" ? "success" : "destructive"}
+            className="mb-4"
           >
             {alert.type === "success" ? (
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertCircle className="h-4 w-4" />
             )}
-            <AlertDescription
-              className={
-                alert.type === "success" ? "text-green-800" : "text-red-800"
-              }
-            >
-              {alert.message}
-            </AlertDescription>
+            <AlertDescription>{alert.message}</AlertDescription>
           </Alert>
         )}
 
@@ -473,30 +468,25 @@ function NotificationsTab() {
       <CardContent>
         {alert && (
           <Alert
-            className={`mb-4 ${alert.type === "success" ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}
+            variant={alert.type === "success" ? "success" : "destructive"}
+            className="mb-4"
           >
             {alert.type === "success" ? (
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertCircle className="h-4 w-4" />
             )}
-            <AlertDescription
-              className={
-                alert.type === "success" ? "text-green-800" : "text-red-800"
-              }
-            >
-              {alert.message}
-            </AlertDescription>
+            <AlertDescription>{alert.message}</AlertDescription>
           </Alert>
         )}
 
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border rounded-md p-3">
-            <div>
-              <p className="font-medium">
+        <div className="space-y-3">
+          <div className="group flex items-center justify-between rounded-lg border border-border bg-card/50 p-4 transition-all duration-200 hover:border-primary/50 hover:bg-card/80 hover:shadow-sm">
+            <div className="flex-1 pr-4">
+              <p className="font-medium text-foreground">
                 {t("settings.notifications.event_reminders", "common")}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {t("settings.notifications.event_reminders_desc", "common")}
               </p>
             </div>
@@ -510,14 +500,15 @@ function NotificationsTab() {
                 "common",
               )}
               disabled={isSaving}
+              className="shrink-0"
             />
           </div>
-          <div className="flex items-center justify-between border rounded-md p-3">
-            <div>
-              <p className="font-medium">
+          <div className="group flex items-center justify-between rounded-lg border border-border bg-card/50 p-4 transition-all duration-200 hover:border-primary/50 hover:bg-card/80 hover:shadow-sm">
+            <div className="flex-1 pr-4">
+              <p className="font-medium text-foreground">
                 {t("settings.notifications.monthly_newsletter", "common")}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {t("settings.notifications.monthly_newsletter_desc", "common")}
               </p>
             </div>
@@ -531,11 +522,12 @@ function NotificationsTab() {
                 "common",
               )}
               disabled={isSaving}
+              className="shrink-0"
             />
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 mt-4 border-t">
+        <div className="flex justify-end pt-6 mt-6 border-t border-border">
           <Button onClick={handleSave} disabled={isSaving}>
             {isSaving ? (
               <>
@@ -692,30 +684,25 @@ function PrivacyTab() {
       <CardContent>
         {alert && (
           <Alert
-            className={`mb-4 ${alert.type === "success" ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}
+            variant={alert.type === "success" ? "success" : "destructive"}
+            className="mb-4"
           >
             {alert.type === "success" ? (
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertCircle className="h-4 w-4" />
             )}
-            <AlertDescription
-              className={
-                alert.type === "success" ? "text-green-800" : "text-red-800"
-              }
-            >
-              {alert.message}
-            </AlertDescription>
+            <AlertDescription>{alert.message}</AlertDescription>
           </Alert>
         )}
 
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border rounded-md p-3">
-            <div>
-              <p className="font-medium">
+        <div className="space-y-3">
+          <div className="group flex items-center justify-between rounded-lg border border-border bg-card/50 p-4 transition-all duration-200 hover:border-primary/50 hover:bg-card/80 hover:shadow-sm">
+            <div className="flex-1 pr-4">
+              <p className="font-medium text-foreground">
                 {t("settings.privacy.profile_visible", "common")}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {t("settings.privacy.profile_visible_desc", "common")}
               </p>
             </div>
@@ -726,14 +713,15 @@ function PrivacyTab() {
               }
               aria-label={t("settings.privacy.profile_visibility", "common")}
               disabled={isSaving}
+              className="shrink-0"
             />
           </div>
-          <div className="flex items-center justify-between border rounded-md p-3">
-            <div>
-              <p className="font-medium">
+          <div className="group flex items-center justify-between rounded-lg border border-border bg-card/50 p-4 transition-all duration-200 hover:border-primary/50 hover:bg-card/80 hover:shadow-sm">
+            <div className="flex-1 pr-4">
+              <p className="font-medium text-foreground">
                 {t("settings.privacy.share_activity", "common")}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {t("settings.privacy.share_activity_desc", "common")}
               </p>
             </div>
@@ -744,11 +732,12 @@ function PrivacyTab() {
               }
               aria-label={t("settings.privacy.share_activity_aria", "common")}
               disabled={isSaving}
+              className="shrink-0"
             />
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 mt-4 border-t">
+        <div className="flex justify-end pt-6 mt-6 border-t border-border">
           <Button onClick={handleSave} disabled={isSaving}>
             {isSaving ? (
               <>
@@ -945,9 +934,9 @@ function PasswordChangeForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Alert className="border-blue-200 bg-blue-50">
-            <AlertCircle className="h-4 w-4 text-blue-600" />
-            <AlertDescription className="text-blue-800">
+          <Alert variant="info">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
               Password changes are not available for accounts signed in with
               social providers. Please use your authentication provider to
               manage your password.
@@ -975,20 +964,15 @@ function PasswordChangeForm() {
       <CardContent>
         {alert && (
           <Alert
-            className={`mb-4 ${alert.type === "success" ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}
+            variant={alert.type === "success" ? "success" : "destructive"}
+            className="mb-4"
           >
             {alert.type === "success" ? (
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertCircle className="h-4 w-4" />
             )}
-            <AlertDescription
-              className={
-                alert.type === "success" ? "text-green-800" : "text-red-800"
-              }
-            >
-              {alert.message}
-            </AlertDescription>
+            <AlertDescription>{alert.message}</AlertDescription>
           </Alert>
         )}
 
@@ -1142,7 +1126,7 @@ function PasswordChangeForm() {
         </form>
 
         {/* Password Requirements - Simplified */}
-        <div className="mt-6 pt-4 border-t">
+        <div className="mt-6 pt-4 border-t border-border">
           <p className="text-xs text-muted-foreground text-center">
             Your password must be at least 8 characters with uppercase,
             lowercase, and a number
