@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getConvexClient } from "@/lib/convex";
-import { api } from "@/../convex/_generated/api";
+import { api } from "@/convex/_generated/api";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 

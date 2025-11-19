@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { getAuthenticatedConvexClient } from "@/lib/convex-server";
-import { api } from "@/../convex/_generated/api";
+import { api } from "@/convex/_generated/api";
 import {
   withApiErrorHandling,
   AuthenticationError,

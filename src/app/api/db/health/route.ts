@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getConvexClient } from "@/lib/convex";
-import { api } from "@/../convex/_generated/api";
+import { api } from "@/convex/_generated/api";
 
 export async function GET() {
   try {
