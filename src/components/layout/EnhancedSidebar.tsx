@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
+import { getNavigationGroupsForRole, NAVIGATION_CONFIGS } from "./navigation";
 
 interface EnhancedSidebarProps {
   className?: string;
@@ -60,390 +61,30 @@ interface NavigationItem {
   readonly description?: string;
 }
 
-// Helper function to filter navigation items with shortcuts
-const filterItemsWithShortcuts = (
-  items: readonly NavigationItem[],
-): Array<NavigationItem & { shortcut: string }> => {
-  return items.filter(
-    (item): item is NavigationItem & { shortcut: string } =>
-      typeof item.shortcut === "string" && item.shortcut.length > 0,
-  );
+// Helper function to get shortcuts for specific role
+const getKeyboardShortcuts = (
+  role: string | undefined,
+  pathname: string
+): Record<string, string> => {
+  const shortcuts: Record<string, string> = {
+    Escape: "close-sidebar",
+    "Ctrl+K": "open-search",
+    "?": "show-shortcuts",
+  };
+
+  if (!role) return shortcuts;
+
+  const groups = getNavigationGroupsForRole(role, pathname);
+  groups.forEach((group) => {
+    group.items.forEach((item: any) => {
+      if (item.shortcut) {
+        shortcuts[item.shortcut] = item.href;
+      }
+    });
+  });
+
+  return shortcuts;
 };
-
-// Function to get translated navigation configuration
-const getEnhancedNavigation = (
-  t: (key: string, namespace?: string) => string,
-) =>
-  ({
-    ADMIN: [
-      {
-        title: t("nav.admin.panel"),
-        href: "/admin",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+H",
-        category: t("nav.main.categories.principal"),
-        description: t("nav.admin.panel"),
-      },
-      {
-        title: t("nav.users"),
-        href: "/admin/usuarios",
-        icon: NavigationIcons.Profile,
-        shortcut: "Alt+U",
-        category: t("nav.main.categories.management"),
-        description: t("nav.users"),
-      },
-      {
-        title: t("nav.planning"),
-        href: "/admin/planificaciones",
-        icon: NavigationIcons.Planning,
-        shortcut: "Alt+P",
-        category: t("nav.main.categories.academic"),
-        description: t("nav.planning"),
-      },
-      {
-        title: "Libro de Clases",
-        href: "/admin/libro-clases",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+L",
-        category: t("nav.main.categories.libro_clases"),
-        description: "Visión integral del libro de clases institucional",
-      },
-      {
-        title: "Asistencia Institucional",
-        href: "/admin/libro-clases/asistencia",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+A",
-        category: t("nav.main.categories.libro_clases"),
-        description: "Consolida asistencia diaria y alertas de ausentismo",
-      },
-      {
-        title: "Calificaciones y Promedios",
-        href: "/admin/libro-clases/calificaciones",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+N",
-        category: t("nav.main.categories.libro_clases"),
-        description: "Seguimiento de notas y tendencias por curso",
-      },
-      {
-        title: "Observaciones y Convivencia",
-        href: "/admin/libro-clases/observaciones",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+O",
-        category: t("nav.main.categories.libro_clases"),
-        description:
-          "Registro centralizado de anotaciones, convivencias y medidas formativas",
-      },
-      {
-        title: "Gestión de Estudiantes",
-        href: "/admin/libro-clases/estudiantes",
-        icon: NavigationIcons.Profile,
-        shortcut: "Alt+G",
-        category: t("nav.main.categories.libro_clases"),
-        description: "Administrar estudiantes por curso",
-      },
-      {
-        title: t("nav.calendar"),
-        href: "/admin/calendario-escolar",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+C",
-        category: t("nav.main.categories.academic"),
-        description: t("nav.calendar"),
-      },
-      {
-        title: t("nav.team"),
-        href: "/admin/equipo-multidisciplinario",
-        icon: NavigationIcons.Team,
-        shortcut: "Alt+E",
-        category: t("nav.main.categories.team"),
-        description: t("nav.team"),
-      },
-      {
-        title: t("nav.meetings"),
-        href: "/admin/reuniones",
-        icon: NavigationIcons.Meeting,
-        shortcut: "Alt+R",
-        category: t("nav.main.categories.team"),
-        description: t("nav.meetings"),
-      },
-      {
-        title: t("nav.voting"),
-        href: "/admin/votaciones",
-        icon: NavigationIcons.Vote,
-        shortcut: "Alt+V",
-        category: t("nav.main.categories.team"),
-        description: t("nav.voting"),
-      },
-      {
-        title: t("nav.documents"),
-        href: "/admin/documentos",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+D",
-        category: t("nav.main.categories.resources"),
-        description: t("nav.documents"),
-      },
-      {
-        title: t("nav.pme"),
-        href: "/admin/pme",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+M",
-        category: t("nav.main.categories.academic"),
-        description: t("nav.pme"),
-      },
-      {
-        title: t("nav.schedule"),
-        href: "/admin/horarios",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+T",
-        category: t("nav.main.categories.information"),
-        description: t("nav.schedule"),
-      },
-      {
-        title: t("nav.settings"),
-        href: "/settings",
-        icon: NavigationIcons.Settings,
-        shortcut: "Alt+S",
-        category: t("nav.main.categories.system"),
-        description: t("nav.settings"),
-      },
-    ],
-    PROFESOR: [
-      {
-        title: t("nav.home"),
-        href: "/profesor",
-        icon: NavigationIcons.Home,
-        shortcut: "Alt+H",
-        category: t("nav.main.categories.principal"),
-        description: t("nav.dashboard"),
-      },
-      {
-        title: t("nav.libro_clases"),
-        href: "/profesor/libro-clases",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+L",
-        category: t("nav.main.categories.libro_clases"),
-        description: t("nav.libro_clases.description"),
-      },
-      {
-        title: t("nav.asistencia"),
-        href: "/profesor/libro-clases/asistencia",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+A",
-        category: t("nav.main.categories.libro_clases"),
-        description: t("nav.asistencia.description"),
-      },
-      {
-        title: t("nav.contenidos_planificacion"),
-        href: "/profesor/libro-clases/contenidos",
-        icon: NavigationIcons.Planning,
-        category: t("nav.main.categories.libro_clases"),
-        description: t("nav.contenidos_planificacion.description"),
-      },
-      {
-        title: t("nav.calificaciones"),
-        href: "/profesor/libro-clases/calificaciones",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+N",
-        category: t("nav.main.categories.libro_clases"),
-        description: t("nav.calificaciones.description"),
-      },
-      {
-        title: t("nav.observaciones"),
-        href: "/profesor/libro-clases/observaciones",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+O",
-        category: t("nav.main.categories.libro_clases"),
-        description: t("nav.observaciones.description"),
-      },
-      {
-        title: t("nav.reuniones_apoderados"),
-        href: "/profesor/libro-clases/reuniones",
-        icon: NavigationIcons.Team,
-        category: t("nav.main.categories.libro_clases"),
-        description: t("nav.reuniones_apoderados.description"),
-      },
-      {
-        title: t("nav.planning"),
-        href: "/profesor/planificaciones",
-        icon: NavigationIcons.Planning,
-        shortcut: "Alt+P",
-        category: t("nav.main.categories.academic"),
-        description: t("nav.planning"),
-      },
-      {
-        title: t("nav.calendar"),
-        href: "/profesor/calendario-escolar",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+C",
-        category: t("nav.main.categories.academic"),
-        description: t("nav.calendar"),
-      },
-      {
-        title: t("nav.pme"),
-        href: "/profesor/pme",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+M",
-        category: t("nav.main.categories.academic"),
-        description: t("nav.pme"),
-      },
-      {
-        title: t("nav.parent.meetings"),
-        href: "/profesor/reuniones",
-        icon: NavigationIcons.Team,
-        shortcut: "Alt+R",
-        category: t("nav.main.categories.communication"),
-        description: t("nav.parent.meetings"),
-      },
-      {
-        title: t("nav.schedule"),
-        href: "/profesor/horarios",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+T",
-        category: t("nav.main.categories.information"),
-        description: t("nav.schedule"),
-      },
-      {
-        title: t("nav.profile"),
-        href: "/profesor/perfil",
-        icon: NavigationIcons.Profile,
-        shortcut: "Alt+F",
-        category: t("nav.main.categories.personal"),
-        description: t("nav.profile"),
-      },
-      {
-        title: t("nav.settings"),
-        href: "/settings",
-        icon: NavigationIcons.Settings,
-        shortcut: "Alt+S",
-        category: t("nav.main.categories.personal"),
-        description: t("nav.settings"),
-      },
-    ],
-    PARENT: [
-      {
-        title: t("nav.home"),
-        href: "/parent",
-        icon: NavigationIcons.Home,
-        shortcut: "Alt+H",
-        category: t("nav.main.categories.principal"),
-        description: t("nav.dashboard"),
-      },
-      {
-        title: t("nav.students"),
-        href: "/parent/estudiantes",
-        icon: NavigationIcons.Profile,
-        shortcut: "Alt+E",
-        category: t("nav.main.categories.information"),
-        description: t("nav.students"),
-      },
-      {
-        title: "Libro de Clases",
-        href: "/parent/libro-clases",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+L",
-        category: t("nav.main.categories.libro_clases"),
-        description: "Resumen del aprendizaje y comunicaciones del curso",
-      },
-      {
-        title: "Asistencia",
-        href: "/parent/libro-clases/asistencia",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+A",
-        category: t("nav.main.categories.libro_clases"),
-        description: "Seguimiento de asistencia diaria y tardanzas",
-      },
-      {
-        title: "Calificaciones",
-        href: "/parent/libro-clases/calificaciones",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+N",
-        category: t("nav.main.categories.libro_clases"),
-        description: "Notas por asignatura y promedios parciales",
-      },
-      {
-        title: "Observaciones",
-        href: "/parent/libro-clases/observaciones",
-        icon: NavigationIcons.Documents,
-        category: t("nav.main.categories.libro_clases"),
-        description: "Anotaciones formativas y comunicados",
-      },
-      {
-        title: "Reuniones",
-        href: "/parent/libro-clases/reuniones",
-        icon: NavigationIcons.Team,
-        category: t("nav.main.categories.libro_clases"),
-        description: "Agenda de reuniones y compromisos",
-      },
-      {
-        title: t("nav.calendar"),
-        href: "/parent/calendario-escolar",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+C",
-        category: t("nav.main.categories.information"),
-        description: t("nav.calendar"),
-      },
-      {
-        title: t("nav.communication"),
-        href: "/parent/comunicacion",
-        icon: NavigationIcons.Notifications,
-        shortcut: "Alt+M",
-        category: t("nav.main.categories.communication"),
-        description: t("nav.communication"),
-      },
-      {
-        title: t("nav.meetings"),
-        href: "/parent/reuniones",
-        icon: NavigationIcons.Meeting,
-        shortcut: "Alt+R",
-        category: t("nav.main.categories.communication"),
-        description: t("nav.meetings"),
-      },
-      {
-        title: t("nav.resources"),
-        href: "/parent/recursos",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+D",
-        category: t("nav.main.categories.resources"),
-        description: t("nav.resources"),
-      },
-      {
-        title: t("nav.voting"),
-        href: "/parent/votaciones",
-        icon: NavigationIcons.Vote,
-        shortcut: "Alt+V",
-        category: t("nav.main.categories.communication"),
-        description: t("nav.voting"),
-      },
-      {
-        title: t("nav.settings"),
-        href: "/settings",
-        icon: NavigationIcons.Settings,
-        shortcut: "Alt+S",
-        category: t("nav.main.categories.personal"),
-        description: t("nav.settings"),
-      },
-    ],
-  }) as const;
-
-// Function to get keyboard shortcuts configuration
-const getKeyboardShortcuts = (t: (key: string, namespace?: string) => string) =>
-  ({
-    BASE: {
-      Escape: "close-sidebar",
-      "Ctrl+K": "open-search",
-      "?": "show-shortcuts",
-    },
-    ...Object.fromEntries(
-      Object.entries(getEnhancedNavigation(t)).map(([role, items]) => [
-        role,
-        Object.fromEntries(
-          filterItemsWithShortcuts(items).map((item) => [
-            item.shortcut,
-            item.href,
-          ]),
-        ),
-      ]),
-    ),
-  }) as const;
 
 export function EnhancedSidebar({
   className,
@@ -470,12 +111,21 @@ export function EnhancedSidebar({
   );
 
   // Get navigation items for current role
-  const navigationItems = useMemo(() => {
+  const navigationGroups = useMemo(() => {
     if (!userRole) return [];
-    const navigation = getEnhancedNavigation(t);
-    const items = navigation[userRole as keyof typeof navigation] || [];
-    return items.map((item) => ({ ...item })) as NavigationItem[];
-  }, [userRole, t]);
+    return getNavigationGroupsForRole(userRole, pathname);
+  }, [userRole, pathname]);
+
+  // Flatten items for search and recommendations
+  const allNavigationItems = useMemo(() => {
+    return navigationGroups.flatMap((group) => 
+      group.items.map((item: any) => ({
+        ...item,
+        category: t(group.title), // Ensure category is translated for search
+        title: item.title,
+      }))
+    );
+  }, [navigationGroups, t]);
 
   // Handle navigation with usage tracking
   const handleNavigate = useCallback(
@@ -540,7 +190,7 @@ export function EnhancedSidebar({
       }
 
       // Handle Alt+ shortcuts
-      const keyboardShortcuts = getKeyboardShortcuts(t);
+      const keyboardShortcuts = getKeyboardShortcuts(userRole || undefined, pathname);
       const shortcut = Object.keys(keyboardShortcuts).find((key) => {
         const [modifier, char] = key.split("+");
         if (modifier === "Alt") {
@@ -570,6 +220,8 @@ export function EnhancedSidebar({
       onToggle,
       handleNavigate,
       t,
+      userRole,
+      pathname,
     ],
   );
 
@@ -726,82 +378,110 @@ export function EnhancedSidebar({
             {!isCollapsed && usageData.length > 0 && showRecommendations && (
               <SmartRecommendations
                 usageData={usageData}
-                allItems={navigationItems}
+                allItems={allNavigationItems}
                 currentPath={pathname}
                 onNavigate={handleNavigate}
               />
             )}
 
             {/* Regular Navigation */}
-            <div className="space-y-1">
-              {navigationItems.map((item) => {
-                const isActive =
-                  pathname === item.href ||
-                  pathname.startsWith(item.href + "/");
-                const Icon = item.icon;
+            <div className="space-y-6">
+              {navigationGroups.map((group, groupIndex) => (
+                <div key={groupIndex} className="space-y-1">
+                  {!isCollapsed && group.title && (
+                    <div className="px-2 py-1 mb-2">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                        {t(group.title)}
+                      </span>
+                    </div>
+                  )}
+                  {group.items.map((item: any) => {
+                    const isActive =
+                      pathname === item.href ||
+                      pathname.startsWith(item.href + "/");
+                    const Icon = item.icon;
 
-                if (isCollapsed) {
-                  return (
-                    <Tooltip key={item.href}>
-                      <TooltipTrigger asChild>
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => handleNavigate(item.href)}
+                    if (isCollapsed) {
+                      return (
+                        <Tooltip key={item.href}>
+                          <TooltipTrigger asChild>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleNavigate(item.href)}
+                              className={cn(
+                                "flex h-10 w-10 items-center justify-center rounded-lg transition-colors mb-1 mx-auto",
+                                isActive
+                                  ? "bg-primary text-primary-foreground shadow-md"
+                                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                              )}
+                            >
+                              <Icon className="h-5 w-5" />
+                            </motion.button>
+                          </TooltipTrigger>
+                          <TooltipContent side="right" className="flex items-center gap-2">
+                            <span>{t(item.title)}</span>
+                            {item.shortcut && (
+                              <span className="text-xs opacity-60 bg-background/20 px-1 rounded">
+                                {item.shortcut}
+                              </span>
+                            )}
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    }
+
+                    return (
+                      <motion.button
+                        key={item.href}
+                        whileHover={{ x: 4 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => handleNavigate(item.href)}
+                        className={cn(
+                          "group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                          isActive
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                        )}
+                      >
+                        <Icon
                           className={cn(
-                            "flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors w-full",
-                            isActive
-                              ? "bg-accent text-accent-foreground"
-                              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                            "h-4 w-4 shrink-0 transition-transform group-hover:scale-110",
+                            isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-accent-foreground",
                           )}
-                          aria-current={isActive ? "page" : undefined}
-                        >
-                          <Icon className="h-4 w-4" />
-                        </motion.button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right">
+                        />
+                        <span className="flex-1 text-left truncate">
+                          {t(item.title)}
+                        </span>
                         <div className="flex items-center gap-2">
-                          <span>{t(item.title)}</span>
+                          {item.badge && (
+                            <Badge
+                              variant="secondary"
+                              className="h-5 px-1.5 text-[10px] font-normal"
+                            >
+                              {item.badge}
+                            </Badge>
+                          )}
                           {item.shortcut && (
-                            <span className="text-xs opacity-60">
+                            <kbd className="hidden pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity lg:inline-flex">
                               {item.shortcut}
-                            </span>
+                            </kbd>
                           )}
                         </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  );
-                }
-
-                return (
-                  <motion.button
-                    key={item.href}
-                    whileHover={{ x: 4 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleNavigate(item.href)}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all w-full text-left",
-                      isActive
-                        ? "bg-accent text-accent-foreground shadow-sm"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                    )}
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    <Icon className="h-4 w-4 shrink-0" />
-                    <span className="flex-1">{t(item.title)}</span>
-                    {item.badge && (
-                      <Badge variant="secondary" className="text-xs">
-                        {item.badge}
-                      </Badge>
-                    )}
-                    {item.shortcut && (
-                      <span className="text-xs text-muted-foreground hidden lg:block">
-                        {item.shortcut}
-                      </span>
-                    )}
-                  </motion.button>
-                );
-              })}
+                        {isActive && (
+                          <motion.div
+                            layoutId="active-indicator"
+                            className="absolute left-0 w-1 h-6 bg-primary rounded-r-full"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.2 }}
+                          />
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              ))}
             </div>
 
             {/* Toggle Recommendations */}
@@ -860,426 +540,73 @@ export function EnhancedSidebar({
               </Button>
             )}
           </div>
-
-          {/* 🏛️ MASTER CONTROL PANEL */}
-          {session?.user?.role === "MASTER" && (
-            <div className="space-y-4 border-t border-blue-200 dark:border-blue-800 pt-6">
-              {/* Master Header */}
-              <div className="px-3 py-3 bg-linear-to-r from-purple-50 via-blue-50 to-indigo-50 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-indigo-950/30 rounded-xl border border-purple-200 dark:border-purple-800">
-                <div className="flex items-center gap-2 mb-2">
-                  <Crown className="h-4 w-4 text-purple-600" />
-                  <h3 className="text-sm font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider">
-                    🏛️ MASTER CONTROL
-                  </h3>
-                </div>
-                <p className="text-[10px] text-purple-600 dark:text-purple-400 leading-tight">
-                  Supreme System Administration
-                </p>
-              </div>
-
-              {/* 📊 DASHBOARD OVERVIEW */}
-              <div className="space-y-2">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                    📊 Overview
-                  </span>
-                </div>
-
-                <Button
-                  variant={pathname === "/master" ? "default" : "ghost"}
-                  className={`w-full justify-start text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-950/20 border ${
-                    pathname === "/master"
-                      ? "bg-slate-100 dark:bg-slate-900/30 border-slate-300 dark:border-slate-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master")}
-                >
-                  <Crown className="mr-3 h-4 w-4 text-slate-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Master Dashboard</span>
-                    <span className="text-[10px] opacity-70">
-                      System overview
-                    </span>
-                  </div>
-                </Button>
-              </div>
-
-              {/* 🔧 SYSTEM MANAGEMENT */}
-              <div className="space-y-2">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                    🔧 System Management
-                  </span>
-                </div>
-
-                <Button
-                  variant={
-                    pathname === "/master/system-monitor" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/20 border ${
-                    pathname === "/master/system-monitor"
-                      ? "bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/system-monitor")}
-                >
-                  <Monitor className="mr-3 h-4 w-4 text-blue-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">System Monitor</span>
-                    <span className="text-[10px] opacity-70">
-                      Real-time monitoring
-                    </span>
-                  </div>
-                </Button>
-
-                <Button
-                  variant={
-                    pathname === "/master/database-tools" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 border ${
-                    pathname === "/master/database-tools"
-                      ? "bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300 dark:border-emerald-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/database-tools")}
-                >
-                  <Database className="mr-3 h-4 w-4 text-emerald-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Database Tools</span>
-                    <span className="text-[10px] opacity-70">
-                      Database management
-                    </span>
-                  </div>
-                </Button>
-
-                <Button
-                  variant={
-                    pathname === "/master/global-settings" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-teal-700 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950/20 border ${
-                    pathname === "/master/global-settings"
-                      ? "bg-teal-100 dark:bg-teal-900/30 border-teal-300 dark:border-teal-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/global-settings")}
-                >
-                  <Settings className="mr-3 h-4 w-4 text-teal-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Global Settings</span>
-                    <span className="text-[10px] opacity-70">
-                      System configuration
-                    </span>
-                  </div>
-                </Button>
-              </div>
-
-              {/* 🛡️ SECURITY & COMPLIANCE */}
-              <div className="space-y-2">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">
-                    🛡️ Security & Compliance
-                  </span>
-                </div>
-
-                <Button
-                  variant={
-                    pathname === "/master/security" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/20 border ${
-                    pathname === "/master/security"
-                      ? "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/security")}
-                >
-                  <Shield className="mr-3 h-4 w-4 text-red-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Security Center</span>
-                    <span className="text-[10px] opacity-70">
-                      Threat analysis
-                    </span>
-                  </div>
-                </Button>
-
-                <Button
-                  variant={
-                    pathname === "/master/audit-logs" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-orange-700 dark:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 border ${
-                    pathname === "/master/audit-logs"
-                      ? "bg-orange-100 dark:bg-orange-900/30 border-orange-300 dark:border-orange-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/audit-logs")}
-                >
-                  <Eye className="mr-3 h-4 w-4 text-orange-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Audit Logs</span>
-                    <span className="text-[10px] opacity-70">
-                      Activity tracking
-                    </span>
-                  </div>
-                </Button>
-
-                <Button
-                  variant={
-                    pathname === "/master/audit-master" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/20 border ${
-                    pathname === "/master/audit-master"
-                      ? "bg-amber-100 dark:bg-amber-900/30 border-amber-300 dark:border-amber-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/audit-master")}
-                >
-                  <FileText className="mr-3 h-4 w-4 text-amber-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Audit Master</span>
-                    <span className="text-[10px] opacity-70">
-                      Advanced auditing
-                    </span>
-                  </div>
-                </Button>
-              </div>
-
-              {/* 👥 USER MANAGEMENT */}
-              <div className="space-y-2">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                    👥 User Management
-                  </span>
-                </div>
-
-                <Button
-                  variant={
-                    pathname === "/master/user-analytics" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 border ${
-                    pathname === "/master/user-analytics"
-                      ? "bg-indigo-100 dark:bg-indigo-900/30 border-indigo-300 dark:border-indigo-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/user-analytics")}
-                >
-                  <NavigationIcons.Analytics className="mr-3 h-4 w-4 text-indigo-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">User Analytics</span>
-                    <span className="text-[10px] opacity-70">
-                      User behavior analysis
-                    </span>
-                  </div>
-                </Button>
-
-                <Button
-                  variant={
-                    pathname === "/master/role-management" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-cyan-700 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/20 border ${
-                    pathname === "/master/role-management"
-                      ? "bg-cyan-100 dark:bg-cyan-900/30 border-cyan-300 dark:border-cyan-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/role-management")}
-                >
-                  <Shield className="mr-3 h-4 w-4 text-cyan-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Role Management</span>
-                    <span className="text-[10px] opacity-70">
-                      Access control
-                    </span>
-                  </div>
-                </Button>
-              </div>
-
-              {/* ⚡ PERFORMANCE & DEBUGGING */}
-              <div className="space-y-2">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-green-600 dark:text-green-400 uppercase tracking-wider">
-                    ⚡ Performance & Debugging
-                  </span>
-                </div>
-
-                <Button
-                  variant={
-                    pathname === "/master/performance" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-green-700 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-950/20 border ${
-                    pathname === "/master/performance"
-                      ? "bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/performance")}
-                >
-                  <Zap className="mr-3 h-4 w-4 text-green-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Performance</span>
-                    <span className="text-[10px] opacity-70">
-                      System performance
-                    </span>
-                  </div>
-                </Button>
-
-                <Button
-                  variant={
-                    pathname === "/master/debug-console" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-lime-700 dark:text-lime-300 hover:bg-lime-50 dark:hover:bg-lime-950/20 border ${
-                    pathname === "/master/debug-console"
-                      ? "bg-lime-100 dark:bg-lime-900/30 border-lime-300 dark:border-lime-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/debug-console")}
-                >
-                  <Terminal className="mr-3 h-4 w-4 text-lime-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Debug Console</span>
-                    <span className="text-[10px] opacity-70">
-                      Advanced debugging
-                    </span>
-                  </div>
-                </Button>
-              </div>
-
-              {/* 🌐 GLOBAL OVERSIGHT */}
-              <div className="space-y-2">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
-                    🌐 Global Oversight
-                  </span>
-                </div>
-
-                <Button
-                  variant={
-                    pathname === "/master/global-oversight"
-                      ? "default"
-                      : "ghost"
-                  }
-                  className={`w-full justify-start text-violet-700 dark:text-violet-300 hover:bg-violet-50 dark:hover:bg-violet-950/20 border ${
-                    pathname === "/master/global-oversight"
-                      ? "bg-violet-100 dark:bg-violet-900/30 border-violet-300 dark:border-violet-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/global-oversight")}
-                >
-                  <Globe className="mr-3 h-4 w-4 text-violet-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Global Oversight</span>
-                    <span className="text-[10px] opacity-70">
-                      Cross-system control
-                    </span>
-                  </div>
-                </Button>
-              </div>
-
-              {/* ⚠️ SUPREME OPERATIONS */}
-              <div className="space-y-2">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">
-                    ⚠️ Supreme Operations
-                  </span>
-                </div>
-
-                <Button
-                  variant={
-                    pathname === "/master/god-mode" ? "default" : "ghost"
-                  }
-                  className={`w-full justify-start text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/20 border ${
-                    pathname === "/master/god-mode"
-                      ? "bg-purple-100 dark:bg-purple-900/30 border-purple-300 dark:border-purple-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/god-mode")}
-                >
-                  <Crown className="mr-3 h-4 w-4 text-purple-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">God Mode</span>
-                    <span className="text-[10px] opacity-70">
-                      Supreme control
-                    </span>
-                  </div>
-                </Button>
-
-                <Button
-                  variant={
-                    pathname === "/master/advanced-operations"
-                      ? "default"
-                      : "destructive"
-                  }
-                  className={`w-full justify-start text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/20 border ${
-                    pathname === "/master/advanced-operations"
-                      ? "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => router.push("/master/advanced-operations")}
-                >
-                  <AlertTriangle className="mr-3 h-4 w-4 text-red-600" />
-                  <div className="flex flex-col items-start">
-                    <span className="font-medium">Advanced Operations</span>
-                    <span className="text-[10px] opacity-70">
-                      Critical operations
-                    </span>
-                  </div>
-                </Button>
-              </div>
-
-              {/* 🎛️ ADVANCED SETTINGS */}
-              <div className="space-y-2 border-t border-slate-200 dark:border-slate-800 pt-4">
-                <div className="px-2 py-1">
-                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                    🎛️ Developer Tools
-                  </span>
-                </div>
-                <AdvancedSettingsDropdown isCollapsed={isCollapsed} />
-              </div>
-            </div>
-          )}
-
-          {isCollapsed && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full mt-2"
-                  onClick={handleLogout}
-                >
-                  <ThemeIcons.Logout className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                <p>Cerrar Sesión</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
         </div>
+
+        {/* Quick Search Dialog */}
+        <AnimatePresence>
+          {quickSearchOpen && (
+            <QuickSearch
+              items={allNavigationItems}
+              onNavigate={handleNavigate}
+              isOpen={quickSearchOpen}
+              onClose={() => setQuickSearchOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Shortcuts Help Dialog */}
+        <AnimatePresence>
+          {shortcutsHelpOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+              onClick={() => setShortcutsHelpOpen(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-md rounded-xl bg-background p-6 shadow-2xl border"
+              >
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-semibold flex items-center gap-2">
+                    <NavigationIcons.Planning className="h-5 w-5" />
+                    {t("nav.shortcuts", "Atajos de Teclado")}
+                  </h2>
+                  <Button variant="ghost" size="sm" onClick={() => setShortcutsHelpOpen(false)}>
+                    <NavigationIcons.Close className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="grid gap-2 max-h-[60vh] overflow-y-auto">
+                  {Object.entries(getKeyboardShortcuts(userRole || undefined, pathname)).map(([key, href]) => {
+                    const item = allNavigationItems.find(i => i.href === href);
+                    // Handle special static shortcuts
+                    let label = href;
+                    if (key === "Escape") label = "Cerrar / Volver";
+                    else if (key === "Ctrl+K") label = "Búsqueda Rápida";
+                    else if (key === "?") label = "Ver Atajos";
+                    else if (item) label = t(item.title);
+                    
+                    return (
+                      <div key={key} className="flex items-center justify-between rounded-lg border p-2 text-sm">
+                         <span className="font-medium text-muted-foreground">
+                           {label}
+                         </span>
+                         <kbd className="rounded bg-muted px-2 py-1 font-mono text-xs font-bold">
+                           {key}
+                         </kbd>
+                      </div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.aside>
-
-      {/* Overlays */}
-      <AnimatePresence>
-        {quickSearchOpen && (
-          <QuickSearch
-            items={navigationItems}
-            onNavigate={handleNavigate}
-            isOpen={quickSearchOpen}
-            onClose={() => setQuickSearchOpen(false)}
-          />
-        )}
-      </AnimatePresence>
     </TooltipProvider>
-  );
-}
-
-export function EnhancedSidebarTrigger({ onToggle }: { onToggle: () => void }) {
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="fixed left-4 top-4 z-50 md:hidden"
-      onClick={onToggle}
-      aria-label="Abrir menú de navegación"
-      title="Abrir menú de navegación"
-    >
-      <NavigationIcons.Menu className="h-4 w-4" aria-hidden="true" />
-    </Button>
   );
 }

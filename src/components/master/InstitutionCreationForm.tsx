@@ -44,7 +44,6 @@ import {
 import {
   Building2,
   Check,
-  Crown,
   ShieldCheck,
   Settings2,
   Palette,
@@ -920,65 +919,6 @@ export function InstitutionCreationForm() {
           </CardContent>
         </Card>
 
-        <Card className="border-blue-200 dark:border-blue-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Crown className="h-5 w-5 text-gold-600" />
-              Instrucciones MASTER
-            </CardTitle>
-            <CardDescription>
-              Supervisión del proceso de institucionalización
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <p>
-                El MASTER provisiona un tenant completo. Asegúrese de que los
-                administradores registrados reciban las credenciales generadas.
-              </p>
-              <p>
-                El administrador principal queda marcado en la membresía para
-                auditoría y soporte prioritario.
-              </p>
-            </div>
-            <Separator />
-            <div className="space-y-3">
-              <h4 className="text-sm font-semibold">Checklist rápido</h4>
-              <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-2">
-                <li>Confirme que la institución no exista previamente</li>
-                <li>Use correos institucionales verificables</li>
-                <li>Comparta la contraseña por un canal seguro</li>
-                <li>Solicite cambio de contraseña en el primer inicio</li>
-              </ul>
-            </div>
-            {creationResult && (
-              <Alert className="border-green-300 bg-green-50/80 dark:border-green-700 dark:bg-green-900/20">
-                <AlertTitle>Tenant creado correctamente</AlertTitle>
-                <AlertDescription>
-                  <div className="space-y-3 text-sm">
-                    <div>
-                      ID Convex:{" "}
-                      {creationResult.institutionId || "sincronizando..."}
-                    </div>
-                    <div className="space-y-1">
-                      <div className="font-semibold">
-                        Administradores provisionados
-                      </div>
-                      <ul className="list-disc pl-5 space-y-1">
-                        {creationResult.admins.map((admin) => (
-                          <li key={admin.userId}>
-                            {admin.email} — rol {admin.role}
-                            {admin.isPrimary ? " (principal)" : ""}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
       </div>
     </MasterPageTemplate>
   );

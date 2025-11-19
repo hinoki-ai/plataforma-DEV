@@ -72,5 +72,19 @@
   "nav.protocolos_convivencia.medidas": "Medidas Correctivas",
   "nav.protocolos_convivencia.reconocimientos": "Reconocimientos",
   "nav.protocolos_convivencia.actas_apoderados": "Actas de Entrevistas Apoderados",
-  "nav.protocolos_convivencia.actas_alumnos": "Actas de Entrevistas Alumnos"
+  "nav.protocolos_convivencia.actas_alumnos": "Actas de Entrevistas Alumnos",
+  "nav.global_oversight": "Supervisión Global",
+  "nav.system_stats": "Estadísticas del Sistema",
+  "nav.system_health": "Salud del Sistema",
+  "nav.institutions": "Instituciones",
+  "nav.roles": "Roles y Permisos",
+  "nav.user_analytics": "Analíticas de Usuarios",
+  "nav.security": "Seguridad",
+  "nav.database": "Base de Datos",
+  "nav.global_settings": "Configuración Global",
+  "nav.god_mode": "Modo Dios",
+  "nav.debug_console": "Consola de Depuración",
+  "nav.audit_logs": "Registros de Auditoría",
+  "nav.system_monitor": "Monitor del Sistema",
+  "nav.performance": "Rendimiento"
 }

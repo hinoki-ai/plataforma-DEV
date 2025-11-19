@@ -492,7 +492,7 @@ export const PARENT_NAVIGATION = [
 // MASTER Navigation Configuration
 export const MASTER_NAVIGATION = [
   {
-    title: ROLE_SPECIFIC_SECTIONS.MASTER.system,
+    title: ROLE_SPECIFIC_SECTIONS.MASTER.primary,
     defaultOpen: true,
     items: [
       {
@@ -502,34 +502,20 @@ export const MASTER_NAVIGATION = [
         shortcut: "Alt+M",
       },
       {
-        title: "nav.main.categories.debug",
-        href: "/master/god-mode",
-        icon: NavigationIcons.ServerStack,
-        shortcut: "Alt+G",
-      },
-      {
-        title: "nav.main.categories.debug",
+        title: "nav.global_oversight",
         href: "/master/global-oversight",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+O",
       },
       {
-        title: "nav.configuration",
-        href: "/master/system-config",
-        icon: NavigationIcons.Settings,
-        shortcut: "Alt+C",
+        title: "nav.system_stats",
+        href: "/master/system-stats",
+        icon: NavigationIcons.Analytics,
       },
       {
-        title: "nav.main.categories.debug",
-        href: "/master/system-monitor",
+        title: "nav.system_health",
+        href: "/master/system-health",
         icon: NavigationIcons.ServerStack,
-        shortcut: "Alt+S",
-      },
-      {
-        title: "nav.main.categories.debug",
-        href: "/master/audit-master",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+A",
       },
     ],
   },
@@ -538,22 +524,91 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "nav.admin.panel",
-        href: "/admin",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+H",
+        title: "nav.institutions",
+        href: "/master/institutions",
+        icon: NavigationIcons.Home,
       },
       {
         title: "nav.users",
-        href: "/admin/usuarios",
+        href: "/master/user-management",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+U",
+      },
+      {
+        title: "nav.roles",
+        href: "/master/role-management",
+        icon: NavigationIcons.Team,
+      },
+      {
+        title: "nav.user_analytics",
+        href: "/master/user-analytics",
+        icon: NavigationIcons.Analytics,
+      },
+    ],
+  },
+  {
+    title: ROLE_SPECIFIC_SECTIONS.MASTER.system,
+    defaultOpen: false,
+    items: [
+      {
+        title: "nav.configuration",
+        href: "/master/system-config",
+        icon: NavigationIcons.Settings,
+        shortcut: "Alt+C",
+      },
+      {
+        title: "nav.security",
+        href: "/master/security-center",
+        icon: NavigationIcons.Settings, // Using Settings as placeholder for Shield if not available in NavigationIcons
+      },
+      {
+        title: "nav.database",
+        href: "/master/database-tools",
+        icon: NavigationIcons.ServerStack,
+      },
+      {
+        title: "nav.global_settings",
+        href: "/master/global-settings",
+        icon: NavigationIcons.Settings,
+      },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.DEBUG,
+    defaultOpen: false,
+    items: [
+      {
+        title: "nav.god_mode",
+        href: "/master/god-mode",
+        icon: NavigationIcons.ServerStack,
+        shortcut: "Alt+G",
+      },
+      {
+        title: "nav.debug_console",
+        href: "/master/debug-console",
+        icon: NavigationIcons.ServerStack,
+      },
+      {
+        title: "nav.audit_logs",
+        href: "/master/audit-logs",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.system_monitor",
+        href: "/master/system-monitor",
+        icon: NavigationIcons.ServerStack,
+        shortcut: "Alt+S",
+      },
+      {
+        title: "nav.performance",
+        href: "/master/performance",
+        icon: NavigationIcons.Analytics,
       },
     ],
   },
   {
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       {
         title: "nav.dashboard",
@@ -585,35 +640,6 @@ export const MASTER_NAVIGATION = [
         href: "/admin/libro-clases/estudiantes",
         icon: NavigationIcons.Profile,
         shortcut: "Alt+G",
-      },
-    ],
-  },
-  {
-    title: STANDARD_SECTION_ORDER.ACADEMIC,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.planning",
-        href: "/profesor/planificaciones",
-        icon: NavigationIcons.Planning,
-        shortcut: "Alt+P",
-        requiredFeature: "academic_planning",
-      },
-      {
-        title: "nav.calendar",
-        href: "/admin/calendario-escolar",
-        icon: NavigationIcons.Calendar,
-        shortcut: "Alt+E",
-      },
-      {
-        title: "nav.schedule",
-        href: "/admin/horarios",
-        icon: NavigationIcons.Calendar,
-      },
-      {
-        title: "nav.pme",
-        href: "/admin/pme",
-        icon: NavigationIcons.Analytics,
       },
     ],
   },
@@ -660,52 +686,9 @@ export const MASTER_NAVIGATION = [
     ],
   },
   {
-    title: STANDARD_SECTION_ORDER.COMMUNICATION,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.meetings",
-        href: "/admin/reuniones",
-        icon: NavigationIcons.Meeting,
-        shortcut: "Alt+R",
-        requiredFeature: "parent_meetings",
-      },
-      {
-        title: "nav.voting",
-        href: "/admin/votaciones",
-        icon: NavigationIcons.Vote,
-        shortcut: "Alt+V",
-      },
-    ],
-  },
-  {
-    title: STANDARD_SECTION_ORDER.RESOURCES,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.documents",
-        href: "/admin/documentos",
-        icon: NavigationIcons.Documents,
-        shortcut: "Alt+D",
-      },
-    ],
-  },
-  {
-    title: STANDARD_SECTION_ORDER.SYSTEM,
+    title: STANDARD_SECTION_ORDER.PERSONAL,
     defaultOpen: false,
     items: [SHARED_NAVIGATION_ITEMS.DOCS, SHARED_NAVIGATION_ITEMS.SETTINGS],
-  },
-  {
-    title: STANDARD_SECTION_ORDER.DEBUG,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.main.categories.debug",
-        href: "/admin/debug-navigation",
-        icon: NavigationIcons.Analytics,
-        shortcut: "Alt+B",
-      },
-    ],
   },
 ];
 
