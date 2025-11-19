@@ -20,6 +20,7 @@ import {
   JoshAnalyticsProvider,
   JoshAnalyticsDashboard,
 } from "./ui/josh-analytics";
+import { ClientOnly } from "./ui/client-only";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -36,10 +37,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
             nonce={undefined}
           >
             <JoshAnalyticsProvider>
-              <JoshWelcomeToast />
-              <JoshIndicator />
-              <JoshProactiveSuggestions />
-              <JoshAnalyticsDashboard />
+              <ClientOnly>
+                <JoshWelcomeToast />
+                <JoshIndicator />
+                <JoshProactiveSuggestions />
+                <JoshAnalyticsDashboard />
+              </ClientOnly>
             </JoshAnalyticsProvider>
             <ContextProvider>
               <LanguageProvider>
