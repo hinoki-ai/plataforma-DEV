@@ -20,28 +20,34 @@ export async function GET(request: NextRequest) {
 
     const client = await getAuthenticatedConvexClient();
 
-    // Resolve Convex user - session.user.id might be a Clerk ID string
+    // Resolve Convex user - prioritize Clerk ID lookup for reliability
     let user = null;
 
-    // Check if session.user.id is a valid Convex ID (starts with a letter)
-    // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
-    if (session.user.id && /^[a-z]/.test(session.user.id)) {
-      // It's a valid Convex ID, use it directly
-      user = await client.query(api.users.getUserById, {
-        userId: session.user.id as any,
-      });
-    } else {
-      // It's a Clerk ID, look up by Clerk ID
-      if (!session.user.clerkId) {
-        return NextResponse.json(
-          { error: "User not found in database" },
-          { status: 404 },
-        );
-      }
-
+    // Always try to look up by Clerk ID first, as it's the most reliable identifier
+    if (session.user.clerkId) {
       user = await client.query(api.users.getUserByClerkId, {
         clerkId: session.user.clerkId,
       });
+    }
+
+    // If Clerk ID lookup failed and we have a Convex ID, try that as fallback
+    if (!user && session.user.id && /^[a-zA-Z]/.test(session.user.id)) {
+      try {
+        user = await client.query(api.users.getUserById, {
+          userId: session.user.id as any,
+        });
+      } catch (error) {
+        // Convex ID lookup failed, continue with null user
+        console.warn("Convex ID lookup failed, user not found:", session.user.id);
+      }
+    }
+
+    // If still no user found, this is an error
+    if (!user && !session.user.clerkId) {
+      return NextResponse.json(
+        { error: "User not found in database - missing Clerk ID" },
+        { status: 404 },
+      );
     }
 
     if (!user) {
@@ -87,31 +93,40 @@ export async function PUT(request: NextRequest) {
 
     const client = await getAuthenticatedConvexClient();
 
-    // Resolve Convex user ID - session.user.id might be a Clerk ID string
-    let convexUserId = session.user.id as any;
+    // Resolve Convex user ID - prioritize Clerk ID lookup for reliability
+    let convexUserId = null;
 
-    // Check if session.user.id is a valid Convex ID (starts with a letter)
-    // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
-    if (!convexUserId || !/^[a-z]/.test(convexUserId)) {
-      if (!session.user.clerkId) {
-        return NextResponse.json(
-          { error: "User not found in database" },
-          { status: 404 },
-        );
-      }
-
+    // Always try to look up by Clerk ID first to get the Convex user
+    if (session.user.clerkId) {
       const userByClerkId = await client.query(api.users.getUserByClerkId, {
         clerkId: session.user.clerkId,
       });
 
-      if (!userByClerkId) {
-        return NextResponse.json(
-          { error: "User not found in database" },
-          { status: 404 },
-        );
+      if (userByClerkId) {
+        convexUserId = userByClerkId._id;
       }
+    }
 
-      convexUserId = userByClerkId._id;
+    // If Clerk ID lookup failed and we have a potential Convex ID, try that as fallback
+    if (!convexUserId && session.user.id && /^[a-zA-Z]/.test(session.user.id)) {
+      try {
+        const userById = await client.query(api.users.getUserById, {
+          userId: session.user.id as any,
+        });
+        if (userById) {
+          convexUserId = userById._id;
+        }
+      } catch (error) {
+        // Convex ID lookup failed, continue
+        console.warn("Convex ID lookup failed for update:", session.user.id);
+      }
+    }
+
+    if (!convexUserId) {
+      return NextResponse.json(
+        { error: "User not found in database" },
+        { status: 404 },
+      );
     }
 
     // Prepare update data with trimming
