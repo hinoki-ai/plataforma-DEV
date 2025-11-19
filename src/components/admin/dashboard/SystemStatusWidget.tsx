@@ -12,6 +12,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 interface SystemMetrics {
   database: {
@@ -68,6 +69,7 @@ const getStatusVariant = (status: string) => {
 };
 
 export function SystemStatusWidget({ metrics }: SystemStatusWidgetProps) {
+  const { t } = useLanguage();
   const formatBytes = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;

@@ -1,5 +1,21 @@
 "use client";
 
+/**
+ * MASTER DASHBOARD - ENGLISH ONLY
+ *
+ * IMPORTANT: This component is intentionally English-only and should NEVER be internationalized.
+ *
+ * Reasons:
+ * - Master dashboard is only used by system administrators/developers
+ * - i18n adds unnecessary complexity, maintenance overhead, and disk usage
+ * - Translation quality for technical admin interfaces is not critical
+ * - Avoids wasting developer time on translating technical terminology
+ * - Reduces bundle size and improves performance
+ *
+ * DO NOT ADD i18n, useDivineParsing, or translation hooks to this component.
+ * All text must remain hardcoded in English.
+ */
+
 import React, { useMemo } from "react";
 import { useSession } from "next-auth/react";
 import {

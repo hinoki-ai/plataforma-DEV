@@ -79,6 +79,8 @@ import libroClasesES from "../../locales/es/libro-clases.json";
 import libroClasesEN from "../../locales/en/libro-clases.json";
 import meetingsES from "../../locales/es/meetings.json";
 import meetingsEN from "../../locales/en/meetings.json";
+// NOTE: masterES/masterEN exist for build compatibility but master dashboard is English-only
+// DO NOT use master translations in MasterDashboard.tsx - keep it hardcoded English
 import masterES from "../../locales/es/master.json";
 import masterEN from "../../locales/en/master.json";
 

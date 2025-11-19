@@ -1,4 +1,13 @@
 {
+  /**
+   * MASTER DASHBOARD LOCALE - DO NOT USE
+   *
+   * This file exists only to prevent build failures but should NEVER contain actual translations.
+   * The master dashboard is English-only by design. See MasterDashboard.tsx for details.
+   *
+   * DO NOT ADD TRANSLATIONS HERE - they will never be used.
+   */
+
   "master.dashboard.title": "Master Dashboard",
   "master.dashboard.subtitle": "Complete system control and oversight",
   "master.system_overview.title": "System Overview",

@@ -20,6 +20,7 @@ import languageES from "@/locales/es/language.json";
 import languageEN from "@/locales/en/language.json";
 import contactoES from "@/locales/es/contacto.json";
 import contactoEN from "@/locales/en/contact.json";
+// NOTE: masterES/masterEN exist for build compatibility but master dashboard is English-only
 import masterES from "@/locales/es/master.json";
 import masterEN from "@/locales/en/master.json";
 

@@ -17,6 +17,7 @@ export function ParentMeetingList({ userId }: ParentMeetingListProps) {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     loadMeetings();
@@ -53,7 +54,7 @@ export function ParentMeetingList({ userId }: ParentMeetingListProps) {
         }));
         setMeetings(convertedMeetings);
       } else {
-        setError("Error al cargar las reuniones");
+        setError(t("meetings.list.loading_error"));
       }
     } catch (err) {
       setError("Error al cargar las reuniones");

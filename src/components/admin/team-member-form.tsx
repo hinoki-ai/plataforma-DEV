@@ -285,7 +285,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
                     <div className="mt-2">
                       <img
                         src={imagePreview}
-                        alt="Vista previa"
+                        alt={t("team.form.image.preview")}
                         className="h-32 w-32 object-cover rounded-lg border"
                       />
                     </div>
