@@ -51,10 +51,6 @@ import {
   calculateBillingPrice,
   formatCLP,
 } from "@/data/pricing-plans";
-import {
-  INSTITUTION_TYPE_INFO,
-  EducationalInstitutionType,
-} from "@/lib/educational-system";
 
 const plans = pricingPlans;
 
@@ -80,8 +76,6 @@ export default function PreciosPage() {
   const { isDesktopForced } = useDesktopToggle();
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("semestral");
-  const [institutionType, setInstitutionType] =
-    useState<EducationalInstitutionType>("PRESCHOOL");
   const [mounted] = useState(true);
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
 
@@ -201,33 +195,6 @@ export default function PreciosPage() {
               </motion.div>
             </motion.div>
 
-            {/* Institution Type Selector */}
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-foreground mb-4">
-                {tp("educational_system.institution_type")}
-              </h3>
-              <div className="flex flex-wrap justify-center gap-2">
-                {Object.entries(INSTITUTION_TYPE_INFO).map(([key, info]) => (
-                  <Button
-                    key={key}
-                    onClick={() =>
-                      setInstitutionType(key as EducationalInstitutionType)
-                    }
-                    variant={institutionType === key ? "default" : "outline"}
-                    size="sm"
-                    className={`flex items-center gap-2 ${
-                      institutionType === key ? info.color : ""
-                    }`}
-                  >
-                    <span className="text-xl">{info.icon}</span>
-                    <span>{info.chileanName}</span>
-                  </Button>
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground mt-2">
-                {INSTITUTION_TYPE_INFO[institutionType].description}
-              </p>
-            </div>
 
             {/* Billing Cycle Toggle */}
             <div className="flex justify-center gap-4 mb-6">
@@ -559,7 +526,7 @@ export default function PreciosPage() {
                       size="lg"
                       onClick={() =>
                         router.push(
-                          `/planes/calculadora?plan=${plan.id}&billing=${billingCycle}&type=${institutionType}`,
+                          `/planes/calculadora?plan=${plan.id}&billing=${billingCycle}`,
                         )
                       }
                     >
