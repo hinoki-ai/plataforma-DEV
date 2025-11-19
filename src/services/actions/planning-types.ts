@@ -105,4 +105,3 @@ Criterios de evaluación`,
     },
   },
 ];
-

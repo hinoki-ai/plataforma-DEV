@@ -141,8 +141,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate options
-    const optionTexts = options.map((opt: any) => 
-      typeof opt === 'string' ? opt : opt.text
+    const optionTexts = options.map((opt: any) =>
+      typeof opt === "string" ? opt : opt.text,
     );
 
     if (optionTexts.some((opt: string) => !opt || !opt.trim())) {
@@ -217,17 +217,17 @@ export async function PUT(request: NextRequest) {
     }
 
     if (options) {
-      const optionTexts = options.map((opt: any) => 
-        typeof opt === 'string' ? opt : opt.text
+      const optionTexts = options.map((opt: any) =>
+        typeof opt === "string" ? opt : opt.text,
       );
-      
+
       if (optionTexts.some((opt: string) => !opt || !opt.trim())) {
         return NextResponse.json(
           { error: "All options must be non-empty" },
           { status: 400 },
         );
       }
-      
+
       args.options = optionTexts.map((opt: string) => opt.trim());
     }
 
@@ -239,20 +239,23 @@ export async function PUT(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error updating vote:", error);
-    
+
     if (error instanceof Error) {
-        if (error.message.includes("Cannot modify options")) {
-            return NextResponse.json(
-                { error: "Cannot modify options because voting has already started." },
-                { status: 400 }
-            );
-        }
+      if (error.message.includes("Cannot modify options")) {
+        return NextResponse.json(
+          {
+            error: "Cannot modify options because voting has already started.",
+          },
+          { status: 400 },
+        );
+      }
     }
 
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      {
+        error: error instanceof Error ? error.message : "Internal server error",
+      },
       { status: 500 },
     );
   }
 }
-

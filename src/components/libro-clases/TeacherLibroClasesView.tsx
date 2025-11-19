@@ -309,17 +309,20 @@ export function TeacherLibroClasesView({
         <PageTransition>
           <div className="space-y-6">
             <RoleAwareHeader
-              title="Conexión con libro de clases inestable"
-              subtitle="Revisa tu conexión o que el servidor de datos esté disponible"
+              title="Error de conexión"
+              subtitle="No se pudo conectar con el servidor de datos"
             />
             <Card>
               <CardContent className="py-10 space-y-4">
-                <p className="text-muted-foreground">
-                  Seguimos intentando conectar con el libro de clases pero no
-                  hay respuesta. Si estás trabajando en local, asegúrate de
-                  tener el servicio Convex ejecutándose (`npm run dev` también
-                  necesita `npx convex dev`).
+                <p className="text-muted-foreground mb-4">
+                  El libro de clases no puede cargar porque no hay conexión con
+                  el servidor de datos. Esto puede deberse a:
                 </p>
+                <ul className="list-disc list-inside ml-4 space-y-2 text-sm text-muted-foreground">
+                  <li>Problemas de conexión a internet</li>
+                  <li>El servidor de datos no está disponible</li>
+                  <li>Problemas de configuración del servicio Convex</li>
+                </ul>
                 {tenancyCheck && "error" in tenancyCheck && (
                   <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                     <p className="text-sm font-medium text-destructive mb-2">
@@ -337,11 +340,26 @@ export function TeacherLibroClasesView({
                     </p>
                   </div>
                 )}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 mt-6">
+                  <Button onClick={() => window.location.reload()}>
+                    Recargar página
+                  </Button>
                   <Button variant="outline" onClick={() => router.refresh()}>
-                    Reintentar
+                    Reintentar conexión
                   </Button>
                 </div>
+                {process.env.NODE_ENV === "development" && (
+                  <div className="mt-4 p-4 bg-muted rounded-lg text-xs">
+                    <p className="font-medium mb-2">
+                      Información de desarrollo:
+                    </p>
+                    <p>
+                      Asegúrate de que el servicio Convex esté ejecutándose:
+                      ejecuta <code>npx convex dev</code> en una terminal
+                      separada.
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

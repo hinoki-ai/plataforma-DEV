@@ -76,13 +76,25 @@ const convex = new ConvexReactClient(convexUrl, {
       if (
         message.includes("WebSocket reconnected at") ||
         message.includes("WebSocket connection") ||
-        message.includes("WebSocket closed")
+        message.includes("WebSocket closed") ||
+        message.includes("Attempting reconnect") ||
+        message.includes("Reconnecting")
       ) {
         return; // Suppress connection-related logs
       }
       console.log(...args);
     },
-    warn: (...args: any[]) => console.warn(...args),
+    warn: (...args: any[]) => {
+      const message = args.join(" ");
+      // Only show warnings that aren't connection-related
+      if (
+        !message.includes("Attempting reconnect") &&
+        !message.includes("Reconnecting") &&
+        !message.includes("WebSocket")
+      ) {
+        console.warn(...args);
+      }
+    },
     error: (...args: any[]) => console.error(...args),
     logVerbose: (...args: any[]) => {
       // Suppress verbose logs entirely

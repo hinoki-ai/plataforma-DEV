@@ -37,9 +37,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { UserRole } from "@/lib/prisma-compat-types";
-import {
-  RoleAwareBreadcrumb,
-} from "@/components/layout/RoleAwareNavigation";
+import { RoleAwareBreadcrumb } from "@/components/layout/RoleAwareNavigation";
 import {
   RoleGuard,
   RoleBasedComponent,

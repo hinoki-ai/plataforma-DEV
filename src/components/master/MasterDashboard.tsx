@@ -101,7 +101,9 @@ function SystemHealthCard({ stats }: { stats: any }) {
         <div className="flex items-center gap-2 pt-2 border-t">
           <CheckCircle className="h-4 w-4 text-green-500" />
           <span className="text-sm text-muted-foreground">
-            {t("master.system_status")}: {stats?.system?.status || t("master.unknown")} - {t("master.uptime")}:{" "}
+            {t("master.system_status")}:{" "}
+            {stats?.system?.status || t("master.unknown")} -{" "}
+            {t("master.uptime")}:{" "}
             {stats?.system?.uptime
               ? `${Math.floor(stats.system.uptime / 3600)}h`
               : "N/A"}
@@ -112,9 +114,15 @@ function SystemHealthCard({ stats }: { stats: any }) {
   );
 }
 
-function LocalMasterStatsCard({ stats, loading }: { stats: any; loading: boolean }) {
+function LocalMasterStatsCard({
+  stats,
+  loading,
+}: {
+  stats: any;
+  loading: boolean;
+}) {
   const { t } = useDivineParsing(["master"]);
-  
+
   if (loading) {
     return (
       <Card className="border-blue-200 dark:border-blue-800">
@@ -146,7 +154,9 @@ function LocalMasterStatsCard({ stats, loading }: { stats: any; loading: boolean
             <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
               {(stats.users?.total || 0).toLocaleString()}
             </div>
-            <div className="text-sm text-muted-foreground">{t("master.system_overview.stats.total_users")}</div>
+            <div className="text-sm text-muted-foreground">
+              {t("master.system_overview.stats.total_users")}
+            </div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -154,7 +164,9 @@ function LocalMasterStatsCard({ stats, loading }: { stats: any; loading: boolean
             <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
               {stats.users?.breakdown?.profesor || 0}
             </div>
-            <div className="text-sm text-muted-foreground">{t("master.global_stats.teachers")}</div>
+            <div className="text-sm text-muted-foreground">
+              {t("master.global_stats.teachers")}
+            </div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -162,7 +174,9 @@ function LocalMasterStatsCard({ stats, loading }: { stats: any; loading: boolean
             <div className="text-2xl font-bold text-green-700 dark:text-green-300">
               {stats.database?.connectionPoolSize || 0}
             </div>
-            <div className="text-sm text-muted-foreground">{t("master.global_stats.db_connections")}</div>
+            <div className="text-sm text-muted-foreground">
+              {t("master.global_stats.db_connections")}
+            </div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -170,7 +184,9 @@ function LocalMasterStatsCard({ stats, loading }: { stats: any; loading: boolean
             <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
               {((stats.performance?.throughput || 0) / 1000).toFixed(1)}K
             </div>
-            <div className="text-sm text-muted-foreground">{t("master.global_stats.requests_hour")}</div>
+            <div className="text-sm text-muted-foreground">
+              {t("master.global_stats.requests_hour")}
+            </div>
           </div>
         </div>
       </CardContent>
@@ -180,7 +196,7 @@ function LocalMasterStatsCard({ stats, loading }: { stats: any; loading: boolean
 
 function SecurityAlertsCard({ stats }: { stats: any }) {
   const { t } = useDivineParsing(["master"]);
-  
+
   const alerts = useMemo(
     () => [
       {
@@ -215,7 +231,9 @@ function SecurityAlertsCard({ stats }: { stats: any }) {
           <Shield className="h-5 w-5 text-blue-600" />
           {t("master.security_alerts.title")}
         </CardTitle>
-        <CardDescription>{t("master.security_alerts.subtitle")}</CardDescription>
+        <CardDescription>
+          {t("master.security_alerts.subtitle")}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -250,60 +268,63 @@ export function MasterDashboard() {
   const { stats, loading } = useDashboardData();
   const { t } = useDivineParsing(["master"]);
 
-  const masterQuickActions: QuickAction[] = useMemo(() => [
-    // Core Master Functions
-    {
-      id: "system-overview",
-      title: t("master.system_overview.title"),
-      description: t("master.system_overview.subtitle"),
-      icon: Activity,
-      href: "/master/system-overview",
-      category: "Core",
-    },
-    {
-      id: "institution-creation",
-      title: t("master.actions.institution_provisioning.title"),
-      description: t("master.actions.institution_provisioning.description"),
-      icon: Building2,
-      href: "/master/institution-creation",
-      category: "Core",
-    },
-    {
-      id: "user-management",
-      title: t("master.user_management.title"),
-      description: t("master.actions.user_management.description"),
-      icon: Users,
-      href: "/master/user-management",
-      category: "Core",
-    },
-    {
-      id: "database-tools",
-      title: t("master.actions.database_tools.title"),
-      description: t("master.actions.database_tools.description"),
-      icon: Database,
-      href: "/master/database-tools",
-      category: "Core",
-    },
-    {
-      id: "security-center",
-      title: t("master.actions.security_center.title"),
-      description: t("master.actions.security_center.description"),
-      icon: Shield,
-      href: "/master/security-center",
-      category: "Core",
-    },
+  const masterQuickActions: QuickAction[] = useMemo(
+    () => [
+      // Core Master Functions
+      {
+        id: "system-overview",
+        title: t("master.system_overview.title"),
+        description: t("master.system_overview.subtitle"),
+        icon: Activity,
+        href: "/master/system-overview",
+        category: "Core",
+      },
+      {
+        id: "institution-creation",
+        title: t("master.actions.institution_provisioning.title"),
+        description: t("master.actions.institution_provisioning.description"),
+        icon: Building2,
+        href: "/master/institution-creation",
+        category: "Core",
+      },
+      {
+        id: "user-management",
+        title: t("master.user_management.title"),
+        description: t("master.actions.user_management.description"),
+        icon: Users,
+        href: "/master/user-management",
+        category: "Core",
+      },
+      {
+        id: "database-tools",
+        title: t("master.actions.database_tools.title"),
+        description: t("master.actions.database_tools.description"),
+        icon: Database,
+        href: "/master/database-tools",
+        category: "Core",
+      },
+      {
+        id: "security-center",
+        title: t("master.actions.security_center.title"),
+        description: t("master.actions.security_center.description"),
+        icon: Shield,
+        href: "/master/security-center",
+        category: "Core",
+      },
 
-    // Advanced Administration
-    {
-      id: "advanced-admin",
-      title: t("master.actions.advanced_admin.title"),
-      description: t("master.actions.advanced_admin.description"),
-      icon: Crown,
-      href: "/master/god-mode",
-      variant: "secondary",
-      category: "Advanced",
-    },
-  ], [t]);
+      // Advanced Administration
+      {
+        id: "advanced-admin",
+        title: t("master.actions.advanced_admin.title"),
+        description: t("master.actions.advanced_admin.description"),
+        icon: Crown,
+        href: "/master/god-mode",
+        variant: "secondary",
+        category: "Advanced",
+      },
+    ],
+    [t],
+  );
 
   const quickActions = masterQuickActions.map((action) => ({
     id: action.id,
@@ -322,7 +343,10 @@ export function MasterDashboard() {
   return (
     <MasterPageTemplate
       title={t("master.dashboard.title")}
-      subtitle={t("master.dashboard.welcome").replace("{name}", session?.user?.name || "Administrator")}
+      subtitle={t("master.dashboard.welcome").replace(
+        "{name}",
+        session?.user?.name || "Administrator",
+      )}
       context="MASTER_DASHBOARD"
     >
       {/* Quick Actions */}

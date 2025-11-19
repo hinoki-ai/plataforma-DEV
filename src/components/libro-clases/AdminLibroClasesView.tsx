@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
@@ -68,6 +68,7 @@ export function AdminLibroClasesView({
     new Date().getFullYear(),
   );
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [loadingTimedOut, setLoadingTimedOut] = useState(false);
 
   const header = {
     title: t(`admin.${view}.title`, "libro-clases"),
@@ -92,6 +93,21 @@ export function AdminLibroClasesView({
       ? { academicYear: selectedYear, isActive: true }
       : "skip",
   );
+
+  // Detect if queries are stuck (connection issue)
+  useEffect(() => {
+    const isLoading = courses === undefined || tenancyCheck === undefined;
+    if (!isLoading) {
+      setLoadingTimedOut(false);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setLoadingTimedOut(true);
+    }, 8000); // 8 second timeout
+
+    return () => clearTimeout(timeout);
+  }, [courses, tenancyCheck]);
 
   const filteredCourses = useMemo(() => {
     if (!courses) {
@@ -168,8 +184,61 @@ export function AdminLibroClasesView({
     );
   }
 
-  // Loading state
+  // Loading state with connection timeout detection
   if (courses === undefined || tenancyCheck === undefined) {
+    if (loadingTimedOut) {
+      return (
+        <PageTransition>
+          <div className="space-y-6">
+            <RoleAwareHeader
+              title="Error de conexión"
+              subtitle="No se pudo conectar con el servidor de datos"
+            />
+            <Card>
+              <CardContent className="py-10 space-y-4">
+                <p className="text-muted-foreground mb-4">
+                  El libro de clases no puede cargar porque no hay conexión con
+                  el servidor de datos. Esto puede deberse a:
+                </p>
+                <ul className="list-disc list-inside ml-4 space-y-2 text-sm text-muted-foreground">
+                  <li>Problemas de conexión a internet</li>
+                  <li>El servidor de datos no está disponible</li>
+                  <li>Problemas de configuración del servicio Convex</li>
+                </ul>
+                <div className="flex flex-wrap gap-3 mt-6">
+                  <Button onClick={() => window.location.reload()}>
+                    Recargar página
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setLoadingTimedOut(false);
+                      // Force a refresh of queries
+                      window.location.reload();
+                    }}
+                  >
+                    Reintentar conexión
+                  </Button>
+                </div>
+                {process.env.NODE_ENV === "development" && (
+                  <div className="mt-4 p-4 bg-muted rounded-lg text-xs">
+                    <p className="font-medium mb-2">
+                      Información de desarrollo:
+                    </p>
+                    <p>
+                      Asegúrate de que el servicio Convex esté ejecutándose:
+                      ejecuta <code>npx convex dev</code> en una terminal
+                      separada.
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </PageTransition>
+      );
+    }
+
     return (
       <PageTransition>
         <div className="space-y-6">

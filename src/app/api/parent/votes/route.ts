@@ -71,7 +71,9 @@ export async function GET(request: NextRequest) {
           status: isExpired ? "closed" : "active",
           totalVotes,
           hasVoted: userVoteResponses && userVoteResponses.length > 0,
-          userVotes: userVoteResponses ? userVoteResponses.map((r: any) => r.optionId) : [],
+          userVotes: userVoteResponses
+            ? userVoteResponses.map((r: any) => r.optionId)
+            : [],
           allowMultipleVotes: vote.allowMultipleVotes,
           maxVotesPerUser: vote.maxVotesPerUser,
           options: optionsWithPercentages,
@@ -140,13 +142,13 @@ export async function POST(request: NextRequest) {
 
     // Verify options belong to this vote
     for (const oid of targetOptionIds) {
-        const optionExists = vote.options.some((opt: any) => opt._id === oid);
-        if (!optionExists) {
-            return NextResponse.json(
-                { error: `Invalid option selected: ${oid}` },
-                { status: 400 },
-            );
-        }
+      const optionExists = vote.options.some((opt: any) => opt._id === oid);
+      if (!optionExists) {
+        return NextResponse.json(
+          { error: `Invalid option selected: ${oid}` },
+          { status: 400 },
+        );
+      }
     }
 
     // Cast the vote(s)
@@ -180,10 +182,16 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Vote not found" }, { status: 404 });
       }
       if (error.message.includes("Duplicate options")) {
-          return NextResponse.json({ error: "Duplicate options selected" }, { status: 400 });
+        return NextResponse.json(
+          { error: "Duplicate options selected" },
+          { status: 400 },
+        );
       }
       if (error.message.includes("already voted for one of these options")) {
-          return NextResponse.json({ error: "You have already voted for one of these options" }, { status: 409 });
+        return NextResponse.json(
+          { error: "You have already voted for one of these options" },
+          { status: 409 },
+        );
       }
     }
 
