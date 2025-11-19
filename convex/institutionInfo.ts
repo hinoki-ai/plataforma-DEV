@@ -187,6 +187,7 @@ export const createOrUpdateSchoolInfo = mutation({
       v.literal("HIGH_SCHOOL"),
       v.literal("TECHNICAL_INSTITUTE"),
       v.literal("TECHNICAL_CENTER"),
+      v.literal("COLLEGE"),
       v.literal("UNIVERSITY"),
     ),
     supportedLevels: v.optional(v.any()),
@@ -237,6 +238,7 @@ export const createInstitution = mutation({
       v.literal("HIGH_SCHOOL"),
       v.literal("TECHNICAL_INSTITUTE"),
       v.literal("TECHNICAL_CENTER"),
+      v.literal("COLLEGE"),
       v.literal("UNIVERSITY"),
     ),
     supportedLevels: v.optional(v.any()),
@@ -267,6 +269,13 @@ export const createInstitutionWithAdmins = mutation({
       email: v.string(),
       website: v.string(),
       logoUrl: v.optional(v.string()),
+      branding: v.optional(
+        v.object({
+          primaryColor: v.string(),
+          secondaryColor: v.string(),
+          faviconUrl: v.optional(v.string()),
+        }),
+      ),
       institutionType: v.union(
         v.literal("PRESCHOOL"),
         v.literal("BASIC_SCHOOL"),
@@ -280,6 +289,16 @@ export const createInstitutionWithAdmins = mutation({
       customSubjects: v.optional(v.any()),
       educationalConfig: v.optional(v.any()),
       isActive: v.optional(v.boolean()),
+      billingPlan: v.optional(v.string()),
+      billingStatus: v.optional(
+        v.union(
+          v.literal("TRIAL"),
+          v.literal("ACTIVE"),
+          v.literal("PAST_DUE"),
+          v.literal("CANCELLED"),
+        ),
+      ),
+      billingPeriodEndsAt: v.optional(v.number()),
     }),
     admins: v.array(
       v.object({

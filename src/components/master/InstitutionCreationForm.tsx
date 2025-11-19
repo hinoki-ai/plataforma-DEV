@@ -19,6 +19,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,11 +38,18 @@ import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 import {
   EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
-  EDUCATIONAL_LEVELS,
   FEATURE_LABELS,
-  getDefaultFeaturesForType,
+  BILLING_PLANS,
 } from "@/lib/educational-system";
-import { Building2, Crown, ShieldCheck, Check, Settings2 } from "lucide-react";
+import {
+  Building2,
+  Check,
+  Crown,
+  ShieldCheck,
+  Settings2,
+  Palette,
+  CreditCard,
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const adminSchema = z.object({
@@ -66,6 +74,14 @@ const institutionCreationSchema = z
       .url("Ingrese una URL válida")
       .optional()
       .or(z.literal("")),
+    branding: z.object({
+      primaryColor: z
+        .string()
+        .regex(/^#([0-9a-f]{3}){1,2}$/i, "Color inválido (hex)"),
+      secondaryColor: z
+        .string()
+        .regex(/^#([0-9a-f]{3}){1,2}$/i, "Color inválido (hex)"),
+    }),
     institutionType: z.enum([
       "PRESCHOOL",
       "BASIC_SCHOOL",
@@ -74,6 +90,7 @@ const institutionCreationSchema = z
       "TECHNICAL_CENTER",
       "UNIVERSITY",
     ] satisfies [EducationalInstitutionType, ...EducationalInstitutionType[]]),
+    billingPlan: z.enum(["ESENCIAL", "AULA", "INTEGRAL", "INSTITUCIONAL"]),
     supportedLevels: z.array(z.string()).optional(),
     educationalConfig: z
       .object({
@@ -110,11 +127,16 @@ const defaultValues: InstitutionCreationFormValues = {
   email: "",
   website: "https://",
   logoUrl: "",
+  branding: {
+    primaryColor: "#2563eb", // blue-600
+    secondaryColor: "#475569", // slate-600
+  },
   institutionType: "PRESCHOOL",
+  billingPlan: "ESENCIAL",
   supportedLevels: [],
   educationalConfig: {
-    maxCourses: 20,
-    maxSubjects: 20,
+    maxCourses: 12,
+    maxSubjects: 10,
     enabledFeatures: {},
   },
   admins: [
@@ -153,10 +175,22 @@ export function InstitutionCreationForm() {
 
   const primaryAdminIndex = form.watch("admins").findIndex((a) => a.isPrimary);
   const selectedInstitutionType = form.watch("institutionType");
+  const selectedPlan = form.watch("billingPlan");
 
   const availableLevels = useMemo(() => {
     return INSTITUTION_TYPE_INFO[selectedInstitutionType].levels;
   }, [selectedInstitutionType]);
+
+  // Auto-configure based on Plan
+  useEffect(() => {
+    if (selectedPlan) {
+      const plan = BILLING_PLANS[selectedPlan as keyof typeof BILLING_PLANS];
+      if (plan) {
+        form.setValue("educationalConfig.maxCourses", plan.maxCourses);
+        form.setValue("educationalConfig.maxSubjects", plan.maxSubjects);
+      }
+    }
+  }, [selectedPlan, form]);
 
   // Auto-select all levels when institution type changes
   useEffect(() => {
@@ -164,8 +198,6 @@ export function InstitutionCreationForm() {
       (l) => l.id,
     );
 
-    // Enable all features by default as per requirement "dont prehide anything"
-    // This allows the Master user to explicitly uncheck what they don't want
     const allFeaturesEnabled: Record<string, boolean> = {};
     Object.keys(FEATURE_LABELS).forEach((key) => {
       allFeaturesEnabled[key] = true;
@@ -174,7 +206,12 @@ export function InstitutionCreationForm() {
     // Use setTimeout to avoid setting state during render cycle conflicts
     const timer = setTimeout(() => {
       form.setValue("supportedLevels", levels);
-      form.setValue("educationalConfig.enabledFeatures", allFeaturesEnabled);
+      if (
+        Object.keys(form.getValues("educationalConfig.enabledFeatures") || {})
+          .length === 0
+      ) {
+        form.setValue("educationalConfig.enabledFeatures", allFeaturesEnabled);
+      }
     }, 0);
 
     return () => clearTimeout(timer);
@@ -215,6 +252,7 @@ export function InstitutionCreationForm() {
       form.setValue(`admins.0.isPrimary`, true, {
         shouldDirty: true,
         shouldValidate: true,
+        shouldValidate: true,
       });
     }
   };
@@ -246,6 +284,10 @@ export function InstitutionCreationForm() {
           institutionType: values.institutionType,
           supportedLevels: values.supportedLevels,
           educationalConfig: values.educationalConfig,
+          branding: values.branding,
+          billingPlan: values.billingPlan,
+          billingStatus: "ACTIVE", // Default to active for sold institutions
+          billingPeriodEndsAt: Date.now() + 365 * 24 * 60 * 60 * 1000, // 1 year default
         },
         admins: values.admins.map((admin) => ({
           name: admin.name.trim(),
@@ -321,7 +363,45 @@ export function InstitutionCreationForm() {
                 onSubmit={form.handleSubmit(onSubmit as any)}
                 className="space-y-6"
               >
-                <div className="grid gap-4 md:grid-cols-2">
+                {/* PLAN SELECTION */}
+                <div className="space-y-4 mb-6">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <CreditCard className="h-5 w-5 text-green-600" />
+                    Plan Comercial
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {Object.values(BILLING_PLANS).map((plan) => (
+                      <div
+                        key={plan.id}
+                        className={`cursor-pointer border rounded-lg p-4 flex flex-col gap-2 transition-all ${
+                          selectedPlan === plan.id
+                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-1 ring-blue-500"
+                            : "hover:border-blue-300"
+                        }`}
+                        onClick={() =>
+                          form.setValue("billingPlan", plan.id as any)
+                        }
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="font-semibold">{plan.name}</span>
+                          {selectedPlan === plan.id && (
+                            <Check className="h-4 w-4 text-blue-600" />
+                          )}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Hasta {plan.maxCourses} cursos
+                          <br />
+                          Hasta {plan.maxSubjects} asignaturas
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* BASIC INFO */}
+                <div className="grid gap-4 md:grid-cols-2 pt-4">
                   <FormField
                     control={formControl}
                     name="name"
@@ -371,12 +451,65 @@ export function InstitutionCreationForm() {
                     )}
                   />
 
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={formControl}
+                      name="branding.primaryColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Color Primario</FormLabel>
+                          <div className="flex gap-2">
+                            <FormControl>
+                              <Input
+                                type="color"
+                                {...field}
+                                className="w-12 p-1 h-10"
+                              />
+                            </FormControl>
+                            <Input
+                              {...field}
+                              placeholder="#000000"
+                              className="uppercase"
+                              maxLength={7}
+                            />
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={formControl}
+                      name="branding.secondaryColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Color Secundario</FormLabel>
+                          <div className="flex gap-2">
+                            <FormControl>
+                              <Input
+                                type="color"
+                                {...field}
+                                className="w-12 p-1 h-10"
+                              />
+                            </FormControl>
+                            <Input
+                              {...field}
+                              placeholder="#000000"
+                              className="uppercase"
+                              maxLength={7}
+                            />
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
                   <FormField
                     control={formControl}
                     name="supportedLevels"
                     render={() => (
                       <FormItem className="md:col-span-2">
-                        <div className="mb-4">
+                        <div className="mb-4 mt-2">
                           <FormLabel className="text-base">
                             Niveles Educativos Soportados
                           </FormLabel>
@@ -415,7 +548,8 @@ export function InstitutionCreationForm() {
                                               ])
                                             : field.onChange(
                                                 field.value?.filter(
-                                                  (value: string) => value !== level.id,
+                                                  (value: string) =>
+                                                    value !== level.id,
                                                 ),
                                               );
                                         }}
@@ -558,6 +692,13 @@ export function InstitutionCreationForm() {
                       </h3>
                       <p className="text-sm text-muted-foreground">
                         Personalice los límites y módulos disponibles
+                        (Pre-configurado por plan{" "}
+                        {
+                          BILLING_PLANS[
+                            selectedPlan as keyof typeof BILLING_PLANS
+                          ]?.name
+                        }
+                        )
                       </p>
                     </div>
                   </div>

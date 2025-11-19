@@ -568,3 +568,57 @@ export const FEATURE_LABELS: Record<string, string> = {
   postgraduate_programs: "Postgrados",
   technical_specialization: "Especialización Técnica",
 };
+
+export const BILLING_PLANS = {
+  ESENCIAL: {
+    id: "esencial",
+    name: "Plan Esencial",
+    maxCourses: 12,
+    maxSubjects: 10,
+    features: [
+      "platform",
+      "basicMaterials",
+      "academicTracking",
+      "integrations",
+    ],
+    pricePerStudent: 1000,
+  },
+  AULA: {
+    id: "aula",
+    name: "Plan Aula",
+    maxCourses: 24,
+    maxSubjects: 20,
+    features: [
+      "platform",
+      "basicMaterials",
+      "academicTracking",
+      "integrations",
+      "parent_meetings",
+    ],
+    pricePerStudent: 875,
+  },
+  INTEGRAL: {
+    id: "integral",
+    name: "Plan Integral",
+    maxCourses: 36,
+    maxSubjects: 30,
+    features: [
+      "platform",
+      "basicMaterials",
+      "academicTracking",
+      "integrations",
+      "parent_meetings",
+      "advancedReports",
+      "api",
+    ],
+    pricePerStudent: 750,
+  },
+  INSTITUCIONAL: {
+    id: "institucional",
+    name: "Plan Institucional",
+    maxCourses: 50,
+    maxSubjects: 40,
+    features: Object.keys(FEATURE_LABELS),
+    pricePerStudent: 600,
+  },
+} as const;

@@ -28,6 +28,14 @@ export const institutionInfo = defineTable({
   email: v.string(),
   website: v.string(),
   logoUrl: v.optional(v.string()),
+  branding: v.optional(
+    v.object({
+      primaryColor: v.string(),
+      secondaryColor: v.string(),
+      faviconUrl: v.optional(v.string()),
+    }),
+  ),
+  subdomain: v.optional(v.string()),
   institutionType: v.union(
     v.literal("PRESCHOOL"),
     v.literal("BASIC_SCHOOL"),

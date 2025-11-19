@@ -12,6 +12,7 @@ const INSTITUTION_TYPES = [
   "HIGH_SCHOOL",
   "TECHNICAL_INSTITUTE",
   "TECHNICAL_CENTER",
+  "COLLEGE",
   "UNIVERSITY",
 ] as const;
 
@@ -53,6 +54,15 @@ const institutionSchema = z.object({
       enabledFeatures: z.record(z.string(), z.boolean()).optional(),
     })
     .optional(),
+  branding: z
+    .object({
+      primaryColor: z.string(),
+      secondaryColor: z.string(),
+    })
+    .optional(),
+  billingPlan: z.string().optional(),
+  billingStatus: z.enum(["TRIAL", "ACTIVE", "PAST_DUE", "CANCELLED"]).optional(),
+  billingPeriodEndsAt: z.number().optional(),
   isActive: z.boolean().optional(),
 });
 

@@ -639,41 +639,9 @@ export default function PricingCalculatorPage({
                     <CardDescription className="text-gray-300 text-base mt-2">
                       {selectedPlan.description}
                     </CardDescription>
-
-                    {/* Institution Type Selector */}
-                    <div className="mt-4 mb-4">
-                      <div className="text-sm font-semibold text-gray-300 mb-2">
-                        {tc("calculator.institution_type_label")}
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {Object.entries(INSTITUTION_TYPE_INFO).map(
-                          ([key, info]) => (
-                            <Button
-                              key={key}
-                              onClick={() =>
-                                setInstitutionType(
-                                  key as EducationalInstitutionType,
-                                )
-                              }
-                              variant={
-                                institutionType === key ? "default" : "outline"
-                              }
-                              size="sm"
-                              className={`flex items-center gap-2 h-8 ${
-                                institutionType === key
-                                  ? "bg-primary text-primary-foreground border-primary"
-                                  : "bg-transparent border-gray-700 text-gray-300 hover:bg-gray-800"
-                              }`}
-                            >
-                              <span className="text-lg">{info.icon}</span>
-                              <span className="text-xs">
-                                {info.chileanName}
-                              </span>
-                            </Button>
-                          ),
-                        )}
-                      </div>
-                    </div>
+                    <CardDescription className="text-gray-400 text-sm mt-1">
+                      {INSTITUTION_TYPE_INFO[institutionType].chileanName} • {INSTITUTION_TYPE_INFO[institutionType].description}
+                    </CardDescription>
 
                     {/* Plan Validation Warning */}
                     {!planValidation.isValid && (

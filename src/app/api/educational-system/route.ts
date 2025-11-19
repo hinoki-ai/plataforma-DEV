@@ -91,6 +91,7 @@ export async function POST(request: NextRequest) {
         "HIGH_SCHOOL",
         "TECHNICAL_INSTITUTE",
         "TECHNICAL_CENTER",
+        "COLLEGE",
         "UNIVERSITY",
       ].includes(institutionType)
     ) {
@@ -98,7 +99,7 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error:
-            "Invalid institution type. Must be one of: PRESCHOOL, BASIC_SCHOOL, HIGH_SCHOOL, TECHNICAL_INSTITUTE, TECHNICAL_CENTER, UNIVERSITY",
+            "Invalid institution type. Must be one of: PRESCHOOL, BASIC_SCHOOL, HIGH_SCHOOL, TECHNICAL_INSTITUTE, TECHNICAL_CENTER, COLLEGE, UNIVERSITY",
         },
         { status: 400 },
       );
