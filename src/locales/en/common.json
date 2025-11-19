@@ -1754,5 +1754,26 @@
   "wizard.security_settings_desc": "Adjust your security",
   "wizard.step": "Step",
   "wizard.verification": "Verification",
-  "wizard.verification_desc": "Verify your account"
+  "wizard.verification_desc": "Verify your account",
+  "institution_management": {
+    "title": "Institution Management",
+    "subtitle": "Manage all institutions registered on the platform",
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "contact": "Contact",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "buttons": {
+      "users": "Users",
+      "settings": "Settings"
+    },
+    "empty": "No institutions registered"
+  }
 }

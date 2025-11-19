@@ -50,40 +50,7 @@ import { useCallback, useMemo } from "react";
 
 // billingMetadata will be created inside the component to use translations
 
-const developerContacts = [
-  {
-    id: "principal",
-    name: "Tu Equipo Astral",
-    role: "Lead Developer & Onboarding",
-    email: "plataforma@astral.cl",
-    whatsappDisplay: "+56 9 7500 1234",
-    whatsappLink: "https://wa.me/56975001234",
-  },
-  {
-    id: "loreto",
-    name: "Loreto",
-    role: "Onboarding Chief",
-    email: "loreto@astral.cl",
-    whatsappDisplay: "+56 9 6854 3210",
-    whatsappLink: "https://wa.me/56968543210",
-  },
-  {
-    id: "agustin",
-    name: "Agustin",
-    role: "Lead Developer",
-    email: "agustin@astral.cl",
-    whatsappDisplay: "+56 9 8889 6773",
-    whatsappLink: "https://wa.me/56988896773",
-  },
-  {
-    id: "salesman",
-    name: "Equipo de Ventas",
-    role: "Sales Representative",
-    email: "ventas@astral.cl",
-    whatsappDisplay: "+56 9 8008 8008",
-    whatsappLink: "https://wa.me/56980088008",
-  },
-] as const;
+// developerContacts will be created inside the component to use translations
 
 const numberFormatter = new Intl.NumberFormat("es-CL");
 
@@ -91,8 +58,11 @@ const numberFormatter = new Intl.NumberFormat("es-CL");
 const planMappings: Record<string, string> = {
   enterprise: "institucional",
   // Legacy mappings for renamed plans
-  avanzado: "academico", // Old "avanzado" (51-350) is now "academico"
-  // Old "academico" (351-1000) is now "profesional" - no mapping needed as ID changed
+  inicial: "esencial", // Old "inicial" is now "esencial"
+  avanzado: "aula", // Old "avanzado" → "academico" → now "aula"
+  academico: "aula", // Old "academico" is now "aula"
+  profesional: "integral", // Old "profesional" → "superior" → now "integral"
+  superior: "integral", // Old "superior" is now "integral"
 };
 
 interface PricingCalculatorPageProps {
@@ -110,6 +80,41 @@ export default function PricingCalculatorPage({
   const { t } = useDivineParsing(["common", "planes"]);
   const tc = (key: string) => t(key, "planes");
   const router = useRouter();
+
+  const developerContacts = [
+    {
+      id: "principal",
+      name: tc("calculator.contacts.team_astral"),
+      role: tc("calculator.contacts.lead_developer_onboarding"),
+      email: "plataforma@astral.cl",
+      whatsappDisplay: "+56 9 7500 1234",
+      whatsappLink: "https://wa.me/56975001234",
+    },
+    {
+      id: "loreto",
+      name: tc("calculator.contacts.loreto"),
+      role: tc("calculator.contacts.onboarding_chief"),
+      email: "loreto@astral.cl",
+      whatsappDisplay: "+56 9 6854 3210",
+      whatsappLink: "https://wa.me/56968543210",
+    },
+    {
+      id: "agustin",
+      name: tc("calculator.contacts.agustin"),
+      role: tc("calculator.contacts.lead_developer"),
+      email: "agustin@astral.cl",
+      whatsappDisplay: "+56 9 8889 6773",
+      whatsappLink: "https://wa.me/56988896773",
+    },
+    {
+      id: "salesman",
+      name: tc("calculator.contacts.sales_team"),
+      role: tc("calculator.contacts.sales_representative"),
+      email: "ventas@astral.cl",
+      whatsappDisplay: "+56 9 8008 8008",
+      whatsappLink: "https://wa.me/56980088008",
+    },
+  ] as const;
   const [resolvedSearchParams, setResolvedSearchParams] = useState<{
     plan?: string;
     billing?: string;
@@ -484,7 +489,7 @@ export default function PricingCalculatorPage({
 
   const sliderUpperBound = selectedPlan.maxStudents
     ? selectedPlan.maxStudents
-    : Math.max(selectedPlan.minStudents * 4, students, 2000);
+    : Math.max(selectedPlan.minStudents * 4, Math.ceil(students * 1.5), 2000);
 
   const studentsLabel = `${numberFormatter.format(selectedPlan.minStudents)}${
     selectedPlan.maxStudents
@@ -531,7 +536,7 @@ export default function PricingCalculatorPage({
       .replace("{period}", periodLabel)
       .replace("{total}", totalFormatted)
       .replace("{payment_frequency}", paymentFrequencyLabel) +
-      `\nTipo de Institución: ${INSTITUTION_TYPE_INFO[institutionType].chileanName}`,
+      `\n${tc("calculator.institution_type_prefix")} ${INSTITUTION_TYPE_INFO[institutionType].chileanName}`,
   );
 
   const emailSubject = encodeURIComponent(
@@ -547,7 +552,7 @@ export default function PricingCalculatorPage({
       .replace("{monthly_price}", monthlyPriceFormatted)
       .replace("{period}", periodLabel)
       .replace("{total}", totalFormatted) +
-      `\nTipo de Institución: ${INSTITUTION_TYPE_INFO[institutionType].chileanName}`,
+      `\n${tc("calculator.institution_type_prefix")} ${INSTITUTION_TYPE_INFO[institutionType].chileanName}`,
   );
 
   const updateStudents = (value: number) => {
@@ -594,7 +599,7 @@ export default function PricingCalculatorPage({
         : `${numberFormatter.format(selectedPlan.minStudents)}+ ${tc("calculator.students_count").replace("{count}", "")}`,
     },
     {
-      label: "Tipo de Institución",
+      label: tc("calculator.institution_type_label"),
       value: INSTITUTION_TYPE_INFO[institutionType].chileanName,
     },
     {
@@ -638,7 +643,7 @@ export default function PricingCalculatorPage({
                     {/* Institution Type Selector */}
                     <div className="mt-4 mb-4">
                       <div className="text-sm font-semibold text-gray-300 mb-2">
-                        Tipo de Institución
+                        {tc("calculator.institution_type_label")}
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {Object.entries(INSTITUTION_TYPE_INFO).map(
@@ -807,7 +812,17 @@ export default function PricingCalculatorPage({
                             }
                           }}
                           className="flex-1 sm:flex-none sm:w-32 bg-gray-800 border-gray-700 text-lg font-semibold text-white"
-                          aria-label={`Número de estudiantes (rango: ${selectedPlan.minStudents}${selectedPlan.maxStudents ? ` - ${selectedPlan.maxStudents}` : "+"})`}
+                          aria-label={tc("calculator.aria.student_count_range")
+                            .replace(
+                              "{min}",
+                              selectedPlan.minStudents.toString(),
+                            )
+                            .replace(
+                              "{max}",
+                              selectedPlan.maxStudents
+                                ? ` - ${selectedPlan.maxStudents}`
+                                : "+",
+                            )}
                           aria-describedby="students-range-description"
                         />
                         <div className="flex items-center gap-2 shrink-0">
@@ -847,7 +862,7 @@ export default function PricingCalculatorPage({
                       max={sliderUpperBound}
                       step={1}
                       onValueChange={(value) => updateStudents(value[0])}
-                      aria-label="Selector de cantidad de estudiantes"
+                      aria-label={tc("calculator.aria.student_selector")}
                       aria-valuemin={selectedPlan.minStudents}
                       aria-valuemax={sliderUpperBound}
                       aria-valuenow={students}
@@ -898,9 +913,9 @@ export default function PricingCalculatorPage({
                       variant={
                         paymentFrequency === "monthly" ? "default" : "outline"
                       }
-                      className="justify-center py-2 min-w-[140px]"
+                      className="justify-center py-2 min-w-[155px]"
                       onClick={() => setPaymentFrequency("monthly")}
-                      aria-label="Pago mensual"
+                      aria-label={tc("calculator.aria.monthly_payment")}
                       aria-pressed={paymentFrequency === "monthly"}
                     >
                       <span className="text-sm font-semibold">
@@ -911,9 +926,9 @@ export default function PricingCalculatorPage({
                       variant={
                         paymentFrequency === "upfront" ? "default" : "outline"
                       }
-                      className="justify-center py-2 relative flex-1 pr-8"
+                      className="justify-center py-2 relative flex-[0.9] pr-8"
                       onClick={() => setPaymentFrequency("upfront")}
-                      aria-label="Pago completo por adelantado con 5% de descuento"
+                      aria-label={tc("calculator.aria.upfront_payment")}
                       aria-pressed={paymentFrequency === "upfront"}
                     >
                       <span className="text-sm font-semibold">
@@ -921,7 +936,7 @@ export default function PricingCalculatorPage({
                       </span>
                       <span
                         className="absolute -top-2 -right-2 bg-green-500 text-white text-sm font-bold px-2 py-1 rounded-full shadow-lg"
-                        aria-label="5% de descuento"
+                        aria-label={tc("calculator.aria.discount_5_percent")}
                       >
                         -5%
                       </span>

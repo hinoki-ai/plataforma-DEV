@@ -28,6 +28,7 @@ import {
   Lightbulb,
   MessageSquare,
   Rocket,
+  School,
   Settings,
   ShieldCheck,
   Sparkles,
@@ -86,6 +87,11 @@ const institutionProgramDetails: Record<
     icon: Layers,
     taglineKey: "programas.hardcoded.institution_programs.high_school.tagline",
     modulesKey: "programas.hardcoded.institution_programs.high_school.modules",
+  },
+  COLLEGE: {
+    icon: School,
+    taglineKey: "programas.hardcoded.institution_programs.college.tagline",
+    modulesKey: "programas.hardcoded.institution_programs.college.modules",
   },
   TECHNICAL_INSTITUTE: {
     icon: Wrench,

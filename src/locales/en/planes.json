@@ -155,6 +155,7 @@
     "month": "month",
     "months": "{count} months",
     "whatsapp_message": "Hello Astral team, I need to activate {plan} for {students} students. Billing cycle: {cycle}. Estimated monthly price: {monthly_price}. Total for the period ({period}): {total}. Let's talk right now to confirm it.",
+    "institution_type_prefix": "Institution Type:",
     "email_subject": "[Astral] {plan} - {students} students",
     "email_body": "==========================================\n   PLAN ACTIVATION REQUEST\n==========================================\n\nHello Astral team,\n\nI am writing to request the activation of the following plan:\n\n---\nPLAN DETAILS\n---\n\n  • Plan: {plan}\n  • Students: {students}\n  • Billing cycle: {cycle}\n\n---\nESTIMATED INVESTMENT\n---\n\n  • Monthly value: {monthly_price}\n  • Total for period ({period}): {total}\n\n==========================================\n\nPlease contact me today to proceed with the activation.\n\nLooking forward to your response.\n\nBest regards,\n\n\n==========================================\n   SOLICITUD DE ACTIVACIÓN DE PLAN\n==========================================\n\nHola equipo Astral,\n\nMe dirijo a ustedes para solicitar la activación del siguiente plan:\n\n---\nDETALLES DEL PLAN\n---\n\n  • Plan: {plan}\n  • Estudiantes: {students}\n  • Ciclo de facturación: {cycle}\n\n---\nINVERSIÓN ESTIMADA\n---\n\n  • Valor mensual: {monthly_price}\n  • Total del período ({period}): {total}\n\n==========================================\n\nPor favor contáctenme hoy para proceder con la activación.\n\nQuedo atento a su respuesta.\n\nSaludos cordiales,",
     "billing_cycle_label": "Billing cycle",
@@ -174,6 +175,24 @@
     "price_includes_vat": "* Price includes VAT (19%)",
     "subtotal": "Subtotal:",
     "vat": "VAT (19%):",
-    "total": "Total:"
+    "total": "Total:",
+    "institution_type_label": "Institution Type",
+    "aria": {
+      "student_selector": "Student count selector",
+      "monthly_payment": "Monthly payment",
+      "upfront_payment": "Full upfront payment with 5% discount",
+      "discount_5_percent": "5% discount",
+      "student_count_range": "Number of students (range: {min}{max})"
+    },
+    "contacts": {
+      "team_astral": "Your Astral Team",
+      "lead_developer_onboarding": "Lead Developer & Onboarding",
+      "loreto": "Loreto",
+      "onboarding_chief": "Onboarding Chief",
+      "agustin": "Agustin",
+      "lead_developer": "Lead Developer",
+      "sales_team": "Sales Team",
+      "sales_representative": "Sales Representative"
+    }
   }
 }

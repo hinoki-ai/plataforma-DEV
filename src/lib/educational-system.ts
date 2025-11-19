@@ -10,6 +10,7 @@ export type EducationalInstitutionType =
   | "HIGH_SCHOOL" // Educación Media
   | "TECHNICAL_INSTITUTE" // Institutos Profesionales
   | "TECHNICAL_CENTER" // Centros de Formación Técnica
+  | "COLLEGE" // Colegios
   | "UNIVERSITY"; // Universidades
 
 export type ISCEDLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
@@ -252,6 +253,16 @@ export const INSTITUTION_TYPE_INFO = {
       l.institutionTypes.includes("HIGH_SCHOOL"),
     ),
   },
+  COLLEGE: {
+    name: "College",
+    chileanName: "Colegio",
+    description: "Instituciones educativas de nivel medio",
+    color: "bg-indigo-100 text-indigo-800 border-indigo-200",
+    icon: "🏫",
+    levels: EDUCATIONAL_LEVELS.filter((l) =>
+      l.institutionTypes.includes("COLLEGE"),
+    ),
+  },
   TECHNICAL_INSTITUTE: {
     name: "Professional Institute",
     chileanName: "Instituto Profesional",
@@ -323,6 +334,21 @@ export const SUBJECTS_BY_LEVEL = {
     "Formación Técnico-Profesional",
     "Especialidades Técnicas",
   ],
+  COLLEGE: [
+    "Lengua y Literatura",
+    "Matemática",
+    "Historia, Geografía y Ciencias Sociales",
+    "Filosofía",
+    "Biología",
+    "Química",
+    "Física",
+    "Inglés",
+    "Educación Física y Salud",
+    "Artes",
+    "Música",
+    "Orientación",
+    "Religión",
+  ],
   TECHNICAL_INSTITUTE: [
     "Especialización Técnica",
     "Metodología de Investigación Aplicada",
@@ -375,6 +401,23 @@ export interface EducationalConfig {
 }
 
 // Check if current system should show certain features based on institution type
+/**
+ * Determines if a specific feature should be visible/active for an institution.
+ *
+ * CRITICAL DATA FLOW:
+ * 1. Checks 'config.enabledFeatures' first (Explicit Configuration).
+ *    - If the feature key exists in the config, that value is authoritative.
+ *    - This allows overriding defaults (e.g. enabling grading for a preschool).
+ *
+ * 2. Fallback to 'featureMatrix' (Default Assumptions).
+ *    - If no config or key is missing, it checks if the institution type is in the allowed list.
+ *    - If the feature is not in the matrix at all, it defaults to TRUE (safe fallback).
+ *
+ * @param feature - The feature key (e.g., "grading_system")
+ * @param institutionType - The type of institution (e.g., "PRESCHOOL")
+ * @param config - The optional configuration object from the database
+ * @returns boolean - Whether the feature should be shown
+ */
 export function shouldShowFeature(
   feature: string,
   institutionType: EducationalInstitutionType,
@@ -438,6 +481,75 @@ export function shouldShowFeature(
   };
 
   return featureMatrix[feature]?.includes(institutionType) ?? true;
+}
+
+// Helper to get default enabled features for an institution type
+export function getDefaultFeaturesForType(
+  institutionType: EducationalInstitutionType,
+): Record<string, boolean> {
+  const defaults: Record<string, boolean> = {};
+
+  // We use the internal logic of shouldShowFeature (without config) to determine defaults
+  // This duplicates the matrix definition which is not ideal but safe for now
+  // A better refactor would be to expose the matrix
+  const featureMatrix: Record<string, EducationalInstitutionType[]> = {
+    parent_meetings: ["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL"],
+    academic_planning: [
+      "BASIC_SCHOOL",
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    grading_system: [
+      "BASIC_SCHOOL",
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    daycare_features: ["PRESCHOOL"],
+    university_features: ["UNIVERSITY"],
+    technical_training: [
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    thesis_management: [
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    play_based_learning: ["PRESCHOOL"],
+    career_guidance: [
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    research_projects: [
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    laboratory_access: [
+      "HIGH_SCHOOL",
+      "TECHNICAL_INSTITUTE",
+      "TECHNICAL_CENTER",
+      "UNIVERSITY",
+    ],
+    certification_programs: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],
+    postgraduate_programs: ["UNIVERSITY"],
+    technical_specialization: ["TECHNICAL_INSTITUTE", "TECHNICAL_CENTER"],
+  };
+
+  Object.keys(FEATURE_LABELS).forEach((feature) => {
+    defaults[feature] =
+      featureMatrix[feature]?.includes(institutionType) ?? false;
+  });
+
+  return defaults;
 }
 
 export const FEATURE_LABELS: Record<string, string> = {

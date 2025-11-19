@@ -38,6 +38,7 @@ export interface SessionUser {
   name?: string | null;
   image?: string | null;
   role: ExtendedUserRole;
+  currentInstitutionId?: string;
   needsRegistration?: boolean;
   isOAuthUser?: boolean;
   provider?: string;

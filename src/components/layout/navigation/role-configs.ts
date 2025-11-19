@@ -48,6 +48,7 @@ export const ADMIN_NAVIGATION = [
         href: "/admin/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
+        requiredFeature: "grading_system",
       },
       {
         title: "nav.documents",
@@ -72,6 +73,7 @@ export const ADMIN_NAVIGATION = [
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
         shortcut: "Alt+P",
+        requiredFeature: "academic_planning",
       },
       {
         title: "nav.calendar",
@@ -142,6 +144,7 @@ export const ADMIN_NAVIGATION = [
         href: "/admin/reuniones",
         icon: NavigationIcons.Meeting,
         shortcut: "Alt+R",
+        requiredFeature: "parent_meetings",
       },
       {
         title: "nav.voting",
@@ -210,6 +213,7 @@ export const PROFESOR_NAVIGATION = [
         href: "/profesor/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
+        requiredFeature: "grading_system",
       },
       {
         title: "nav.documents",
@@ -221,6 +225,7 @@ export const PROFESOR_NAVIGATION = [
         title: "nav.parent.meetings",
         href: "/profesor/libro-clases/reuniones",
         icon: NavigationIcons.Team,
+        requiredFeature: "parent_meetings",
       },
     ],
   },
@@ -233,6 +238,7 @@ export const PROFESOR_NAVIGATION = [
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
         shortcut: "Alt+P",
+        requiredFeature: "academic_planning",
       },
       {
         title: "nav.calendar",
@@ -305,6 +311,7 @@ export const PROFESOR_NAVIGATION = [
         href: "/profesor/reuniones",
         icon: NavigationIcons.Team,
         shortcut: "Alt+R",
+        requiredFeature: "parent_meetings",
       },
       {
         title: "nav.voting",
@@ -365,6 +372,7 @@ export const PARENT_NAVIGATION = [
         href: "/parent/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
+        requiredFeature: "grading_system",
       },
       {
         title: "nav.documents",
@@ -564,6 +572,7 @@ export const MASTER_NAVIGATION = [
         href: "/admin/libro-clases/calificaciones",
         icon: NavigationIcons.Analytics,
         shortcut: "Alt+N",
+        requiredFeature: "grading_system",
       },
       {
         title: "nav.documents",
@@ -588,6 +597,7 @@ export const MASTER_NAVIGATION = [
         href: "/profesor/planificaciones",
         icon: NavigationIcons.Planning,
         shortcut: "Alt+P",
+        requiredFeature: "academic_planning",
       },
       {
         title: "nav.calendar",
@@ -658,6 +668,7 @@ export const MASTER_NAVIGATION = [
         href: "/admin/reuniones",
         icon: NavigationIcons.Meeting,
         shortcut: "Alt+R",
+        requiredFeature: "parent_meetings",
       },
       {
         title: "nav.voting",

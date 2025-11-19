@@ -39,8 +39,8 @@ export const billingCycleDiscount: Record<BillingCycle, number> = {
 
 export const pricingPlans: PricingPlan[] = [
   {
-    id: "inicial",
-    name: "Plan Inicial",
+    id: "esencial",
+    name: "Plan Esencial",
     description: "Hasta 50 estudiantes",
     pricePerStudent: 1000,
     minStudents: 1,
@@ -65,13 +65,13 @@ export const pricingPlans: PricingPlan[] = [
     },
   },
   {
-    id: "academico",
-    name: "Plan Académico",
+    id: "aula",
+    name: "Plan Aula",
     description: "Hasta 350 estudiantes",
     pricePerStudent: 875,
     minStudents: 51,
     maxStudents: 350,
-    badge: "Más Popular",
+    badge: null,
     features: {
       platform: true,
       basicMaterials: true,
@@ -91,8 +91,8 @@ export const pricingPlans: PricingPlan[] = [
     },
   },
   {
-    id: "profesional",
-    name: "Plan Profesional",
+    id: "integral",
+    name: "Plan Integral",
     description: "Hasta 1.000 estudiantes",
     pricePerStudent: 750,
     minStudents: 351,
@@ -123,7 +123,7 @@ export const pricingPlans: PricingPlan[] = [
     pricePerStudent: 600,
     minStudents: 1001,
     maxStudents: null,
-    badge: "Premium",
+    badge: null,
     features: {
       platform: true,
       basicMaterials: true,

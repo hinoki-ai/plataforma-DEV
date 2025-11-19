@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,6 +39,7 @@ import {
   INSTITUTION_TYPE_INFO,
   EDUCATIONAL_LEVELS,
   FEATURE_LABELS,
+  getDefaultFeaturesForType,
 } from "@/lib/educational-system";
 import { Building2, Crown, ShieldCheck, Check, Settings2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -78,7 +79,7 @@ const institutionCreationSchema = z
       .object({
         maxCourses: z.coerce.number().min(1).optional(),
         maxSubjects: z.coerce.number().min(1).optional(),
-        enabledFeatures: z.record(z.boolean()).optional(),
+        enabledFeatures: z.record(z.string(), z.boolean()).optional(),
       })
       .optional(),
     admins: z.array(adminSchema).min(1, "Debe crear al menos un administrador"),
@@ -133,10 +134,13 @@ export function InstitutionCreationForm() {
   );
 
   const form = useForm<InstitutionCreationFormValues>({
-    resolver: zodResolver(institutionCreationSchema),
+    resolver: zodResolver(institutionCreationSchema) as any,
     defaultValues,
     mode: "onSubmit",
   });
+
+  // Type assertion helper to work around react-hook-form type issues
+  const formControl = form.control as any;
 
   const {
     fields: adminFields,
@@ -155,14 +159,25 @@ export function InstitutionCreationForm() {
   }, [selectedInstitutionType]);
 
   // Auto-select all levels when institution type changes
-  useMemo(() => {
+  useEffect(() => {
     const levels = INSTITUTION_TYPE_INFO[selectedInstitutionType].levels.map(
       (l) => l.id,
     );
-    // Use setTimeout to avoid setting state during render
-    setTimeout(() => {
+
+    // Enable all features by default as per requirement "dont prehide anything"
+    // This allows the Master user to explicitly uncheck what they don't want
+    const allFeaturesEnabled: Record<string, boolean> = {};
+    Object.keys(FEATURE_LABELS).forEach((key) => {
+      allFeaturesEnabled[key] = true;
+    });
+
+    // Use setTimeout to avoid setting state during render cycle conflicts
+    const timer = setTimeout(() => {
       form.setValue("supportedLevels", levels);
+      form.setValue("educationalConfig.enabledFeatures", allFeaturesEnabled);
     }, 0);
+
+    return () => clearTimeout(timer);
   }, [selectedInstitutionType, form]);
 
   const institutionOptions = useMemo(
@@ -303,12 +318,12 @@ export function InstitutionCreationForm() {
           <CardContent>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmit as any)}
                 className="space-y-6"
               >
                 <div className="grid gap-4 md:grid-cols-2">
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
@@ -321,7 +336,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="institutionType"
                     render={({ field }) => (
                       <FormItem>
@@ -357,7 +372,7 @@ export function InstitutionCreationForm() {
                   />
 
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="supportedLevels"
                     render={() => (
                       <FormItem className="md:col-span-2">
@@ -379,7 +394,7 @@ export function InstitutionCreationForm() {
                           {availableLevels.map((level) => (
                             <FormField
                               key={level.id}
-                              control={form.control}
+                              control={formControl}
                               name="supportedLevels"
                               render={({ field }) => {
                                 return (
@@ -400,7 +415,7 @@ export function InstitutionCreationForm() {
                                               ])
                                             : field.onChange(
                                                 field.value?.filter(
-                                                  (value) => value !== level.id,
+                                                  (value: string) => value !== level.id,
                                                 ),
                                               );
                                         }}
@@ -426,7 +441,7 @@ export function InstitutionCreationForm() {
                   />
 
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
@@ -439,7 +454,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
@@ -452,7 +467,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="website"
                     render={({ field }) => (
                       <FormItem>
@@ -465,7 +480,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="logoUrl"
                     render={({ field }) => (
                       <FormItem>
@@ -481,7 +496,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="address"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
@@ -497,7 +512,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="mission"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
@@ -514,7 +529,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={formControl}
                     name="vision"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
@@ -549,7 +564,7 @@ export function InstitutionCreationForm() {
 
                   <div className="grid gap-4 md:grid-cols-2">
                     <FormField
-                      control={form.control}
+                      control={formControl}
                       name="educationalConfig.maxCourses"
                       render={({ field }) => (
                         <FormItem>
@@ -562,7 +577,7 @@ export function InstitutionCreationForm() {
                       )}
                     />
                     <FormField
-                      control={form.control}
+                      control={formControl}
                       name="educationalConfig.maxSubjects"
                       render={({ field }) => (
                         <FormItem>
@@ -583,12 +598,14 @@ export function InstitutionCreationForm() {
                         <FormField
                           key={key}
                           control={form.control}
-                          name={`educationalConfig.enabledFeatures.${key}`}
+                          name={
+                            `educationalConfig.enabledFeatures.${key}` as any
+                          }
                           render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                               <FormControl>
                                 <Checkbox
-                                  checked={field.value}
+                                  checked={field.value as boolean}
                                   onCheckedChange={field.onChange}
                                 />
                               </FormControl>
@@ -675,7 +692,7 @@ export function InstitutionCreationForm() {
                         </CardHeader>
                         <CardContent className="grid gap-3 md:grid-cols-2">
                           <FormField
-                            control={form.control}
+                            control={formControl}
                             name={`admins.${index}.name`}
                             render={({ field }) => (
                               <FormItem>
@@ -691,7 +708,7 @@ export function InstitutionCreationForm() {
                             )}
                           />
                           <FormField
-                            control={form.control}
+                            control={formControl}
                             name={`admins.${index}.email`}
                             render={({ field }) => (
                               <FormItem>
@@ -707,7 +724,7 @@ export function InstitutionCreationForm() {
                             )}
                           />
                           <FormField
-                            control={form.control}
+                            control={formControl}
                             name={`admins.${index}.phone`}
                             render={({ field }) => (
                               <FormItem>
@@ -723,7 +740,7 @@ export function InstitutionCreationForm() {
                             )}
                           />
                           <FormField
-                            control={form.control}
+                            control={formControl}
                             name={`admins.${index}.password`}
                             render={({ field }) => (
                               <FormItem>

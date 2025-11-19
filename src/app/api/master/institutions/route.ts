@@ -50,7 +50,7 @@ const institutionSchema = z.object({
     .object({
       maxCourses: z.coerce.number().min(1).optional(),
       maxSubjects: z.coerce.number().min(1).optional(),
-      enabledFeatures: z.record(z.boolean()).optional(),
+      enabledFeatures: z.record(z.string(), z.boolean()).optional(),
     })
     .optional(),
   isActive: z.boolean().optional(),

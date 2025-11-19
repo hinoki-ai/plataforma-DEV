@@ -24,10 +24,13 @@ import { Building2, Users, Settings, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useRouter } from "next/navigation";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export function InstitutionManagement() {
   const institutions = useQuery(api.institutionInfo.getAllInstitutions);
   const router = useRouter();
+  const { t } = useDivineParsing(["common"]);
+  const tc = (key: string) => t(key, "common");
 
   if (institutions === undefined) {
     return (
@@ -42,10 +45,10 @@ export function InstitutionManagement() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Building2 className="h-5 w-5 text-blue-600" />
-          Gestión de Instituciones
+          {tc("institution_management.title")}
         </CardTitle>
         <CardDescription>
-          Administre todas las instituciones registradas en la plataforma
+          {tc("institution_management.subtitle")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -53,12 +56,20 @@ export function InstitutionManagement() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nombre</TableHead>
-                <TableHead>Tipo</TableHead>
-                <TableHead>Contacto</TableHead>
-                <TableHead>Estado</TableHead>
-                <TableHead>Creado</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
+                <TableHead>{tc("institution_management.table.name")}</TableHead>
+                <TableHead>{tc("institution_management.table.type")}</TableHead>
+                <TableHead>
+                  {tc("institution_management.table.contact")}
+                </TableHead>
+                <TableHead>
+                  {tc("institution_management.table.status")}
+                </TableHead>
+                <TableHead>
+                  {tc("institution_management.table.created")}
+                </TableHead>
+                <TableHead className="text-right">
+                  {tc("institution_management.table.actions")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -96,7 +107,9 @@ export function InstitutionManagement() {
                           inst.isActive ? "bg-green-500 hover:bg-green-600" : ""
                         }
                       >
-                        {inst.isActive ? "Activo" : "Inactivo"}
+                        {inst.isActive
+                          ? tc("institution_management.status.active")
+                          : tc("institution_management.status.inactive")}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -116,7 +129,7 @@ export function InstitutionManagement() {
                           }
                         >
                           <Users className="h-4 w-4 mr-1" />
-                          Usuarios
+                          {tc("institution_management.buttons.users")}
                         </Button>
                         <Button
                           variant="ghost"
@@ -128,7 +141,7 @@ export function InstitutionManagement() {
                           }
                         >
                           <Settings className="h-4 w-4 mr-1" />
-                          Config
+                          {tc("institution_management.buttons.settings")}
                         </Button>
                       </div>
                     </TableCell>
@@ -141,7 +154,7 @@ export function InstitutionManagement() {
                     colSpan={6}
                     className="text-center py-8 text-muted-foreground"
                   >
-                    No hay instituciones registradas
+                    {tc("institution_management.empty")}
                   </TableCell>
                 </TableRow>
               )}

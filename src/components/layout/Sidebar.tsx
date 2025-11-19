@@ -31,6 +31,9 @@ import {
   getNavigationGroupsForRole,
 } from "./navigation";
 import { useLanguage } from "@/components/language/LanguageContext";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean;
@@ -239,6 +242,14 @@ export function Sidebar({
   const pathname = usePathname();
   const router = useRouter();
 
+  const institutionId = session?.user?.currentInstitutionId as
+    | Id<"institutionInfo">
+    | undefined;
+  const institution = useQuery(
+    api.institutionInfo.getInstitutionById,
+    institutionId ? { institutionId } : "skip",
+  );
+
   // Load navigation translations
   const { t } = useLanguage();
 
@@ -322,8 +333,19 @@ export function Sidebar({
 
   // ⚡ Performance: Memoize navigation groups calculation
   const navigationGroups = React.useMemo(
-    () => getNavigationGroupsForRole(session?.user?.role, pathname),
-    [session?.user?.role, pathname],
+    () =>
+      getNavigationGroupsForRole(
+        session?.user?.role,
+        pathname,
+        institution?.institutionType,
+        institution?.educationalConfig,
+      ),
+    [
+      session?.user?.role,
+      pathname,
+      institution?.institutionType,
+      institution?.educationalConfig,
+    ],
   );
 
   // ⚡ Performance: Memoize open groups state initialization
