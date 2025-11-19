@@ -43,7 +43,7 @@ export default function CompactFooter() {
             href="https://aramac.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-red-500 hover:text-red-400 transition-colors font-bold text-sm mr-2"
+            className="text-[#E73C48] hover:text-[#d63342] transition-colors font-bold text-sm mr-2"
             aria-label={t("home.footer.aria.developer", "common")}
           >
             ΛRΛMΛC
