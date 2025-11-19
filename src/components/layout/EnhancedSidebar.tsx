@@ -38,7 +38,7 @@ import {
   Terminal,
   FileText,
 } from "lucide-react";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 import { AdvancedSettingsDropdown } from "@/components/master/AdvancedSettingsDropdown";
 import { getNavigationGroupsForRole, NAVIGATION_CONFIGS } from "./navigation";
 

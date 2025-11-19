@@ -30,7 +30,7 @@ import {
   ROLE_SPECIFIC_SECTIONS,
   getNavigationGroupsForRole,
 } from "./navigation";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";

@@ -3,8 +3,14 @@
 import { DonutBackground } from "@/components/ui/donut-background";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-export default function NotFound() {
+// Force dynamic rendering to avoid SSR issues
+export default dynamic(() => Promise.resolve(NotFoundComponent), {
+  ssr: false,
+});
+
+function NotFoundComponent() {
   const [isMounted, setIsMounted] = useState(false);
 
   // Only use translation after mounting to avoid SSR issues
@@ -12,6 +18,7 @@ export default function NotFound() {
     setIsMounted(true);
   }, []);
 
+  // Initialize hook but don't use it until mounted
   const { t } = useDivineParsing(["common"]);
 
   // Fallback text for SSR

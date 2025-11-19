@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import { MasterPageTemplate } from "./MasterPageTemplate";
 import { MasterActionCard } from "./MasterActionCard";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface QuickAction {
   id: string;
@@ -44,7 +43,6 @@ interface QuickAction {
 }
 
 function SystemHealthCard({ stats }: { stats: any }) {
-  const { t } = useDivineParsing(["master"]);
   const healthMetrics = useMemo(
     () => ({
       overall: stats?.performance?.healthScore || 98.5,
@@ -57,11 +55,11 @@ function SystemHealthCard({ stats }: { stats: any }) {
   );
 
   const metricLabels: Record<string, string> = {
-    overall: t("master.system_overview.health.overall"),
-    database: t("master.system_overview.health.database"),
-    api: t("master.system_overview.health.api"),
-    security: t("master.security_alerts.title"), // Using title as label for now
-    performance: t("master.system_overview.performance.title"),
+    overall: "Overall Status",
+    database: "Database",
+    api: "API Performance",
+    security: "Security Alerts", // Using title as label for now
+    performance: "Performance Metrics",
   };
 
   return (
@@ -69,10 +67,10 @@ function SystemHealthCard({ stats }: { stats: any }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Activity className="h-5 w-5 text-blue-600" />
-          {t("master.system_overview.health.title")}
+          System Health
         </CardTitle>
         <CardDescription>
-          {t("master.system_overview.health.subtitle")}
+          Overall status of all system components
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -101,9 +99,9 @@ function SystemHealthCard({ stats }: { stats: any }) {
         <div className="flex items-center gap-2 pt-2 border-t">
           <CheckCircle className="h-4 w-4 text-green-500" />
           <span className="text-sm text-muted-foreground">
-            {t("master.system_status")}:{" "}
-            {stats?.system?.status || t("master.unknown")} -{" "}
-            {t("master.uptime")}:{" "}
+            System Status:{" "}
+            {stats?.system?.status || "Unknown"} -{" "}
+            Uptime:{" "}
             {stats?.system?.uptime
               ? `${Math.floor(stats.system.uptime / 3600)}h`
               : "N/A"}
@@ -121,8 +119,6 @@ function LocalMasterStatsCard({
   stats: any;
   loading: boolean;
 }) {
-  const { t } = useDivineParsing(["master"]);
-
   if (loading) {
     return (
       <Card className="border-blue-200 dark:border-blue-800">
@@ -130,7 +126,7 @@ function LocalMasterStatsCard({
           <div className="flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             <span className="ml-2 text-muted-foreground">
-              {t("master.loading_stats")}
+              Loading statistics...
             </span>
           </div>
         </CardContent>
@@ -143,9 +139,9 @@ function LocalMasterStatsCard({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-blue-600" />
-          {t("master.global_stats.title")}
+          Global Statistics
         </CardTitle>
-        <CardDescription>{t("master.global_stats.subtitle")}</CardDescription>
+        <CardDescription>Critical system metrics</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
@@ -155,7 +151,7 @@ function LocalMasterStatsCard({
               {(stats.users?.total || 0).toLocaleString()}
             </div>
             <div className="text-sm text-muted-foreground">
-              {t("master.system_overview.stats.total_users")}
+              Total Users
             </div>
           </div>
 
@@ -165,7 +161,7 @@ function LocalMasterStatsCard({
               {stats.users?.breakdown?.profesor || 0}
             </div>
             <div className="text-sm text-muted-foreground">
-              {t("master.global_stats.teachers")}
+              Teachers
             </div>
           </div>
 
@@ -175,7 +171,7 @@ function LocalMasterStatsCard({
               {stats.database?.connectionPoolSize || 0}
             </div>
             <div className="text-sm text-muted-foreground">
-              {t("master.global_stats.db_connections")}
+              DB Connections
             </div>
           </div>
 
@@ -185,7 +181,7 @@ function LocalMasterStatsCard({
               {((stats.performance?.throughput || 0) / 1000).toFixed(1)}K
             </div>
             <div className="text-sm text-muted-foreground">
-              {t("master.global_stats.requests_hour")}
+              Requests/hour
             </div>
           </div>
         </div>
@@ -195,33 +191,31 @@ function LocalMasterStatsCard({
 }
 
 function SecurityAlertsCard({ stats }: { stats: any }) {
-  const { t } = useDivineParsing(["master"]);
-
   const alerts = useMemo(
     () => [
       {
         id: 1,
         type: "warning",
-        message: `${t("master.security_alerts.active_threats")}: ${stats?.security?.activeThreats || 0}`,
-        time: t("master.time.live"),
+        message: `Active Threats: ${stats?.security?.activeThreats || 0}`,
+        time: "Live",
         severity: (stats?.security?.activeThreats || 0) > 0 ? "high" : "low",
       },
       {
         id: 2,
         type: "info",
-        message: `${t("master.security_alerts.blocked_attempts")}: ${stats?.security?.blockedAttempts || 0}`,
-        time: t("master.time.last_24h"),
+        message: `Blocked Attempts: ${stats?.security?.blockedAttempts || 0}`,
+        time: "Last 24h",
         severity: "medium",
       },
       {
         id: 3,
         type: "success",
-        message: `${t("master.security_alerts.security_score")}: ${stats?.security?.securityScore || "N/A"}`,
-        time: t("master.time.current"),
+        message: `Security Score: ${stats?.security?.securityScore || "N/A"}`,
+        time: "Current",
         severity: "low",
       },
     ],
-    [stats, t],
+    [stats],
   );
 
   return (
@@ -229,10 +223,10 @@ function SecurityAlertsCard({ stats }: { stats: any }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-blue-600" />
-          {t("master.security_alerts.title")}
+          Security Alerts
         </CardTitle>
         <CardDescription>
-          {t("master.security_alerts.subtitle")}
+          Recent security events
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -266,47 +260,46 @@ function SecurityAlertsCard({ stats }: { stats: any }) {
 export function MasterDashboard() {
   const { data: session } = useSession();
   const { stats, loading } = useDashboardData();
-  const { t } = useDivineParsing(["master"]);
 
   const masterQuickActions: QuickAction[] = useMemo(
     () => [
       // Core Master Functions
       {
         id: "system-overview",
-        title: t("master.system_overview.title"),
-        description: t("master.system_overview.subtitle"),
+        title: "System Overview",
+        description: "Comprehensive system monitoring and performance analytics",
         icon: Activity,
         href: "/master/system-overview",
         category: "Core",
       },
       {
         id: "institution-creation",
-        title: t("master.actions.institution_provisioning.title"),
-        description: t("master.actions.institution_provisioning.description"),
+        title: "New Institution",
+        description: "Create new institution",
         icon: Building2,
         href: "/master/institution-creation",
         category: "Core",
       },
       {
         id: "user-management",
-        title: t("master.user_management.title"),
-        description: t("master.actions.user_management.description"),
+        title: "User Management",
+        description: "Manage users and roles",
         icon: Users,
         href: "/master/user-management",
         category: "Core",
       },
       {
         id: "database-tools",
-        title: t("master.actions.database_tools.title"),
-        description: t("master.actions.database_tools.description"),
+        title: "Database Tools",
+        description: "Database operations and maintenance",
         icon: Database,
         href: "/master/database-tools",
         category: "Core",
       },
       {
         id: "security-center",
-        title: t("master.actions.security_center.title"),
-        description: t("master.actions.security_center.description"),
+        title: "Security Center",
+        description: "Security monitoring and controls",
         icon: Shield,
         href: "/master/security-center",
         category: "Core",
@@ -315,15 +308,15 @@ export function MasterDashboard() {
       // Advanced Administration
       {
         id: "advanced-admin",
-        title: t("master.actions.advanced_admin.title"),
-        description: t("master.actions.advanced_admin.description"),
+        title: "Advanced Administration",
+        description: "Full system control and monitoring",
         icon: Crown,
         href: "/master/god-mode",
         variant: "secondary",
         category: "Advanced",
       },
     ],
-    [t],
+    [],
   );
 
   const quickActions = masterQuickActions.map((action) => ({
@@ -342,20 +335,17 @@ export function MasterDashboard() {
 
   return (
     <MasterPageTemplate
-      title={t("master.dashboard.title")}
-      subtitle={t("master.dashboard.welcome").replace(
-        "{name}",
-        session?.user?.name || "Administrator",
-      )}
+      title="Master Dashboard"
+      subtitle={`Welcome, ${session?.user?.name || "Administrator"}`}
       context="MASTER_DASHBOARD"
     >
       {/* Quick Actions */}
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-4">
-          {t("master.quick_actions.title")}
+          Quick Actions - Administrative Tools
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          {t("master.quick_actions.subtitle")}
+          Advanced tools for system administrators
         </p>
         <MasterActionCard
           title=""

@@ -40,7 +40,7 @@ import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { OASelector } from "./OASelector";
 import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 type ClassContentFormData = {
   date: Date;

@@ -10,8 +10,7 @@ import { es, enUS } from "date-fns/locale";
 import { StatusBadge } from "@/components/ui/status-badge";
 
 // i18n
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 interface MeetingCardProps {
   meeting: Meeting & { teacher?: { name: string; email: string } };

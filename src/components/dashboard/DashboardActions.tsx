@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/adaptive-card";
 import { AdaptiveButton } from "@/components/ui/adaptive-button";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 import {
   Plus,
   Calendar,
