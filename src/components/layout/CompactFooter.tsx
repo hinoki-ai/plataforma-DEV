@@ -8,7 +8,7 @@ export default function CompactFooter() {
   return (
     <div className="bg-gray-900 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="text-gray-300 text-sm">
             © {new Date().getFullYear()} Plataforma Astral. Todos los derechos
             reservados.
@@ -43,7 +43,7 @@ export default function CompactFooter() {
             href="https://aramac.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-red-500 hover:text-red-400 transition-colors font-bold text-sm"
+            className="text-red-500 hover:text-red-400 transition-colors font-bold text-sm mr-2"
             aria-label={t("home.footer.aria.developer", "common")}
           >
             ΛRΛMΛC

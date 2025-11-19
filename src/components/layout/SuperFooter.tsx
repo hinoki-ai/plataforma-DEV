@@ -225,7 +225,7 @@ export default function HomepageFooter() {
                 href="https://aramac.dev"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-400 hover:text-white transition-colors font-medium text-sm"
+                className="text-red-500 hover:text-red-400 transition-colors font-bold text-sm"
                 aria-label={t("home.footer.aria.developer", "common")}
               >
                 ΛRΛMΛC
