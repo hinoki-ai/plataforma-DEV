@@ -8,7 +8,10 @@ import { toast } from "sonner";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "@clerk/nextjs";
 import { JoshChat } from "./josh-chat";
-import { MessageCircle } from "lucide-react";
+import { JoshTour } from "./josh-tour";
+import { JoshAnimated, RippleButton, FloatingElement, PulseNotification } from "./josh-animations";
+import { useJoshAnalytics } from "./josh-analytics";
+import { MessageCircle, Map } from "lucide-react";
 
 /**
  * Floating Josh indicator that appears in the bottom-right corner
@@ -19,9 +22,12 @@ export function JoshIndicator() {
   const { t } = useDivineParsing();
   const { session } = useSession();
   const pathname = usePathname();
+  const analytics = useJoshAnalytics();
   const [isVisible, setIsVisible] = useState(true);
   const [clickCount, setClickCount] = useState(0);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [activeTour, setActiveTour] = useState<string | null>(null);
+  const [isTourActive, setIsTourActive] = useState(false);
 
   const isDark = resolvedTheme === "dark";
   const joshImage = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
@@ -43,9 +49,28 @@ export function JoshIndicator() {
     return { role, section: "general" };
   };
 
+  // Get appropriate tour for current context
+  const getTourForContext = (context: any) => {
+    if (context.section === "admin") return "admin-dashboard";
+    if (context.section === "profesor" && pathname.includes("libro-clases")) return "teacher-classbook";
+    if (context.section === "parent") return "parent-dashboard";
+    return null;
+  };
+
   const handleClick = () => {
     const newCount = clickCount + 1;
     setClickCount(newCount);
+
+    // Track interaction
+    analytics.trackInteraction({
+      type: "click",
+      page: pathname,
+      context: {
+        role: getUserRole(),
+        action: "main_interaction"
+      },
+      metadata: { clickCount: newCount }
+    });
     const context = getPageContext();
 
     // Contextual tips based on user role and current page
@@ -115,6 +140,17 @@ export function JoshIndicator() {
 
   const handleDismiss = () => {
     setIsVisible(false);
+
+    // Track dismiss
+    analytics.trackInteraction({
+      type: "dismiss",
+      page: pathname,
+      context: {
+        role: getUserRole(),
+        action: "assistant_dismissed"
+      }
+    });
+
     toast.info(t("josh.dismiss", "Josh se esconderá... pero puedes llamarme con Ctrl+J"), {
       duration: 4000,
     });
@@ -140,6 +176,50 @@ export function JoshIndicator() {
       {/* Chat Interface */}
       <JoshChat isOpen={isChatOpen} onToggle={() => setIsChatOpen(false)} />
 
+      {/* Tour Interface */}
+      <JoshTour
+        isActive={isTourActive}
+        tourId={activeTour}
+        onComplete={() => {
+          setIsTourActive(false);
+          setActiveTour(null);
+
+          // Track tour completion
+          analytics.trackInteraction({
+            type: "tour",
+            page: pathname,
+            context: {
+              role: getUserRole(),
+              action: "tour_completed",
+              response: activeTour || "unknown"
+            }
+          });
+
+          toast.success(t("josh.tour.completed", "¡Tour completado! Ya sabes cómo usar esta sección."), {
+            duration: 3000,
+          });
+        }}
+        onSkip={() => {
+          setIsTourActive(false);
+          setActiveTour(null);
+
+          // Track tour skip
+          analytics.trackInteraction({
+            type: "tour",
+            page: pathname,
+            context: {
+              role: getUserRole(),
+              action: "tour_skipped",
+              response: activeTour || "unknown"
+            }
+          });
+
+          toast.info(t("josh.tour.skipped", "Tour omitido. Puedes iniciarlo nuevamente cuando lo necesites."), {
+            duration: 2000,
+          });
+        }}
+      />
+
       <AnimatePresence>
         {isVisible && (
           <motion.div
@@ -164,19 +244,35 @@ export function JoshIndicator() {
             onClick={handleClick}
           >
             {/* Josh Image */}
-            <motion.img
-              src={joshImage}
-              alt="Josh Assistant"
-              className="w-12 h-12 rounded-full object-cover shadow-lg border-3 border-white dark:border-gray-700 hover:shadow-xl transition-shadow"
-              animate={{
-                y: [0, -3, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <FloatingElement intensity={1.5} speed={1}>
+              <JoshAnimated
+                variant="idle"
+                isHovered={false}
+                isActive={isChatOpen}
+                size="md"
+              >
+                <motion.img
+                  src={joshImage}
+                  alt={t("josh.alt", "Josh - Educational Assistant")}
+                  className="w-12 h-12 rounded-full object-cover shadow-lg border-3 border-white dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={t("josh.click.label", "Click to interact with Josh, your educational assistant")}
+                  onClick={handleClick}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleClick();
+                    }
+                  }}
+                  whileHover={{
+                    scale: 1.1,
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                />
+              </JoshAnimated>
+            </FloatingElement>
 
             {/* Notification dot */}
             <motion.div
@@ -191,36 +287,90 @@ export function JoshIndicator() {
             />
 
             {/* Tooltip */}
-            <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            <div
+              className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
+              role="tooltip"
+              id="josh-tooltip"
+            >
               {t("josh.tooltip", "¡Haz clic en mí!")}
               <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
             </div>
 
+            {/* Tour button */}
+            <RippleButton
+              onClick={(e) => {
+                e.stopPropagation();
+                const context = getPageContext();
+                const tourId = getTourForContext(context);
+                if (tourId) {
+                  setActiveTour(tourId);
+                  setIsTourActive(true);
+
+                  // Track tour start
+                  analytics.trackInteraction({
+                    type: "tour",
+                    page: pathname,
+                    context: {
+                      role: context.role,
+                      action: "tour_started",
+                      response: tourId
+                    }
+                  });
+
+                  toast.success(t("josh.tour.starting", "¡Comenzando tour interactivo!"), {
+                    duration: 2000,
+                  });
+                }
+              }}
+              className="absolute -top-1 -right-1 w-6 h-6 bg-purple-500 hover:bg-purple-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center focus:opacity-100 focus:ring-2 focus:ring-purple-300"
+              title={t("josh.tour.button", "Tour Interactivo")}
+              aria-label={t("josh.tour.button.accessible", "Start interactive tour with Josh")}
+              tabIndex={0}
+            >
+              <Map className="w-3 h-3" aria-hidden="true" />
+            </RippleButton>
+
             {/* Chat button */}
-            <button
+            <RippleButton
               onClick={(e) => {
                 e.stopPropagation();
                 setIsChatOpen(true);
+
+                // Track chat open
+                analytics.trackInteraction({
+                  type: "chat",
+                  page: pathname,
+                  context: {
+                    role: getUserRole(),
+                    action: "chat_opened"
+                  }
+                });
+
                 toast.success(t("josh.chat.open", "¡Hola! ¿En qué puedo ayudarte?"), {
                   duration: 2000,
                 });
               }}
-              className="absolute -top-1 -left-1 w-6 h-6 bg-green-500 hover:bg-green-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              className="absolute -top-1 -left-1 w-6 h-6 bg-green-500 hover:bg-green-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center focus:opacity-100 focus:ring-2 focus:ring-green-300"
               title={t("josh.chat.button", "Chatear con Josh")}
+              aria-label={t("josh.chat.button.accessible", "Open chat with Josh, your educational assistant")}
+              tabIndex={0}
             >
-              <MessageCircle className="w-3 h-3" />
-            </button>
+              <MessageCircle className="w-3 h-3" aria-hidden="true" />
+            </RippleButton>
 
             {/* Dismiss button */}
-            <button
+            <RippleButton
               onClick={(e) => {
                 e.stopPropagation();
                 handleDismiss();
               }}
-              className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              className="absolute -bottom-1 -right-1 w-4 h-4 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center focus:opacity-100 focus:ring-2 focus:ring-red-300"
+              title={t("josh.dismiss.button", "Hide Josh temporarily")}
+              aria-label={t("josh.dismiss.accessible", "Hide Josh assistant, can bring back with Ctrl+J")}
+              tabIndex={0}
             >
               ×
-            </button>
+            </RippleButton>
           </motion.div>
         </motion.div>
       )}

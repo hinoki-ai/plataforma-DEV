@@ -48,7 +48,7 @@ export const renderNavigationItem = (
   item: NavigationItem,
   isActive: boolean,
   pathname: string,
-  t: (key: string) => string,
+  t: (key: string, namespace?: string) => string,
   onToggle?: () => void,
   handleLogout?: () => void,
 ): React.ReactElement => {
@@ -106,7 +106,7 @@ export const renderCollapsedNavigationItem = (
   item: NavigationItem,
   isActive: boolean,
   pathname: string,
-  t: (key: string) => string,
+  t: (key: string, namespace?: string) => string,
   onToggle?: () => void,
   handleLogout?: () => void,
 ): React.ReactElement => {

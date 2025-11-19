@@ -100,6 +100,25 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
     const context = getPageContext();
     const lowerMessage = userMessage.toLowerCase();
 
+    // Check for tour requests
+    if (lowerMessage.includes("tour") || lowerMessage.includes("guia") || lowerMessage.includes("guide")) {
+      if (context.section === "admin") {
+        return t("josh.chat.tour.admin", "¿Te gustaría que te guíe por el panel de administración? Puedo mostrarte cómo gestionar usuarios, calendario y todas las funciones principales. Solo di 'sí' para comenzar el tour.");
+      }
+      if (context.section === "teacher") {
+        return t("josh.chat.tour.teacher", "¿Quieres que te enseñe a usar el libro de clases? Te mostraré cómo registrar asistencia, calificaciones y observaciones. Solo di 'sí' para comenzar el tour.");
+      }
+      if (context.section === "parent") {
+        return t("josh.chat.tour.parent", "¿Te gustaría un tour por el portal de apoderados? Te explicaré cómo ver el progreso de tu estudiante y comunicarte con profesores. Solo di 'sí' para comenzar.");
+      }
+    }
+
+    // Check for tour confirmation
+    if (lowerMessage.includes("si") || lowerMessage.includes("yes") || lowerMessage.includes("comenzar") || lowerMessage.includes("start")) {
+      // This would trigger the tour - handled by parent component
+      return t("josh.chat.tour.starting", "¡Perfecto! Iniciando el tour interactivo. Te guiaré paso a paso por las funciones principales.");
+    }
+
     // Contextual responses based on user role and page
     if (context.section === "admin") {
       if (lowerMessage.includes("calendario") || lowerMessage.includes("calendar")) {
@@ -203,37 +222,46 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 20 }}
         className="fixed bottom-20 right-6 z-50 w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="josh-chat-title"
+        aria-describedby="josh-chat-description"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
+        <header className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
           <div className="flex items-center space-x-2">
             <motion.img
               src={joshImage}
-              alt="Josh"
+              alt=""
               className="w-8 h-8 rounded-full border-2 border-white"
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              aria-hidden="true"
             />
             <div>
-              <h3 className="font-semibold text-sm">Josh</h3>
-              <p className="text-xs opacity-90">Tu asistente educativo</p>
+              <h3 id="josh-chat-title" className="font-semibold text-sm">Josh</h3>
+              <p id="josh-chat-description" className="text-xs opacity-90">Tu asistente educativo</p>
             </div>
           </div>
           <div className="flex items-center space-x-1">
             <button
               onClick={() => setIsMinimized(!isMinimized)}
-              className="p-1 hover:bg-white/20 rounded transition-colors"
+              className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
+              aria-label={isMinimized ? t("josh.chat.maximize", "Maximizar chat") : t("josh.chat.minimize", "Minimizar chat")}
+              title={isMinimized ? t("josh.chat.maximize", "Maximizar chat") : t("josh.chat.minimize", "Minimizar chat")}
             >
-              {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+              {isMinimized ? <Maximize2 className="w-4 h-4" aria-hidden="true" /> : <Minimize2 className="w-4 h-4" aria-hidden="true" />}
             </button>
             <button
               onClick={onToggle}
-              className="p-1 hover:bg-white/20 rounded transition-colors"
+              className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
+              aria-label={t("josh.chat.close", "Cerrar chat")}
+              title={t("josh.chat.close", "Cerrar chat")}
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Messages */}
         <AnimatePresence>
@@ -245,7 +273,13 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
               className="flex-1 overflow-hidden"
             >
               <div className="h-full flex flex-col">
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div
+                  className="flex-1 overflow-y-auto p-4 space-y-4"
+                  role="log"
+                  aria-label={t("josh.chat.messages", "Mensajes del chat")}
+                  aria-live="polite"
+                  aria-atomic="false"
+                >
                   {messages.map((message) => (
                     <motion.div
                       key={message.id}
@@ -262,14 +296,14 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                       >
                         {message.sender === "josh" && (
                           <div className="flex items-center space-x-2 mb-1">
-                            <img src={joshImage} alt="Josh" className="w-4 h-4 rounded-full" />
+                            <img src={joshImage} alt="" className="w-4 h-4 rounded-full" aria-hidden="true" />
                             <span className="text-xs font-medium">Josh</span>
                           </div>
                         )}
                         <p className="text-sm">{message.content}</p>
-                        <span className="text-xs opacity-70 mt-1 block">
+                        <time className="text-xs opacity-70 mt-1 block" dateTime={message.timestamp.toISOString()}>
                           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
+                        </time>
                       </div>
                     </motion.div>
                   ))}
@@ -299,8 +333,12 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                 {/* Input */}
                 <div className="p-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex space-x-2">
+                    <label htmlFor="josh-chat-input" className="sr-only">
+                      {t("josh.chat.input.label", "Escribe tu mensaje para Josh")}
+                    </label>
                     <input
                       ref={inputRef}
+                      id="josh-chat-input"
                       type="text"
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
@@ -308,15 +346,24 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                       placeholder={t("josh.chat.placeholder", "Escribe tu mensaje...")}
                       className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                       disabled={isTyping}
+                      aria-describedby={isTyping ? "josh-typing-status" : undefined}
+                      autoComplete="off"
                     />
                     <button
                       onClick={handleSendMessage}
                       disabled={!inputValue.trim() || isTyping}
-                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center"
+                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0"
+                      aria-label={t("josh.chat.send", "Enviar mensaje")}
+                      title={t("josh.chat.send", "Enviar mensaje")}
                     >
-                      <Send className="w-4 h-4" />
+                      <Send className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </div>
+                  {isTyping && (
+                    <div id="josh-typing-status" className="sr-only" aria-live="assertive">
+                      {t("josh.chat.typing", "Josh está escribiendo")}
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>

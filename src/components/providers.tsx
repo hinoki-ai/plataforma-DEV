@@ -15,6 +15,8 @@ import { clerkConfig } from "@/lib/clerk-config";
 import { PreloadingProvider } from "./providers/PreloadingProvider";
 import { JoshWelcomeToast } from "./ui/josh-welcome-toast";
 import { JoshIndicator } from "./ui/josh-indicator";
+import { JoshProactiveSuggestions } from "./ui/josh-proactive";
+import { JoshAnalyticsProvider, JoshAnalyticsDashboard } from "./ui/josh-analytics";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -30,8 +32,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
             forcedTheme={undefined}
             nonce={undefined}
           >
-            <JoshWelcomeToast />
-            <JoshIndicator />
+            <JoshAnalyticsProvider>
+              <JoshWelcomeToast />
+              <JoshIndicator />
+              <JoshProactiveSuggestions />
+              <JoshAnalyticsDashboard />
+            </JoshAnalyticsProvider>
             <ContextProvider>
               <LanguageProvider>
                 <LanguageHtmlUpdater />
