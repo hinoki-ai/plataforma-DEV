@@ -168,6 +168,7 @@
     "plan_min_students_error": "The {plan} plan requires a minimum of {min} students",
     "plan_max_students_error": "The {plan} plan allows a maximum of {max} students",
     "change_to": "Switch to {plan}",
+    "change_to_cycle": "Switch to {cycle} cycle",
     "recommended_plan_available": "Recommended plan available",
     "recommended_plan_description": "For {students} students, the <strong>{plan}</strong> is more suitable and can save you money.",
     "best_option_available": "Best option available",

@@ -599,10 +599,6 @@ export default function PricingCalculatorPage({
         : `${numberFormatter.format(selectedPlan.minStudents)}+ ${tc("calculator.students_count").replace("{count}", "")}`,
     },
     {
-      label: tc("calculator.institution_type_label"),
-      value: INSTITUTION_TYPE_INFO[institutionType].chileanName,
-    },
-    {
       label: tc("calculator.price_per_student"),
       value: `${formatCLP(selectedPlan.pricePerStudent)} / ${tc("calculator.month")}`,
     },
@@ -638,21 +634,6 @@ export default function PricingCalculatorPage({
                     </div>
                     <CardDescription className="text-gray-300 text-base mt-2">
                       {selectedPlan.description}
-                    </CardDescription>
-                    <CardDescription className="text-gray-400 text-sm mt-3 leading-relaxed">
-                      {Object.entries(INSTITUTION_TYPE_INFO).map(
-                        ([key, info], index) => (
-                          <span key={key}>
-                            <span className="font-medium text-gray-300">
-                              {info.chileanName}
-                            </span>
-                            : {info.description}
-                            {index < Object.keys(INSTITUTION_TYPE_INFO).length - 1 && (
-                              <span className="mx-2 text-gray-500">•</span>
-                            )}
-                          </span>
-                        ),
-                      )}
                     </CardDescription>
 
                     {/* Plan Validation Warning */}
@@ -888,12 +869,12 @@ export default function PricingCalculatorPage({
                   <div className="text-sm font-semibold text-gray-300">
                     {tc("calculator.payment_frequency")}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex">
                     <Button
                       variant={
                         paymentFrequency === "monthly" ? "default" : "outline"
                       }
-                      className="justify-center py-2 min-w-[155px]"
+                      className="justify-center py-2 flex-1 min-w-[200px]"
                       onClick={() => setPaymentFrequency("monthly")}
                       aria-label={tc("calculator.aria.monthly_payment")}
                       aria-pressed={paymentFrequency === "monthly"}
@@ -967,8 +948,8 @@ export default function PricingCalculatorPage({
                               setBillingCycle(bestBillingCycle.cycle)
                             }
                           >
-                            {tc("calculator.change_to").replace(
-                              "{plan}",
+                            {tc("calculator.change_to_cycle").replace(
+                              "{cycle}",
                               billingMetadata[bestBillingCycle.cycle].label,
                             )}
                             <ChevronRight className="w-4 h-4 ml-1" />

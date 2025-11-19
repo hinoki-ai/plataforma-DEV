@@ -125,7 +125,7 @@ export function EducationalSystemExplorer() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-0">
           {Object.entries(INSTITUTION_TYPE_INFO).map(([type, info]) => {
             const typedType = type as EducationalInstitutionType;
             const isSelected = selectedType === typedType;
@@ -133,8 +133,8 @@ export function EducationalSystemExplorer() {
             return (
               <div
                 key={type}
-                className={`relative group cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-                  isSelected ? "scale-105" : ""
+                className={`relative group cursor-pointer transition-all duration-300 flex-1 ${
+                  isSelected ? "transform scale-105" : ""
                 }`}
                 onClick={() => setSelectedType(typedType)}
               >
@@ -147,7 +147,7 @@ export function EducationalSystemExplorer() {
                 ></div>
 
                 <Card
-                  className={`relative border-0 ${DESIGN_TOKENS.shadows.elevated} ${DESIGN_TOKENS.transitions} overflow-hidden ${
+                  className={`relative border-0 ${DESIGN_TOKENS.shadows.elevated} ${DESIGN_TOKENS.transitions} overflow-hidden h-full ${
                     isSelected
                       ? "bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-blue-500/25"
                       : "bg-white dark:bg-slate-800 hover:shadow-2xl hover:shadow-blue-500/10"
@@ -156,7 +156,7 @@ export function EducationalSystemExplorer() {
                   <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                   <CardContent
-                    className={`${DESIGN_TOKENS.padding.card} text-center ${DESIGN_TOKENS.spacing.content} relative z-10`}
+                    className={`${DESIGN_TOKENS.padding.card} text-center ${DESIGN_TOKENS.spacing.content} relative z-10 h-full flex flex-col justify-between`}
                   >
                     <div
                       className={`inline-flex ${DESIGN_TOKENS.padding.icon} ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.transitions} ${
