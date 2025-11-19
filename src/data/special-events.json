@@ -1,0 +1,181 @@
+[
+  {
+    "id": "reunion-equipo-multidisciplinario-2025",
+    "title": "Reunión Equipo Multidisciplinario",
+    "description":
+      "Coordinación semanal del equipo de fonoaudiología, psicología y pedagogía",
+    "date": "2025-03-07",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "taller-padres-lenguaje-2025",
+    "title": "Taller para Padres - Estimulación del Lenguaje",
+    "description":
+      "Taller mensual para apoderados sobre técnicas de estimulación del lenguaje en casa",
+    "date": "2025-03-20",
+    "category": "parent",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "evaluacion-fonoaudiologica-2025",
+    "title": "Evaluación Fonoaudiológica",
+    "description": "Evaluación individual del desarrollo del lenguaje",
+    "date": "2025-04-15",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+
+  {
+    "id": "reunion-equipo-multidisciplinario-2026",
+    "title": "Reunión Equipo Multidisciplinario",
+    "description":
+      "Coordinación semanal del equipo de fonoaudiología, psicología y pedagogía",
+    "date": "2026-03-06",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "taller-padres-lenguaje-2026",
+    "title": "Taller para Padres - Estimulación del Lenguaje",
+    "description":
+      "Taller mensual para apoderados sobre técnicas de estimulación del lenguaje en casa",
+    "date": "2026-03-19",
+    "category": "parent",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "evaluacion-fonoaudiologica-2026",
+    "title": "Evaluación Fonoaudiológica",
+    "description": "Evaluación individual del desarrollo del lenguaje",
+    "date": "2026-04-14",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+
+  {
+    "id": "reunion-equipo-multidisciplinario-2027",
+    "title": "Reunión Equipo Multidisciplinario",
+    "description":
+      "Coordinación semanal del equipo de fonoaudiología, psicología y pedagogía",
+    "date": "2027-03-05",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "taller-padres-lenguaje-2027",
+    "title": "Taller para Padres - Estimulación del Lenguaje",
+    "description":
+      "Taller mensual para apoderados sobre técnicas de estimulación del lenguaje en casa",
+    "date": "2027-03-18",
+    "category": "parent",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "evaluacion-fonoaudiologica-2027",
+    "title": "Evaluación Fonoaudiológica",
+    "description": "Evaluación individual del desarrollo del lenguaje",
+    "date": "2027-04-13",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+
+  {
+    "id": "reunion-equipo-multidisciplinario-2028",
+    "title": "Reunión Equipo Multidisciplinario",
+    "description":
+      "Coordinación semanal del equipo de fonoaudiología, psicología y pedagogía",
+    "date": "2028-03-06",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "taller-padres-lenguaje-2028",
+    "title": "Taller para Padres - Estimulación del Lenguaje",
+    "description":
+      "Taller mensual para apoderados sobre técnicas de estimulación del lenguaje en casa",
+    "date": "2028-03-19",
+    "category": "parent",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "evaluacion-fonoaudiologica-2028",
+    "title": "Evaluación Fonoaudiológica",
+    "description": "Evaluación individual del desarrollo del lenguaje",
+    "date": "2028-04-14",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+
+  {
+    "id": "reunion-equipo-multidisciplinario-2029",
+    "title": "Reunión Equipo Multidisciplinario",
+    "description":
+      "Coordinación semanal del equipo de fonoaudiología, psicología y pedagogía",
+    "date": "2029-03-05",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "taller-padres-lenguaje-2029",
+    "title": "Taller para Padres - Estimulación del Lenguaje",
+    "description":
+      "Taller mensual para apoderados sobre técnicas de estimulación del lenguaje en casa",
+    "date": "2029-03-18",
+    "category": "parent",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "evaluacion-fonoaudiologica-2029",
+    "title": "Evaluación Fonoaudiológica",
+    "description": "Evaluación individual del desarrollo del lenguaje",
+    "date": "2029-04-13",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+
+  {
+    "id": "reunion-equipo-multidisciplinario-2030",
+    "title": "Reunión Equipo Multidisciplinario",
+    "description":
+      "Coordinación semanal del equipo de fonoaudiología, psicología y pedagogía",
+    "date": "2030-03-04",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "taller-padres-lenguaje-2030",
+    "title": "Taller para Padres - Estimulación del Lenguaje",
+    "description":
+      "Taller mensual para apoderados sobre técnicas de estimulación del lenguaje en casa",
+    "date": "2030-03-17",
+    "category": "parent",
+    "level": "both",
+    "isRecurring": true
+  },
+  {
+    "id": "evaluacion-fonoaudiologica-2030",
+    "title": "Evaluación Fonoaudiológica",
+    "description": "Evaluación individual del desarrollo del lenguaje",
+    "date": "2030-04-12",
+    "category": "academic",
+    "level": "both",
+    "isRecurring": true
+  }
+]

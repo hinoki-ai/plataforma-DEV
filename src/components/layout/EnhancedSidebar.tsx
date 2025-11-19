@@ -56,35 +56,10 @@ interface NavigationItem {
   readonly href: string;
   readonly icon: React.ComponentType<{ className?: string }>;
   readonly badge?: string;
-  readonly shortcut?: string;
   readonly category: string;
   readonly description?: string;
 }
 
-// Helper function to get shortcuts for specific role
-const getKeyboardShortcuts = (
-  role: string | undefined,
-  pathname: string
-): Record<string, string> => {
-  const shortcuts: Record<string, string> = {
-    Escape: "close-sidebar",
-    "Ctrl+K": "open-search",
-    "?": "show-shortcuts",
-  };
-
-  if (!role) return shortcuts;
-
-  const groups = getNavigationGroupsForRole(role, pathname);
-  groups.forEach((group) => {
-    group.items.forEach((item: any) => {
-      if (item.shortcut) {
-        shortcuts[item.shortcut] = item.href;
-      }
-    });
-  });
-
-  return shortcuts;
-};
 
 export function EnhancedSidebar({
   className,
@@ -105,7 +80,6 @@ export function EnhancedSidebar({
   // State management
   const [quickSearchOpen, setQuickSearchOpen] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
-  const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
   const [usageData, setUsageData] = useState(() =>
     navigationUtils.getUsageData(),
   );
@@ -150,97 +124,7 @@ export function EnhancedSidebar({
     }
   }, [router]);
 
-  // Keyboard navigation
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (!session) return;
 
-      // Handle Ctrl+K for search
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setQuickSearchOpen(true);
-        return;
-      }
-
-      // Handle ? for shortcuts help
-      if (
-        event.key === "?" &&
-        !event.shiftKey &&
-        !event.ctrlKey &&
-        !event.metaKey
-      ) {
-        event.preventDefault();
-        setShortcutsHelpOpen(true);
-        return;
-      }
-
-      // Handle Escape
-      if (event.key === "Escape") {
-        event.preventDefault();
-        if (quickSearchOpen) {
-          setQuickSearchOpen(false);
-        } else if (shortcutsHelpOpen) {
-          setShortcutsHelpOpen(false);
-        } else if (isMobile && isOpen) {
-          onClose?.();
-        } else {
-          onToggle?.();
-        }
-        return;
-      }
-
-      // Handle Alt+ shortcuts
-      const keyboardShortcuts = getKeyboardShortcuts(userRole || undefined, pathname);
-      const shortcut = Object.keys(keyboardShortcuts).find((key) => {
-        const [modifier, char] = key.split("+");
-        if (modifier === "Alt") {
-          return event.altKey && event.key.toLowerCase() === char.toLowerCase();
-        }
-        return false;
-      });
-
-      if (shortcut && shortcut !== "Escape") {
-        event.preventDefault();
-        const action =
-          keyboardShortcuts[shortcut as keyof typeof keyboardShortcuts];
-        if (action && typeof action === "string") {
-          if ((action as string).startsWith("/")) {
-            handleNavigate(action);
-          }
-        }
-      }
-    },
-    [
-      session,
-      quickSearchOpen,
-      shortcutsHelpOpen,
-      isMobile,
-      isOpen,
-      onClose,
-      onToggle,
-      handleNavigate,
-      t,
-      userRole,
-      pathname,
-    ],
-  );
-
-  // Set up keyboard listeners
-  useEffect(() => {
-    const debouncedHandler = (event: KeyboardEvent) => {
-      // Don't handle shortcuts when typing in inputs
-      if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement
-      ) {
-        return;
-      }
-      handleKeyDown(event);
-    };
-
-    window.addEventListener("keydown", debouncedHandler);
-    return () => window.removeEventListener("keydown", debouncedHandler);
-  }, [handleKeyDown]);
 
   // Mobile drag to close functionality
   const handleDragEnd = useCallback(
@@ -332,11 +216,9 @@ export function EnhancedSidebar({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Búsqueda rápida (Ctrl+K)</p>
+                    <p>Búsqueda rápida</p>
                   </TooltipContent>
                 </Tooltip>
-
-                {/* Shortcuts Help Button */}
               </>
             )}
 
@@ -419,13 +301,8 @@ export function EnhancedSidebar({
                               <Icon className="h-5 w-5" />
                             </motion.button>
                           </TooltipTrigger>
-                          <TooltipContent side="right" className="flex items-center gap-2">
+                          <TooltipContent side="right">
                             <span>{t(item.title)}</span>
-                            {item.shortcut && (
-                              <span className="text-xs opacity-60 bg-background/20 px-1 rounded">
-                                {item.shortcut}
-                              </span>
-                            )}
                           </TooltipContent>
                         </Tooltip>
                       );
@@ -461,11 +338,6 @@ export function EnhancedSidebar({
                             >
                               {item.badge}
                             </Badge>
-                          )}
-                          {item.shortcut && (
-                            <kbd className="hidden pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity lg:inline-flex">
-                              {item.shortcut}
-                            </kbd>
                           )}
                         </div>
                         {isActive && (
@@ -554,58 +426,6 @@ export function EnhancedSidebar({
           )}
         </AnimatePresence>
 
-        {/* Shortcuts Help Dialog */}
-        <AnimatePresence>
-          {shortcutsHelpOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-              onClick={() => setShortcutsHelpOpen(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-md rounded-xl bg-background p-6 shadow-2xl border"
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-semibold flex items-center gap-2">
-                    <NavigationIcons.Planning className="h-5 w-5" />
-                    {t("nav.shortcuts", "Atajos de Teclado")}
-                  </h2>
-                  <Button variant="ghost" size="sm" onClick={() => setShortcutsHelpOpen(false)}>
-                    <NavigationIcons.Close className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="grid gap-2 max-h-[60vh] overflow-y-auto">
-                  {Object.entries(getKeyboardShortcuts(userRole || undefined, pathname)).map(([key, href]) => {
-                    const item = allNavigationItems.find(i => i.href === href);
-                    // Handle special static shortcuts
-                    let label = href;
-                    if (key === "Escape") label = "Cerrar / Volver";
-                    else if (key === "Ctrl+K") label = "Búsqueda Rápida";
-                    else if (key === "?") label = "Ver Atajos";
-                    else if (item) label = t(item.title);
-                    
-                    return (
-                      <div key={key} className="flex items-center justify-between rounded-lg border p-2 text-sm">
-                         <span className="font-medium text-muted-foreground">
-                           {label}
-                         </span>
-                         <kbd className="rounded bg-muted px-2 py-1 font-mono text-xs font-bold">
-                           {key}
-                         </kbd>
-                      </div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.aside>
     </TooltipProvider>
   );

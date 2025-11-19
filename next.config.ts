@@ -127,7 +127,6 @@ const nextConfig: NextConfig = {
   // output: "standalone",
 
   // Performance optimizations
-  productionBrowserSourceMaps: true,
   compress: true,
   poweredByHeader: false,
 
@@ -146,7 +145,8 @@ const nextConfig: NextConfig = {
   // Temporarily disabled due to missing babel-plugin-react-compiler
   // reactCompiler: true,
 
-  // Explicitly use webpack instead of Turbopack for stability with large codebase
+  // Partial Pre-Rendering temporarily disabled due to conflicts with dynamic route configs
+  // cacheComponents: true, // Enable cache components and PPR for better Core Web Vitals
   experimental: {
     webpackBuildWorker: false, // Disable webpack build workers to avoid memory issues
   },
@@ -174,6 +174,10 @@ const nextConfig: NextConfig = {
     // Performance optimizations for large codebase
     config.optimization = {
       ...config.optimization,
+      // Enable tree shaking
+      usedExports: true,
+      // Concatenate modules for better tree shaking
+      concatenateModules: true,
       splitChunks: {
         chunks: 'all',
         cacheGroups: {
@@ -188,6 +192,19 @@ const nextConfig: NextConfig = {
             name: 'convex',
             chunks: 'all',
             priority: 20,
+          },
+          // Additional cache groups for better tree shaking
+          ui: {
+            test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+            name: 'radix-ui',
+            chunks: 'all',
+            priority: 15,
+          },
+          clerk: {
+            test: /[\\/]node_modules[\\/]@clerk[\\/]/,
+            name: 'clerk',
+            chunks: 'all',
+            priority: 15,
           },
         },
       },

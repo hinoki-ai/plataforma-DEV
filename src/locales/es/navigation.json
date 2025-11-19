@@ -11,8 +11,6 @@
   "nav.toggle.menu": "Alternar menú",
   "nav.sidebar.expand": "Expandir barra lateral",
   "nav.sidebar.collapse": "Contraer barra lateral",
-  "nav.sidebar.expand.shortcut": "Expandir barra lateral (Escape)",
-  "nav.sidebar.collapse.shortcut": "Contraer barra lateral (Escape)",
   "nav.home": "Inicio",
   "nav.dashboard": "Dashboard",
   "nav.admin.panel": "Panel Administrativo",

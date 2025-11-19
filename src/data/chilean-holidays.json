@@ -1,0 +1,2636 @@
+[
+  {
+    "id": "new-year-2024",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2024-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2024",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2024-03-29",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2024",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2024-03-30",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2024",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2024-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2024",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2024-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2024",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2024-05-30",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2024",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2024-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2024",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2024-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2024",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2024-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2024",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2024-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2024",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2024-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2024",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2024-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2024",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2024-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2024",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2024-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2024",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2024-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2024",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2024-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2024",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2024-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2025",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2025-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2025",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2025-04-18",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2025",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2025-04-19",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2025",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2025-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2025",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2025-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2025",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2025-06-19",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2025",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2025-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2025",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2025-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2025",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2025-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2025",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2025-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2025",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2025-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2025",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2025-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2025",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2025-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2025",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2025-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2025",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2025-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2025",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2025-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2025",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2025-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2026",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2026-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2026",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2026-04-03",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2026",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2026-04-04",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2026",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2026-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2026",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2026-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2026",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2026-06-04",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2026",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2026-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2026",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2026-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2026",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2026-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2026",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2026-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2026",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2026-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2026",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2026-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2026",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2026-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2026",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2026-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2026",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2026-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2026",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2026-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2026",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2026-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2027",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2027-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2027",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2027-03-26",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2027",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2027-03-27",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2027",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2027-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2027",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2027-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2027",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2027-05-27",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2027",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2027-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2027",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2027-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2027",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2027-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2027",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2027-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2027",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2027-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2027",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2027-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2027",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2027-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2027",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2027-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2027",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2027-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2027",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2027-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2027",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2027-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2028",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2028-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2028",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2028-04-14",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2028",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2028-04-15",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2028",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2028-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2028",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2028-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2028",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2028-06-15",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2028",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2028-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2028",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2028-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2028",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2028-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2028",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2028-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2028",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2028-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2028",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2028-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2028",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2028-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2028",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2028-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2028",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2028-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2028",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2028-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2028",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2028-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2029",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2029-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2029",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2029-03-30",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2029",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2029-03-31",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2029",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2029-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2029",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2029-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2029",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2029-05-31",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2029",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2029-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2029",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2029-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2029",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2029-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2029",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2029-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2029",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2029-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2029",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2029-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2029",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2029-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2029",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2029-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2029",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2029-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2029",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2029-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2029",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2029-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2030",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2030-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2030",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2030-04-19",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2030",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2030-04-20",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2030",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2030-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2030",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2030-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2030",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2030-06-20",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2030",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2030-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2030",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2030-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2030",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2030-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2030",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2030-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2030",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2030-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2030",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2030-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2030",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2030-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2030",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2030-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2030",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2030-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2030",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2030-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2030",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2030-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2031",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2031-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2031",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2031-04-11",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2031",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2031-04-12",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2031",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2031-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2031",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2031-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2031",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2031-06-12",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2031",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2031-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2031",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2031-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2031",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2031-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2031",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2031-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2031",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2031-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2031",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2031-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2031",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2031-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2031",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2031-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2031",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2031-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2031",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2031-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2031",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2031-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2032",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2032-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2032",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2032-03-26",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2032",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2032-03-27",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2032",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2032-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2032",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2032-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2032",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2032-05-27",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2032",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2032-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2032",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2032-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2032",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2032-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2032",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2032-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2032",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2032-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2032",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2032-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2032",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2032-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2032",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2032-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2032",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2032-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2032",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2032-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2032",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2032-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2033",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2033-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2033",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2033-04-15",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2033",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2033-04-16",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2033",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2033-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2033",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2033-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2033",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2033-06-16",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2033",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2033-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2033",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2033-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2033",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2033-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2033",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2033-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2033",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2033-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2033",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2033-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2033",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2033-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2033",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2033-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2033",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2033-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2033",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2033-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2033",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2033-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2034",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2034-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2034",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2034-04-07",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2034",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2034-04-08",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2034",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2034-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2034",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2034-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2034",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2034-06-08",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2034",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2034-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2034",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2034-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2034",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2034-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2034",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2034-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2034",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2034-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2034",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2034-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2034",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2034-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2034",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2034-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2034",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2034-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2034",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2034-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2034",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2034-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2035",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2035-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2035",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2035-03-23",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2035",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2035-03-24",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2035",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2035-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2035",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2035-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2035",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2035-05-24",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2035",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2035-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2035",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2035-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2035",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2035-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2035",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2035-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2035",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2035-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2035",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2035-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2035",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2035-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2035",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2035-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2035",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2035-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2035",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2035-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2035",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2035-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2036",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2036-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2036",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2036-04-11",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2036",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2036-04-12",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2036",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2036-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2036",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2036-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2036",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2036-06-12",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2036",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2036-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2036",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2036-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2036",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2036-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2036",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2036-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2036",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2036-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2036",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2036-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2036",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2036-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2036",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2036-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2036",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2036-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2036",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2036-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2036",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2036-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2037",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2037-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2037",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2037-04-03",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2037",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2037-04-04",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2037",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2037-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2037",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2037-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2037",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2037-06-04",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2037",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2037-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2037",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2037-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2037",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2037-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2037",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2037-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2037",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2037-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2037",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2037-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2037",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2037-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2037",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2037-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2037",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2037-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2037",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2037-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2037",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2037-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2038",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2038-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2038",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2038-04-23",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2038",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2038-04-24",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2038",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2038-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2038",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2038-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2038",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2038-06-24",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2038",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2038-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2038",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2038-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2038",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2038-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2038",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2038-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2038",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2038-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2038",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2038-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2038",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2038-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2038",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2038-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2038",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2038-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2038",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2038-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2038",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2038-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2039",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2039-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2039",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2039-04-08",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2039",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2039-04-09",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2039",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2039-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2039",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2039-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2039",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2039-06-09",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2039",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2039-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2039",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2039-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2039",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2039-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2039",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2039-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2039",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2039-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2039",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2039-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2039",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2039-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2039",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2039-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2039",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2039-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2039",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2039-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2039",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2039-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+
+  {
+    "id": "new-year-2040",
+    "name": "Año Nuevo",
+    "description": "Celebración del Año Nuevo",
+    "date": "2040-01-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "good-friday-2040",
+    "name": "Viernes Santo",
+    "description": "Conmemoración de la Crucifixión de Jesucristo",
+    "date": "2040-03-30",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "easter-saturday-2040",
+    "name": "Sábado Santo",
+    "description": "Día posterior a Viernes Santo",
+    "date": "2040-03-31",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "labor-day-2040",
+    "name": "Día del Trabajador",
+    "description": "Día Internacional del Trabajador",
+    "date": "2040-05-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "naval-battle-2040",
+    "name": "Día de las Glorias Navales",
+    "description": "Conmemoración del Combate Naval de Iquique",
+    "date": "2040-05-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "corpus-christi-2040",
+    "name": "Corpus Christi",
+    "description": "Festividad católica del Cuerpo y la Sangre de Cristo",
+    "date": "2040-05-31",
+    "isNational": true,
+    "isRecurring": false,
+    "category": "holiday"
+  },
+  {
+    "id": "indigenous-day-2040",
+    "name": "Día Nacional de los Pueblos Indígenas",
+    "description":
+      "Conmemoración del Solsticio de Invierno y los pueblos originarios",
+    "date": "2040-06-21",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "saint-peter-paul-2040",
+    "name": "San Pedro y San Pablo",
+    "description": "Festividad de los Santos Pedro y Pablo",
+    "date": "2040-06-29",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "virgin-carmen-2040",
+    "name": "Día de la Virgen del Carmen",
+    "description": "Festividad de la Virgen del Carmen, Patrona de Chile",
+    "date": "2040-07-16",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "assumption-2040",
+    "name": "Asunción de la Virgen",
+    "description": "Asunción de la Virgen María",
+    "date": "2040-08-15",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "independence-day-2040",
+    "name": "Día de la Independencia",
+    "description": "Celebración de la Independencia de Chile",
+    "date": "2040-09-18",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "army-day-2040",
+    "name": "Día de las Glorias del Ejército",
+    "description": "Conmemoración de las Glorias del Ejército de Chile",
+    "date": "2040-09-19",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "columbus-day-2040",
+    "name": "Día del Encuentro de Dos Mundos",
+    "description": "Conmemoración del Descubrimiento de América",
+    "date": "2040-10-12",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "reformation-day-2040",
+    "name": "Día Nacional de las Iglesias Evangélicas",
+    "description": "Día de las Iglesias Evangélicas y Protestantes",
+    "date": "2040-10-31",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "all-saints-2040",
+    "name": "Día de Todos los Santos",
+    "description": "Festividad católica de Todos los Santos",
+    "date": "2040-11-01",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "immaculate-conception-2040",
+    "name": "Inmaculada Concepción",
+    "description": "Festividad de la Inmaculada Concepción",
+    "date": "2040-12-08",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  },
+  {
+    "id": "christmas-2040",
+    "name": "Navidad",
+    "description": "Celebración del Nacimiento de Jesucristo",
+    "date": "2040-12-25",
+    "isNational": true,
+    "isRecurring": true,
+    "category": "holiday"
+  }
+]

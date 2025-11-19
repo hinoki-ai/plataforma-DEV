@@ -12,6 +12,9 @@ import { WebVitalsProvider } from "./providers/WebVitalsProvider";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { AppSessionProvider } from "@/lib/auth-client";
 import { clerkConfig } from "@/lib/clerk-config";
+import { PreloadingProvider } from "./providers/PreloadingProvider";
+import { JoshWelcomeToast } from "./ui/josh-welcome-toast";
+import { JoshIndicator } from "./ui/josh-indicator";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -27,11 +30,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
             forcedTheme={undefined}
             nonce={undefined}
           >
+            <JoshWelcomeToast />
+            <JoshIndicator />
             <ContextProvider>
               <LanguageProvider>
                 <LanguageHtmlUpdater />
                 <DesktopToggleProvider>
-                  <WebVitalsProvider>{children}</WebVitalsProvider>
+                  <WebVitalsProvider>
+                    <PreloadingProvider>{children}</PreloadingProvider>
+                  </WebVitalsProvider>
                 </DesktopToggleProvider>
               </LanguageProvider>
             </ContextProvider>

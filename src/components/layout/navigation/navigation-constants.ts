@@ -7,19 +7,16 @@ export const SHARED_NAVIGATION_ITEMS = {
     title: "nav.docs",
     href: "/docs",
     icon: NavigationIcons.Documents,
-    shortcut: "Alt+D",
   },
   SETTINGS: {
     title: "nav.configuration",
     href: "/settings",
     icon: NavigationIcons.Settings,
-    shortcut: "Alt+S",
   },
   PROFILE: {
     title: "nav.profile",
     href: "/profile",
     icon: NavigationIcons.Profile,
-    shortcut: "Alt+P",
   },
   LOGOUT: {
     title: "nav.logout",

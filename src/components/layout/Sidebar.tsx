@@ -34,20 +34,18 @@ import { useLanguage } from "@/components/language/useDivineLanguage";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import {
+  NavigationItem,
+  handleNavigationItemClick,
+  renderNavigationItem,
+  renderCollapsedNavigationItem,
+} from "./sidebar-utils";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean;
   onToggle?: () => void;
 }
 
-interface NavigationItem {
-  readonly title: string;
-  readonly href?: string;
-  readonly icon: React.ComponentType<{ className?: string }>;
-  readonly badge?: string;
-  readonly shortcut?: string;
-  readonly action?: string;
-}
 
 interface NavigationGroup {
   title: string;
@@ -57,180 +55,8 @@ interface NavigationGroup {
 
 // Navigation configuration is now imported from modular files
 
-// Helper function to handle navigation item clicks
-const handleNavigationItemClick = (
-  item: NavigationItem,
-  pathname: string,
-  onToggle?: () => void,
-  handleLogout?: () => void,
-) => {
-  return (e: React.MouseEvent) => {
-    // Handle action items (like logout)
-    if (item.action === "logout") {
-      e.preventDefault();
-      handleLogout?.();
-      return;
-    }
 
-    // Handle link items
-    if (item.href) {
-      // Prevent double navigation if already on the same route
-      if (pathname === item.href) {
-        e.preventDefault();
-        return;
-      }
-      // Close mobile sidebar on navigation - hydration-safe
-      if (typeof window !== "undefined" && window.innerWidth < 768) {
-        onToggle?.();
-      }
-    }
-  };
-};
 
-// Helper function to render navigation item content
-const renderNavigationItem = (
-  item: NavigationItem,
-  isActive: boolean,
-  pathname: string,
-  t: (key: string) => string,
-  onToggle?: () => void,
-  handleLogout?: () => void,
-) => {
-  const handleClick = handleNavigationItemClick(
-    item,
-    pathname,
-    onToggle,
-    handleLogout,
-  );
-
-  if (item.action === "logout") {
-    // Render as button for actions
-    return (
-      <button
-        className={cn(
-          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2 w-full text-left",
-          "text-muted-foreground hover:text-foreground",
-        )}
-        aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
-        onClick={handleClick}
-      >
-        <item.icon className="h-4 w-4 shrink-0" />
-        <span className="flex-1">{t(item.title)}</span>
-        {(item as any).shortcut && (
-          <span className="ml-auto text-xs text-muted-foreground hidden lg:block">
-            {(item as any).shortcut}
-          </span>
-        )}
-      </button>
-    );
-  }
-
-  // Render as link for navigation items
-  return (
-    <Link
-      href={item.href || "#"}
-      prefetch={false}
-      className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2",
-        isActive
-          ? "bg-accent text-accent-foreground shadow-sm"
-          : "text-muted-foreground hover:text-foreground",
-      )}
-      aria-current={isActive ? "page" : undefined}
-      aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
-      onClick={handleClick}
-    >
-      <item.icon className="h-4 w-4 shrink-0" />
-      <span className="flex-1">{t(item.title)}</span>
-      {(item as any).badge && (
-        <span className="ml-auto bg-accent text-accent-foreground text-xs px-1.5 py-0.5 rounded">
-          {(item as any).badge}
-        </span>
-      )}
-      {(item as any).shortcut && (
-        <span className="ml-auto text-xs text-muted-foreground hidden lg:block">
-          {(item as any).shortcut}
-        </span>
-      )}
-    </Link>
-  );
-};
-
-const renderCollapsedNavigationItem = (
-  item: NavigationItem,
-  isActive: boolean,
-  pathname: string,
-  t: (key: string) => string,
-  onToggle?: () => void,
-  handleLogout?: () => void,
-) => {
-  const handleClick = handleNavigationItemClick(
-    item,
-    pathname,
-    onToggle,
-    handleLogout,
-  );
-
-  const baseClasses =
-    "flex h-10 w-10 items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
-
-  const stateClasses = isActive
-    ? "bg-accent text-accent-foreground shadow-sm"
-    : "text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground";
-
-  const label = t ? t(item.title) : item.title;
-
-  if (item.action === "logout") {
-    return (
-      <Tooltip key={`collapsed-${item.title}`}>
-        <TooltipTrigger asChild>
-          <button
-            className={cn(baseClasses, stateClasses, "mx-auto")}
-            aria-label={`${label}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
-            onClick={handleClick}
-          >
-            <item.icon className="h-4 w-4" />
-          </button>
-        </TooltipTrigger>
-        <TooltipContent side="right">
-          <div className="flex items-center gap-2">
-            <span>{label}</span>
-            {(item as any).shortcut && (
-              <span className="text-xs opacity-60">
-                {(item as any).shortcut}
-              </span>
-            )}
-          </div>
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
-
-  return (
-    <Tooltip key={`collapsed-${item.href || item.title}`}>
-      <TooltipTrigger asChild>
-        <Link
-          href={item.href || "#"}
-          prefetch={false}
-          className={cn(baseClasses, stateClasses, "mx-auto")}
-          aria-current={isActive ? "page" : undefined}
-          aria-label={`${label}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
-          onClick={handleClick}
-        >
-          <item.icon className="h-4 w-4" />
-        </Link>
-      </TooltipTrigger>
-      <TooltipContent side="right">
-        <div className="flex items-center gap-2">
-          <span>{label}</span>
-          {(item as any).shortcut && (
-            <span className="text-xs opacity-60">{(item as any).shortcut}</span>
-          )}
-        </div>
-      </TooltipContent>
-    </Tooltip>
-  );
-};
 
 export function Sidebar({
   className,
@@ -264,11 +90,6 @@ export function Sidebar({
     return () => clearInterval(interval);
   }, []);
 
-  // ⚡ Performance: Memoize keyboard shortcuts to prevent recreation
-  const keyboardShortcuts = React.useMemo(
-    () => ({}), // Empty shortcuts for basic sidebar
-    [],
-  );
 
   // ⚡ Performance: Memoize logout handler
   const handleLogout = React.useCallback(async () => {
@@ -281,55 +102,7 @@ export function Sidebar({
     }
   }, [router]);
 
-  // ⚡ Performance: Memoize keyboard handler
-  const handleKeyDown = React.useCallback(
-    (event: KeyboardEvent) => {
-      if (!session) return;
 
-      const shortcut = Object.keys(keyboardShortcuts).find((key) => {
-        const [modifier, char] = key.split("+");
-        if (modifier === "Alt") {
-          return event.altKey && event.key.toLowerCase() === char.toLowerCase();
-        }
-        if (modifier === "Escape") {
-          return event.key === "Escape";
-        }
-        return false;
-      });
-
-      if (shortcut) {
-        event.preventDefault();
-        const action =
-          keyboardShortcuts[shortcut as keyof typeof keyboardShortcuts];
-
-        if (action === "close-sidebar") {
-          onToggle?.();
-        } else if (action) {
-          router.push(action);
-        }
-      }
-    },
-    [session, keyboardShortcuts, onToggle, router],
-  );
-
-  // Simplified keyboard navigation with debounce
-  React.useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const debouncedHandler = (event: KeyboardEvent) => {
-      // Debounce keyboard events to prevent rapid firing
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => handleKeyDown(event), 100);
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("keydown", debouncedHandler);
-      return () => {
-        clearTimeout(timeoutId);
-        window.removeEventListener("keydown", debouncedHandler);
-      };
-    }
-  }, [handleKeyDown]);
 
   // ⚡ Performance: Memoize navigation groups calculation
   const navigationGroups = React.useMemo(
@@ -446,11 +219,6 @@ export function Sidebar({
             aria-label={
               isCollapsed ? t("nav.sidebar.expand") : t("nav.sidebar.collapse")
             }
-            title={
-              isCollapsed
-                ? t("nav.sidebar.expand.shortcut")
-                : t("nav.sidebar.collapse.shortcut")
-            }
           >
             <NavigationIcons.ChevronRight
               className={cn(
@@ -542,13 +310,8 @@ export function Sidebar({
                               )}
                             </TooltipTrigger>
                             <TooltipContent side="right">
-                              <div className="flex items-center gap-2">
+                              <div>
                                 <span>{t(item.title)}</span>
-                                {(item as any).shortcut && (
-                                  <span className="text-xs opacity-60">
-                                    {(item as any).shortcut}
-                                  </span>
-                                )}
                               </div>
                             </TooltipContent>
                           </Tooltip>

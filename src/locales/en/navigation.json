@@ -11,8 +11,6 @@
   "nav.toggle.menu": "Toggle menu",
   "nav.sidebar.expand": "Expand sidebar",
   "nav.sidebar.collapse": "Collapse sidebar",
-  "nav.sidebar.expand.shortcut": "Expand sidebar (Escape)",
-  "nav.sidebar.collapse.shortcut": "Collapse sidebar (Escape)",
   "nav.home": "Home",
   "nav.dashboard": "Dashboard",
   "nav.admin.panel": "Administrative Panel",

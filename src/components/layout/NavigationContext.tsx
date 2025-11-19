@@ -19,7 +19,6 @@ interface NavigationItem {
   href: string;
   icon?: React.ComponentType<{ className?: string }>;
   badge?: string | number;
-  shortcut?: string;
   category: string;
   description?: string;
   permissions?: Permission[];

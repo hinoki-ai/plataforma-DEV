@@ -44,6 +44,7 @@
     "test-results/**/*",
     "scripts/**/*",
     "prisma/**/*",
-    "convex/**/*"
+    "convex/**/*",
+    "emergency-backup/**/*"
   ]
 }

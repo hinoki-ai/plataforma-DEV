@@ -47,10 +47,8 @@ import {
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-
-// billingMetadata will be created inside the component to use translations
-
-// developerContacts will be created inside the component to use translations
+import { developerContacts } from "@/data/developer-contacts";
+import { createBillingMetadata } from "@/data/billing-metadata";
 
 const numberFormatter = new Intl.NumberFormat("es-CL");
 
@@ -81,40 +79,6 @@ export default function PricingCalculatorPage({
   const tc = (key: string) => t(key, "planes");
   const router = useRouter();
 
-  const developerContacts = [
-    {
-      id: "principal",
-      name: tc("calculator.contacts.team_astral"),
-      role: tc("calculator.contacts.lead_developer_onboarding"),
-      email: "plataforma@astral.cl",
-      whatsappDisplay: "+56 9 7500 1234",
-      whatsappLink: "https://wa.me/56975001234",
-    },
-    {
-      id: "loreto",
-      name: tc("calculator.contacts.loreto"),
-      role: tc("calculator.contacts.onboarding_chief"),
-      email: "loreto@astral.cl",
-      whatsappDisplay: "+56 9 6854 3210",
-      whatsappLink: "https://wa.me/56968543210",
-    },
-    {
-      id: "agustin",
-      name: tc("calculator.contacts.agustin"),
-      role: tc("calculator.contacts.lead_developer"),
-      email: "agustin@astral.cl",
-      whatsappDisplay: "+56 9 8889 6773",
-      whatsappLink: "https://wa.me/56988896773",
-    },
-    {
-      id: "salesman",
-      name: tc("calculator.contacts.sales_team"),
-      role: tc("calculator.contacts.sales_representative"),
-      email: "ventas@astral.cl",
-      whatsappDisplay: "+56 9 8008 8008",
-      whatsappLink: "https://wa.me/56980088008",
-    },
-  ] as const;
   const [resolvedSearchParams, setResolvedSearchParams] = useState<{
     plan?: string;
     billing?: string;
@@ -404,41 +368,7 @@ export default function PricingCalculatorPage({
   );
 
   // Create billingMetadata with translations
-  const billingMetadata: Record<
-    BillingCycle,
-    { label: string; description: string; months: number }
-  > = {
-    semestral: {
-      label: tc("billing.semestral"),
-      description:
-        tc("billing.semestral") +
-        " - " +
-        tc("calculator.months").replace("{count}", "6"),
-      months: 6,
-    },
-    annual: {
-      label: tc("billing.annual"),
-      description:
-        tc("billing.annual") +
-        " - " +
-        tc("calculator.months").replace("{count}", "12") +
-        " (" +
-        tc("billing.discount_annual") +
-        ")",
-      months: 12,
-    },
-    biannual: {
-      label: tc("billing.biannual"),
-      description:
-        tc("billing.biannual") +
-        " - " +
-        tc("calculator.months").replace("{count}", "24") +
-        " (" +
-        tc("billing.discount_biannual") +
-        ")",
-      months: 24,
-    },
-  };
+  const billingMetadata = createBillingMetadata(tc);
 
   const billingInfo = billingMetadata[billingCycle];
   const discountPercentage = billingCycleDiscount[billingCycle];
@@ -1158,10 +1088,10 @@ export default function PricingCalculatorPage({
                       </div>
                       <div>
                         <div className="text-lg font-semibold text-white">
-                          {contact.name}
+                          {tc(contact.nameKey)}
                         </div>
                         <div className="text-sm text-gray-400">
-                          {contact.role}
+                          {tc(contact.roleKey)}
                         </div>
                       </div>
                     </div>
