@@ -2,7 +2,7 @@
 
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageTransition } from "@/components/ui/page-transition";
 import { SettingsTabs } from "@/components/settings/SettingsTabs";
@@ -14,12 +14,55 @@ export default function SettingsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { t } = useDivineParsing(["common"]);
+  const [activeTab, setActiveTab] = useState("profile");
+  const [wizardStep, setWizardStep] = useState<number | undefined>(undefined);
+
+  // Map wizard steps to tabs
+  const stepToTabMap: Record<number, string> = {
+    1: "profile",
+    2: "notifications",
+    3: "account",
+    4: "profile",
+  };
+
+  // Map tabs to wizard steps (for reverse navigation)
+  const tabToStepMap: Record<string, number[]> = {
+    profile: [1, 4],
+    notifications: [2],
+    account: [3],
+    appearance: [],
+    privacy: [],
+  };
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
     }
   }, [status, router]);
+
+  // Handle wizard step click - navigate to corresponding tab
+  const handleWizardStepClick = (step: number) => {
+    const tab = stepToTabMap[step];
+    if (tab) {
+      setActiveTab(tab);
+      setWizardStep(step);
+    }
+  };
+
+  // Handle tab change - optionally update wizard step if it matches
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    // Find if any wizard step corresponds to this tab
+    const correspondingSteps = tabToStepMap[tab] || [];
+    if (correspondingSteps.length > 0 && wizardStep !== undefined) {
+      // Only update if current wizard step doesn't match this tab
+      const currentTab = stepToTabMap[wizardStep];
+      if (currentTab !== tab) {
+        // Set to the first matching step
+        setWizardStep(correspondingSteps[0]);
+      }
+    }
+  };
 
   // Show loading while checking authentication
   if (status === "loading") {
@@ -54,7 +97,12 @@ export default function SettingsPage() {
         <div>
           <Card>
             <CardContent className="p-6">
-              <ProfileCompletionWizard />
+              <ProfileCompletionWizard
+                currentStep={wizardStep}
+                onStepChange={setWizardStep}
+                onStepClick={handleWizardStepClick}
+                activeTab={activeTab}
+              />
             </CardContent>
           </Card>
         </div>
@@ -67,7 +115,10 @@ export default function SettingsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <SettingsTabs />
+            <SettingsTabs
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+            />
           </CardContent>
         </Card>
       </div>

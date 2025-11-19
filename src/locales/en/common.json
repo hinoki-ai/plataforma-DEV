@@ -1449,6 +1449,8 @@
   "wizard.verification_desc": "Verify your account",
   "wizard.previous": "Previous",
   "wizard.next": "Next",
+  "wizard.completed": "completed",
+  "wizard.complete": "complete",
 
   "appearance.title": "Appearance",
   "appearance.description": "Customize the appearance of the application on your device.",

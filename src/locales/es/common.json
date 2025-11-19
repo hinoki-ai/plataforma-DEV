@@ -1372,6 +1372,8 @@
   "wizard.verification_desc": "Verifica tu cuenta",
   "wizard.previous": "Anterior",
   "wizard.next": "Siguiente",
+  "wizard.completed": "completado",
+  "wizard.complete": "completo",
 
   "appearance.title": "Apariencia",
   "appearance.description": "Personaliza la apariencia de la aplicación en tu dispositivo.",
