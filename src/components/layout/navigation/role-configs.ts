@@ -306,6 +306,12 @@ export const PROFESOR_NAVIGATION = [
         icon: NavigationIcons.Team,
         shortcut: "Alt+R",
       },
+      {
+        title: "nav.voting",
+        href: "/profesor/votaciones",
+        icon: NavigationIcons.Vote,
+        shortcut: "Alt+V",
+      },
     ],
   },
   {
@@ -447,6 +453,12 @@ export const PARENT_NAVIGATION = [
         href: "/parent/reuniones",
         icon: NavigationIcons.Meeting,
         shortcut: "Alt+R",
+      },
+      {
+        title: "nav.voting",
+        href: "/parent/votaciones",
+        icon: NavigationIcons.Vote,
+        shortcut: "Alt+V",
       },
     ],
   },
