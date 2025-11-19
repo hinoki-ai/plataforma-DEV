@@ -432,7 +432,7 @@ export default function PreciosPage() {
                             <ul className="space-y-1.5 text-xs text-muted-foreground pl-6">
                               <li>
                                 {tp("pricing.training")}:{" "}
-                                {renderFeatureIncluded(plan.features.training)}
+                                {plan.features.training}
                               </li>
                               <li>
                                 {tp("pricing.advanced_reports")}:{" "}
