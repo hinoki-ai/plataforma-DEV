@@ -48,7 +48,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { SignatureModal } from "@/components/digital-signatures/SignatureModal";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 // Schema and types will be defined inside the component
 

@@ -67,5 +67,12 @@
   "list.search": "Buscar reuniones...",
   "delete.confirm": "¿Estás seguro de eliminar esta reunión?",
   "delete.success": "Reunión eliminada exitosamente",
-  "delete.error": "Error al eliminar la reunión"
+  "delete.error": "Error al eliminar la reunión",
+  "list.loading_error": "Error al cargar las reuniones",
+  "list.retry": "Reintentar",
+  "list.all_meetings": "Todas las Reuniones",
+  "list.my_meetings": "Mis Reuniones",
+  "list.new_meeting": "Nueva Reunión",
+  "list.empty_description_admin": "Comienza creando una nueva reunión.",
+  "list.empty_description_teacher": "Tu coordinador te asignará reuniones pronto."
 }

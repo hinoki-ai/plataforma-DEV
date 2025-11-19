@@ -7,6 +7,7 @@ import { ParentMeetingCard } from "./ParentMeetingCard";
 import { getMeetingsByParentAction } from "@/services/actions/meetings";
 import type { Meeting, User } from "@/lib/prisma-compat-types";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 interface ParentMeetingListProps {
   userId: string;

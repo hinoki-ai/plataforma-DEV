@@ -15,6 +15,7 @@ import { MeetingStatus } from "@/lib/prisma-compat-types";
 import { useResponsiveMode } from "@/lib/hooks/useDesktopToggle";
 import { layout, typography } from "@/lib/responsive-utils";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 interface MeetingListProps {
   isAdmin?: boolean;
@@ -27,6 +28,7 @@ export function MeetingList({
 }: MeetingListProps) {
   const { data: session } = useSession();
   const { isDesktopForced } = useResponsiveMode();
+  const { t } = useLanguage();
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,10 +80,10 @@ export function MeetingList({
         );
         setMeetings(convertedMeetings);
       } else {
-        setError("Error al cargar las reuniones");
+        setError(t("meetings.list.loading_error"));
       }
     } catch (err) {
-      setError("Error al cargar las reuniones");
+      setError(t("meetings.list.loading_error"));
     } finally {
       setLoading(false);
     }
@@ -127,7 +129,7 @@ export function MeetingList({
       <div className="text-center py-8">
         <p className="text-red-600">{error}</p>
         <Button onClick={loadMeetings} className="mt-4">
-          Reintentar
+          {t("meetings.list.retry")}
         </Button>
       </div>
     );
@@ -140,18 +142,18 @@ export function MeetingList({
           <Plus className="h-12 w-12" />
         </div>
         <h3 className="mt-2 text-sm font-medium text-gray-900">
-          No hay reuniones programadas
+          {t("meetings.list.empty")}
         </h3>
         <p className="mt-1 text-sm text-gray-500">
           {isAdmin
-            ? "Comienza creando una nueva reunión."
-            : "Tu coordinador te asignará reuniones pronto."}
+            ? t("meetings.list.empty_description_admin")
+            : t("meetings.list.empty_description_teacher")}
         </p>
         {isAdmin && (
           <div className="mt-6">
             <Button onClick={onCreateMeeting}>
               <Plus className="mr-2 h-4 w-4" />
-              Nueva Reunión
+              {t("meetings.list.new_meeting")}
             </Button>
           </div>
         )}
@@ -165,7 +167,7 @@ export function MeetingList({
         <h2
           className={`${typography.heading(isDesktopForced)} font-bold text-foreground`}
         >
-          {isAdmin ? "Todas las Reuniones" : "Mis Reuniones"}
+          {isAdmin ? t("meetings.list.all_meetings") : t("meetings.list.my_meetings")}
         </h2>
         {isAdmin && (
           <Button onClick={onCreateMeeting}>

@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 import { ConvexProviderWithAuth } from "convex/react";
 import { ConvexReactClient } from "convex/react";
 import { useAuth } from "@clerk/nextjs";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 // Create a custom auth hook that matches Convex's expected interface
 const useConvexAuth = () => {

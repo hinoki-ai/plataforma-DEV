@@ -67,5 +67,12 @@
   "list.search": "Search meetings...",
   "delete.confirm": "Are you sure you want to delete this meeting?",
   "delete.success": "Meeting deleted successfully",
-  "delete.error": "Error deleting meeting"
+  "delete.error": "Error deleting meeting",
+  "list.loading_error": "Error loading meetings",
+  "list.retry": "Retry",
+  "list.all_meetings": "All Meetings",
+  "list.my_meetings": "My Meetings",
+  "list.new_meeting": "New Meeting",
+  "list.empty_description_admin": "Start by creating a new meeting.",
+  "list.empty_description_teacher": "Your coordinator will assign meetings to you soon."
 }
