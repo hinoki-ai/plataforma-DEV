@@ -1,6 +1,11 @@
 "use client";
 
-import { motion, useAnimation, useMotionValue, useTransform } from "motion/react";
+import {
+  motion,
+  useAnimation,
+  useMotionValue,
+  useTransform,
+} from "motion/react";
 import { useEffect, useState } from "react";
 
 /**
@@ -74,7 +79,7 @@ export function CelebrationParticles({ isActive }: { isActive: boolean }) {
 
   const particles = Array.from({ length: 12 }, (_, i) => ({
     id: i,
-    angle: (i * 30) * (Math.PI / 180),
+    angle: i * 30 * (Math.PI / 180),
     delay: i * 0.1,
   }));
 
@@ -257,7 +262,9 @@ export function RippleButton({
   className?: string;
   [key: string]: any;
 }) {
-  const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [ripples, setRipples] = useState<
+    Array<{ id: number; x: number; y: number }>
+  >([]);
 
   const handleClick = (e: React.MouseEvent) => {
     const button = e.currentTarget;
@@ -266,11 +273,11 @@ export function RippleButton({
     const y = e.clientY - rect.top;
 
     const newRipple = { id: Date.now(), x, y };
-    setRipples(prev => [...prev, newRipple]);
+    setRipples((prev) => [...prev, newRipple]);
 
     // Remove ripple after animation
     setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== newRipple.id));
+      setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
     }, 600);
 
     onClick?.();
@@ -283,7 +290,7 @@ export function RippleButton({
       {...props}
     >
       {children}
-      {ripples.map(ripple => (
+      {ripples.map((ripple) => (
         <motion.span
           key={ripple.id}
           className="absolute bg-white/30 rounded-full"
@@ -357,7 +364,11 @@ export function SuccessAnimation({ isVisible }: { isVisible: boolean }) {
 }
 
 // Pulse notification indicator
-export function PulseNotification({ hasNotification }: { hasNotification: boolean }) {
+export function PulseNotification({
+  hasNotification,
+}: {
+  hasNotification: boolean;
+}) {
   if (!hasNotification) return null;
 
   return (

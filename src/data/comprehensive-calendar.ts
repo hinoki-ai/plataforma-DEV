@@ -96,16 +96,19 @@ export type ComprehensiveCalendarEvent =
 // ==================== CHILEAN HOLIDAYS 2024-2027 ====================
 
 // Import holiday data from JSON
-import chileanHolidaysData from './chilean-holidays.json';
-export const chileanHolidays: ChileanHoliday[] = chileanHolidaysData as ChileanHoliday[];
+import chileanHolidaysData from "./chilean-holidays.json";
+export const chileanHolidays: ChileanHoliday[] =
+  chileanHolidaysData as ChileanHoliday[];
 
 // Import academic calendar data from JSON
-import academicCalendarData from './academic-calendar.json';
-export const academicCalendar: AcademicEvent[] = academicCalendarData as AcademicEvent[];
+import academicCalendarData from "./academic-calendar.json";
+export const academicCalendar: AcademicEvent[] =
+  academicCalendarData as AcademicEvent[];
 
 // Import special events data from JSON
-import specialEventsData from './special-events.json';
-export const specialEvents: CalendarEvent[] = specialEventsData as CalendarEvent[];
+import specialEventsData from "./special-events.json";
+export const specialEvents: CalendarEvent[] =
+  specialEventsData as CalendarEvent[];
 // ==================== UTILITY FUNCTIONS ====================
 
 export const getAllEvents = (): ComprehensiveCalendarEvent[] => {
@@ -226,7 +229,6 @@ export const chileanEducationInfo = {
       "Equipo multidisciplinario: educadoras, fonoaudiólogas, psicólogas",
   },
 };
-
 
 const comprehensiveCalendarData = {
   chileanHolidays,

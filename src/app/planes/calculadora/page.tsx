@@ -672,23 +672,29 @@ export default function PricingCalculatorPage({
                     {tc("educational_system.institution_type")}
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {Object.entries(INSTITUTION_TYPE_INFO).map(([key, info]) => (
-                      <Button
-                        key={key}
-                        onClick={() =>
-                          setInstitutionType(key as EducationalInstitutionType)
-                        }
-                        variant={institutionType === key ? "default" : "outline"}
-                        size="sm"
-                        className={`${
-                          institutionType === key
-                            ? info.color
-                            : "border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
-                        }`}
-                      >
-                        {info.chileanName}
-                      </Button>
-                    ))}
+                    {Object.entries(INSTITUTION_TYPE_INFO).map(
+                      ([key, info]) => (
+                        <Button
+                          key={key}
+                          onClick={() =>
+                            setInstitutionType(
+                              key as EducationalInstitutionType,
+                            )
+                          }
+                          variant={
+                            institutionType === key ? "default" : "outline"
+                          }
+                          size="sm"
+                          className={`${
+                            institutionType === key
+                              ? info.color
+                              : "border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
+                          }`}
+                        >
+                          {info.chileanName}
+                        </Button>
+                      ),
+                    )}
                   </div>
                   <p className="text-sm text-gray-500 mt-3">
                     {INSTITUTION_TYPE_INFO[institutionType].description}

@@ -1383,7 +1383,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         >
                           <Command>
                             <CommandInput
-                              placeholder={t("signup.institution_search.placeholder")}
+                              placeholder={t(
+                                "signup.institution_search.placeholder",
+                              )}
                               className="h-9"
                             />
                             <CommandEmpty>
@@ -1490,7 +1492,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     <Input
                       id="emergencyContact"
                       name="emergencyContact"
-                      placeholder={t("signup.emergency_contact_primary.placeholder")}
+                      placeholder={t(
+                        "signup.emergency_contact_primary.placeholder",
+                      )}
                       value={formData.emergencyContact}
                       onChange={handleChange}
                       onKeyDown={(e) => handleKeyDown(e, "emergencyContact")}
@@ -1538,7 +1542,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     <Input
                       id="secondaryEmergencyContact"
                       name="secondaryEmergencyContact"
-                      placeholder={t("signup.emergency_contact_secondary.placeholder")}
+                      placeholder={t(
+                        "signup.emergency_contact_secondary.placeholder",
+                      )}
                       value={formData.secondaryEmergencyContact}
                       onChange={handleChange}
                       onKeyDown={(e) =>
@@ -1592,7 +1598,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                     <Input
                       id="tertiaryEmergencyContact"
                       name="tertiaryEmergencyContact"
-                      placeholder={t("signup.emergency_contact_secondary.placeholder")}
+                      placeholder={t(
+                        "signup.emergency_contact_secondary.placeholder",
+                      )}
                       value={formData.tertiaryEmergencyContact}
                       onChange={handleChange}
                       onKeyDown={(e) =>
@@ -1648,7 +1656,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         <CardHeader>
           <div className="text-center">
             <p className="text-sm font-medium text-primary">
-{t("signup.step_indicator", { currentStep, totalSteps })} {stepTitles[currentStep - 1]}
+              {t("signup.step_indicator", { currentStep, totalSteps })}{" "}
+              {stepTitles[currentStep - 1]}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               {stepDescriptions[currentStep - 1]}
@@ -1673,7 +1682,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                 variant="outline"
                 className="rounded-full border-white/60 bg-white/70 px-4 sm:px-6 text-sm sm:text-base text-slate-700 shadow-sm transition hover:bg-white/80 dark:border-white/15 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:bg-slate-900/70 disabled:opacity-50 disabled:cursor-not-allowed flex-1 sm:flex-none"
               >
-{t("signup.previous_button")}
+                {t("signup.previous_button")}
               </Button>
 
               {currentStep < totalSteps ? (
@@ -1683,7 +1692,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                   disabled={isLoading}
                   className="rounded-full bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 px-4 sm:px-6 text-sm sm:text-base font-semibold shadow-lg shadow-primary/25 transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex-1 sm:flex-none"
                 >
-{t("signup.next_button")}
+                  {t("signup.next_button")}
                 </Button>
               ) : (
                 <Button

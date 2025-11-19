@@ -45,7 +45,7 @@ export function DataTableBody<T>({
   columns,
   data,
   renderCell,
-  emptyMessage = "No data available"
+  emptyMessage = "No data available",
 }: {
   columns: Column[];
   data: T[] | undefined;
@@ -56,7 +56,10 @@ export function DataTableBody<T>({
     return (
       <TableBody>
         <TableRow>
-          <TableCell colSpan={columns.length} className="text-center py-8 text-muted-foreground">
+          <TableCell
+            colSpan={columns.length}
+            className="text-center py-8 text-muted-foreground"
+          >
             {emptyMessage}
           </TableCell>
         </TableRow>
@@ -80,7 +83,13 @@ export function DataTableBody<T>({
 }
 
 // Loading skeleton for table body
-export function DataTableSkeleton({ columns, rows = 5 }: { columns: Column[]; rows?: number }) {
+export function DataTableSkeleton({
+  columns,
+  rows = 5,
+}: {
+  columns: Column[];
+  rows?: number;
+}) {
   return (
     <TableBody>
       {Array.from({ length: rows }).map((_, rowIndex) => (

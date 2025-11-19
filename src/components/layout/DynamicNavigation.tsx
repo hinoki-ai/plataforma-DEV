@@ -26,10 +26,22 @@ export function NavigationShell() {
     { name: "Usuarios", href: "/admin/usuarios", roles: ["ADMIN"] },
     { name: "Calendario", href: "/admin/calendario-escolar", roles: ["ADMIN"] },
     { name: "Dashboard", href: "/profesor", roles: ["PROFESOR"] },
-    { name: "Planificaciones", href: "/profesor/planificaciones", roles: ["PROFESOR"] },
-    { name: "Calendario", href: "/profesor/calendario-escolar", roles: ["PROFESOR"] },
+    {
+      name: "Planificaciones",
+      href: "/profesor/planificaciones",
+      roles: ["PROFESOR"],
+    },
+    {
+      name: "Calendario",
+      href: "/profesor/calendario-escolar",
+      roles: ["PROFESOR"],
+    },
     { name: "Dashboard", href: "/parent", roles: ["PARENT"] },
-    { name: "Calendario", href: "/parent/calendario-escolar", roles: ["PARENT"] },
+    {
+      name: "Calendario",
+      href: "/parent/calendario-escolar",
+      roles: ["PARENT"],
+    },
     { name: "Comunicación", href: "/parent/comunicacion", roles: ["PARENT"] },
   ];
 
@@ -39,7 +51,10 @@ export function NavigationShell() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
+              <Link
+                href="/"
+                className="text-xl font-bold text-gray-900 dark:text-white"
+              >
                 Plataforma
               </Link>
             </div>
@@ -102,7 +117,10 @@ export function DynamicUserMenu() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="flex items-center space-x-2">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={session.user.image || ""} alt={session.user.name || ""} />
+            <AvatarImage
+              src={session.user.image || ""}
+              alt={session.user.name || ""}
+            />
             <AvatarFallback>
               {session.user.name?.charAt(0).toUpperCase() || "U"}
             </AvatarFallback>
@@ -138,7 +156,10 @@ export function DynamicNavigation() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
+              <Link
+                href="/"
+                className="text-xl font-bold text-gray-900 dark:text-white"
+              >
                 Plataforma
               </Link>
             </div>
@@ -151,12 +172,14 @@ export function DynamicNavigation() {
 
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             {/* Dynamic user menu loads after */}
-            <Suspense fallback={
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-8 w-8 rounded-full" />
-                <Skeleton className="h-4 w-20" />
-              </div>
-            }>
+            <Suspense
+              fallback={
+                <div className="flex items-center space-x-4">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+              }
+            >
               <DynamicUserMenu />
             </Suspense>
           </div>

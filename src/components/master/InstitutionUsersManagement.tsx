@@ -65,7 +65,9 @@ export function InstitutionUsersManagement() {
     return (
       <div className="flex justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="mt-2 text-muted-foreground">{t("master.institution_users.loading")}</p>
+        <p className="mt-2 text-muted-foreground">
+          {t("master.institution_users.loading")}
+        </p>
       </div>
     );
   }
@@ -82,7 +84,10 @@ export function InstitutionUsersManagement() {
           {t("master.institution_users.title")} - {institution.name}
         </CardTitle>
         <CardDescription>
-          {t("master.institution_users.subtitle").replace("{institutionName}", institution.name)}
+          {t("master.institution_users.subtitle").replace(
+            "{institutionName}",
+            institution.name,
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -91,10 +96,16 @@ export function InstitutionUsersManagement() {
             <TableHeader>
               <TableRow>
                 <TableHead>{t("master.institution_users.user")}</TableHead>
-                <TableHead>{t("master.institution_users.role_in_institution")}</TableHead>
+                <TableHead>
+                  {t("master.institution_users.role_in_institution")}
+                </TableHead>
                 <TableHead>{t("master.institution_users.email")}</TableHead>
-                <TableHead>{t("master.institution_users.membership_status")}</TableHead>
-                <TableHead>{t("master.institution_users.registered_date")}</TableHead>
+                <TableHead>
+                  {t("master.institution_users.membership_status")}
+                </TableHead>
+                <TableHead>
+                  {t("master.institution_users.registered_date")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -110,7 +121,12 @@ export function InstitutionUsersManagement() {
                       {ROLE_ICONS[user.role as string] || (
                         <User className="h-4 w-4" />
                       )}
-                      <Badge variant="outline">{t(ROLE_LABELS[user.role as string] || "master.institution_users.role_public")}</Badge>
+                      <Badge variant="outline">
+                        {t(
+                          ROLE_LABELS[user.role as string] ||
+                            "master.institution_users.role_public",
+                        )}
+                      </Badge>
                     </div>
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
@@ -127,8 +143,7 @@ export function InstitutionUsersManagement() {
                     >
                       {user.status === "ACTIVE"
                         ? t("master.institution_users.status_active")
-                        : t("master.institution_users.status_inactive")
-                      }
+                        : t("master.institution_users.status_inactive")}
                     </Badge>
                   </TableCell>
                   <TableCell>

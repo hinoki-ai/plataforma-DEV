@@ -154,7 +154,6 @@ const nextConfig: NextConfig = {
   // Disable source maps in production build to reduce memory usage
   productionBrowserSourceMaps: false,
 
-
   // Development optimizations
   ...(isDevelopment && {
     onDemandEntries: {
@@ -179,31 +178,31 @@ const nextConfig: NextConfig = {
       // Concatenate modules for better tree shaking
       concatenateModules: true,
       splitChunks: {
-        chunks: 'all',
+        chunks: "all",
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
+            name: "vendors",
+            chunks: "all",
             priority: 10,
           },
           convex: {
             test: /[\\/]convex[\\/]/,
-            name: 'convex',
-            chunks: 'all',
+            name: "convex",
+            chunks: "all",
             priority: 20,
           },
           // Additional cache groups for better tree shaking
           ui: {
             test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
-            name: 'radix-ui',
-            chunks: 'all',
+            name: "radix-ui",
+            chunks: "all",
             priority: 15,
           },
           clerk: {
             test: /[\\/]node_modules[\\/]@clerk[\\/]/,
-            name: 'clerk',
-            chunks: 'all',
+            name: "clerk",
+            chunks: "all",
             priority: 15,
           },
         },

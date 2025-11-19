@@ -54,22 +54,45 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 function createInstitutionCreationSchema(t: (key: string) => string) {
   const adminSchema = z.object({
-    name: z.string().min(2, t("master.institution_creation.validation.admin_name_required")),
-    email: z.string().email(t("master.institution_creation.validation.admin_email_invalid")),
-    password: z.string().min(8, t("master.institution_creation.validation.admin_password_min")),
+    name: z
+      .string()
+      .min(2, t("master.institution_creation.validation.admin_name_required")),
+    email: z
+      .string()
+      .email(t("master.institution_creation.validation.admin_email_invalid")),
+    password: z
+      .string()
+      .min(8, t("master.institution_creation.validation.admin_password_min")),
     phone: z.string().optional(),
     isPrimary: z.boolean(),
   });
 
   return z
     .object({
-      name: z.string().min(3, t("master.institution_creation.validation.name_required")),
-      mission: z.string().min(20, t("master.institution_creation.validation.mission_min_length")),
-      vision: z.string().min(20, t("master.institution_creation.validation.vision_min_length")),
-      address: z.string().min(5, t("master.institution_creation.validation.address_required")),
-      phone: z.string().min(7, t("master.institution_creation.validation.phone_required")),
-      email: z.string().email(t("master.institution_creation.validation.email_invalid")),
-      website: z.string().url(t("master.institution_creation.validation.website_invalid")),
+      name: z
+        .string()
+        .min(3, t("master.institution_creation.validation.name_required")),
+      mission: z
+        .string()
+        .min(
+          20,
+          t("master.institution_creation.validation.mission_min_length"),
+        ),
+      vision: z
+        .string()
+        .min(20, t("master.institution_creation.validation.vision_min_length")),
+      address: z
+        .string()
+        .min(5, t("master.institution_creation.validation.address_required")),
+      phone: z
+        .string()
+        .min(7, t("master.institution_creation.validation.phone_required")),
+      email: z
+        .string()
+        .email(t("master.institution_creation.validation.email_invalid")),
+      website: z
+        .string()
+        .url(t("master.institution_creation.validation.website_invalid")),
       logoUrl: z
         .string()
         .url(t("master.institution_creation.validation.logo_invalid"))
@@ -78,10 +101,16 @@ function createInstitutionCreationSchema(t: (key: string) => string) {
       branding: z.object({
         primaryColor: z
           .string()
-          .regex(/^#([0-9a-f]{3}){1,2}$/i, t("master.institution_creation.validation.color_invalid")),
+          .regex(
+            /^#([0-9a-f]{3}){1,2}$/i,
+            t("master.institution_creation.validation.color_invalid"),
+          ),
         secondaryColor: z
           .string()
-          .regex(/^#([0-9a-f]{3}){1,2}$/i, t("master.institution_creation.validation.color_invalid")),
+          .regex(
+            /^#([0-9a-f]{3}){1,2}$/i,
+            t("master.institution_creation.validation.color_invalid"),
+          ),
       }),
       institutionType: z.enum([
         "PRESCHOOL",
@@ -90,7 +119,10 @@ function createInstitutionCreationSchema(t: (key: string) => string) {
         "TECHNICAL_INSTITUTE",
         "TECHNICAL_CENTER",
         "UNIVERSITY",
-      ] satisfies [EducationalInstitutionType, ...EducationalInstitutionType[]]),
+      ] satisfies [
+        EducationalInstitutionType,
+        ...EducationalInstitutionType[],
+      ]),
       billingPlan: z.enum(["ESENCIAL", "AULA", "INTEGRAL", "INSTITUCIONAL"]),
       supportedLevels: z.array(z.string()).optional(),
       educationalConfig: z
@@ -100,10 +132,17 @@ function createInstitutionCreationSchema(t: (key: string) => string) {
           enabledFeatures: z.record(z.string(), z.boolean()).optional(),
         })
         .optional(),
-      admins: z.array(adminSchema).min(1, t("master.institution_creation.validation.primary_admin_required")),
+      admins: z
+        .array(adminSchema)
+        .min(
+          1,
+          t("master.institution_creation.validation.primary_admin_required"),
+        ),
     })
     .refine((data) => data.admins.some((admin) => admin.isPrimary), {
-      message: t("master.institution_creation.validation.primary_admin_required"),
+      message: t(
+        "master.institution_creation.validation.primary_admin_required",
+      ),
       path: ["admins"],
     });
 }
@@ -409,9 +448,16 @@ export function InstitutionCreationForm() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("master.institution_creation.institution_name")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.institution_name")}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder={t("master.institution_creation.institution_name_placeholder")} {...field} />
+                          <Input
+                            placeholder={t(
+                              "master.institution_creation.institution_name_placeholder",
+                            )}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -422,14 +468,20 @@ export function InstitutionCreationForm() {
                     name="institutionType"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("master.institution_creation.institution_type")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.institution_type")}
+                        </FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder={t("master.institution_creation.institution_type_placeholder")} />
+                              <SelectValue
+                                placeholder={t(
+                                  "master.institution_creation.institution_type_placeholder",
+                                )}
+                              />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -459,7 +511,9 @@ export function InstitutionCreationForm() {
                       name="branding.primaryColor"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("master.institution_creation.primary_color")}</FormLabel>
+                          <FormLabel>
+                            {t("master.institution_creation.primary_color")}
+                          </FormLabel>
                           <div className="flex gap-2">
                             <FormControl>
                               <Input
@@ -484,7 +538,9 @@ export function InstitutionCreationForm() {
                       name="branding.secondaryColor"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("master.institution_creation.secondary_color")}</FormLabel>
+                          <FormLabel>
+                            {t("master.institution_creation.secondary_color")}
+                          </FormLabel>
                           <div className="flex gap-2">
                             <FormControl>
                               <Input
@@ -581,9 +637,16 @@ export function InstitutionCreationForm() {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("master.institution_creation.phone")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.phone")}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder={t("master.institution_creation.phone_placeholder")} {...field} />
+                          <Input
+                            placeholder={t(
+                              "master.institution_creation.phone_placeholder",
+                            )}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -594,9 +657,16 @@ export function InstitutionCreationForm() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("master.institution_creation.email")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.email")}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder={t("master.institution_creation.email_placeholder")} {...field} />
+                          <Input
+                            placeholder={t(
+                              "master.institution_creation.email_placeholder",
+                            )}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -607,9 +677,16 @@ export function InstitutionCreationForm() {
                     name="website"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("master.institution_creation.website")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.website")}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder={t("master.institution_creation.website_placeholder")} {...field} />
+                          <Input
+                            placeholder={t(
+                              "master.institution_creation.website_placeholder",
+                            )}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -620,10 +697,14 @@ export function InstitutionCreationForm() {
                     name="logoUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("master.institution_creation.logo_url")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.logo_url")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={t("master.institution_creation.logo_url_placeholder")}
+                            placeholder={t(
+                              "master.institution_creation.logo_url_placeholder",
+                            )}
                             {...field}
                           />
                         </FormControl>
@@ -636,10 +717,14 @@ export function InstitutionCreationForm() {
                     name="address"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
-                        <FormLabel>{t("master.institution_creation.address")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.address")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={t("master.institution_creation.address_placeholder")}
+                            placeholder={t(
+                              "master.institution_creation.address_placeholder",
+                            )}
                             {...field}
                           />
                         </FormControl>
@@ -652,10 +737,14 @@ export function InstitutionCreationForm() {
                     name="mission"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
-                        <FormLabel>{t("master.institution_creation.mission")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.mission")}
+                        </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder={t("master.institution_creation.mission_placeholder")}
+                            placeholder={t(
+                              "master.institution_creation.mission_placeholder",
+                            )}
                             className="min-h-[100px]"
                             {...field}
                           />
@@ -669,10 +758,14 @@ export function InstitutionCreationForm() {
                     name="vision"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
-                        <FormLabel>{t("master.institution_creation.vision")}</FormLabel>
+                        <FormLabel>
+                          {t("master.institution_creation.vision")}
+                        </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder={t("master.institution_creation.vision_placeholder")}
+                            placeholder={t(
+                              "master.institution_creation.vision_placeholder",
+                            )}
                             className="min-h-[100px]"
                             {...field}
                           />
@@ -693,7 +786,9 @@ export function InstitutionCreationForm() {
                         {t("master.institution_creation.educational_config")}
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        {t("master.institution_creation.educational_config_desc")}
+                        {t(
+                          "master.institution_creation.educational_config_desc",
+                        )}
                       </p>
                     </div>
                   </div>
@@ -831,10 +926,14 @@ export function InstitutionCreationForm() {
                             name={`admins.${index}.name`}
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{t("master.institution_creation.admin_name")}</FormLabel>
+                                <FormLabel>
+                                  {t("master.institution_creation.admin_name")}
+                                </FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder={t("master.institution_creation.admin_name_placeholder")}
+                                    placeholder={t(
+                                      "master.institution_creation.admin_name_placeholder",
+                                    )}
                                     {...field}
                                   />
                                 </FormControl>
@@ -847,10 +946,14 @@ export function InstitutionCreationForm() {
                             name={`admins.${index}.email`}
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{t("master.institution_creation.admin_email")}</FormLabel>
+                                <FormLabel>
+                                  {t("master.institution_creation.admin_email")}
+                                </FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder={t("master.institution_creation.admin_email_placeholder")}
+                                    placeholder={t(
+                                      "master.institution_creation.admin_email_placeholder",
+                                    )}
                                     {...field}
                                   />
                                 </FormControl>
@@ -863,10 +966,14 @@ export function InstitutionCreationForm() {
                             name={`admins.${index}.phone`}
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{t("master.institution_creation.admin_phone")}</FormLabel>
+                                <FormLabel>
+                                  {t("master.institution_creation.admin_phone")}
+                                </FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder={t("master.institution_creation.admin_phone_placeholder")}
+                                    placeholder={t(
+                                      "master.institution_creation.admin_phone_placeholder",
+                                    )}
                                     {...field}
                                   />
                                 </FormControl>
@@ -879,11 +986,17 @@ export function InstitutionCreationForm() {
                             name={`admins.${index}.password`}
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{t("master.institution_creation.admin_password")}</FormLabel>
+                                <FormLabel>
+                                  {t(
+                                    "master.institution_creation.admin_password",
+                                  )}
+                                </FormLabel>
                                 <FormControl>
                                   <Input
                                     type="password"
-                                    placeholder={t("master.institution_creation.admin_password_placeholder")}
+                                    placeholder={t(
+                                      "master.institution_creation.admin_password_placeholder",
+                                    )}
                                     {...field}
                                   />
                                 </FormControl>
@@ -916,7 +1029,6 @@ export function InstitutionCreationForm() {
             </Form>
           </CardContent>
         </Card>
-
       </div>
     </MasterPageTemplate>
   );

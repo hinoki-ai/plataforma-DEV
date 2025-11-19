@@ -16,7 +16,10 @@ import { PreloadingProvider } from "./providers/PreloadingProvider";
 import { JoshWelcomeToast } from "./ui/josh-welcome-toast";
 import { JoshIndicator } from "./ui/josh-indicator";
 import { JoshProactiveSuggestions } from "./ui/josh-proactive";
-import { JoshAnalyticsProvider, JoshAnalyticsDashboard } from "./ui/josh-analytics";
+import {
+  JoshAnalyticsProvider,
+  JoshAnalyticsDashboard,
+} from "./ui/josh-analytics";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

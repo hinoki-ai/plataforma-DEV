@@ -114,7 +114,9 @@ export function PeriodLockingControls({ userId }: PeriodLockingControlsProps) {
       setLockReason("");
       setShowConfirmDialog(false);
     } catch (error: any) {
-      toast.error(error.message || t("digital-signatures.period_locking.lock_error"));
+      toast.error(
+        error.message || t("digital-signatures.period_locking.lock_error"),
+      );
     } finally {
       setIsLocking(false);
     }
@@ -132,7 +134,9 @@ export function PeriodLockingControls({ userId }: PeriodLockingControlsProps) {
       toast.success(t("digital-signatures.period_locking.unlock_success"));
       setLockReason("");
     } catch (error: any) {
-      toast.error(error.message || t("digital-signatures.period_locking.unlock_error"));
+      toast.error(
+        error.message || t("digital-signatures.period_locking.unlock_error"),
+      );
     } finally {
       setIsLocking(false);
     }

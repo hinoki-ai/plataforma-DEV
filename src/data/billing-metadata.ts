@@ -8,7 +8,9 @@ export interface BillingMetadataItem {
 
 export type BillingMetadata = Record<BillingCycle, BillingMetadataItem>;
 
-export function createBillingMetadata(tc: (key: string) => string): BillingMetadata {
+export function createBillingMetadata(
+  tc: (key: string) => string,
+): BillingMetadata {
   return {
     semestral: {
       label: tc("billing.semestral"),

@@ -38,9 +38,12 @@ export function JoshWelcomeToast() {
   const getPageContext = () => {
     const role = getUserRole();
     if (pathname.includes("/admin")) return { role: "admin", section: "admin" };
-    if (pathname.includes("/profesor")) return { role: "teacher", section: "profesor" };
-    if (pathname.includes("/parent")) return { role: "parent", section: "parent" };
-    if (pathname.includes("/master")) return { role: "master", section: "master" };
+    if (pathname.includes("/profesor"))
+      return { role: "teacher", section: "profesor" };
+    if (pathname.includes("/parent"))
+      return { role: "parent", section: "parent" };
+    if (pathname.includes("/master"))
+      return { role: "master", section: "master" };
     return { role, section: "general" };
   };
 
@@ -50,24 +53,54 @@ export function JoshWelcomeToast() {
 
     const contextualMessages = {
       admin: [
-        t("welcome.josh.admin.1", "¡Hola administrador! ¿Qué vamos a gestionar hoy?"),
-        t("welcome.josh.admin.2", "¡Listo para mantener todo funcionando perfectamente!"),
-        t("welcome.josh.admin.3", "¡Tu centro educativo te necesita! Vamos a trabajar juntos."),
+        t(
+          "welcome.josh.admin.1",
+          "¡Hola administrador! ¿Qué vamos a gestionar hoy?",
+        ),
+        t(
+          "welcome.josh.admin.2",
+          "¡Listo para mantener todo funcionando perfectamente!",
+        ),
+        t(
+          "welcome.josh.admin.3",
+          "¡Tu centro educativo te necesita! Vamos a trabajar juntos.",
+        ),
       ],
       teacher: [
-        t("welcome.josh.teacher.1", "¡Hola profesor! ¿Qué clase vamos a preparar hoy?"),
-        t("welcome.josh.teacher.2", "¡Tus estudiantes te esperan con entusiasmo!"),
-        t("welcome.josh.teacher.3", "¡Vamos a hacer una jornada educativa increíble!"),
+        t(
+          "welcome.josh.teacher.1",
+          "¡Hola profesor! ¿Qué clase vamos a preparar hoy?",
+        ),
+        t(
+          "welcome.josh.teacher.2",
+          "¡Tus estudiantes te esperan con entusiasmo!",
+        ),
+        t(
+          "welcome.josh.teacher.3",
+          "¡Vamos a hacer una jornada educativa increíble!",
+        ),
       ],
       parent: [
-        t("welcome.josh.parent.1", "¡Hola apoderado! ¿Cómo podemos ayudar a tu estudiante?"),
-        t("welcome.josh.parent.2", "¡Bienvenido a seguir el progreso de tu hijo!"),
+        t(
+          "welcome.josh.parent.1",
+          "¡Hola apoderado! ¿Cómo podemos ayudar a tu estudiante?",
+        ),
+        t(
+          "welcome.josh.parent.2",
+          "¡Bienvenido a seguir el progreso de tu hijo!",
+        ),
         t("welcome.josh.parent.3", "¡Estamos aquí para mantenerte informado!"),
       ],
       master: [
-        t("welcome.josh.master.1", "¡Hola maestro del sistema! ¿Qué operaciones avanzadas realizaremos?"),
+        t(
+          "welcome.josh.master.1",
+          "¡Hola maestro del sistema! ¿Qué operaciones avanzadas realizaremos?",
+        ),
         t("welcome.josh.master.2", "¡Todo el sistema está bajo control!"),
-        t("welcome.josh.master.3", "¡Listo para optimizar la plataforma educativa!"),
+        t(
+          "welcome.josh.master.3",
+          "¡Listo para optimizar la plataforma educativa!",
+        ),
       ],
       general: [
         t("welcome.josh.1", "¡Estoy feliz de verte!"),
@@ -78,7 +111,9 @@ export function JoshWelcomeToast() {
       ],
     };
 
-    const messages = contextualMessages[context.section as keyof typeof contextualMessages] || contextualMessages.general;
+    const messages =
+      contextualMessages[context.section as keyof typeof contextualMessages] ||
+      contextualMessages.general;
     return messages[Math.floor(Math.random() * messages.length)];
   };
 
@@ -90,18 +125,26 @@ export function JoshWelcomeToast() {
       admin: t("welcome.admin", "Panel de Administración - Plataforma Astral"),
       teacher: t("welcome.teacher", "Panel de Profesores - Plataforma Astral"),
       parent: t("welcome.parent", "Panel de Apoderados - Plataforma Astral"),
-      master: t("welcome.master", "Panel Maestro del Sistema - Plataforma Astral"),
+      master: t(
+        "welcome.master",
+        "Panel Maestro del Sistema - Plataforma Astral",
+      ),
       general: t("welcome.message", "Bienvenido a Plataforma Astral"),
     };
 
-    return welcomeMessages[context.section as keyof typeof welcomeMessages] || welcomeMessages.general;
+    return (
+      welcomeMessages[context.section as keyof typeof welcomeMessages] ||
+      welcomeMessages.general
+    );
   };
 
   useEffect(() => {
     // Only show if we haven't shown it this session and theme is resolved
     if (!hasShown && resolvedTheme) {
       const isDark = resolvedTheme === "dark";
-      const joshImage = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
+      const joshImage = isDark
+        ? "/josh-happy-dark.png"
+        : "/josh-happy-light.png";
 
       // Create animated Josh icon
       const JoshIcon = () => (
@@ -114,13 +157,13 @@ export function JoshWelcomeToast() {
               type: "spring",
               stiffness: 260,
               damping: 20,
-              delay: 0.1
-            }
+              delay: 0.1,
+            },
           }}
           whileHover={{
             scale: 1.1,
             rotate: 10,
-            transition: { duration: 0.2 }
+            transition: { duration: 0.2 },
           }}
           className="relative"
         >
@@ -134,19 +177,19 @@ export function JoshWelcomeToast() {
             transition={{
               duration: 2,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
           />
           <motion.div
             className="absolute -top-1 -right-1 text-lg"
             animate={{
               scale: [1, 1.2, 1],
-              rotate: [0, 10, -10, 0]
+              rotate: [0, 10, -10, 0],
             }}
             transition={{
               duration: 1.5,
               repeat: Infinity,
-              delay: 0.5
+              delay: 0.5,
             }}
           >
             👋
@@ -161,9 +204,7 @@ export function JoshWelcomeToast() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          <div className="font-bold text-lg">
-            {getTimeBasedGreeting()}
-          </div>
+          <div className="font-bold text-lg">{getTimeBasedGreeting()}</div>
           <div className="text-sm opacity-90 mt-1">
             {getContextualWelcomeMessage()}
           </div>
@@ -178,7 +219,10 @@ export function JoshWelcomeToast() {
             >
               <div className="text-sm">{getJoshMessage()}</div>
               <div className="text-xs opacity-75 mt-1">
-                {t("welcome.description", "Tu plataforma educativa inteligente")}
+                {t(
+                  "welcome.description",
+                  "Tu plataforma educativa inteligente",
+                )}
               </div>
             </motion.div>
           ),
@@ -193,7 +237,7 @@ export function JoshWelcomeToast() {
               });
             },
           },
-        }
+        },
       );
 
       setHasShown(true);

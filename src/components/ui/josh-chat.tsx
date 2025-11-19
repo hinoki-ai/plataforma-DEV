@@ -51,10 +51,48 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
   const getPageContext = () => {
     const role = getUserRole();
     if (pathname.includes("/admin")) return { role: "admin", section: "admin" };
-    if (pathname.includes("/profesor")) return { role: "teacher", section: "profesor" };
-    if (pathname.includes("/parent")) return { role: "parent", section: "parent" };
-    if (pathname.includes("/master")) return { role: "master", section: "master" };
+    if (pathname.includes("/profesor"))
+      return { role: "teacher", section: "profesor" };
+    if (pathname.includes("/parent"))
+      return { role: "parent", section: "parent" };
+    if (pathname.includes("/master"))
+      return { role: "master", section: "master" };
     return { role, section: "general" };
+  };
+
+  const getWelcomeMessage = (context: any): Message => {
+    const welcomeMessages = {
+      admin: t(
+        "josh.chat.welcome.admin",
+        "¡Hola! Soy Josh, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?",
+      ),
+      teacher: t(
+        "josh.chat.welcome.teacher",
+        "¡Hola profesor! Soy Josh, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
+      ),
+      parent: t(
+        "josh.chat.welcome.parent",
+        "¡Hola apoderado! Soy Josh, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?",
+      ),
+      master: t(
+        "josh.chat.welcome.master",
+        "¡Hola maestro del sistema! Soy Josh, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?",
+      ),
+      general: t(
+        "josh.chat.welcome.general",
+        "¡Hola! Soy Josh, tu asistente educativo. ¿En qué puedo ayudarte hoy?",
+      ),
+    };
+
+    return {
+      id: "welcome",
+      content:
+        welcomeMessages[context.section as keyof typeof welcomeMessages] ||
+        welcomeMessages.general,
+      sender: "josh",
+      timestamp: new Date(),
+      type: "text",
+    };
   };
 
   // Initialize with welcome message
@@ -78,101 +116,173 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
     }
   }, [isOpen, isMinimized]);
 
-  const getWelcomeMessage = (context: any): Message => {
-    const welcomeMessages = {
-      admin: t("josh.chat.welcome.admin", "¡Hola! Soy Josh, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?"),
-      teacher: t("josh.chat.welcome.teacher", "¡Hola profesor! Soy Josh, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?"),
-      parent: t("josh.chat.welcome.parent", "¡Hola apoderado! Soy Josh, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?"),
-      master: t("josh.chat.welcome.master", "¡Hola maestro del sistema! Soy Josh, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?"),
-      general: t("josh.chat.welcome.general", "¡Hola! Soy Josh, tu asistente educativo. ¿En qué puedo ayudarte hoy?")
-    };
-
-    return {
-      id: "welcome",
-      content: welcomeMessages[context.section as keyof typeof welcomeMessages] || welcomeMessages.general,
-      sender: "josh",
-      timestamp: new Date(),
-      type: "text"
-    };
-  };
-
   const generateJoshResponse = async (userMessage: string): Promise<string> => {
     const context = getPageContext();
     const lowerMessage = userMessage.toLowerCase();
 
     // Check for tour requests
-    if (lowerMessage.includes("tour") || lowerMessage.includes("guia") || lowerMessage.includes("guide")) {
+    if (
+      lowerMessage.includes("tour") ||
+      lowerMessage.includes("guia") ||
+      lowerMessage.includes("guide")
+    ) {
       if (context.section === "admin") {
-        return t("josh.chat.tour.admin", "¿Te gustaría que te guíe por el panel de administración? Puedo mostrarte cómo gestionar usuarios, calendario y todas las funciones principales. Solo di 'sí' para comenzar el tour.");
+        return t(
+          "josh.chat.tour.admin",
+          "¿Te gustaría que te guíe por el panel de administración? Puedo mostrarte cómo gestionar usuarios, calendario y todas las funciones principales. Solo di 'sí' para comenzar el tour.",
+        );
       }
       if (context.section === "teacher") {
-        return t("josh.chat.tour.teacher", "¿Quieres que te enseñe a usar el libro de clases? Te mostraré cómo registrar asistencia, calificaciones y observaciones. Solo di 'sí' para comenzar el tour.");
+        return t(
+          "josh.chat.tour.teacher",
+          "¿Quieres que te enseñe a usar el libro de clases? Te mostraré cómo registrar asistencia, calificaciones y observaciones. Solo di 'sí' para comenzar el tour.",
+        );
       }
       if (context.section === "parent") {
-        return t("josh.chat.tour.parent", "¿Te gustaría un tour por el portal de apoderados? Te explicaré cómo ver el progreso de tu estudiante y comunicarte con profesores. Solo di 'sí' para comenzar.");
+        return t(
+          "josh.chat.tour.parent",
+          "¿Te gustaría un tour por el portal de apoderados? Te explicaré cómo ver el progreso de tu estudiante y comunicarte con profesores. Solo di 'sí' para comenzar.",
+        );
       }
     }
 
     // Check for tour confirmation
-    if (lowerMessage.includes("si") || lowerMessage.includes("yes") || lowerMessage.includes("comenzar") || lowerMessage.includes("start")) {
+    if (
+      lowerMessage.includes("si") ||
+      lowerMessage.includes("yes") ||
+      lowerMessage.includes("comenzar") ||
+      lowerMessage.includes("start")
+    ) {
       // This would trigger the tour - handled by parent component
-      return t("josh.chat.tour.starting", "¡Perfecto! Iniciando el tour interactivo. Te guiaré paso a paso por las funciones principales.");
+      return t(
+        "josh.chat.tour.starting",
+        "¡Perfecto! Iniciando el tour interactivo. Te guiaré paso a paso por las funciones principales.",
+      );
     }
 
     // Contextual responses based on user role and page
     if (context.section === "admin") {
-      if (lowerMessage.includes("calendario") || lowerMessage.includes("calendar")) {
-        return t("josh.chat.admin.calendar", "Para gestionar el calendario escolar, ve a 'Calendario Escolar' en el menú lateral. Puedes agregar eventos, feriados y actividades importantes para mantener a todos informados.");
+      if (
+        lowerMessage.includes("calendario") ||
+        lowerMessage.includes("calendar")
+      ) {
+        return t(
+          "josh.chat.admin.calendar",
+          "Para gestionar el calendario escolar, ve a 'Calendario Escolar' en el menú lateral. Puedes agregar eventos, feriados y actividades importantes para mantener a todos informados.",
+        );
       }
       if (lowerMessage.includes("usuario") || lowerMessage.includes("user")) {
-        return t("josh.chat.admin.users", "Para gestionar usuarios, accede a 'Usuarios' en el panel administrativo. Puedes crear, editar o desactivar cuentas de profesores, apoderados y personal administrativo.");
+        return t(
+          "josh.chat.admin.users",
+          "Para gestionar usuarios, accede a 'Usuarios' en el panel administrativo. Puedes crear, editar o desactivar cuentas de profesores, apoderados y personal administrativo.",
+        );
       }
-      if (lowerMessage.includes("planificación") || lowerMessage.includes("planning")) {
-        return t("josh.chat.admin.planning", "Las planificaciones de profesores están en 'Planificaciones'. Puedes revisar, aprobar o solicitar modificaciones para asegurar el cumplimiento curricular.");
+      if (
+        lowerMessage.includes("planificación") ||
+        lowerMessage.includes("planning")
+      ) {
+        return t(
+          "josh.chat.admin.planning",
+          "Las planificaciones de profesores están en 'Planificaciones'. Puedes revisar, aprobar o solicitar modificaciones para asegurar el cumplimiento curricular.",
+        );
       }
     }
 
     if (context.section === "teacher") {
-      if (lowerMessage.includes("asistencia") || lowerMessage.includes("attendance")) {
-        return t("josh.chat.teacher.attendance", "Para registrar asistencia, ve a 'Libro de Clases > Asistencia'. Marca presente/ausente para cada estudiante y agrega observaciones si es necesario.");
+      if (
+        lowerMessage.includes("asistencia") ||
+        lowerMessage.includes("attendance")
+      ) {
+        return t(
+          "josh.chat.teacher.attendance",
+          "Para registrar asistencia, ve a 'Libro de Clases > Asistencia'. Marca presente/ausente para cada estudiante y agrega observaciones si es necesario.",
+        );
       }
-      if (lowerMessage.includes("calificación") || lowerMessage.includes("grade")) {
-        return t("josh.chat.teacher.grades", "Las calificaciones se registran en 'Libro de Clases > Calificaciones'. Ingresa notas por asignatura y período académico.");
+      if (
+        lowerMessage.includes("calificación") ||
+        lowerMessage.includes("grade")
+      ) {
+        return t(
+          "josh.chat.teacher.grades",
+          "Las calificaciones se registran en 'Libro de Clases > Calificaciones'. Ingresa notas por asignatura y período académico.",
+        );
       }
-      if (lowerMessage.includes("planificación") || lowerMessage.includes("planning")) {
-        return t("josh.chat.teacher.planning", "Crea planificaciones en 'Planificaciones'. Incluye objetivos, actividades y materiales para cada clase.");
+      if (
+        lowerMessage.includes("planificación") ||
+        lowerMessage.includes("planning")
+      ) {
+        return t(
+          "josh.chat.teacher.planning",
+          "Crea planificaciones en 'Planificaciones'. Incluye objetivos, actividades y materiales para cada clase.",
+        );
       }
     }
 
     if (context.section === "parent") {
-      if (lowerMessage.includes("progreso") || lowerMessage.includes("progress")) {
-        return t("josh.chat.parent.progress", "Revisa el progreso de tu estudiante en 'Libro de Clases'. Verás calificaciones, asistencia y observaciones de profesores.");
+      if (
+        lowerMessage.includes("progreso") ||
+        lowerMessage.includes("progress")
+      ) {
+        return t(
+          "josh.chat.parent.progress",
+          "Revisa el progreso de tu estudiante en 'Libro de Clases'. Verás calificaciones, asistencia y observaciones de profesores.",
+        );
       }
-      if (lowerMessage.includes("reunión") || lowerMessage.includes("meeting")) {
-        return t("josh.chat.parent.meeting", "Programa reuniones con profesores en 'Reuniones'. Coordina horarios y temas a discutir sobre tu estudiante.");
+      if (
+        lowerMessage.includes("reunión") ||
+        lowerMessage.includes("meeting")
+      ) {
+        return t(
+          "josh.chat.parent.meeting",
+          "Programa reuniones con profesores en 'Reuniones'. Coordina horarios y temas a discutir sobre tu estudiante.",
+        );
       }
-      if (lowerMessage.includes("comunicación") || lowerMessage.includes("communication")) {
-        return t("josh.chat.parent.communication", "Las comunicaciones del centro están en 'Comunicación'. Recibe anuncios importantes y noticias relevantes.");
+      if (
+        lowerMessage.includes("comunicación") ||
+        lowerMessage.includes("communication")
+      ) {
+        return t(
+          "josh.chat.parent.communication",
+          "Las comunicaciones del centro están en 'Comunicación'. Recibe anuncios importantes y noticias relevantes.",
+        );
       }
     }
 
     // General responses
     if (lowerMessage.includes("ayuda") || lowerMessage.includes("help")) {
-      return t("josh.chat.help.general", "¿En qué área específica necesitas ayuda? Puedo guiarte por las funciones de administración, enseñanza, seguimiento parental o configuración del sistema.");
+      return t(
+        "josh.chat.help.general",
+        "¿En qué área específica necesitas ayuda? Puedo guiarte por las funciones de administración, enseñanza, seguimiento parental o configuración del sistema.",
+      );
     }
 
-    if (lowerMessage.includes("problema") || lowerMessage.includes("error") || lowerMessage.includes("issue")) {
-      return t("josh.chat.help.problem", "Si encuentras un problema, intenta refrescar la página. Si persiste, contacta al administrador del sistema. ¿Puedes describir qué está pasando?");
+    if (
+      lowerMessage.includes("problema") ||
+      lowerMessage.includes("error") ||
+      lowerMessage.includes("issue")
+    ) {
+      return t(
+        "josh.chat.help.problem",
+        "Si encuentras un problema, intenta refrescar la página. Si persiste, contacta al administrador del sistema. ¿Puedes describir qué está pasando?",
+      );
     }
 
     // Default responses
     const defaultResponses = [
-      t("josh.chat.default.1", "¡Entiendo! Déjame ayudarte con eso. ¿Puedes darme más detalles sobre lo que necesitas?"),
-      t("josh.chat.default.2", "Estoy aquí para ayudarte. ¿Hay algo específico en lo que pueda asistirte?"),
+      t(
+        "josh.chat.default.1",
+        "¡Entiendo! Déjame ayudarte con eso. ¿Puedes darme más detalles sobre lo que necesitas?",
+      ),
+      t(
+        "josh.chat.default.2",
+        "Estoy aquí para ayudarte. ¿Hay algo específico en lo que pueda asistirte?",
+      ),
       t("josh.chat.default.3", "¡Perfecto! ¿Qué más puedo hacer por ti hoy?"),
     ];
 
-    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+    return defaultResponses[
+      Math.floor(Math.random() * defaultResponses.length)
+    ];
   };
 
   const handleSendMessage = async () => {
@@ -183,27 +293,30 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
       content: inputValue,
       sender: "user",
       timestamp: new Date(),
-      type: "text"
+      type: "text",
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
     setIsTyping(true);
 
     // Simulate typing delay
-    setTimeout(async () => {
-      const joshResponse = await generateJoshResponse(inputValue);
-      const joshMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: joshResponse,
-        sender: "josh",
-        timestamp: new Date(),
-        type: "text"
-      };
+    setTimeout(
+      async () => {
+        const joshResponse = await generateJoshResponse(inputValue);
+        const joshMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: joshResponse,
+          sender: "josh",
+          timestamp: new Date(),
+          type: "text",
+        };
 
-      setMessages(prev => [...prev, joshMessage]);
-      setIsTyping(false);
-    }, 1000 + Math.random() * 2000); // 1-3 second delay
+        setMessages((prev) => [...prev, joshMessage]);
+        setIsTyping(false);
+      },
+      1000 + Math.random() * 2000,
+    ); // 1-3 second delay
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -239,18 +352,34 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
               aria-hidden="true"
             />
             <div>
-              <h3 id="josh-chat-title" className="font-semibold text-sm">Josh</h3>
-              <p id="josh-chat-description" className="text-xs opacity-90">Tu asistente educativo</p>
+              <h3 id="josh-chat-title" className="font-semibold text-sm">
+                Josh
+              </h3>
+              <p id="josh-chat-description" className="text-xs opacity-90">
+                Tu asistente educativo
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-1">
             <button
               onClick={() => setIsMinimized(!isMinimized)}
               className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
-              aria-label={isMinimized ? t("josh.chat.maximize", "Maximizar chat") : t("josh.chat.minimize", "Minimizar chat")}
-              title={isMinimized ? t("josh.chat.maximize", "Maximizar chat") : t("josh.chat.minimize", "Minimizar chat")}
+              aria-label={
+                isMinimized
+                  ? t("josh.chat.maximize", "Maximizar chat")
+                  : t("josh.chat.minimize", "Minimizar chat")
+              }
+              title={
+                isMinimized
+                  ? t("josh.chat.maximize", "Maximizar chat")
+                  : t("josh.chat.minimize", "Minimizar chat")
+              }
             >
-              {isMinimized ? <Maximize2 className="w-4 h-4" aria-hidden="true" /> : <Minimize2 className="w-4 h-4" aria-hidden="true" />}
+              {isMinimized ? (
+                <Maximize2 className="w-4 h-4" aria-hidden="true" />
+              ) : (
+                <Minimize2 className="w-4 h-4" aria-hidden="true" />
+              )}
             </button>
             <button
               onClick={onToggle}
@@ -296,13 +425,24 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                       >
                         {message.sender === "josh" && (
                           <div className="flex items-center space-x-2 mb-1">
-                            <img src={joshImage} alt="" className="w-4 h-4 rounded-full" aria-hidden="true" />
+                            <img
+                              src={joshImage}
+                              alt=""
+                              className="w-4 h-4 rounded-full"
+                              aria-hidden="true"
+                            />
                             <span className="text-xs font-medium">Josh</span>
                           </div>
                         )}
                         <p className="text-sm">{message.content}</p>
-                        <time className="text-xs opacity-70 mt-1 block" dateTime={message.timestamp.toISOString()}>
-                          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        <time
+                          className="text-xs opacity-70 mt-1 block"
+                          dateTime={message.timestamp.toISOString()}
+                        >
+                          {message.timestamp.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </time>
                       </div>
                     </motion.div>
@@ -316,11 +456,24 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                     >
                       <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                         <div className="flex items-center space-x-2">
-                          <img src={joshImage} alt="Josh" className="w-4 h-4 rounded-full" />
+                          <img
+                            src={joshImage}
+                            alt="Josh"
+                            className="w-4 h-4 rounded-full"
+                          />
                           <div className="flex space-x-1">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                            <div
+                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                              style={{ animationDelay: "0ms" }}
+                            ></div>
+                            <div
+                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                              style={{ animationDelay: "150ms" }}
+                            ></div>
+                            <div
+                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                              style={{ animationDelay: "300ms" }}
+                            ></div>
                           </div>
                         </div>
                       </div>
@@ -334,7 +487,10 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                 <div className="p-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex space-x-2">
                     <label htmlFor="josh-chat-input" className="sr-only">
-                      {t("josh.chat.input.label", "Escribe tu mensaje para Josh")}
+                      {t(
+                        "josh.chat.input.label",
+                        "Escribe tu mensaje para Josh",
+                      )}
                     </label>
                     <input
                       ref={inputRef}
@@ -343,10 +499,15 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      placeholder={t("josh.chat.placeholder", "Escribe tu mensaje...")}
+                      placeholder={t(
+                        "josh.chat.placeholder",
+                        "Escribe tu mensaje...",
+                      )}
                       className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                       disabled={isTyping}
-                      aria-describedby={isTyping ? "josh-typing-status" : undefined}
+                      aria-describedby={
+                        isTyping ? "josh-typing-status" : undefined
+                      }
                       autoComplete="off"
                     />
                     <button
@@ -360,7 +521,11 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                     </button>
                   </div>
                   {isTyping && (
-                    <div id="josh-typing-status" className="sr-only" aria-live="assertive">
+                    <div
+                      id="josh-typing-status"
+                      className="sr-only"
+                      aria-live="assertive"
+                    >
                       {t("josh.chat.typing", "Josh está escribiendo")}
                     </div>
                   )}

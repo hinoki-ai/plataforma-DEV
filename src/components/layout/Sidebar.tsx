@@ -46,7 +46,6 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   onToggle?: () => void;
 }
 
-
 interface NavigationGroup {
   title: string;
   items: NavigationItem[];
@@ -54,9 +53,6 @@ interface NavigationGroup {
 }
 
 // Navigation configuration is now imported from modular files
-
-
-
 
 export function Sidebar({
   className,
@@ -90,7 +86,6 @@ export function Sidebar({
     return () => clearInterval(interval);
   }, []);
 
-
   // ⚡ Performance: Memoize logout handler
   const handleLogout = React.useCallback(async () => {
     try {
@@ -101,8 +96,6 @@ export function Sidebar({
       router.push("/");
     }
   }, [router]);
-
-
 
   // ⚡ Performance: Memoize navigation groups calculation
   const navigationGroups = React.useMemo(

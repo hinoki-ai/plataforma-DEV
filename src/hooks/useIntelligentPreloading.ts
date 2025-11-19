@@ -4,13 +4,37 @@ import { useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 
 interface PreloadOptions {
-  priority?: 'low' | 'high';
-  as?: 'script' | 'style' | 'font' | 'image' | 'fetch' | 'document';
-  crossOrigin?: 'anonymous' | 'use-credentials';
+  priority?: "low" | "high";
+  as?: "script" | "style" | "font" | "image" | "fetch" | "document";
+  crossOrigin?: "anonymous" | "use-credentials";
 }
 
 export function useIntelligentPreloading() {
   const pathname = usePathname();
+
+  // Generic resource preloading
+  const preloadResource = useCallback(
+    (href: string, options: PreloadOptions = {}) => {
+      // Check if already preloaded
+      const existingLink = document.querySelector(`link[href="${href}"]`);
+      if (existingLink) return;
+
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.href = href;
+
+      if (options.as) link.as = options.as;
+      if (options.crossOrigin) link.crossOrigin = options.crossOrigin;
+
+      // Set fetch priority if supported
+      if ("fetchPriority" in link && options.priority) {
+        (link as any).fetchPriority = options.priority;
+      }
+
+      document.head.appendChild(link);
+    },
+    [],
+  );
 
   // Preload critical resources based on current route
   const preloadRouteResources = useCallback((route: string) => {
@@ -18,31 +42,52 @@ export function useIntelligentPreloading() {
 
     // Route-specific preloading
     switch (route) {
-      case '/':
+      case "/":
         resources.push(
-          { href: '/api/analytics', options: { as: 'fetch', priority: 'low' } },
-          { href: '/api/school-info', options: { as: 'fetch', priority: 'high' } }
+          { href: "/api/analytics", options: { as: "fetch", priority: "low" } },
+          {
+            href: "/api/school-info",
+            options: { as: "fetch", priority: "high" },
+          },
         );
         break;
 
-      case '/admin':
+      case "/admin":
         resources.push(
-          { href: '/api/admin/dashboard', options: { as: 'fetch', priority: 'high' } },
-          { href: '/api/admin/users', options: { as: 'fetch', priority: 'low' } }
+          {
+            href: "/api/admin/dashboard",
+            options: { as: "fetch", priority: "high" },
+          },
+          {
+            href: "/api/admin/users",
+            options: { as: "fetch", priority: "low" },
+          },
         );
         break;
 
-      case '/profesor':
+      case "/profesor":
         resources.push(
-          { href: '/api/profesor/dashboard', options: { as: 'fetch', priority: 'high' } },
-          { href: '/api/profesor/planning', options: { as: 'fetch', priority: 'low' } }
+          {
+            href: "/api/profesor/dashboard",
+            options: { as: "fetch", priority: "high" },
+          },
+          {
+            href: "/api/profesor/planning",
+            options: { as: "fetch", priority: "low" },
+          },
         );
         break;
 
-      case '/parent':
+      case "/parent":
         resources.push(
-          { href: '/api/parent/dashboard', options: { as: 'fetch', priority: 'high' } },
-          { href: '/api/parent/communications', options: { as: 'fetch', priority: 'low' } }
+          {
+            href: "/api/parent/dashboard",
+            options: { as: "fetch", priority: "high" },
+          },
+          {
+            href: "/api/parent/communications",
+            options: { as: "fetch", priority: "low" },
+          },
         );
         break;
     }
@@ -57,64 +102,35 @@ export function useIntelligentPreloading() {
   const preloadComponents = useCallback(() => {
     // Preload heavy components that are likely to be used
     const components = [
-      '/components/ui/data-table',
-      '/components/ui/dialog',
-      '/components/ui/dropdown-menu',
+      "/components/ui/data-table",
+      "/components/ui/dialog",
+      "/components/ui/dropdown-menu",
     ];
 
-    components.forEach(component => {
-      preloadResource(`/dynamic${component}`, { priority: 'low' });
+    components.forEach((component) => {
+      preloadResource(`/dynamic${component}`, { priority: "low" });
     });
   }, []);
 
   // Image preloading for critical images
   const preloadImages = useCallback((imageUrls: string[]) => {
-    imageUrls.forEach(url => {
+    imageUrls.forEach((url) => {
       preloadResource(url, {
-        as: 'image',
-        priority: 'low'
+        as: "image",
+        priority: "low",
       });
     });
   }, []);
 
   // Font preloading
   const preloadFonts = useCallback((fontUrls: string[]) => {
-    fontUrls.forEach(url => {
+    fontUrls.forEach((url) => {
       preloadResource(url, {
-        as: 'font',
-        crossOrigin: 'anonymous',
-        priority: 'high'
+        as: "font",
+        crossOrigin: "anonymous",
+        priority: "high",
       });
     });
-  }, []);
-
-  // Generic resource preloading
-  const preloadResource = useCallback((href: string, options: PreloadOptions = {}) => {
-    // Check if already preloaded
-    const existingLink = document.querySelector(`link[href="${href}"]`);
-    if (existingLink) return;
-
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = href;
-
-    if (options.as) link.as = options.as;
-    if (options.crossOrigin) link.crossOrigin = options.crossOrigin;
-
-    // Set fetch priority if supported
-    if ('fetchPriority' in link && options.priority) {
-      (link as any).fetchPriority = options.priority;
-    }
-
-    // Add to head
-    document.head.appendChild(link);
-
-    // Remove after timeout to clean up
-    setTimeout(() => {
-      if (link.parentNode) {
-        link.parentNode.removeChild(link);
-      }
-    }, 30000); // 30 seconds
   }, []);
 
   // Predict next routes based on current location and user role
@@ -122,12 +138,24 @@ export function useIntelligentPreloading() {
     const predictions: string[] = [];
 
     // Add common next routes based on current path
-    if (pathname?.startsWith('/admin')) {
-      predictions.push('/admin/usuarios', '/admin/calendario-escolar', '/admin/reuniones');
-    } else if (pathname?.startsWith('/profesor')) {
-      predictions.push('/profesor/planificaciones', '/profesor/calendario-escolar', '/profesor/reuniones');
-    } else if (pathname?.startsWith('/parent')) {
-      predictions.push('/parent/comunicacion', '/parent/calendario-escolar', '/parent/reuniones');
+    if (pathname?.startsWith("/admin")) {
+      predictions.push(
+        "/admin/usuarios",
+        "/admin/calendario-escolar",
+        "/admin/reuniones",
+      );
+    } else if (pathname?.startsWith("/profesor")) {
+      predictions.push(
+        "/profesor/planificaciones",
+        "/profesor/calendario-escolar",
+        "/profesor/reuniones",
+      );
+    } else if (pathname?.startsWith("/parent")) {
+      predictions.push(
+        "/parent/comunicacion",
+        "/parent/calendario-escolar",
+        "/parent/reuniones",
+      );
     }
 
     return predictions;
@@ -137,12 +165,12 @@ export function useIntelligentPreloading() {
   const preloadPredictedRoutes = useCallback(() => {
     const routes = predictNextRoutes();
 
-    routes.forEach(route => {
+    routes.forEach((route) => {
       // Use Next.js prefetch API for pages
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
+      const link = document.createElement("link");
+      link.rel = "prefetch";
       link.href = route;
-      link.as = 'document';
+      link.as = "document";
       document.head.appendChild(link);
 
       // Clean up after timeout
@@ -158,13 +186,14 @@ export function useIntelligentPreloading() {
   const setupHoverPreloading = useCallback(() => {
     const handleMouseEnter = (e: Event) => {
       const target = e.target as HTMLElement;
-      const href = target.getAttribute('href') || target.getAttribute('data-preload');
+      const href =
+        target.getAttribute("href") || target.getAttribute("data-preload");
 
-      if (href && (href.startsWith('/') || href.startsWith('http'))) {
+      if (href && (href.startsWith("/") || href.startsWith("http"))) {
         // Small delay to avoid unnecessary preloading on quick mouse movements
         const timeoutId = setTimeout(() => {
-          if (href.startsWith('/')) {
-            preloadResource(href, { as: 'document', priority: 'low' });
+          if (href.startsWith("/")) {
+            preloadResource(href, { as: "document", priority: "low" });
           }
         }, 100);
 
@@ -182,19 +211,19 @@ export function useIntelligentPreloading() {
     };
 
     // Add event listeners to navigation elements
-    document.addEventListener('mouseenter', handleMouseEnter, true);
-    document.addEventListener('mouseleave', handleMouseLeave, true);
+    document.addEventListener("mouseenter", handleMouseEnter, true);
+    document.addEventListener("mouseleave", handleMouseLeave, true);
 
     return () => {
-      document.removeEventListener('mouseenter', handleMouseEnter, true);
-      document.removeEventListener('mouseleave', handleMouseLeave, true);
+      document.removeEventListener("mouseenter", handleMouseEnter, true);
+      document.removeEventListener("mouseleave", handleMouseLeave, true);
     };
   }, []);
 
   // Initialize preloading on mount
   useEffect(() => {
     // Route-based preloading
-    preloadRouteResources(pathname || '/');
+    preloadRouteResources(pathname || "/");
 
     // Component preloading
     preloadComponents();
@@ -209,7 +238,13 @@ export function useIntelligentPreloading() {
     // preloadImages(['/bg1.jpg', '/bg2.jpg']);
 
     return cleanup;
-  }, [pathname, preloadRouteResources, preloadComponents, preloadPredictedRoutes, setupHoverPreloading]);
+  }, [
+    pathname,
+    preloadRouteResources,
+    preloadComponents,
+    preloadPredictedRoutes,
+    setupHoverPreloading,
+  ]);
 
   // Return utility functions for manual preloading
   return {

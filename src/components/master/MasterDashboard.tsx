@@ -115,9 +115,7 @@ function SystemHealthCard({ stats }: { stats: any }) {
         <div className="flex items-center gap-2 pt-2 border-t">
           <CheckCircle className="h-4 w-4 text-green-500" />
           <span className="text-sm text-muted-foreground">
-            System Status:{" "}
-            {stats?.system?.status || "Unknown"} -{" "}
-            Uptime:{" "}
+            System Status: {stats?.system?.status || "Unknown"} - Uptime:{" "}
             {stats?.system?.uptime
               ? `${Math.floor(stats.system.uptime / 3600)}h`
               : "N/A"}
@@ -166,9 +164,7 @@ function LocalMasterStatsCard({
             <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
               {(stats.users?.total || 0).toLocaleString()}
             </div>
-            <div className="text-sm text-muted-foreground">
-              Total Users
-            </div>
+            <div className="text-sm text-muted-foreground">Total Users</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -176,9 +172,7 @@ function LocalMasterStatsCard({
             <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
               {stats.users?.breakdown?.profesor || 0}
             </div>
-            <div className="text-sm text-muted-foreground">
-              Teachers
-            </div>
+            <div className="text-sm text-muted-foreground">Teachers</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -186,9 +180,7 @@ function LocalMasterStatsCard({
             <div className="text-2xl font-bold text-green-700 dark:text-green-300">
               {stats.database?.connectionPoolSize || 0}
             </div>
-            <div className="text-sm text-muted-foreground">
-              DB Connections
-            </div>
+            <div className="text-sm text-muted-foreground">DB Connections</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -196,9 +188,7 @@ function LocalMasterStatsCard({
             <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
               {((stats.performance?.throughput || 0) / 1000).toFixed(1)}K
             </div>
-            <div className="text-sm text-muted-foreground">
-              Requests/hour
-            </div>
+            <div className="text-sm text-muted-foreground">Requests/hour</div>
           </div>
         </div>
       </CardContent>
@@ -241,9 +231,7 @@ function SecurityAlertsCard({ stats }: { stats: any }) {
           <Shield className="h-5 w-5 text-blue-600" />
           Security Alerts
         </CardTitle>
-        <CardDescription>
-          Recent security events
-        </CardDescription>
+        <CardDescription>Recent security events</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -283,7 +271,8 @@ export function MasterDashboard() {
       {
         id: "system-overview",
         title: "System Overview",
-        description: "Comprehensive system monitoring and performance analytics",
+        description:
+          "Comprehensive system monitoring and performance analytics",
         icon: Activity,
         href: "/master/system-overview",
         category: "Core",

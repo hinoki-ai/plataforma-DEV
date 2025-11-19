@@ -141,13 +141,34 @@ export function TeacherLibroClasesView({
 
   const getTabHeader = (tab: TabValue) => {
     const tabKeys = {
-      overview: { title: "profesor.libro_clases.title", subtitle: "profesor.libro_clases.tab_descriptions.overview" },
-      attendance: { title: "profesor.libro_clases.tabs.attendance", subtitle: "profesor.libro_clases.tab_descriptions.attendance" },
-      content: { title: "profesor.libro_clases.tabs.content", subtitle: "profesor.libro_clases.tab_descriptions.content" },
-      observations: { title: "profesor.libro_clases.tabs.observations", subtitle: "profesor.libro_clases.tab_descriptions.observations" },
-      grades: { title: "profesor.libro_clases.tabs.grades", subtitle: "profesor.libro_clases.tab_descriptions.grades" },
-      meetings: { title: "profesor.libro_clases.tabs.meetings", subtitle: "profesor.libro_clases.tab_descriptions.meetings" },
-      coverage: { title: "profesor.libro_clases.tabs.coverage", subtitle: "profesor.libro_clases.tab_descriptions.coverage" },
+      overview: {
+        title: "profesor.libro_clases.title",
+        subtitle: "profesor.libro_clases.tab_descriptions.overview",
+      },
+      attendance: {
+        title: "profesor.libro_clases.tabs.attendance",
+        subtitle: "profesor.libro_clases.tab_descriptions.attendance",
+      },
+      content: {
+        title: "profesor.libro_clases.tabs.content",
+        subtitle: "profesor.libro_clases.tab_descriptions.content",
+      },
+      observations: {
+        title: "profesor.libro_clases.tabs.observations",
+        subtitle: "profesor.libro_clases.tab_descriptions.observations",
+      },
+      grades: {
+        title: "profesor.libro_clases.tabs.grades",
+        subtitle: "profesor.libro_clases.tab_descriptions.grades",
+      },
+      meetings: {
+        title: "profesor.libro_clases.tabs.meetings",
+        subtitle: "profesor.libro_clases.tab_descriptions.meetings",
+      },
+      coverage: {
+        title: "profesor.libro_clases.tabs.coverage",
+        subtitle: "profesor.libro_clases.tab_descriptions.coverage",
+      },
     };
     return tabKeys[tab] || tabKeys.overview;
   };
@@ -584,7 +605,9 @@ export function TeacherLibroClasesView({
                                       )
                                     }
                                   >
-                                    {t("profesor.libro_clases.overview.observation_button")}
+                                    {t(
+                                      "profesor.libro_clases.overview.observation_button",
+                                    )}
                                   </Button>
                                   <Button
                                     size="sm"
@@ -596,7 +619,9 @@ export function TeacherLibroClasesView({
                                       )
                                     }
                                   >
-                                    {t("profesor.libro_clases.overview.grade_button")}
+                                    {t(
+                                      "profesor.libro_clases.overview.grade_button",
+                                    )}
                                   </Button>
                                 </div>
                               </div>
@@ -605,7 +630,9 @@ export function TeacherLibroClasesView({
                         </div>
                       ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                          {t("profesor.libro_clases.overview.no_students_enrolled")}
+                          {t(
+                            "profesor.libro_clases.overview.no_students_enrolled",
+                          )}
                         </div>
                       )}
                     </CardContent>
@@ -613,8 +640,14 @@ export function TeacherLibroClasesView({
 
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t("profesor.libro_clases.overview.subjects_title")}</CardTitle>
-                      <CardDescription>{t("profesor.libro_clases.overview.subjects_description")}</CardDescription>
+                      <CardTitle>
+                        {t("profesor.libro_clases.overview.subjects_title")}
+                      </CardTitle>
+                      <CardDescription>
+                        {t(
+                          "profesor.libro_clases.overview.subjects_description",
+                        )}
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
@@ -650,7 +683,9 @@ export function TeacherLibroClasesView({
                   <div className="space-y-6">
                     <Tabs defaultValue="form" className="w-full">
                       <TabsList>
-                        <TabsTrigger value="form">{t("profesor.libro_clases.content.add_content")}</TabsTrigger>
+                        <TabsTrigger value="form">
+                          {t("profesor.libro_clases.content.add_content")}
+                        </TabsTrigger>
                         <TabsTrigger value="list">
                           {t("profesor.libro_clases.content.view_content")}
                         </TabsTrigger>
@@ -728,9 +763,13 @@ export function TeacherLibroClasesView({
         >
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>{t("profesor.libro_clases.observations.add_observation")}</DialogTitle>
+              <DialogTitle>
+                {t("profesor.libro_clases.observations.add_observation")}
+              </DialogTitle>
               <DialogDescription>
-                {t("profesor.libro_clases.observations.register_for_student", { studentName: selectedStudentName })}
+                {t("profesor.libro_clases.observations.register_for_student", {
+                  studentName: selectedStudentName,
+                })}
               </DialogDescription>
             </DialogHeader>
             {selectedCourseId && selectedStudentId && currentUser?._id && (
@@ -741,7 +780,9 @@ export function TeacherLibroClasesView({
                 teacherId={currentUser._id}
                 onSuccess={() => {
                   setIsObservationDialogOpen(false);
-                  toast.success(t("profesor.libro_clases.observations.observation_saved"));
+                  toast.success(
+                    t("profesor.libro_clases.observations.observation_saved"),
+                  );
                 }}
                 onCancel={() => setIsObservationDialogOpen(false)}
               />
@@ -753,9 +794,13 @@ export function TeacherLibroClasesView({
         <Dialog open={isGradeDialogOpen} onOpenChange={setIsGradeDialogOpen}>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>{t("profesor.libro_clases.grades.enter_grades")}</DialogTitle>
+              <DialogTitle>
+                {t("profesor.libro_clases.grades.enter_grades")}
+              </DialogTitle>
               <DialogDescription>
-                {t("profesor.libro_clases.grades.register_grade_for_student", { studentName: selectedStudentName })}
+                {t("profesor.libro_clases.grades.register_grade_for_student", {
+                  studentName: selectedStudentName,
+                })}
               </DialogDescription>
             </DialogHeader>
             {selectedCourseId && selectedStudentId && currentUser?._id && (

@@ -86,9 +86,7 @@ export function ClassContentForm({
     }),
     subject: z.string().min(1, t("form.validation.subject_required")),
     topic: z.string().min(3, t("form.validation.topic_min_length")),
-    objectives: z
-      .string()
-      .min(10, t("form.validation.objectives_min_length")),
+    objectives: z.string().min(10, t("form.validation.objectives_min_length")),
     content: z.string().min(20, t("form.validation.content_min_length")),
     activities: z.string().optional(),
     resources: z.string().optional(),
@@ -269,7 +267,9 @@ export function ClassContentForm({
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>{t("libro-clases.form.class_content.date_label")}</FormLabel>
+                <FormLabel>
+                  {t("libro-clases.form.class_content.date_label")}
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -284,7 +284,11 @@ export function ClassContentForm({
                         {field.value ? (
                           format(field.value, "PPP", { locale: es })
                         ) : (
-                          <span>{t("libro-clases.form.class_content.date_placeholder")}</span>
+                          <span>
+                            {t(
+                              "libro-clases.form.class_content.date_placeholder",
+                            )}
+                          </span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -314,7 +318,9 @@ export function ClassContentForm({
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("libro-clases.form.class_content.subject_label")}</FormLabel>
+                <FormLabel>
+                  {t("libro-clases.form.class_content.subject_label")}
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -323,7 +329,11 @@ export function ClassContentForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "subject")}
                     >
-                      <SelectValue placeholder={t("libro-clases.form.class_content.subject_placeholder")} />
+                      <SelectValue
+                        placeholder={t(
+                          "libro-clases.form.class_content.subject_placeholder",
+                        )}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

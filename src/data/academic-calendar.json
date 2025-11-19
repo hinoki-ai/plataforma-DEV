@@ -158,8 +158,7 @@
   {
     "id": "fiestas-patrias-preparacion-2024",
     "title": "Preparación Fiestas Patrias",
-    "description":
-      "Actividades preparatorias para celebración de Fiestas Patrias",
+    "description": "Actividades preparatorias para celebración de Fiestas Patrias",
     "startDate": "2024-09-09",
     "endDate": "2024-09-13",
     "priority": "MEDIUM",
@@ -304,8 +303,7 @@
   {
     "id": "inicio-docentes-2025",
     "title": "Inicio Actividades Docentes 2025",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2025-03-03",
     "endDate": "2025-03-03",
     "priority": "HIGH",
@@ -329,8 +327,7 @@
   {
     "id": "reunion-apoderados-marzo-2025",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2025-03-14",
     "endDate": "2025-03-14",
     "priority": "HIGH",
@@ -498,8 +495,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2025",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2025-09-17",
     "endDate": "2025-09-17",
     "priority": "HIGH",
@@ -535,8 +531,7 @@
   {
     "id": "halloween-educativo-2025",
     "title": "Celebración Halloween Educativa",
-    "description":
-      "Actividad lúdica con disfraces y cuentos de terror infantiles",
+    "description": "Actividad lúdica con disfraces y cuentos de terror infantiles",
     "startDate": "2025-10-31",
     "endDate": "2025-10-31",
     "priority": "MEDIUM",
@@ -572,8 +567,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2025",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2025-12-12",
     "endDate": "2025-12-12",
     "priority": "HIGH",
@@ -610,8 +604,7 @@
   {
     "id": "inicio-docentes-2026",
     "title": "Inicio Actividades Docentes 2026",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2026-03-02",
     "endDate": "2026-03-02",
     "priority": "HIGH",
@@ -635,8 +628,7 @@
   {
     "id": "reunion-apoderados-marzo-2026",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2026-03-13",
     "endDate": "2026-03-13",
     "priority": "HIGH",
@@ -804,8 +796,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2026",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2026-09-16",
     "endDate": "2026-09-16",
     "priority": "HIGH",
@@ -841,8 +832,7 @@
   {
     "id": "halloween-educativo-2026",
     "title": "Celebración Halloween Educativa",
-    "description":
-      "Actividad lúdica con disfraces y cuentos de terror infantiles",
+    "description": "Actividad lúdica con disfraces y cuentos de terror infantiles",
     "startDate": "2026-10-31",
     "endDate": "2026-10-31",
     "priority": "MEDIUM",
@@ -878,8 +868,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2026",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2026-12-11",
     "endDate": "2026-12-11",
     "priority": "HIGH",
@@ -916,8 +905,7 @@
   {
     "id": "inicio-docentes-2027",
     "title": "Inicio Actividades Docentes 2027",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2027-02-25",
     "endDate": "2027-02-25",
     "priority": "HIGH",
@@ -941,8 +929,7 @@
   {
     "id": "reunion-apoderados-marzo-2027",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2027-03-12",
     "endDate": "2027-03-12",
     "priority": "HIGH",
@@ -1110,8 +1097,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2027",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2027-09-15",
     "endDate": "2027-09-15",
     "priority": "HIGH",
@@ -1147,8 +1133,7 @@
   {
     "id": "halloween-educativo-2027",
     "title": "Celebración Halloween Educativa",
-    "description":
-      "Actividad lúdica con disfraces y cuentos de terror infantiles",
+    "description": "Actividad lúdica con disfraces y cuentos de terror infantiles",
     "startDate": "2027-10-31",
     "endDate": "2027-10-31",
     "priority": "MEDIUM",
@@ -1184,8 +1169,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2027",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2027-12-10",
     "endDate": "2027-12-10",
     "priority": "HIGH",
@@ -1210,8 +1194,7 @@
   {
     "id": "inicio-docentes-2028",
     "title": "Inicio Actividades Docentes 2028",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2028-03-01",
     "endDate": "2028-03-01",
     "priority": "HIGH",
@@ -1235,8 +1218,7 @@
   {
     "id": "reunion-apoderados-marzo-2028",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2028-03-12",
     "endDate": "2028-03-12",
     "priority": "HIGH",
@@ -1404,8 +1386,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2028",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2028-09-16",
     "endDate": "2028-09-16",
     "priority": "HIGH",
@@ -1441,8 +1422,7 @@
   {
     "id": "halloween-educativo-2028",
     "title": "Celebración Halloween Educativa",
-    "description":
-      "Actividad lúdica con disfraces y cuentos de terror infantiles",
+    "description": "Actividad lúdica con disfraces y cuentos de terror infantiles",
     "startDate": "2028-10-31",
     "endDate": "2028-10-31",
     "priority": "MEDIUM",
@@ -1478,8 +1458,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2028",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2028-12-10",
     "endDate": "2028-12-10",
     "priority": "HIGH",
@@ -1516,8 +1495,7 @@
   {
     "id": "inicio-docentes-2029",
     "title": "Inicio Actividades Docentes 2029",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2029-02-28",
     "endDate": "2029-02-28",
     "priority": "HIGH",
@@ -1541,8 +1519,7 @@
   {
     "id": "reunion-apoderados-marzo-2029",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2029-03-13",
     "endDate": "2029-03-13",
     "priority": "HIGH",
@@ -1710,8 +1687,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2029",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2029-09-15",
     "endDate": "2029-09-15",
     "priority": "HIGH",
@@ -1747,8 +1723,7 @@
   {
     "id": "halloween-educativo-2029",
     "title": "Celebración Halloween Educativa",
-    "description":
-      "Actividad lúdica con disfraces y cuentos de terror infantiles",
+    "description": "Actividad lúdica con disfraces y cuentos de terror infantiles",
     "startDate": "2029-10-31",
     "endDate": "2029-10-31",
     "priority": "MEDIUM",
@@ -1784,8 +1759,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2029",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2029-12-09",
     "endDate": "2029-12-09",
     "priority": "HIGH",
@@ -1822,8 +1796,7 @@
   {
     "id": "inicio-docentes-2030",
     "title": "Inicio Actividades Docentes 2030",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2030-02-26",
     "endDate": "2030-02-26",
     "priority": "HIGH",
@@ -1847,8 +1820,7 @@
   {
     "id": "reunion-apoderados-marzo-2030",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2030-03-12",
     "endDate": "2030-03-12",
     "priority": "HIGH",
@@ -2016,8 +1988,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2030",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2030-09-14",
     "endDate": "2030-09-14",
     "priority": "HIGH",
@@ -2053,8 +2024,7 @@
   {
     "id": "halloween-educativo-2030",
     "title": "Celebración Halloween Educativa",
-    "description":
-      "Actividad lúdica con disfraces y cuentos de terror infantiles",
+    "description": "Actividad lúdica con disfraces y cuentos de terror infantiles",
     "startDate": "2030-10-31",
     "endDate": "2030-10-31",
     "priority": "MEDIUM",
@@ -2090,8 +2060,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2030",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2030-12-08",
     "endDate": "2030-12-08",
     "priority": "HIGH",
@@ -2116,8 +2085,7 @@
   {
     "id": "inicio-docentes-2031",
     "title": "Inicio Actividades Docentes 2031",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2030-02-26",
     "endDate": "2030-02-26",
     "priority": "HIGH",
@@ -2141,8 +2109,7 @@
   {
     "id": "reunion-apoderados-marzo-2031",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2031-03-12",
     "endDate": "2031-03-12",
     "priority": "HIGH",
@@ -2310,8 +2277,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2031",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2031-09-14",
     "endDate": "2031-09-14",
     "priority": "HIGH",
@@ -2347,8 +2313,7 @@
   {
     "id": "halloween-educativo-2031",
     "title": "Celebración Halloween Educativa",
-    "description":
-      "Actividad lúdica con disfraces y cuentos de terror infantiles",
+    "description": "Actividad lúdica con disfraces y cuentos de terror infantiles",
     "startDate": "2031-10-31",
     "endDate": "2031-10-31",
     "priority": "MEDIUM",
@@ -2384,8 +2349,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2031",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2031-12-08",
     "endDate": "2031-12-08",
     "priority": "HIGH",
@@ -2410,8 +2374,7 @@
   {
     "id": "inicio-docentes-2032",
     "title": "Inicio Actividades Docentes 2032",
-    "description":
-      "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
+    "description": "Reuniones de planificación, preparación de aulas y coordinación pedagógica",
     "startDate": "2031-02-26",
     "endDate": "2031-02-26",
     "priority": "HIGH",
@@ -2435,8 +2398,7 @@
   {
     "id": "reunion-apoderados-marzo-2032",
     "title": "Reunión de Apoderados - Inicio de Año",
-    "description":
-      "Presentación del equipo docente, objetivos anuales y calendario de actividades",
+    "description": "Presentación del equipo docente, objetivos anuales y calendario de actividades",
     "startDate": "2032-03-12",
     "endDate": "2032-03-12",
     "priority": "HIGH",
@@ -2532,8 +2494,7 @@
   {
     "id": "acto-civico-fiestas-patrias-2032",
     "title": "Acto Cívico Fiestas Patrias",
-    "description":
-      "Celebración con bailes típicos, comidas tradicionales y juegos",
+    "description": "Celebración con bailes típicos, comidas tradicionales y juegos",
     "startDate": "2032-09-14",
     "endDate": "2032-09-14",
     "priority": "HIGH",
@@ -2581,8 +2542,7 @@
   {
     "id": "ceremonia-graduacion-nt2-2032",
     "title": "Ceremonia de Graduación NT2",
-    "description":
-      "Ceremonia de graduación para estudiantes que pasan a educación básica",
+    "description": "Ceremonia de graduación para estudiantes que pasan a educación básica",
     "startDate": "2032-12-08",
     "endDate": "2032-12-08",
     "priority": "HIGH",

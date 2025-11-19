@@ -20,9 +20,7 @@ export function DashboardShell() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">--</div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Loading...
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">Loading...</p>
             </CardContent>
           </Card>
         ))}

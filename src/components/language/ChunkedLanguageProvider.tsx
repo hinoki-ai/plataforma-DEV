@@ -273,9 +273,11 @@ const planesESInline = {
     change_to: "Cambiar a {plan}",
     change_to_cycle: "Cambiar a ciclo {cycle}",
     recommended_plan_available: "Plan recomendado disponible",
-    recommended_plan_description: "Para {students} estudiantes, el <strong>{plan}</strong> es más adecuado y puede ahorrarte dinero.",
+    recommended_plan_description:
+      "Para {students} estudiantes, el <strong>{plan}</strong> es más adecuado y puede ahorrarte dinero.",
     best_option_available: "Mejor opción disponible",
-    best_option_description: "El ciclo {cycle} te ahorraría {amount} por {months} meses ({percent}% menos)",
+    best_option_description:
+      "El ciclo {cycle} te ahorraría {amount} por {months} meses ({percent}% menos)",
     price_includes_vat: "* Precio incluye IVA (19%)",
     subtotal: "Subtotal:",
     vat: "IVA (19%):",
@@ -286,7 +288,7 @@ const planesESInline = {
       monthly_payment: "Pago mensual",
       upfront_payment: "Pago completo por adelantado con 5% de descuento",
       discount_5_percent: "5% de descuento",
-      student_count_range: "Número de estudiantes (rango: {min}{max})"
+      student_count_range: "Número de estudiantes (rango: {min}{max})",
     },
     contacts: {
       team_astral: "Tu Equipo Astral",
@@ -296,8 +298,8 @@ const planesESInline = {
       agustin: "Agustin",
       lead_developer: "Lead Developer",
       sales_team: "Equipo de Ventas",
-      sales_representative: "Sales Representative"
-    }
+      sales_representative: "Sales Representative",
+    },
   },
 };
 
@@ -483,14 +485,18 @@ const planesENInline = {
     please_contact: "Please contact me today to activate it.",
     thanks: "Thanks!",
     plan_not_compatible: "Plan not compatible",
-    plan_min_students_error: "The {plan} plan requires a minimum of {min} students",
-    plan_max_students_error: "The {plan} plan allows a maximum of {max} students",
+    plan_min_students_error:
+      "The {plan} plan requires a minimum of {min} students",
+    plan_max_students_error:
+      "The {plan} plan allows a maximum of {max} students",
     change_to: "Switch to {plan}",
     change_to_cycle: "Switch to {cycle} cycle",
     recommended_plan_available: "Recommended plan available",
-    recommended_plan_description: "For {students} students, the <strong>{plan}</strong> is more suitable and can save you money.",
+    recommended_plan_description:
+      "For {students} students, the <strong>{plan}</strong> is more suitable and can save you money.",
     best_option_available: "Best option available",
-    best_option_description: "The {cycle} cycle would save you {amount} for {months} months ({percent}% less)",
+    best_option_description:
+      "The {cycle} cycle would save you {amount} for {months} months ({percent}% less)",
     price_includes_vat: "* Price includes VAT (19%)",
     subtotal: "Subtotal:",
     vat: "VAT (19%):",
@@ -501,7 +507,7 @@ const planesENInline = {
       monthly_payment: "Monthly payment",
       upfront_payment: "Full upfront payment with 5% discount",
       discount_5_percent: "5% discount",
-      student_count_range: "Number of students (range: {min}{max})"
+      student_count_range: "Number of students (range: {min}{max})",
     },
     contacts: {
       team_astral: "Your Astral Team",
@@ -511,8 +517,8 @@ const planesENInline = {
       agustin: "Agustin",
       lead_developer: "Lead Developer",
       sales_team: "Sales Team",
-      sales_representative: "Sales Representative"
-    }
+      sales_representative: "Sales Representative",
+    },
   },
 };
 

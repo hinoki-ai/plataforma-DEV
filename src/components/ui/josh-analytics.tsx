@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, createContext, useContext } from "react";
+import {
+  useEffect,
+  useState,
+  createContext,
+  useContext,
+  useCallback,
+} from "react";
 import { useSession } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 
@@ -53,25 +59,35 @@ interface AnalyticsInsights {
 }
 
 interface JoshAnalyticsContextType {
-  trackInteraction: (interaction: Omit<JoshInteraction, "id" | "timestamp">) => void;
+  trackInteraction: (
+    interaction: Omit<JoshInteraction, "id" | "timestamp">,
+  ) => void;
   getInsights: () => AnalyticsInsights;
   updatePreferences: (preferences: Partial<UserPreferences>) => void;
   getPersonalizedSuggestions: () => string[];
 }
 
-const JoshAnalyticsContext = createContext<JoshAnalyticsContextType | null>(null);
+const JoshAnalyticsContext = createContext<JoshAnalyticsContextType | null>(
+  null,
+);
 
 // Custom hook for analytics
 export function useJoshAnalytics() {
   const context = useContext(JoshAnalyticsContext);
   if (!context) {
-    throw new Error("useJoshAnalytics must be used within JoshAnalyticsProvider");
+    throw new Error(
+      "useJoshAnalytics must be used within JoshAnalyticsProvider",
+    );
   }
   return context;
 }
 
 // Analytics provider component
-export function JoshAnalyticsProvider({ children }: { children: React.ReactNode }) {
+export function JoshAnalyticsProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { session } = useSession();
   const pathname = usePathname();
   const [analytics, setAnalytics] = useState<JoshAnalyticsData | null>(null);
@@ -81,7 +97,9 @@ export function JoshAnalyticsProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     if (session?.user?.id) {
       const sessionId = `${session.user.id}_${Date.now()}`;
-      const storedData = localStorage.getItem(`josh_analytics_${session.user.id}`);
+      const storedData = localStorage.getItem(
+        `josh_analytics_${session.user.id}`,
+      );
 
       const initialData: JoshAnalyticsData = storedData
         ? JSON.parse(storedData)
@@ -125,120 +143,151 @@ export function JoshAnalyticsProvider({ children }: { children: React.ReactNode 
     setAnalytics(data);
   };
 
-  // Track user interactions
-  const trackInteraction = (interaction: Omit<JoshInteraction, "id" | "timestamp">) => {
-    if (!analytics) return;
-
-    const newInteraction: JoshInteraction = {
-      ...interaction,
-      id: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date(),
-    };
-
-    const updatedAnalytics = {
-      ...analytics,
-      interactions: [...analytics.interactions, newInteraction],
-    };
-
-    // Update insights based on new interaction
-    updatedAnalytics.insights = generateInsights(updatedAnalytics);
-
-    saveAnalytics(updatedAnalytics);
-  };
+  // Generate unique ID for interactions
+  const generateInteractionId = useCallback(() => {
+    return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }, []);
 
   // Generate insights from interaction data
-  const generateInsights = (data: JoshAnalyticsData): AnalyticsInsights => {
-    const interactions = data.interactions;
-    const recentInteractions = interactions.filter(
-      (i) => Date.now() - new Date(i.timestamp).getTime() < 30 * 24 * 60 * 60 * 1000 // Last 30 days
-    );
+  const generateInsights = useCallback(
+    (data: JoshAnalyticsData): AnalyticsInsights => {
+      const interactions = data.interactions;
+      const recentInteractions = interactions.filter(
+        (i) =>
+          Date.now() - new Date(i.timestamp).getTime() <
+          30 * 24 * 60 * 60 * 1000, // Last 30 days
+      );
 
-    // Most used features
-    const featureCount = recentInteractions.reduce((acc, interaction) => {
-      const feature = interaction.type;
-      acc[feature] = (acc[feature] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+      // Most used features
+      const featureCount = recentInteractions.reduce(
+        (acc, interaction) => {
+          const feature = interaction.type;
+          acc[feature] = (acc[feature] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
-    const mostUsedFeatures = Object.entries(featureCount)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 5)
-      .map(([feature]) => feature);
+      const mostUsedFeatures = Object.entries(featureCount)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 5)
+        .map(([feature]) => feature);
 
-    // Preferred interaction times
-    const hourCount = recentInteractions.reduce((acc, interaction) => {
-      const hour = new Date(interaction.timestamp).getHours();
-      const timeOfDay = hour < 6 ? "night" :
-                       hour < 12 ? "morning" :
-                       hour < 18 ? "afternoon" : "evening";
-      acc[timeOfDay] = (acc[timeOfDay] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+      // Preferred interaction times
+      const hourCount = recentInteractions.reduce(
+        (acc, interaction) => {
+          const hour = new Date(interaction.timestamp).getHours();
+          const timeOfDay =
+            hour < 6
+              ? "night"
+              : hour < 12
+                ? "morning"
+                : hour < 18
+                  ? "afternoon"
+                  : "evening";
+          acc[timeOfDay] = (acc[timeOfDay] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
-    const preferredTimes = Object.entries(hourCount)
-      .sort(([, a], [, b]) => b - a)
-      .map(([time]) => time);
+      const preferredTimes = Object.entries(hourCount)
+        .sort(([, a], [, b]) => b - a)
+        .map(([time]) => time);
 
-    // Common questions (from chat interactions)
-    const chatInteractions = recentInteractions.filter(i => i.type === "chat");
-    const questionCount = chatInteractions.reduce((acc, interaction) => {
-      const question = interaction.context.action || "general";
-      acc[question] = (acc[question] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+      // Common questions (from chat interactions)
+      const chatInteractions = recentInteractions.filter(
+        (i) => i.type === "chat",
+      );
+      const questionCount = chatInteractions.reduce(
+        (acc, interaction) => {
+          const question = interaction.context.action || "general";
+          acc[question] = (acc[question] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
-    const commonQuestions = Object.entries(questionCount)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 5)
-      .map(([question]) => question);
+      const commonQuestions = Object.entries(questionCount)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 5)
+        .map(([question]) => question);
 
-    // Engagement score (0-100)
-    const totalInteractions = recentInteractions.length;
-    const uniqueFeatures = new Set(recentInteractions.map(i => i.type)).size;
-    const avgInteractionsPerDay = totalInteractions / 30;
-    const engagementScore = Math.min(100,
-      (totalInteractions * 2) + (uniqueFeatures * 10) + (avgInteractionsPerDay * 5)
-    );
+      // Engagement score (0-100)
+      const totalInteractions = recentInteractions.length;
+      const uniqueFeatures = new Set(recentInteractions.map((i) => i.type))
+        .size;
+      const avgInteractionsPerDay = totalInteractions / 30;
+      const engagementScore = Math.min(
+        100,
+        totalInteractions * 2 + uniqueFeatures * 10 + avgInteractionsPerDay * 5,
+      );
 
-    // Learning patterns
-    const learningPatterns = [];
-    if (mostUsedFeatures.includes("tour")) {
-      learningPatterns.push("prefers_guided_learning");
-    }
-    if (mostUsedFeatures.includes("chat")) {
-      learningPatterns.push("interactive_learner");
-    }
-    if (preferredTimes.includes("morning")) {
-      learningPatterns.push("morning_person");
-    }
-    if (engagementScore > 70) {
-      learningPatterns.push("highly_engaged");
-    }
+      // Learning patterns
+      const learningPatterns = [];
+      if (mostUsedFeatures.includes("tour")) {
+        learningPatterns.push("prefers_guided_learning");
+      }
+      if (mostUsedFeatures.includes("chat")) {
+        learningPatterns.push("interactive_learner");
+      }
+      if (preferredTimes.includes("morning")) {
+        learningPatterns.push("morning_person");
+      }
+      if (engagementScore > 70) {
+        learningPatterns.push("highly_engaged");
+      }
 
-    // Generate recommendations
-    const recommendations = [];
-    if (!mostUsedFeatures.includes("tour") && totalInteractions > 5) {
-      recommendations.push("try_interactive_tours");
-    }
-    if (!mostUsedFeatures.includes("chat") && totalInteractions > 10) {
-      recommendations.push("explore_chat_features");
-    }
-    if (engagementScore < 30) {
-      recommendations.push("increase_engagement");
-    }
-    if (preferredTimes.length === 0) {
-      recommendations.push("set_interaction_preferences");
-    }
+      // Generate recommendations
+      const recommendations = [];
+      if (!mostUsedFeatures.includes("tour") && totalInteractions > 5) {
+        recommendations.push("try_interactive_tours");
+      }
+      if (!mostUsedFeatures.includes("chat") && totalInteractions > 10) {
+        recommendations.push("explore_chat_features");
+      }
+      if (engagementScore < 30) {
+        recommendations.push("increase_engagement");
+      }
+      if (preferredTimes.length === 0) {
+        recommendations.push("set_interaction_preferences");
+      }
 
-    return {
-      mostUsedFeatures,
-      preferredTimes,
-      commonQuestions,
-      engagementScore: Math.round(engagementScore),
-      learningPatterns,
-      recommendations,
-    };
-  };
+      return {
+        mostUsedFeatures,
+        preferredTimes,
+        commonQuestions,
+        engagementScore: Math.round(engagementScore),
+        learningPatterns,
+        recommendations,
+      };
+    },
+    [],
+  );
+
+  // Track user interactions
+  const trackInteraction = useCallback(
+    (interaction: Omit<JoshInteraction, "id" | "timestamp">) => {
+      if (!analytics) return;
+
+      const newInteraction: JoshInteraction = {
+        ...interaction,
+        id: generateInteractionId(),
+        timestamp: new Date(),
+      };
+
+      const updatedAnalytics = {
+        ...analytics,
+        interactions: [...analytics.interactions, newInteraction],
+      };
+
+      // Update insights based on new interaction
+      updatedAnalytics.insights = generateInsights(updatedAnalytics);
+
+      saveAnalytics(updatedAnalytics);
+    },
+    [analytics, generateInteractionId],
+  );
 
   // Update user preferences
   const updatePreferences = (newPreferences: Partial<UserPreferences>) => {
@@ -261,24 +310,37 @@ export function JoshAnalyticsProvider({ children }: { children: React.ReactNode 
 
     // Based on engagement score
     if (insights.engagementScore > 80) {
-      suggestions.push("¡Excelente! Eres un usuario muy activo. ¿Quieres explorar funciones avanzadas?");
+      suggestions.push(
+        "¡Excelente! Eres un usuario muy activo. ¿Quieres explorar funciones avanzadas?",
+      );
     } else if (insights.engagementScore < 30) {
-      suggestions.push("Parece que aún no has explorado todas las funciones. ¿Te gustaría un tour rápido?");
+      suggestions.push(
+        "Parece que aún no has explorado todas las funciones. ¿Te gustaría un tour rápido?",
+      );
     }
 
     // Based on preferred times
-    if (insights.preferredTimes.includes("morning") && new Date().getHours() < 12) {
-      suggestions.push("¡Buenos días! Es tu hora preferida para aprender. ¿Qué te gustaría hacer hoy?");
+    if (
+      insights.preferredTimes.includes("morning") &&
+      new Date().getHours() < 12
+    ) {
+      suggestions.push(
+        "¡Buenos días! Es tu hora preferida para aprender. ¿Qué te gustaría hacer hoy?",
+      );
     }
 
     // Based on unused features
     if (!insights.mostUsedFeatures.includes("tour")) {
-      suggestions.push("Los tours interactivos pueden ayudarte a conocer mejor la plataforma. ¿Quieres probar uno?");
+      suggestions.push(
+        "Los tours interactivos pueden ayudarte a conocer mejor la plataforma. ¿Quieres probar uno?",
+      );
     }
 
     // Based on learning patterns
     if (insights.learningPatterns.includes("interactive_learner")) {
-      suggestions.push("Como usuario interactivo, te recomiendo explorar el chat para preguntas específicas.");
+      suggestions.push(
+        "Como usuario interactivo, te recomiendo explorar el chat para preguntas específicas.",
+      );
     }
 
     return suggestions;
@@ -286,14 +348,15 @@ export function JoshAnalyticsProvider({ children }: { children: React.ReactNode 
 
   const contextValue: JoshAnalyticsContextType = {
     trackInteraction,
-    getInsights: () => analytics?.insights || {
-      mostUsedFeatures: [],
-      preferredTimes: [],
-      commonQuestions: [],
-      engagementScore: 0,
-      learningPatterns: [],
-      recommendations: [],
-    },
+    getInsights: () =>
+      analytics?.insights || {
+        mostUsedFeatures: [],
+        preferredTimes: [],
+        commonQuestions: [],
+        engagementScore: 0,
+        learningPatterns: [],
+        recommendations: [],
+      },
     updatePreferences,
     getPersonalizedSuggestions,
   };
@@ -312,8 +375,10 @@ export function JoshAnalyticsDashboard() {
   const [showDashboard, setShowDashboard] = useState(false);
 
   // Only show for admin/master users
-  if (!session?.user?.publicMetadata?.role ||
-      !["admin", "master"].includes(session.user.publicMetadata.role as string)) {
+  if (
+    !session?.user?.publicMetadata?.role ||
+    !["admin", "master"].includes(session.user.publicMetadata.role as string)
+  ) {
     return null;
   }
 
@@ -336,11 +401,15 @@ export function JoshAnalyticsDashboard() {
           <div className="space-y-2 text-sm">
             <div>
               <span className="font-medium">Engagement Score:</span>
-              <span className={`ml-2 px-2 py-1 rounded ${
-                insights.engagementScore > 70 ? "bg-green-100 text-green-800" :
-                insights.engagementScore > 40 ? "bg-yellow-100 text-yellow-800" :
-                "bg-red-100 text-red-800"
-              }`}>
+              <span
+                className={`ml-2 px-2 py-1 rounded ${
+                  insights.engagementScore > 70
+                    ? "bg-green-100 text-green-800"
+                    : insights.engagementScore > 40
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                }`}
+              >
                 {insights.engagementScore}/100
               </span>
             </div>
@@ -348,8 +417,11 @@ export function JoshAnalyticsDashboard() {
             <div>
               <span className="font-medium">Most Used Features:</span>
               <div className="flex flex-wrap gap-1 mt-1">
-                {insights.mostUsedFeatures.map(feature => (
-                  <span key={feature} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                {insights.mostUsedFeatures.map((feature) => (
+                  <span
+                    key={feature}
+                    className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+                  >
                     {feature}
                   </span>
                 ))}
@@ -359,8 +431,11 @@ export function JoshAnalyticsDashboard() {
             <div>
               <span className="font-medium">Learning Patterns:</span>
               <div className="flex flex-wrap gap-1 mt-1">
-                {insights.learningPatterns.map(pattern => (
-                  <span key={pattern} className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">
+                {insights.learningPatterns.map((pattern) => (
+                  <span
+                    key={pattern}
+                    className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs"
+                  >
                     {pattern.replace("_", " ")}
                   </span>
                 ))}
@@ -370,7 +445,7 @@ export function JoshAnalyticsDashboard() {
             <div>
               <span className="font-medium">Recommendations:</span>
               <ul className="mt-1 text-xs space-y-1">
-                {insights.recommendations.map(rec => (
+                {insights.recommendations.map((rec) => (
                   <li key={rec} className="text-gray-600 dark:text-gray-400">
                     • {rec.replace("_", " ")}
                   </li>
@@ -388,7 +463,12 @@ export function JoshAnalyticsDashboard() {
 export function usePageAnalytics() {
   const analytics = useJoshAnalytics();
   const pathname = usePathname();
-  const [pageStartTime, setPageStartTime] = useState(Date.now());
+  const [pageStartTime, setPageStartTime] = useState<number>(0);
+
+  // Set initial page start time
+  useEffect(() => {
+    setPageStartTime(Date.now());
+  }, []);
 
   useEffect(() => {
     setPageStartTime(Date.now());
@@ -399,8 +479,8 @@ export function usePageAnalytics() {
       page: pathname,
       context: {
         role: "user",
-        action: "page_view"
-      }
+        action: "page_view",
+      },
     });
   }, [pathname]);
 
@@ -414,8 +494,8 @@ export function usePageAnalytics() {
         context: {
           role: "user",
           action: "page_time",
-          duration: timeSpent
-        }
+          duration: timeSpent,
+        },
       });
     };
   }, [pageStartTime, pathname]);

@@ -91,12 +91,17 @@ export function ObservationForm({
         "OTRO",
       ],
       {
-        message: t("libro-clases.observations.form.validation.category_required"),
+        message: t(
+          "libro-clases.observations.form.validation.category_required",
+        ),
       },
     ),
     observation: z
       .string()
-      .min(10, t("libro-clases.observations.form.validation.observation_min_length")),
+      .min(
+        10,
+        t("libro-clases.observations.form.validation.observation_min_length"),
+      ),
     subject: z.string().optional(),
     severity: z.enum(["LEVE", "GRAVE", "GRAVISIMA"]).optional(),
     actionTaken: z.string().optional(),
@@ -137,9 +142,18 @@ export function ObservationForm({
   };
 
   const SEVERITY_CONFIG = {
-    LEVE: { label: t("libro-clases.observations.severity.label_leve"), color: "bg-yellow-100 text-yellow-800" },
-    GRAVE: { label: t("libro-clases.observations.severity.label_grave"), color: "bg-orange-100 text-orange-800" },
-    GRAVISIMA: { label: t("libro-clases.observations.severity.label_gravisima"), color: "bg-red-100 text-red-800" },
+    LEVE: {
+      label: t("libro-clases.observations.severity.label_leve"),
+      color: "bg-yellow-100 text-yellow-800",
+    },
+    GRAVE: {
+      label: t("libro-clases.observations.severity.label_grave"),
+      color: "bg-orange-100 text-orange-800",
+    },
+    GRAVISIMA: {
+      label: t("libro-clases.observations.severity.label_gravisima"),
+      color: "bg-red-100 text-red-800",
+    },
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -200,7 +214,9 @@ export function ObservationForm({
     // Validate severity for negative observations
     if (data.type === "NEGATIVA" && !data.severity) {
       toast.error(
-        t("libro-clases.observations.form.validation.severity_required_negative"),
+        t(
+          "libro-clases.observations.form.validation.severity_required_negative",
+        ),
       );
       return;
     }
@@ -212,7 +228,9 @@ export function ObservationForm({
     ) {
       if (!data.actionTaken || data.actionTaken.trim().length === 0) {
         toast.error(
-          t("libro-clases.observations.form.validation.actions_required_serious"),
+          t(
+            "libro-clases.observations.form.validation.actions_required_serious",
+          ),
         );
         return;
       }
@@ -248,7 +266,9 @@ export function ObservationForm({
 
       // Don't call onSuccess here - wait for signature
     } catch (error: any) {
-      toast.error(error.message || t("libro-clases.observations.form.error_save"));
+      toast.error(
+        error.message || t("libro-clases.observations.form.error_save"),
+      );
       setIsSubmitting(false);
     }
   };
@@ -261,9 +281,12 @@ export function ObservationForm({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b">
           <div>
-            <h3 className="text-lg font-semibold">{t("libro-clases.observations.form.title")}</h3>
+            <h3 className="text-lg font-semibold">
+              {t("libro-clases.observations.form.title")}
+            </h3>
             <p className="text-sm text-muted-foreground">
-              {t("libro-clases.observations.form.student_label")}: <span className="font-medium">{studentName}</span>
+              {t("libro-clases.observations.form.student_label")}:{" "}
+              <span className="font-medium">{studentName}</span>
             </p>
           </div>
           {typeConfig && (
@@ -284,7 +307,9 @@ export function ObservationForm({
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>{t("libro-clases.observations.form.date_label")}</FormLabel>
+                <FormLabel>
+                  {t("libro-clases.observations.form.date_label")}
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -299,7 +324,11 @@ export function ObservationForm({
                         {field.value ? (
                           format(field.value, "PPP", { locale: es })
                         ) : (
-                          <span>{t("libro-clases.observations.form.date_placeholder")}</span>
+                          <span>
+                            {t(
+                              "libro-clases.observations.form.date_placeholder",
+                            )}
+                          </span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -326,14 +355,20 @@ export function ObservationForm({
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("libro-clases.observations.form.type_label")}</FormLabel>
+                <FormLabel>
+                  {t("libro-clases.observations.form.type_label")}
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={t("libro-clases.observations.form.type_placeholder")} />
+                      <SelectValue
+                        placeholder={t(
+                          "libro-clases.observations.form.type_placeholder",
+                        )}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -362,7 +397,9 @@ export function ObservationForm({
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("libro-clases.observations.form.category_label")}</FormLabel>
+                <FormLabel>
+                  {t("libro-clases.observations.form.category_label")}
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -371,7 +408,11 @@ export function ObservationForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "category")}
                     >
-                      <SelectValue placeholder={t("libro-clases.observations.form.category_placeholder")} />
+                      <SelectValue
+                        placeholder={t(
+                          "libro-clases.observations.form.category_placeholder",
+                        )}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -392,10 +433,14 @@ export function ObservationForm({
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("libro-clases.observations.form.subject_label")}</FormLabel>
+                <FormLabel>
+                  {t("libro-clases.observations.form.subject_label")}
+                </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={t("libro-clases.observations.form.subject_placeholder")}
+                    placeholder={t(
+                      "libro-clases.observations.form.subject_placeholder",
+                    )}
                     {...field}
                     onKeyDown={(e) => handleKeyDown(e, "subject")}
                   />
@@ -416,7 +461,9 @@ export function ObservationForm({
             name="severity"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("libro-clases.observations.form.severity_label")}</FormLabel>
+                <FormLabel>
+                  {t("libro-clases.observations.form.severity_label")}
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -425,7 +472,11 @@ export function ObservationForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "severity")}
                     >
-                      <SelectValue placeholder={t("libro-clases.observations.form.severity_placeholder")} />
+                      <SelectValue
+                        placeholder={t(
+                          "libro-clases.observations.form.severity_placeholder",
+                        )}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -453,10 +504,14 @@ export function ObservationForm({
           name="observation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("libro-clases.observations.form.observation_label")}</FormLabel>
+              <FormLabel>
+                {t("libro-clases.observations.form.observation_label")}
+              </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t("libro-clases.observations.form.observation_placeholder")}
+                  placeholder={t(
+                    "libro-clases.observations.form.observation_placeholder",
+                  )}
                   rows={5}
                   {...field}
                   onKeyDown={(e) => handleKeyDown(e, "observation")}
@@ -478,17 +533,23 @@ export function ObservationForm({
               name="actionTaken"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("libro-clases.observations.form.actions_taken_label")}</FormLabel>
+                  <FormLabel>
+                    {t("libro-clases.observations.form.actions_taken_label")}
+                  </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder={t("libro-clases.observations.form.actions_taken_placeholder")}
+                      placeholder={t(
+                        "libro-clases.observations.form.actions_taken_placeholder",
+                      )}
                       rows={3}
                       {...field}
                       onKeyDown={(e) => handleKeyDown(e, "actionTaken")}
                     />
                   </FormControl>
                   <FormDescription>
-                    {t("libro-clases.observations.form.actions_taken_description")}
+                    {t(
+                      "libro-clases.observations.form.actions_taken_description",
+                    )}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -508,7 +569,9 @@ export function ObservationForm({
                   {t("libro-clases.observations.form.notify_parent_label")}
                 </FormLabel>
                 <FormDescription>
-                  {t("libro-clases.observations.form.notify_parent_description")}
+                  {t(
+                    "libro-clases.observations.form.notify_parent_description",
+                  )}
                 </FormDescription>
               </div>
               <FormControl>
@@ -526,9 +589,13 @@ export function ObservationForm({
         {watchedSeverity === "GRAVISIMA" && (
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>{t("libro-clases.observations.alerts.serious_observation_title")}</AlertTitle>
+            <AlertTitle>
+              {t("libro-clases.observations.alerts.serious_observation_title")}
+            </AlertTitle>
             <AlertDescription>
-              {t("libro-clases.observations.alerts.serious_observation_description")}
+              {t(
+                "libro-clases.observations.alerts.serious_observation_description",
+              )}
             </AlertDescription>
           </Alert>
         )}
@@ -546,7 +613,9 @@ export function ObservationForm({
             </Button>
           )}
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? t("libro-clases.observations.form.saving_button") : t("libro-clases.observations.form.save_button")}
+            {isSubmitting
+              ? t("libro-clases.observations.form.saving_button")
+              : t("libro-clases.observations.form.save_button")}
           </Button>
         </div>
       </form>

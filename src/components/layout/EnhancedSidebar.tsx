@@ -60,7 +60,6 @@ interface NavigationItem {
   readonly description?: string;
 }
 
-
 export function EnhancedSidebar({
   className,
   isCollapsed = false,
@@ -92,12 +91,12 @@ export function EnhancedSidebar({
 
   // Flatten items for search and recommendations
   const allNavigationItems = useMemo(() => {
-    return navigationGroups.flatMap((group) => 
+    return navigationGroups.flatMap((group) =>
       group.items.map((item: any) => ({
         ...item,
         category: t(group.title), // Ensure category is translated for search
         title: item.title,
-      }))
+      })),
     );
   }, [navigationGroups, t]);
 
@@ -123,8 +122,6 @@ export function EnhancedSidebar({
       router.push("/");
     }
   }, [router]);
-
-
 
   // Mobile drag to close functionality
   const handleDragEnd = useCallback(
@@ -324,7 +321,9 @@ export function EnhancedSidebar({
                         <Icon
                           className={cn(
                             "h-4 w-4 shrink-0 transition-transform group-hover:scale-110",
-                            isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-accent-foreground",
+                            isActive
+                              ? "text-primary-foreground"
+                              : "text-muted-foreground group-hover:text-accent-foreground",
                           )}
                         />
                         <span className="flex-1 text-left truncate">
@@ -425,7 +424,6 @@ export function EnhancedSidebar({
             />
           )}
         </AnimatePresence>
-
       </motion.aside>
     </TooltipProvider>
   );

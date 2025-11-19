@@ -274,7 +274,8 @@ export function ParentLibroClasesView({
                 {connectionError && (
                   <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                     <p className="text-sm font-medium text-destructive mb-2">
-                      {t("parent.libro_clases.loading.connection_error_detail")}:
+                      {t("parent.libro_clases.loading.connection_error_detail")}
+                      :
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {connectionError}
@@ -311,9 +312,7 @@ export function ParentLibroClasesView({
                     <p className="font-medium mb-2">
                       {t("parent.libro_clases.loading.development_info")}:
                     </p>
-                    <p>
-                      {t("parent.libro_clases.loading.convex_dev_note")}
-                    </p>
+                    <p>{t("parent.libro_clases.loading.convex_dev_note")}</p>
                     <p className="mt-2">
                       {t("parent.libro_clases.loading.connection_status")}:{" "}
                       <span
@@ -323,7 +322,9 @@ export function ParentLibroClasesView({
                             : "text-red-600 font-medium"
                         }
                       >
-                        {isConnected ? t("parent.libro_clases.loading.connected") : t("parent.libro_clases.loading.disconnected")}
+                        {isConnected
+                          ? t("parent.libro_clases.loading.connected")
+                          : t("parent.libro_clases.loading.disconnected")}
                       </span>
                     </p>
                     <p>
@@ -452,7 +453,9 @@ export function ParentLibroClasesView({
 
             {/* Course List */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">{t("parent.libro_clases.course_selection.select_course")}</h2>
+              <h2 className="text-xl font-semibold">
+                {t("parent.libro_clases.course_selection.select_course")}
+              </h2>
               {courses && courses.length > 0 ? (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {courses.map((course) => (
@@ -479,7 +482,10 @@ export function ParentLibroClasesView({
                         <div className="space-y-2">
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">
-                              {t("parent.libro_clases.course_selection.subjects")}:
+                              {t(
+                                "parent.libro_clases.course_selection.subjects",
+                              )}
+                              :
                             </span>
                             <span className="font-medium">
                               {course.subjects.length}
@@ -515,7 +521,9 @@ export function ParentLibroClasesView({
                       {t("parent.libro_clases.course_selection.no_courses")}
                     </h3>
                     <p className="text-muted-foreground">
-                      {t("parent.libro_clases.course_selection.no_courses_desc")}
+                      {t(
+                        "parent.libro_clases.course_selection.no_courses_desc",
+                      )}
                     </p>
                   </CardContent>
                 </Card>
@@ -535,7 +543,8 @@ export function ParentLibroClasesView({
                     </CardTitle>
                     <CardDescription>
                       {selectedCourse?.grade} {selectedCourse?.section} -{" "}
-                      {selectedCourse?.level} | {t("parent.libro_clases.course_selection.academic_year")}{" "}
+                      {selectedCourse?.level} |{" "}
+                      {t("parent.libro_clases.course_selection.academic_year")}{" "}
                       {selectedCourse?.academicYear}
                     </CardDescription>
                   </div>
@@ -614,7 +623,9 @@ export function ParentLibroClasesView({
                 <div className="grid gap-4 md:grid-cols-2">
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t("parent.libro_clases.overview.my_students")}</CardTitle>
+                      <CardTitle>
+                        {t("parent.libro_clases.overview.my_students")}
+                      </CardTitle>
                       <CardDescription>
                         {t("parent.libro_clases.overview.my_students_desc")}
                       </CardDescription>
@@ -653,8 +664,12 @@ export function ParentLibroClasesView({
 
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t("parent.libro_clases.overview.subjects")}</CardTitle>
-                      <CardDescription>{t("parent.libro_clases.overview.subjects_desc")}</CardDescription>
+                      <CardTitle>
+                        {t("parent.libro_clases.overview.subjects")}
+                      </CardTitle>
+                      <CardDescription>
+                        {t("parent.libro_clases.overview.subjects_desc")}
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
@@ -702,7 +717,9 @@ export function ParentLibroClasesView({
                   {/* Course Context Header */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t("parent.libro_clases.attendance.calendar_title")}</CardTitle>
+                      <CardTitle>
+                        {t("parent.libro_clases.attendance.calendar_title")}
+                      </CardTitle>
                       <CardDescription>
                         {t("parent.libro_clases.attendance.calendar_desc")}
                       </CardDescription>
@@ -714,7 +731,10 @@ export function ParentLibroClasesView({
                             {t("parent.libro_clases.attendance.current_course")}
                           </p>
                           <p className="text-lg font-semibold">
-                            {selectedCourse?.name || t("parent.libro_clases.course_selection.select_course")}
+                            {selectedCourse?.name ||
+                              t(
+                                "parent.libro_clases.course_selection.select_course",
+                              )}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {selectedCourse?.grade} {selectedCourse?.section}
@@ -722,24 +742,36 @@ export function ParentLibroClasesView({
                         </div>
                         <div className="rounded-lg border p-4">
                           <p className="text-xs uppercase text-muted-foreground">
-                            {t("parent.libro_clases.attendance.events_this_month")}
+                            {t(
+                              "parent.libro_clases.attendance.events_this_month",
+                            )}
                           </p>
                           <p className="text-lg font-semibold">
-                            {t("parent.libro_clases.attendance.integrated_calendar")}
+                            {t(
+                              "parent.libro_clases.attendance.integrated_calendar",
+                            )}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {t("parent.libro_clases.attendance.academic_events")}
+                            {t(
+                              "parent.libro_clases.attendance.academic_events",
+                            )}
                           </p>
                         </div>
                         <div className="rounded-lg border p-4">
                           <p className="text-xs uppercase text-muted-foreground">
-                            {t("parent.libro_clases.attendance.family_attendance")}
+                            {t(
+                              "parent.libro_clases.attendance.family_attendance",
+                            )}
                           </p>
                           <p className="text-lg font-semibold">
-                            {t("parent.libro_clases.attendance.real_time_tracking")}
+                            {t(
+                              "parent.libro_clases.attendance.real_time_tracking",
+                            )}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {t("parent.libro_clases.attendance.automatic_notifications")}
+                            {t(
+                              "parent.libro_clases.attendance.automatic_notifications",
+                            )}
                           </p>
                         </div>
                       </div>
@@ -769,7 +801,9 @@ export function ParentLibroClasesView({
               <TabsContent value="observations">
                 <Card>
                   <CardHeader>
-                    <CardTitle>{t("parent.libro_clases.observations.title")}</CardTitle>
+                    <CardTitle>
+                      {t("parent.libro_clases.observations.title")}
+                    </CardTitle>
                     <CardDescription>
                       {t("parent.libro_clases.observations.desc")}
                     </CardDescription>
@@ -777,15 +811,23 @@ export function ParentLibroClasesView({
                   <CardContent className="space-y-4">
                     <div className="grid gap-3 md:grid-cols-2">
                       <div className="rounded-lg border p-4">
-                        <p className="text-sm font-semibold">{t("parent.libro_clases.observations.recognitions")}</p>
+                        <p className="text-sm font-semibold">
+                          {t("parent.libro_clases.observations.recognitions")}
+                        </p>
                         <p className="text-sm text-muted-foreground">
-                          {t("parent.libro_clases.observations.recognitions_desc")}
+                          {t(
+                            "parent.libro_clases.observations.recognitions_desc",
+                          )}
                         </p>
                       </div>
                       <div className="rounded-lg border p-4">
-                        <p className="text-sm font-semibold">{t("parent.libro_clases.observations.commitments")}</p>
+                        <p className="text-sm font-semibold">
+                          {t("parent.libro_clases.observations.commitments")}
+                        </p>
                         <p className="text-sm text-muted-foreground">
-                          {t("parent.libro_clases.observations.commitments_desc")}
+                          {t(
+                            "parent.libro_clases.observations.commitments_desc",
+                          )}
                         </p>
                       </div>
                     </div>
@@ -800,7 +842,9 @@ export function ParentLibroClasesView({
               <TabsContent value="meetings">
                 <Card>
                   <CardHeader>
-                    <CardTitle>{t("parent.libro_clases.meetings.title")}</CardTitle>
+                    <CardTitle>
+                      {t("parent.libro_clases.meetings.title")}
+                    </CardTitle>
                     <CardDescription>
                       {t("parent.libro_clases.meetings.desc")}
                     </CardDescription>
@@ -811,11 +855,17 @@ export function ParentLibroClasesView({
                     </p>
                     <div className="flex flex-wrap gap-3">
                       <Link href="/parent/reuniones" className="inline-flex">
-                        <Button variant="secondary">{t("parent.libro_clases.meetings.actions.go_to_meetings")}</Button>
+                        <Button variant="secondary">
+                          {t(
+                            "parent.libro_clases.meetings.actions.go_to_meetings",
+                          )}
+                        </Button>
                       </Link>
                       <Link href="/parent/comunicacion" className="inline-flex">
                         <Button variant="outline">
-                          {t("parent.libro_clases.meetings.actions.contact_inspection")}
+                          {t(
+                            "parent.libro_clases.meetings.actions.contact_inspection",
+                          )}
                         </Button>
                       </Link>
                     </div>

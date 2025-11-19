@@ -167,7 +167,9 @@ export function MeetingList({
         <h2
           className={`${typography.heading(isDesktopForced)} font-bold text-foreground`}
         >
-          {isAdmin ? t("meetings.list.all_meetings") : t("meetings.list.my_meetings")}
+          {isAdmin
+            ? t("meetings.list.all_meetings")
+            : t("meetings.list.my_meetings")}
         </h2>
         {isAdmin && (
           <Button onClick={onCreateMeeting}>
