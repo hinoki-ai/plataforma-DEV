@@ -46,30 +46,70 @@ export async function GET(request: NextRequest) {
     if (isConvexId) {
       // It's a valid Convex ID, use it directly
       console.log("Profile API: Querying by Convex ID", userId);
-      user = await client.query(api.users.getUserById, {
-        userId: userId as any,
-      });
-      console.log("Profile API: Convex ID query result", { found: !!user });
+      try {
+        user = await client.query(api.users.getUserById, {
+          userId: userId as any,
+        });
+        console.log("Profile API: Convex ID query result", { found: !!user });
+      } catch (queryError) {
+        console.error("Profile API: Error querying by Convex ID:", {
+          userId,
+          error: queryError instanceof Error ? queryError.message : String(queryError)
+        });
+        return NextResponse.json(
+          {
+            error: "Database query failed",
+            details: queryError instanceof Error ? queryError.message : String(queryError),
+            userId
+          },
+          { status: 500 },
+        );
+      }
     } else {
       // It's a Clerk ID, look up by Clerk ID
       const clerkId = session.user.clerkId;
       if (!clerkId) {
-        console.log("Profile API: No Clerk ID available for lookup");
+        console.log("Profile API: No Clerk ID available for lookup, userId:", userId);
         return NextResponse.json(
-          { error: "User not found in database" },
+          {
+            error: "User not found in database",
+            details: "No Clerk ID available for user lookup",
+            userId: userId
+          },
           { status: 404 },
         );
       }
 
       console.log("Profile API: Querying by Clerk ID", clerkId);
-      user = await client.query(api.users.getUserByClerkId, {
-        clerkId,
-      });
-      console.log("Profile API: Clerk ID query result", { found: !!user });
+      try {
+        user = await client.query(api.users.getUserByClerkId, {
+          clerkId,
+        });
+        console.log("Profile API: Clerk ID query result", { found: !!user });
+      } catch (queryError) {
+        console.error("Profile API: Error querying by Clerk ID:", {
+          clerkId,
+          error: queryError instanceof Error ? queryError.message : String(queryError)
+        });
+        return NextResponse.json(
+          {
+            error: "Database query failed",
+            details: queryError instanceof Error ? queryError.message : String(queryError),
+            clerkId
+          },
+          { status: 500 },
+        );
+      }
     }
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      console.log("Profile API: User not found in Convex database", { userId, clerkId: session.user.clerkId });
+      return NextResponse.json({
+        error: "User not found",
+        details: "User exists in authentication but not in database",
+        userId: userId,
+        clerkId: session.user.clerkId
+      }, { status: 404 });
     }
 
     // Default preferences
