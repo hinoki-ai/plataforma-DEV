@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
@@ -17,13 +16,15 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowLeft,
   Calculator,
   Check,
   Mail,
   MessageCircle,
-  Sparkles,
   Users,
+  AlertTriangle,
+  TrendingDown,
+  Info,
+  ChevronRight,
 } from "lucide-react";
 import {
   BillingCycle,
@@ -31,8 +32,13 @@ import {
   findPricingPlan,
   isValidBillingCycle,
   billingCycleDiscount,
-  calculateBillingPrice,
   formatCLP,
+  findPlanByStudentCount,
+  validatePlanForStudents,
+  calculatePriceBreakdown,
+  compareBillingCycles,
+  type PriceBreakdown,
+  type BillingCycleComparison,
 } from "@/data/pricing-plans";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useRouter } from "next/navigation";
@@ -107,33 +113,26 @@ export default function PricingCalculatorPage({
 
   // Function to update URL with current state
   const updateUrl = useCallback(
-    (newBillingCycle?: BillingCycle, newStudents?: number) => {
+    (newBillingCycle?: BillingCycle, newStudents?: number, newPlan?: string) => {
       const params = new URLSearchParams();
 
-      // Set current resolved params
-      if (resolvedSearchParams.plan) {
-        params.set("plan", resolvedSearchParams.plan);
-      }
-      if (resolvedSearchParams.billing) {
-        params.set("billing", resolvedSearchParams.billing);
-      }
-      if (resolvedSearchParams.students) {
-        params.set("students", resolvedSearchParams.students);
-      }
+      // Use new plan if provided, otherwise keep current
+      const planToUse = newPlan ?? selectedPlan.id;
+      params.set("plan", planToUse);
 
-      if (newBillingCycle) {
-        params.set("billing", newBillingCycle);
-      }
+      // Use new billing cycle if provided, otherwise keep current
+      const billingToUse = newBillingCycle ?? billingCycle;
+      params.set("billing", billingToUse);
 
-      if (newStudents !== undefined) {
-        params.set("students", newStudents.toString());
-      }
+      // Use new students if provided, otherwise keep current
+      const studentsToUse = newStudents ?? students;
+      params.set("students", studentsToUse.toString());
 
       router.replace(`/planes/calculadora?${params.toString()}`, {
         scroll: false,
       });
     },
-    [router, resolvedSearchParams],
+    [router, selectedPlan.id, billingCycle, students],
   );
 
   // Map legacy or alternative plan names to correct plan IDs
@@ -150,7 +149,41 @@ export default function PricingCalculatorPage({
     ? findPricingPlan(mappedPlanId)
     : undefined;
   const fallbackPlan = pricingPlans[1] ?? pricingPlans[0];
-  const selectedPlan = planFromParams ?? fallbackPlan;
+  
+  // Smart plan selection: use URL param if valid, otherwise auto-select based on student count
+  const [selectedPlanId, setSelectedPlanId] = useState<string>(
+    planFromParams?.id ?? fallbackPlan.id,
+  );
+  const [manualPlanOverride, setManualPlanOverride] = useState<boolean>(
+    !!planFromParams,
+  );
+
+  // Get initial students to determine auto-plan
+  const initialStudentsForPlan = useMemo(() => {
+    const parsed = resolvedSearchParams.students
+      ? Number.parseInt(resolvedSearchParams.students, 10)
+      : NaN;
+    return Number.isNaN(parsed) ? fallbackPlan.minStudents : parsed;
+  }, [resolvedSearchParams.students, fallbackPlan.minStudents]);
+
+  // Auto-select plan based on student count if no manual override
+  const autoSelectedPlan = useMemo(
+    () => findPlanByStudentCount(initialStudentsForPlan),
+    [initialStudentsForPlan],
+  );
+
+  const selectedPlan = useMemo(() => {
+    if (manualPlanOverride) {
+      const plan = findPricingPlan(selectedPlanId);
+      return plan ?? autoSelectedPlan;
+    }
+    return autoSelectedPlan;
+  }, [selectedPlanId, manualPlanOverride, autoSelectedPlan]);
+
+  // Update selectedPlanId when plan changes
+  useEffect(() => {
+    setSelectedPlanId(selectedPlan.id);
+  }, [selectedPlan.id]);
 
   const initialBilling: BillingCycle = isValidBillingCycle(
     resolvedSearchParams.billing,
@@ -163,42 +196,53 @@ export default function PricingCalculatorPage({
     "monthly" | "upfront"
   >("monthly");
 
-  const clampStudents = (value: number) => {
+  const clampStudents = useCallback((value: number) => {
     const min = selectedPlan.minStudents;
     const rounded = Math.max(min, Math.round(value));
     if (selectedPlan.maxStudents) {
       return Math.min(selectedPlan.maxStudents, rounded);
     }
     return rounded;
-  };
+  }, [selectedPlan.minStudents, selectedPlan.maxStudents]);
 
+  // Calculate initial students - use autoSelectedPlan to avoid circular dependency
   const initialStudents = useMemo(() => {
     const parsed = resolvedSearchParams.students
       ? Number.parseInt(resolvedSearchParams.students, 10)
       : NaN;
     if (Number.isNaN(parsed)) {
-      return selectedPlan.minStudents;
+      return autoSelectedPlan.minStudents;
     }
-    return clampStudents(parsed);
+    // Use autoSelectedPlan for clamping to avoid dependency on selectedPlan
+    const min = autoSelectedPlan.minStudents;
+    const rounded = Math.max(min, Math.round(parsed));
+    if (autoSelectedPlan.maxStudents) {
+      return Math.min(autoSelectedPlan.maxStudents, rounded);
+    }
+    return rounded;
   }, [
     resolvedSearchParams.students,
-    selectedPlan.minStudents,
-    selectedPlan.maxStudents,
+    autoSelectedPlan.minStudents,
+    autoSelectedPlan.maxStudents,
   ]);
 
+  // Initialize with autoSelectedPlan to avoid dependency issues
   const [students, setStudentsState] = useState<number>(
-    selectedPlan.minStudents,
+    autoSelectedPlan.minStudents,
   );
   // Separate input state to allow temporary invalid values while typing
   const [inputValue, setInputValue] = useState<string>(
-    String(selectedPlan.minStudents),
+    String(autoSelectedPlan.minStudents),
   );
 
   // Update students state when initialStudents changes (e.g., when URL params change)
   useEffect(() => {
-    setStudentsState(initialStudents);
-    setInputValue(String(initialStudents));
-  }, [initialStudents]);
+    // Only update if the value actually changed to avoid unnecessary re-renders
+    if (students !== initialStudents) {
+      setStudentsState(initialStudents);
+      setInputValue(String(initialStudents));
+    }
+  }, [initialStudents, students]);
 
   // Wrapper functions to update state and URL
   const setBillingCycle = useCallback(
@@ -222,6 +266,17 @@ export default function PricingCalculatorPage({
     setInputValue(String(students));
   }, [students]);
 
+  // Auto-switch plan when student count changes (if not manually overridden)
+  useEffect(() => {
+    if (!manualPlanOverride) {
+      const recommendedPlan = findPlanByStudentCount(students);
+      if (recommendedPlan.id !== selectedPlan.id) {
+        setSelectedPlanId(recommendedPlan.id);
+        updateUrl(billingCycle, students, recommendedPlan.id);
+      }
+    }
+  }, [students, manualPlanOverride, selectedPlan.id, billingCycle, updateUrl]);
+
   // Ensure students is valid when plan changes
   useEffect(() => {
     const currentStudents = students;
@@ -232,7 +287,26 @@ export default function PricingCalculatorPage({
       // Update URL after clamping
       updateUrl(billingCycle, clamped);
     }
-  }, [selectedPlan.id]); // Only when plan changes
+  }, [selectedPlan.id, students, billingCycle, updateUrl, clampStudents]);
+
+  // Plan validation
+  const planValidation = useMemo(
+    () => validatePlanForStudents(selectedPlan, students),
+    [selectedPlan, students],
+  );
+
+  // Check if there's a better plan for current student count
+  const recommendedPlan = useMemo(
+    () => findPlanByStudentCount(students),
+    [students],
+  );
+  const shouldRecommendPlan = useMemo(
+    () =>
+      !manualPlanOverride &&
+      recommendedPlan.id !== selectedPlan.id &&
+      planValidation.isValid,
+    [manualPlanOverride, recommendedPlan.id, selectedPlan.id, planValidation.isValid],
+  );
 
   // Create billingMetadata with translations
   const billingMetadata: Record<
@@ -273,49 +347,46 @@ export default function PricingCalculatorPage({
 
   const billingInfo = billingMetadata[billingCycle];
   const discountPercentage = billingCycleDiscount[billingCycle];
-  const upfrontDiscount = 0.05; // 5% additional discount for upfront payment
-  const basePrice = selectedPlan.pricePerStudent * students;
 
-  // Calculate monthly price with plan period discount
-  const monthlyPriceWithPlanDiscount = calculateBillingPrice(
-    selectedPlan.pricePerStudent,
-    students,
-    billingCycle,
+  // Comprehensive price breakdown using new calculation system
+  const priceBreakdown = useMemo(
+    () =>
+      calculatePriceBreakdown(
+        selectedPlan.pricePerStudent,
+        students,
+        billingCycle,
+        paymentFrequency,
+        0.05, // upfront discount
+        0.19, // VAT
+      ),
+    [selectedPlan.pricePerStudent, students, billingCycle, paymentFrequency],
   );
 
-  // Calculate period total with plan discount
-  const periodTotalWithPlanDiscount =
-    monthlyPriceWithPlanDiscount * billingInfo.months;
+  // Billing cycle comparison for savings optimizer
+  const billingComparisons = useMemo(
+    () => compareBillingCycles(
+      selectedPlan.pricePerStudent,
+      students,
+      paymentFrequency,
+    ),
+    [selectedPlan.pricePerStudent, students, paymentFrequency],
+  );
 
-  // Apply upfront discount to total if selected (5% off total period amount)
-  const periodTotal =
-    paymentFrequency === "upfront"
-      ? Math.round(periodTotalWithPlanDiscount * (1 - upfrontDiscount))
-      : periodTotalWithPlanDiscount;
+  // Best billing cycle (lowest total cost)
+  const bestBillingCycle = useMemo(
+    () => billingComparisons[0],
+    [billingComparisons],
+  );
 
-  // Monthly price (for display when paying monthly)
-  const monthlyPrice = monthlyPriceWithPlanDiscount;
-
-  // Upfront total (for display when paying upfront)
+  // Derived values for backward compatibility and display
+  const monthlyPrice = priceBreakdown.totalPerMonth;
+  const periodTotal = priceBreakdown.total;
   const upfrontTotal = paymentFrequency === "upfront" ? periodTotal : null;
-
-  // Savings calculations
-  const savingsFromPlanDiscount = basePrice - monthlyPriceWithPlanDiscount;
-  const savingsFromPlanDiscountPeriod =
-    savingsFromPlanDiscount * billingInfo.months;
-
-  const savingsFromUpfront =
-    paymentFrequency === "upfront"
-      ? Math.round(periodTotalWithPlanDiscount * upfrontDiscount)
-      : 0;
-
-  const totalSavingsPeriod = savingsFromPlanDiscountPeriod + savingsFromUpfront;
-
-  // Calculate final per-student values after all discounts
-  const finalPerStudentMonthly =
-    paymentFrequency === "upfront"
-      ? periodTotal / billingInfo.months / students
-      : monthlyPriceWithPlanDiscount / students;
+  const totalSavingsPeriod = priceBreakdown.savings.total;
+  // Safe division - students is always >= 1 due to clamping
+  const finalPerStudentMonthly = students > 0 
+    ? priceBreakdown.totalPerMonth / students 
+    : priceBreakdown.totalPerMonth;
   const savingsPerStudent =
     selectedPlan.pricePerStudent - finalPerStudentMonthly;
 
@@ -337,12 +408,18 @@ export default function PricingCalculatorPage({
     description: billingMetadata[value].description,
   }));
 
-  const studentsFormatted = numberFormatter.format(students);
-  const periodLabel =
-    billingInfo.months === 1
-      ? tc("calculator.month")
-      : tc("calculator.months").replace("{count}", String(billingInfo.months)) +
-        ` (${billingInfo.label})`;
+  const studentsFormatted = useMemo(
+    () => numberFormatter.format(students),
+    [students],
+  );
+  const periodLabel = useMemo(
+    () =>
+      billingInfo.months === 1
+        ? tc("calculator.month")
+        : tc("calculator.months").replace("{count}", String(billingInfo.months)) +
+          ` (${billingInfo.label})`,
+    [billingInfo.months, billingInfo.label, tc],
+  );
 
   const monthlyPriceFormatted = formatCLP(monthlyPrice);
   const totalFormatted = formatCLP(periodTotal);
@@ -443,8 +520,8 @@ export default function PricingCalculatorPage({
             <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/60 text-white">
               <CardHeader>
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <CardTitle className="text-3xl font-semibold">
                         {selectedPlan.name}
                       </CardTitle>
@@ -457,6 +534,61 @@ export default function PricingCalculatorPage({
                     <CardDescription className="text-gray-300 text-base mt-2">
                       {selectedPlan.description}
                     </CardDescription>
+                    {/* Plan Validation Warning */}
+                    {!planValidation.isValid && (
+                      <div className="mt-3 rounded-lg border border-yellow-500/50 bg-yellow-500/10 p-3 flex items-start gap-2">
+                        <AlertTriangle className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-yellow-400">
+                            Plan no compatible
+                          </p>
+                          <p className="text-xs text-yellow-300/80 mt-1">
+                            {planValidation.reason}
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-2 text-yellow-400 border-yellow-400/50 hover:bg-yellow-400/20"
+                            onClick={() => {
+                              setSelectedPlanId(recommendedPlan.id);
+                              setManualPlanOverride(false);
+                              updateUrl(billingCycle, students, recommendedPlan.id);
+                            }}
+                          >
+                            Cambiar a {recommendedPlan.name}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                    {/* Plan Recommendation */}
+                    {shouldRecommendPlan && (
+                      <div className="mt-3 rounded-lg border border-primary/50 bg-primary/10 p-3 flex items-start gap-2">
+                        <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-primary">
+                            Plan recomendado disponible
+                          </p>
+                          <p className="text-xs text-primary/80 mt-1">
+                            Para {studentsFormatted} estudiantes, el{" "}
+                            <strong>{recommendedPlan.name}</strong> es más
+                            adecuado y puede ahorrarte dinero.
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-2 text-primary border-primary/50 hover:bg-primary/20"
+                            onClick={() => {
+                              setSelectedPlanId(recommendedPlan.id);
+                              setManualPlanOverride(false);
+                              updateUrl(billingCycle, students, recommendedPlan.id);
+                            }}
+                          >
+                            Cambiar a {recommendedPlan.name}
+                            <ChevronRight className="w-4 h-4 ml-1" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-gray-400">
@@ -506,6 +638,8 @@ export default function PricingCalculatorPage({
                             }
                           }}
                           className="flex-1 sm:flex-none sm:w-32 bg-gray-800 border-gray-700 text-lg font-semibold text-white"
+                          aria-label={`Número de estudiantes (rango: ${selectedPlan.minStudents}${selectedPlan.maxStudents ? ` - ${selectedPlan.maxStudents}` : "+"})`}
+                          aria-describedby="students-range-description"
                         />
                         <div className="flex items-center gap-2 shrink-0">
                           <Button
@@ -527,7 +661,10 @@ export default function PricingCalculatorPage({
                           </Button>
                         </div>
                       </div>
-                      <span className="text-sm text-gray-400 text-center sm:text-left">
+                      <span
+                        id="students-range-description"
+                        className="text-sm text-gray-400 text-center sm:text-left"
+                      >
                         {studentsLabel}
                       </span>
                     </div>
@@ -537,6 +674,10 @@ export default function PricingCalculatorPage({
                       max={sliderUpperBound}
                       step={1}
                       onValueChange={(value) => updateStudents(value[0])}
+                      aria-label="Selector de cantidad de estudiantes"
+                      aria-valuemin={selectedPlan.minStudents}
+                      aria-valuemax={sliderUpperBound}
+                      aria-valuenow={students}
                     />
                   </div>
                 </div>
@@ -565,6 +706,8 @@ export default function PricingCalculatorPage({
                       }
                       className="justify-center py-3 px-4"
                       onClick={() => setBillingCycle(option.value)}
+                      aria-label={`Ciclo de facturación: ${option.label}`}
+                      aria-pressed={billingCycle === option.value}
                     >
                       <span className="text-sm font-semibold">
                         {option.label}
@@ -584,6 +727,8 @@ export default function PricingCalculatorPage({
                       }
                       className="justify-center py-2"
                       onClick={() => setPaymentFrequency("monthly")}
+                      aria-label="Pago mensual"
+                      aria-pressed={paymentFrequency === "monthly"}
                     >
                       <span className="text-sm font-semibold">
                         {tc("calculator.pay_monthly")}
@@ -595,11 +740,13 @@ export default function PricingCalculatorPage({
                       }
                       className="justify-center py-2 relative"
                       onClick={() => setPaymentFrequency("upfront")}
+                      aria-label="Pago completo por adelantado con 5% de descuento"
+                      aria-pressed={paymentFrequency === "upfront"}
                     >
                       <span className="text-sm font-semibold">
                         {tc("calculator.pay_upfront")}
                       </span>
-                      <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                      <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full" aria-label="5% de descuento">
                         -5%
                       </span>
                     </Button>
@@ -610,6 +757,36 @@ export default function PricingCalculatorPage({
                     </p>
                   )}
                 </div>
+                {/* Savings Optimizer */}
+                {bestBillingCycle && bestBillingCycle.cycle !== billingCycle && bestBillingCycle.savings > 0 && (
+                  <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-4">
+                    <div className="flex items-start gap-2">
+                      <TrendingDown className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-green-400">
+                          Mejor opción disponible
+                        </p>
+                        <p className="text-xs text-green-300/80 mt-1">
+                          El ciclo {billingMetadata[bestBillingCycle.cycle].label} te
+                          ahorraría{" "}
+                          {formatCLP(
+                            priceBreakdown.total - bestBillingCycle.totalCost,
+                          )}{" "}
+                          ({bestBillingCycle.savingsPercent}% menos)
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="mt-2 text-green-400 border-green-400/50 hover:bg-green-400/20"
+                          onClick={() => setBillingCycle(bestBillingCycle.cycle)}
+                        >
+                          Cambiar a {billingMetadata[bestBillingCycle.cycle].label}
+                          <ChevronRight className="w-4 h-4 ml-1" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardHeader>
               <CardContent className="space-y-5">
                 {paymentFrequency === "monthly" ? (
@@ -625,14 +802,18 @@ export default function PricingCalculatorPage({
                       {tc("calculator.students_count").replace("{count}", "")} •{" "}
                       {billingInfo.label}
                     </p>
-                    {discountPercentage > 0 && savingsFromPlanDiscount > 0 && (
+                    {discountPercentage > 0 && priceBreakdown.savings.fromBillingCycle > 0 && (
                       <p className="mt-2 text-sm text-green-400">
                         {tc("calculator.savings_per_month")}:{" "}
-                        {formatCLP(savingsFromPlanDiscount)} (
+                        {formatCLP(priceBreakdown.savings.fromBillingCycle / billingInfo.months)} (
                         {Math.round(discountPercentage * 100)}%{" "}
                         {tc("calculator.less")})
                       </p>
                     )}
+                    {/* VAT Notice */}
+                    <p className="mt-2 text-xs text-gray-500">
+                      * Precio incluye IVA (19%)
+                    </p>
                   </div>
                 ) : (
                   <div className="rounded-2xl border border-gray-800 bg-black/40 p-5">
@@ -649,17 +830,17 @@ export default function PricingCalculatorPage({
                     </p>
                     <div className="mt-3 space-y-1">
                       {discountPercentage > 0 &&
-                        savingsFromPlanDiscountPeriod > 0 && (
+                        priceBreakdown.savings.fromBillingCycle > 0 && (
                           <p className="text-sm text-green-400">
                             {tc("calculator.savings_from_plan")} (
                             {Math.round(discountPercentage * 100)}%):{" "}
-                            {formatCLP(savingsFromPlanDiscountPeriod)}
+                            {formatCLP(priceBreakdown.savings.fromBillingCycle)}
                           </p>
                         )}
-                      {savingsFromUpfront > 0 && (
+                      {priceBreakdown.savings.fromUpfront > 0 && (
                         <p className="text-sm text-green-400">
                           {tc("calculator.upfront_discount")}:{" "}
-                          {formatCLP(savingsFromUpfront)}
+                          {formatCLP(priceBreakdown.savings.fromUpfront)}
                         </p>
                       )}
                       {totalSavingsPeriod > 0 && (
@@ -668,6 +849,21 @@ export default function PricingCalculatorPage({
                           {formatCLP(totalSavingsPeriod)}
                         </p>
                       )}
+                    </div>
+                    {/* VAT Breakdown */}
+                    <div className="mt-3 pt-3 border-t border-gray-700 space-y-1 text-xs">
+                      <div className="flex justify-between text-gray-400">
+                        <span>Subtotal:</span>
+                        <span>{formatCLP(priceBreakdown.subtotal)}</span>
+                      </div>
+                      <div className="flex justify-between text-gray-400">
+                        <span>IVA (19%):</span>
+                        <span>{formatCLP(priceBreakdown.vatAmount)}</span>
+                      </div>
+                      <div className="flex justify-between text-primary font-semibold pt-1 border-t border-gray-700">
+                        <span>Total:</span>
+                        <span>{formatCLP(priceBreakdown.total)}</span>
+                      </div>
                     </div>
                   </div>
                 )}
