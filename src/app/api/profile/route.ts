@@ -12,36 +12,60 @@ const profileUpdateSchema = z.object({
 // GET /api/profile - Get current user profile
 export async function GET(request: NextRequest) {
   try {
+    console.log("Profile API: Starting request");
+
     const session = await auth();
+    console.log("Profile API: Auth result", {
+      hasSession: !!session,
+      userId: session?.user?.id,
+      clerkId: session?.user?.clerkId,
+    });
 
     if (!session) {
+      console.log("Profile API: No session found");
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
+    console.log("Profile API: Getting Convex client");
     const client = await getAuthenticatedConvexClient();
+    console.log("Profile API: Convex client obtained successfully");
 
     // Resolve Convex user - session.user.id might be a Clerk ID string
     let user = null;
 
     // Check if session.user.id is a valid Convex ID (starts with a letter)
     // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
-    if (session.user.id && /^[a-z]/.test(session.user.id)) {
+    const userId = session.user.id;
+    const isConvexId = userId && /^[a-z]/.test(userId);
+    console.log("Profile API: User ID analysis", {
+      userId,
+      isConvexId,
+      clerkId: session.user.clerkId,
+    });
+
+    if (isConvexId) {
       // It's a valid Convex ID, use it directly
+      console.log("Profile API: Querying by Convex ID", userId);
       user = await client.query(api.users.getUserById, {
-        userId: session.user.id as any,
+        userId: userId as any,
       });
+      console.log("Profile API: Convex ID query result", { found: !!user });
     } else {
       // It's a Clerk ID, look up by Clerk ID
-      if (!session.user.clerkId) {
+      const clerkId = session.user.clerkId;
+      if (!clerkId) {
+        console.log("Profile API: No Clerk ID available for lookup");
         return NextResponse.json(
           { error: "User not found in database" },
           { status: 404 },
         );
       }
 
+      console.log("Profile API: Querying by Clerk ID", clerkId);
       user = await client.query(api.users.getUserByClerkId, {
-        clerkId: session.user.clerkId,
+        clerkId,
       });
+      console.log("Profile API: Clerk ID query result", { found: !!user });
     }
 
     if (!user) {
@@ -65,9 +89,16 @@ export async function GET(request: NextRequest) {
       preferences,
     });
   } catch (error) {
-    console.error("Error fetching profile:", error);
+    console.error("Profile API: Error fetching profile:", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined,
+    });
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }
