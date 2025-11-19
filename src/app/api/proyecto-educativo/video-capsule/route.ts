@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/../convex/_generated/api";
 import {
   withApiErrorHandling,
@@ -16,7 +16,7 @@ export const GET = withApiErrorHandling(async (request: NextRequest) => {
     throw new AuthenticationError("Authentication required");
   }
 
-  const client = getConvexClient();
+  const client = await getAuthenticatedConvexClient();
 
   // Get the active video capsule
   const videoCapsule = await client.query(api.media.getActiveVideoCapsule, {});
@@ -69,7 +69,7 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  const client = getConvexClient();
+  const client = await getAuthenticatedConvexClient();
 
   // Convex handles create-or-update automatically
   const videoCapsuleId = await client.mutation(api.media.updateVideoCapsule, {
@@ -102,7 +102,7 @@ export const DELETE = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  const client = getConvexClient();
+  const client = await getAuthenticatedConvexClient();
 
   // Set video capsule to inactive
   await client.mutation(api.media.updateVideoCapsule, {

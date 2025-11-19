@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { sanitizeJsonInput } from "@/lib/sanitization";
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     const sanitizedBody = sanitizeJsonInput(rawBody);
     const parsedBody = payloadSchema.parse(sanitizedBody);
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     let createdByUserId: Id<"users"> | undefined;
     try {

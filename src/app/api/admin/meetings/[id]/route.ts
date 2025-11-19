@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { canAccessAdmin } from "@/lib/role-utils";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { z } from "zod";
@@ -85,7 +85,7 @@ export async function GET(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const meeting = await client.query(api.meetings.getMeetingById, {
       id: id as Id<"meetings">,
     });
@@ -140,7 +140,7 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updateMeetingSchema.parse(body);
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Check if meeting exists
     const existingMeeting = await client.query(api.meetings.getMeetingById, {
@@ -250,7 +250,7 @@ export async function DELETE(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Check if meeting exists
     const existingMeeting = await client.query(api.meetings.getMeetingById, {

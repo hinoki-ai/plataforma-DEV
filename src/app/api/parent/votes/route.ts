@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { api } from "@/convex/_generated/api";
 import { getServerSession } from "@/lib/server-auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 
 export const runtime = "nodejs";
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const convex = getConvexClient();
+    const convex = await getAuthenticatedConvexClient();
 
     // Get only active public votes for parents
     const votes = await convex.query(api.votes.getVotes, {
@@ -35,8 +35,9 @@ export async function GET(request: NextRequest) {
         });
 
         // Check if user already voted
-        const userVoteResponse = await convex.query(
-          api.votes.getUserVoteResponse,
+        // We use getUserVoteResponses to get all votes if multiple are allowed
+        const userVoteResponses = await convex.query(
+          api.votes.getUserVoteResponses,
           {
             voteId: vote._id,
             userId: session.user.id as any,
@@ -65,11 +66,14 @@ export async function GET(request: NextRequest) {
           id: vote._id,
           title: vote.title,
           description: vote.description,
+          category: vote.category,
           endDate: new Date(vote.endDate).toISOString(),
           status: isExpired ? "closed" : "active",
           totalVotes,
-          hasVoted: !!userVoteResponse,
-          userVote: userVoteResponse ? userVoteResponse.optionId : null,
+          hasVoted: userVoteResponses && userVoteResponses.length > 0,
+          userVotes: userVoteResponses ? userVoteResponses.map((r: any) => r.optionId) : [],
+          allowMultipleVotes: vote.allowMultipleVotes,
+          maxVotesPerUser: vote.maxVotesPerUser,
           options: optionsWithPercentages,
         };
       }),
@@ -101,13 +105,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const convex = getConvexClient();
+    const convex = await getAuthenticatedConvexClient();
     const body = await request.json();
-    const { voteId, optionId } = body;
+    const { voteId, optionId, optionIds } = body;
 
-    if (!voteId || !optionId) {
+    if (!voteId || (!optionId && (!optionIds || optionIds.length === 0))) {
       return NextResponse.json(
-        { error: "Vote ID and Option ID are required" },
+        { error: "Vote ID and at least one Option ID are required" },
         { status: 400 },
       );
     }
@@ -131,41 +135,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already voted and multiple votes are not allowed
-    if (!vote.allowMultipleVotes) {
-      const existingVote = await convex.query(api.votes.getUserVoteResponse, {
-        voteId,
-        userId: session.user.id as any,
-      });
+    // Determine options to vote for
+    const targetOptionIds = optionIds || [optionId];
 
-      if (existingVote) {
-        return NextResponse.json(
-          { error: "You have already voted in this poll" },
-          { status: 409 },
-        );
-      }
+    // Verify options belong to this vote
+    for (const oid of targetOptionIds) {
+        const optionExists = vote.options.some((opt: any) => opt._id === oid);
+        if (!optionExists) {
+            return NextResponse.json(
+                { error: `Invalid option selected: ${oid}` },
+                { status: 400 },
+            );
+        }
     }
 
-    // Verify the option belongs to this vote
-    const optionExists = vote.options.some((opt: any) => opt._id === optionId);
-    if (!optionExists) {
-      return NextResponse.json(
-        { error: "Invalid option selected" },
-        { status: 400 },
-      );
-    }
-
-    // Cast the vote
-    const voteResponseId = await convex.mutation(api.votes.castVote, {
+    // Cast the vote(s)
+    // Use castVotes for batch voting
+    const result = await convex.mutation(api.votes.castVotes, {
       voteId,
-      optionId,
+      optionIds: targetOptionIds,
       userId: session.user.id as any,
     });
 
     return NextResponse.json({
-      data: { id: voteResponseId },
+      data: { ids: result },
       success: true,
-      message: "Vote cast successfully",
+      message: "Vote(s) cast successfully",
     });
   } catch (error) {
     console.error("Error casting vote:", error);
@@ -183,6 +178,12 @@ export async function POST(request: NextRequest) {
       }
       if (error.message.includes("Vote not found")) {
         return NextResponse.json({ error: "Vote not found" }, { status: 404 });
+      }
+      if (error.message.includes("Duplicate options")) {
+          return NextResponse.json({ error: "Duplicate options selected" }, { status: 400 });
+      }
+      if (error.message.includes("already voted for one of these options")) {
+          return NextResponse.json({ error: "You have already voted for one of these options" }, { status: 409 });
       }
     }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@/lib/prisma-compat-types";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 interface DashboardStats {
   users?: {
@@ -13,6 +14,12 @@ interface DashboardStats {
     newToday?: number;
     byRole?: Record<string, number>;
     recentUsers?: any[];
+    breakdown?: {
+      master: number;
+      admin: number;
+      profesor: number;
+      parent: number;
+    };
   };
   meetings?: {
     total: number;
@@ -61,22 +68,36 @@ interface DashboardStats {
   };
   system?: {
     health?: number;
-    uptime?: string;
+    uptime?: string | number;
     status?: string;
+    memory?: any;
+    nodeVersion?: string;
+    environment?: string;
   };
   security?: {
     threats: number;
+    activeThreats?: number;
     blocked: number;
+    blockedAttempts?: number;
     alerts?: number;
+    securityScore?: string;
+    lastSecurityScan?: string;
   };
   performance?: {
     responseTime: number;
     throughput: number;
+    healthScore?: number;
+    activeConnections?: number;
+    avgResponseTime?: number;
   };
   database?: {
     connections: number;
+    connectionPoolSize?: number;
     queriesPerSec?: number;
     size: string;
+    status?: string;
+    queryPerformance?: string;
+    lastBackup?: string;
   };
   api?: {
     requests: number;
@@ -87,10 +108,25 @@ interface DashboardStats {
     meetings?: { total: number; scheduled: number };
     logs?: { total: number; recent: number; critical: number };
   };
+  content?: {
+    events: number;
+    documents: number;
+    meetings: number;
+    photos: number;
+    videos: number;
+    total: number;
+    117: number;
+  };
+  errors?: {
+    totalErrors: number;
+    criticalErrors: number;
+    recentErrors: number;
+  };
 }
 
 export function useDashboardData() {
   const { data: session } = useSession();
+  const { t } = useDivineParsing(["common", "dashboard"]);
   const [stats, setStats] = useState<DashboardStats>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -136,7 +172,7 @@ export function useDashboardData() {
           // Handle authentication errors differently from server errors
           if (response.status === 401) {
             console.warn("User not authenticated for dashboard access");
-            setError("Usuario no autenticado");
+            setError(t("error.unauthorized.title"));
             setStats(getMockData(session?.user?.role));
             setLoading(false);
             return;
@@ -147,7 +183,7 @@ export function useDashboardData() {
             response.status,
           );
           setError(
-            `Error del servidor (${response.status}). Mostrando datos simulados.`,
+            `${t("error.server_unavailable")} (${response.status}).`,
           );
           setStats(getMockData(session?.user?.role));
           setLoading(false);
@@ -159,7 +195,7 @@ export function useDashboardData() {
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
         setError(
-          err instanceof Error ? err.message : "Error fetching dashboard data",
+          t("dashboard.error.loading"),
         );
 
         // Fallback to mock data on error
@@ -170,7 +206,7 @@ export function useDashboardData() {
     };
 
     fetchDashboardData();
-  }, [session?.user?.role]);
+  }, [session?.user?.role, t]);
 
   return { stats, loading, error };
 }
@@ -179,12 +215,42 @@ function getMockData(role: UserRole | undefined): DashboardStats {
   switch (role) {
     case "MASTER":
       return {
-        users: { total: 1247, active: 892, newToday: 5 },
-        system: { health: 98.5, uptime: "99.98%" },
-        security: { threats: 3, blocked: 47 },
-        performance: { responseTime: 45, throughput: 15420 },
-        database: { connections: 23, size: "2.4GB" },
+        users: {
+          total: 1247,
+          active: 892,
+          newToday: 5,
+          breakdown: { master: 2, admin: 15, profesor: 45, parent: 1185 },
+        },
+        system: { health: 98.5, uptime: 359928, status: "healthy" },
+        security: {
+          threats: 3,
+          activeThreats: 3,
+          blocked: 47,
+          blockedAttempts: 47,
+          securityScore: "A+",
+        },
+        performance: {
+          responseTime: 45,
+          throughput: 15420,
+          healthScore: 98.5,
+          activeConnections: 23,
+        },
+        database: {
+          connections: 23,
+          connectionPoolSize: 10,
+          size: "2.4GB",
+          status: "connected",
+        },
         api: { requests: 45280, errors: 12 },
+        content: {
+          events: 150,
+          documents: 320,
+          meetings: 45,
+          photos: 1200,
+          videos: 50,
+          total: 1765,
+          117: 0,
+        },
       };
     case "ADMIN":
       return {

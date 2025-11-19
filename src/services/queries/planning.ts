@@ -2,7 +2,7 @@
  * Planning Document Queries - Convex Implementation
  */
 
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -31,7 +31,7 @@ export async function getPlanningDocuments(
   } = {},
 ) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const docs = await client.query(api.planning.getPlanningDocuments, {
       authorId: filters.authorId as Id<"users"> | undefined,
@@ -53,7 +53,7 @@ export async function getPlanningDocuments(
 
 export async function getPlanningDocumentById(id: string) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const doc = await client.query(api.planning.getPlanningDocumentById, {
       id: id as Id<"planningDocuments">,
     });

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { canAccessProfesor } from "@/lib/role-utils";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { z } from "zod";
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status"); // upcoming, completed, all
     const type = searchParams.get("type");
@@ -184,7 +184,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = createActivitySchema.parse(body);
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const activityId = await client.mutation(api.activities.createActivity, {
       ...validatedData,
       scheduledDate: new Date(validatedData.scheduledDate).getTime(),

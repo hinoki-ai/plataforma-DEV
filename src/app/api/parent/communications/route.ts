@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const parentId = session.user.id as unknown as Id<"users">;
     const searchParams = request.nextUrl.searchParams;
     const status = mapStatus(searchParams.get("status"));
@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
     const normalizedPriority = String(priority).toLowerCase() as PriorityKey;
     const convexPriority = PRIORITY_MAP[normalizedPriority] ?? "MEDIUM";
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const parentId = session.user.id as unknown as Id<"users">;
 
     const recipient = await client.query(api.users.getUserByEmail, {

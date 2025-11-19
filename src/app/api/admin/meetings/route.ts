@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { canAccessAdmin } from "@/lib/role-utils";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { z } from "zod";
 import {
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Build filter object
     const filter: any = {};
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = createMeetingSchema.parse(body);
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Verify that the assigned teacher exists and is active
     const assignedTeacher = await client.query(api.users.getUserById, {

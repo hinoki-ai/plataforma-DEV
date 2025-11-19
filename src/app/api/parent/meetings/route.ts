@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Check if user is a parent
     const user = await client.query(api.users.getUserByEmail, {
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Check if user is a parent
     const user = await client.query(api.users.getUserByEmail, {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { createSuccessResponse, handleApiError } from "@/lib/api-error";
 
@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 // GET /api/admin/dashboard - Get dashboard metrics for admin
 export async function GET() {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const session = await auth();
 
     if (!session || session.user.role !== "ADMIN") {

@@ -223,17 +223,19 @@ export const findPlanByStudentCount = (studentCount: number): PricingPlan => {
 export const validatePlanForStudents = (
   plan: PricingPlan,
   studentCount: number,
-): { isValid: boolean; reason?: string } => {
+): { isValid: boolean; reasonKey?: string; reasonParams?: Record<string, any> } => {
   if (studentCount < plan.minStudents) {
     return {
       isValid: false,
-      reason: `El plan ${plan.name} requiere mínimo ${plan.minStudents} estudiantes`,
+      reasonKey: "calculator.plan_min_students_error",
+      reasonParams: { plan: plan.name, min: plan.minStudents },
     };
   }
   if (plan.maxStudents !== null && studentCount > plan.maxStudents) {
     return {
       isValid: false,
-      reason: `El plan ${plan.name} admite máximo ${plan.maxStudents} estudiantes`,
+      reasonKey: "calculator.plan_max_students_error",
+      reasonParams: { plan: plan.name, max: plan.maxStudents },
     };
   }
   return { isValid: true };
@@ -303,11 +305,24 @@ export const calculatePriceBreakdown = (
   // Per month calculations
   const totalPerMonth = total / billingCycleMonths;
 
-  // Savings calculations
-  const savingsFromBillingCycle =
-    billingCycleDiscountAmount * billingCycleMonths;
-  const savingsFromUpfront = upfrontDiscountAmount;
-  const totalSavings = savingsFromBillingCycle + savingsFromUpfront;
+  // Savings calculations (on subtotal, before VAT)
+  // Calculate base price for the period (no discounts)
+  const basePeriodTotal = basePrice * billingCycleMonths;
+  
+  // Calculate what the subtotal would be with only billing cycle discount
+  const subtotalWithBillingDiscountOnly = periodTotalBeforeUpfront;
+  
+  // Calculate final subtotal with all discounts
+  const finalSubtotal = subtotal;
+  
+  // Savings from billing cycle discount (compared to base, before VAT)
+  const savingsFromBillingCycle = basePeriodTotal - subtotalWithBillingDiscountOnly;
+  
+  // Savings from upfront discount (additional savings on top of billing discount, before VAT)
+  const savingsFromUpfront = subtotalWithBillingDiscountOnly - finalSubtotal;
+  
+  // Total savings (before VAT)
+  const totalSavings = basePeriodTotal - finalSubtotal;
 
   return {
     basePrice: Math.round(basePrice),
@@ -359,21 +374,32 @@ export const compareBillingCycles = (
       cycle,
       paymentFrequency,
     );
-    // Calculate base total (no discounts, but with VAT) for comparison
+    // Calculate base total for the SAME period (normalize to 24 months for fair comparison)
     const months = cycle === "semestral" ? 6 : cycle === "annual" ? 12 : 24;
-    const baseTotalWithoutDiscounts = basePrice * months;
-    const baseTotalWithVAT = Math.round(baseTotalWithoutDiscounts * 1.19); // Add VAT
-    const savings = baseTotalWithVAT - breakdown.total;
-    const savingsPercent = (savings / baseTotalWithVAT) * 100;
+    const normalizedMonths = 24; // Compare all cycles over 24 months
+    
+    // Calculate what the cost would be for 24 months with this cycle
+    const cyclesNeeded = normalizedMonths / months; // How many cycles needed for 24 months
+    const totalCostFor24Months = breakdown.total * cyclesNeeded;
+    
+    // Calculate base cost for 24 months (no discounts, with VAT)
+    const baseTotalFor24Months = basePrice * normalizedMonths;
+    const baseTotalWithVAT = Math.round(baseTotalFor24Months * 1.19);
+    
+    // Savings compared to semestral (most expensive, no discount)
+    const semestralCostFor24Months = baseTotalWithVAT; // Semestral has no discount
+    const savings = semestralCostFor24Months - totalCostFor24Months;
+    const savingsPercent = (savings / semestralCostFor24Months) * 100;
 
     return {
       cycle,
-      totalCost: breakdown.total,
+      totalCost: breakdown.total, // Keep original total for display
       monthlyCost: breakdown.totalPerMonth,
       savings: Math.max(0, Math.round(savings)), // Ensure non-negative
       savingsPercent: Math.max(0, Math.round(savingsPercent * 100) / 100),
     };
   });
 
-  return comparisons.sort((a, b) => a.totalCost - b.totalCost);
+  // Sort by monthly cost (cheapest per month first), not total cost
+  return comparisons.sort((a, b) => a.monthlyCost - b.monthlyCost);
 };

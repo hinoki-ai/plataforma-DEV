@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { createApiRoute, REQUIRED_ROLES } from "@/lib/api-validation";
 import { createSuccessResponse } from "@/lib/api-error";
@@ -7,7 +7,7 @@ import { createSuccessResponse } from "@/lib/api-error";
 // GET /api/master/dashboard - MASTER system overview
 export const GET = createApiRoute(
   async (request, validated) => {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Parallel system metrics queries for maximum performance
     const [

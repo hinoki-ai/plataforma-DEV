@@ -1,8 +1,10 @@
+"use server";
+
 /**
  * Team Member Actions (Mutations) - Convex Implementation
  */
 
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -15,7 +17,7 @@ export async function createTeamMember(data: {
   order?: number;
 }) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const memberId = await client.mutation(
       api.teamMembers.createTeamMember,
@@ -42,7 +44,7 @@ export async function updateTeamMember(
   },
 ) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     await client.mutation(api.teamMembers.updateTeamMember, {
       id: id as Id<"teamMembers">,
@@ -61,7 +63,7 @@ export async function updateTeamMember(
 
 export async function deleteTeamMember(id: string) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     await client.mutation(api.teamMembers.deleteTeamMember, {
       id: id as Id<"teamMembers">,
     });
@@ -77,7 +79,7 @@ export async function deleteTeamMember(id: string) {
 
 export async function toggleTeamMemberStatus(id: string, isActive: boolean) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     await client.mutation(api.teamMembers.toggleTeamMemberStatus, {
       id: id as Id<"teamMembers">,
       isActive,

@@ -165,10 +165,6 @@ function VotacionesContent() {
       return;
     }
 
-    // If multiple votes allowed and multiple selected, cast all votes
-    // Otherwise, cast single vote for the first selected option
-    const optionToVoteFor = selectedOptions[0];
-
     setSubmitting(true);
     try {
       const response = await fetch("/api/parent/votes", {
@@ -178,7 +174,7 @@ function VotacionesContent() {
         },
         body: JSON.stringify({
           voteId: selectedSession.id,
-          optionId: optionToVoteFor,
+          optionIds: selectedOptions,
         }),
       });
 

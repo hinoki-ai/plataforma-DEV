@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { sendNotificationToUser } from "@/lib/notification-utils";
 
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") || "all";
     const limit = parseInt(searchParams.get("limit") || "50");
@@ -66,7 +66,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const body = await request.json();
     const { notificationIds, markAll } = body;
 
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const body = await request.json();
     const {
       title,
