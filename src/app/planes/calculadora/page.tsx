@@ -127,8 +127,13 @@ export default function PricingCalculatorPage({
   const fallbackPlan = pricingPlans[1] ?? pricingPlans[0];
 
   // Smart plan selection: use URL param if valid, otherwise auto-select based on student count
-  const [selectedPlanId, setSelectedPlanId] = useState<string>(fallbackPlan.id);
-  const [manualPlanOverride, setManualPlanOverride] = useState<boolean>(false);
+  // Initialize with plan from params if available, otherwise use fallback
+  const [selectedPlanId, setSelectedPlanId] = useState<string>(
+    planFromParams?.id ?? fallbackPlan.id,
+  );
+  const [manualPlanOverride, setManualPlanOverride] = useState<boolean>(
+    Boolean(planFromParams),
+  );
 
   // Update selectedPlanId when resolvedSearchParams.plan changes
   useEffect(() => {
@@ -137,7 +142,12 @@ export default function PricingCalculatorPage({
       const mappedPlanId = planMappings[planParam] || planParam;
       const plan = findPricingPlan(mappedPlanId);
       if (plan) {
-        setSelectedPlanId(plan.id);
+        setSelectedPlanId((currentId) => {
+          if (currentId !== plan.id) {
+            return plan.id;
+          }
+          return currentId;
+        });
         setManualPlanOverride(true);
         return;
       }
@@ -151,7 +161,11 @@ export default function PricingCalculatorPage({
     if (hasResolvedParams && !planParam) {
       setManualPlanOverride(false);
     }
-  }, [resolvedSearchParams.plan]);
+  }, [
+    resolvedSearchParams.plan,
+    resolvedSearchParams.billing,
+    resolvedSearchParams.students,
+  ]);
 
   // Get initial students to determine auto-plan
   const initialStudentsForPlan = useMemo(() => {
