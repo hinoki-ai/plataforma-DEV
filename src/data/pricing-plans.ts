@@ -190,3 +190,189 @@ export const isPlanFeatureEnabled = (value: PlanFeatureValue) => {
   }
   return Boolean(value);
 };
+
+/**
+ * Finds the appropriate pricing plan for a given student count
+ * Returns the plan that matches the student count range
+ */
+export const findPlanByStudentCount = (studentCount: number): PricingPlan => {
+  // Find the plan where studentCount falls within minStudents and maxStudents
+  const matchingPlan = pricingPlans.find((plan) => {
+    if (plan.maxStudents === null) {
+      return studentCount >= plan.minStudents;
+    }
+    return studentCount >= plan.minStudents && studentCount <= plan.maxStudents;
+  });
+
+  // If no exact match, return the closest plan (prefer higher tier if on boundary)
+  if (!matchingPlan) {
+    // If student count is below minimum, return first plan
+    if (studentCount < pricingPlans[0].minStudents) {
+      return pricingPlans[0];
+    }
+    // If student count is above all maxes, return last plan
+    return pricingPlans[pricingPlans.length - 1];
+  }
+
+  return matchingPlan;
+};
+
+/**
+ * Validates if a student count is within the range of a given plan
+ */
+export const validatePlanForStudents = (
+  plan: PricingPlan,
+  studentCount: number,
+): { isValid: boolean; reason?: string } => {
+  if (studentCount < plan.minStudents) {
+    return {
+      isValid: false,
+      reason: `El plan ${plan.name} requiere mínimo ${plan.minStudents} estudiantes`,
+    };
+  }
+  if (plan.maxStudents !== null && studentCount > plan.maxStudents) {
+    return {
+      isValid: false,
+      reason: `El plan ${plan.name} admite máximo ${plan.maxStudents} estudiantes`,
+    };
+  }
+  return { isValid: true };
+};
+
+/**
+ * Calculates comprehensive price breakdown including VAT
+ */
+export interface PriceBreakdown {
+  basePrice: number;
+  basePricePerMonth: number;
+  billingCycleDiscount: number;
+  billingCycleDiscountAmount: number;
+  priceAfterBillingDiscount: number;
+  priceAfterBillingDiscountPerMonth: number;
+  upfrontDiscount: number;
+  upfrontDiscountAmount: number;
+  subtotal: number;
+  vat: number;
+  vatAmount: number;
+  total: number;
+  totalPerMonth: number;
+  savings: {
+    fromBillingCycle: number;
+    fromUpfront: number;
+    total: number;
+  };
+}
+
+export const calculatePriceBreakdown = (
+  pricePerStudent: number,
+  students: number,
+  billingCycle: BillingCycle,
+  paymentFrequency: "monthly" | "upfront",
+  upfrontDiscountPercent: number = 0.05,
+  vatPercent: number = 0.19,
+): PriceBreakdown => {
+  // Base calculations (no rounding until final step)
+  const basePrice = pricePerStudent * students;
+  const billingCycleMonths =
+    billingCycle === "semestral" ? 6 : billingCycle === "annual" ? 12 : 24;
+  const basePricePerMonth = basePrice;
+
+  // Apply billing cycle discount
+  const cycleDiscount = billingCycleDiscount[billingCycle];
+  const billingCycleDiscountAmount = basePrice * cycleDiscount;
+  const priceAfterBillingDiscount = basePrice * (1 - cycleDiscount);
+  const priceAfterBillingDiscountPerMonth = priceAfterBillingDiscount;
+
+  // Calculate period total (before upfront discount)
+  const periodTotalBeforeUpfront =
+    priceAfterBillingDiscountPerMonth * billingCycleMonths;
+
+  // Apply upfront discount if applicable
+  const upfrontDiscount =
+    paymentFrequency === "upfront" ? upfrontDiscountPercent : 0;
+  const upfrontDiscountAmount =
+    paymentFrequency === "upfront"
+      ? periodTotalBeforeUpfront * upfrontDiscountPercent
+      : 0;
+  const subtotal = periodTotalBeforeUpfront - upfrontDiscountAmount;
+
+  // Calculate VAT
+  const vatAmount = Math.round(subtotal * vatPercent);
+  const total = subtotal + vatAmount;
+
+  // Per month calculations
+  const totalPerMonth = total / billingCycleMonths;
+
+  // Savings calculations
+  const savingsFromBillingCycle = billingCycleDiscountAmount * billingCycleMonths;
+  const savingsFromUpfront = upfrontDiscountAmount;
+  const totalSavings = savingsFromBillingCycle + savingsFromUpfront;
+
+  return {
+    basePrice: Math.round(basePrice),
+    basePricePerMonth: Math.round(basePricePerMonth),
+    billingCycleDiscount: cycleDiscount,
+    billingCycleDiscountAmount: Math.round(billingCycleDiscountAmount),
+    priceAfterBillingDiscount: Math.round(priceAfterBillingDiscount),
+    priceAfterBillingDiscountPerMonth: Math.round(
+      priceAfterBillingDiscountPerMonth,
+    ),
+    upfrontDiscount,
+    upfrontDiscountAmount: Math.round(upfrontDiscountAmount),
+    subtotal: Math.round(subtotal),
+    vat: vatPercent,
+    vatAmount,
+    total: Math.round(total),
+    totalPerMonth: Math.round(totalPerMonth),
+    savings: {
+      fromBillingCycle: Math.round(savingsFromBillingCycle),
+      fromUpfront: Math.round(savingsFromUpfront),
+      total: Math.round(totalSavings),
+    },
+  };
+};
+
+/**
+ * Compares all billing cycles and returns the best option
+ */
+export interface BillingCycleComparison {
+  cycle: BillingCycle;
+  totalCost: number;
+  monthlyCost: number;
+  savings: number;
+  savingsPercent: number;
+}
+
+export const compareBillingCycles = (
+  pricePerStudent: number,
+  students: number,
+  paymentFrequency: "monthly" | "upfront" = "monthly",
+): BillingCycleComparison[] => {
+  const cycles: BillingCycle[] = ["semestral", "annual", "biannual"];
+  const basePrice = pricePerStudent * students;
+
+  const comparisons: BillingCycleComparison[] = cycles.map((cycle) => {
+    const breakdown = calculatePriceBreakdown(
+      pricePerStudent,
+      students,
+      cycle,
+      paymentFrequency,
+    );
+    // Calculate base total (no discounts, but with VAT) for comparison
+    const months = cycle === "semestral" ? 6 : cycle === "annual" ? 12 : 24;
+    const baseTotalWithoutDiscounts = basePrice * months;
+    const baseTotalWithVAT = Math.round(baseTotalWithoutDiscounts * 1.19); // Add VAT
+    const savings = baseTotalWithVAT - breakdown.total;
+    const savingsPercent = (savings / baseTotalWithVAT) * 100;
+
+    return {
+      cycle,
+      totalCost: breakdown.total,
+      monthlyCost: breakdown.totalPerMonth,
+      savings: Math.max(0, Math.round(savings)), // Ensure non-negative
+      savingsPercent: Math.max(0, Math.round(savingsPercent * 100) / 100),
+    };
+  });
+
+  return comparisons.sort((a, b) => a.totalCost - b.totalCost);
+};
