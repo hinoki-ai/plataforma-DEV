@@ -23,14 +23,9 @@ export async function GET(request: NextRequest) {
     // Resolve Convex user - session.user.id might be a Clerk ID string
     let user = null;
 
-    // Check if session.user.id is a valid Convex ID (starts with a letter)
-    // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
-    if (session.user.id && /^[a-z]/.test(session.user.id)) {
-      // It's a valid Convex ID, use it directly
-      user = await client.query(api.users.getUserById, {
-        userId: session.user.id as any,
-      });
-    } else {
+    // Check if session.user.id is a Clerk ID (starts with "user_")
+    // If so, look up by Clerk ID; otherwise, use it as a Convex ID
+    if (session.user.id && session.user.id.startsWith("user_")) {
       // It's a Clerk ID, look up by Clerk ID
       if (!session.user.clerkId) {
         return NextResponse.json(
@@ -41,6 +36,11 @@ export async function GET(request: NextRequest) {
 
       user = await client.query(api.users.getUserByClerkId, {
         clerkId: session.user.clerkId,
+      });
+    } else {
+      // It's a Convex ID, use it directly
+      user = await client.query(api.users.getUserById, {
+        userId: session.user.id as any,
       });
     }
 
@@ -90,9 +90,9 @@ export async function PUT(request: NextRequest) {
     // Resolve Convex user ID - session.user.id might be a Clerk ID string
     let convexUserId = session.user.id as any;
 
-    // Check if session.user.id is a valid Convex ID (starts with a letter)
-    // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
-    if (!convexUserId || !/^[a-z]/.test(convexUserId)) {
+    // Check if session.user.id is a Clerk ID (starts with "user_")
+    // If so, look up the actual Convex user ID; otherwise, use it directly
+    if (convexUserId && convexUserId.startsWith("user_")) {
       if (!session.user.clerkId) {
         return NextResponse.json(
           { error: "User not found in database" },
