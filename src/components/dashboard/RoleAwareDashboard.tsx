@@ -37,11 +37,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { UserRole } from "@/lib/prisma-compat-types";
-import { getRoleDisplayName } from "@/lib/role-utils";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
-  RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
 import {
   RoleGuard,
@@ -467,18 +464,6 @@ export function RoleAwareDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header with role indicator */}
-      <RoleAwareHeader
-        title={`Panel de ${getRoleDisplayName(currentRole)}`}
-        subtitle={`Bienvenido${session?.user?.name ? `, ${session.user.name}` : ""}`}
-        actions={
-          <div className="flex items-center gap-2">
-            <RoleIndicator role={currentRole} />
-            <Badge variant="outline">{getRoleDisplayName(currentRole)}</Badge>
-          </div>
-        }
-      />
-
       {/* Breadcrumbs */}
       <RoleAwareBreadcrumb />
 

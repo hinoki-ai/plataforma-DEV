@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { createApiRoute } from "@/lib/api-validation";
 import { createSuccessResponse } from "@/lib/api-error";
@@ -14,7 +14,7 @@ export const GET = createApiRoute(
     }
 
     const userId = session.user.id as any;
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     try {
       // Get user info

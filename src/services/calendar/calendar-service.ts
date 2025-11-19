@@ -1,9 +1,11 @@
+"use server";
+
 /**
  * Calendar Service - Consolidated
  * Unified calendar operations combining queries, mutations, and statistics
  */
 
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import type {
@@ -30,7 +32,7 @@ export async function getCalendarEvents(
   } = {},
 ) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const events = await client.query(api.calendar.getCalendarEvents, {
       startDate: filters.startDate?.getTime(),
@@ -58,7 +60,7 @@ export async function getCalendarEvents(
  */
 export async function getUpcomingEvents(limit?: number) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const events = await client.query(api.calendar.getUpcomingEvents, {
       limit,
     });
@@ -95,7 +97,7 @@ export async function createCalendarEvent(data: {
   attendeeIds?: string[];
 }) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const eventId = await client.mutation(api.calendar.createCalendarEvent, {
       ...data,
@@ -134,7 +136,7 @@ export async function updateCalendarEvent(
   },
 ) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const updates: Record<string, unknown> = { ...data };
     if (data.startDate) updates.startDate = data.startDate.getTime();
@@ -158,7 +160,7 @@ export async function updateCalendarEvent(
  */
 export async function deleteCalendarEvent(id: string) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     await client.mutation(api.calendar.deleteCalendarEvent, {
       id: id as Id<"calendarEvents">,
     });
@@ -178,7 +180,7 @@ export async function getCalendarStatistics(
   query?: CalendarQuery,
 ): Promise<CalendarStats> {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Fetch all calendar events
     const events = await client.query(api.calendar.getCalendarEvents, {

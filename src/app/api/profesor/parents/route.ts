@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { canCreateParentUser } from "@/lib/authorization";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { z } from "zod";
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     const sanitizedBody = sanitizeJsonInput(body);
     const validatedData = createParentSchema.parse(sanitizedBody);
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Check if email already exists
     const existingUser = await client.query(api.users.getUserByEmail, {

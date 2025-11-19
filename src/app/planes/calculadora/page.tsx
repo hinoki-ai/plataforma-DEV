@@ -224,13 +224,11 @@ export default function PricingCalculatorPage({
     autoSelectedPlan.maxStudents,
   ]);
 
-  // Initialize with autoSelectedPlan to avoid dependency issues
-  const [students, setStudentsState] = useState<number>(
-    autoSelectedPlan.minStudents,
-  );
+  // Initialize with fallback plan initially, will be updated when params resolve
+  const [students, setStudentsState] = useState<number>(fallbackPlan.minStudents);
   // Separate input state to allow temporary invalid values while typing
   const [inputValue, setInputValue] = useState<string>(
-    String(autoSelectedPlan.minStudents),
+    String(fallbackPlan.minStudents),
   );
 
   // Update students state when initialStudents changes (e.g., when URL params change)
@@ -575,10 +573,24 @@ export default function PricingCalculatorPage({
                         <AlertTriangle className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-yellow-400">
-                            Plan no compatible
+                            {tc("calculator.plan_not_compatible")}
                           </p>
                           <p className="text-xs text-yellow-300/80 mt-1">
-                            {planValidation.reason}
+                            {planValidation.reasonKey
+                              ? tc(planValidation.reasonKey)
+                                  .replace(
+                                    "{plan}",
+                                    planValidation.reasonParams?.plan,
+                                  )
+                                  .replace(
+                                    "{min}",
+                                    planValidation.reasonParams?.min,
+                                  )
+                                  .replace(
+                                    "{max}",
+                                    planValidation.reasonParams?.max,
+                                  )
+                              : ""}
                           </p>
                           <Button
                             variant="outline"
@@ -594,7 +606,10 @@ export default function PricingCalculatorPage({
                               );
                             }}
                           >
-                            Cambiar a {recommendedPlan.name}
+                            {tc("calculator.change_to").replace(
+                              "{plan}",
+                              recommendedPlan.name,
+                            )}
                           </Button>
                         </div>
                       </div>
@@ -605,13 +620,18 @@ export default function PricingCalculatorPage({
                         <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-primary">
-                            Plan recomendado disponible
+                            {tc("calculator.recommended_plan_available")}
                           </p>
-                          <p className="text-xs text-primary/80 mt-1">
-                            Para {studentsFormatted} estudiantes, el{" "}
-                            <strong>{recommendedPlan.name}</strong> es más
-                            adecuado y puede ahorrarte dinero.
-                          </p>
+                          <p
+                            className="text-xs text-primary/80 mt-1"
+                            dangerouslySetInnerHTML={{
+                              __html: tc(
+                                "calculator.recommended_plan_description",
+                              )
+                                .replace("{students}", studentsFormatted)
+                                .replace("{plan}", recommendedPlan.name),
+                            }}
+                          />
                           <Button
                             variant="outline"
                             size="sm"
@@ -626,7 +646,10 @@ export default function PricingCalculatorPage({
                               );
                             }}
                           >
-                            Cambiar a {recommendedPlan.name}
+                            {tc("calculator.change_to").replace(
+                              "{plan}",
+                              recommendedPlan.name,
+                            )}
                             <ChevronRight className="w-4 h-4 ml-1" />
                           </Button>
                         </div>
@@ -698,6 +721,10 @@ export default function PricingCalculatorPage({
                             variant="outline"
                             size="icon"
                             onClick={() => adjustStudents(10)}
+                            disabled={
+                              selectedPlan.maxStudents !== null &&
+                              students >= selectedPlan.maxStudents
+                            }
                             aria-label={tc("calculator.increase_10")}
                           >
                             {tc("calculator.increase_10_short")}
@@ -763,7 +790,7 @@ export default function PricingCalculatorPage({
                   <div className="text-sm font-semibold text-gray-300">
                     {tc("calculator.payment_frequency")}
                   </div>
-                  <div className="flex gap-2 justify-end">
+                  <div className="flex gap-2">
                     <Button
                       variant={
                         paymentFrequency === "monthly" ? "default" : "outline"
@@ -781,7 +808,7 @@ export default function PricingCalculatorPage({
                       variant={
                         paymentFrequency === "upfront" ? "default" : "outline"
                       }
-                      className="justify-center py-2 relative min-w-[240px] pr-8"
+                      className="justify-center py-2 relative flex-1 pr-8"
                       onClick={() => setPaymentFrequency("upfront")}
                       aria-label="Pago completo por adelantado con 5% de descuento"
                       aria-pressed={paymentFrequency === "upfront"}
@@ -812,16 +839,27 @@ export default function PricingCalculatorPage({
                         <TrendingDown className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-green-400">
-                            Mejor opción disponible
+                            {tc("calculator.best_option_available")}
                           </p>
                           <p className="text-xs text-green-300/80 mt-1">
-                            El ciclo{" "}
-                            {billingMetadata[bestBillingCycle.cycle].label} te
-                            ahorraría{" "}
-                            {formatCLP(
-                              priceBreakdown.total - bestBillingCycle.totalCost,
-                            )}{" "}
-                            ({bestBillingCycle.savingsPercent}% menos)
+                            {tc("calculator.best_option_description")
+                              .replace(
+                                "{cycle}",
+                                billingMetadata[bestBillingCycle.cycle].label,
+                              )
+                              .replace(
+                                "{amount}",
+                                formatCLP(
+                                  (priceBreakdown.totalPerMonth -
+                                    bestBillingCycle.monthlyCost) *
+                                    billingInfo.months,
+                                ),
+                              )
+                              .replace("{months}", String(billingInfo.months))
+                              .replace(
+                                "{percent}",
+                                String(bestBillingCycle.savingsPercent),
+                              )}
                           </p>
                           <Button
                             variant="outline"
@@ -831,8 +869,10 @@ export default function PricingCalculatorPage({
                               setBillingCycle(bestBillingCycle.cycle)
                             }
                           >
-                            Cambiar a{" "}
-                            {billingMetadata[bestBillingCycle.cycle].label}
+                            {tc("calculator.change_to").replace(
+                              "{plan}",
+                              billingMetadata[bestBillingCycle.cycle].label,
+                            )}
                             <ChevronRight className="w-4 h-4 ml-1" />
                           </Button>
                         </div>
@@ -868,7 +908,7 @@ export default function PricingCalculatorPage({
                       )}
                     {/* VAT Notice */}
                     <p className="mt-2 text-xs text-gray-500">
-                      * Precio incluye IVA (19%)
+                      {tc("calculator.price_includes_vat")}
                     </p>
                   </div>
                 ) : (
@@ -909,15 +949,15 @@ export default function PricingCalculatorPage({
                     {/* VAT Breakdown */}
                     <div className="mt-3 pt-3 border-t border-gray-700 space-y-1 text-xs">
                       <div className="flex justify-between text-gray-400">
-                        <span>Subtotal:</span>
+                        <span>{tc("calculator.subtotal")}</span>
                         <span>{formatCLP(priceBreakdown.subtotal)}</span>
                       </div>
                       <div className="flex justify-between text-gray-400">
-                        <span>IVA (19%):</span>
+                        <span>{tc("calculator.vat")}</span>
                         <span>{formatCLP(priceBreakdown.vatAmount)}</span>
                       </div>
                       <div className="flex justify-between text-primary font-semibold pt-1 border-t border-gray-700">
-                        <span>Total:</span>
+                        <span>{tc("calculator.total")}</span>
                         <span>{formatCLP(priceBreakdown.total)}</span>
                       </div>
                     </div>

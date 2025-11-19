@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user has admin role
-    if (session.user.role !== "ADMIN") {
+    // Check if user has profesor role
+    if (session.user.role !== "PROFESOR") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
           updatedAt: new Date(vote.updatedAt).toISOString(),
           creator: {
             id: vote.createdBy,
-            name: session.user?.name || "Admin",
+            name: session.user?.name || "Profesor",
             email: session.user?.email || "",
           },
           options: options?.options?.map((opt: any) => ({
@@ -100,18 +100,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user has admin role
-    if (session.user.role !== "ADMIN") {
+    // Check if user has profesor role
+    if (session.user.role !== "PROFESOR") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Validate that session.user.id is a valid Convex ID
-    // It should start with a letter followed by alphanumeric characters
     if (!session.user.id || !/^[a-z]/.test(session.user.id)) {
       console.error("Invalid user ID format in session:", {
         id: session.user.id,
-        clerkId: session.user.clerkId,
-        email: session.user.email,
         role: session.user.role,
       });
       return NextResponse.json(
@@ -144,7 +141,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate options
-    // Handle both array of strings and array of objects with text property
     const optionTexts = options.map((opt: any) => 
       typeof opt === 'string' ? opt : opt.text
     );
@@ -177,47 +173,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error creating vote:", error);
-
-    // Provide more helpful error messages
-    if (error instanceof Error) {
-      if (error.message.includes("Authentication required")) {
-        return NextResponse.json(
-          { error: "Authentication required. Please log in again." },
-          { status: 401 },
-        );
-      }
-      if (error.message.includes("User record not found")) {
-        return NextResponse.json(
-          {
-            error:
-              "Your account needs to be synced. Please contact support or log out and log back in.",
-          },
-          { status: 403 },
-        );
-      }
-      if (error.message.includes("No institution selected")) {
-        return NextResponse.json(
-          {
-            error:
-              "You must be associated with an institution to create votes.",
-          },
-          { status: 403 },
-        );
-      }
-      if (error.message.includes("Membership required")) {
-        return NextResponse.json(
-          { error: "You must have an active membership to create votes." },
-          { status: 403 },
-        );
-      }
-      if (error.message.includes("User is inactive")) {
-        return NextResponse.json(
-          { error: "Your account is inactive. Please contact support." },
-          { status: 403 },
-        );
-      }
-    }
-
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Internal server error",
@@ -235,8 +190,8 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user has admin role
-    if (session.user.role !== "ADMIN") {
+    // Check if user has profesor role
+    if (session.user.role !== "PROFESOR") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -262,7 +217,6 @@ export async function PUT(request: NextRequest) {
     }
 
     if (options) {
-      // Handle both array of strings and array of objects with text property
       const optionTexts = options.map((opt: any) => 
         typeof opt === 'string' ? opt : opt.text
       );
@@ -301,3 +255,4 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
+

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { canAccessProfesor } from "@/lib/role-utils";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { z } from "zod";
@@ -68,7 +68,7 @@ export async function GET(
       );
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const activity = await client.query(api.activities.getActivityById, {
       id: id as Id<"activities">,
     });
@@ -142,7 +142,7 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updateActivitySchema.parse(body);
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Check if activity exists and belongs to current teacher
     const existingActivity = await client.query(
@@ -245,7 +245,7 @@ export async function DELETE(
       );
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Check if activity exists and belongs to current teacher
     const existingActivity = await client.query(

@@ -1,8 +1,10 @@
+"use server";
+
 /**
  * Meeting Actions (Mutations) - Convex Implementation
  */
 
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -30,7 +32,7 @@ export async function createMeeting(data: {
   studentId?: string;
 }) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const meetingId = await client.mutation(api.meetings.createMeeting, {
       ...data,
@@ -68,7 +70,7 @@ export async function updateMeeting(
   },
 ) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const updates: Record<string, unknown> = { ...data };
     if (data.scheduledDate) {
@@ -89,7 +91,7 @@ export async function updateMeeting(
 
 export async function deleteMeeting(id: string) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     await client.mutation(api.meetings.deleteMeeting, {
       id: id as Id<"meetings">,
     });
@@ -102,7 +104,7 @@ export async function deleteMeeting(id: string) {
 
 export async function cancelMeeting(id: string, reason?: string) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     await client.mutation(api.meetings.cancelMeeting, {
       id: id as Id<"meetings">,
       reason,
@@ -117,7 +119,7 @@ export async function cancelMeeting(id: string, reason?: string) {
 // Query functions for components
 export async function getMeetingsAction() {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const meetings = await client.query(api.meetings.getMeetings, {});
     return { success: true, data: meetings };
   } catch (error) {
@@ -136,7 +138,7 @@ export async function getMeetingsByTeacherAction(teacherId: string) {
       };
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const meetings = await client.query(api.meetings.getMeetingsByTeacher, {
       teacherId: teacherId as Id<"users">,
     });
@@ -152,7 +154,7 @@ export async function getMeetingsByTeacherAction(teacherId: string) {
 
 export async function getMeetingsByParentAction(parentId: string) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const meetings = await client.query(api.meetings.getMeetingsByParent, {
       parentId: parentId as Id<"users">,
     });
@@ -168,7 +170,7 @@ export async function getMeetingsByParentAction(parentId: string) {
 
 export async function getMeetingStatsAction() {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const stats = await client.query(api.meetings.getMeetingStats, {});
     return { success: true, data: stats };
   } catch (error) {
@@ -182,7 +184,7 @@ export async function getMeetingStatsAction() {
 
 export async function getParentMeetingRequestsAction() {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const requests = await client.query(
       api.meetings.getParentMeetingRequests,
       {},
@@ -199,7 +201,7 @@ export async function getParentMeetingRequestsAction() {
 
 export async function getUpcomingMeetingsAction() {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const meetings = await client.query(api.meetings.getUpcomingMeetings, {});
     return { success: true, data: meetings };
   } catch (error) {
@@ -229,7 +231,7 @@ export async function requestMeeting(data: {
   teacherId?: string;
 }) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     const meetingId = await client.mutation(api.meetings.requestMeeting, {
       ...data,
@@ -256,7 +258,7 @@ export async function updateMeetingStatus(
   notes?: string,
 ) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     await client.mutation(api.meetings.updateMeeting, {
       id: id as Id<"meetings">,
       status,

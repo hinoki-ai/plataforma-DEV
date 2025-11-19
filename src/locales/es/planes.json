@@ -162,6 +162,18 @@
     "total_period": "Total del período",
     "lets_talk": "Hablemos ahora mismo para confirmarlo.",
     "please_contact": "Por favor contáctenme hoy para activarlo.",
-    "thanks": "Gracias!"
+    "thanks": "Gracias!",
+    "plan_not_compatible": "Plan no compatible",
+    "plan_min_students_error": "El plan {plan} requiere mínimo {min} estudiantes",
+    "plan_max_students_error": "El plan {plan} admite máximo {max} estudiantes",
+    "change_to": "Cambiar a {plan}",
+    "recommended_plan_available": "Plan recomendado disponible",
+    "recommended_plan_description": "Para {students} estudiantes, el <strong>{plan}</strong> es más adecuado y puede ahorrarte dinero.",
+    "best_option_available": "Mejor opción disponible",
+    "best_option_description": "El ciclo {cycle} te ahorraría {amount} por {months} meses ({percent}% menos)",
+    "price_includes_vat": "* Precio incluye IVA (19%)",
+    "subtotal": "Subtotal:",
+    "vat": "IVA (19%):",
+    "total": "Total:"
   }
 }

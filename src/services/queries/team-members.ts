@@ -2,7 +2,7 @@
  * Team Member Queries - Convex Implementation
  */
 
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "../../../convex/_generated/api";
 import type { TeamMember } from "@/lib/prisma-compat-types";
 
@@ -26,7 +26,7 @@ function adaptTeamMember(convexMember: Record<string, unknown>): TeamMember {
 
 export async function getTeamMembers(isActive?: boolean) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const members = await client.query(api.teamMembers.getTeamMembers, {
       isActive,
     });
@@ -44,7 +44,7 @@ export async function getTeamMembers(isActive?: boolean) {
 
 export async function getTeamMemberById(id: string) {
   try {
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const member = await client.query(api.teamMembers.getTeamMemberById, {
       id: id as never,
     });

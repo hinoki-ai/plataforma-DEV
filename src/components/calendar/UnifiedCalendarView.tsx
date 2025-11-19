@@ -55,7 +55,7 @@ import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider"
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { exportCalendarEventsInFormat } from "@/services/calendar/calendar-service";
+import { exportCalendarEventsAction } from "@/app/actions/calendar";
 import { useSession } from "@/lib/auth-client";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 import {
@@ -519,7 +519,7 @@ export default function UnifiedCalendarView({
         format === "ICAL"
           ? "ics"
           : (format.toLowerCase() as "json" | "csv" | "ics");
-      const result = await exportCalendarEventsInFormat(formatLower);
+      const result = await exportCalendarEventsAction(formatLower);
 
       if (result.success && result.data) {
         // Create download - result.data has content property

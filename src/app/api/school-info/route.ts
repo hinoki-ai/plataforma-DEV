@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { hasPermission, Permissions } from "@/lib/authorization";
 import { withApiErrorHandling } from "@/lib/error-handler";
 
 // GET: Public access to school information
 export const GET = withApiErrorHandling(async () => {
-  const client = getConvexClient();
+  const client = await getAuthenticatedConvexClient();
   const schoolInfo = await client.query(api.institutionInfo.getSchoolInfo, {});
 
   if (!schoolInfo) {
@@ -58,7 +58,7 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  const client = getConvexClient();
+  const client = await getAuthenticatedConvexClient();
   const schoolInfoId = await client.mutation(
     api.institutionInfo.createOrUpdateSchoolInfo,
     {
@@ -113,7 +113,7 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  const client = getConvexClient();
+  const client = await getAuthenticatedConvexClient();
   await client.mutation(api.institutionInfo.createOrUpdateSchoolInfo, {
     ...updateData,
     institutionType: updateData.institutionType || "PRESCHOOL",

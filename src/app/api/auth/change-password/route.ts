@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getConvexClient } from "@/lib/convex";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { hashPassword, verifyPassword } from "@/lib/crypto";
 import { Logger } from "@/lib/logger";
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch user with password
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
     const user = await client.query(api.users.getUserById, {
       userId: userId as any,
     });

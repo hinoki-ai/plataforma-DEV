@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "@/lib/server-auth";
+import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "@/convex/_generated/api";
 import { EducationalInstitutionType } from "@/lib/educational-system";
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const client = getConvexClient();
+    const client = await getAuthenticatedConvexClient();
 
     // Update or create school info with new institution type
     await client.mutation(api.institutionInfo.createOrUpdateSchoolInfo, {
