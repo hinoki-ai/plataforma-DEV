@@ -52,6 +52,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { format } from "date-fns";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
@@ -62,6 +63,7 @@ interface PeriodLockingControlsProps {
 export function PeriodLockingControls({ userId }: PeriodLockingControlsProps) {
   const [selectedCourseId, setSelectedCourseId] =
     useState<Id<"courses"> | null>(null);
+  const { t } = useLanguage();
   const [selectedPeriod, setSelectedPeriod] = useState<
     "PRIMER_SEMESTRE" | "SEGUNDO_SEMESTRE" | "ANUAL"
   >("PRIMER_SEMESTRE");
@@ -94,7 +96,7 @@ export function PeriodLockingControls({ userId }: PeriodLockingControlsProps) {
 
   const handleLockRecords = async () => {
     if (!selectedCourseId) {
-      toast.error("Debe seleccionar un curso");
+      toast.error(t("digital-signatures.period_locking.select_course"));
       return;
     }
 
@@ -108,11 +110,11 @@ export function PeriodLockingControls({ userId }: PeriodLockingControlsProps) {
         reason: lockReason,
       });
 
-      toast.success("Registros bloqueados exitosamente");
+      toast.success(t("digital-signatures.period_locking.lock_success"));
       setLockReason("");
       setShowConfirmDialog(false);
     } catch (error: any) {
-      toast.error(error.message || "Error al bloquear registros");
+      toast.error(error.message || t("digital-signatures.period_locking.lock_error"));
     } finally {
       setIsLocking(false);
     }
@@ -127,10 +129,10 @@ export function PeriodLockingControls({ userId }: PeriodLockingControlsProps) {
         reason: lockReason,
       });
 
-      toast.success("Registros desbloqueados exitosamente");
+      toast.success(t("digital-signatures.period_locking.unlock_success"));
       setLockReason("");
     } catch (error: any) {
-      toast.error(error.message || "Error al desbloquear registros");
+      toast.error(error.message || t("digital-signatures.period_locking.unlock_error"));
     } finally {
       setIsLocking(false);
     }

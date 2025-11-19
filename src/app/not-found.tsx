@@ -42,11 +42,8 @@ export default function NotFound() {
           textDecoration: 'none',
           borderRadius: '8px',
           fontWeight: 'bold',
-          transition: 'transform 0.2s',
           boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
         }}
-        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
       >
         Volver al inicio
       </a>

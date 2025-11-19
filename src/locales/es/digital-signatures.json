@@ -43,5 +43,17 @@
     "certify_success": "Registro certificado exitosamente",
     "certify_error": "Error al certificar el registro",
     "bulk_certify_error": "Error al certificar registros"
+  },
+  "signature": {
+    "provide_signature": "Debe proporcionar su firma antes de continuar",
+    "signature_registered": "Firma registrada exitosamente",
+    "signature_error": "Error al registrar la firma"
+  },
+  "period_locking": {
+    "select_course": "Debe seleccionar un curso",
+    "lock_success": "Registros bloqueados exitosamente",
+    "lock_error": "Error al bloquear registros",
+    "unlock_success": "Registros desbloqueados exitosamente",
+    "unlock_error": "Error al desbloquear registros"
   }
 }

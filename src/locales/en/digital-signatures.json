@@ -43,5 +43,17 @@
     "certify_success": "Record certified successfully",
     "certify_error": "Error certifying the record",
     "bulk_certify_error": "Error certifying records"
+  },
+  "signature": {
+    "provide_signature": "You must provide your signature before continuing",
+    "signature_registered": "Signature registered successfully",
+    "signature_error": "Error registering signature"
+  },
+  "period_locking": {
+    "select_course": "You must select a course",
+    "lock_success": "Records locked successfully",
+    "lock_error": "Error locking records",
+    "unlock_success": "Records unlocked successfully",
+    "unlock_error": "Error unlocking records"
   }
 }

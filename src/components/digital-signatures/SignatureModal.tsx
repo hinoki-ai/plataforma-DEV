@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { PenTool, X, RotateCcw, Check, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 type RecordType =
   | "CLASS_CONTENT"
@@ -45,6 +46,7 @@ export function SignatureModal({
   recordLabel,
 }: SignatureModalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { t } = useLanguage();
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasSignature, setHasSignature] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -126,7 +128,7 @@ export function SignatureModal({
 
   const handleSubmit = async () => {
     if (!hasSignature) {
-      toast.error("Debe proporcionar su firma antes de continuar");
+      toast.error(t("digital-signatures.signature.provide_signature"));
       return;
     }
 
@@ -156,12 +158,12 @@ export function SignatureModal({
         userAgent,
       });
 
-      toast.success("Firma registrada exitosamente");
+      toast.success(t("digital-signatures.signature.signature_registered"));
       onSuccess?.();
       onClose();
     } catch (error: any) {
       console.error("Error creating signature:", error);
-      toast.error(error.message || "Error al registrar la firma");
+      toast.error(error.message || t("digital-signatures.signature.signature_error"));
     } finally {
       setIsSubmitting(false);
     }
