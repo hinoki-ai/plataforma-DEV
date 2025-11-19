@@ -111,30 +111,6 @@ export default function PricingCalculatorPage({
     resolveParams();
   }, [searchParams]);
 
-  // Function to update URL with current state
-  const updateUrl = useCallback(
-    (newBillingCycle?: BillingCycle, newStudents?: number, newPlan?: string) => {
-      const params = new URLSearchParams();
-
-      // Use new plan if provided, otherwise keep current
-      const planToUse = newPlan ?? selectedPlan.id;
-      params.set("plan", planToUse);
-
-      // Use new billing cycle if provided, otherwise keep current
-      const billingToUse = newBillingCycle ?? billingCycle;
-      params.set("billing", billingToUse);
-
-      // Use new students if provided, otherwise keep current
-      const studentsToUse = newStudents ?? students;
-      params.set("students", studentsToUse.toString());
-
-      router.replace(`/planes/calculadora?${params.toString()}`, {
-        scroll: false,
-      });
-    },
-    [router, selectedPlan.id, billingCycle, students],
-  );
-
   // Map legacy or alternative plan names to correct plan IDs
   const planMappings: Record<string, string> = {
     enterprise: "institucional",
@@ -149,14 +125,13 @@ export default function PricingCalculatorPage({
     ? findPricingPlan(mappedPlanId)
     : undefined;
   const fallbackPlan = pricingPlans[1] ?? pricingPlans[0];
-  
+
   // Smart plan selection: use URL param if valid, otherwise auto-select based on student count
   const [selectedPlanId, setSelectedPlanId] = useState<string>(
     planFromParams?.id ?? fallbackPlan.id,
   );
-  const [manualPlanOverride, setManualPlanOverride] = useState<boolean>(
-    !!planFromParams,
-  );
+  const [manualPlanOverride, setManualPlanOverride] =
+    useState<boolean>(!!planFromParams);
 
   // Get initial students to determine auto-plan
   const initialStudentsForPlan = useMemo(() => {
@@ -196,14 +171,17 @@ export default function PricingCalculatorPage({
     "monthly" | "upfront"
   >("monthly");
 
-  const clampStudents = useCallback((value: number) => {
-    const min = selectedPlan.minStudents;
-    const rounded = Math.max(min, Math.round(value));
-    if (selectedPlan.maxStudents) {
-      return Math.min(selectedPlan.maxStudents, rounded);
-    }
-    return rounded;
-  }, [selectedPlan.minStudents, selectedPlan.maxStudents]);
+  const clampStudents = useCallback(
+    (value: number) => {
+      const min = selectedPlan.minStudents;
+      const rounded = Math.max(min, Math.round(value));
+      if (selectedPlan.maxStudents) {
+        return Math.min(selectedPlan.maxStudents, rounded);
+      }
+      return rounded;
+    },
+    [selectedPlan.minStudents, selectedPlan.maxStudents],
+  );
 
   // Calculate initial students - use autoSelectedPlan to avoid circular dependency
   const initialStudents = useMemo(() => {
@@ -243,6 +221,34 @@ export default function PricingCalculatorPage({
       setInputValue(String(initialStudents));
     }
   }, [initialStudents, students]);
+
+  // Function to update URL with current state (defined after all variables are declared)
+  const updateUrl = useCallback(
+    (
+      newBillingCycle?: BillingCycle,
+      newStudents?: number,
+      newPlan?: string,
+    ) => {
+      const params = new URLSearchParams();
+
+      // Use new plan if provided, otherwise keep current
+      const planToUse = newPlan ?? selectedPlan.id;
+      params.set("plan", planToUse);
+
+      // Use new billing cycle if provided, otherwise keep current
+      const billingToUse = newBillingCycle ?? billingCycle;
+      params.set("billing", billingToUse);
+
+      // Use new students if provided, otherwise keep current
+      const studentsToUse = newStudents ?? students;
+      params.set("students", studentsToUse.toString());
+
+      router.replace(`/planes/calculadora?${params.toString()}`, {
+        scroll: false,
+      });
+    },
+    [router, selectedPlan.id, billingCycle, students],
+  );
 
   // Wrapper functions to update state and URL
   const setBillingCycle = useCallback(
@@ -305,7 +311,12 @@ export default function PricingCalculatorPage({
       !manualPlanOverride &&
       recommendedPlan.id !== selectedPlan.id &&
       planValidation.isValid,
-    [manualPlanOverride, recommendedPlan.id, selectedPlan.id, planValidation.isValid],
+    [
+      manualPlanOverride,
+      recommendedPlan.id,
+      selectedPlan.id,
+      planValidation.isValid,
+    ],
   );
 
   // Create billingMetadata with translations
@@ -364,11 +375,12 @@ export default function PricingCalculatorPage({
 
   // Billing cycle comparison for savings optimizer
   const billingComparisons = useMemo(
-    () => compareBillingCycles(
-      selectedPlan.pricePerStudent,
-      students,
-      paymentFrequency,
-    ),
+    () =>
+      compareBillingCycles(
+        selectedPlan.pricePerStudent,
+        students,
+        paymentFrequency,
+      ),
     [selectedPlan.pricePerStudent, students, paymentFrequency],
   );
 
@@ -384,9 +396,10 @@ export default function PricingCalculatorPage({
   const upfrontTotal = paymentFrequency === "upfront" ? periodTotal : null;
   const totalSavingsPeriod = priceBreakdown.savings.total;
   // Safe division - students is always >= 1 due to clamping
-  const finalPerStudentMonthly = students > 0 
-    ? priceBreakdown.totalPerMonth / students 
-    : priceBreakdown.totalPerMonth;
+  const finalPerStudentMonthly =
+    students > 0
+      ? priceBreakdown.totalPerMonth / students
+      : priceBreakdown.totalPerMonth;
   const savingsPerStudent =
     selectedPlan.pricePerStudent - finalPerStudentMonthly;
 
@@ -416,8 +429,10 @@ export default function PricingCalculatorPage({
     () =>
       billingInfo.months === 1
         ? tc("calculator.month")
-        : tc("calculator.months").replace("{count}", String(billingInfo.months)) +
-          ` (${billingInfo.label})`,
+        : tc("calculator.months").replace(
+            "{count}",
+            String(billingInfo.months),
+          ) + ` (${billingInfo.label})`,
     [billingInfo.months, billingInfo.label, tc],
   );
 
@@ -552,7 +567,11 @@ export default function PricingCalculatorPage({
                             onClick={() => {
                               setSelectedPlanId(recommendedPlan.id);
                               setManualPlanOverride(false);
-                              updateUrl(billingCycle, students, recommendedPlan.id);
+                              updateUrl(
+                                billingCycle,
+                                students,
+                                recommendedPlan.id,
+                              );
                             }}
                           >
                             Cambiar a {recommendedPlan.name}
@@ -580,7 +599,11 @@ export default function PricingCalculatorPage({
                             onClick={() => {
                               setSelectedPlanId(recommendedPlan.id);
                               setManualPlanOverride(false);
-                              updateUrl(billingCycle, students, recommendedPlan.id);
+                              updateUrl(
+                                billingCycle,
+                                students,
+                                recommendedPlan.id,
+                              );
                             }}
                           >
                             Cambiar a {recommendedPlan.name}
@@ -746,7 +769,10 @@ export default function PricingCalculatorPage({
                       <span className="text-sm font-semibold">
                         {tc("calculator.pay_upfront")}
                       </span>
-                      <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full" aria-label="5% de descuento">
+                      <span
+                        className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full"
+                        aria-label="5% de descuento"
+                      >
                         -5%
                       </span>
                     </Button>
@@ -758,35 +784,41 @@ export default function PricingCalculatorPage({
                   )}
                 </div>
                 {/* Savings Optimizer */}
-                {bestBillingCycle && bestBillingCycle.cycle !== billingCycle && bestBillingCycle.savings > 0 && (
-                  <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-4">
-                    <div className="flex items-start gap-2">
-                      <TrendingDown className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-green-400">
-                          Mejor opción disponible
-                        </p>
-                        <p className="text-xs text-green-300/80 mt-1">
-                          El ciclo {billingMetadata[bestBillingCycle.cycle].label} te
-                          ahorraría{" "}
-                          {formatCLP(
-                            priceBreakdown.total - bestBillingCycle.totalCost,
-                          )}{" "}
-                          ({bestBillingCycle.savingsPercent}% menos)
-                        </p>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-2 text-green-400 border-green-400/50 hover:bg-green-400/20"
-                          onClick={() => setBillingCycle(bestBillingCycle.cycle)}
-                        >
-                          Cambiar a {billingMetadata[bestBillingCycle.cycle].label}
-                          <ChevronRight className="w-4 h-4 ml-1" />
-                        </Button>
+                {bestBillingCycle &&
+                  bestBillingCycle.cycle !== billingCycle &&
+                  bestBillingCycle.savings > 0 && (
+                    <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-4">
+                      <div className="flex items-start gap-2">
+                        <TrendingDown className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-green-400">
+                            Mejor opción disponible
+                          </p>
+                          <p className="text-xs text-green-300/80 mt-1">
+                            El ciclo{" "}
+                            {billingMetadata[bestBillingCycle.cycle].label} te
+                            ahorraría{" "}
+                            {formatCLP(
+                              priceBreakdown.total - bestBillingCycle.totalCost,
+                            )}{" "}
+                            ({bestBillingCycle.savingsPercent}% menos)
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-2 text-green-400 border-green-400/50 hover:bg-green-400/20"
+                            onClick={() =>
+                              setBillingCycle(bestBillingCycle.cycle)
+                            }
+                          >
+                            Cambiar a{" "}
+                            {billingMetadata[bestBillingCycle.cycle].label}
+                            <ChevronRight className="w-4 h-4 ml-1" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </CardHeader>
               <CardContent className="space-y-5">
                 {paymentFrequency === "monthly" ? (
@@ -802,14 +834,18 @@ export default function PricingCalculatorPage({
                       {tc("calculator.students_count").replace("{count}", "")} •{" "}
                       {billingInfo.label}
                     </p>
-                    {discountPercentage > 0 && priceBreakdown.savings.fromBillingCycle > 0 && (
-                      <p className="mt-2 text-sm text-green-400">
-                        {tc("calculator.savings_per_month")}:{" "}
-                        {formatCLP(priceBreakdown.savings.fromBillingCycle / billingInfo.months)} (
-                        {Math.round(discountPercentage * 100)}%{" "}
-                        {tc("calculator.less")})
-                      </p>
-                    )}
+                    {discountPercentage > 0 &&
+                      priceBreakdown.savings.fromBillingCycle > 0 && (
+                        <p className="mt-2 text-sm text-green-400">
+                          {tc("calculator.savings_per_month")}:{" "}
+                          {formatCLP(
+                            priceBreakdown.savings.fromBillingCycle /
+                              billingInfo.months,
+                          )}{" "}
+                          ({Math.round(discountPercentage * 100)}%{" "}
+                          {tc("calculator.less")})
+                        </p>
+                      )}
                     {/* VAT Notice */}
                     <p className="mt-2 text-xs text-gray-500">
                       * Precio incluye IVA (19%)

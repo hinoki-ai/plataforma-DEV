@@ -250,7 +250,7 @@ const planesESInline = {
       "Estamos en modo reacción inmediata. Escríbenos y comencemos hoy mismo.",
     direct_email: "Email directo",
     whatsapp_immediate: "WhatsApp inmediato",
-    whatsapp_now: "WhatsApp Ahora",
+    whatsapp_now: "Enviar WhatsApp",
     send_email: "Enviar Email",
     month: "mes",
     months: "{count} meses",

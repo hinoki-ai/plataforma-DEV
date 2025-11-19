@@ -57,9 +57,14 @@ export async function getAuthenticatedUser(ctx: AnyCtx) {
 /**
  * Validate that a user has the required role
  */
-export function validateUserRole(user: Doc<"users">, requiredRoles: string[]): void {
+export function validateUserRole(
+  user: Doc<"users">,
+  requiredRoles: string[],
+): void {
   if (!requiredRoles.includes(user.role)) {
-    throw new Error(`Insufficient permissions. Required roles: ${requiredRoles.join(", ")}`);
+    throw new Error(
+      `Insufficient permissions. Required roles: ${requiredRoles.join(", ")}`,
+    );
   }
 }
 
@@ -114,7 +119,8 @@ export async function userInInstitution(
 /**
  * Common filter for active status
  */
-export function filterActive<T extends { isActive?: boolean }>(items: T[]): T[] {
+export function filterActive<T extends { isActive?: boolean }>(
+  items: T[],
+): T[] {
   return items.filter((item) => item.isActive !== false);
 }
-

@@ -54,7 +54,7 @@ export const getContentBySubject = query({
   handler: async (ctx, { courseId, subject, startDate, endDate }) => {
     let content = await ctx.db
       .query("classContent")
-      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .withIndex("by_courseId_date", (q) => q.eq("courseId", courseId))
       .collect();
 
     // Filter by subject
@@ -113,7 +113,7 @@ export const getContentByTeacher = query({
   handler: async (ctx, { teacherId, startDate, endDate }) => {
     let content = await ctx.db
       .query("classContent")
-      .withIndex("by_teacherId", (q) => q.eq("teacherId", teacherId))
+      .withIndex("by_teacherId_date", (q) => q.eq("teacherId", teacherId))
       .collect();
 
     // Filter by date range if provided

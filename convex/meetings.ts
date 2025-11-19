@@ -14,7 +14,6 @@ type MeetingDoc = Doc<"meetings">;
 type UserDoc = Doc<"users">;
 type AnyCtx = QueryCtx | MutationCtx;
 
-
 async function enrichMeetingsWithTeacher<C extends AnyCtx>(
   ctx: C,
   meetings: MeetingDoc[],

@@ -7,8 +7,16 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
-import { EXTRA_CURRICULAR_CATEGORIES, EXTRA_CURRICULAR_CATEGORY_SCHEMA } from "./constants";
-import { getAuthenticatedUser, validateEntityOwnership, now, filterActive } from "./validation";
+import {
+  EXTRA_CURRICULAR_CATEGORIES,
+  EXTRA_CURRICULAR_CATEGORY_SCHEMA,
+} from "./constants";
+import {
+  getAuthenticatedUser,
+  validateEntityOwnership,
+  now,
+  filterActive,
+} from "./validation";
 
 // ==================== QUERIES ====================
 
@@ -193,10 +201,18 @@ export const createActivity = mutation({
   handler: async (ctx, args) => {
     // Get authenticated user
     const user = await getAuthenticatedUser(ctx);
+    if (!user.currentInstitutionId) {
+      throw new Error("User must be associated with an institution");
+    }
 
     // Validate instructor if provided
     if (args.instructorId) {
-      await validateEntityOwnership(ctx, args.instructorId, "Instructor", user.currentInstitutionId);
+      await validateEntityOwnership(
+        ctx,
+        args.instructorId,
+        "Instructor",
+        user.currentInstitutionId,
+      );
     }
 
     const currentTime = now();
@@ -234,13 +250,26 @@ export const updateActivity = mutation({
   handler: async (ctx, { activityId, ...updates }) => {
     // Get authenticated user
     const user = await getAuthenticatedUser(ctx);
+    if (!user.currentInstitutionId) {
+      throw new Error("User must be associated with an institution");
+    }
 
     // Validate activity exists and belongs to user's institution
-    const activity = await validateEntityOwnership(ctx, activityId, "Activity", user.currentInstitutionId);
+    const activity = await validateEntityOwnership(
+      ctx,
+      activityId,
+      "Activity",
+      user.currentInstitutionId,
+    );
 
     // Validate instructor if being updated
     if (updates.instructorId) {
-      await validateEntityOwnership(ctx, updates.instructorId, "Instructor", user.currentInstitutionId);
+      await validateEntityOwnership(
+        ctx,
+        updates.instructorId,
+        "Instructor",
+        user.currentInstitutionId,
+      );
     }
 
     await ctx.db.patch(activityId, {
@@ -264,16 +293,34 @@ export const enrollStudent = mutation({
   handler: async (ctx, { activityId, studentId, courseId }) => {
     // Get authenticated user
     const user = await getAuthenticatedUser(ctx);
+    if (!user.currentInstitutionId) {
+      throw new Error("User must be associated with an institution");
+    }
 
     // Validate activity exists, is active, and belongs to user's institution
-    const activity = await validateEntityOwnership(ctx, activityId, "Activity", user.currentInstitutionId);
+    const activity = await validateEntityOwnership(
+      ctx,
+      activityId,
+      "Activity",
+      user.currentInstitutionId,
+    );
     if (!activity.isActive) {
       throw new Error("Activity is not active");
     }
 
     // Validate student and course exist and belong to user's institution
-    await validateEntityOwnership(ctx, studentId, "Student", user.currentInstitutionId);
-    const course = await validateEntityOwnership(ctx, courseId, "Course", user.currentInstitutionId);
+    await validateEntityOwnership(
+      ctx,
+      studentId,
+      "Student",
+      user.currentInstitutionId,
+    );
+    const course = await validateEntityOwnership(
+      ctx,
+      courseId,
+      "Course",
+      user.currentInstitutionId,
+    );
 
     // Check if student is already enrolled
     const existingEnrollments = await ctx.db

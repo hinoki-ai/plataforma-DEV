@@ -7,8 +7,18 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
-import { ATTENDANCE_STATUS_VALUES, ATTENDANCE_STATUS_SCHEMA, type AttendanceStatus } from "./constants";
-import { getAuthenticatedUser, validateTeacherRole, validateDateNotInFuture, now, validateEntityOwnership } from "./validation";
+import {
+  ATTENDANCE_STATUS_VALUES,
+  ATTENDANCE_STATUS_SCHEMA,
+  type AttendanceStatus,
+} from "./constants";
+import {
+  getAuthenticatedUser,
+  validateTeacherRole,
+  validateDateNotInFuture,
+  now,
+  validateEntityOwnership,
+} from "./validation";
 
 // ==================== QUERIES ====================
 
@@ -281,7 +291,15 @@ export const recordAttendance = mutation({
 
     // Validate course exists and get authenticated user
     const user = await getAuthenticatedUser(ctx);
-    const course = await validateEntityOwnership(ctx, courseId, "Course", user.currentInstitutionId);
+    if (!user.currentInstitutionId) {
+      throw new Error("User must be associated with an institution");
+    }
+    const course = await validateEntityOwnership(
+      ctx,
+      courseId,
+      "Course",
+      user.currentInstitutionId,
+    );
 
     // Validate registeredBy is a teacher
     const teacher = await ctx.db.get(registeredBy);
@@ -310,7 +328,7 @@ export const recordAttendance = mutation({
           period: record.period,
           observation: record.observation,
           registeredBy: registeredBy,
-          updatedAt: now,
+          updatedAt: now(),
         });
         results.push({ studentId: record.studentId, action: "updated" });
       } else {
@@ -325,8 +343,8 @@ export const recordAttendance = mutation({
           period: record.period,
           observation: record.observation,
           registeredBy,
-          createdAt: now,
-          updatedAt: now,
+          createdAt: now(),
+          updatedAt: now(),
         });
         results.push({ studentId: record.studentId, action: "created" });
       }
@@ -355,7 +373,7 @@ export const updateAttendanceRecord = mutation({
 
     await ctx.db.patch(attendanceId, {
       ...updates,
-          updatedAt: currentTime,
+      updatedAt: now(),
     });
 
     return await ctx.db.get(attendanceId);
@@ -393,7 +411,7 @@ export const bulkUpdateAttendance = mutation({
         await ctx.db.patch(existing._id, {
           status,
           registeredBy,
-          updatedAt: now,
+          updatedAt: now(),
         });
         results.push({ studentId, action: "updated" });
       } else {
@@ -409,8 +427,8 @@ export const bulkUpdateAttendance = mutation({
           date,
           status,
           registeredBy,
-          createdAt: now,
-          updatedAt: now,
+          createdAt: now(),
+          updatedAt: now(),
         });
         results.push({ studentId, action: "created" });
       }
