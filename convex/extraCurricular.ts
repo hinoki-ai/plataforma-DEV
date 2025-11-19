@@ -6,7 +6,7 @@
 
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
+import { Id, Doc } from "./_generated/dataModel";
 import {
   EXTRA_CURRICULAR_CATEGORIES,
   EXTRA_CURRICULAR_CATEGORY_SCHEMA,
@@ -298,12 +298,9 @@ export const enrollStudent = mutation({
     }
 
     // Validate activity exists, is active, and belongs to user's institution
-    const activity = await validateEntityOwnership(
-      ctx,
-      activityId,
-      "Activity",
-      user.currentInstitutionId,
-    );
+    const activity = await validateEntityOwnership<
+      Doc<"extraCurricularActivities">
+    >(ctx, activityId, "Activity", user.currentInstitutionId);
     if (!activity.isActive) {
       throw new Error("Activity is not active");
     }

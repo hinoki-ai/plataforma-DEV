@@ -355,8 +355,10 @@ export const createInstitutionWithAdmins = mutation({
           joinedAt: now,
           lastAccessAt: now,
           metadata: {
-            isPrimary: admin.isPrimary ?? false,
-            assignedByMaster: Boolean(createdBy),
+            customFields: {
+              isPrimary: String(admin.isPrimary ?? false),
+              assignedByMaster: String(Boolean(createdBy)),
+            },
           },
           createdAt: now,
           updatedAt: now,

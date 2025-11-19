@@ -83,6 +83,12 @@ const developerContacts = [
 
 const numberFormatter = new Intl.NumberFormat("es-CL");
 
+// Map legacy or alternative plan names to correct plan IDs
+const planMappings: Record<string, string> = {
+  enterprise: "institucional",
+  // Add any other mappings here if needed
+};
+
 interface PricingCalculatorPageProps {
   searchParams: Promise<{
     plan?: string;
@@ -111,12 +117,6 @@ export default function PricingCalculatorPage({
     resolveParams();
   }, [searchParams]);
 
-  // Map legacy or alternative plan names to correct plan IDs
-  const planMappings: Record<string, string> = {
-    enterprise: "institucional",
-    // Add any other mappings here if needed
-  };
-
   const planParam = resolvedSearchParams.plan;
   const mappedPlanId = planParam
     ? planMappings[planParam] || planParam
@@ -127,11 +127,31 @@ export default function PricingCalculatorPage({
   const fallbackPlan = pricingPlans[1] ?? pricingPlans[0];
 
   // Smart plan selection: use URL param if valid, otherwise auto-select based on student count
-  const [selectedPlanId, setSelectedPlanId] = useState<string>(
-    planFromParams?.id ?? fallbackPlan.id,
-  );
-  const [manualPlanOverride, setManualPlanOverride] =
-    useState<boolean>(!!planFromParams);
+  const [selectedPlanId, setSelectedPlanId] = useState<string>(fallbackPlan.id);
+  const [manualPlanOverride, setManualPlanOverride] = useState<boolean>(false);
+
+  // Update selectedPlanId when resolvedSearchParams.plan changes
+  useEffect(() => {
+    const planParam = resolvedSearchParams.plan;
+    if (planParam) {
+      const mappedPlanId = planMappings[planParam] || planParam;
+      const plan = findPricingPlan(mappedPlanId);
+      if (plan) {
+        setSelectedPlanId(plan.id);
+        setManualPlanOverride(true);
+        return;
+      }
+    }
+    // Only reset if params were actually resolved (not just initial empty state)
+    // Check if we have any params to know if they've been resolved
+    const hasResolvedParams =
+      resolvedSearchParams.billing !== undefined ||
+      resolvedSearchParams.students !== undefined ||
+      resolvedSearchParams.plan !== undefined;
+    if (hasResolvedParams && !planParam) {
+      setManualPlanOverride(false);
+    }
+  }, [resolvedSearchParams.plan]);
 
   // Get initial students to determine auto-plan
   const initialStudentsForPlan = useMemo(() => {
@@ -743,12 +763,12 @@ export default function PricingCalculatorPage({
                   <div className="text-sm font-semibold text-gray-300">
                     {tc("calculator.payment_frequency")}
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="flex gap-2 justify-end">
                     <Button
                       variant={
                         paymentFrequency === "monthly" ? "default" : "outline"
                       }
-                      className="justify-center py-2"
+                      className="justify-center py-2 min-w-[140px]"
                       onClick={() => setPaymentFrequency("monthly")}
                       aria-label="Pago mensual"
                       aria-pressed={paymentFrequency === "monthly"}
@@ -761,7 +781,7 @@ export default function PricingCalculatorPage({
                       variant={
                         paymentFrequency === "upfront" ? "default" : "outline"
                       }
-                      className="justify-center py-2 relative"
+                      className="justify-center py-2 relative min-w-[240px] pr-8"
                       onClick={() => setPaymentFrequency("upfront")}
                       aria-label="Pago completo por adelantado con 5% de descuento"
                       aria-pressed={paymentFrequency === "upfront"}
@@ -770,7 +790,7 @@ export default function PricingCalculatorPage({
                         {tc("calculator.pay_upfront")}
                       </span>
                       <span
-                        className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full"
+                        className="absolute -top-2 -right-2 bg-green-500 text-white text-sm font-bold px-2 py-1 rounded-full shadow-lg"
                         aria-label="5% de descuento"
                       >
                         -5%
