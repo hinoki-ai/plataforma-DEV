@@ -285,8 +285,7 @@ export const getUnsignedRecords = query({
     if (!recordType || recordType === "CLASS_CONTENT") {
       let classContent = await ctx.db
         .query("classContent")
-        .withIndex("by_courseId")
-        .filter((q) => q.eq(q.field("courseId"), courseId))
+        .withIndex("by_courseId_date", (q) => q.eq("courseId", courseId))
         .filter((q) => q.eq(q.field("isSigned"), false))
         .collect();
 

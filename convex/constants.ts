@@ -37,7 +37,8 @@ export const EXTRA_CURRICULAR_CATEGORIES = [
   "OTRA",
 ] as const;
 
-export type ExtraCurricularCategory = (typeof EXTRA_CURRICULAR_CATEGORIES)[number];
+export type ExtraCurricularCategory =
+  (typeof EXTRA_CURRICULAR_CATEGORIES)[number];
 
 export const EXTRA_CURRICULAR_CATEGORY_SCHEMA = v.union(
   v.literal("DEPORTIVA"),
@@ -103,10 +104,7 @@ export const COVERAGE_STATUS_SCHEMA = v.union(
 
 // ==================== COVERAGE TYPES ====================
 
-export const COVERAGE_TYPES = [
-  "PARCIAL",
-  "COMPLETA",
-] as const;
+export const COVERAGE_TYPES = ["PARCIAL", "COMPLETA"] as const;
 
 export type CoverageType = (typeof COVERAGE_TYPES)[number];
 
@@ -137,11 +135,7 @@ export const MEETING_TYPE_SCHEMA = v.union(
 
 // ==================== OBSERVATION TYPES ====================
 
-export const OBSERVATION_TYPES = [
-  "POSITIVA",
-  "NEGATIVA",
-  "NEUTRA",
-] as const;
+export const OBSERVATION_TYPES = ["POSITIVA", "NEGATIVA", "NEUTRA"] as const;
 
 export type ObservationType = (typeof OBSERVATION_TYPES)[number];
 
@@ -174,4 +168,3 @@ export const OBSERVATION_CATEGORY_SCHEMA = v.union(
   v.literal("CONVIVENCIA"),
   v.literal("OTRA"),
 );
-

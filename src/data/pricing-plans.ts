@@ -304,7 +304,8 @@ export const calculatePriceBreakdown = (
   const totalPerMonth = total / billingCycleMonths;
 
   // Savings calculations
-  const savingsFromBillingCycle = billingCycleDiscountAmount * billingCycleMonths;
+  const savingsFromBillingCycle =
+    billingCycleDiscountAmount * billingCycleMonths;
   const savingsFromUpfront = upfrontDiscountAmount;
   const totalSavings = savingsFromBillingCycle + savingsFromUpfront;
 

@@ -145,21 +145,21 @@ export default function PreciosPage() {
     isAvailable: boolean,
     availableText: string = tp("pricing.available"),
     notAvailableText: string = tp("pricing.not_available"),
-  ) => (
+  ) =>
     isAvailable ? (
       <span className="text-green-500 font-semibold">{availableText}</span>
     ) : (
       <span className="text-red-500">{notAvailableText}</span>
-    )
-  );
+    );
 
-  const renderFeatureIncluded = (isIncluded: boolean) => (
+  const renderFeatureIncluded = (isIncluded: boolean) =>
     isIncluded ? (
-      <span className="text-green-500 font-semibold">{tp("pricing.included")}</span>
+      <span className="text-green-500 font-semibold">
+        {tp("pricing.included")}
+      </span>
     ) : (
       <span className="text-red-500">{tp("pricing.not_included")}</span>
-    )
-  );
+    );
 
   return (
     <div className="min-h-screen bg-responsive-desktop bg-planes">
@@ -196,31 +196,34 @@ export default function PreciosPage() {
             </motion.div>
 
             {/* Billing Cycle Toggle */}
-            <div className="flex justify-center gap-2 mb-4">
+            <div className="flex justify-center gap-4 mb-6">
               <Button
                 onClick={() => setBillingCycle("semestral")}
                 variant={billingCycle === "semestral" ? "default" : "outline"}
-                className="min-w-[120px]"
+                size="lg"
+                className="min-w-[160px] text-lg font-bold py-6 px-8 h-auto"
               >
                 {tp("planes.billing.semestral")}
               </Button>
               <Button
                 onClick={() => setBillingCycle("annual")}
                 variant={billingCycle === "annual" ? "default" : "outline"}
-                className="min-w-[120px] relative"
+                size="lg"
+                className="min-w-[160px] text-lg font-bold py-6 px-8 h-auto relative"
               >
                 {tp("planes.billing.annual")}
-                <span className="absolute -top-2 -right-2 bg-green-700 text-white text-xs px-2 py-0.5 rounded-full">
+                <span className="absolute -top-2 -right-2 bg-green-700 text-white text-sm px-3 py-1 rounded-full font-bold">
                   {tp("planes.billing.discount_annual")}
                 </span>
               </Button>
               <Button
                 onClick={() => setBillingCycle("biannual")}
                 variant={billingCycle === "biannual" ? "default" : "outline"}
-                className="min-w-[120px] relative"
+                size="lg"
+                className="min-w-[160px] text-lg font-bold py-6 px-8 h-auto relative"
               >
                 {tp("planes.billing.biannual")}
-                <span className="absolute -top-2 -right-2 bg-green-700 text-white text-xs px-2 py-0.5 rounded-full">
+                <span className="absolute -top-2 -right-2 bg-green-700 text-white text-sm px-3 py-1 rounded-full font-bold">
                   {tp("planes.billing.discount_biannual")}
                 </span>
               </Button>
@@ -431,11 +434,15 @@ export default function PreciosPage() {
                               </li>
                               <li>
                                 {tp("pricing.advanced_reports")}:{" "}
-                                {renderFeatureAvailability(plan.features.advancedReports)}
+                                {renderFeatureAvailability(
+                                  plan.features.advancedReports,
+                                )}
                               </li>
                               <li>
                                 {tp("pricing.integrations")}:{" "}
-                                {renderFeatureAvailability(plan.features.integrations)}
+                                {renderFeatureAvailability(
+                                  plan.features.integrations,
+                                )}
                               </li>
                               <li>
                                 {tp("pricing.api_webhooks")}:{" "}
@@ -443,7 +450,9 @@ export default function PreciosPage() {
                               </li>
                               <li>
                                 {tp("pricing.dedicated_manager")}:{" "}
-                                {renderFeatureIncluded(plan.features.dedicatedManager)}
+                                {renderFeatureIncluded(
+                                  plan.features.dedicatedManager,
+                                )}
                               </li>
                             </ul>
                           </div>

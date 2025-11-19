@@ -8,7 +8,12 @@ import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { tenantQuery, tenantMutation } from "./tenancy";
 import { Id, Doc } from "./_generated/dataModel";
-import { SEMESTER_SCHEMA, EVALUATION_LEVEL_SCHEMA, COVERAGE_STATUS_SCHEMA, COVERAGE_TYPE_SCHEMA } from "./constants";
+import {
+  SEMESTER_SCHEMA,
+  EVALUATION_LEVEL_SCHEMA,
+  COVERAGE_STATUS_SCHEMA,
+  COVERAGE_TYPE_SCHEMA,
+} from "./constants";
 import { now } from "./validation";
 
 // ==================== QUERIES ====================
