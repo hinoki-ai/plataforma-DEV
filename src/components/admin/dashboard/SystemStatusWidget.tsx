@@ -191,8 +191,8 @@ export function SystemStatusWidget({ metrics }: SystemStatusWidgetProps) {
                   "status" in m &&
                   m.status === "healthy",
               )
-                ? "Todo funcionando"
-                : "Requiere atención"}
+                ? t("system.status.all_good")
+                : t("system.status.needs_attention")}
             </Badge>
           </div>
         </div>
