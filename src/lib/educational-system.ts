@@ -367,11 +367,24 @@ export function getSubjectsForInstitutionType(
   return [...(SUBJECTS_BY_LEVEL[type] || [])];
 }
 
+// Define the structure for educational configuration
+export interface EducationalConfig {
+  maxCourses?: number;
+  maxSubjects?: number;
+  enabledFeatures?: Record<string, boolean>;
+}
+
 // Check if current system should show certain features based on institution type
 export function shouldShowFeature(
   feature: string,
   institutionType: EducationalInstitutionType,
+  config?: EducationalConfig,
 ): boolean {
+  // If explicit config is present, prioritize it
+  if (config?.enabledFeatures && feature in config.enabledFeatures) {
+    return config.enabledFeatures[feature];
+  }
+
   const featureMatrix: Record<string, EducationalInstitutionType[]> = {
     parent_meetings: ["PRESCHOOL", "BASIC_SCHOOL", "HIGH_SCHOOL"],
     academic_planning: [
@@ -426,3 +439,20 @@ export function shouldShowFeature(
 
   return featureMatrix[feature]?.includes(institutionType) ?? true;
 }
+
+export const FEATURE_LABELS: Record<string, string> = {
+  parent_meetings: "Reuniones de Apoderados",
+  academic_planning: "Planificación Académica",
+  grading_system: "Sistema de Calificaciones",
+  daycare_features: "Funciones de Sala Cuna",
+  university_features: "Gestión Universitaria",
+  technical_training: "Formación Técnica",
+  thesis_management: "Gestión de Tesis",
+  play_based_learning: "Aprendizaje Basado en Juegos",
+  career_guidance: "Orientación Vocacional",
+  research_projects: "Proyectos de Investigación",
+  laboratory_access: "Acceso a Laboratorios",
+  certification_programs: "Programas de Certificación",
+  postgraduate_programs: "Postgrados",
+  technical_specialization: "Especialización Técnica",
+};

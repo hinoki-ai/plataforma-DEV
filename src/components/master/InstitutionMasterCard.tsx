@@ -101,10 +101,10 @@ export function InstitutionMasterCard({
         "bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700",
     },
     {
-      label: "Gestión Universal Usuarios",
-      icon: Users,
-      description: "Control total de todos los niveles educativos",
-      action: () => toast.info("🏛️ MASTER: Accediendo a gestión universal"),
+      label: "Gestión de Instituciones",
+      icon: Building2,
+      description: "Administrar tenants y sus usuarios",
+      action: () => router.push("/master/institutions"),
       color:
         "bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700",
     },

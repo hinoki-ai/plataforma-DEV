@@ -46,7 +46,13 @@ const institutionSchema = z.object({
   supportedLevels: z.any().optional(),
   customGrades: z.any().optional(),
   customSubjects: z.any().optional(),
-  educationalConfig: z.any().optional(),
+  educationalConfig: z
+    .object({
+      maxCourses: z.coerce.number().min(1).optional(),
+      maxSubjects: z.coerce.number().min(1).optional(),
+      enabledFeatures: z.record(z.boolean()).optional(),
+    })
+    .optional(),
   isActive: z.boolean().optional(),
 });
 

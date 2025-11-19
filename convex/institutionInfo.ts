@@ -142,6 +142,33 @@ export const getUserActiveInstitutions = query({
   },
 });
 
+export const getInstitutionUsers = query({
+  args: { institutionId: v.id("institutionInfo") },
+  handler: async (ctx, args) => {
+    const memberships = await ctx.db
+      .query("institutionMemberships")
+      .withIndex("by_institutionId", (q) =>
+        q.eq("institutionId", args.institutionId),
+      )
+      .collect();
+
+    const usersWithRoles = await Promise.all(
+      memberships.map(async (m) => {
+        const user = await ctx.db.get(m.userId);
+        if (!user) return null;
+        return {
+          ...user,
+          role: m.role, // Use role from membership
+          status: m.status,
+          membershipId: m._id,
+        };
+      }),
+    );
+
+    return usersWithRoles.filter((u) => u !== null);
+  },
+});
+
 // ==================== MUTATIONS ====================
 
 export const createOrUpdateSchoolInfo = mutation({

@@ -67,6 +67,9 @@ export const institutionInfo = defineTable({
           passingGrade: v.number(),
         }),
       ),
+      maxCourses: v.optional(v.number()),
+      maxSubjects: v.optional(v.number()),
+      enabledFeatures: v.optional(v.any()),
     }),
   ), // Educational configuration
   isActive: v.optional(v.boolean()),

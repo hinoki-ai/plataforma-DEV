@@ -37,8 +37,11 @@ import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 import {
   EducationalInstitutionType,
   INSTITUTION_TYPE_INFO,
+  EDUCATIONAL_LEVELS,
+  FEATURE_LABELS,
 } from "@/lib/educational-system";
-import { Building2, Crown, ShieldCheck } from "lucide-react";
+import { Building2, Crown, ShieldCheck, Check, Settings2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const adminSchema = z.object({
   name: z.string().min(2, "Ingrese al menos 2 caracteres"),
@@ -70,6 +73,14 @@ const institutionCreationSchema = z
       "TECHNICAL_CENTER",
       "UNIVERSITY",
     ] satisfies [EducationalInstitutionType, ...EducationalInstitutionType[]]),
+    supportedLevels: z.array(z.string()).optional(),
+    educationalConfig: z
+      .object({
+        maxCourses: z.coerce.number().min(1).optional(),
+        maxSubjects: z.coerce.number().min(1).optional(),
+        enabledFeatures: z.record(z.boolean()).optional(),
+      })
+      .optional(),
     admins: z.array(adminSchema).min(1, "Debe crear al menos un administrador"),
   })
   .refine((data) => data.admins.some((admin) => admin.isPrimary), {
@@ -99,6 +110,12 @@ const defaultValues: InstitutionCreationFormValues = {
   website: "https://",
   logoUrl: "",
   institutionType: "PRESCHOOL",
+  supportedLevels: [],
+  educationalConfig: {
+    maxCourses: 20,
+    maxSubjects: 20,
+    enabledFeatures: {},
+  },
   admins: [
     {
       name: "",
@@ -131,6 +148,22 @@ export function InstitutionCreationForm() {
   });
 
   const primaryAdminIndex = form.watch("admins").findIndex((a) => a.isPrimary);
+  const selectedInstitutionType = form.watch("institutionType");
+
+  const availableLevels = useMemo(() => {
+    return INSTITUTION_TYPE_INFO[selectedInstitutionType].levels;
+  }, [selectedInstitutionType]);
+
+  // Auto-select all levels when institution type changes
+  useMemo(() => {
+    const levels = INSTITUTION_TYPE_INFO[selectedInstitutionType].levels.map(
+      (l) => l.id,
+    );
+    // Use setTimeout to avoid setting state during render
+    setTimeout(() => {
+      form.setValue("supportedLevels", levels);
+    }, 0);
+  }, [selectedInstitutionType, form]);
 
   const institutionOptions = useMemo(
     () =>
@@ -196,6 +229,8 @@ export function InstitutionCreationForm() {
           website: values.website.trim(),
           logoUrl: values.logoUrl?.trim() || undefined,
           institutionType: values.institutionType,
+          supportedLevels: values.supportedLevels,
+          educationalConfig: values.educationalConfig,
         },
         admins: values.admins.map((admin) => ({
           name: admin.name.trim(),
@@ -320,6 +355,76 @@ export function InstitutionCreationForm() {
                       </FormItem>
                     )}
                   />
+
+                  <FormField
+                    control={form.control}
+                    name="supportedLevels"
+                    render={() => (
+                      <FormItem className="md:col-span-2">
+                        <div className="mb-4">
+                          <FormLabel className="text-base">
+                            Niveles Educativos Soportados
+                          </FormLabel>
+                          <CardDescription>
+                            Seleccione los niveles que ofrecerá esta institución
+                            ({availableLevels.length} disponibles para{" "}
+                            {
+                              INSTITUTION_TYPE_INFO[selectedInstitutionType]
+                                .chileanName
+                            }
+                            )
+                          </CardDescription>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 bg-muted/10">
+                          {availableLevels.map((level) => (
+                            <FormField
+                              key={level.id}
+                              control={form.control}
+                              name="supportedLevels"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={level.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(
+                                          level.id,
+                                        )}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([
+                                                ...(field.value || []),
+                                                level.id,
+                                              ])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== level.id,
+                                                ),
+                                              );
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                      <FormLabel className="font-normal text-sm font-semibold">
+                                        {level.chileanName}
+                                      </FormLabel>
+                                      <p className="text-xs text-muted-foreground">
+                                        {level.ages} • {level.duration}
+                                      </p>
+                                    </div>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="phone"
@@ -425,6 +530,77 @@ export function InstitutionCreationForm() {
                       </FormItem>
                     )}
                   />
+                </div>
+
+                <Separator />
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Settings2 className="h-5 w-5 text-blue-600" />
+                        Configuración Educativa
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Personalice los límites y módulos disponibles
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="educationalConfig.maxCourses"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Límite de Cursos</FormLabel>
+                          <FormControl>
+                            <Input type="number" min="1" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="educationalConfig.maxSubjects"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Límite de Asignaturas</FormLabel>
+                          <FormControl>
+                            <Input type="number" min="1" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-3 border rounded-lg p-4 bg-muted/10">
+                    <FormLabel>Módulos y Funcionalidades</FormLabel>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {Object.entries(FEATURE_LABELS).map(([key, label]) => (
+                        <FormField
+                          key={key}
+                          control={form.control}
+                          name={`educationalConfig.enabledFeatures.${key}`}
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal text-sm cursor-pointer">
+                                {label}
+                              </FormLabel>
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 <Separator />

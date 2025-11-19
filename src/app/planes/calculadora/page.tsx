@@ -40,6 +40,10 @@ import {
   type PriceBreakdown,
   type BillingCycleComparison,
 } from "@/data/pricing-plans";
+import {
+  INSTITUTION_TYPE_INFO,
+  EducationalInstitutionType,
+} from "@/lib/educational-system";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -86,7 +90,9 @@ const numberFormatter = new Intl.NumberFormat("es-CL");
 // Map legacy or alternative plan names to correct plan IDs
 const planMappings: Record<string, string> = {
   enterprise: "institucional",
-  // Add any other mappings here if needed
+  // Legacy mappings for renamed plans
+  avanzado: "academico", // Old "avanzado" (51-350) is now "academico"
+  // Old "academico" (351-1000) is now "profesional" - no mapping needed as ID changed
 };
 
 interface PricingCalculatorPageProps {
@@ -94,6 +100,7 @@ interface PricingCalculatorPageProps {
     plan?: string;
     billing?: string;
     students?: string;
+    type?: string;
   }>;
 }
 
@@ -107,6 +114,7 @@ export default function PricingCalculatorPage({
     plan?: string;
     billing?: string;
     students?: string;
+    type?: string;
   }>({});
 
   useEffect(() => {
@@ -135,9 +143,18 @@ export default function PricingCalculatorPage({
     Boolean(planFromParams),
   );
 
+  // Initialize institution type
+  const [institutionType, setInstitutionTypeState] =
+    useState<EducationalInstitutionType>("PRESCHOOL");
+
   // Update selectedPlanId when resolvedSearchParams.plan changes
   useEffect(() => {
     const planParam = resolvedSearchParams.plan;
+    if (resolvedSearchParams.type) {
+      setInstitutionTypeState(
+        resolvedSearchParams.type as EducationalInstitutionType,
+      );
+    }
     if (planParam) {
       const mappedPlanId = planMappings[planParam] || planParam;
       const plan = findPricingPlan(mappedPlanId);
@@ -277,6 +294,7 @@ export default function PricingCalculatorPage({
       newBillingCycle?: BillingCycle,
       newStudents?: number,
       newPlan?: string,
+      newType?: EducationalInstitutionType,
     ) => {
       const params = new URLSearchParams();
 
@@ -292,11 +310,15 @@ export default function PricingCalculatorPage({
       const studentsToUse = newStudents ?? students;
       params.set("students", studentsToUse.toString());
 
+      // Use new type if provided, otherwise keep current
+      const typeToUse = newType ?? institutionType;
+      params.set("type", typeToUse);
+
       router.replace(`/planes/calculadora?${params.toString()}`, {
         scroll: false,
       });
     },
-    [router, selectedPlan.id, billingCycle, students],
+    [router, selectedPlan.id, billingCycle, students, institutionType],
   );
 
   // Wrapper functions to update state and URL
@@ -314,6 +336,14 @@ export default function PricingCalculatorPage({
       updateUrl(billingCycle, newStudents);
     },
     [updateUrl, billingCycle],
+  );
+
+  const setInstitutionType = useCallback(
+    (type: EducationalInstitutionType) => {
+      setInstitutionTypeState(type);
+      updateUrl(billingCycle, students, undefined, type);
+    },
+    [updateUrl, billingCycle, students],
   );
 
   // Sync inputValue when students changes externally (slider, buttons, plan change)
@@ -500,7 +530,8 @@ export default function PricingCalculatorPage({
       .replace("{monthly_price}", monthlyPriceFormatted)
       .replace("{period}", periodLabel)
       .replace("{total}", totalFormatted)
-      .replace("{payment_frequency}", paymentFrequencyLabel),
+      .replace("{payment_frequency}", paymentFrequencyLabel) +
+      `\nTipo de Institución: ${INSTITUTION_TYPE_INFO[institutionType].chileanName}`,
   );
 
   const emailSubject = encodeURIComponent(
@@ -515,7 +546,8 @@ export default function PricingCalculatorPage({
       .replace("{cycle}", billingInfo.label)
       .replace("{monthly_price}", monthlyPriceFormatted)
       .replace("{period}", periodLabel)
-      .replace("{total}", totalFormatted),
+      .replace("{total}", totalFormatted) +
+      `\nTipo de Institución: ${INSTITUTION_TYPE_INFO[institutionType].chileanName}`,
   );
 
   const updateStudents = (value: number) => {
@@ -562,6 +594,10 @@ export default function PricingCalculatorPage({
         : `${numberFormatter.format(selectedPlan.minStudents)}+ ${tc("calculator.students_count").replace("{count}", "")}`,
     },
     {
+      label: "Tipo de Institución",
+      value: INSTITUTION_TYPE_INFO[institutionType].chileanName,
+    },
+    {
       label: tc("calculator.price_per_student"),
       value: `${formatCLP(selectedPlan.pricePerStudent)} / ${tc("calculator.month")}`,
     },
@@ -598,6 +634,42 @@ export default function PricingCalculatorPage({
                     <CardDescription className="text-gray-300 text-base mt-2">
                       {selectedPlan.description}
                     </CardDescription>
+
+                    {/* Institution Type Selector */}
+                    <div className="mt-4 mb-4">
+                      <div className="text-sm font-semibold text-gray-300 mb-2">
+                        Tipo de Institución
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(INSTITUTION_TYPE_INFO).map(
+                          ([key, info]) => (
+                            <Button
+                              key={key}
+                              onClick={() =>
+                                setInstitutionType(
+                                  key as EducationalInstitutionType,
+                                )
+                              }
+                              variant={
+                                institutionType === key ? "default" : "outline"
+                              }
+                              size="sm"
+                              className={`flex items-center gap-2 h-8 ${
+                                institutionType === key
+                                  ? "bg-primary text-primary-foreground border-primary"
+                                  : "bg-transparent border-gray-700 text-gray-300 hover:bg-gray-800"
+                              }`}
+                            >
+                              <span className="text-lg">{info.icon}</span>
+                              <span className="text-xs">
+                                {info.chileanName}
+                              </span>
+                            </Button>
+                          ),
+                        )}
+                      </div>
+                    </div>
+
                     {/* Plan Validation Warning */}
                     {!planValidation.isValid && (
                       <div className="mt-3 rounded-lg border border-yellow-500/50 bg-yellow-500/10 p-3 flex items-start gap-2">
