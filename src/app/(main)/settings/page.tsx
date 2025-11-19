@@ -115,10 +115,7 @@ export default function SettingsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <SettingsTabs
-              activeTab={activeTab}
-              onTabChange={handleTabChange}
-            />
+            <SettingsTabs activeTab={activeTab} onTabChange={handleTabChange} />
           </CardContent>
         </Card>
       </div>

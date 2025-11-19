@@ -121,16 +121,16 @@ export function ProfileCompletionWizard({
     // However, completedSteps might be empty if session exists but no steps are completed yet
     // So we check if we have processed the session data at least once
     // We do this by checking if the completion calculation has had a chance to run
-    
+
     // Wait for the completion calculation to process (it will set completedSteps)
     // We'll let it run at least once by checking if session exists (which it does at this point)
     // The completion effect depends on session, so once session is defined, completedSteps should be calculated
-    
+
     const stepArray = Array.from({ length: totalSteps }, (_, i) => i + 1);
     const firstIncomplete = stepArray.find(
       (step) => !completedSteps.includes(step),
     );
-    
+
     // Only auto-advance if we found an incomplete step
     // We check against currentStep using a callback to avoid including it in dependencies
     if (firstIncomplete !== undefined) {
@@ -139,7 +139,7 @@ export function ProfileCompletionWizard({
         return firstIncomplete !== prevStep ? firstIncomplete : prevStep;
       });
     }
-    
+
     // Mark as initialized once we've processed the auto-advance logic
     // (even if no incomplete step was found, meaning all are complete)
     hasInitialized.current = true;
@@ -179,47 +179,33 @@ export function ProfileCompletionWizard({
       {
         id: 1,
         title: t("wizard.personal_info", "Personal Information"),
-        description: t(
-          "wizard.personal_info_desc",
-          "Complete your basic data",
-        ),
+        description: t("wizard.personal_info_desc", "Complete your basic data"),
         tab: "profile",
       },
       {
         id: 2,
         title: t("wizard.preferences", "Preferences"),
-        description: t(
-          "wizard.preferences_desc",
-          "Configure your preferences",
-        ),
+        description: t("wizard.preferences_desc", "Configure your preferences"),
         tab: "notifications",
       },
       {
         id: 3,
         title: t("wizard.security_settings", "Security Settings"),
-        description: t(
-          "wizard.security_settings_desc",
-          "Ajusta tu seguridad",
-        ),
+        description: t("wizard.security_settings_desc", "Ajusta tu seguridad"),
         tab: "account",
       },
       {
         id: 4,
         title: t("wizard.verification", "Verification"),
-        description: t(
-          "wizard.verification_desc",
-          "Verifica tu cuenta",
-        ),
+        description: t("wizard.verification_desc", "Verifica tu cuenta"),
         tab: "profile",
       },
     ];
 
-    return stepConfigs
-      .slice(0, totalSteps)
-      .map((config) => ({
-        ...config,
-        completed: completedSteps.includes(config.id),
-      }));
+    return stepConfigs.slice(0, totalSteps).map((config) => ({
+      ...config,
+      completed: completedSteps.includes(config.id),
+    }));
   }, [totalSteps, completedSteps, t]);
 
   const handleStepClick = (stepId: number) => {
@@ -269,7 +255,7 @@ export function ProfileCompletionWizard({
               const isCurrent = step.id === currentStep;
               const isTabActive = activeTab === step.tab;
               const isClickable = onStepClick !== undefined;
-              
+
               return (
                 <div
                   key={step.id}
@@ -277,7 +263,9 @@ export function ProfileCompletionWizard({
                   className={cn(
                     "flex items-center space-x-3 p-3 rounded-md transition-all",
                     isCurrent && "bg-muted",
-                    isTabActive && !isCurrent && "bg-muted/50 ring-2 ring-primary/20",
+                    isTabActive &&
+                      !isCurrent &&
+                      "bg-muted/50 ring-2 ring-primary/20",
                     isClickable && "cursor-pointer hover:bg-muted/50",
                   )}
                 >

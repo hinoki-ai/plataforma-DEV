@@ -19,9 +19,30 @@ export async function GET(request: NextRequest) {
     }
 
     const client = await getAuthenticatedConvexClient();
-    const user = await client.query(api.users.getUserById, {
-      userId: session.user.id as any,
-    });
+
+    // Resolve Convex user - session.user.id might be a Clerk ID string
+    let user = null;
+
+    // Check if session.user.id is a valid Convex ID (starts with a letter)
+    // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
+    if (session.user.id && /^[a-z]/.test(session.user.id)) {
+      // It's a valid Convex ID, use it directly
+      user = await client.query(api.users.getUserById, {
+        userId: session.user.id as any,
+      });
+    } else {
+      // It's a Clerk ID, look up by Clerk ID
+      if (!session.user.clerkId) {
+        return NextResponse.json(
+          { error: "User not found in database" },
+          { status: 404 },
+        );
+      }
+
+      user = await client.query(api.users.getUserByClerkId, {
+        clerkId: session.user.clerkId,
+      });
+    }
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -66,6 +87,33 @@ export async function PUT(request: NextRequest) {
 
     const client = await getAuthenticatedConvexClient();
 
+    // Resolve Convex user ID - session.user.id might be a Clerk ID string
+    let convexUserId = session.user.id as any;
+
+    // Check if session.user.id is a valid Convex ID (starts with a letter)
+    // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
+    if (!convexUserId || !/^[a-z]/.test(convexUserId)) {
+      if (!session.user.clerkId) {
+        return NextResponse.json(
+          { error: "User not found in database" },
+          { status: 404 },
+        );
+      }
+
+      const userByClerkId = await client.query(api.users.getUserByClerkId, {
+        clerkId: session.user.clerkId,
+      });
+
+      if (!userByClerkId) {
+        return NextResponse.json(
+          { error: "User not found in database" },
+          { status: 404 },
+        );
+      }
+
+      convexUserId = userByClerkId._id;
+    }
+
     // Prepare update data with trimming
     const updateData: any = {};
     if (validatedData.name !== undefined) {
@@ -85,7 +133,7 @@ export async function PUT(request: NextRequest) {
 
     // Update user
     const updatedUser = await client.mutation(api.users.updateUser, {
-      id: session.user.id as any,
+      id: convexUserId,
       ...updateData,
     });
 
