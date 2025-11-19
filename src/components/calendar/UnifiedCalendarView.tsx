@@ -1187,7 +1187,7 @@ export default function UnifiedCalendarView({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
-                  className="w-[600px] p-4"
+                  className="w-[calc(100vw-2rem)] sm:w-[600px] md:w-[700px] lg:w-[900px] p-4"
                   align="start"
                   sideOffset={8}
                 >
@@ -1220,7 +1220,7 @@ export default function UnifiedCalendarView({
                           : "Seleccionar todo"}
                       </Button>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[400px] overflow-y-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-[500px] overflow-y-auto">
                       {(Object.keys(categorySystem) as EventCategory[]).map(
                         (category) => {
                           const config = getCategoryConfig(category);
