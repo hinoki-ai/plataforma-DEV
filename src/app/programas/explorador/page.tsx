@@ -15,25 +15,25 @@ export default function ProgramasExplorerPage() {
   return (
     <div className="min-h-screen bg-responsive-desktop bg-programas flex flex-col">
       <div className="relative flex flex-1 flex-col">
-        {/* Animated ambient elements */}
+        {/* Animated ambient elements - responsive sizing */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-linear-to-br from-blue-400/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-linear-to-tr from-indigo-400/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-linear-to-r from-emerald-400/10 to-teal-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute -top-20 -right-20 sm:-top-40 sm:-right-40 w-40 h-40 sm:w-80 sm:h-80 bg-linear-to-br from-blue-400/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-20 -left-20 sm:-bottom-40 sm:-left-40 w-40 h-40 sm:w-80 sm:h-80 bg-linear-to-tr from-indigo-400/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-96 sm:h-96 bg-linear-to-r from-emerald-400/10 to-teal-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
         <div className="relative flex flex-1 flex-col">
           <Header />
 
-          <main className="container mx-auto px-4 pt-8 pb-12 md:pb-16 flex-1">
-            <div className="max-w-7xl mx-auto space-y-16">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-8 sm:pb-12 md:pb-16 flex-1">
+            <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12 lg:space-y-16">
               {/* Hero Section */}
-              <section className="text-center space-y-8">
-                <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-3xl border border-white/10 dark:border-white/5 shadow-2xl p-6 md:p-10 inline-block">
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl">
+              <section className="text-center space-y-4 sm:space-y-6">
+                <div className="max-w-4xl mx-auto px-4">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl">
                     {t("programas.explorer.page_heading")}
                   </h1>
-                  <p className="mt-4 text-lg md:text-xl text-slate-600 dark:text-slate-200 max-w-3xl mx-auto leading-relaxed">
+                  <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-200 max-w-3xl mx-auto leading-relaxed">
                     {t("programas.explorer.page_subheading")}
                   </p>
                 </div>
@@ -52,23 +52,23 @@ export default function ProgramasExplorerPage() {
               </section>
 
               {/* CTA Section */}
-              <section className="relative overflow-hidden rounded-3xl bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 text-white shadow-2xl border border-white/20 dark:border-white/10">
+              <section className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 text-white shadow-2xl border border-white/20 dark:border-white/10">
                 <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div className="absolute -top-10 -right-10 sm:-top-20 sm:-right-20 w-20 h-20 sm:w-40 sm:h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div className="absolute -bottom-10 -left-10 sm:-bottom-20 sm:-left-20 w-20 h-20 sm:w-40 sm:h-40 bg-white/10 rounded-full blur-2xl"></div>
 
-                <div className="relative p-12 md:p-16 grid gap-8 lg:grid-cols-[1.2fr,0.8fr]">
-                  <div className="space-y-6">
-                    <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full font-medium">
-                      <Sparkles className="h-5 w-5" />
+                <div className="relative p-6 sm:p-8 md:p-12 lg:p-16 grid gap-6 sm:gap-8 lg:grid-cols-[1.2fr,0.8fr]">
+                  <div className="space-y-4 sm:space-y-6">
+                    <div className="inline-flex items-center gap-2 sm:gap-3 bg-white/20 backdrop-blur-sm px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium text-sm sm:text-base">
+                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                       {t("programas.explorer.contact_title")}
                     </div>
-                    <p className="text-xl md:text-2xl leading-relaxed opacity-90">
+                    <p className="text-lg sm:text-xl md:text-2xl leading-relaxed opacity-90">
                       {t("programas.explorer.contact_subtitle")}
                     </p>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-end">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:items-center lg:justify-end">
                     <Button
                       asChild
                       size="lg"

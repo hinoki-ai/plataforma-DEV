@@ -39,6 +39,33 @@ import {
 import { LevelSpecificDashboard } from "@/components/dashboard/LevelSpecificDashboard";
 import { EducationalLevelAwareNavigation } from "@/components/layout/EducationalLevelAwareNavigation";
 
+// Standardized design tokens
+const DESIGN_TOKENS = {
+  spacing: {
+    section: "space-y-8",
+    card: "space-y-6",
+    content: "space-y-4",
+    item: "space-y-2",
+  },
+  padding: {
+    card: "p-6",
+    icon: "p-3",
+    badge: "px-3 py-1",
+    button: "px-6 py-3",
+  },
+  borderRadius: {
+    card: "rounded-xl",
+    button: "rounded-lg",
+    badge: "rounded-full",
+  },
+  shadows: {
+    card: "shadow-lg",
+    button: "shadow-md hover:shadow-lg",
+    elevated: "shadow-xl",
+  },
+  transitions: "transition-all duration-300",
+} as const;
+
 export function EducationalSystemExplorer() {
   const { t } = useDivineParsing(["common", "programas"]);
   const [selectedType, setSelectedType] =
@@ -61,9 +88,11 @@ export function EducationalSystemExplorer() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className={DESIGN_TOKENS.spacing.section}>
       {/* Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 text-white shadow-2xl">
+      <div
+        className={`relative overflow-hidden ${DESIGN_TOKENS.borderRadius.card} bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 text-white ${DESIGN_TOKENS.shadows.elevated}`}
+      >
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute -top-10 -right-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
         <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
@@ -71,8 +100,10 @@ export function EducationalSystemExplorer() {
         <Card className="bg-transparent border-0 text-white shadow-none">
           <CardHeader className="relative z-10">
             <CardTitle className="flex items-center gap-3 text-2xl md:text-3xl font-bold">
-              <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-                <Globe className="h-7 w-7" />
+              <div
+                className={`${DESIGN_TOKENS.padding.icon} bg-white/20 ${DESIGN_TOKENS.borderRadius.card} backdrop-blur-sm`}
+              >
+                <Globe className="h-6 w-6" />
               </div>
               🎓 {t("programas.explorer.title")}
             </CardTitle>
@@ -84,7 +115,7 @@ export function EducationalSystemExplorer() {
       </div>
 
       {/* Institution Type Selector */}
-      <div className="space-y-6">
+      <div className={DESIGN_TOKENS.spacing.card}>
         <div className="text-center space-y-2">
           <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white">
             {t("programas.explorer.select_institution_type")}
@@ -108,7 +139,7 @@ export function EducationalSystemExplorer() {
                 onClick={() => setSelectedType(typedType)}
               >
                 <div
-                  className={`absolute inset-0 rounded-2xl blur-xl transition-all duration-300 ${
+                  className={`absolute inset-0 ${DESIGN_TOKENS.borderRadius.card} blur-xl ${DESIGN_TOKENS.transitions} ${
                     isSelected
                       ? "bg-linear-to-r from-blue-500/50 to-purple-500/50"
                       : "bg-linear-to-r from-slate-200/20 to-slate-300/20 group-hover:from-blue-400/30 group-hover:to-purple-400/30"
@@ -116,7 +147,7 @@ export function EducationalSystemExplorer() {
                 ></div>
 
                 <Card
-                  className={`relative border-0 shadow-xl transition-all duration-300 overflow-hidden ${
+                  className={`relative border-0 ${DESIGN_TOKENS.shadows.elevated} ${DESIGN_TOKENS.transitions} overflow-hidden ${
                     isSelected
                       ? "bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-blue-500/25"
                       : "bg-white dark:bg-slate-800 hover:shadow-2xl hover:shadow-blue-500/10"
@@ -124,9 +155,11 @@ export function EducationalSystemExplorer() {
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                  <CardContent className="p-6 text-center space-y-4 relative z-10">
+                  <CardContent
+                    className={`${DESIGN_TOKENS.padding.card} text-center ${DESIGN_TOKENS.spacing.content} relative z-10`}
+                  >
                     <div
-                      className={`inline-flex p-4 rounded-2xl transition-all duration-300 ${
+                      className={`inline-flex ${DESIGN_TOKENS.padding.icon} ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.transitions} ${
                         isSelected
                           ? "bg-white/20 text-white"
                           : "bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-600 dark:text-blue-400 group-hover:scale-110"
@@ -135,9 +168,9 @@ export function EducationalSystemExplorer() {
                       <span className="text-3xl">{info.icon}</span>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className={DESIGN_TOKENS.spacing.item}>
                       <h3
-                        className={`font-bold text-lg transition-colors duration-300 ${
+                        className={`font-bold text-lg ${DESIGN_TOKENS.transitions} ${
                           isSelected
                             ? "text-white"
                             : "text-slate-800 dark:text-white"
@@ -147,7 +180,7 @@ export function EducationalSystemExplorer() {
                       </h3>
                       <Badge
                         variant={isSelected ? "secondary" : "outline"}
-                        className={`transition-all duration-300 ${
+                        className={`${DESIGN_TOKENS.transitions} ${
                           isSelected
                             ? "bg-white/20 text-white border-white/30"
                             : "group-hover:bg-blue-50 group-hover:border-blue-200"
@@ -166,12 +199,16 @@ export function EducationalSystemExplorer() {
       </div>
 
       {/* Current Selection Info */}
-      <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg">
+      <div
+        className={`relative overflow-hidden ${DESIGN_TOKENS.borderRadius.card} bg-linear-to-r from-emerald-500 to-teal-500 text-white ${DESIGN_TOKENS.shadows.card}`}
+      >
         <div className="absolute inset-0 bg-black/10"></div>
 
         <Alert className="border-0 bg-transparent text-white shadow-none">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+            <div
+              className={`${DESIGN_TOKENS.padding.icon} bg-white/20 ${DESIGN_TOKENS.borderRadius.card} backdrop-blur-sm`}
+            >
               <Target className="h-5 w-5" />
             </div>
             <AlertDescription className="text-white/90 leading-relaxed">
@@ -220,46 +257,55 @@ export function EducationalSystemExplorer() {
         onValueChange={(value) => setActiveView(value as any)}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl shadow-inner">
+        <TabsList
+          className={`grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-800 ${DESIGN_TOKENS.padding.badge} ${DESIGN_TOKENS.borderRadius.card} shadow-inner`}
+        >
           <TabsTrigger
             value="overview"
-            className="rounded-xl data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-lg transition-all duration-300 font-medium"
+            className={`${DESIGN_TOKENS.borderRadius.card} data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-lg ${DESIGN_TOKENS.transitions} font-medium`}
           >
             {t("programas.explorer.overview")}
           </TabsTrigger>
           <TabsTrigger
             value="navigation"
-            className="rounded-xl data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-lg transition-all duration-300 font-medium"
+            className={`${DESIGN_TOKENS.borderRadius.card} data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-lg ${DESIGN_TOKENS.transitions} font-medium`}
           >
             {t("programas.explorer.navigation")}
           </TabsTrigger>
           <TabsTrigger
             value="dashboard"
-            className="rounded-xl data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-lg transition-all duration-300 font-medium"
+            className={`${DESIGN_TOKENS.borderRadius.card} data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-lg ${DESIGN_TOKENS.transitions} font-medium`}
           >
             {t("programas.explorer.dashboard")}
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-8 mt-8">
+        <TabsContent
+          value="overview"
+          className={`${DESIGN_TOKENS.spacing.section} mt-8`}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Educational Levels */}
-            <Card className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border-blue-200 dark:border-blue-800 shadow-xl">
+            <Card
+              className={`bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border-blue-200 dark:border-blue-800 ${DESIGN_TOKENS.shadows.elevated}`}
+            >
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="p-2 bg-blue-600 rounded-xl text-white">
+                  <div
+                    className={`${DESIGN_TOKENS.padding.icon} bg-blue-600 ${DESIGN_TOKENS.borderRadius.card} text-white`}
+                  >
                     <BookOpen className="h-5 w-5" />
                   </div>
                   {t("educational_system.educational_levels")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className={DESIGN_TOKENS.spacing.content}>
                   {INSTITUTION_TYPE_INFO[selectedType].levels.map(
                     (level, index) => (
                       <div
                         key={level.id}
-                        className="group relative overflow-hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700"
+                        className={`group relative overflow-hidden bg-white dark:bg-slate-800 ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.padding.card} shadow-sm hover:shadow-lg ${DESIGN_TOKENS.transitions} border border-slate-200 dark:border-slate-700`}
                       >
                         <div className="absolute inset-0 bg-linear-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -293,17 +339,23 @@ export function EducationalSystemExplorer() {
             </Card>
 
             {/* Subjects and Features */}
-            <Card className="bg-linear-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 border-emerald-200 dark:border-emerald-800 shadow-xl">
+            <Card
+              className={`bg-linear-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 border-emerald-200 dark:border-emerald-800 ${DESIGN_TOKENS.shadows.elevated}`}
+            >
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="p-2 bg-emerald-600 rounded-xl text-white">
+                  <div
+                    className={`${DESIGN_TOKENS.padding.icon} bg-emerald-600 ${DESIGN_TOKENS.borderRadius.card} text-white`}
+                  >
                     <Users className="h-5 w-5" />
                   </div>
                   {t("programas.explorer.system_features")}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+              <CardContent className={DESIGN_TOKENS.spacing.card}>
+                <div
+                  className={`bg-white dark:bg-slate-800 ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.padding.card} border border-slate-200 dark:border-slate-700`}
+                >
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-semibold text-slate-800 dark:text-white">
                       {t("programas.explorer.subjects")}
@@ -341,7 +393,9 @@ export function EducationalSystemExplorer() {
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+                <div
+                  className={`bg-white dark:bg-slate-800 ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.padding.card} border border-slate-200 dark:border-slate-700`}
+                >
                   <h4 className="font-semibold mb-3 text-slate-800 dark:text-white">
                     {t("programas.explorer.enabled_features")}
                   </h4>
@@ -399,11 +453,18 @@ export function EducationalSystemExplorer() {
           </div>
         </TabsContent>
 
-        <TabsContent value="navigation" className="space-y-8 mt-8">
-          <Card className="bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 border-purple-200 dark:border-purple-800 shadow-xl">
+        <TabsContent
+          value="navigation"
+          className={`${DESIGN_TOKENS.spacing.section} mt-8`}
+        >
+          <Card
+            className={`bg-linear-to-br from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 border-purple-200 dark:border-purple-800 ${DESIGN_TOKENS.shadows.elevated}`}
+          >
             <CardHeader className="pb-6">
               <CardTitle className="flex items-center gap-3 text-xl">
-                <div className="p-2 bg-purple-600 rounded-xl text-white">
+                <div
+                  className={`${DESIGN_TOKENS.padding.icon} bg-purple-600 ${DESIGN_TOKENS.borderRadius.card} text-white`}
+                >
                   <Globe className="h-5 w-5" />
                 </div>
                 {t("programas.explorer.adapted_navigation")}
@@ -413,7 +474,9 @@ export function EducationalSystemExplorer() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+              <div
+                className={`bg-white dark:bg-slate-800 ${DESIGN_TOKENS.borderRadius.card} p-6 border border-slate-200 dark:border-slate-700 shadow-sm`}
+              >
                 <EducationalLevelAwareNavigation
                   currentType={selectedType}
                   userRole="ADMIN"
@@ -423,10 +486,17 @@ export function EducationalSystemExplorer() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="dashboard" className="space-y-8 mt-8">
-          <div className="bg-linear-to-br from-orange-50 to-red-50 dark:from-orange-950/50 dark:to-red-950/50 rounded-2xl p-6 border border-orange-200 dark:border-orange-800">
+        <TabsContent
+          value="dashboard"
+          className={`${DESIGN_TOKENS.spacing.section} mt-8`}
+        >
+          <div
+            className={`bg-linear-to-br from-orange-50 to-red-50 dark:from-orange-950/50 dark:to-red-950/50 ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.padding.card} border border-orange-200 dark:border-orange-800`}
+          >
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-orange-600 rounded-xl text-white">
+              <div
+                className={`${DESIGN_TOKENS.padding.icon} bg-orange-600 ${DESIGN_TOKENS.borderRadius.card} text-white`}
+              >
                 <BarChart3 className="h-5 w-5" />
               </div>
               <div>
@@ -441,7 +511,9 @@ export function EducationalSystemExplorer() {
                 </p>
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <div
+              className={`bg-white dark:bg-slate-800 ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.padding.card} border border-slate-200 dark:border-slate-700 shadow-sm`}
+            >
               <LevelSpecificDashboard
                 currentType={selectedType}
                 userRole="ADMIN"
@@ -452,7 +524,9 @@ export function EducationalSystemExplorer() {
       </Tabs>
 
       {/* Implementation Status */}
-      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-green-500 via-emerald-500 to-teal-500 text-white shadow-2xl">
+      <div
+        className={`relative overflow-hidden ${DESIGN_TOKENS.borderRadius.card} bg-linear-to-r from-green-500 via-emerald-500 to-teal-500 text-white ${DESIGN_TOKENS.shadows.elevated}`}
+      >
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute -top-10 -right-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
         <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
@@ -460,13 +534,17 @@ export function EducationalSystemExplorer() {
         <Card className="bg-transparent border-0 text-white shadow-none">
           <CardHeader className="relative z-10">
             <CardTitle className="flex items-center gap-3 text-2xl">
-              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <div
+                className={`${DESIGN_TOKENS.padding.icon} bg-white/20 ${DESIGN_TOKENS.borderRadius.card} backdrop-blur-sm`}
+              >
                 <Info className="h-6 w-6" />
               </div>
               {t("programas.explorer.implementation_status")}
             </CardTitle>
           </CardHeader>
-          <CardContent className="relative z-10 space-y-6">
+          <CardContent
+            className={`relative z-10 ${DESIGN_TOKENS.spacing.card}`}
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
@@ -520,7 +598,7 @@ export function EducationalSystemExplorer() {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/20 transition-all duration-300 group"
+                  className={`bg-white/10 backdrop-blur-sm ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.padding.card} border border-white/20 hover:bg-white/20 ${DESIGN_TOKENS.transitions} group`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="text-2xl">{item.icon}</div>
@@ -544,7 +622,9 @@ export function EducationalSystemExplorer() {
               ))}
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+            <div
+              className={`bg-white/10 backdrop-blur-sm ${DESIGN_TOKENS.borderRadius.card} ${DESIGN_TOKENS.padding.card} border border-white/20`}
+            >
               <div className="flex items-start gap-4">
                 <div className="text-3xl">🎉</div>
                 <div className="flex-1">

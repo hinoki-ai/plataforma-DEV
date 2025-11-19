@@ -166,7 +166,7 @@ export const ADMIN_NAVIGATION = [
   {
     title: STANDARD_SECTION_ORDER.SYSTEM,
     defaultOpen: false,
-    items: [SHARED_NAVIGATION_ITEMS.SETTINGS],
+    items: [SHARED_NAVIGATION_ITEMS.DOCS, SHARED_NAVIGATION_ITEMS.SETTINGS],
   },
 ];
 
@@ -318,6 +318,7 @@ export const PROFESOR_NAVIGATION = [
         icon: NavigationIcons.Profile,
         shortcut: "Alt+F",
       },
+      SHARED_NAVIGATION_ITEMS.DOCS,
       SHARED_NAVIGATION_ITEMS.SETTINGS,
     ],
   },
@@ -464,7 +465,7 @@ export const PARENT_NAVIGATION = [
   {
     title: STANDARD_SECTION_ORDER.PERSONAL,
     defaultOpen: false,
-    items: [SHARED_NAVIGATION_ITEMS.SETTINGS],
+    items: [SHARED_NAVIGATION_ITEMS.DOCS, SHARED_NAVIGATION_ITEMS.SETTINGS],
   },
 ];
 
@@ -669,7 +670,7 @@ export const MASTER_NAVIGATION = [
   {
     title: STANDARD_SECTION_ORDER.SYSTEM,
     defaultOpen: false,
-    items: [SHARED_NAVIGATION_ITEMS.SETTINGS],
+    items: [SHARED_NAVIGATION_ITEMS.DOCS, SHARED_NAVIGATION_ITEMS.SETTINGS],
   },
   {
     title: STANDARD_SECTION_ORDER.DEBUG,

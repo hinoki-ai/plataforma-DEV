@@ -215,7 +215,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --radius: 0px;
+  --radius: 0.75rem;
   --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
   --tracking-tight: calc(var(--tracking-normal) - 0.025em);
   --tracking-wide: calc(var(--tracking-normal) + 0.025em);
@@ -242,7 +242,7 @@
 }
 
 :root {
-  --radius: 0px;
+  --radius: 0.75rem;
   --background: oklch(0.8452 0 0);
   --foreground: oklch(0.2393 0 0);
   --card: oklch(0.7572 0 0);
@@ -340,7 +340,7 @@
   --sidebar-border: oklch(0.4091 0 0);
   --sidebar-ring: oklch(0.6083 0.209 27.0276);
   --destructive-foreground: oklch(0 0 0);
-  --radius: 0px;
+  --radius: 0.75rem;
   --font-sans: "Oxanium", sans-serif;
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: "Source Code Pro", monospace;
@@ -604,56 +604,23 @@
     @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6;
   }
 
-  /* Responsive background utilities for desktop full-width viewing */
+  /* Standardized responsive background utilities */
   .bg-responsive-desktop {
-    /* Mobile/Tablet: Keep cover behavior, avoid fixed attachment to prevent jank */
     @apply bg-cover bg-center;
     background-repeat: no-repeat;
     background-attachment: scroll;
-    /* Support for dynamic background images */
     background-image: var(--bg-image, none);
     position: relative;
+    min-height: 100vh;
   }
 
-  /* Mobile portrait: rotate landscape assets so they read vertically without stretching */
+  /* Mobile portrait: simplified background handling */
   @media (max-width: 768px) and (orientation: portrait) {
     .bg-responsive-desktop {
-      background-image: none;
-      overflow: hidden;
-      position: relative;
-      isolation: isolate;
-    }
-
-    .bg-responsive-desktop.bg-variable {
-      background-image: none;
-    }
-
-    .bg-responsive-desktop.bg-login {
-      background-image: none;
-    }
-
-    .bg-responsive-desktop::before {
-      content: "";
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      --bg-portrait-width: calc(100vh * 1.1);
-      --bg-portrait-height: calc(100vw * 1.1);
-      width: var(--bg-portrait-width);
-      height: var(--bg-portrait-height);
-      margin-left: calc(var(--bg-portrait-width) * -0.5);
-      margin-top: calc(var(--bg-portrait-height) * -0.5);
-      background-image: var(--bg-mobile-image, var(--bg-image, none));
+      background-attachment: scroll;
       background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      transform: rotate(90deg);
-      transform-origin: center;
-      z-index: -2;
-    }
-
-    .bg-login {
-      --bg-image: url(/bg18.jpg);
+      /* Use mobile-optimized background if available */
+      background-image: var(--bg-mobile-image, var(--bg-image, none));
     }
   }
 
@@ -666,77 +633,38 @@
     background-position: center 5%;
   }
 
-  /* Home page background */
+  /* Standardized background classes */
   .bg-home-page {
     --bg-image: url(/bg17.jpg);
-    position: relative;
   }
 
-  /* Centro consejo background */
   .bg-cpma {
     --bg-image: url(/bg19.jpg);
-    background-image: url(/bg19.jpg) !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    position: relative;
   }
 
-  /* Ensure bg-cpma works with bg-responsive-desktop */
-  .bg-responsive-desktop.bg-cpma {
-    background-image: url(/bg19.jpg) !important;
-    background-size: cover !important;
-  }
-
-  /* Login/Auth background */
   .bg-login {
-    background-image: url(/bg18.jpg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
+    --bg-image: url(/bg18.jpg);
   }
 
-  /* Subpages backgrounds */
   .bg-programas {
     --bg-image: url(/bg2.jpg);
-    position: relative;
   }
 
-  .bg-precios {
-    --bg-image: url(/bg7.jpg);
-    position: relative;
-  }
-
+  .bg-precios,
   .bg-planes {
     --bg-image: url(/bg7.jpg);
-    position: relative;
   }
 
   .bg-contacto {
     --bg-image: url(/bg11.jpg);
-    position: relative;
   }
 
   .bg-docs {
     --bg-image: url(/bg12.jpg);
-    position: relative;
   }
 
-  /* BG20 background */
   .bg20 {
     --bg-image: url(/bg20.jpg);
-    background-image: url(/bg20.jpg) !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    position: relative;
-  }
-
-  /* Ensure bg20 overrides bg-login when both are present */
-  .bg-responsive-desktop.bg20 {
-    background-image: url(/bg20.jpg) !important;
-    background-size: cover !important;
   }
 
   /* Mobile portrait video background */
@@ -855,7 +783,7 @@
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color: hsl(var(--muted-foreground));
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -1055,7 +983,7 @@
 
   .glass-panel {
     position: relative;
-    border-radius: 1.75rem;
+    border-radius: var(--radius-xl);
     border: 1px solid rgba(15, 23, 42, 0.12);
     background-color: rgba(255, 255, 255, 0.86);
     -webkit-backdrop-filter: blur(26px);
@@ -1085,7 +1013,7 @@
     text-align: center;
     color: #00ff41;
     background: rgba(11, 11, 11, 0.85);
-    border-radius: 1rem;
+    border-radius: var(--radius-lg);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     box-shadow: 0 0 40px rgba(0, 255, 65, 0.2);
@@ -1116,7 +1044,7 @@
     padding: 0.75rem 1.5rem;
     background: #00ff41;
     color: #0b0b0b;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-md);
     text-decoration: none;
     font-weight: 600;
     box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
@@ -1145,7 +1073,7 @@
     text-align: center;
     color: #ff8800;
     background: rgba(11, 11, 11, 0.85);
-    border-radius: 1rem;
+    border-radius: var(--radius-lg);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     box-shadow: 0 0 40px rgba(255, 136, 0, 0.2);
@@ -1170,7 +1098,7 @@
     padding: 0.75rem 1.5rem;
     background: #ff8800;
     color: #0b0b0b;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-md);
     border: none;
     cursor: pointer;
     font-weight: 600;

@@ -105,19 +105,57 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Validate that session.user.id is a valid Convex ID
-    if (!session.user.id || !/^[a-z]/.test(session.user.id)) {
-      console.error("Invalid user ID format in session:", {
-        id: session.user.id,
+    // Validate that we have a user ID and resolve Convex user ID
+    if (!session.user.id) {
+      console.error("No user ID in session:", {
+        clerkId: session.user.clerkId,
+        email: session.user.email,
         role: session.user.role,
       });
       return NextResponse.json(
-        { error: "User not found in database. Please contact support." },
+        { error: "User session is invalid. Please log out and log back in." },
         { status: 500 },
       );
     }
 
+    // Get authenticated Convex client to resolve user
     const convex = await getAuthenticatedConvexClient();
+
+    // Resolve Convex user ID - session.user.id might be a Clerk ID string
+    let convexUserId: Id<"users">;
+    if (session.user.id && /^[a-z]/.test(session.user.id)) {
+      // It's already a valid Convex ID
+      convexUserId = session.user.id as Id<"users">;
+    } else {
+      // It's a Clerk ID, look up the Convex user
+      if (!session.user.clerkId) {
+        console.error("No Clerk ID available for user lookup:", {
+          id: session.user.id,
+          email: session.user.email,
+        });
+        return NextResponse.json(
+          { error: "User not found in database. Please contact support." },
+          { status: 500 },
+        );
+      }
+
+      const convexUser = await convex.query(api.users.getUserByClerkId, {
+        clerkId: session.user.clerkId,
+      });
+
+      if (!convexUser) {
+        console.error("User not found in Convex database:", {
+          clerkId: session.user.clerkId,
+          email: session.user.email,
+        });
+        return NextResponse.json(
+          { error: "User not found in database. Please contact support." },
+          { status: 500 },
+        );
+      }
+
+      convexUserId = convexUser._id;
+    }
     const body = await request.json();
     const {
       title,
@@ -163,7 +201,7 @@ export async function POST(request: NextRequest) {
       allowMultipleVotes: allowMultipleVotes ?? false,
       maxVotesPerUser: maxVotesPerUser ?? null,
       requireAuthentication: requireAuthentication ?? true,
-      createdBy: session.user.id as any,
+      createdBy: convexUserId,
       options: optionTexts.map((opt: string) => opt.trim()),
     });
 

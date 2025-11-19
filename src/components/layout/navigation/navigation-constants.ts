@@ -3,6 +3,12 @@ import { NavigationIcons, ThemeIcons } from "@/components/icons/hero-icons";
 
 // Navigation constants and shared items across all roles
 export const SHARED_NAVIGATION_ITEMS = {
+  DOCS: {
+    title: "nav.docs",
+    href: "/docs",
+    icon: NavigationIcons.Documents,
+    shortcut: "Alt+D",
+  },
   SETTINGS: {
     title: "nav.configuration",
     href: "/settings",

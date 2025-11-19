@@ -112,6 +112,17 @@ export async function requireCurrentInstitution(
     if (fallbackMembership) {
       institutionId = fallbackMembership.institutionId ?? null;
       membership = fallbackMembership;
+    } else if (user.role === "ADMIN" || user.role === "MASTER") {
+      // For ADMIN/MASTER users without membership, try to find any institution
+      const anyInstitution = await ctx.db.query("institutionInfo").first();
+      if (anyInstitution) {
+        institutionId = anyInstitution._id as Id<"institutionInfo">;
+        // ADMIN/MASTER users don't need membership for basic access
+      } else {
+        throw new Error(
+          "No institutions found. Please create an institution first.",
+        );
+      }
     }
   }
 

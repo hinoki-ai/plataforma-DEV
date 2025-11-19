@@ -53,17 +53,19 @@ export default async function PublicTeamDirectoryPage() {
     >
       <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
         <section className="px-4 py-16 sm:py-20">
-          <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
-            <div className="mb-6 flex items-center gap-3 rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-blue-200">
+          <div className="mx-auto flex max-w-5xl flex-col items-center text-center space-y-8">
+            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl p-6 mx-auto inline-block">
+              <h1 className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out">
+                {t("team.public.title")}
+              </h1>
+              <p className="text-center text-lg font-medium leading-relaxed text-gray-700 dark:text-gray-300 mt-3 transition-all duration-700 ease-out">
+                {t("team.public.description")}
+              </p>
+            </div>
+            <div className="flex items-center gap-3 rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-blue-200">
               <Users className="h-4 w-4" />
               {t("team.public.badge")}
             </div>
-            <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
-              {t("team.public.title")}
-            </h1>
-            <p className="mt-4 max-w-3xl text-lg text-blue-100">
-              {t("team.public.description")}
-            </p>
           </div>
         </section>
 
