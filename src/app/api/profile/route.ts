@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { z } from "zod";
+import { currentUser } from "@clerk/nextjs/server";
 
 const profileUpdateSchema = z.object({
   name: z.string().min(1).optional(),
@@ -103,13 +104,52 @@ export async function GET(request: NextRequest) {
     }
 
     if (!user) {
-      console.log("Profile API: User not found in Convex database", { userId, clerkId: session.user.clerkId });
-      return NextResponse.json({
-        error: "User not found",
-        details: "User exists in authentication but not in database",
-        userId: userId,
-        clerkId: session.user.clerkId
-      }, { status: 404 });
+      console.log("Profile API: User not found in Convex database, attempting sync", { userId, clerkId: session.user.clerkId });
+
+      // Try to sync the user from Clerk to Convex
+      try {
+        const clerkUser = await currentUser();
+        if (clerkUser && session.user.clerkId) {
+          console.log("Profile API: Syncing user from Clerk to Convex", session.user.clerkId);
+          await client.mutation(api.users.syncFromClerk, {
+            data: clerkUser,
+          });
+
+          // Try to fetch the user again after sync
+          if (isConvexId) {
+            user = await client.query(api.users.getUserById, {
+              userId: userId as any,
+            });
+          } else {
+            user = await client.query(api.users.getUserByClerkId, {
+              clerkId: session.user.clerkId,
+            });
+          }
+
+          if (user) {
+            console.log("Profile API: User successfully synced and found");
+          } else {
+            console.log("Profile API: User sync completed but still not found");
+          }
+        } else {
+          console.log("Profile API: Could not get Clerk user data for sync");
+        }
+      } catch (syncError) {
+        console.error("Profile API: Failed to sync user from Clerk:", {
+          error: syncError instanceof Error ? syncError.message : String(syncError),
+          clerkId: session.user.clerkId
+        });
+      }
+
+      // If still no user after sync attempt, return error
+      if (!user) {
+        return NextResponse.json({
+          error: "User not found",
+          details: "User exists in authentication but not in database. Sync attempted but failed.",
+          userId: userId,
+          clerkId: session.user.clerkId
+        }, { status: 404 });
+      }
     }
 
     // Default preferences
