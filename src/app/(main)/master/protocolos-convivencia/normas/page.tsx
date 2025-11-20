@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { PageTransition } from "@/components/ui/page-transition";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import {
@@ -24,7 +23,6 @@ import {
 } from "lucide-react";
 
 function NormasMasterContent() {
-  const { t } = useDivineParsing(["navigation", "common"]);
 
   const globalNormsStats = {
     totalNorms: 145,
@@ -51,8 +49,7 @@ function NormasMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro -{" "}
-              {t("nav.protocolos_convivencia.normas", "navigation")}
+              Master Control - Norms
             </h1>
             <p className="text-muted-foreground mt-2">
               Gestión global de normas de comportamiento en todas las

@@ -112,14 +112,14 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Monitor className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium">Vista</span>
+                  <span className="text-sm font-medium">View</span>
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {isDesktopForced ? "Escritorio" : "Automático"}
+                  {isDesktopForced ? "Desktop" : "Auto"}
                 </div>
               </div>
               <div className="text-xs text-muted-foreground mb-2">
-                Dispositivo: {isActualMobile ? "Móvil" : "Escritorio"}
+                Device: {isActualMobile ? "Mobile" : "Desktop"}
               </div>
             </div>
 
@@ -131,7 +131,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
               <div className="flex flex-col">
                 <span className="font-medium">Force Desktop View</span>
                 <span className="text-xs text-muted-foreground">
-                  Para desarrollo/testing
+                  For development/testing
                 </span>
               </div>
             </DropdownMenuItem>
@@ -143,7 +143,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
         {/* Developer Tools Section */}
         <div className="px-2 py-1">
           <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-            🛠️ Herramientas
+            🛠️ Tools
           </span>
         </div>
 
@@ -155,7 +155,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
           <div className="flex flex-col">
             <span className="font-medium">Developer Panel</span>
             <span className="text-xs text-muted-foreground">
-              {showDevPanel ? "Activado" : "Desactivado"}
+              {showDevPanel ? "Enabled" : "Disabled"}
             </span>
           </div>
         </DropdownMenuItem>
@@ -168,7 +168,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
           <div className="flex flex-col">
             <span className="font-medium">Performance Mode</span>
             <span className="text-xs text-muted-foreground">
-              {performanceMode ? "Activado" : "Desactivado"}
+              {performanceMode ? "Enabled" : "Disabled"}
             </span>
           </div>
         </DropdownMenuItem>
@@ -197,14 +197,14 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
         {/* System Status */}
         <div className="px-2 py-2">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">Estado:</span>
+            <span className="text-muted-foreground">Status:</span>
             <span className="text-green-600 dark:text-green-400 font-medium">
-              ✓ Operativo
+              ✓ Operational
             </span>
           </div>
           {isDesktopForced && (
             <div className="text-xs text-blue-600 dark:text-blue-400 mt-2 p-2 bg-blue-50 dark:bg-blue-950/20 rounded">
-              💡 Vista de escritorio forzada
+              💡 Desktop view forced
             </div>
           )}
         </div>

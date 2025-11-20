@@ -115,10 +115,18 @@ export function Sidebar({
   );
 
   // ⚡ Performance: Memoize open groups state initialization
+  // Only allow the first group with defaultOpen: true to be open initially
   const initialOpenGroups = React.useMemo(() => {
     const initialState: Record<string, boolean> = {};
+    let firstOpenGroupFound = false;
     navigationGroups.forEach((group) => {
-      initialState[group.title] = group.defaultOpen ?? false;
+      const shouldOpen = group.defaultOpen ?? false;
+      if (shouldOpen && !firstOpenGroupFound) {
+        initialState[group.title] = true;
+        firstOpenGroupFound = true;
+      } else {
+        initialState[group.title] = false;
+      }
     });
     return initialState;
   }, [navigationGroups]);

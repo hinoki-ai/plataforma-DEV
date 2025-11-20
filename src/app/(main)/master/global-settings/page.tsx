@@ -26,7 +26,7 @@ export default function GlobalSettingsPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="🌐 GLOBAL SETTINGS - SUPREME GLOBAL CONTROL"
+      context="Global Settings Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

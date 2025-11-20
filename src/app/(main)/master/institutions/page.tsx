@@ -6,8 +6,8 @@ import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 export default function MasterInstitutionsPage() {
   return (
     <MasterPageTemplate
-      title="Instituciones"
-      subtitle="Gestión centralizada de todos los tenants educativos"
+      title="Institutions"
+      subtitle="Centralized management of all educational tenants"
       context="MASTER_INSTITUTION_LIST"
     >
       <InstitutionManagement />

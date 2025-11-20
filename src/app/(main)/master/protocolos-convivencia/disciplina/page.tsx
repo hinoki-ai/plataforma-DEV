@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { PageTransition } from "@/components/ui/page-transition";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import {
@@ -24,7 +23,6 @@ import {
 } from "lucide-react";
 
 function DisciplinaMasterContent() {
-  const { t } = useDivineParsing(["navigation", "common"]);
 
   const globalDisciplineStats = {
     activeCases: 23,
@@ -61,7 +59,7 @@ function DisciplinaMasterContent() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">
               Control Maestro -{" "}
-              {t("nav.protocolos_convivencia.disciplina", "navigation")}
+              English Title
             </h1>
             <p className="text-muted-foreground mt-2">
               Supervisión global de casos disciplinarios en todas las

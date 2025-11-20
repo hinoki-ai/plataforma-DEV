@@ -26,7 +26,7 @@ export default function RoleManagementPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="👑 ROLE MANAGEMENT - SUPREME ROLE CONTROL"
+      context="Role Management Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

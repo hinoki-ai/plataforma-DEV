@@ -11,17 +11,16 @@ import { SystemMonitor } from "@/components/master/SystemMonitor";
 export const dynamic = "force-dynamic";
 
 export default function SystemMonitorPage() {
-  // 🚨 SUPREME AUTHORITY: Critical system monitoring
+  // System monitoring page
   try {
     // System monitor will show real-time data but remain functional
   } catch (error) {
     dbLogger.error(
-      "SYSTEM MONITOR FAILURE - SUPREME MONITORING CONTROL COMPROMISED",
+      "SYSTEM MONITOR FAILURE",
       error,
       {
         context: "SystemMonitorPage",
         systemMonitor: true,
-        supremeAuthority: true,
       },
     );
     // System monitor will show degraded state but remain functional
@@ -29,7 +28,7 @@ export default function SystemMonitorPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="🏛️ SUPREME System Monitor"
+      context="System Monitor"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

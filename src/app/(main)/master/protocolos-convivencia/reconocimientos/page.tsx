@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { PageTransition } from "@/components/ui/page-transition";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import {
@@ -17,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { Award, Trophy, Star, TrendingUp, Globe, Users } from "lucide-react";
 
 function ReconocimientosMasterContent() {
-  const { t } = useDivineParsing(["navigation", "common"]);
 
   const globalRecognitionStats = {
     totalRecognitions: 892,
@@ -45,8 +43,7 @@ function ReconocimientosMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro -{" "}
-              {t("nav.protocolos_convivencia.reconocimientos", "navigation")}
+              Master Control - Recognitions
             </h1>
             <p className="text-muted-foreground mt-2">
               Sistema global de reconocimientos y premios en todas las

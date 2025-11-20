@@ -26,7 +26,7 @@ export default function DatabaseToolsPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="🗄️ DATABASE TOOLS - SUPREME DATABASE MANAGEMENT"
+      context="Database Tools Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

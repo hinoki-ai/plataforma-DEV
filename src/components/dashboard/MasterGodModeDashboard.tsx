@@ -137,7 +137,7 @@ export function MasterGodModeDashboard() {
           <div className="flex items-center gap-3">
             <div>
               <CardTitle className="text-2xl font-bold text-yellow-800 dark:text-yellow-200">
-                🏛️ SUPREMO MASTER GOD MODE
+                🏛️ SUPREME MASTER GOD MODE
               </CardTitle>
               <CardDescription className="text-yellow-700 dark:text-yellow-300">
                 Ultimate Authority - Complete System Control

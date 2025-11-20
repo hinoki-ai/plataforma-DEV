@@ -421,14 +421,8 @@ export function SystemConfigDashboard() {
     <div className="space-y-6 p-6">
       {/* System Config Header */}
       <RoleAwareHeader
-        title="⚙️ SYSTEM CONFIG - SUPREME CONFIGURATION"
-        subtitle={`Configuración absoluta del sistema - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-gray-600 border-gray-600">
-              <Settings className="h-3 w-3 mr-1" />
-              SYSTEM CONFIG
-            </Badge>
             <RoleIndicator role="MASTER" />
           </div>
         }

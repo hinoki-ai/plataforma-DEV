@@ -105,7 +105,7 @@ export function InstitutionMasterCard({
       label: "Migrate Educational Structure",
       icon: Database,
       description: "Mass migration of educational data",
-      action: () => toast.info("🏛️ MASTER: Iniciendo migración educativa"),
+      action: () => toast.info("🏛️ MASTER: Starting educational migration"),
       color:
         "bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700",
     },
@@ -139,9 +139,9 @@ export function InstitutionMasterCard({
                 <div className="flex items-center justify-between w-full">
                   <div>
                     <strong>Current Institution:</strong>{" "}
-                    {currentInfo.chileanName}
+                    {currentInfo.name}
                     <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      {currentInfo.levels.length} niveles educativos • ISCED{" "}
+                      {currentInfo.levels.length} educational levels • ISCED{" "}
                       {Math.min(...currentInfo.levels.map((l) => l.isced))}-
                       {Math.max(...currentInfo.levels.map((l) => l.isced))}
                     </div>
@@ -195,7 +195,7 @@ export function InstitutionMasterCard({
                       <div className="text-2xl mb-1">{info.icon}</div>
                       <div className="text-sm font-medium">{info.name}</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
-                        {info.levels.length} niveles
+                        {info.levels.length} levels
                       </div>
                       {isActive && (
                         <Badge className="mt-1" variant="secondary">

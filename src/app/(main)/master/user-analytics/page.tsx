@@ -27,7 +27,7 @@ export default function UserAnalyticsPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="📊 USER ANALYTICS - SUPREME USER ANALYSIS"
+      context="User Analytics Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

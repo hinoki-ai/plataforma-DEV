@@ -1,8 +1,22 @@
+/**
+ * MEDIDAS MASTER PAGE - ENGLISH ONLY
+ *
+ * CRITICAL RULE: This component MUST remain English-only and hardcoded.
+ * No translations, i18n hooks, or internationalization allowed.
+ *
+ * This is a strict requirement that cannot be broken for:
+ * - Master dashboard consistency
+ * - Technical admin interface standards
+ * - Performance optimization
+ * - Avoiding translation overhead for system administrators
+ *
+ * If you need to add text, hardcode it in English only.
+ */
+
 "use client";
 
 import { Suspense } from "react";
 import { PageTransition } from "@/components/ui/page-transition";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import {
@@ -23,7 +37,6 @@ import {
 } from "lucide-react";
 
 function MedidasMasterContent() {
-  const { t } = useDivineParsing(["navigation", "common"]);
 
   const globalMeasuresStats = {
     totalApplications: 1247,
@@ -65,11 +78,10 @@ function MedidasMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro -{" "}
-              {t("nav.protocolos_convivencia.medidas", "navigation")}
+              Master Control - Measures
             </h1>
             <p className="text-muted-foreground mt-2">
-              Gestión global y analytics de medidas correctivas
+              Global management and analytics of corrective measures
             </p>
           </div>
           <Button>

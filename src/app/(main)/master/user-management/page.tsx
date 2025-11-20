@@ -1,3 +1,19 @@
+/**
+ * USER MANAGEMENT PAGE - ENGLISH ONLY
+ *
+ * CRITICAL RULE: This component MUST remain English-only and hardcoded.
+ * No translations, i18n hooks, or internationalization allowed.
+ *
+ * This is a strict requirement that cannot be broken for:
+ * - Master dashboard consistency
+ * - Technical admin interface standards
+ * - Performance optimization
+ * - Avoiding translation overhead for system administrators
+ *
+ * If you need to add text, hardcode it in English only.
+ * DO NOT add useDivineParsing, useLanguage, or any translation hooks.
+ */
+
 "use client";
 
 import { Suspense } from "react";
@@ -15,7 +31,6 @@ import {
   Shield,
   GraduationCap,
 } from "lucide-react";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
@@ -32,12 +47,8 @@ const userManagementFallback = (
 );
 
 export default function UserManagementPage() {
-  const { t } = useDivineParsing(["master"]);
-
   return (
     <MasterPageTemplate
-      title={`👥 ${t("master.user_management.title", "master")}`}
-      subtitle={t("master.user_management.subtitle", "master")}
       context="USER_MANAGEMENT"
       errorContext="UserManagementPage"
       fallbackContent={userManagementFallback}
@@ -51,7 +62,7 @@ export default function UserManagementPage() {
               <div>
                 <div className="text-2xl font-bold">1,247</div>
                 <div className="text-sm text-muted-foreground">
-                  {t("master.user_management.stats.total_users", "master")}
+                  Total Users
                 </div>
               </div>
             </div>
@@ -65,7 +76,7 @@ export default function UserManagementPage() {
               <div>
                 <div className="text-2xl font-bold">1,189</div>
                 <div className="text-sm text-muted-foreground">
-                  {t("master.user_management.stats.active_users", "master")}
+                  Active Users
                 </div>
               </div>
             </div>
@@ -79,7 +90,7 @@ export default function UserManagementPage() {
               <div>
                 <div className="text-2xl font-bold">58</div>
                 <div className="text-sm text-muted-foreground">
-                  {t("master.user_management.stats.inactive_users", "master")}
+                  Inactive Users
                 </div>
               </div>
             </div>
@@ -93,7 +104,7 @@ export default function UserManagementPage() {
               <div>
                 <div className="text-2xl font-bold">12</div>
                 <div className="text-sm text-muted-foreground">
-                  {t("master.user_management.stats.master_users", "master")}
+                  Master Users
                 </div>
               </div>
             </div>
@@ -105,14 +116,14 @@ export default function UserManagementPage() {
       <Card className="border-slate-200 dark:border-slate-800">
         <div className="p-6">
           <h3 className="text-lg font-semibold mb-6">
-            {t("master.user_management.roles.title", "master")}
+Role Distribution
           </h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <Crown className="h-5 w-5 text-purple-600" />
                 <span className="font-medium">
-                  {t("master.user_management.roles.master", "master")}
+                  Master
                 </span>
               </div>
               <Badge variant="secondary">12 users</Badge>
@@ -122,7 +133,7 @@ export default function UserManagementPage() {
               <div className="flex items-center gap-3">
                 <Shield className="h-5 w-5 text-blue-600" />
                 <span className="font-medium">
-                  {t("master.user_management.roles.admin", "master")}
+                  Administrator
                 </span>
               </div>
               <Badge variant="secondary">45 users</Badge>
@@ -132,7 +143,7 @@ export default function UserManagementPage() {
               <div className="flex items-center gap-3">
                 <GraduationCap className="h-5 w-5 text-green-600" />
                 <span className="font-medium">
-                  {t("master.user_management.roles.teacher", "master")}
+                  Teacher
                 </span>
               </div>
               <Badge variant="secondary">234 users</Badge>
@@ -142,7 +153,7 @@ export default function UserManagementPage() {
               <div className="flex items-center gap-3">
                 <Users className="h-5 w-5 text-orange-600" />
                 <span className="font-medium">
-                  {t("master.user_management.roles.parent", "master")}
+                  Parent
                 </span>
               </div>
               <Badge variant="secondary">956 users</Badge>
@@ -155,28 +166,28 @@ export default function UserManagementPage() {
       <Card className="border-slate-200 dark:border-slate-800">
         <div className="p-6">
           <h3 className="text-lg font-semibold mb-6">
-            {t("master.user_management.actions.title", "master")}
+            Quick Actions
           </h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Button variant="outline" className="h-auto p-4 justify-start">
               <Users className="h-4 w-4 mr-3" />
-              {t("master.user_management.actions.view_all", "master")}
+View All Users
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <Shield className="h-4 w-4 mr-3" />
-              {t("master.user_management.actions.manage_roles", "master")}
+Manage Roles
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <UserCheck className="h-4 w-4 mr-3" />
-              {t("master.user_management.actions.bulk_operations", "master")}
+Bulk Operations
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <Crown className="h-4 w-4 mr-3" />
-              {t("master.user_management.actions.role_permissions", "master")}
+Role Permissions
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <UserX className="h-4 w-4 mr-3" />
-              {t("master.user_management.actions.deactivated", "master")}
+Deactivated Users
             </Button>
           </div>
         </div>

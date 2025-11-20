@@ -26,7 +26,7 @@ export default function PerformancePage() {
 
   return (
     <AdvancedErrorBoundary
-      context="⚡ PERFORMANCE ANALYZER - SUPREME PERFORMANCE CONTROL"
+      context="Performance Analyzer Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

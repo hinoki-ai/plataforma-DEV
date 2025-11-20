@@ -61,7 +61,7 @@ function CriticalActionsWarning() {
           <Button asChild className="w-full">
             <a href="/master/advanced-operations">
               <AlertTriangle className="h-4 w-4 mr-2" />
-              Ir a Operaciones Avanzadas
+              Go to Advanced Operations
             </a>
           </Button>
         </div>
@@ -111,8 +111,6 @@ export function GodModeDashboard() {
       <MasterStatusIndicator />
 
       <MasterPageTemplate
-        title="Advanced System Administration"
-        subtitle={`Welcome, ${session?.user?.name || "Administrator"} - Full system access`}
         context="ADVANCED_ADMIN_DASHBOARD"
       >
         {/* Critical Warning */}

@@ -11,25 +11,24 @@ import { GlobalOversightDashboard } from "@/components/master/GlobalOversightDas
 export const dynamic = "force-dynamic";
 
 export default function GlobalOversightPage() {
-  // 🚨 GLOBAL OVERSIGHT: Supreme monitoring authority
+  // System monitoring page
   try {
-    // Global oversight will show worldwide system status but remain functional
+    // System monitoring will show system status but remain functional
   } catch (error) {
     dbLogger.error(
-      "GLOBAL OVERSIGHT FAILURE - WORLDWIDE MONITORING COMPROMISED",
+      "SYSTEM MONITORING FAILURE",
       error,
       {
-        context: "GlobalOversightPage",
-        globalOversight: true,
-        supremeAuthority: true,
+        context: "SystemMonitoringPage",
+        systemMonitoring: true,
       },
     );
-    // Global oversight will show worldwide error state but remain functional
+    // System monitoring will show error state but remain functional
   }
 
   return (
     <AdvancedErrorBoundary
-      context="🌍 GLOBAL OVERSIGHT - SUPREME MONITORING"
+      context="System Monitoring Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

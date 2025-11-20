@@ -146,8 +146,8 @@ export function RoleAwareNavigation({
 
     if (currentRole === "MASTER") {
       quickActions.push(
-        { icon: Settings, label: "Configuración", href: "/settings" },
-        { icon: User, label: "Perfil", href: "/profile" },
+        { icon: Settings, label: "Settings", href: "/settings" },
+        { icon: User, label: "Profile", href: "/profile" },
       );
     } else if (currentRole === "ADMIN") {
       quickActions.push(
@@ -205,7 +205,9 @@ export function RoleAwareNavigation({
       {!compact && (
         <div className="flex items-center gap-3 text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">Rol:</span>
+            <span className="text-muted-foreground">
+              {navCurrentRole === "MASTER" ? "Role:" : "Rol:"}
+            </span>
             <span className="font-medium">
               {getRoleDisplayName(navCurrentRole)}
             </span>
@@ -213,12 +215,15 @@ export function RoleAwareNavigation({
 
           {/* Route Context */}
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">Área:</span>
+            <span className="text-muted-foreground">
+              {navCurrentRole === "MASTER" ? "Area:" : "Área:"}
+            </span>
             <Badge variant="outline" className="text-xs">
               {isAdminRoute && "Administración"}
               {isProfesorRoute && "Docente"}
               {isParentRoute && "Familiar"}
               {isPublicRoute && "Público"}
+              {navCurrentRole === "MASTER" && pathname.startsWith("/master") && "Master Control"}
             </Badge>
           </div>
         </div>
@@ -270,7 +275,7 @@ export function RoleAwareBreadcrumb({
     // Add home based on role
     if (showHome) {
       const homeItem = {
-        label: "Inicio",
+        label: breadcrumbCurrentRole === "MASTER" ? "Home" : "Inicio",
         href:
           breadcrumbCurrentRole === "ADMIN"
             ? "/admin"

@@ -22,7 +22,7 @@ export default function AuditLogsPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="📋 AUDIT LOGS - SUPREME AUDIT TRAIL"
+      context="Audit Logs Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

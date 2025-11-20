@@ -412,17 +412,8 @@ export function PerformanceAnalyzerDashboard() {
     <div className="space-y-6 p-6">
       {/* Performance Analyzer Header */}
       <RoleAwareHeader
-        title="⚡ PERFORMANCE ANALYZER - SUPREME PERFORMANCE CONTROL"
-        subtitle={`Análisis y optimización de rendimiento absoluto - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge
-              variant="outline"
-              className="text-green-600 border-green-600"
-            >
-              <TrendingUp className="h-3 w-3 mr-1" />
-              PERFORMANCE ANALYZER
-            </Badge>
             <RoleIndicator role="MASTER" />
           </div>
         }

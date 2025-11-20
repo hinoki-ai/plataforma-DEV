@@ -127,10 +127,10 @@ function GlobalMapCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Globe className="h-5 w-5 text-blue-600" />
-          Mapa Global de Nodos
+          Global Node Map
         </CardTitle>
         <CardDescription>
-          Distribución mundial de servidores y centros de datos
+          Worldwide server and data center distribution
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -164,26 +164,26 @@ function GlobalMapCard() {
 
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between">
-                  <span>País:</span>
+                  <span>Country:</span>
                   <span>{node.country}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Usuarios:</span>
+                  <span>Users:</span>
                   <span>{node.users.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Latencia:</span>
+                  <span>Latency:</span>
                   <span>{node.latency}ms</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Carga:</span>
+                  <span>Load:</span>
                   <span>{node.load}%</span>
                 </div>
               </div>
 
               <Progress value={node.load} className="h-1 mt-2" />
               <p className="text-xs text-muted-foreground mt-1">
-                Última actualización: {node.lastUpdate}
+                Last update: {node.lastUpdate}
               </p>
             </div>
           ))}
@@ -211,10 +211,10 @@ function GlobalMetricsCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-green-600" />
-          Métricas Globales
+          Global Metrics
         </CardTitle>
         <CardDescription>
-          Estado general del sistema distribuido
+          General status of distributed system
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -224,7 +224,7 @@ function GlobalMetricsCard() {
             <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
               {metrics.activeNodes}/{metrics.totalNodes}
             </div>
-            <div className="text-sm text-muted-foreground">Nodos Activos</div>
+            <div className="text-sm text-muted-foreground">Active Nodes</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -233,7 +233,7 @@ function GlobalMetricsCard() {
               {metrics.totalUsers.toLocaleString()}
             </div>
             <div className="text-sm text-muted-foreground">
-              Usuarios Globales
+              Global Users
             </div>
           </div>
 
@@ -242,7 +242,7 @@ function GlobalMetricsCard() {
             <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
               {metrics.globalLatency}ms
             </div>
-            <div className="text-sm text-muted-foreground">Latencia Global</div>
+            <div className="text-sm text-muted-foreground">Global Latency</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -251,7 +251,7 @@ function GlobalMetricsCard() {
               {metrics.dataTransferred}
             </div>
             <div className="text-sm text-muted-foreground">
-              Datos Transferidos
+              Data Transferred
             </div>
           </div>
 
@@ -260,7 +260,7 @@ function GlobalMetricsCard() {
             <div className="text-2xl font-bold text-teal-700 dark:text-teal-300">
               {metrics.uptime}
             </div>
-            <div className="text-sm text-muted-foreground">Uptime Global</div>
+            <div className="text-sm text-muted-foreground">Global Uptime</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -268,7 +268,7 @@ function GlobalMetricsCard() {
             <div className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
               100%
             </div>
-            <div className="text-sm text-muted-foreground">Conectividad</div>
+            <div className="text-sm text-muted-foreground">Connectivity</div>
           </div>
         </div>
       </CardContent>
@@ -283,7 +283,7 @@ function GlobalAlertsCard() {
         id: 1,
         type: "warning",
         region: "SA East",
-        message: "Latencia elevada detectada",
+        message: "High latency detected",
         severity: "medium",
         time: "5 min ago",
       },
@@ -291,7 +291,7 @@ function GlobalAlertsCard() {
         id: 2,
         type: "info",
         region: "Global",
-        message: "Actualización de seguridad aplicada en todos los nodos",
+        message: "Security update applied on all nodes",
         severity: "low",
         time: "15 min ago",
       },
@@ -299,7 +299,7 @@ function GlobalAlertsCard() {
         id: 3,
         type: "success",
         region: "EU West",
-        message: "Optimización de rendimiento completada",
+        message: "Performance optimization completed",
         severity: "low",
         time: "1 hour ago",
       },
@@ -312,10 +312,10 @@ function GlobalAlertsCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Eye className="h-5 w-5 text-orange-600" />
-          Alertas Globales
+          Global Alerts
         </CardTitle>
         <CardDescription>
-          Eventos importantes en la red distribuida
+          Important distributed network events
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -359,61 +359,61 @@ function NetworkTopologyCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Network className="h-5 w-5 text-indigo-600" />
-          Topología de Red
+          Network Topology
         </CardTitle>
         <CardDescription>
-          Arquitectura de la red distribuida global
+          Global distributed network architecture
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-8">
           {/* Overview Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Vista General</h3>
+            <h3 className="text-lg font-semibold">Overview</h3>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="p-4 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg">
-                <h4 className="font-medium mb-2">Regiones Activas</h4>
+                <h4 className="font-medium mb-2">Active Regions</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>América del Norte:</span>
-                    <span className="font-medium">3 nodos</span>
+                    <span>North America:</span>
+                    <span className="font-medium">3 nodes</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Europa:</span>
-                    <span className="font-medium">3 nodos</span>
+                    <span>Europe:</span>
+                    <span className="font-medium">3 nodes</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Asia-Pacífico:</span>
-                    <span className="font-medium">4 nodos</span>
+                    <span>Asia-Pacific:</span>
+                    <span className="font-medium">4 nodes</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>América del Sur:</span>
-                    <span className="font-medium">1 nodo</span>
+                    <span>South America:</span>
+                    <span className="font-medium">1 node</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>África:</span>
-                    <span className="font-medium">1 nodo</span>
+                    <span>Africa:</span>
+                    <span className="font-medium">1 node</span>
                   </div>
                 </div>
               </div>
 
               <div className="p-4 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg">
-                <h4 className="font-medium mb-2">Conectividad Global</h4>
+                <h4 className="font-medium mb-2">Global Connectivity</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>Red principal:</span>
+                    <span>Main network:</span>
                     <Badge variant="secondary">Online</Badge>
                   </div>
                   <div className="flex justify-between">
                     <span>Backups:</span>
-                    <Badge variant="secondary">2 activos</Badge>
+                    <Badge variant="secondary">2 active</Badge>
                   </div>
                   <div className="flex justify-between">
                     <span>CDN:</span>
                     <Badge variant="secondary">12 edge locations</Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span>Latencia media:</span>
+                    <span>Average latency:</span>
                     <span className="font-medium">34ms</span>
                   </div>
                 </div>
@@ -423,7 +423,7 @@ function NetworkTopologyCard() {
 
           {/* Latency Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Latencia por Región</h3>
+            <h3 className="text-lg font-semibold">Latency by Region</h3>
             <div className="space-y-4">
               {globalNodes.map((node) => (
                 <div
@@ -448,34 +448,34 @@ function NetworkTopologyCard() {
 
           {/* Traffic Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Tráfico de Red</h3>
+            <h3 className="text-lg font-semibold">Network Traffic</h3>
             <div className="text-center p-8">
               <Network className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">
-                Visualización de tráfico en desarrollo
+                Traffic visualization in development
               </p>
             </div>
           </div>
 
           {/* Health Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Herramientas de Salud</h3>
+            <h3 className="text-lg font-semibold">Health Tools</h3>
             <div className="grid gap-4 md:grid-cols-2">
               <Button variant="outline" className="h-20 flex-col gap-2">
                 <Shield className="h-6 w-6" />
-                <span>Verificación de Salud</span>
+                <span>Health Check</span>
               </Button>
               <Button variant="outline" className="h-20 flex-col gap-2">
                 <Monitor className="h-6 w-6" />
-                <span>Diagnóstico de Red</span>
+                <span>Network Diagnostic</span>
               </Button>
               <Button variant="outline" className="h-20 flex-col gap-2">
                 <TrendingUp className="h-6 w-6" />
-                <span>Análisis de Rendimiento</span>
+                <span>Performance Analysis</span>
               </Button>
               <Button variant="outline" className="h-20 flex-col gap-2">
                 <AlertTriangle className="h-6 w-6" />
-                <span>Reportes de Incidentes</span>
+                <span>Incident Reports</span>
               </Button>
             </div>
           </div>
@@ -493,7 +493,7 @@ export function GlobalOversightDashboard() {
       {/* Global Oversight Header */}
       <RoleAwareHeader
         title="🌍 GLOBAL OVERSIGHT - SUPREME MONITORING"
-        subtitle={`Supervisión mundial absoluta - Arquitecto ${session?.user?.name || "Master Developer"}`}
+        subtitle={`Absolute global supervision - Architect ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="text-blue-600 border-blue-600">

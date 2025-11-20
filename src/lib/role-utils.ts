@@ -198,7 +198,7 @@ export function getRoleFilter(
 export function getRoleDisplayName(role: ExtendedUserRole): string {
   switch (role) {
     case "MASTER":
-      return "🏛️ SUPREMO MASTER"; // God Mode indicator
+      return "Master Administrator";
     case "ADMIN":
       return "Administrador";
     case "PROFESOR":

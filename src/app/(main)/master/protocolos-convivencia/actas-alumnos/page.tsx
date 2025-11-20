@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { PageTransition } from "@/components/ui/page-transition";
-import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { LoadingState } from "@/components/ui/loading-states";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import {
@@ -17,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { FileText, Database, Globe, BarChart3, Settings } from "lucide-react";
 
 function ActasAlumnosMasterContent() {
-  const { t } = useDivineParsing(["navigation", "common"]);
 
   const globalStats = {
     totalActas: 2156,
@@ -39,7 +37,7 @@ function ActasAlumnosMasterContent() {
           <div>
             <h1 className="text-3xl font-bold text-foreground">
               Control Maestro -{" "}
-              {t("nav.protocolos_convivencia.actas_alumnos", "navigation")}
+              English Title
             </h1>
             <p className="text-muted-foreground mt-2">
               Supervisión global de actas de entrevistas con alumnos en todas

@@ -9,9 +9,7 @@ export const dynamic = "force-dynamic";
 export default function SystemHealthPage() {
   return (
     <MasterPageTemplate
-      title="🏥 System Health Monitor"
-      subtitle="Real-time monitoring of all system components"
-      context="🏥 System Health Monitor"
+      context="System Health Monitor"
       errorContext="SystemHealthPage"
     >
       <SystemHealthCard />

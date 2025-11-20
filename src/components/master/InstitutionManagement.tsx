@@ -102,7 +102,7 @@ Actions
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline" className={typeInfo?.color}>
-                        {typeInfo?.chileanName || inst.institutionType}
+                        {typeInfo?.name || inst.institutionType}
                       </Badge>
                     </TableCell>
                     <TableCell>

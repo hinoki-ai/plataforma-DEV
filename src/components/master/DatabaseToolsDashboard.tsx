@@ -455,14 +455,8 @@ export function DatabaseToolsDashboard() {
     <div className="space-y-6 p-6">
       {/* Database Tools Header */}
       <RoleAwareHeader
-        title="🗄️ DATABASE TOOLS - SUPREME DATABASE MANAGEMENT"
-        subtitle={`Herramientas avanzadas de base de datos - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-blue-600 border-blue-600">
-              <Database className="h-3 w-3 mr-1" />
-              DATABASE TOOLS
-            </Badge>
             <RoleIndicator role="MASTER" />
           </div>
         }

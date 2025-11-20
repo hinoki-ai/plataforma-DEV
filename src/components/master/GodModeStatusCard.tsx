@@ -46,8 +46,8 @@ export function GodModeStatusCard() {
       system: {
         status: adminActive ? "ACTIVE" : "MAINTENANCE",
         uptime: "99.99%",
-        lastBackup: "2 minutos atrás",
-        nextMaintenance: "Esta noche 2:00 AM",
+        lastBackup: "2 minutes ago",
+        nextMaintenance: "Tonight 2:00 AM",
       },
       authority: {
         adminActive,
@@ -72,25 +72,25 @@ export function GodModeStatusCard() {
     {
       icon: Crown,
       value: metrics.threats.active,
-      label: "Amenazas Activas",
+      label: "Active Threats",
       color: "red" as const,
     },
     {
       icon: Sparkles,
       value: metrics.threats.blocked,
-      label: "Bloqueadas",
+      label: "Blocked",
       color: "green" as const,
     },
     {
       icon: Crown,
       value: `${metrics.performance.responseTime}ms`,
-      label: "Tiempo de Respuesta",
+      label: "Response Time",
       color: "blue" as const,
     },
     {
       icon: Sparkles,
       value: `${metrics.performance.efficiency}%`,
-      label: "Eficiencia",
+      label: "Efficiency",
       color: "purple" as const,
     },
   ];

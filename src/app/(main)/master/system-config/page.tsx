@@ -29,7 +29,7 @@ export default function SystemConfigPage() {
 
   return (
     <AdvancedErrorBoundary
-      context="⚙️ SYSTEM CONFIG - SUPREME CONFIGURATION"
+      context="System Configuration Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

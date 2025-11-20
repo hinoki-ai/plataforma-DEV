@@ -443,14 +443,8 @@ export function DebugConsoleDashboard() {
     <div className="space-y-6 p-6">
       {/* Debug Console Header */}
       <RoleAwareHeader
-        title="🔧 DEBUG CONSOLE - SUPREME DEBUG CONTROL"
-        subtitle={`Herramientas avanzadas de debug y diagnóstico - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-gray-600 border-gray-600">
-              <Terminal className="h-3 w-3 mr-1" />
-              DEBUG CONSOLE
-            </Badge>
             <RoleIndicator role="MASTER" />
           </div>
         }

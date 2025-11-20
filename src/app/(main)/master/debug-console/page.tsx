@@ -26,7 +26,7 @@ export default function DebugConsolePage() {
 
   return (
     <AdvancedErrorBoundary
-      context="🔧 DEBUG CONSOLE - SUPREME DEBUG CONTROL"
+      context="Debug Console Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

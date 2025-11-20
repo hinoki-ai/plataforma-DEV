@@ -26,8 +26,6 @@ const securityCenterFallback = (
 export default function SecurityCenterPage() {
   return (
     <MasterPageTemplate
-      title="🛡️ Security Center"
-      subtitle="Monitor security events, manage threats, and ensure system integrity"
       context="SECURITY_CENTER"
       errorContext="SecurityCenterPage"
       fallbackContent={securityCenterFallback}

@@ -568,11 +568,6 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "nav.dashboard",
-        href: "/admin/libro-clases",
-        icon: NavigationIcons.Analytics,
-      },
-      {
         title: "nav.calendar",
         href: "/admin/libro-clases/asistencia",
         icon: NavigationIcons.Calendar,

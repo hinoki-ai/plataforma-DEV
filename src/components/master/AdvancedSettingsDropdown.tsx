@@ -71,7 +71,7 @@ export function AdvancedSettingsDropdown({
             variant="ghost"
             size="icon"
             className="w-8 h-8 relative"
-            title="Configuración Avanzada"
+            title="Advanced Settings"
           >
             <Settings2 className="h-4 w-4" />
             {(isDesktopForced || showDevPanel) && (
@@ -82,7 +82,7 @@ export function AdvancedSettingsDropdown({
         <DropdownMenuContent align="end" className="w-72">
           <DropdownMenuLabel className="flex items-center gap-2">
             <Settings2 className="h-4 w-4" />
-            <span>Configuración Avanzada</span>
+            <span>Advanced Settings</span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
 
@@ -93,24 +93,24 @@ export function AdvancedSettingsDropdown({
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <Monitor className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Vista</span>
+                    <span className="text-sm font-medium">View</span>
                   </div>
                   <Badge
                     variant={isDesktopForced ? "default" : "secondary"}
                     className="text-xs"
                   >
-                    {isDesktopForced ? "Escritorio" : "Automático"}
+                    {isDesktopForced ? "Desktop" : "Auto"}
                   </Badge>
                 </div>
                 <div className="text-xs text-muted-foreground mb-2">
-                  Dispositivo:{" "}
+                  Device:{" "}
                   {isActualMobile ? (
                     <span className="inline-flex items-center gap-1">
-                      <Smartphone className="h-3 w-3" /> Móvil
+                      <Smartphone className="h-3 w-3" /> Mobile
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1">
-                      <Monitor className="h-3 w-3" /> Escritorio
+                      <Monitor className="h-3 w-3" /> Desktop
                     </span>
                   )}
                 </div>
@@ -123,9 +123,9 @@ export function AdvancedSettingsDropdown({
               >
                 <ThemeIcons.Desktop className="h-4 w-4 mr-2" />
                 <div className="flex flex-col">
-                  <span className="font-medium">Forzar Vista Escritorio</span>
+                  <span className="font-medium">Force Desktop View</span>
                   <span className="text-xs text-muted-foreground">
-                    Usa interfaz de escritorio en móvil
+                    Use desktop interface on mobile
                   </span>
                 </div>
               </DropdownMenuCheckboxItem>
@@ -137,7 +137,7 @@ export function AdvancedSettingsDropdown({
           {/* Developer Tools Section */}
           <div className="px-2 py-1">
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-              🛠️ Herramientas
+              🛠️ Tools
             </span>
           </div>
 
@@ -148,9 +148,9 @@ export function AdvancedSettingsDropdown({
           >
             <Code2 className="h-4 w-4 mr-2" />
             <div className="flex flex-col">
-              <span className="font-medium">Panel Desarrollador</span>
+              <span className="font-medium">Developer Panel</span>
               <span className="text-xs text-muted-foreground">
-                Mostrar información de debug
+                Show debug information
               </span>
             </div>
           </DropdownMenuCheckboxItem>
@@ -162,9 +162,9 @@ export function AdvancedSettingsDropdown({
           >
             <Gauge className="h-4 w-4 mr-2" />
             <div className="flex flex-col">
-              <span className="font-medium">Modo Rendimiento</span>
+              <span className="font-medium">Performance Mode</span>
               <span className="text-xs text-muted-foreground">
-                Optimiza para velocidad
+                Optimize for speed
               </span>
             </div>
           </DropdownMenuCheckboxItem>
@@ -174,7 +174,7 @@ export function AdvancedSettingsDropdown({
           {/* Quick Actions */}
           <div className="px-2 py-1">
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-              ⚡ Acciones Rápidas
+              ⚡ Quick Actions
             </span>
           </div>
 
@@ -185,7 +185,7 @@ export function AdvancedSettingsDropdown({
 
           <DropdownMenuItem className="cursor-pointer">
             <Eye className="h-4 w-4 mr-2" />
-            <span>Modo Inspector</span>
+            <span>Inspector Mode</span>
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
@@ -193,14 +193,14 @@ export function AdvancedSettingsDropdown({
           {/* Status Info */}
           <div className="px-2 py-2 space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">Estado:</span>
+              <span className="text-muted-foreground">Status:</span>
               <Badge variant="outline" className="text-xs">
-                Activo
+                Active
               </Badge>
             </div>
             {isDesktopForced && (
               <div className="text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20 p-2 rounded">
-                💡 Vista de escritorio forzada - Para desarrollo/testing
+                💡 Desktop view forced - For dev/testing
               </div>
             )}
           </div>
@@ -220,15 +220,15 @@ export function AdvancedSettingsDropdown({
             <Settings2 className="mr-3 h-4 w-4 text-slate-600" />
             <div className="flex flex-col items-start flex-1">
               <span className="font-medium text-sm">
-                Configuración Avanzada
+                Advanced Settings
               </span>
               <span className="text-[10px] opacity-70">
-                Vista, desarrollo y más
+                View, dev tools & more
               </span>
             </div>
             {(isDesktopForced || showDevPanel) && (
               <Badge variant="default" className="text-xs ml-2">
-                Activo
+                Active
               </Badge>
             )}
           </Button>
@@ -236,7 +236,7 @@ export function AdvancedSettingsDropdown({
         <DropdownMenuContent align="end" className="w-80">
           <DropdownMenuLabel className="flex items-center gap-2">
             <Settings2 className="h-4 w-4" />
-            <span>Configuración Avanzada</span>
+            <span>Advanced Settings</span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
 
@@ -248,33 +248,33 @@ export function AdvancedSettingsDropdown({
                   <div className="flex items-center gap-2">
                     <Monitor className="h-4 w-4 text-primary" />
                     <span className="text-sm font-semibold">
-                      Vista de Dashboard
+                      Dashboard View
                     </span>
                   </div>
                   <Badge
                     variant={isDesktopForced ? "default" : "secondary"}
                     className="text-xs"
                   >
-                    {isDesktopForced ? "Escritorio" : "Automático"}
+                    {isDesktopForced ? "Desktop" : "Auto"}
                   </Badge>
                 </div>
                 <div className="text-xs text-muted-foreground space-y-1">
                   <div className="flex items-center gap-1">
-                    <span className="font-medium">Dispositivo actual:</span>
+                    <span className="font-medium">Current Device:</span>
                     {isActualMobile ? (
                       <span className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400">
-                        <Smartphone className="h-3 w-3" /> Móvil
+                        <Smartphone className="h-3 w-3" /> Mobile
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400">
-                        <Monitor className="h-3 w-3" /> Escritorio
+                        <Monitor className="h-3 w-3" /> Desktop
                       </span>
                     )}
                   </div>
                   <div className="flex items-center gap-1">
-                    <span className="font-medium">Vista renderizada:</span>
+                    <span className="font-medium">Rendered View:</span>
                     <span className="text-primary font-medium">
-                      {isDesktopForced ? "Escritorio forzado" : "Responsive"}
+                      {isDesktopForced ? "Forced Desktop" : "Responsive"}
                     </span>
                   </div>
                 </div>
@@ -288,11 +288,11 @@ export function AdvancedSettingsDropdown({
                 >
                   <ThemeIcons.Desktop className="h-4 w-4 mr-2 text-primary" />
                   <div className="flex flex-col flex-1">
-                    <span className="font-medium">Forzar Vista Escritorio</span>
+                    <span className="font-medium">Force Desktop View</span>
                     <span className="text-xs text-muted-foreground">
                       {isDesktopForced
-                        ? "Dashboard optimizado para desarrollo y admin"
-                        : "Activa para usar interfaz completa en móvil"}
+                        ? "Dashboard optimized for admin & dev"
+                        : "Enable to use full desktop interface on mobile"}
                     </span>
                   </div>
                 </DropdownMenuCheckboxItem>
@@ -305,7 +305,7 @@ export function AdvancedSettingsDropdown({
           {/* Developer Tools Section */}
           <div className="px-2 py-1">
             <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-              🛠️ Herramientas de Desarrollo
+              🛠️ Developer Tools
             </span>
           </div>
 
@@ -316,9 +316,9 @@ export function AdvancedSettingsDropdown({
           >
             <Code2 className="h-4 w-4 mr-2 text-purple-600" />
             <div className="flex flex-col flex-1">
-              <span className="font-medium">Panel Desarrollador</span>
+              <span className="font-medium">Developer Panel</span>
               <span className="text-xs text-muted-foreground">
-                Mostrar información de debugging en tiempo real
+                Show debug info in real-time
               </span>
             </div>
           </DropdownMenuCheckboxItem>
@@ -330,9 +330,9 @@ export function AdvancedSettingsDropdown({
           >
             <Gauge className="h-4 w-4 mr-2 text-green-600" />
             <div className="flex flex-col flex-1">
-              <span className="font-medium">Modo Alto Rendimiento</span>
+              <span className="font-medium">High Performance Mode</span>
               <span className="text-xs text-muted-foreground">
-                Reduce animaciones y optimiza velocidad
+                Reduce animations and optimize speed
               </span>
             </div>
           </DropdownMenuCheckboxItem>
@@ -342,7 +342,7 @@ export function AdvancedSettingsDropdown({
           {/* Quick Actions */}
           <div className="px-2 py-1">
             <span className="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider">
-              ⚡ Acciones Rápidas
+              ⚡ Quick Actions
             </span>
           </div>
 
@@ -351,7 +351,7 @@ export function AdvancedSettingsDropdown({
             <div className="flex flex-col">
               <span className="font-medium">Clear Local Cache</span>
               <span className="text-xs text-muted-foreground">
-                Elimina datos temporales
+                Remove temporary data
               </span>
             </div>
           </DropdownMenuItem>
@@ -359,9 +359,9 @@ export function AdvancedSettingsDropdown({
           <DropdownMenuItem className="cursor-pointer">
             <Eye className="h-4 w-4 mr-2 text-cyan-600" />
             <div className="flex flex-col">
-              <span className="font-medium">Modo Inspector</span>
+              <span className="font-medium">Inspector Mode</span>
               <span className="text-xs text-muted-foreground">
-                Analiza componentes en tiempo real
+                Analyze components in real-time
               </span>
             </div>
           </DropdownMenuItem>
@@ -372,13 +372,13 @@ export function AdvancedSettingsDropdown({
           <div className="px-2 py-2 space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="text-muted-foreground font-medium">
-                Estado del Sistema:
+                System Status:
               </span>
               <Badge
                 variant="outline"
                 className="text-xs bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800"
               >
-                ✓ Operativo
+                ✓ Operational
               </Badge>
             </div>
             {isDesktopForced && (
@@ -387,11 +387,11 @@ export function AdvancedSettingsDropdown({
                   <Monitor className="h-3 w-3 mt-0.5 shrink-0" />
                   <div>
                     <div className="font-semibold mb-1">
-                      Vista de Escritorio Activa
+                      Desktop View Active
                     </div>
                     <div className="opacity-80">
-                      Dashboard optimizado para administración y desarrollo.
-                      Perfecto para trabajo avanzado.
+                      Dashboard optimized for administration and development.
+                      Perfect for advanced work.
                     </div>
                   </div>
                 </div>
@@ -400,7 +400,7 @@ export function AdvancedSettingsDropdown({
             {showDevPanel && (
               <div className="text-xs text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/20 p-2 rounded border border-purple-200 dark:border-purple-800">
                 <Code2 className="h-3 w-3 inline mr-1" />
-                Panel de desarrollo habilitado
+                Developer panel enabled
               </div>
             )}
           </div>

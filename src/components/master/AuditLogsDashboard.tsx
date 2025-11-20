@@ -501,14 +501,8 @@ export function AuditLogsDashboard() {
     <div className="space-y-6 p-6">
       {/* Audit Logs Header */}
       <RoleAwareHeader
-        title="📋 AUDIT LOGS - SUPREME AUDIT TRAIL"
-        subtitle={`Registro de auditoría completo del sistema - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-gray-600 border-gray-600">
-              <FileText className="h-3 w-3 mr-1" />
-              AUDIT LOGS
-            </Badge>
             <RoleIndicator role="MASTER" />
           </div>
         }

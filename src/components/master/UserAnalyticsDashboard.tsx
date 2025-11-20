@@ -395,17 +395,8 @@ export function UserAnalyticsDashboard() {
     <div className="space-y-6 p-6">
       {/* User Analytics Header */}
       <RoleAwareHeader
-        title="📊 USER ANALYTICS - SUPREME USER ANALYSIS"
-        subtitle={`Análisis completo de usuarios - Arquitecto ${session?.user?.name || "Master Developer"}`}
         actions={
           <div className="flex items-center gap-4">
-            <Badge
-              variant="outline"
-              className="text-purple-600 border-purple-600"
-            >
-              <BarChart3 className="h-3 w-3 mr-1" />
-              USER ANALYTICS
-            </Badge>
             <RoleIndicator role="MASTER" />
             <Button variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
