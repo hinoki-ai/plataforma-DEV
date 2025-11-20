@@ -26,126 +26,6 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
 
-function SystemOverviewContent() {
-  const { stats, loading } = useDashboardData();
-
-  if (loading) {
-    return systemOverviewFallback;
-  }
-
-  const getHealthStatus = (score: number) => {
-    if (score >= 98) return { text: "Excellent", color: "text-green-600" };
-    if (score >= 95) return { text: "Good", color: "text-yellow-600" };
-    return { text: "Needs Attention", color: "text-red-600" };
-  };
-
-  const getUptimePercentage = (uptimeSeconds: number) => {
-    const uptimeHours = uptimeSeconds / 3600;
-    const uptimeDays = uptimeHours / 24;
-    if (uptimeDays < 1) return "99.9%";
-    if (uptimeDays < 7) return "99.95%";
-    if (uptimeDays < 30) return "99.98%";
-    return "99.99%";
-  };
-
-  const formatThroughput = (throughput: number) => {
-    if (throughput >= 1000) {
-      return `${(throughput / 1000).toFixed(1)}K req/s`;
-    }
-    return `${throughput} req/s`;
-  };
-
-  const healthStatus = getHealthStatus(stats?.performance?.healthScore || 98.5);
-  const databaseStatus =
-    stats?.database?.status === "connected" ? "99.9%" : "Offline";
-  const apiPerformance = `${stats?.performance?.healthScore || 97.8}%`;
-
-  return (
-    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {/* System Health */}
-      <Card className="border-green-200 dark:border-green-800">
-        <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">System Health</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between">
-              <span>Overall Status</span>
-              <span className={`font-medium ${healthStatus.color}`}>
-                {healthStatus.text}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Database</span>
-              <span className="text-green-600 font-medium">
-                {databaseStatus}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>API Performance</span>
-              <span className="text-green-600 font-medium">
-                {apiPerformance}
-              </span>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* System Statistics */}
-      <Card className="border-blue-200 dark:border-blue-800">
-        <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">System Statistics</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between">
-              <span>Total Users</span>
-              <span className="font-medium">
-                {(stats?.users?.total || 0).toLocaleString()}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Active Sessions</span>
-              <span className="font-medium">
-                {stats?.performance?.activeConnections || 0}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Queries/Hour</span>
-              <span className="font-medium">
-                {formatThroughput(stats?.performance?.throughput || 0)}
-              </span>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Performance Metrics */}
-      <Card className="border-purple-200 dark:border-purple-800">
-        <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between">
-              <span>Response Time</span>
-              <span className="font-medium">
-                {stats?.performance?.avgResponseTime || 0}ms
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Throughput</span>
-              <span className="font-medium">
-                {formatThroughput(stats?.performance?.throughput || 0)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Uptime</span>
-              <span className="text-green-600 font-medium">
-                {getUptimePercentage(stats?.system?.uptime || 0)}
-              </span>
-            </div>
-          </div>
-        </div>
-      </Card>
-    </div>
-  );
-}
-
 const systemOverviewFallback = (
   <div className="space-y-8">
     <Card className="animate-pulse border-blue-200 dark:border-blue-800">
@@ -157,6 +37,96 @@ const systemOverviewFallback = (
   </div>
 );
 
+function SystemOverviewContent() {
+  const { stats, loading } = useDashboardData();
+
+  if (loading) {
+    return (
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Card key={i} className="border-blue-200 dark:border-blue-800">
+            <div className="p-6">
+              <Skeleton className="h-6 w-40 mb-4" />
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, j) => (
+                  <div key={j} className="flex justify-between">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  const formatUptime = (uptime?: number | string) => {
+    if (typeof uptime === "number") {
+      const hours = Math.floor(uptime / 3600);
+      return `${hours}h`;
+    }
+    return "N/A";
+  };
+
+  const calculateMemoryUsage = (memory: any) => {
+    if (!memory) return 0;
+    const used = memory.used || 0;
+    const total = memory.total || 1;
+    return Math.round((used / total) * 100);
+  };
+
+  return (
+    <>
+      {/* System Overview */}
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {/* System Health */}
+        <Card className="border-green-200 dark:border-green-800">
+          <div className="p-6">
+            <h3 className="text-lg font-semibold mb-4">System Health</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between">
+                <span>Overall Status</span>
+                <span className="text-green-600 font-medium">
+                  {stats.system?.status || "Unknown"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Database</span>
+                <span className="text-green-600 font-medium">
+                  {stats.database?.status === "connected"
+                    ? "Connected"
+                    : "Disconnected"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Performance Score</span>
+                <span className="text-green-600 font-medium">
+                  {stats.performance?.healthScore || 0}%
+                </span>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* System Statistics */}
+        <Card className="border-blue-200 dark:border-blue-800">
+          <div className="p-6">
+            <h3 className="text-lg font-semibold mb-4">System Statistics</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between">
+                <span>Total Users</span>
+                <span className="font-medium">
+                  {stats.users?.total?.toLocaleString() || 0}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Active Connections</span>
+                <span className="font-medium">
+                  {stats.performance?.activeConnections || 0}
+                </span>
+              </div>
               <div className="flex justify-between">
                 <span>Content Items</span>
                 <span className="font-medium">
@@ -208,10 +178,8 @@ const systemOverviewFallback = (
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="bg-green-600 h-2 rounded-full"
-                  style={{
-                    width: `${calculateMemoryUsage(stats.system?.memory)}%`,
-                  }}
+                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${calculateMemoryUsage(stats.system?.memory)}%` }}
                 ></div>
               </div>
             </div>
@@ -222,7 +190,7 @@ const systemOverviewFallback = (
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="bg-blue-600 h-2 rounded-full"
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${Math.min((stats.performance?.activeConnections || 0) * 2, 100)}%`,
                   }}

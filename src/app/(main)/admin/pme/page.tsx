@@ -315,19 +315,8 @@ export default function AdminPMEPage() {
   return (
     <PageTransition skeletonType="page" duration={700}>
       <div className="container mx-auto px-4 py-6">
-        {/* Admin Header with Master Controls */}
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div>
-              <p className="text-muted-foreground">
-                Gestión completa de todos los Planes de Mejoramiento Educativo •
-                Control total sobre {adminStats.totalTeachers} profesores
-              </p>
-            </div>
-          </div>
-
-          {/* Master Admin Controls */}
-          <div className="flex flex-wrap gap-2">
+        {/* Master Admin Controls */}
+        <div className="flex flex-wrap gap-2">
             <Button onClick={handleCreateGoalForTeacher} className="gap-2">
               <Plus className="w-4 h-4" />
               Crear Objetivo (Cualquier Profesor)
@@ -364,7 +353,7 @@ export default function AdminPMEPage() {
               <FileText className="w-4 h-4" />
               Reportes Institucionales
             </Button>
-          </div>
+        </div>
         </div>
 
         {/* Admin Statistics Dashboard */}
