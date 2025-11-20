@@ -41,7 +41,7 @@ export function MeetingList({
       if (isAdmin) {
         response = await getMeetingsAction();
       } else if (session?.user?.id) {
-        response = await getMeetingsByTeacherAction(session.data?.user.id);
+        response = await getMeetingsByTeacherAction(session.user.id);
       } else {
         setMeetings([]);
         return;

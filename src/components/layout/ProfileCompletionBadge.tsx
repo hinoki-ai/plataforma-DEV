@@ -43,8 +43,8 @@ export function ProfileCompletionBadge({
 
   // Check if profile is complete
   const isProfileComplete = checkProfileCompletion({
-    ...(session.data?.user as SessionUser),
-    role: session.data?.user.role as UserRole,
+    ...(session.user as SessionUser),
+    role: session.user.role as UserRole,
   } as ExtendedUser);
 
   // Don't show if profile is already complete

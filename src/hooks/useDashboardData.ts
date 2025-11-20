@@ -141,7 +141,7 @@ export function useDashboardData() {
 
         let endpoint = "";
 
-        switch (session.data?.user.role) {
+        switch (session.user.role) {
           case "MASTER":
             endpoint = "/api/master/dashboard";
             break;

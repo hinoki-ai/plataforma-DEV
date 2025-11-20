@@ -62,7 +62,7 @@ export default async function AuthSuccessPage() {
   }
 
   // Handle PARENT with registration requirement
-  if (role === "PARENT" && session.data?.user.needsRegistration) {
+  if (role === "PARENT" && session.user.needsRegistration) {
     console.log(
       "📝 [AUTH-SUCCESS] Parent needs registration, redirecting to cpma",
       {

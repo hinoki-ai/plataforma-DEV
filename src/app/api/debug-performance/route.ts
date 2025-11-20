@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       type,
       data,
       timestamp: new Date().toISOString(),
-      userId: session.data?.user.id,
+      userId: session.user.id,
       userAgent: request.headers.get("user-agent"),
     });
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       type,
       data,
       timestamp: new Date().toISOString(),
-      userId: session.data?.user.id,
+      userId: session.user.id,
     };
 
     return NextResponse.json({

@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     const session = await auth();
 
     // MASTER Almighty Authority Check
-    if (!session?.user || session.data?.user.role !== "MASTER") {
+    if (!session?.user || session.user.role !== "MASTER") {
       logger.warn("🚫 UNAUTHORIZED: Non-MASTER attempted system control", {
         userId: session?.user?.id,
         userRole: session?.user?.role,
@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
     const { action, target, parameters } = body;
 
     logger.info("🏛️ MASTER Almighty Action Executed", {
-      masterId: session.data?.user.id,
-      masterEmail: session.data?.user.email,
+      masterId: session.user.id,
+      masterEmail: session.user.email,
       action,
       target,
       parameters,
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
       case "emergency_lockdown":
         // MASTER Emergency Lockdown Capability
         logger.warn("🚨 MASTER Emergency Lockdown Activated", {
-          masterId: session.data?.user.id,
+          masterId: session.user.id,
           target: target || "ALL_SYSTEMS",
           parameters,
         });
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       case "system_reset":
         // MASTER System Reset Capability
         logger.warn("🔄 MASTER System Reset Initiated", {
-          masterId: session.data?.user.id,
+          masterId: session.user.id,
           target: target || "CURRENT_SYSTEM",
           parameters,
         });
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
         }
 
         logger.info("👑 MASTER User Role Override", {
-          masterId: session.data?.user.id,
+          masterId: session.user.id,
           targetUser: target,
           overrideType: parameters?.overrideType || "ROLE_CHANGE",
           parameters,
@@ -178,7 +178,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session?.user || session.data?.user.role !== "MASTER") {
+    if (!session?.user || session.user.role !== "MASTER") {
       return NextResponse.json(
         { success: false, error: "MASTER access required" },
         { status: 403 },
@@ -189,7 +189,7 @@ export async function GET(request: NextRequest) {
       success: true,
       message: "🏛️ MASTER Almighty Status",
       godModeActive: true,
-      masterUser: session.data?.user.email,
+      masterUser: session.user.email,
       capabilities: Object.values(MasterPermissions),
       systemControl: "ACTIVE",
       globalOversight: "ENABLED",

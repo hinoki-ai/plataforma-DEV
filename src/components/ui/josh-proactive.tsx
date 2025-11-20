@@ -77,11 +77,11 @@ export function JoshProactiveSuggestions() {
   // Get user context
   const getUserContext = () => {
     if (!session?.user) return { role: "guest", id: "guest" };
-    const role = session.data?.user.publicMetadata?.role as string;
+    const role = session.user.publicMetadata?.role as string;
     return {
       role: role || "guest",
-      id: session.data?.user.id,
-      lastLogin: session.data?.user.lastSignInAt,
+      id: session.user.id,
+      lastLogin: session.user.lastSignInAt,
     };
   };
 

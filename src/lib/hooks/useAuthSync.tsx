@@ -34,10 +34,10 @@ export function useAuthSync() {
       const isProfesorPath = pathname?.startsWith("/profesor");
       const isParentPath = pathname?.startsWith("/parent");
       const isCpaPath = pathname?.startsWith("/cpma");
-      const userRole = session.data?.user.role;
+      const userRole = session.user.role;
 
       // Ensure session is fully loaded before redirecting
-      if (!session.data?.user.id) {
+      if (!session.user.id) {
         await update();
         return;
       }

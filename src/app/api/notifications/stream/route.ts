@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
           const data = `data: ${JSON.stringify({
             type: "connected",
             timestamp: new Date().toISOString(),
-            userId: session.data?.user.id,
+            userId: session.user.id,
           })}\n\n`;
 
           controller.enqueue(new TextEncoder().encode(data));

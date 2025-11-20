@@ -13,7 +13,7 @@ export const GET = createApiRoute(
       throw new Error("User ID is required");
     }
 
-    const userId = session.data?.user.id as any;
+    const userId = session.user.id as any;
     const client = await getAuthenticatedConvexClient();
 
     try {

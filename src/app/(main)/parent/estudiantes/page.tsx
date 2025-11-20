@@ -189,11 +189,11 @@ function EstudiantesContent() {
   }
 
   // Ensure user has access to parent section
-  if (!session || !session.data?.user) {
+  if (!session || !session.user) {
     redirect("/login");
   }
 
-  const roleAccess = getRoleAccess(session.data?.user.role);
+  const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
     redirect("/unauthorized");
   }

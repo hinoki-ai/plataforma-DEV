@@ -62,7 +62,6 @@ interface GlobalMetrics {
   uptime: string;
 }
 
-
 function GlobalMapCard() {
   const globalNodes = useQuery(api.globalOversight.getGlobalNodes) || [];
 
@@ -288,12 +287,16 @@ function NetworkTopologyCard() {
               <div className="p-4 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg">
                 <h4 className="font-medium mb-2">Active Regions</h4>
                 <div className="space-y-2 text-sm">
-                  {topology ? Object.entries(topology.regions).map(([region, count]) => (
-                    <div key={region} className="flex justify-between">
-                      <span>{region}:</span>
-                      <span className="font-medium">{count} institutions</span>
-                    </div>
-                  )) : (
+                  {topology ? (
+                    Object.entries(topology.regions).map(([region, count]) => (
+                      <div key={region} className="flex justify-between">
+                        <span>{region}:</span>
+                        <span className="font-medium">
+                          {count} institutions
+                        </span>
+                      </div>
+                    ))
+                  ) : (
                     <div className="text-muted-foreground">Loading...</div>
                   )}
                 </div>
@@ -308,15 +311,21 @@ function NetworkTopologyCard() {
                   </div>
                   <div className="flex justify-between">
                     <span>Active institutions:</span>
-                    <Badge variant="secondary">{topology?.activeInstitutions || 0}</Badge>
+                    <Badge variant="secondary">
+                      {topology?.activeInstitutions || 0}
+                    </Badge>
                   </div>
                   <div className="flex justify-between">
                     <span>Total users:</span>
-                    <Badge variant="secondary">{topology?.totalUsers || 0}</Badge>
+                    <Badge variant="secondary">
+                      {topology?.totalUsers || 0}
+                    </Badge>
                   </div>
                   <div className="flex justify-between">
                     <span>Average latency:</span>
-                    <span className="font-medium">{topology?.averageLatency || 0}ms</span>
+                    <span className="font-medium">
+                      {topology?.averageLatency || 0}ms
+                    </span>
                   </div>
                 </div>
               </div>
@@ -327,25 +336,31 @@ function NetworkTopologyCard() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Latency by Region</h3>
             <div className="space-y-4">
-              {topology ? Object.entries(topology.regionalLatency).map(([region, latency]) => (
-                <div
-                  key={region}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-4 w-4" />
-                    <span className="font-medium">{region}</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm">{latency}ms</span>
-                    <Progress
-                      value={Math.max(0, 100 - latency)}
-                      className="w-20 h-2"
-                    />
-                  </div>
+              {topology ? (
+                Object.entries(topology.regionalLatency).map(
+                  ([region, latency]) => (
+                    <div
+                      key={region}
+                      className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <MapPin className="h-4 w-4" />
+                        <span className="font-medium">{region}</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm">{latency}ms</span>
+                        <Progress
+                          value={Math.max(0, 100 - latency)}
+                          className="w-20 h-2"
+                        />
+                      </div>
+                    </div>
+                  ),
+                )
+              ) : (
+                <div className="text-muted-foreground">
+                  Loading latency data...
                 </div>
-              )) : (
-                <div className="text-muted-foreground">Loading latency data...</div>
               )}
             </div>
           </div>

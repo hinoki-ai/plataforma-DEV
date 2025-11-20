@@ -128,9 +128,9 @@ export default function PerfilPage() {
     if (session?.user) {
       setUserProfile({
         name:
-          session.data?.user.name || t("profesor.perfil.default_name", "profesor"),
+          session.user.name || t("profesor.perfil.default_name", "profesor"),
         email:
-          session.data?.user.email || t("profesor.perfil.default_email", "profesor"),
+          session.user.email || t("profesor.perfil.default_email", "profesor"),
         phone: t("profesor.perfil.default_phone", "profesor"),
         bio: t("profesor.perfil.default_bio", "profesor"),
         avatar: "/public/images/avatar-placeholder.png",

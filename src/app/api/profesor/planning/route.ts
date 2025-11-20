@@ -25,7 +25,7 @@ export const GET = createApiRoute(
         throw new Error("User ID not found in session");
       }
 
-      const teacherId = session.data?.user.id as unknown as Id<"users">;
+      const teacherId = session.user.id as unknown as Id<"users">;
 
       // Get authenticated Convex client (required for tenant queries)
       const client = await getAuthenticatedConvexClient();

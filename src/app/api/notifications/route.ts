@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       const notifications = await client.query(
         api.notifications.getNotifications,
         {
-          recipientId: session.data?.user.id as any, // Cast string to Id<"users">
+          recipientId: session.user.id as any, // Cast string to Id<"users">
           status: status as "all" | "read" | "unread",
           limit,
         },
@@ -73,12 +73,12 @@ export async function PATCH(request: NextRequest) {
     try {
       if (markAll) {
         await client.mutation(api.notifications.markAllAsRead, {
-          recipientId: session.data?.user.id as any, // Cast string to Id<"users">
+          recipientId: session.user.id as any, // Cast string to Id<"users">
         });
       } else if (notificationIds?.length > 0) {
         await client.mutation(api.notifications.markAsRead, {
           notificationIds,
-          recipientId: session.data?.user.id as any, // Cast string to Id<"users">
+          recipientId: session.user.id as any, // Cast string to Id<"users">
         });
       }
 
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has permission to create notifications (admin/professor)
-    if (!["ADMIN", "PROFESOR"].includes(session.data?.user.role)) {
+    if (!["ADMIN", "PROFESOR"].includes(session.user.role)) {
       return NextResponse.json(
         { error: "Insufficient permissions" },
         { status: 403 },
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
         priority,
         actionUrl,
         expiresAt: expiresAt ? new Date(expiresAt).getTime() : undefined,
-        senderId: session.data?.user.id as any,
+        senderId: session.user.id as any,
       });
 
       return NextResponse.json({ success: true });

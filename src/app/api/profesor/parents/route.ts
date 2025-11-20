@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user can create parent users
-    if (!canCreateParentUser(session.data?.user.role)) {
+    if (!canCreateParentUser(session.user.role)) {
       return NextResponse.json(
         {
           error: "No tienes permisos para crear usuarios padres",
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
       phone: validatedData.phone,
       role: "PARENT",
-      createdByAdmin: session.data?.user.id, // Track which teacher created this user
+      createdByAdmin: session.user.id, // Track which teacher created this user
     });
 
     // Get the created user
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
       guardianPhone: validatedData.guardianPhone || validatedData.phone || "",
       scheduledDate: Date.now(), // Set to current date for registration tracking
       scheduledTime: "09:00", // Default time
-      assignedTo: session.data?.user.id as Id<"users">,
+      assignedTo: session.user.id as Id<"users">,
       type: "PARENT_TEACHER",
       reason: `Registro de usuario padre - Relación: ${validatedData.relationship}`,
     });

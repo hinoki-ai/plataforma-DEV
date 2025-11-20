@@ -177,8 +177,8 @@ export function SessionAnalytics() {
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{session.data?.userName}</span>
-                      <Badge variant="outline">{session.data?.userRole}</Badge>
+                      <span className="font-medium">{session.userName}</span>
+                      <Badge variant="outline">{session.userRole}</Badge>
                     </div>
                     <div className="text-sm text-muted-foreground">
                       Started: {new Date(session.startTime).toLocaleString()}

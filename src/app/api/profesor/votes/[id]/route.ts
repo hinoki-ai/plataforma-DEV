@@ -18,7 +18,7 @@ export async function DELETE(
     }
 
     // Check if user has profesor role
-    if (session.data?.user.role !== "PROFESOR") {
+    if (session.user.role !== "PROFESOR") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

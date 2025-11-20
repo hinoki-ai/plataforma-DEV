@@ -207,8 +207,8 @@ export default function LoginButton() {
           >
             <Avatar className="h-8 w-8 border-2 border-border">
               <AvatarImage
-                src={session.data?.user.image || undefined}
-                alt={session.data?.user.name || t("user.role.default", "common")}
+                src={session.user.image || undefined}
+                alt={session.user.name || t("user.role.default", "common")}
               />
               <AvatarFallback
                 className={cn(
@@ -226,7 +226,7 @@ export default function LoginButton() {
                 {roleData.roleName}
               </span>
               <span className="text-sm font-semibold text-foreground">
-                {session.data?.user.name?.split(" ")[0]}
+                {session.user.name?.split(" ")[0]}
               </span>
             </div>
 
@@ -244,8 +244,8 @@ export default function LoginButton() {
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10">
                 <AvatarImage
-                  src={session.data?.user.image || undefined}
-                  alt={session.data?.user.name || t("user.role.default", "common")}
+                  src={session.user.image || undefined}
+                  alt={session.user.name || t("user.role.default", "common")}
                 />
                 <AvatarFallback
                   className={cn(
@@ -260,10 +260,10 @@ export default function LoginButton() {
               </Avatar>
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  {session.data?.user.name}
+                  {session.user.name}
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  {session.data?.user.email}
+                  {session.user.email}
                 </p>
                 <div className="flex items-center space-x-1">
                   <RoleIcon className={cn("h-3 w-3", roleData.color)} />
@@ -281,7 +281,7 @@ export default function LoginButton() {
             {/* Simplified Navigation - Single dashboard link based on role */}
             <DropdownMenuItem asChild>
               <Link
-                href={getDashboardLink(session.data?.user.role)}
+                href={getDashboardLink(session.user.role)}
                 className="cursor-pointer"
                 onClick={() => setIsOpen(false)}
               >

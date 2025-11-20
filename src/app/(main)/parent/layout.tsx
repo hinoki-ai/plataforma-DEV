@@ -62,10 +62,10 @@ export default function ParentLayout({
     const roleAccess = getRoleAccess(session.user.role);
 
     // MASTER has access to all sections
-    if (!roleAccess.canAccessParent && session.data?.user.role !== "MASTER") {
+    if (!roleAccess.canAccessParent && session.user.role !== "MASTER") {
       if (!hasRedirectedRef.current) {
         console.warn(
-          `Access denied to parent section for role: ${session.data?.user.role}`,
+          `Access denied to parent section for role: ${session.user.role}`,
         );
         hasRedirectedRef.current = true;
         router.replace("/unauthorized");

@@ -21,13 +21,13 @@ export const metadata: Metadata = {
 
 export default async function CalendarioEscolarPage() {
   const session = await requireAuth();
-  const roleAccess = getRoleAccess(session.data?.user.role);
+  const roleAccess = getRoleAccess(session.user.role);
 
   // Ensure user has access to parent dashboard
   if (
     !roleAccess.canAccessParent &&
-    session.data?.user.role !== "PROFESOR" &&
-    session.data?.user.role !== "ADMIN"
+    session.user.role !== "PROFESOR" &&
+    session.user.role !== "ADMIN"
   ) {
     redirect("/unauthorized");
   }

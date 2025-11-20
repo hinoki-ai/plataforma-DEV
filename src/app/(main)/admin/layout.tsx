@@ -1,19 +1,9 @@
-import { redirect } from "next/navigation";
-import { requireAuth } from "@/lib/server-auth";
-import { getRoleAccess } from "@/lib/role-utils";
+import ClientAdminLayout from "@/components/layout/ClientAdminLayout";
 
-export default async function AdminLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await requireAuth();
-  const roleAccess = getRoleAccess(session.data?.user.role);
-
-  // Ensure user has access to admin section
-  if (!roleAccess.canAccessAdmin) {
-    redirect("/unauthorized");
-  }
-
-  return <>{children}</>;
+  return <ClientAdminLayout>{children}</ClientAdminLayout>;
 }

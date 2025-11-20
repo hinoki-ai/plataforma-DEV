@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (!canAccessProfesor(session.data?.user.role)) {
+    if (!canAccessProfesor(session.user.role)) {
       return NextResponse.json(
         {
           error: "No tienes permisos para acceder a estas actividades",
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 
     // Get activities for this teacher
     const allActivities = (await client.query(api.activities.getActivities, {
-      teacherId: session.data?.user.id as any,
+      teacherId: session.user.id as any,
       type: type as any,
     })) as Doc<"activities">[];
 
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (!canAccessProfesor(session.data?.user.role)) {
+    if (!canAccessProfesor(session.user.role)) {
       return NextResponse.json(
         {
           error: "No tienes permisos para crear actividades",
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
     const activityId = await client.mutation(api.activities.createActivity, {
       ...validatedData,
       scheduledDate: new Date(validatedData.scheduledDate).getTime(),
-      teacherId: session.data?.user.id as any,
+      teacherId: session.user.id as any,
     });
 
     const activity = await client.query(api.activities.getActivityById, {
@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
     });
 
     const teacher = await client.query(api.users.getUserById, {
-      userId: session.data?.user.id as any,
+      userId: session.user.id as any,
     });
 
     return NextResponse.json({

@@ -35,7 +35,7 @@ export function AuthWrapper({
     }
 
     if (status === "authenticated" && allowedRoles?.length && session?.user) {
-      const userRole = session.data?.user.role;
+      const userRole = session.user.role;
       if (!userRole || !allowedRoles.includes(userRole)) {
         // Redirect to appropriate dashboard based on role
         switch (userRole) {
@@ -79,7 +79,7 @@ export function AuthWrapper({
   }
 
   if (status === "authenticated" && allowedRoles?.length && session?.user) {
-    const userRole = session.data?.user.role;
+    const userRole = session.user.role;
     if (!allowedRoles.includes(userRole)) {
       return null; // Will redirect via useEffect
     }

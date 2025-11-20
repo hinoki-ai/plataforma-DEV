@@ -4,12 +4,12 @@
  * Manually sync all users from Clerk to Convex database
  */
 
-import { createClerkClient } from '@clerk/backend';
-import { ConvexHttpClient } from 'convex/browser';
-import { config } from 'dotenv';
+import { createClerkClient } from "@clerk/backend";
+import { ConvexHttpClient } from "convex/browser";
+import { config } from "dotenv";
 
 // Load environment variables
-config({ path: '.env.local' });
+config({ path: ".env.local" });
 
 async function syncClerkUsers() {
   try {
@@ -36,7 +36,9 @@ async function syncClerkUsers() {
 
     for (const clerkUser of usersResponse.data) {
       try {
-        console.log(`\n🔄 Processing: ${clerkUser.emailAddresses[0]?.emailAddress}`);
+        console.log(
+          `\n🔄 Processing: ${clerkUser.emailAddresses[0]?.emailAddress}`,
+        );
 
         // Extract user data in the format expected by Convex
         const userData = {
@@ -46,7 +48,7 @@ async function syncClerkUsers() {
           username: clerkUser.username,
           image_url: clerkUser.imageUrl,
           primary_email_address_id: clerkUser.primaryEmailAddressId,
-          email_addresses: clerkUser.emailAddresses.map(email => ({
+          email_addresses: clerkUser.emailAddresses.map((email) => ({
             id: email.id,
             email_address: email.emailAddress,
             verification: {
@@ -78,7 +80,6 @@ async function syncClerkUsers() {
     console.log(`   ✅ Synced: ${synced}`);
     console.log(`   ⚠️  Errors: ${errors}`);
     console.log(`   📋 Total: ${usersResponse.data.length}`);
-
   } catch (error) {
     console.error("❌ Sync failed:", error.message);
   }

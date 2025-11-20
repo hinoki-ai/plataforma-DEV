@@ -118,14 +118,14 @@ export function DynamicUserMenu() {
         <Button variant="ghost" className="flex items-center space-x-2">
           <Avatar className="h-8 w-8">
             <AvatarImage
-              src={session.data?.user.image || ""}
-              alt={session.data?.user.name || ""}
+              src={session.user.image || ""}
+              alt={session.user.name || ""}
             />
             <AvatarFallback>
-              {session.data?.user.name?.charAt(0).toUpperCase() || "U"}
+              {session.user.name?.charAt(0).toUpperCase() || "U"}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium">{session.data?.user.name}</span>
+          <span className="text-sm font-medium">{session.user.name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

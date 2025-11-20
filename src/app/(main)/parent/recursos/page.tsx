@@ -30,7 +30,7 @@ import { FixedBackgroundLayout } from "@/components/layout/FixedBackgroundLayout
 
 export default async function RecursosPage() {
   const session = await requireAuth();
-  const roleAccess = getRoleAccess(session.data?.user.role);
+  const roleAccess = getRoleAccess(session.user.role);
 
   // Ensure user has access to parent section
   if (!roleAccess.canAccessParent) {

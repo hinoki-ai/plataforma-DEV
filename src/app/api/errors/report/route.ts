@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
       const session = await auth();
       if (session?.user) {
         userInfo = {
-          userId: session.data?.user.id,
+          userId: session.user.id,
           userRole: session.user.role,
           sessionId: `session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`,
         };

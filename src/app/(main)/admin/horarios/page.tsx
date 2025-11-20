@@ -33,7 +33,7 @@ export default function AdminHorariosPage() {
                     {session?.user?.name
                       ? t("admin.horarios.subtitle_greeting", "admin").replace(
                           "{name}",
-                          session.data?.user.name.split(" ")[0],
+                          session.user.name.split(" ")[0],
                         )
                       : t("admin.horarios.subtitle", "admin")}
                   </p>

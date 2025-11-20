@@ -15,7 +15,7 @@ export const GET = createApiRoute(
       throw new Error("User ID is required");
     }
 
-    const teacherId = session.data?.user.id as unknown as Id<"users">;
+    const teacherId = session.user.id as unknown as Id<"users">;
     const client = await getAuthenticatedConvexClient();
 
     // Optimized parallel queries for teacher data with error handling
