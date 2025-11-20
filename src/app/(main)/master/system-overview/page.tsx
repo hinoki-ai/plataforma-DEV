@@ -180,7 +180,9 @@ function SystemOverviewContent() {
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
                   className={`bg-green-600 h-2 rounded-full transition-all duration-300`}
-                  style={{ width: `${calculateMemoryUsage(stats.system?.memory)}%` }}
+                  style={{
+                    width: `${calculateMemoryUsage(stats.system?.memory)}%`,
+                  }}
                 />
               </div>
             </div>
@@ -192,7 +194,9 @@ function SystemOverviewContent() {
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
                   className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${Math.min((stats.performance?.activeConnections || 0) * 2, 100)}%` }}
+                  style={{
+                    width: `${Math.min((stats.performance?.activeConnections || 0) * 2, 100)}%`,
+                  }}
                 />
               </div>
             </div>
