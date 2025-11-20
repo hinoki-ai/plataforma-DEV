@@ -86,7 +86,7 @@ export function JoshOnboarding({
                   src="/josh-happy-light.png"
                   alt="Josh"
                   fill
-                  className="object-contain drop-shadow-2xl"
+                  className="object-contain"
                   priority
                 />
               </motion.div>

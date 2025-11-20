@@ -170,7 +170,7 @@ export function JoshWelcomeToast() {
           <motion.img
             src={joshImage}
             alt="Josh"
-            className="w-10 h-10 rounded-full object-cover shadow-lg border-2 border-white dark:border-gray-700"
+            className="w-10 h-10 rounded-full object-cover border-2 border-white dark:border-gray-700"
             animate={{
               y: [0, -2, 0],
             }}

@@ -213,6 +213,13 @@ export default function PricingCalculatorPage({
     "monthly" | "upfront"
   >("monthly");
 
+  useEffect(() => {
+    const billingParam = resolvedSearchParams.billing;
+    if (isValidBillingCycle(billingParam) && billingParam !== billingCycle) {
+      setBillingCycleState(billingParam);
+    }
+  }, [resolvedSearchParams.billing, billingCycle]);
+
   const clampStudents = useCallback((value: number) => {
     // Clamp to global minimum and maximum, but allow values outside current plan range
     // to trigger plan switching or validation warnings
@@ -256,71 +263,47 @@ export default function PricingCalculatorPage({
   // Function to update URL with current state (defined after all variables are declared)
   const updateUrl = useCallback(
     (
-      newBillingCycle?: BillingCycle,
-      newStudents?: number,
-      newPlan?: string,
-      newType?: EducationalInstitutionType,
+      updates: {
+        billing?: BillingCycle;
+        students?: number;
+        plan?: string;
+        type?: EducationalInstitutionType;
+      } = {},
     ) => {
       const params = new URLSearchParams();
 
-      // Use new plan if provided, otherwise keep current
-      const planToUse = newPlan ?? selectedPlan.id;
+      const planToUse = updates.plan ?? selectedPlan.id;
+      const billingToUse = updates.billing ?? billingCycle;
+      const studentsToUse = updates.students ?? students;
+      const typeToUse = updates.type ?? institutionType;
+
       params.set("plan", planToUse);
-
-      // Use new billing cycle if provided, otherwise keep current
-      const billingToUse = newBillingCycle ?? billingCycle;
       params.set("billing", billingToUse);
+      params.set("students", studentsToUse.toString());
+      params.set("type", typeToUse);
 
-      // Use new students if provided, otherwise use current students state
-      // We need to read the current state value, not from closure
-      setStudentsState((currentStudents) => {
-        const studentsToUse = newStudents ?? currentStudents;
-        params.set("students", studentsToUse.toString());
-        return currentStudents; // Don't change state here, just read it
-      });
-
-      // Actually set students param properly
-      setStudentsState((currentStudents) => {
-        const studentsToUse = newStudents ?? currentStudents;
-        params.set("students", studentsToUse.toString());
-
-        // Use new type if provided, otherwise keep current
-        const typeToUse = newType ?? institutionType;
-        params.set("type", typeToUse);
-
-        router.replace(`/planes/calculadora?${params.toString()}`, {
-          scroll: false,
-        });
-
-        return currentStudents; // Don't change state here
+      router.replace(`/planes/calculadora?${params.toString()}`, {
+        scroll: false,
       });
     },
-    [router, selectedPlan.id, billingCycle, institutionType],
+    [router, selectedPlan.id, billingCycle, students, institutionType],
   );
 
   // Wrapper functions to update state and URL
   const setBillingCycle = useCallback(
     (cycle: BillingCycle) => {
       setBillingCycleState(cycle);
-      updateUrl(cycle, students);
+      updateUrl({ billing: cycle });
     },
-    [updateUrl, students],
-  );
-
-  const setStudents = useCallback(
-    (newStudents: number) => {
-      setStudentsState(newStudents);
-      updateUrl(billingCycle, newStudents);
-    },
-    [updateUrl, billingCycle],
+    [updateUrl],
   );
 
   const setInstitutionType = useCallback(
     (type: EducationalInstitutionType) => {
       setInstitutionTypeState(type);
-      updateUrl(billingCycle, students, undefined, type);
+      updateUrl({ type });
     },
-    [updateUrl, billingCycle, students],
+    [updateUrl],
   );
 
   // Sync inputValue when students changes externally (slider, buttons, plan change)
@@ -336,7 +319,7 @@ export default function PricingCalculatorPage({
       const recommendedPlan = findPlanByStudentCount(students);
       if (recommendedPlan.id !== selectedPlan.id) {
         setSelectedPlanId(recommendedPlan.id);
-        updateUrl(billingCycle, students, recommendedPlan.id);
+        updateUrl({ plan: recommendedPlan.id });
       }
     }
   }, [students, manualPlanOverride, selectedPlan.id, billingCycle, updateUrl]);
@@ -349,7 +332,7 @@ export default function PricingCalculatorPage({
       setInputValue(String(clamped));
       setStudentsState(clamped);
       // Update URL after clamping
-      updateUrl(billingCycle, clamped);
+      updateUrl({ students: clamped });
     }
   }, [students, billingCycle, updateUrl, clampStudents]);
 
@@ -518,9 +501,9 @@ export default function PricingCalculatorPage({
       // The isEditingInput check is only for preventing updates while typing
       setInputValue(String(clamped));
       isEditingInput.current = false; // Reset editing flag
-      updateUrl(billingCycle, clamped);
+      updateUrl({ students: clamped });
     },
-    [clampStudents, billingCycle, updateUrl],
+    [clampStudents, updateUrl],
   );
 
   const handleStudentInputChange = useCallback(
@@ -539,10 +522,10 @@ export default function PricingCalculatorPage({
         // Live update of calculations - use clampStudents for consistency
         const clamped = clampStudents(numeric);
         setStudentsState(clamped);
-        updateUrl(billingCycle, clamped);
+        updateUrl({ students: clamped });
       }
     },
-    [billingCycle, updateUrl, clampStudents],
+    [updateUrl, clampStudents],
   );
 
   const handleStudentInputBlur = useCallback(() => {
@@ -557,9 +540,9 @@ export default function PricingCalculatorPage({
       const clamped = clampStudents(numeric);
       setStudentsState(clamped);
       setInputValue(String(clamped));
-      updateUrl(billingCycle, clamped);
+      updateUrl({ students: clamped });
     }
-  }, [inputValue, students, clampStudents, billingCycle, updateUrl]);
+  }, [inputValue, students, clampStudents, updateUrl]);
 
   const adjustStudents = useCallback(
     (delta: number) => {
@@ -567,9 +550,9 @@ export default function PricingCalculatorPage({
       const clamped = clampStudents(newValue);
       setStudentsState(clamped);
       setInputValue(String(clamped));
-      updateUrl(billingCycle, clamped);
+      updateUrl({ students: clamped });
     },
-    [students, clampStudents, billingCycle, updateUrl],
+    [students, clampStudents, updateUrl],
   );
 
   const highlightItems = [
@@ -629,7 +612,7 @@ export default function PricingCalculatorPage({
                           onClick={() => {
                             setSelectedPlanId(plan.id);
                             setManualPlanOverride(true);
-                            updateUrl(billingCycle, students, plan.id);
+                            updateUrl({ plan: plan.id });
                           }}
                           className={`flex-1 ${
                             selectedPlan.id === plan.id
@@ -678,11 +661,7 @@ export default function PricingCalculatorPage({
                             onClick={() => {
                               setSelectedPlanId(recommendedPlan.id);
                               setManualPlanOverride(false);
-                              updateUrl(
-                                billingCycle,
-                                students,
-                                recommendedPlan.id,
-                              );
+                              updateUrl({ plan: recommendedPlan.id });
                             }}
                             title={tc("calculator.change_to").replace(
                               "{plan}",
@@ -723,11 +702,7 @@ export default function PricingCalculatorPage({
                             onClick={() => {
                               setSelectedPlanId(recommendedPlan.id);
                               setManualPlanOverride(false);
-                              updateUrl(
-                                billingCycle,
-                                students,
-                                recommendedPlan.id,
-                              );
+                              updateUrl({ plan: recommendedPlan.id });
                             }}
                             title={tc("calculator.change_to").replace(
                               "{plan}",

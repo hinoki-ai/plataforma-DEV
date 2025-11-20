@@ -287,7 +287,7 @@ export function JoshIndicator() {
               <motion.img
                 src={joshImage}
                 alt={t("josh.alt", "Josh - Educational Assistant")}
-                className="w-12 h-12 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                className="w-20 h-20 cursor-pointer"
                 role="button"
                 tabIndex={0}
                 aria-label={t(
@@ -303,7 +303,6 @@ export function JoshIndicator() {
                 }}
                 whileHover={{
                   scale: 1.1,
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
                 }}
                 whileTap={{ scale: 0.95 }}
               />
