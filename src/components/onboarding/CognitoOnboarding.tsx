@@ -86,7 +86,7 @@ export function CognitoOnboarding({
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-3xl animate-pulse" />
                 <Image
                   src="/cognito-happy-light.png"
-                  alt="Cognito"
+                  alt="Cogníto"
                   fill
                   className="object-contain"
                   priority
@@ -109,7 +109,7 @@ export function CognitoOnboarding({
                 <div className="relative z-10">
                   <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                     {step === 0
-                      ? "¡Hola! Soy Cognito 👋"
+                      ? "¡Hola! Soy Cogníto 👋"
                       : "Tu Panel de Control"}
                   </h2>
 

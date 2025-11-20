@@ -230,7 +230,7 @@ export function SignatureModal({
               className="w-full"
             >
               <RotateCcw className="h-4 w-4 mr-2" />
-              Limpiar Firma
+              {t("digital-signatures.signature.clear_signature")}
             </Button>
           </div>
 
@@ -252,7 +252,7 @@ export function SignatureModal({
               className="flex-1"
             >
               <X className="h-4 w-4 mr-2" />
-              Cancelar
+              {t("digital-signatures.signature.cancel")}
             </Button>
             <Button
               onClick={handleSubmit}
@@ -260,11 +260,11 @@ export function SignatureModal({
               className="flex-1"
             >
               {isSubmitting ? (
-                "Registrando..."
+                t("digital-signatures.certification.certifying")
               ) : (
                 <>
                   <Check className="h-4 w-4 mr-2" />
-                  Firmar y Guardar
+                  {t("digital-signatures.signature.sign_and_save")}
                 </>
               )}
             </Button>

@@ -394,4 +394,4 @@ When adding new animations:
 
 ---
 
-**Reference:** Cognito AI-powered animation development for Plataforma Astral
+**Reference:** Cogníto AI-powered animation development for Plataforma Astral

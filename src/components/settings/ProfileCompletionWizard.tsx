@@ -47,12 +47,13 @@ export function ProfileCompletionWizard({
   useEffect(() => {
     const completed: number[] = [];
 
-    // Step 1: Personal info (name is filled)
-    if (session?.user?.name) {
+    // Step 1: Personal info (name and email are filled)
+    if (session?.user?.name && session?.user?.email) {
       completed.push(1);
     }
 
-    // Step 2: Preferences (check localStorage)
+    // Step 2: Preferences (check if user has visited settings/notifications tab)
+    // For now, consider complete if user has basic preferences stored
     try {
       if (typeof window !== "undefined") {
         const prefs = localStorage.getItem("plataforma_user_preferences");
@@ -71,13 +72,15 @@ export function ProfileCompletionWizard({
       // ignore localStorage errors
     }
 
-    // Step 3: Security settings (all authenticated users can access security settings)
+    // Step 3: Security settings (user can access security tab)
+    // All authenticated users can access security settings
     if (session?.user) {
-      completed.push(3); // All authenticated users have access to security settings
+      completed.push(3);
     }
 
-    // Step 4: Verification (always complete for now)
-    if (totalSteps >= 4) {
+    // Step 4: Verification (email exists and user is authenticated)
+    // Consider complete if user has email (verification is separate concern)
+    if (session?.user?.email) {
       completed.push(4);
     }
 

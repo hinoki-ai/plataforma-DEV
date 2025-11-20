@@ -1,19 +1,19 @@
 # COGNITO AI - Educational Assistant Documentation
 
-This file provides guidance for working with the Cognito AI educational assistant feature in the Plataforma Astral codebase.
+This file provides guidance for working with the Cogníto AI educational assistant feature in the Plataforma Astral codebase.
 
 ## Project Overview
 
-**Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 16 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, Centro Consejo voting functionality, and **Cognito AI** - an integrated educational assistant. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
+**Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 16 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, Centro Consejo voting functionality, and **Cogníto AI** - an integrated educational assistant. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
 
-**Note**: When referring to "Cognito", this documentation specifically addresses the Cognito AI educational assistant feature only, not general AI assistance or other AI-related functionality.
+**Note**: When referring to "Cogníto", this documentation specifically addresses the Cogníto AI educational assistant feature only, not general AI assistance or other AI-related functionality.
 
 ## 📚 Critical Documentation
 
 **Status**: Production ready with full Convex integration ✅
 **Backend**: 100% migrated to Convex serverless
 **Authentication**: Clerk integration complete
-**Cognito AI**: Educational assistant feature integrated
+**Cogníto AI**: Educational assistant feature integrated
 
 ### Primary Documentation Reference
 
@@ -23,9 +23,9 @@ This file provides guidance for working with the Cognito AI educational assistan
 - `DEPLOYMENT.md` - Deployment procedures
 - `START_HERE.md` - Quick start guide
 
-### Cognito AI Feature Documentation
+### Cogníto AI Feature Documentation
 
-**Cognito AI** is the integrated educational assistant feature that provides:
+**Cogníto AI** is the integrated educational assistant feature that provides:
 
 - Interactive chat support for users (admin, teacher, parent, master roles)
 - Guided onboarding tours for new users
@@ -33,7 +33,7 @@ This file provides guidance for working with the Cognito AI educational assistan
 - Welcome messages and contextual help
 - Real-time educational assistance
 
-**Key Cognito Components**:
+**Key Cogníto Components**:
 
 - `src/components/ui/cognito-chat.tsx` - Main chat interface
 - `src/components/ui/cognito-tour.tsx` - Interactive onboarding tours
@@ -372,7 +372,7 @@ GOOGLE_CLIENT_SECRET=...
 - Public information display
 - Council member management
 
-### Cognito AI Educational Assistant
+### Cogníto AI Educational Assistant
 
 - Role-based chat support (Admin/Teacher/Parent/Master)
 - Interactive onboarding tours

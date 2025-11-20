@@ -105,8 +105,7 @@ export function SettingsTabs({
           {t("settings.tabs.appearance", "common")}
         </TabsTrigger>
         <TabsTrigger value="assistant">
-          <Bot className="w-4 h-4 mr-2" />
-          {t("settings.tabs.assistant", "Assistant")}
+          {t("settings.tabs.assistant", "Cogníto")}
         </TabsTrigger>
         <TabsTrigger value="privacy">
           {t("settings.tabs.privacy", "common")}
@@ -153,7 +152,7 @@ function AssistantTab() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Bot className="w-5 h-5" />
-            Cognito
+            Cogníto
           </CardTitle>
           <CardDescription>
             {t(
@@ -167,18 +166,22 @@ function AssistantTab() {
       {/* Configuration Options */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Preferencias del asistente</CardTitle>
+          <CardTitle className="text-lg">
+            {t("settings.assistant.preferences_title", "common")}
+          </CardTitle>
           <CardDescription>
-            Personaliza cómo Cognito interactúa contigo
+            {t("settings.assistant.preferences_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Sound Notifications */}
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <div className="text-sm font-medium">Notificaciones sonoras</div>
+              <div className="text-sm font-medium">
+                {t("settings.assistant.sound_notifications", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Reproducir sonidos cuando llegan respuestas
+                {t("settings.assistant.sound_notifications_desc", "common")}
               </div>
             </div>
             <Switch defaultChecked />
@@ -187,9 +190,11 @@ function AssistantTab() {
           {/* Auto-show Tips */}
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <div className="text-sm font-medium">Consejos automáticos</div>
+              <div className="text-sm font-medium">
+                {t("settings.assistant.auto_tips", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Mostrar sugerencias útiles automáticamente
+                {t("settings.assistant.auto_tips_desc", "common")}
               </div>
             </div>
             <Switch defaultChecked />
@@ -199,10 +204,10 @@ function AssistantTab() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <div className="text-sm font-medium">
-                Recordatorios de tutoriales
+                {t("settings.assistant.tutorial_reminders", "common")}
               </div>
               <div className="text-xs text-muted-foreground">
-                Recordar tutoriales disponibles en nuevas secciones
+                {t("settings.assistant.tutorial_reminders_desc", "common")}
               </div>
             </div>
             <Switch />
@@ -212,10 +217,10 @@ function AssistantTab() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <div className="text-sm font-medium">
-                Guardar historial de chat
+                {t("settings.assistant.chat_history", "common")}
               </div>
               <div className="text-xs text-muted-foreground">
-                Mantener conversaciones entre sesiones
+                {t("settings.assistant.chat_history_desc", "common")}
               </div>
             </div>
             <Switch defaultChecked />
@@ -226,25 +231,27 @@ function AssistantTab() {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Acciones rápidas</CardTitle>
+          <CardTitle className="text-lg">
+            {t("settings.assistant.quick_actions", "common")}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
             <Button variant="outline" size="sm">
               <MessageSquare className="w-4 h-4 mr-2" />
-              Nuevo chat
+              {t("settings.assistant.new_chat", "common")}
             </Button>
             <Button variant="outline" size="sm">
               <Activity className="w-4 h-4 mr-2" />
-              Reiniciar tutoriales
+              {t("settings.assistant.reset_tutorials", "common")}
             </Button>
             <Button variant="outline" size="sm">
               <Settings className="w-4 h-4 mr-2" />
-              Limpiar historial
+              {t("settings.assistant.clear_history", "common")}
             </Button>
             <Button variant="outline" size="sm">
               <Heart className="w-4 h-4 mr-2" />
-              Enviar feedback
+              {t("settings.assistant.send_feedback", "common")}
             </Button>
           </div>
         </CardContent>
@@ -253,34 +260,31 @@ function AssistantTab() {
       {/* Usage Info */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Información de uso</CardTitle>
+          <CardTitle className="text-lg">
+            {t("settings.assistant.usage_info", "common")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
-              Conversaciones esta semana
+              {t("settings.assistant.conversations_this_week", "common")}
             </span>
             <span className="font-medium">12</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Preguntas respondidas</span>
+            <span className="text-muted-foreground">
+              {t("settings.assistant.questions_answered", "common")}
+            </span>
             <span className="font-medium">87</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
-              Tutoriales completados
+              {t("settings.assistant.tutorials_completed", "common")}
             </span>
             <span className="font-medium">3/5</span>
           </div>
         </CardContent>
       </Card>
-
-      {/* Footer */}
-      <div className="text-center pt-4 border-t">
-        <p className="text-xs text-muted-foreground italic">
-          {COGNITO_CONFIG.definition}
-        </p>
-      </div>
     </div>
   );
 }
@@ -396,18 +400,18 @@ function ProfileTab() {
         setAvatarUrl(data.url);
         setAlert({
           type: "success",
-          message: "Avatar updated successfully!",
+          message: t("settings.profile.success.avatar_updated", "common"),
         });
       } else {
         setAlert({
           type: "error",
-          message: "Failed to upload avatar",
+          message: t("settings.profile.error.avatar_upload_failed", "common"),
         });
       }
     } catch (error) {
       setAlert({
         type: "error",
-        message: "Upload error. Please try again.",
+        message: t("settings.profile.error.upload_generic", "common"),
       });
     } finally {
       setIsUploading(false);
@@ -424,7 +428,7 @@ function ProfileTab() {
     if (!trimmedName) {
       setAlert({
         type: "error",
-        message: "Name is required",
+        message: t("settings.profile.validation.name_required", "common"),
       });
       setIsSaving(false);
       return;
@@ -457,7 +461,7 @@ function ProfileTab() {
       if (response.ok) {
         setAlert({
           type: "success",
-          message: "Profile updated successfully!",
+          message: t("settings.profile.success.updated", "common"),
         });
         await update(); // Refresh session
         // Auto-dismiss success alert after 3 seconds
@@ -465,7 +469,7 @@ function ProfileTab() {
       } else {
         setAlert({
           type: "error",
-          message: data.error || "Failed to update profile",
+          message: data.error || t("settings.profile.error.network", "common"),
         });
       }
     } catch (error) {
@@ -546,13 +550,15 @@ function ProfileTab() {
               </label>
             </div>
             <div className="flex-1">
-              <h4 className="font-medium">Foto de perfil</h4>
+              <h4 className="font-medium">
+                {t("settings.profile.avatar_title", "common")}
+              </h4>
               <p className="text-sm text-muted-foreground">
-                Sube una imagen cuadrada de al menos 200x200px
+                {t("settings.profile.avatar_description", "common")}
               </p>
               {isUploading && (
                 <p className="text-xs text-muted-foreground mt-1">
-                  Subiendo...
+                  {t("settings.profile.avatar_uploading", "common")}
                 </p>
               )}
             </div>
@@ -570,19 +576,24 @@ function ProfileTab() {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                placeholder="Tu nombre completo"
+                placeholder={t(
+                  "settings.profile.display_name_placeholder",
+                  "common",
+                )}
                 disabled={isSaving}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="title">Título profesional</Label>
+              <Label htmlFor="title">
+                {t("settings.profile.title_label", "common")}
+              </Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
-                placeholder="Profesor, Director, etc."
+                placeholder={t("settings.profile.title_placeholder", "common")}
                 disabled={isSaving}
               />
             </div>
@@ -607,7 +618,7 @@ function ProfileTab() {
             <div className="space-y-2">
               <Label htmlFor="timezone">
                 <MapPin className="w-4 h-4 inline mr-1" />
-                Zona horaria
+                {t("settings.profile.timezone_label", "common")}
               </Label>
               <select
                 id="timezone"
@@ -618,30 +629,41 @@ function ProfileTab() {
                 className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm"
                 disabled={isSaving}
               >
-                <option value="America/Santiago">Chile (Santiago)</option>
-                <option value="America/Buenos_Aires">
-                  Argentina (Buenos Aires)
+                <option value="America/Santiago">
+                  {t("settings.profile.timezone_chile", "common")}
                 </option>
-                <option value="America/Lima">Perú (Lima)</option>
-                <option value="America/Bogota">Colombia (Bogotá)</option>
-                <option value="America/Mexico_City">México (CDMX)</option>
+                <option value="America/Buenos_Aires">
+                  {t("settings.profile.timezone_argentina", "common")}
+                </option>
+                <option value="America/Lima">
+                  {t("settings.profile.timezone_peru", "common")}
+                </option>
+                <option value="America/Bogota">
+                  {t("settings.profile.timezone_colombia", "common")}
+                </option>
+                <option value="America/Mexico_City">
+                  {t("settings.profile.timezone_mexico", "common")}
+                </option>
               </select>
             </div>
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="bio">Biografía</Label>
+              <Label htmlFor="bio">
+                {t("settings.profile.bio_label", "common")}
+              </Label>
               <textarea
                 id="bio"
                 value={formData.bio}
                 onChange={(e) =>
                   setFormData({ ...formData, bio: e.target.value })
                 }
-                placeholder="Cuéntanos sobre ti..."
+                placeholder={t("settings.profile.bio_placeholder", "common")}
                 className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm min-h-[80px]"
                 disabled={isSaving}
                 maxLength={500}
               />
               <p className="text-xs text-muted-foreground">
-                {formData.bio.length}/500 caracteres
+                {formData.bio.length}/500{" "}
+                {t("settings.profile.bio_characters", "common")}
               </p>
             </div>
           </div>
@@ -650,13 +672,13 @@ function ProfileTab() {
           <div className="space-y-4">
             <h4 className="font-medium flex items-center gap-2">
               <LinkIcon className="w-4 h-4" />
-              Enlaces y redes sociales
+              {t("settings.profile.social_links", "common")}
             </h4>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="website">
                   <Globe className="w-4 h-4 inline mr-1" />
-                  Sitio web
+                  {t("settings.profile.website_label", "common")}
                 </Label>
                 <Input
                   id="website"
@@ -665,36 +687,51 @@ function ProfileTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, website: e.target.value })
                   }
-                  placeholder="https://tu-sitio.com"
+                  placeholder={t(
+                    "settings.profile.website_placeholder",
+                    "common",
+                  )}
                   disabled={isSaving}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="linkedin">LinkedIn</Label>
+                <Label htmlFor="linkedin">
+                  {t("settings.profile.linkedin_label", "common")}
+                </Label>
                 <Input
                   id="linkedin"
                   value={formData.linkedin}
                   onChange={(e) =>
                     setFormData({ ...formData, linkedin: e.target.value })
                   }
-                  placeholder="linkedin.com/in/tu-perfil"
+                  placeholder={t(
+                    "settings.profile.linkedin_placeholder",
+                    "common",
+                  )}
                   disabled={isSaving}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="twitter">Twitter/X</Label>
+                <Label htmlFor="twitter">
+                  {t("settings.profile.twitter_label", "common")}
+                </Label>
                 <Input
                   id="twitter"
                   value={formData.twitter}
                   onChange={(e) =>
                     setFormData({ ...formData, twitter: e.target.value })
                   }
-                  placeholder="@tu-usuario"
+                  placeholder={t(
+                    "settings.profile.twitter_placeholder",
+                    "common",
+                  )}
                   disabled={isSaving}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">
+                  {t("settings.profile.email_label", "common")}
+                </Label>
                 <Input
                   id="email"
                   value={formData.email}
@@ -702,7 +739,7 @@ function ProfileTab() {
                   className="bg-muted"
                 />
                 <p className="text-xs text-muted-foreground">
-                  El email no se puede cambiar desde aquí
+                  {t("settings.profile.email_disabled_message", "common")}
                 </p>
               </div>
             </div>
@@ -713,12 +750,12 @@ function ProfileTab() {
               {isSaving ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Guardando...
+                  {t("settings.profile.saving_button", "common")}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  Guardar cambios
+                  {t("settings.profile.save_button", "common")}
                 </>
               )}
             </Button>
@@ -822,7 +859,7 @@ function NotificationsTab() {
         ) {
           setAlert({
             type: "error",
-            message: "Storage quota exceeded. Please clear some browser data.",
+            message: t("settings.notifications.error_quota_exceeded", "common"),
           });
           setIsSaving(false);
           return;
@@ -847,15 +884,17 @@ function NotificationsTab() {
 
       setAlert({
         type: "success",
-        message: "Preferencias de notificaciones guardadas exitosamente!",
+        message: t("settings.notifications.success_saved", "common"),
       });
       // Auto-dismiss success alert after 3 seconds
       setTimeout(() => setAlert(null), 3000);
+
+      // Notify other components that preferences have been updated
+      window.dispatchEvent(new CustomEvent("preferencesUpdated"));
     } catch (error) {
       setAlert({
         type: "error",
-        message:
-          "Error al guardar las preferencias. Por favor intenta nuevamente.",
+        message: t("settings.notifications.error_save_failed", "common"),
       });
     } finally {
       setIsSaving(false);
@@ -887,10 +926,10 @@ function NotificationsTab() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Bell className="w-5 h-5" />
-            Canales de notificación
+            {t("settings.notifications.channels_title", "common")}
           </CardTitle>
           <CardDescription>
-            Elige cómo quieres recibir las notificaciones
+            {t("settings.notifications.channels_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -901,9 +940,11 @@ function NotificationsTab() {
                   <Bell className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <div className="font-medium text-sm">Notificaciones push</div>
+                  <div className="font-medium text-sm">
+                    {t("settings.notifications.push_title", "common")}
+                  </div>
                   <div className="text-xs text-muted-foreground">
-                    En el navegador y app móvil
+                    {t("settings.notifications.push_description", "common")}
                   </div>
                 </div>
               </div>
@@ -925,10 +966,10 @@ function NotificationsTab() {
                 </div>
                 <div>
                   <div className="font-medium text-sm">
-                    Notificaciones por email
+                    {t("settings.notifications.email_title", "common")}
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Resúmenes y actualizaciones importantes
+                    {t("settings.notifications.email_description", "common")}
                   </div>
                 </div>
               </div>
@@ -949,9 +990,11 @@ function NotificationsTab() {
                   <Smartphone className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <div className="font-medium text-sm">SMS (próximamente)</div>
+                  <div className="font-medium text-sm">
+                    {t("settings.notifications.sms_title", "common")}
+                  </div>
                   <div className="text-xs text-muted-foreground">
-                    Solo para notificaciones críticas
+                    {t("settings.notifications.sms_description", "common")}
                   </div>
                 </div>
               </div>
@@ -975,20 +1018,20 @@ function NotificationsTab() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="w-5 h-5" />
-            Horas de silencio
+            {t("settings.notifications.quiet_hours_title", "common")}
           </CardTitle>
           <CardDescription>
-            Pausa las notificaciones durante ciertas horas
+            {t("settings.notifications.quiet_hours_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium text-sm">
-                Activar horas de silencio
+                {t("settings.notifications.quiet_hours_enable", "common")}
               </div>
               <div className="text-xs text-muted-foreground">
-                No recibir notificaciones durante el horario configurado
+                {t("settings.notifications.quiet_hours_enable_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1006,7 +1049,9 @@ function NotificationsTab() {
           {notificationSettings.quietHours.enabled && (
             <div className="grid grid-cols-2 gap-4 pt-4 border-t">
               <div className="space-y-2">
-                <Label htmlFor="quietStart">Hora de inicio</Label>
+                <Label htmlFor="quietStart">
+                  {t("settings.notifications.quiet_start_label", "common")}
+                </Label>
                 <Input
                   id="quietStart"
                   type="time"
@@ -1024,7 +1069,9 @@ function NotificationsTab() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="quietEnd">Hora de fin</Label>
+                <Label htmlFor="quietEnd">
+                  {t("settings.notifications.quiet_end_label", "common")}
+                </Label>
                 <Input
                   id="quietEnd"
                   type="time"
@@ -1049,19 +1096,21 @@ function NotificationsTab() {
       {/* Notification Types */}
       <Card>
         <CardHeader>
-          <CardTitle>Tipos de notificación</CardTitle>
+          <CardTitle>
+            {t("settings.notifications.types_title", "common")}
+          </CardTitle>
           <CardDescription>
-            Elige qué tipos de notificaciones quieres recibir
+            {t("settings.notifications.types_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium text-sm">
-                Recordatorios de reuniones
+                {t("settings.notifications.meeting_reminders", "common")}
               </div>
               <div className="text-xs text-muted-foreground">
-                Notificaciones sobre citas y reuniones programadas
+                {t("settings.notifications.meeting_reminders_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1078,10 +1127,10 @@ function NotificationsTab() {
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium text-sm">
-                Actualizaciones del sistema
+                {t("settings.notifications.system_updates", "common")}
               </div>
               <div className="text-xs text-muted-foreground">
-                Nuevas funcionalidades y mantenimiento
+                {t("settings.notifications.system_updates_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1098,10 +1147,10 @@ function NotificationsTab() {
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium text-sm">
-                Solo notificaciones prioritarias
+                {t("settings.notifications.priority_only", "common")}
               </div>
               <div className="text-xs text-muted-foreground">
-                Filtrar solo notificaciones importantes
+                {t("settings.notifications.priority_only_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1117,9 +1166,11 @@ function NotificationsTab() {
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <div className="font-medium text-sm">Emails de marketing</div>
+              <div className="font-medium text-sm">
+                {t("settings.notifications.marketing_emails", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Novedades, consejos y ofertas especiales
+                {t("settings.notifications.marketing_emails_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1141,20 +1192,20 @@ function NotificationsTab() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="w-5 h-5" />
-            Controles de sesión
+            {t("settings.notifications.session_controls_title", "common")}
           </CardTitle>
           <CardDescription>
-            Gestiona la duración y seguridad de tus sesiones
+            {t("settings.notifications.session_controls_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="font-medium text-sm">
-                Cierre automático de sesión
+                {t("settings.notifications.auto_logout", "common")}
               </div>
               <div className="text-xs text-muted-foreground">
-                Cerrar sesión automáticamente después de inactividad
+                {t("settings.notifications.auto_logout_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1177,7 +1228,10 @@ function NotificationsTab() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="sessionDuration">
-                    Duración de sesión (minutos)
+                    {t(
+                      "settings.notifications.session_duration_label",
+                      "common",
+                    )}
                   </Label>
                   <select
                     id="sessionDuration"
@@ -1194,11 +1248,21 @@ function NotificationsTab() {
                     className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm"
                     disabled={isSaving}
                   >
-                    <option value="15">15 minutos</option>
-                    <option value="30">30 minutos</option>
-                    <option value="60">1 hora</option>
-                    <option value="120">2 horas</option>
-                    <option value="240">4 horas</option>
+                    <option value="15">
+                      {t("settings.notifications.time_15_minutes", "common")}
+                    </option>
+                    <option value="30">
+                      {t("settings.notifications.time_30_minutes", "common")}
+                    </option>
+                    <option value="60">
+                      {t("settings.notifications.time_1_hour", "common")}
+                    </option>
+                    <option value="120">
+                      {t("settings.notifications.time_2_hours", "common")}
+                    </option>
+                    <option value="240">
+                      {t("settings.notifications.time_4_hours", "common")}
+                    </option>
                   </select>
                 </div>
                 <div className="space-y-2">
@@ -1218,9 +1282,15 @@ function NotificationsTab() {
                     className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm"
                     disabled={isSaving}
                   >
-                    <option value="1">1 minuto</option>
-                    <option value="5">5 minutos</option>
-                    <option value="10">10 minutos</option>
+                    <option value="1">
+                      {t("settings.notifications.time_1_minute", "common")}
+                    </option>
+                    <option value="5">
+                      {t("settings.notifications.time_5_minutes", "common")}
+                    </option>
+                    <option value="10">
+                      {t("settings.notifications.time_10_minutes", "common")}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -1229,13 +1299,19 @@ function NotificationsTab() {
                   <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div className="text-sm">
                     <div className="font-medium text-blue-900 dark:text-blue-100">
-                      Información de seguridad
+                      {t(
+                        "settings.notifications.security_info_title",
+                        "common",
+                      )}
                     </div>
                     <div className="text-blue-700 dark:text-blue-300 text-xs mt-1">
-                      Recibirás una notificación{" "}
-                      {notificationSettings.sessionTimeout.warnBefore} minutos
-                      antes del cierre automático. Esto ayuda a proteger tu
-                      cuenta cuando te alejas del dispositivo.
+                      {t(
+                        "settings.notifications.security_info_text",
+                        "common",
+                      ).replace(
+                        "{warnBefore}",
+                        notificationSettings.sessionTimeout.warnBefore.toString(),
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1359,20 +1435,18 @@ function PrivacyTab() {
 
         setAlert({
           type: "success",
-          message:
-            "Datos exportados exitosamente. Revisa tu carpeta de descargas.",
+          message: t("settings.privacy.success_exported", "common"),
         });
       } else {
         setAlert({
           type: "error",
-          message: "Error al exportar los datos. Por favor intenta nuevamente.",
+          message: t("settings.privacy.error_export_failed", "common"),
         });
       }
     } catch (error) {
       setAlert({
         type: "error",
-        message:
-          "Error de conexión. Por favor verifica tu conexión a internet.",
+        message: t("settings.privacy.error_network", "common"),
       });
     } finally {
       setExportLoading(false);
@@ -1397,7 +1471,7 @@ function PrivacyTab() {
       if (response.ok) {
         setAlert({
           type: "success",
-          message: "Cuenta eliminada exitosamente. Serás redirigido en breve.",
+          message: t("settings.privacy.success_deleted", "common"),
         });
         // Redirect after a delay
         setTimeout(() => {
@@ -1406,14 +1480,13 @@ function PrivacyTab() {
       } else {
         setAlert({
           type: "error",
-          message:
-            "Error al eliminar la cuenta. Por favor contacta al soporte.",
+          message: t("settings.privacy.error_delete_failed", "common"),
         });
       }
     } catch (error) {
       setAlert({
         type: "error",
-        message: "Error de conexión. Por favor intenta nuevamente.",
+        message: t("settings.privacy.error_network", "common"),
       });
     } finally {
       setIsSaving(false);
@@ -1449,7 +1522,7 @@ function PrivacyTab() {
         ) {
           setAlert({
             type: "error",
-            message: "Storage quota exceeded. Please clear some browser data.",
+            message: t("settings.notifications.error_quota_exceeded", "common"),
           });
           setIsSaving(false);
           return;
@@ -1474,15 +1547,17 @@ function PrivacyTab() {
 
       setAlert({
         type: "success",
-        message: "Configuración de privacidad guardada exitosamente!",
+        message: t("settings.privacy.success_saved", "common"),
       });
       // Auto-dismiss success alert after 3 seconds
       setTimeout(() => setAlert(null), 3000);
+
+      // Notify other components that preferences have been updated
+      window.dispatchEvent(new CustomEvent("preferencesUpdated"));
     } catch (error) {
       setAlert({
         type: "error",
-        message:
-          "Error al guardar la configuración. Por favor intenta nuevamente.",
+        message: t("settings.privacy.error_network", "common"),
       });
     } finally {
       setIsSaving(false);
@@ -1514,18 +1589,20 @@ function PrivacyTab() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="w-5 h-5" />
-            Controles de privacidad
+            {t("settings.privacy.controls_title", "common")}
           </CardTitle>
           <CardDescription>
-            Gestiona quién puede ver tu información y actividad
+            {t("settings.privacy.controls_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
             <div className="flex-1">
-              <div className="font-medium text-sm">Perfil público</div>
+              <div className="font-medium text-sm">
+                {t("settings.privacy.profile_visibility", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Permitir que otros usuarios vean tu perfil
+                {t("settings.privacy.profile_visibility_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1541,9 +1618,11 @@ function PrivacyTab() {
           </div>
           <div className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
             <div className="flex-1">
-              <div className="font-medium text-sm">Compartir actividad</div>
+              <div className="font-medium text-sm">
+                {t("settings.privacy.activity_sharing", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Mostrar tu actividad en el feed público
+                {t("settings.privacy.activity_sharing_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1559,9 +1638,11 @@ function PrivacyTab() {
           </div>
           <div className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
             <div className="flex-1">
-              <div className="font-medium text-sm">Analytics y mejora</div>
+              <div className="font-medium text-sm">
+                {t("settings.privacy.data_analytics", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Ayudar a mejorar la plataforma con datos de uso
+                {t("settings.privacy.data_analytics_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1577,9 +1658,11 @@ function PrivacyTab() {
           </div>
           <div className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
             <div className="flex-1">
-              <div className="font-medium text-sm">Anuncios personalizados</div>
+              <div className="font-medium text-sm">
+                {t("settings.privacy.personalized_ads", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Mostrar contenido relevante basado en tu actividad
+                {t("settings.privacy.personalized_ads_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1595,9 +1678,11 @@ function PrivacyTab() {
           </div>
           <div className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
             <div className="flex-1">
-              <div className="font-medium text-sm">Compartir con terceros</div>
+              <div className="font-medium text-sm">
+                {t("settings.privacy.third_party_sharing", "common")}
+              </div>
               <div className="text-xs text-muted-foreground">
-                Permitir compartir datos con partners de confianza
+                {t("settings.privacy.third_party_sharing_desc", "common")}
               </div>
             </div>
             <Switch
@@ -1619,15 +1704,17 @@ function PrivacyTab() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Download className="w-5 h-5" />
-            Gestión de datos
+            {t("settings.privacy.data_management_title", "common")}
           </CardTitle>
           <CardDescription>
-            Controla tus datos personales y su almacenamiento
+            {t("settings.privacy.data_management_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Retención de datos</Label>
+            <Label>
+              {t("settings.privacy.data_retention_label", "common")}
+            </Label>
             <select
               value={privacySettings.dataRetention}
               onChange={(e) =>
@@ -1639,12 +1726,18 @@ function PrivacyTab() {
               className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm"
               disabled={isSaving}
             >
-              <option value="1year">1 año</option>
-              <option value="2years">2 años</option>
-              <option value="forever">Indefinidamente</option>
+              <option value="1year">
+                {t("settings.privacy.retention_1year", "common")}
+              </option>
+              <option value="2years">
+                {t("settings.privacy.retention_2years", "common")}
+              </option>
+              <option value="forever">
+                {t("settings.privacy.retention_forever", "common")}
+              </option>
             </select>
             <p className="text-xs text-muted-foreground">
-              Cuánto tiempo mantener tus datos después de inactividad
+              {t("settings.privacy.data_retention_desc", "common")}
             </p>
           </div>
 
@@ -1663,12 +1756,12 @@ function PrivacyTab() {
               ) : (
                 <>
                   <Download className="mr-2 h-4 w-4" />
-                  Exportar mis datos
+                  {t("settings.privacy.export_button", "common")}
                 </>
               )}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              Descarga una copia de todos tus datos personales en formato JSON
+              {t("settings.privacy.export_description", "common")}
             </p>
           </div>
         </CardContent>
@@ -1679,19 +1772,20 @@ function PrivacyTab() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <Trash2 className="w-5 h-5" />
-            Zona de peligro
+            {t("settings.privacy.danger_zone_title", "common")}
           </CardTitle>
           <CardDescription>
-            Acciones irreversibles que afectan tu cuenta
+            {t("settings.privacy.danger_zone_description", "common")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="p-4 border border-destructive/20 rounded-lg bg-destructive/5">
-              <h4 className="font-medium text-sm mb-2">Eliminar cuenta</h4>
+              <h4 className="font-medium text-sm mb-2">
+                {t("settings.privacy.delete_account_button", "common")}
+              </h4>
               <p className="text-xs text-muted-foreground mb-3">
-                Una vez eliminada tu cuenta, no hay vuelta atrás. Por favor,
-                asegúrate de haber exportado tus datos primero.
+                {t("settings.privacy.delete_account_warning", "common")}
               </p>
               <Button
                 variant="destructive"
@@ -1700,7 +1794,7 @@ function PrivacyTab() {
                 disabled={isSaving}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
-                Eliminar cuenta
+                {t("settings.privacy.delete_account_button", "common")}
               </Button>
             </div>
           </div>
@@ -1744,11 +1838,10 @@ function PrivacyTab() {
           <Card className="w-full max-w-md mx-4">
             <CardHeader>
               <CardTitle className="text-destructive">
-                ¿Eliminar cuenta?
+                {t("settings.privacy.delete_dialog_title", "common")}
               </CardTitle>
               <CardDescription>
-                Esta acción no se puede deshacer. Perderás acceso a todos tus
-                datos y configuraciones.
+                {t("settings.privacy.delete_dialog_description", "common")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -1758,7 +1851,7 @@ function PrivacyTab() {
                   onClick={() => setShowDeleteDialog(false)}
                   className="flex-1"
                 >
-                  Cancelar
+                  {t("settings.privacy.delete_confirm_button", "common")}
                 </Button>
                 <Button
                   variant="destructive"
@@ -1769,7 +1862,7 @@ function PrivacyTab() {
                   {isSaving ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    "Eliminar"
+                    t("settings.privacy.delete_delete_button", "common")
                   )}
                 </Button>
               </div>
@@ -1846,22 +1939,22 @@ function PasswordChangeForm() {
 
   const validateForm = (): string | null => {
     if (!formData.currentPassword) {
-      return "Current password is required";
+      return t("settings.password.validation.current_required", "common");
     }
     if (!formData.newPassword) {
-      return "New password is required";
+      return t("settings.password.validation.new_required", "common");
     }
     if (formData.newPassword.length < 8) {
-      return "New password must be at least 8 characters long";
+      return t("settings.password.validation.min_length", "common");
     }
     if (formData.newPassword !== formData.confirmPassword) {
-      return "Passwords do not match";
+      return t("settings.password.validation.no_match", "common");
     }
     if (formData.currentPassword === formData.newPassword) {
-      return "New password must be different from current password";
+      return t("settings.password.validation.different_required", "common");
     }
     if (passwordStrength < 60) {
-      return "Password is too weak. Please choose a stronger password";
+      return t("settings.password.validation.too_weak", "common");
     }
     return null;
   };
@@ -1896,8 +1989,7 @@ function PasswordChangeForm() {
       if (response.ok) {
         setAlert({
           type: "success",
-          message:
-            "Password changed successfully! You may need to log in again on other devices.",
+          message: t("settings.password.success_changed", "common"),
         });
 
         // Clear form
@@ -1916,13 +2008,13 @@ function PasswordChangeForm() {
       } else {
         setAlert({
           type: "error",
-          message: data.error || "Failed to change password",
+          message: data.error || t("settings.password.error_generic", "common"),
         });
       }
     } catch (error) {
       setAlert({
         type: "error",
-        message: "Network error. Please try again.",
+        message: t("settings.password.error_network", "common"),
       });
     } finally {
       setIsLoading(false);
@@ -1936,9 +2028,9 @@ function PasswordChangeForm() {
   };
 
   const getPasswordStrengthText = (strength: number): string => {
-    if (strength < 40) return "Weak";
-    if (strength < 70) return "Medium";
-    return "Strong";
+    if (strength < 40) return t("settings.password.strength_weak", "common");
+    if (strength < 70) return t("settings.password.strength_medium", "common");
+    return t("settings.password.strength_strong", "common");
   };
 
   // Show message for OAuth users
@@ -1961,9 +2053,7 @@ function PasswordChangeForm() {
           <Alert variant="info">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Password changes are not available for accounts signed in with
-              social providers. Please use your authentication provider to
-              manage your password.
+              {t("settings.password.oauth_message", "common")}
             </AlertDescription>
           </Alert>
         </CardContent>
@@ -2003,14 +2093,19 @@ function PasswordChangeForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Current Password */}
           <div className="space-y-2">
-            <Label htmlFor="currentPassword">Current Password</Label>
+            <Label htmlFor="currentPassword">
+              {t("settings.password.current_label", "common")}
+            </Label>
             <div className="relative">
               <Input
                 id="currentPassword"
                 type={showPasswords.current ? "text" : "password"}
                 value={formData.currentPassword}
                 onChange={handlePasswordChange("currentPassword")}
-                placeholder="Enter your current password"
+                placeholder={t(
+                  "settings.password.current_placeholder",
+                  "common",
+                )}
                 className="pr-10"
                 disabled={isLoading}
               />
@@ -2033,14 +2128,16 @@ function PasswordChangeForm() {
 
           {/* New Password */}
           <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password</Label>
+            <Label htmlFor="newPassword">
+              {t("settings.password.new_label", "common")}
+            </Label>
             <div className="relative">
               <Input
                 id="newPassword"
                 type={showPasswords.new ? "text" : "password"}
                 value={formData.newPassword}
                 onChange={handlePasswordChange("newPassword")}
-                placeholder="Enter your new password"
+                placeholder={t("settings.password.new_placeholder", "common")}
                 className="pr-10"
                 disabled={isLoading}
               />
@@ -2064,7 +2161,7 @@ function PasswordChangeForm() {
             {formData.newPassword && (
               <div className="space-y-1">
                 <div className="flex justify-between text-sm">
-                  <span>Password Strength</span>
+                  <span>{t("settings.password.strength_title", "common")}</span>
                   <span
                     className={`font-medium ${
                       passwordStrength < 40
@@ -2088,25 +2185,25 @@ function PasswordChangeForm() {
                     <div
                       className={`w-2 h-2 rounded-full ${formData.newPassword.length >= 8 ? "bg-green-500" : "bg-gray-300"}`}
                     />
-                    At least 8 characters
+                    {t("settings.password.requirement_length", "common")}
                   </div>
                   <div className="flex items-center gap-1">
                     <div
                       className={`w-2 h-2 rounded-full ${/[a-z]/.test(formData.newPassword) ? "bg-green-500" : "bg-gray-300"}`}
                     />
-                    Lowercase letter
+                    {t("settings.password.requirement_lowercase", "common")}
                   </div>
                   <div className="flex items-center gap-1">
                     <div
                       className={`w-2 h-2 rounded-full ${/[A-Z]/.test(formData.newPassword) ? "bg-green-500" : "bg-gray-300"}`}
                     />
-                    Uppercase letter
+                    {t("settings.password.requirement_uppercase", "common")}
                   </div>
                   <div className="flex items-center gap-1">
                     <div
                       className={`w-2 h-2 rounded-full ${/\d/.test(formData.newPassword) ? "bg-green-500" : "bg-gray-300"}`}
                     />
-                    Number
+                    {t("settings.password.requirement_number", "common")}
                   </div>
                 </div>
               </div>
@@ -2115,14 +2212,19 @@ function PasswordChangeForm() {
 
           {/* Confirm Password */}
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm New Password</Label>
+            <Label htmlFor="confirmPassword">
+              {t("settings.password.confirm_label", "common")}
+            </Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
                 type={showPasswords.confirm ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={handlePasswordChange("confirmPassword")}
-                placeholder="Confirm your new password"
+                placeholder={t(
+                  "settings.password.confirm_placeholder",
+                  "common",
+                )}
                 className="pr-10"
                 disabled={isLoading}
               />
@@ -2145,15 +2247,16 @@ function PasswordChangeForm() {
 
           {/* Submit Button */}
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Changing Password..." : "Change Password"}
+            {isLoading
+              ? t("settings.password.changing_button", "common")
+              : t("settings.password.change_button", "common")}
           </Button>
         </form>
 
         {/* Password Requirements - Simplified */}
         <div className="mt-6 pt-4 border-t border-border">
           <p className="text-xs text-muted-foreground text-center">
-            Your password must be at least 8 characters with uppercase,
-            lowercase, and a number
+            {t("settings.password.requirements_text", "common")}
           </p>
         </div>
       </CardContent>

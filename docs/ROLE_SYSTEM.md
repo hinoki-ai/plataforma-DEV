@@ -243,4 +243,4 @@ const logger = Logger.getInstance("RoleSwitchAPI");
 ---
 
 **Last Updated**: December 2024
-**Maintainer**: Agustin (MASTER)
+**Maintainer**: Agustín (MASTER)

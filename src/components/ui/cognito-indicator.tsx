@@ -294,7 +294,7 @@ export function CognitoIndicator() {
               Error en el chat
             </h3>
             <p className="text-xs text-red-700 dark:text-red-300 mb-3">
-              Lo sentimos, el asistente Cognito no está disponible
+              Lo sentimos, el asistente Cogníto no está disponible
               temporalmente.
             </p>
             <button

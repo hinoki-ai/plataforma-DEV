@@ -77,7 +77,7 @@ CLOUDINARY_URL="cloudinary://api_key:api_secret@cloud_name"
 2. Get API credentials from dashboard
 3. Format: `cloudinary://KEY:SECRET@CLOUD_NAME`
 
-### Cognito AI Assistant (Optional)
+### Cogníto AI Assistant (Optional)
 
 ```bash
 # OpenAI API Key (for embeddings)
@@ -87,7 +87,7 @@ OPENAI_API_KEY="sk-..."
 GROQ_API_KEY="gsk_..."
 ```
 
-**Setup Cognito AI Assistant**:
+**Setup Cogníto AI Assistant**:
 
 1. Sign up at [OpenAI](https://platform.openai.com) for embeddings
 2. Get API key from OpenAI dashboard
@@ -95,7 +95,7 @@ GROQ_API_KEY="gsk_..."
 4. Get API key from Groq dashboard
 5. Add both keys to Convex Dashboard → Settings → Environment Variables
 
-**Cognito Features**:
+**Cogníto Features**:
 
 - Ultra-fast responses using Groq-hosted Llama 3.1
 - Vector search for contextual answers

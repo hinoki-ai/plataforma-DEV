@@ -172,7 +172,7 @@ export function CognitoWelcomeToast() {
         >
           <motion.img
             src={cognitoImage}
-            alt="Cognito"
+            alt="Cogníto"
             className="w-10 h-10 rounded-full object-cover border-2 border-white dark:border-gray-700"
             animate={{
               y: [0, -2, 0],

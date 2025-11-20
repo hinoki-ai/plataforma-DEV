@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +35,30 @@ export function ProfileCompletionBadge({
   const { data: session, status } = useSession();
   const router = useRouter();
   const { t } = useDivineParsing(["common"]);
+
+  // State to track preferences changes
+  const [preferencesVersion, setPreferencesVersion] = React.useState(0);
+
+  // Listen for localStorage changes (preferences updates)
+  React.useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "plataforma_user_preferences") {
+        setPreferencesVersion((v) => v + 1);
+      }
+    };
+
+    const handleCustomEvent = () => {
+      setPreferencesVersion((v) => v + 1);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("preferencesUpdated", handleCustomEvent);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("preferencesUpdated", handleCustomEvent);
+    };
+  }, []);
 
   // Don't show during loading or for unauthenticated users
   if (status === "loading" || !session?.user) {
@@ -128,13 +152,24 @@ function checkProfileCompletion(user: ExtendedUser): boolean {
     return true;
   });
 
-  // For now, we only require name and email
-  // In the future, we could make this stricter by requiring:
-  // - user.phone (phone number)
-  // - user.image (profile picture)
-  // - user.emailVerified (email verification)
+  // Check if user has basic preferences configured
+  let hasPreferences = false;
+  try {
+    if (typeof window !== "undefined") {
+      const prefs = localStorage.getItem("plataforma_user_preferences");
+      if (prefs) {
+        const parsed = JSON.parse(prefs);
+        if (typeof parsed === "object" && parsed !== null) {
+          hasPreferences = true;
+        }
+      }
+    }
+  } catch (e) {
+    // ignore localStorage errors
+  }
 
-  return hasRequiredFields;
+  // Profile is complete if user has name, email, and has configured preferences
+  return hasRequiredFields && hasPreferences;
 }
 
 export default ProfileCompletionBadge;

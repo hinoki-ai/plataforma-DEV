@@ -8,7 +8,7 @@ export const COGNITO_DEFINITION =
 
 export const COGNITO_CONFIG = {
   definition: COGNITO_DEFINITION,
-  name: "Cognito",
+  name: "Cogníto",
   description: "Tu asistente educativo",
-  alt: "Cognito - Educational Assistant",
+  alt: "Cogníto - Educational Assistant",
 } as const;

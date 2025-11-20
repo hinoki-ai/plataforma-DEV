@@ -47,7 +47,10 @@
   "signature": {
     "provide_signature": "Debe proporcionar su firma antes de continuar",
     "signature_registered": "Firma registrada exitosamente",
-    "signature_error": "Error al registrar la firma"
+    "signature_error": "Error al registrar la firma",
+    "clear_signature": "Limpiar Firma",
+    "cancel": "Cancelar",
+    "sign_and_save": "Firmar y Guardar"
   },
   "period_locking": {
     "select_course": "Debe seleccionar un curso",

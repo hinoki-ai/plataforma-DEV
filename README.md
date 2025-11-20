@@ -44,7 +44,7 @@ Plataforma Astral is a comprehensive educational management platform that provid
 - 👥 **Role-Based Access**: Secure multi-user system (Admin/Teacher/Parent)
 - 🗳️ **Centro Consejo Voting**: Digital voting platform for school councils
 - 📁 **Media Resources**: Photo and video management system
-- 🤖 **Cognito AI**: Integrated educational assistant with chat support and guided tours
+- 🤖 **Cogníto AI**: Integrated educational assistant with chat support and guided tours
 
 ### Tech Stack
 

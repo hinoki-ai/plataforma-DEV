@@ -47,7 +47,10 @@
   "signature": {
     "provide_signature": "You must provide your signature before continuing",
     "signature_registered": "Signature registered successfully",
-    "signature_error": "Error registering signature"
+    "signature_error": "Error registering signature",
+    "clear_signature": "Clear Signature",
+    "cancel": "Cancel",
+    "sign_and_save": "Sign and Save"
   },
   "period_locking": {
     "select_course": "You must select a course",

@@ -55,7 +55,7 @@ export const seedDatabase = mutation({
 
     // Create Master User (Supreme Access)
     const masterId = await ctx.db.insert("users", {
-      name: "Agustin",
+      name: "Agustín",
       email: "agustin@astral.cl",
       password: hashedMasterPassword,
       role: "MASTER",

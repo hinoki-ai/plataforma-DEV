@@ -26,9 +26,9 @@
 
 ## 🎯 Overview
 
-Plataforma Astral is a comprehensive SaaS educational management platform built with Next.js 16, React 19, TypeScript, and Convex for real-time backend services. This platform provides complete school management functionality including user authentication, student management, voting systems, administrative tools, and **Cognito AI** - an integrated educational assistant feature.
+Plataforma Astral is a comprehensive SaaS educational management platform built with Next.js 16, React 19, TypeScript, and Convex for real-time backend services. This platform provides complete school management functionality including user authentication, student management, voting systems, administrative tools, and **Cogníto AI** - an integrated educational assistant feature.
 
-**Note**: References to "Cognito" in this documentation specifically refer to the Cognito AI educational assistant feature only, not general AI assistance or other AI-related functionality.
+**Note**: References to "Cogníto" in this documentation specifically refer to the Cogníto AI educational assistant feature only, not general AI assistance or other AI-related functionality.
 
 ---
 
@@ -51,7 +51,7 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 1. Follow setup steps in START_HERE.md
 2. Study AI_KNOWLEDGE_BASE.md for system patterns
 3. Reference specific feature docs as needed
-4. Use CLAUDE.md for Cognito AI feature development
+4. Use CLAUDE.md for Cogníto AI feature development
 
 ### For Experienced Developers (Feature Implementation)
 
@@ -105,7 +105,7 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 ### 🚀 Getting Started
 
 - **[START_HERE.md](./START_HERE.md)** - First-time setup and development environment
-- **[CLAUDE.md](./CLAUDE.md)** - Cognito AI educational assistant guidelines
+- **[CLAUDE.md](./CLAUDE.md)** - Cogníto AI educational assistant guidelines
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Complete contributor guide and development standards
 - **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)** - Git workflow and branching strategy
 
@@ -138,7 +138,7 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 - **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Current feature implementations**
 - **[docs/VOTING_SYSTEM.md](./docs/VOTING_SYSTEM.md)** - Centro Consejo voting system (AI-optimized guide)
 - **[docs/LIBRO_DE_CLASES_GUIDE.md](./docs/LIBRO_DE_CLASES_GUIDE.md)** - Complete Libro de Clases system guide
-- **[CLAUDE.md](./CLAUDE.md)** - **Cognito AI**: Educational assistant feature documentation
+- **[CLAUDE.md](./CLAUDE.md)** - **Cogníto AI**: Educational assistant feature documentation
 
 ### 🌐 Internationalization (i18n)
 
@@ -257,7 +257,7 @@ npm run verify-deployment  # Verify deployment readiness
 ### Development Resources
 
 - **Setup Guide**: [START_HERE.md](./START_HERE.md)
-- **Cognito AI**: [CLAUDE.md](./CLAUDE.md)
+- **Cogníto AI**: [CLAUDE.md](./CLAUDE.md)
 - **Branch Strategy**: [BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)
 
 ### Emergency Procedures
@@ -306,7 +306,7 @@ npm run verify-deployment  # Verify deployment readiness
 ## 🤝 Contributing
 
 1. Follow [BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md) for branching
-2. Review [CLAUDE.md](./CLAUDE.md) for Cognito AI development guidelines
+2. Review [CLAUDE.md](./CLAUDE.md) for Cogníto AI development guidelines
 3. Test thoroughly using available test suites
 4. Update documentation for any new features
 

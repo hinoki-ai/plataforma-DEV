@@ -118,7 +118,7 @@ export function TypingIndicator({ isTyping }: { isTyping: boolean }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
     >
-      <span className="text-xs text-gray-500">Cognito is typing</span>
+      <span className="text-xs text-gray-500">Cogníto is typing</span>
       <div className="flex space-x-1">
         {[0, 1, 2].map((i) => (
           <motion.div

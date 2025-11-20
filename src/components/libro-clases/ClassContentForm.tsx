@@ -550,7 +550,7 @@ export function ClassContentForm({
               onClick={onCancel}
               disabled={isSubmitting}
             >
-              Cancelar
+              {t("common.cancel")}
             </Button>
           )}
           <Button type="submit" disabled={isSubmitting}>

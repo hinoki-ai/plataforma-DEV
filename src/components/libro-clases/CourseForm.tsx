@@ -27,6 +27,7 @@ import {
 import { toast } from "sonner";
 import { useAuth } from "@clerk/nextjs";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
+import { useLanguage } from "@/components/language/useDivineLanguage";
 
 const courseSchema = z.object({
   name: z
@@ -58,6 +59,7 @@ export function CourseForm({
   onCancel,
   initialData,
 }: CourseFormProps) {
+  const { t } = useLanguage();
   const { userId } = useAuth();
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(
     initialData?.subjects || [],
@@ -362,11 +364,12 @@ export function CourseForm({
         <div className="flex justify-end gap-2">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel}>
-              Cancelar
+              {t("common.cancel")}
             </Button>
           )}
           <Button type="submit">
-            {initialData ? "Actualizar" : "Crear"} Curso
+            {initialData ? t("common.update") : t("common.create")}{" "}
+            {t("libro-clases.create.course").split(" ")[1]}
           </Button>
         </div>
       </form>

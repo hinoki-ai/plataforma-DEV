@@ -69,7 +69,7 @@
 ### Development Setup?
 
 - First time: [../START_HERE.md](../START_HERE.md)
-- Cognito AI: [../CLAUDE.md](../CLAUDE.md)
+- Cogníto AI: [../CLAUDE.md](../CLAUDE.md)
 
 ---
 
@@ -88,7 +88,7 @@
 For questions or issues:
 
 1. Review [AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md) for system overview and troubleshooting
-2. See [../CLAUDE.md](../CLAUDE.md) for Cognito AI development guidelines
+2. See [../CLAUDE.md](../CLAUDE.md) for Cogníto AI development guidelines
 3. Check [CLERK_SETUP.md](./CLERK_SETUP.md) for authentication setup issues
 
 ---

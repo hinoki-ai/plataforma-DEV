@@ -95,23 +95,23 @@ export function CognitoChat({
     const welcomeMessages = {
       admin: t(
         "cognito.chat.welcome.admin",
-        "¡Hola! Soy Cognito, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?",
+        "¡Hola! Soy Cogníto, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?",
       ),
       teacher: t(
         "cognito.chat.welcome.teacher",
-        "¡Hola profesor! Soy Cognito, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
+        "¡Hola profesor! Soy Cogníto, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
       ),
       parent: t(
         "cognito.chat.welcome.parent",
-        "¡Hola apoderado! Soy Cognito, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?",
+        "¡Hola apoderado! Soy Cogníto, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?",
       ),
       master: t(
         "cognito.chat.welcome.master",
-        "¡Hola maestro del sistema! Soy Cognito, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?",
+        "¡Hola maestro del sistema! Soy Cogníto, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?",
       ),
       general: t(
         "cognito.chat.welcome.general",
-        "¡Hola! Soy Cognito, tu asistente educativo. ¿En qué puedo ayudarte hoy?",
+        "¡Hola! Soy Cogníto, tu asistente educativo. ¿En qué puedo ayudarte hoy?",
       ),
     };
 
@@ -425,7 +425,7 @@ export function CognitoChat({
                     <div className="flex items-center space-x-2">
                       <img
                         src={cognitoImage}
-                        alt="Cognito"
+                        alt="Cogníto"
                         className="w-4 h-4 rounded-full"
                       />
                       <div className="flex space-x-1">

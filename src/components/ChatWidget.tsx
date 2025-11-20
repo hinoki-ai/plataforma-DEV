@@ -195,7 +195,7 @@ export default function ChatWidget() {
         <Button
           onClick={handleMinimize}
           className="w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-shadow bg-primary hover:bg-primary/90"
-          title="Maximizar Cognito"
+          title="Maximizar Cogníto"
         >
           <Bot className="w-8 h-8 text-primary-foreground" />
         </Button>
@@ -209,7 +209,7 @@ export default function ChatWidget() {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Bot className="w-5 h-5 text-primary" />
-            Cognito
+            Cogníto
           </CardTitle>
           <div className="flex items-center gap-1">
             <Button
@@ -246,7 +246,7 @@ export default function ChatWidget() {
                   <p className="text-sm opacity-90">{getCognitoMessage()}</p>
                 </div>
                 <p className="mb-4">
-                  👋 Soy Cognito, tu asistente educativo inteligente.
+                  👋 Soy Cogníto, tu asistente educativo inteligente.
                 </p>
                 <p className="text-sm">
                   Pregúntame <strong>Cómo</strong>, <strong>Dónde</strong>, o{" "}
