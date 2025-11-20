@@ -24,7 +24,7 @@ export default function ClientMasterLayout({
 
     if (status === "authenticated" && session?.user) {
       if (!hasMasterGodModeAccess(session.user.role)) {
-        router.push("/unauthorized");
+        router.push("/no-autorizado");
         return;
       }
     }
@@ -50,4 +50,3 @@ export default function ClientMasterLayout({
 
   return <>{children}</>;
 }
-

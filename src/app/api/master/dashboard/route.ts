@@ -19,7 +19,6 @@ export const GET = createApiRoute(
       allPhotos,
       allVideos,
       errorMetrics,
-      performanceMetrics,
     ] = await Promise.all([
       // System health metrics
       Promise.resolve({
@@ -45,14 +44,14 @@ export const GET = createApiRoute(
         criticalErrors: 0,
         recentErrors: 0,
       }),
-
-      // Performance metrics - using realistic calculations
-      Promise.resolve({
-        avgResponseTime: Math.round(50 + allUsers.length / 10), // Base 50ms + load factor
-        throughput: Math.round(500 + allUsers.length * 2), // Base throughput + user load
-        activeConnections: Math.round(10 + allUsers.length / 20), // Base connections + user factor
-      }),
     ]);
+
+    // Performance metrics - using realistic calculations based on user count
+    const performanceMetrics = {
+      avgResponseTime: Math.round(50 + allUsers.length / 10), // Base 50ms + load factor
+      throughput: Math.round(500 + allUsers.length * 2), // Base throughput + user load
+      activeConnections: Math.round(10 + allUsers.length / 20), // Base connections + user factor
+    };
 
     // Transform user metrics for easy consumption
     const usersByRole = allUsers.reduce(
@@ -62,6 +61,9 @@ export const GET = createApiRoute(
       },
       {} as Record<string, number>,
     );
+
+    // Active users is the same as allUsers since we filter for active users
+    const activeUsers = allUsers;
 
     const totalEvents = Array.isArray(allEvents)
       ? allEvents.length

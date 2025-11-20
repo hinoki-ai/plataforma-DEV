@@ -17,7 +17,7 @@ export function useAuthSync() {
     if (!isHydrated) return;
 
     // Only sync on specific auth-related routes when component mounts
-    if (pathname === "/auth-success" || pathname === "/login") {
+    if (pathname === "/autenticacion-exitosa" || pathname === "/login") {
       update().catch(console.error);
     }
   }, [pathname, update, isHydrated]);

@@ -50,7 +50,7 @@ const PUBLIC_ROUTES = [
   "/login",
   "/registro",
   "/registro-centro",
-  "/auth-success",
+  "/autenticacion-exitosa",
   "/cpma",
 ];
 
@@ -86,7 +86,7 @@ export default clerkMiddleware(async (auth, req) => {
   // Authenticated user on login page → redirect to success
   if ((await auth()).userId && pathname.startsWith("/login")) {
     const successUrl = req.nextUrl.clone();
-    successUrl.pathname = "/auth-success";
+    successUrl.pathname = "/autenticacion-exitosa";
     successUrl.searchParams.set("next", pathname + req.nextUrl.search);
     return NextResponse.redirect(successUrl);
   }

@@ -32,7 +32,7 @@ export default async function ParentReunionesPage() {
     session.user.role !== "PROFESOR" &&
     session.user.role !== "ADMIN"
   ) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   const t = (key: string) => getServerTranslation(key, "parent", "es");

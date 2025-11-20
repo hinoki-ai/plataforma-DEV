@@ -120,7 +120,7 @@ export default function ArchivoPage() {
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   const filteredMessages = messages

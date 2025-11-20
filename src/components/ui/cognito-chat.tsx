@@ -9,6 +9,7 @@ import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider"
 import { useSession } from "@clerk/nextjs";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { COGNITO_CONFIG } from "@/lib/cognito-constants";
 import {
   Send,
   X,
@@ -312,7 +313,8 @@ export function CognitoChat({
                 id="cognito-chat-title"
                 className="font-semibold text-sm truncate"
               >
-                Cognito
+                Cognito - Compañero Organizado Guía Nuestra Inteligencia Tiempo
+                Optimizado
               </h3>
               <p
                 id="cognito-chat-description"

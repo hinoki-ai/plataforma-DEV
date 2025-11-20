@@ -96,7 +96,7 @@ export default function NuevoMensajePage() {
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

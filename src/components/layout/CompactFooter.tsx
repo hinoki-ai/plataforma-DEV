@@ -27,7 +27,7 @@ export default function CompactFooter() {
               Política de Privacidad
             </a>
             <a
-              href="/dpa"
+              href="/acuerdo-proteccion-datos"
               className="hover:text-primary transition-colors underline"
             >
               Acuerdo de Procesamiento de Datos (DPA)

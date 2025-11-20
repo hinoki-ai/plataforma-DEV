@@ -232,11 +232,9 @@ function GlobalAlertsCard() {
             >
               <div
                 className={`mt-0.5 h-2 w-2 rounded-full ${
-                  alert.severity === "high"
-                    ? "bg-red-500"
-                    : alert.severity === "medium"
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
+                  alert.severity === "medium"
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
                 }`}
               />
               <div className="flex-1">

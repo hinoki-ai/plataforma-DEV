@@ -14,7 +14,7 @@
 | **Understand the Convex migration**       | [.archive/old-backups/MIGRATION.md](./.archive/old-backups/MIGRATION.md) |
 | **See all documentation**                 | [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)                       |
 | **Deploy to production**                  | [DEPLOYMENT.md](./DEPLOYMENT.md)                                         |
-| **Work on the codebase (AI)**             | [CLAUDE.md](./CLAUDE.md)                                                 |
+| **Work on the codebase (Cognito AI)**     | [CLAUDE.md](./CLAUDE.md)                                                 |
 
 ---
 
@@ -112,10 +112,10 @@ plataforma-astral/
 ## 🔐 User Roles & Access
 
 | Role         | Access                  | Notes                          |
-| ------------ | ----------------------- | ------------------------------- |
+| ------------ | ----------------------- | ------------------------------ |
 | **ADMIN**    | Full system access      | System administration          |
 | **PROFESOR** | Teaching tools          | Educational content management |
-| **PARENT**   | Student info & meetings | Family communication          |
+| **PARENT**   | Student info & meetings | Family communication           |
 | **PUBLIC**   | Limited public access   | Public website access          |
 
 ---
@@ -196,7 +196,7 @@ npm run convex:deploy
 
 - **[README.md](./README.md)** - Project overview and quick start
 - **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Complete documentation catalog
-- **[CLAUDE.md](./CLAUDE.md)** - Guide for AI assistants working on this project
+- **[CLAUDE.md](./CLAUDE.md)** - Guide for Cognito AI feature development
 - **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment procedures & environments
 
 ### Technical Documentation
@@ -291,7 +291,7 @@ const meetings = await client.query(api.meetings.getMeetings, {});
 
 ### Project-Specific
 
-- Read [CLAUDE.md](./CLAUDE.md) for development patterns
+- Read [CLAUDE.md](./CLAUDE.md) for Cognito AI development patterns
 - Review [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) for complete system documentation
 - Check existing code in `src/services/` for examples
 
@@ -332,7 +332,7 @@ const meetings = await client.query(api.meetings.getMeetings, {});
 ## 🚀 Next Steps
 
 1. **Complete Setup** - Follow [First Time Setup](#-first-time-setup-10-minutes) above
-2. **Explore Codebase** - Read [CLAUDE.md](./CLAUDE.md) for development patterns
+2. **Explore Codebase** - Read [CLAUDE.md](./CLAUDE.md) for Cognito AI development patterns
 3. **Review Documentation** - Check [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for all available guides
 4. **Start Developing** - Pick a task from the docs or create new features
 
@@ -343,7 +343,7 @@ const meetings = await client.query(api.meetings.getMeetings, {});
 - **Documentation**: See [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) for complete catalog
 - **System Overview**: Review [docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md) for comprehensive documentation
 - **Convex Support**: Visit [Convex Discord](https://convex.dev/community)
-- **Development Patterns**: Reference [CLAUDE.md](./CLAUDE.md)
+- **Development Patterns**: Reference [CLAUDE.md](./CLAUDE.md) for Cognito AI
 
 ---
 

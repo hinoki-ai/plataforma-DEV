@@ -44,10 +44,14 @@ export const seedDatabase = mutation({
 
     // Passwords are hashed using bcrypt (10 rounds)
     // For development, use environment variables or generate random passwords
-    const hashedMasterPassword = process.env.SEED_MASTER_PASSWORD || "HASH_PLACEHOLDER";
-    const hashedAdminPassword = process.env.SEED_ADMIN_PASSWORD || "HASH_PLACEHOLDER";
-    const hashedProfesorPassword = process.env.SEED_PROFESOR_PASSWORD || "HASH_PLACEHOLDER";
-    const hashedParentPassword = process.env.SEED_PARENT_PASSWORD || "HASH_PLACEHOLDER";
+    const hashedMasterPassword =
+      process.env.SEED_MASTER_PASSWORD || "HASH_PLACEHOLDER";
+    const hashedAdminPassword =
+      process.env.SEED_ADMIN_PASSWORD || "HASH_PLACEHOLDER";
+    const hashedProfesorPassword =
+      process.env.SEED_PROFESOR_PASSWORD || "HASH_PLACEHOLDER";
+    const hashedParentPassword =
+      process.env.SEED_PARENT_PASSWORD || "HASH_PLACEHOLDER";
 
     // Create Master User (Supreme Access)
     const masterId = await ctx.db.insert("users", {

@@ -1,39 +1,45 @@
-import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export default authMiddleware({
-  // Routes that require authentication
-  publicRoutes: [
-    "/",
-    "/contacto",
-    "/cpma",
-    "/dpa",
-    "/equipo-multidisciplinario",
-    "/privacidad",
-    "/programas",
-    "/registro-centro",
-    "/terminos",
-    "/planes",
-    "/docs(.*)",
-    "/api/health",
-    "/api/contacto",
-    "/api/cpma",
-    "/api/magic-login(.*)",
-    "/api/auth(.*)",
-  ],
+// Routes that don't require authentication
+const PUBLIC_ROUTES = [
+  "/",
+  "/contacto",
+  "/cpma",
+  "/acuerdo-proteccion-datos",
+  "/equipo-multidisciplinario",
+  "/privacidad",
+  "/programas",
+  "/registro-centro",
+  "/terminos",
+  "/planes",
+  "/docs(.*)",
+  "/api/health",
+  "/api/contacto",
+  "/api/cpma",
+  "/api/magic-login(.*)",
+  "/api/auth(.*)",
+];
 
-  // Routes that require specific roles
-  afterAuth(auth, req, evt) {
-    // If the user is not authenticated and trying to access a protected route
-    if (!auth.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
-    }
+// Routes that require authentication
+const isProtectedRoute = createRouteMatcher([
+  "/master(.*)",
+  "/admin(.*)",
+  "/profesor(.*)",
+  "/parent(.*)",
+]);
 
-    // Allow authenticated users to access any route
-    // Role-based access control is handled in the layouts/components
-    return NextResponse.next();
-  },
+export default clerkMiddleware(async (auth, req) => {
+  // If it's a protected route and user is not authenticated, redirect to login
+  if (isProtectedRoute(req) && !(await auth()).userId) {
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("redirect_url", req.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // Allow authenticated users to access any route
+  // Role-based access control is handled in the layouts/components
+  return NextResponse.next();
 });
 
 export const config = {
@@ -44,4 +50,3 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
-

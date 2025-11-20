@@ -29,7 +29,7 @@ export async function requirePermission(
     !isStandardUserRole(session?.user.role) ||
     !hasPermission(session?.user.role, permission)
   ) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   return session;

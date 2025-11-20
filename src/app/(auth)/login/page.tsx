@@ -74,7 +74,7 @@ function LoginForm() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        const target = callbackUrl ?? "/auth-success";
+        const target = callbackUrl ?? "/autenticacion-exitosa";
 
         router.replace(target);
         return;

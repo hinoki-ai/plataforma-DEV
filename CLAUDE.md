@@ -1,24 +1,44 @@
-# CLAUDE.md
+# COGNITO AI - Educational Assistant Documentation
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance for working with the Cognito AI educational assistant feature in the Plataforma Astral codebase.
 
 ## Project Overview
 
-**Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 16 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, and Centro Consejo voting functionality. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
+**Plataforma Astral** is a comprehensive SaaS platform for teacher, admin, and parent control with extensive features, built with Next.js 16 and Convex (serverless backend), designed for educational institutions. The platform features role-based access control, meeting scheduling, educational planning, Centro Consejo voting functionality, and **Cognito AI** - an integrated educational assistant. The project has been migrated from Prisma/PostgreSQL to Convex for real-time capabilities and simplified backend management.
+
+**Note**: When referring to "Cognito", this documentation specifically addresses the Cognito AI educational assistant feature only, not general AI assistance or other AI-related functionality.
 
 ## 📚 Critical Documentation
 
-**Status**: Production ready with full Convex integration ✅  
-**Backend**: 100% migrated to Convex serverless  
+**Status**: Production ready with full Convex integration ✅
+**Backend**: 100% migrated to Convex serverless
 **Authentication**: Clerk integration complete
+**Cognito AI**: Educational assistant feature integrated
 
 ### Primary Documentation Reference
 
-- **⭐ `docs/AI_KNOWLEDGE_BASE.md`** - **PRIMARY**: Complete system documentation optimized for AI assistants (includes Clerk + Convex authentication)
+- **⭐ `docs/AI_KNOWLEDGE_BASE.md`** - **PRIMARY**: Complete system documentation (includes Clerk + Convex authentication)
 - `DOCUMENTATION_INDEX.md` - Complete documentation catalog
 - `docs/CLERK_SETUP.md` - Clerk authentication setup guide
 - `DEPLOYMENT.md` - Deployment procedures
 - `START_HERE.md` - Quick start guide
+
+### Cognito AI Feature Documentation
+
+**Cognito AI** is the integrated educational assistant feature that provides:
+
+- Interactive chat support for users (admin, teacher, parent, master roles)
+- Guided onboarding tours for new users
+- Proactive suggestions and analytics
+- Welcome messages and contextual help
+- Real-time educational assistance
+
+**Key Cognito Components**:
+
+- `src/components/ui/cognito-chat.tsx` - Main chat interface
+- `src/components/ui/cognito-tour.tsx` - Interactive onboarding tours
+- `src/components/ui/cognito-indicator.tsx` - Floating assistant indicator
+- `convex/functions/ask.ts` - Backend chat processing (`cognitoChat` action)
 
 ## Essential Commands
 
@@ -273,7 +293,6 @@ Create test users via Convex dashboard or use the seed script:
 npx tsx scripts/seed-convex.ts
 ```
 
-
 ## Environment Configuration
 
 ### Required Variables
@@ -352,6 +371,14 @@ GOOGLE_CLIENT_SECRET=...
 - Separate voting system
 - Public information display
 - Council member management
+
+### Cognito AI Educational Assistant
+
+- Role-based chat support (Admin/Teacher/Parent/Master)
+- Interactive onboarding tours
+- Proactive suggestions and analytics
+- Welcome messages with contextual help
+- Real-time educational assistance
 
 ## Development Workflow Commands
 

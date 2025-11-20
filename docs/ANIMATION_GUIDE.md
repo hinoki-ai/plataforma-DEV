@@ -1,6 +1,6 @@
 # CSS Keyframe Animations Guide
 
-This guide implements the comprehensive keyframe animation concepts from [Josh Comeau's Interactive Guide to Keyframe Animations](https://www.joshwcomeau.com/animation/keyframe-animations/) in our Plataforma Astral Educational website.
+This guide implements comprehensive keyframe animation concepts developed for the Plataforma Astral Educational website with cognito ai assistance.
 
 ## Table of Contents
 
@@ -394,4 +394,4 @@ When adding new animations:
 
 ---
 
-**Reference:** [Josh Comeau's Interactive Guide to Keyframe Animations](https://www.joshwcomeau.com/animation/keyframe-animations/)
+**Reference:** Cognito AI-powered animation development for Plataforma Astral

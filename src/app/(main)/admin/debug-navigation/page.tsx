@@ -31,7 +31,7 @@ export default async function AdminDebugNavigationPage() {
 
   // Ensure only MASTER role can access this page
   if (!hasMasterGodModeAccess(session.user.role)) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
   return (
     <div className="w-full px-4 py-8 sm:px-6 lg:px-8">

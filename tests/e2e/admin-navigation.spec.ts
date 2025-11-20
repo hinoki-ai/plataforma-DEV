@@ -58,13 +58,13 @@ async function performLogin(
 
   await page.waitForFunction(
     () =>
-      ["/auth-success", "/admin"].some((segment) =>
+      ["/autenticacion-exitosa", "/admin"].some((segment) =>
         window.location.pathname.startsWith(segment),
       ),
     { timeout: 60_000 },
   );
 
-  if (page.url().includes("/auth-success")) {
+  if (page.url().includes("/autenticacion-exitosa")) {
     await page.waitForFunction(
       () => window.location.pathname.startsWith("/admin"),
       { timeout: 60_000 },

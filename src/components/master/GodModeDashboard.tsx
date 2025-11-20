@@ -100,7 +100,11 @@ export function GodModeDashboard() {
       {/* MASTER Status Indicator - Always Visible */}
       <MasterStatusIndicator />
 
-      <MasterPageTemplate context="ADVANCED_ADMIN_DASHBOARD">
+      <MasterPageTemplate
+        title="God Mode Dashboard"
+        subtitle="Supreme Administrative Control"
+        context="ADVANCED_ADMIN_DASHBOARD"
+      >
         {/* Critical Warning */}
         <Alert className="border-yellow-200">
           <AlertTriangle className="h-4 w-4 text-yellow-600" />

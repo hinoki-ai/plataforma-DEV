@@ -25,7 +25,7 @@ export default function ClientAdminLayout({
     if (status === "authenticated" && session?.user) {
       const roleAccess = getRoleAccess(session.user.role);
       if (!roleAccess.canAccessAdmin) {
-        router.push("/unauthorized");
+        router.push("/no-autorizado");
         return;
       }
     }
@@ -52,4 +52,3 @@ export default function ClientAdminLayout({
 
   return <>{children}</>;
 }
-

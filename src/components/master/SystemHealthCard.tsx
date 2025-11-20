@@ -46,8 +46,8 @@ export function SystemHealthCard() {
     return systemHealth.components.map((component) => ({
       id: component.id,
       name: component.name,
-      status: component.status,
-      type: component.type,
+      status: component.status as SystemComponent["status"],
+      type: component.type as SystemComponent["type"],
       uptime: component.uptime,
       responseTime: component.responseTime,
       load: component.load,

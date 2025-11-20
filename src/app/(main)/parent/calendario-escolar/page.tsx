@@ -29,7 +29,7 @@ export default async function CalendarioEscolarPage() {
     session.user.role !== "PROFESOR" &&
     session.user.role !== "ADMIN"
   ) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   // Redirect to integrated calendar in libro de clases

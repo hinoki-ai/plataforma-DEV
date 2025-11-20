@@ -79,7 +79,7 @@ export default function ComunicacionPage() {
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   const fetchCommunications = async () => {

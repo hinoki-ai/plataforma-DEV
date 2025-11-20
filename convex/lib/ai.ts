@@ -1,16 +1,26 @@
 import OpenAI from "openai";
 import type { ActionCtx } from "../_generated/server";
 
-// Initialize OpenAI client for Embeddings (usually OpenAI)
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client for Embeddings (usually OpenAI) - lazy initialization
+const getOpenAIClient = () => {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY environment variable is required");
+  }
+  return new OpenAI({ apiKey });
+};
 
-// Initialize OpenAI client for Chat (using Groq)
-const groq = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1",
-});
+// Initialize OpenAI client for Chat (using Groq) - lazy initialization
+const getGroqClient = () => {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error("GROQ_API_KEY environment variable is required");
+  }
+  return new OpenAI({
+    apiKey,
+    baseURL: "https://api.groq.com/openai/v1",
+  });
+};
 
 export const embed = async (ctx: ActionCtx, model: string, text: string) => {
   // Check if API key is set
@@ -19,6 +29,7 @@ export const embed = async (ctx: ActionCtx, model: string, text: string) => {
     return new Array(1536).fill(0).map(() => Math.random());
   }
 
+  const openai = getOpenAIClient();
   const response = await openai.embeddings.create({
     model: model || "text-embedding-3-large",
     input: text,
@@ -40,8 +51,9 @@ export const ai = {
       };
     }
 
+    const groq = getGroqClient();
     const response = await groq.chat.completions.create({
-      model: model || "llama3-8b-8192",
+      model: model || "llama-3.1-8b-instant", // Using current Llama model
       messages: args.messages,
       max_tokens: args.max_tokens || 512,
     });

@@ -34,7 +34,7 @@ async function testAuthFlow() {
     console.log("\n🔍 Step 2: Testing User Authentication\n");
 
     // Test users should be loaded from environment variables
-    const TEST_USERS = process.env.TEST_USER_EMAILS?.split(',') || [];
+    const TEST_USERS = process.env.TEST_USER_EMAILS?.split(",") || [];
 
     for (const email of TEST_USERS) {
       console.log(`   Testing: ${email}`);
@@ -107,7 +107,7 @@ async function testAuthFlow() {
     console.log("   5. signIn() is called (creates session)");
     console.log("   6. NextAuth throws NEXT_REDIRECT to /auth-success");
     console.log(
-      "   7. /auth-success checks session and redirects to role dashboard",
+      "   7. /autenticacion-exitosa checks session and redirects to role dashboard",
     );
     console.log("   8. Middleware validates session and allows access\n");
 

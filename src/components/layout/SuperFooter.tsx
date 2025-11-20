@@ -203,7 +203,7 @@ export default function HomepageFooter() {
                 Política de Privacidad
               </a>
               <a
-                href="/dpa"
+                href="/acuerdo-proteccion-datos"
                 className="block text-slate-400 hover:text-white transition-colors text-sm hover:translate-x-1 transform duration-200"
               >
                 DPA

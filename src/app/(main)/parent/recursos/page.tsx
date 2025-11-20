@@ -34,7 +34,7 @@ export default async function RecursosPage() {
 
   // Ensure user has access to parent section
   if (!roleAccess.canAccessParent) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   const t = (key: string) => getServerTranslation(key, "parent", "es");

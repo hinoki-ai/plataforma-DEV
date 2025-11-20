@@ -60,7 +60,7 @@ export default function ParentLayout({
     if (!roleAccess.canAccessParent && session.user.role !== "MASTER") {
       if (!hasRedirectedRef.current) {
         hasRedirectedRef.current = true;
-        router.replace("/unauthorized");
+        router.replace("/no-autorizado");
       }
       return;
     }

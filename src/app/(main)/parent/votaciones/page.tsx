@@ -250,7 +250,7 @@ function VotacionesContent() {
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessParent) {
-    redirect("/unauthorized");
+    redirect("/no-autorizado");
   }
 
   if (loading) {

@@ -231,7 +231,7 @@ export function NetworkErrorBoundary({
     if (
       typeof window !== "undefined" &&
       (window.location.pathname?.includes("/login") ||
-        window.location.pathname?.includes("/auth-success"))
+        window.location.pathname?.includes("/autenticacion-exitosa"))
     ) {
       return (
         <div className="min-h-screen flex items-center justify-center p-4">

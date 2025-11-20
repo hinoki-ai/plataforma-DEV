@@ -9,7 +9,7 @@ import { api } from "../convex/_generated/api";
 
 async function verifyUsers() {
   // Test emails should be loaded from environment variables
-  const testEmails = process.env.TEST_USER_EMAILS?.split(',') || [];
+  const testEmails = process.env.TEST_USER_EMAILS?.split(",") || [];
 
   try {
     const deploymentUrl = process.env.CONVEX_URL;

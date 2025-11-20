@@ -24,14 +24,14 @@ export default function ClientProfesorLayout({
 
     if (status === "authenticated" && session?.user) {
       if (!session.user.role) {
-        router.push("/unauthorized");
+        router.push("/no-autorizado");
         return;
       }
 
       const roleAccess = getRoleAccess(session.user.role);
 
       if (!roleAccess.canAccessProfesor) {
-        router.push("/unauthorized");
+        router.push("/no-autorizado");
         return;
       }
     }
@@ -62,4 +62,3 @@ export default function ClientProfesorLayout({
 
   return <>{children}</>;
 }
-

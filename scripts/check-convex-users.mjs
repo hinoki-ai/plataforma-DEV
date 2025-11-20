@@ -66,4 +66,3 @@ async function checkConvexUsers() {
 }
 
 checkConvexUsers();
-

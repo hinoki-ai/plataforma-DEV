@@ -1,8 +1,0 @@
-admin@plataforma-astral.com==>REDACTED_EMAIL
-profesor@plataforma-astral.com==>REDACTED_EMAIL
-parent@plataforma-astral.com==>REDACTED_EMAIL
-admin123==>REDACTED_PASSWORD
-profesor123==>REDACTED_PASSWORD
-parent123==>REDACTED_PASSWORD
-59163476a==>REDACTED_PASSWORD
-
