@@ -33,12 +33,8 @@ async function testAuthFlow() {
 
     console.log("\n🔍 Step 2: Testing User Authentication\n");
 
-    const TEST_USERS = [
-      "master@plataforma-astral.com",
-      "admin@plataforma-astral.com",
-      "profesor@plataforma-astral.com",
-      "parent@plataforma-astral.com",
-    ];
+    // Test users should be loaded from environment variables
+    const TEST_USERS = process.env.TEST_USER_EMAILS?.split(',') || [];
 
     for (const email of TEST_USERS) {
       console.log(`   Testing: ${email}`);

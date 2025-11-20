@@ -13,10 +13,8 @@ When the standard authentication system fails, emergency access procedures ensur
 
 ### Credentials (CONFIDENTIAL)
 
-```text
-Email: admin@plataforma-astral.com
-Password: admin123
-```
+**EMERGENCY ACCESS CREDENTIALS ARE STORED IN A SECURE VAULT**  
+**Contact system administrator for access during actual emergencies only**
 
 ### Access Conditions
 
@@ -34,15 +32,15 @@ Located in `src/lib/auth-prisma.ts` at lines 27-40 and 82-94:
 ```typescript
 // EMERGENCY BYPASS: Allow admin access when database is unavailable
 if (
-  email.toLowerCase() === "admin@plataforma-astral.com" &&
-  password === "admin123"
+  email.toLowerCase() === EMERGENCY_ADMIN_EMAIL &&
+  password === EMERGENCY_ADMIN_PASSWORD
 ) {
   logger.warn("EMERGENCY BYPASS: Admin authentication without database", {
     email,
   });
   return {
     id: "emergency-admin-id",
-    email: "admin@plataforma-astral.com",
+    email: EMERGENCY_ADMIN_EMAIL,
     name: "Emergency Admin",
     role: "ADMIN",
   };
@@ -131,9 +129,9 @@ Authorization: [Manager name if available]
 ### Step 3: Access System (30 seconds)
 
 1. Navigate to <https://school.aramac.dev/login>
-2. Enter emergency credentials:
-   - Email: <admin@plataforma-astral.com>
-   - Password: admin123
+2. Enter emergency credentials (obtain from secure vault)
+   - Email: [EMERGENCY ADMIN EMAIL]
+   - Password: [EMERGENCY ADMIN PASSWORD]
 3. Verify successful login with admin privileges
 
 ### Step 4: Perform Only Critical Actions

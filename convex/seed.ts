@@ -42,16 +42,12 @@ export const seedDatabase = mutation({
       isActive: true,
     });
 
-    // Password: 59163476a, admin123, profesor123, parent123
-    // Pre-hashed with bcrypt (10 rounds) - UPDATED HASHES
-    const hashedMasterPassword =
-      "$2b$10$DIdRzGR5r9lckpG7X5jr9OIQHiFMYGXLcGnVyBDnRwAu.pnAwZMg6";
-    const hashedAdminPassword =
-      "$2b$10$rcuVz6SAAsmXGpqtEfyMAu4qp9qh9O/7rgF/j8E8PBZIBA6lA2yse";
-    const hashedProfesorPassword =
-      "$2b$10$5HeL15fadPfphQwoFo5v3uL2D.KvFhDIC84G9FZEHYa9IV7zVnllW";
-    const hashedParentPassword =
-      "$2b$10$PztmJfNsa4ziz3T7AkfK8egkjSsM9A0qmH16EKGbriaImmqz7N1za";
+    // Passwords are hashed using bcrypt (10 rounds)
+    // For development, use environment variables or generate random passwords
+    const hashedMasterPassword = process.env.SEED_MASTER_PASSWORD || "HASH_PLACEHOLDER";
+    const hashedAdminPassword = process.env.SEED_ADMIN_PASSWORD || "HASH_PLACEHOLDER";
+    const hashedProfesorPassword = process.env.SEED_PROFESOR_PASSWORD || "HASH_PLACEHOLDER";
+    const hashedParentPassword = process.env.SEED_PARENT_PASSWORD || "HASH_PLACEHOLDER";
 
     // Create Master User (Supreme Access)
     const masterId = await ctx.db.insert("users", {
@@ -72,7 +68,7 @@ export const seedDatabase = mutation({
     // Create Admin User
     const adminId = await ctx.db.insert("users", {
       name: "Administrador Principal",
-      email: "admin@plataforma-astral.com",
+      email: process.env.SEED_ADMIN_EMAIL || "admin@example.com",
       password: hashedAdminPassword,
       role: "ADMIN",
       isActive: true,
@@ -88,7 +84,7 @@ export const seedDatabase = mutation({
     // Create Profesor User
     const profesorId = await ctx.db.insert("users", {
       name: "Profesor de Prueba",
-      email: "profesor@plataforma-astral.com",
+      email: process.env.SEED_PROFESOR_EMAIL || "profesor@example.com",
       password: hashedProfesorPassword,
       role: "PROFESOR",
       isActive: true,
@@ -104,7 +100,7 @@ export const seedDatabase = mutation({
     // Create Parent User
     const parentId = await ctx.db.insert("users", {
       name: "Padre/Madre de Prueba",
-      email: "parent@plataforma-astral.com",
+      email: process.env.SEED_PARENT_EMAIL || "parent@example.com",
       password: hashedParentPassword,
       role: "PARENT",
       isActive: true,
@@ -174,7 +170,7 @@ export const seedDatabase = mutation({
       studentName: "Juan Pérez",
       studentGrade: "Pre-Kinder",
       guardianName: "Padre/Madre de Prueba",
-      guardianEmail: "parent@plataforma-astral.com",
+      guardianEmail: process.env.SEED_PARENT_EMAIL || "parent@example.com",
       guardianPhone: "+56911223344",
       scheduledDate: tomorrow,
       scheduledTime: "15:00",

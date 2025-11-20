@@ -273,11 +273,6 @@ Create test users via Convex dashboard or use the seed script:
 npx tsx scripts/seed-convex.ts
 ```
 
-| Role     | Email                          | Password    |
-| -------- | ------------------------------ | ----------- |
-| ADMIN    | admin@plataforma-astral.com    | admin123    |
-| PROFESOR | profesor@plataforma-astral.com | profesor123 |
-| PARENT   | parent@plataforma-astral.com   | parent123   |
 
 ## Environment Configuration
 

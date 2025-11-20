@@ -15,16 +15,10 @@ if (!CONVEX_URL) {
 
 const client = new ConvexHttpClient(CONVEX_URL);
 
-// Correct bcrypt hashes for test passwords
+// NOTE: Password hashes have been removed for security reasons
+// This script should use environment variables or secure credential management
 const CORRECT_HASHES = {
-  "master@plataforma-astral.com":
-    "$2b$10$.CMNqsxLIY3X9LAunrPvaOG1GIGmvwNi70Ksth1hHOlMrqQyp9UOy", // master123
-  "admin@plataforma-astral.com":
-    "$2b$10$07JuDiQUuQj9AQYD7k7KSeNbPVSx0n6cA8N17biZ95Qroq3owdtRm", // admin123
-  "profesor@plataforma-astral.com":
-    "$2b$10$cd7.dEqS/9KNbYaG7DSgmeKUXOBvKN4qNzNXHK1TGdYaRf26xqtAu", // profesor123
-  "parent@plataforma-astral.com":
-    "$2b$10$F1C0aQWCrE59er8wB0p94OThHCBMPrpxRA3esWSW0UuPS/Aa0FLZS", // parent123
+  // Credentials should be loaded from environment variables or secure vault
 };
 
 async function fixPasswords() {

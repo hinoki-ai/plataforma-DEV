@@ -150,7 +150,7 @@
   "profesor.perfil.task_in_progress": "En Progreso",
   "profesor.perfil.task_pending": "Pendiente",
   "profesor.perfil.default_name": "Nombre del Profesor",
-  "profesor.perfil.default_email": "profesor@plataforma-astral.com",
+  "profesor.perfil.default_email": "profesor@example.com",
   "profesor.perfil.default_phone": "+56 9 1234 5678",
   "profesor.perfil.default_bio": "Apasionado por la educación y el desarrollo de los niños. Siempre aprendiendo y compartiendo.",
   "profesor.perfil.avatar_alt": "Avatar del profesor",

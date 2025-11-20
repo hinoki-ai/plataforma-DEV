@@ -55,25 +55,25 @@ export default function NuevoMensajePage() {
     {
       id: "1",
       name: "Dirección",
-      email: "direccion@plataforma-astral.com",
+      email: "direccion@example.com",
       role: "Admin",
     },
     {
       id: "2",
       name: "Profesor Jefe",
-      email: "profesor@plataforma-astral.com",
+      email: "profesor@example.com",
       role: "Teacher",
     },
     {
       id: "3",
       name: "Coordinación PIE",
-      email: "pie@plataforma-astral.com",
+      email: "pie@example.com",
       role: "Specialist",
     },
     {
       id: "4",
       name: "Psicopedagoga",
-      email: "psicopedagoga@plataforma-astral.com",
+      email: "psicopedagoga@example.com",
       role: "Specialist",
     },
   ];

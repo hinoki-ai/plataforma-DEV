@@ -32,7 +32,8 @@ async function removeUser(email: string) {
   }
 }
 
-// Remove María López
-removeUser("parent@plataforma-astral.com").catch((error) => {
+// Remove test user - email should be loaded from environment variable
+const testUserEmail = process.env.TEST_USER_EMAIL || "test@example.com";
+removeUser(testUserEmail).catch((error) => {
   process.exit(1);
 });

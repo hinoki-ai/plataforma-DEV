@@ -8,14 +8,8 @@ import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api";
 
 async function verifyUsers() {
-  const testEmails = [
-    "admin@plataforma-astral.com",
-    "profesor@plataforma-astral.com",
-    "admina@plataforma-astral.com",
-    "profesora@plataforma-astral.com",
-    "apoderado@plataforma-astral.com",
-    "apoderada@plataforma-astral.com",
-  ];
+  // Test emails should be loaded from environment variables
+  const testEmails = process.env.TEST_USER_EMAILS?.split(',') || [];
 
   try {
     const deploymentUrl = process.env.CONVEX_URL;

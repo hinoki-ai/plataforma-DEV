@@ -46,10 +46,8 @@
    npm run dev
    ```
 
-2. **Access Test Credentials:**
-   - **Admin**: `admin@plataforma-astral.com` / `admin123`
-   - **Teacher**: `profesor@plataforma-astral.com` / `profesor123`
-   - **Parent**: `parent@plataforma-astral.com` / `parent123`
+2. **Create Test Accounts:**
+   - Create test accounts through the admin panel or contact your administrator
 
 3. **Read Documentation:**
    - [START_HERE.md](../START_HERE.md) - Setup guide
