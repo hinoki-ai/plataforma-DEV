@@ -62,7 +62,6 @@ export async function GET(
 
     return NextResponse.json(userData);
   } catch (error) {
-    console.error("Error fetching user:", error);
     return NextResponse.json(
       { error: "Error al obtener usuario" },
       { status: 500 },
@@ -129,7 +128,6 @@ export async function PUT(
       );
     }
 
-    console.error("Error updating user:", error);
     return NextResponse.json(
       { error: "Error al actualizar usuario" },
       { status: 500 },
@@ -171,7 +169,6 @@ export async function DELETE(
 
     return NextResponse.json({ message: "Usuario eliminado exitosamente" });
   } catch (error) {
-    console.error("Error deleting user:", error);
     return NextResponse.json(
       { error: "Error al eliminar usuario" },
       { status: 500 },
@@ -212,7 +209,6 @@ export async function POST(
       );
     }
 
-    console.error("Error resetting password:", error);
     return NextResponse.json(
       { error: "Error al restablecer contraseña" },
       { status: 500 },

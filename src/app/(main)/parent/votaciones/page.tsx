@@ -152,7 +152,6 @@ function VotacionesContent() {
         setSelectedSession(sessions[0]);
       }
     } catch (err) {
-      console.error("Error fetching voting sessions:", err);
       setError(t("parent.voting.error_loading"));
     } finally {
       setLoading(false);
@@ -189,7 +188,6 @@ function VotacionesContent() {
       await fetchVotingSessions();
       setSelectedOptions([]);
     } catch (err: any) {
-      console.error("Error submitting vote:", err);
       toast.error(err.message || t("parent.voting.error_registering"));
     } finally {
       setSubmitting(false);

@@ -394,7 +394,6 @@ export function setupGlobalErrorHandling(): void {
   if (typeof window !== "undefined") {
     window.addEventListener("unhandledrejection", (event) => {
       const error = classifyError(event.reason);
-      console.error("Unhandled promise rejection:", error);
 
       if (isCriticalError(error)) {
         errorNotificationManager.notify(error, "public");
@@ -406,7 +405,6 @@ export function setupGlobalErrorHandling(): void {
     // Handle runtime JavaScript errors
     window.addEventListener("error", (event) => {
       const error = classifyError(event.error || new Error(event.message));
-      console.error("Runtime error:", error);
 
       if (isCriticalError(error)) {
         errorNotificationManager.notify(error, "public");

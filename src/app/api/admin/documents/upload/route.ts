@@ -84,7 +84,6 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error uploading document:", error);
     return NextResponse.json(
       { error: "Error al procesar el archivo" },
       { status: 500 },

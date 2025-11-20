@@ -62,7 +62,7 @@ export function HomePage() {
         }
       } catch (error) {
         // Video failed to autoplay - hide it and show static background
-        console.warn("Video autoplay failed:", error);
+
         setVideoError(true);
       }
     };

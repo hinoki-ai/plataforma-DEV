@@ -115,16 +115,12 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
         // Simple compression using built-in compression if available
         try {
           serializedData = btoa(serializedData);
-        } catch (e) {
-          console.warn("Compression failed, saving uncompressed");
-        }
+        } catch (e) {}
       }
 
       localStorage.setItem(storageKey, serializedData);
       setLastAutoSave(new Date());
-    } catch (error) {
-      console.error("Auto-save failed:", error);
-    }
+    } catch (error) {}
   }, [autoSave, form, currentStep, completedSteps, analytics, formAnalytics]);
 
   // Load saved data
@@ -171,7 +167,6 @@ export function useAdvancedForm<T extends FieldValues = FieldValues>({
 
       return true;
     } catch (error) {
-      console.error("Failed to load saved data:", error);
       return false;
     }
   }, [autoSave, form, analytics]);
@@ -614,7 +609,6 @@ export function useFormAutoComplete(options: {
 
         setSuggestions((prev) => ({ ...prev, [fieldName]: results }));
       } catch (error) {
-        console.error("Error fetching suggestions:", error);
         setSuggestions((prev) => ({ ...prev, [fieldName]: [] }));
       } finally {
         setLoading((prev) => ({ ...prev, [fieldName]: false }));

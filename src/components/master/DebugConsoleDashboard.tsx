@@ -135,7 +135,6 @@ function DebugConsoleCard() {
     // Simulate command execution
     setTimeout(() => {
       setIsExecuting(false);
-      console.log("Debug command executed:", command);
     }, 2000);
   };
 

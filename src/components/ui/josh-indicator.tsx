@@ -287,7 +287,7 @@ export function JoshIndicator() {
               <motion.img
                 src={joshImage}
                 alt={t("josh.alt", "Josh - Educational Assistant")}
-                className="w-12 h-12 object-cover shadow-lg border-3 border-white dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
+                className="shadow-lg border-3 border-white dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
                 role="button"
                 tabIndex={0}
                 aria-label={t(

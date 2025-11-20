@@ -15,18 +15,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Log the error with structured format
-    console.error("Client Error Tracked:", {
-      error,
-      stack,
-      context,
-      url,
-      userAgent,
-      timestamp: new Date().toISOString(),
-      ip:
-        request.headers.get("x-forwarded-for") ||
-        request.headers.get("x-real-ip") ||
-        "unknown",
-    });
 
     return createSuccessResponse({
       id: Date.now().toString(),

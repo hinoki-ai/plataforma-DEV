@@ -28,7 +28,6 @@ export async function GET() {
       message: "Convex query successful",
     });
   } catch (error) {
-    console.error("Convex test failed:", error);
     return NextResponse.json(
       {
         status: "error",

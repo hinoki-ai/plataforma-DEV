@@ -20,7 +20,6 @@ if (holidaysMatch) {
 
   // Write to JSON file
   fs.writeFileSync("src/data/chilean-holidays.json", holidaysJson);
-  console.log("✅ Chilean holidays converted to JSON");
 }
 
 // Extract academic calendar data
@@ -33,7 +32,6 @@ if (academicMatch) {
     .replace(/,(\s*[}\]])/g, "$1");
 
   fs.writeFileSync("src/data/academic-calendar.json", academicJson);
-  console.log("✅ Academic calendar converted to JSON");
 }
 
 // Extract special events data
@@ -46,5 +44,4 @@ if (specialMatch) {
     .replace(/,(\s*[}\]])/g, "$1");
 
   fs.writeFileSync("src/data/special-events.json", specialJson);
-  console.log("✅ Special events converted to JSON");
 }

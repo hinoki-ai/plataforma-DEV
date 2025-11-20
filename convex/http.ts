@@ -22,18 +22,15 @@ http.route({
         await ctx.runMutation(internal.users.syncFromClerk, {
           data: event.data as unknown,
         });
-        console.log(
-          `Processed ${event.type} for user ${(event.data as any)?.id}`,
-        );
+
         break;
       case "user.deleted":
         await ctx.runMutation(internal.users.disableUserFromClerk, {
           clerkId: (event.data as any).id,
         });
-        console.log(`Processed user deletion for ${(event.data as any)?.id}`);
+
         break;
       default:
-        console.log("Unhandled Clerk webhook event", event.type);
     }
 
     return new Response(null, { status: 200 });
@@ -45,7 +42,6 @@ async function validateRequest(req: Request): Promise<WebhookEvent | null> {
   const secret = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!secret) {
-    console.error("CLERK_WEBHOOK_SECRET is not configured");
     return null;
   }
 
@@ -57,7 +53,6 @@ async function validateRequest(req: Request): Promise<WebhookEvent | null> {
       "svix-signature": req.headers.get("svix-signature") ?? "",
     }) as unknown as WebhookEvent;
   } catch (error) {
-    console.error("Failed to verify Clerk webhook", error);
     return null;
   }
 }

@@ -124,7 +124,6 @@ export async function createClerkUser(
     const user = await client.users.createUser(userParams);
     return clerkUserToAppFormat(user);
   } catch (error) {
-    console.error("Failed to create Clerk user:", error);
     throw new Error(
       `Failed to create user: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
@@ -142,7 +141,6 @@ export async function getClerkUserById(
     const user = await client.users.getUser(userId);
     return clerkUserToAppFormat(user);
   } catch (error) {
-    console.error("Failed to get Clerk user:", error);
     return null;
   }
 }
@@ -163,7 +161,6 @@ export async function getClerkUserByEmail(
 
     return clerkUserToAppFormat(users.data[0]);
   } catch (error) {
-    console.error("Failed to get Clerk user by email:", error);
     return null;
   }
 }
@@ -184,7 +181,6 @@ export async function getClerkUsers(
         try {
           return clerkUserToAppFormat(user);
         } catch (error) {
-          console.error(`Error formatting user ${user.id}:`, error);
           return null;
         }
       })
@@ -196,7 +192,6 @@ export async function getClerkUsers(
 
     return filteredUsers;
   } catch (error) {
-    console.error("Failed to get Clerk users:", error);
     return [];
   }
 }
@@ -245,7 +240,6 @@ export async function updateClerkUser(
     const user = await client.users.updateUser(userId, updateParams);
     return clerkUserToAppFormat(user);
   } catch (error) {
-    console.error("Failed to update Clerk user:", error);
     throw new Error(
       `Failed to update user: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
@@ -260,7 +254,6 @@ export async function deleteClerkUser(userId: string): Promise<void> {
     const client = await clerkClient();
     await client.users.deleteUser(userId);
   } catch (error) {
-    console.error("Failed to delete Clerk user:", error);
     throw new Error(
       `Failed to delete user: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
@@ -292,7 +285,6 @@ export async function getClerkUserCountByRole(): Promise<
 
     return counts;
   } catch (error) {
-    console.error("Failed to get user count by role:", error);
     return {
       MASTER: 0,
       ADMIN: 0,

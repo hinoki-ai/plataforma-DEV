@@ -99,10 +99,8 @@ function splitName(name: string | undefined): {
 async function exportConvexUsers(
   client: ConvexHttpClient,
 ): Promise<ConvexUser[]> {
-  console.log("📋 Fetching users from Convex...");
   const users = await client.query(api.users.getUsers, {});
 
-  console.log(`✅ Found ${users.length} users in Convex`);
   return users as ConvexUser[];
 }
 
@@ -113,8 +111,6 @@ async function createClerkImportFile(
   users: ConvexUser[],
   outputPath: string,
 ): Promise<void> {
-  console.log(`📄 Creating Clerk import file at ${outputPath}...`);
-
   const clerkImportData: ClerkImportUser[] = users
     .filter((user) => !user.clerkId) // Only export users without Clerk ID
     .map((user) => {
@@ -152,10 +148,6 @@ async function createClerkImportFile(
   });
 
   fs.writeFileSync(outputPath, JSON.stringify(cleanedData, null, 2), "utf-8");
-
-  console.log(
-    `✅ Created import file with ${cleanedData.length} users (${users.length - cleanedData.length} already have Clerk IDs)`,
-  );
 }
 
 /**
@@ -165,13 +157,8 @@ async function importUsersToClerk(
   users: ConvexUser[],
   convexClient: ConvexHttpClient,
 ): Promise<void> {
-  console.log("\n🚀 Starting Clerk import process...");
-  console.log("================================================");
-
   const clerk = clerkClient(process.env.CLERK_SECRET_KEY!);
   const usersToImport = users.filter((user) => !user.clerkId);
-
-  console.log(`📊 Users to import: ${usersToImport.length}`);
 
   let imported = 0;
   let skipped = 0;
@@ -190,9 +177,6 @@ async function importUsersToClerk(
 
       if (existingUsers.data.length > 0) {
         const existingUser = existingUsers.data[0];
-        console.log(
-          `${progress} ⏭️  Skipping ${user.email} - already exists in Clerk (ID: ${existingUser.id})`,
-        );
 
         // Link the existing Clerk user to Convex
         await convexClient.mutation(api.users.linkClerkIdentity, {
@@ -239,14 +223,11 @@ async function importUsersToClerk(
         } else {
           // Password is hashed, skip it and require password reset
           clerkUserParams.skipPasswordRequirement = true;
-          console.log(
-            `${progress} ⚠️  User ${user.email} has hashed password - they will need to reset password in Clerk`,
-          );
         }
       }
 
       // Create user in Clerk
-      console.log(`${progress} 🔄 Creating ${user.email} in Clerk...`);
+
       const clerkUser = await clerk.users.createUser(clerkUserParams);
 
       // Link Clerk ID to Convex user
@@ -255,9 +236,6 @@ async function importUsersToClerk(
         clerkId: clerkUser.id,
       });
 
-      console.log(
-        `${progress} ✅ Imported ${user.email} (Clerk ID: ${clerkUser.id})`,
-      );
       imported++;
 
       // Rate limiting: wait 100ms between requests
@@ -267,9 +245,7 @@ async function importUsersToClerk(
     } catch (error: any) {
       const errorMessage =
         error?.message || error?.toString() || "Unknown error";
-      console.error(
-        `${progress} ❌ Failed to import ${user.email}: ${errorMessage}`,
-      );
+
       errors++;
       errorsList.push({ email: user.email, error: errorMessage });
 
@@ -279,26 +255,13 @@ async function importUsersToClerk(
   }
 
   // Print summary
-  console.log("\n📊 Import Summary");
-  console.log("===================");
-  console.log(`✅ Successfully imported: ${imported}`);
-  console.log(`⏭️  Skipped (already exist): ${skipped}`);
-  console.log(`❌ Errors: ${errors}`);
-  console.log(`📊 Total processed: ${usersToImport.length}`);
 
   if (errorsList.length > 0) {
-    console.log("\n❌ Failed imports:");
-    errorsList.forEach(({ email, error }) => {
-      console.log(`   • ${email}: ${error}`);
-    });
+    errorsList.forEach(({ email, error }) => {});
   }
 
   if (errors === 0) {
-    console.log("\n🎉 Import completed successfully!");
   } else {
-    console.log(
-      "\n⚠️  Import completed with errors. Please review the failed imports.",
-    );
   }
 }
 
@@ -306,21 +269,14 @@ async function importUsersToClerk(
  * Main function
  */
 async function main() {
-  console.log("🚀 Convex to Clerk User Import Script");
-  console.log("=====================================\n");
-
   // Check environment variables
   const convexUrl =
     process.env.NEXT_PUBLIC_CONVEX_URL || process.env.CONVEX_URL;
   if (!convexUrl) {
-    console.error(
-      "❌ NEXT_PUBLIC_CONVEX_URL or CONVEX_URL environment variable is not set",
-    );
     process.exit(1);
   }
 
   if (!process.env.CLERK_SECRET_KEY) {
-    console.error("❌ CLERK_SECRET_KEY environment variable is not set");
     process.exit(1);
   }
 
@@ -332,7 +288,6 @@ async function main() {
     const convexUsers = await exportConvexUsers(convexClient);
 
     if (convexUsers.length === 0) {
-      console.log("ℹ️  No users found in Convex database");
       return;
     }
 
@@ -350,14 +305,8 @@ async function main() {
 
     // Step 3: Import users to Clerk
     await importUsersToClerk(convexUsers, convexClient);
-
-    console.log("\n✅ All steps completed!");
-    console.log(`\n📄 Export file saved at: ${exportPath}`);
   } catch (error) {
-    console.error("\n❌ Migration failed:", error);
     if (error instanceof Error) {
-      console.error("Error details:", error.message);
-      console.error("Stack:", error.stack);
     }
     process.exit(1);
   }
@@ -366,7 +315,6 @@ async function main() {
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch((error) => {
-    console.error("Unhandled error:", error);
     process.exit(1);
   });
 }

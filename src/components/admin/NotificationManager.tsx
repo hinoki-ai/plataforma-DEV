@@ -70,7 +70,6 @@ export function NotificationManager({ className }: NotificationManagerProps) {
         actionUrl: "",
       });
     } catch (error) {
-      console.error("Error creating notification:", error);
     } finally {
       setLoading(false);
     }

@@ -72,7 +72,6 @@ export function SessionAnalytics() {
         totalPageViews: mockSessions.reduce((acc, s) => acc + s.pageViews, 0),
       });
     } catch (error) {
-      console.error("Failed to load session data:", error);
     } finally {
       setIsLoading(false);
     }

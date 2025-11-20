@@ -85,17 +85,7 @@ export class HydrationErrorBoundary extends Component<Props, State> {
 
     // Enhanced logging for hydration errors
     if (isHydrationError) {
-      console.warn("🚧 HYDRATION ERROR DETECTED:", {
-        error: error.message,
-        stack: error.stack,
-        componentStack: errorInfo.componentStack,
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        url: window.location.href,
-        retryCount: this.state.retryCount,
-      });
     } else {
-      console.error("💥 COMPONENT ERROR:", error, errorInfo);
     }
 
     this.setState({

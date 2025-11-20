@@ -116,7 +116,6 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error fetching admin meeting:", error);
     return NextResponse.json(
       { error: "Error al obtener reunión" },
       { status: 500 },
@@ -229,7 +228,6 @@ export async function PUT(
       );
     }
 
-    console.error("Error updating admin meeting:", error);
     return NextResponse.json(
       { error: "Error al actualizar reunión" },
       { status: 500 },
@@ -273,7 +271,6 @@ export async function DELETE(
       message: "Reunión eliminada exitosamente",
     });
   } catch (error) {
-    console.error("Error deleting admin meeting:", error);
     return NextResponse.json(
       { error: "Error al eliminar reunión" },
       { status: 500 },

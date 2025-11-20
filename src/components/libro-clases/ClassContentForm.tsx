@@ -187,7 +187,6 @@ export function ClassContentForm({
             } exitosamente`,
           );
         } catch (oaError: any) {
-          console.error("Error linking OA:", oaError);
           toast.error(
             "Contenido guardado, pero hubo un error al vincular algunos OA",
           );

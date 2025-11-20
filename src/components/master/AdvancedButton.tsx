@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AdaptiveButton } from "@/components/ui/adaptive-button";
-import { useLanguage } from "@/components/language/LanguageContext";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Settings2,
   Monitor,
@@ -21,7 +21,6 @@ import {
   Eye,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { cn } from "@/lib/utils";
 import {
   useDesktopToggle,
@@ -43,7 +42,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
   const [performanceMode, setPerformanceMode] = useState(false);
 
   const { theme, setTheme } = useTheme();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useDivineParsing([]);
   const { toggleDesktopMode } = useDesktopToggle();
   const { isDesktopForced, isActualMobile, isHydrated } = useResponsiveMode();
 

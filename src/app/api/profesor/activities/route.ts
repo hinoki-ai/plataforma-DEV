@@ -130,7 +130,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching activities:", error);
     return NextResponse.json(
       { error: "Error al obtener actividades" },
       { status: 500 },
@@ -220,7 +219,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error("Error creating activity:", error);
     return NextResponse.json(
       { error: "Error al crear actividad" },
       { status: 500 },

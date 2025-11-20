@@ -464,18 +464,9 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                             className="w-4 h-4 rounded-full"
                           />
                           <div className="flex space-x-1">
-                            <div
-                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                              style={{ animationDelay: "0ms" }}
-                            ></div>
-                            <div
-                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                              style={{ animationDelay: "150ms" }}
-                            ></div>
-                            <div
-                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                              style={{ animationDelay: "300ms" }}
-                            ></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-150"></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-300"></div>
                           </div>
                         </div>
                       </div>

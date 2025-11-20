@@ -90,11 +90,9 @@ export default function ArchivoPage() {
 
           setMessages(archived);
         } else {
-          console.warn("Falling back to cached archived communications");
           setMessages([]);
         }
       } catch (error) {
-        console.error("Error fetching archived communications:", error);
         setMessages([]);
       } finally {
         setLoading(false);
@@ -172,7 +170,6 @@ export default function ArchivoPage() {
 
   const exportMessages = () => {
     // In a real app, this would generate and download a file
-    console.log("Exporting messages...");
   };
 
   return (

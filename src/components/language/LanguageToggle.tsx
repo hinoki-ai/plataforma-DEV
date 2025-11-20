@@ -2,7 +2,7 @@
 
 import React, { useCallback, memo, useState, useEffect } from "react";
 import styled from "styled-components";
-import { useLanguage } from "./LanguageContext";
+import { useDivineParsing } from "./ChunkedLanguageProvider";
 
 interface LanguageOption {
   code: "es" | "en";
@@ -19,7 +19,9 @@ interface LanguageToggleProps {
 
 const LanguageToggle = memo(
   ({ className, size = "md" }: LanguageToggleProps) => {
-    const { language, setLanguage, isLoading, t } = useLanguage();
+    const { language, setLanguage, isLoading, t } = useDivineParsing([
+      "language",
+    ]);
     const [mounted, setMounted] = useState(false);
 
     // Only set mounted after component has mounted to prevent hydration issues
@@ -74,7 +76,6 @@ const LanguageToggle = memo(
         } catch (error) {
           // Silently handle errors - the language state should still update
           if (process.env.NODE_ENV === "development") {
-            console.warn("Language toggle error:", error);
           }
         }
       }

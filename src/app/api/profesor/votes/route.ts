@@ -84,7 +84,6 @@ export async function GET(request: NextRequest) {
       success: true,
     });
   } catch (error) {
-    console.error("Error fetching votes:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
@@ -107,11 +106,6 @@ export async function POST(request: NextRequest) {
 
     // Validate that we have a user ID and resolve Convex user ID
     if (!session.user.id) {
-      console.error("No user ID in session:", {
-        clerkId: session.user.clerkId,
-        email: session.user.email,
-        role: session.user.role,
-      });
       return NextResponse.json(
         { error: "User session is invalid. Please log out and log back in." },
         { status: 500 },
@@ -129,10 +123,6 @@ export async function POST(request: NextRequest) {
     } else {
       // It's a Clerk ID, look up the Convex user
       if (!session.user.clerkId) {
-        console.error("No Clerk ID available for user lookup:", {
-          id: session.user.id,
-          email: session.user.email,
-        });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
           { status: 500 },
@@ -144,10 +134,6 @@ export async function POST(request: NextRequest) {
       });
 
       if (!convexUser) {
-        console.error("User not found in Convex database:", {
-          clerkId: session.user.clerkId,
-          email: session.user.email,
-        });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
           { status: 500 },
@@ -210,7 +196,6 @@ export async function POST(request: NextRequest) {
       success: true,
     });
   } catch (error) {
-    console.error("Error creating vote:", error);
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Internal server error",
@@ -276,8 +261,6 @@ export async function PUT(request: NextRequest) {
       message: "Vote updated successfully",
     });
   } catch (error) {
-    console.error("Error updating vote:", error);
-
     if (error instanceof Error) {
       if (error.message.includes("Cannot modify options")) {
         return NextResponse.json(

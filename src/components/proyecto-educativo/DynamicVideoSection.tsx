@@ -43,7 +43,6 @@ export function DynamicVideoSection() {
         }
       }
     } catch (error) {
-      console.error("Error loading video capsule:", error);
     } finally {
       setIsLoading(false);
     }

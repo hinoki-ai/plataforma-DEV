@@ -64,7 +64,6 @@ export function DangerConfirmationDialog({
       const errorMessage =
         error instanceof Error ? error.message : "An unexpected error occurred";
       setError(errorMessage);
-      console.error("Confirmation action failed:", error);
     } finally {
       setIsConfirming(false);
     }

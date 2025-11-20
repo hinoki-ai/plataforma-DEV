@@ -16,8 +16,6 @@ export async function GET() {
       backend: "convex",
     });
   } catch (error: any) {
-    console.error("Health check failed:", error);
-
     return NextResponse.json(
       {
         status: "unhealthy",

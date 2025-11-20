@@ -58,10 +58,8 @@ export function ParentMeetingCalendar({ userId }: ParentMeetingCalendarProps) {
         }));
         setMeetings(convertedMeetings);
       } else {
-        console.error("Error loading meetings:", response.error);
       }
     } catch (error) {
-      console.error("Error loading meetings:", error);
     } finally {
       setLoading(false);
     }

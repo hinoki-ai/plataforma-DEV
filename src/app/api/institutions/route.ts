@@ -103,8 +103,6 @@ export async function GET() {
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error fetching institutions:", error);
-
     // Return fallback institutions even on error
     const fallbackInstitutions = [
       {

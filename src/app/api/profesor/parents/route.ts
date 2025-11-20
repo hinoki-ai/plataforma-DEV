@@ -152,7 +152,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error("Error creating parent user:", error);
     return NextResponse.json(
       { error: "Error al crear usuario padre" },
       { status: 500 },

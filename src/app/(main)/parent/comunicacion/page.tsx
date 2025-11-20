@@ -101,7 +101,6 @@ export default function ComunicacionPage() {
         })) as Communication[];
         setCommunications(items);
       } else {
-        console.warn("API failed, using fallback data");
         // Use fallback data when API fails
         setCommunications([
           ...fallbackMessages,
@@ -118,7 +117,6 @@ export default function ComunicacionPage() {
         ]);
       }
     } catch (error) {
-      console.warn("Network error, using fallback data:", error);
       // Use fallback data when network fails
       setCommunications([
         ...fallbackMessages,

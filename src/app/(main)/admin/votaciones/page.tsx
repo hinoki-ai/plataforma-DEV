@@ -5,7 +5,7 @@ import { useSession } from "@/lib/auth-client";
 import { useLanguage } from "@/components/language/useDivineLanguage";
 import { SkeletonLoader } from "@/components/ui/dashboard-loader";
 import {
-  Vote,
+  Vote as VoteIcon,
   Plus,
   Edit,
   Trash2,
@@ -51,7 +51,6 @@ import {
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSearchParams, useRouter } from "next/navigation";
 
 interface VoteOption {
@@ -140,7 +139,6 @@ export default function AdminVotesPage() {
         toast.error(t("admin.votaciones.error.loading", "common"));
       }
     } catch (error) {
-      console.error("Error fetching votes:", error);
       toast.error(t("admin.votaciones.error.loading", "common"));
     } finally {
       setIsLoading(false);
@@ -172,7 +170,6 @@ export default function AdminVotesPage() {
         );
       }
     } catch (error) {
-      console.error("Error creating vote:", error);
       toast.error(t("admin.votaciones.error.creating", "common"));
     } finally {
       setIsCreating(false);
@@ -207,7 +204,6 @@ export default function AdminVotesPage() {
         );
       }
     } catch (error) {
-      console.error("Error updating vote:", error);
       toast.error(t("admin.votaciones.error.updating", "common"));
     } finally {
       setIsEditing(false);
@@ -230,7 +226,6 @@ export default function AdminVotesPage() {
         );
       }
     } catch (error) {
-      console.error("Error deleting vote:", error);
       toast.error(t("admin.votaciones.error.deleting", "common"));
     }
   };
@@ -358,7 +353,7 @@ export default function AdminVotesPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
-              <Vote className="h-8 w-8 text-blue-600" />
+              <VoteIcon className="h-8 w-8 text-blue-600" />
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   {t("admin.votaciones.stats.total", "common")}
@@ -804,7 +799,7 @@ export default function AdminVotesPage() {
                       {vote.totalVotes} {t("admin.votaciones.votes", "common")}
                     </div>
                     <div className="flex items-center gap-1">
-                      <Vote className="h-4 w-4" />
+                      <VoteIcon className="h-4 w-4" />
                       {vote.totalOptions}{" "}
                       {t("admin.votaciones.options", "common")}
                     </div>
@@ -891,7 +886,7 @@ export default function AdminVotesPage() {
         {filteredVotes.length === 0 && (
           <Card>
             <CardContent className="p-12 text-center">
-              <Vote className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <VoteIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 {t("admin.votaciones.empty.title", "common")}
               </h3>

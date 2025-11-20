@@ -670,9 +670,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           setInstitutions(data.institutions);
         }
       })
-      .catch((error) => {
-        console.error("Error fetching institutions:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   const handleChange = useCallback(

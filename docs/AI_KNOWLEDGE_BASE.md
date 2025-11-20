@@ -499,7 +499,7 @@ export async function GET(request: NextRequest) {
     "implementation_details": {
       "i18n_guide": "./PAGE_I18N_GUIDE.md",
       "multi_tenant": "./MULTI_TENANT_GUIDE.md",
-      "migration_history": "../archive/MIGRATION.md"
+      "migration_history": "../.archive/old-backups/MIGRATION.md"
     },
     "analysis_reviews": {
       "system_review": "./REVIEW_ANALYSIS.md",

@@ -124,7 +124,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data });
   } catch (error) {
-    console.error("Error fetching communications:", error);
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 },
@@ -190,7 +189,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error creating communication:", error);
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 },

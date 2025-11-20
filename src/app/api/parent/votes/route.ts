@@ -86,7 +86,6 @@ export async function GET(request: NextRequest) {
       success: true,
     });
   } catch (error) {
-    console.error("Error fetching votes for parent:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
@@ -165,8 +164,6 @@ export async function POST(request: NextRequest) {
       message: "Vote(s) cast successfully",
     });
   } catch (error) {
-    console.error("Error casting vote:", error);
-
     // Handle specific Convex errors
     if (error instanceof Error) {
       if (error.message.includes("User has already voted")) {

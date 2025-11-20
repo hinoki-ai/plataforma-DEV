@@ -24,7 +24,6 @@ export default function ClientProfesorLayout({
 
     if (status === "authenticated" && session?.user) {
       if (!session.user.role) {
-        console.error("ClientProfesorLayout - No user role found");
         router.push("/unauthorized");
         return;
       }
@@ -32,10 +31,6 @@ export default function ClientProfesorLayout({
       const roleAccess = getRoleAccess(session.user.role);
 
       if (!roleAccess.canAccessProfesor) {
-        console.log(
-          "ClientProfesorLayout - User does not have profesor access, role:",
-          session.user.role,
-        );
         router.push("/unauthorized");
         return;
       }

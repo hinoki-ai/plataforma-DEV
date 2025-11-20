@@ -285,7 +285,6 @@ function QueryExecutorCard() {
     // Simulate query execution
     setTimeout(() => {
       setIsExecuting(false);
-      console.log("Query executed:", query);
     }, 2000);
   };
 

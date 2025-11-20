@@ -18,7 +18,6 @@ class EmergencyDeployer {
 
   log(message, emoji = "📝") {
     const timestamp = new Date().toISOString();
-    console.log(`${emoji} [${timestamp}] ${message}`);
   }
 
   error(message) {
@@ -79,25 +78,8 @@ class EmergencyDeployer {
   }
 
   async emergencyConfirmation(driftDetected) {
-    console.log("\n" + "=".repeat(70));
-    console.log("🚨 EMERGENCY DEPLOYMENT CONFIRMATION 🚨");
-    console.log("=".repeat(70));
-
     if (driftDetected) {
-      console.log("\n❌ PRODUCTION DRIFT DETECTED!");
-      console.log("Your production contains changes not in git.");
-      console.log("Deploying now will OVERWRITE working production code!");
     }
-
-    console.log("\nCurrent status:");
-    console.log("- Production: Working ✅");
-    console.log("- Git status: " + (await this.getGitStatus()));
-    console.log("- Drift check: " + (driftDetected ? "❌ DETECTED" : "✅ OK"));
-
-    console.log("\nEMERGENCY OPTIONS:");
-    console.log("1. Cancel deployment (RECOMMENDED if drift detected)");
-    console.log("2. Force deploy anyway (RISKY - may break production)");
-    console.log("3. Create backup first, then deploy");
 
     if (!this.force) {
       const readline = require("readline");
@@ -112,17 +94,13 @@ class EmergencyDeployer {
           const choice = answer.toLowerCase().trim();
 
           if (choice === "1" || choice === "cancel") {
-            console.log("❌ Deployment cancelled by user");
             process.exit(0);
           } else if (choice === "2") {
-            console.log("⚠️  Force deploying despite warnings...");
             resolve(true);
           } else if (choice === "3") {
-            console.log("📦 Creating backup before deployment...");
             // TODO: Implement backup creation
             resolve(true);
           } else {
-            console.log("Invalid choice, cancelling...");
             process.exit(0);
           }
         });
@@ -145,12 +123,6 @@ class EmergencyDeployer {
 
   async runEmergencyDeploy() {
     try {
-      console.log("\n🚨 EMERGENCY DEPLOYMENT MODE 🚨");
-      console.log(
-        "This script is for solo developers when production/git are out of sync",
-      );
-      console.log("=".repeat(70));
-
       // Step 1: Check for drift
       const driftDetected = await this.checkProductionDrift();
 
@@ -178,18 +150,6 @@ class EmergencyDeployer {
 // Main execution
 async function main() {
   if (process.argv.includes("--help") || process.argv.includes("-h")) {
-    console.log("Emergency Deployment Script - Solo Developer Edition");
-    console.log("");
-    console.log("Usage: node scripts/emergency-deploy.js [options]");
-    console.log("");
-    console.log("Options:");
-    console.log("  --force              Skip confirmation prompts");
-    console.log("  --skip-drift-check   Skip production drift detection");
-    console.log("  --help, -h          Show this help");
-    console.log("");
-    console.log(
-      "WARNING: Only use this when production and git are out of sync!",
-    );
     process.exit(0);
   }
 
@@ -199,7 +159,6 @@ async function main() {
 
 if (require.main === module) {
   main().catch((error) => {
-    console.error("💥 Emergency deployment failed:", error);
     process.exit(1);
   });
 }

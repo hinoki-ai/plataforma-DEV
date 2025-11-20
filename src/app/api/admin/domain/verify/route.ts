@@ -48,7 +48,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(verificationResult);
   } catch (error) {
-    console.error("Error verifying domain:", error);
     return NextResponse.json(
       { error: "Error al verificar dominio" },
       { status: 500 },

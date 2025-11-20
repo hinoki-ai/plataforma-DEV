@@ -77,7 +77,6 @@ export class Logger {
     switch (level) {
       case "debug":
         if (process.env.NODE_ENV === "development") {
-          console.debug(logMessage, data || "");
         }
         break;
       case "info":
@@ -85,7 +84,6 @@ export class Logger {
       case "warn":
         break;
       case "error":
-        console.error(logMessage, error || data || "");
         break;
     }
   }
@@ -146,14 +144,12 @@ export class Logger {
       }
     } catch (externalError) {
       // Don't let external service errors break the application
-      console.error("Failed to send log to external service:", externalError);
     }
   }
 
   private sendToSentry(logData: LogData) {
     // Sentry integration disabled - not configured in this environment
     if (process.env.NODE_ENV === "development") {
-      console.warn("Sentry integration is not available");
     }
   }
 
@@ -193,7 +189,6 @@ export class Logger {
     // This is a placeholder for actual implementation
     if (typeof window === "undefined") {
       // Only run on server side
-      console.log("CloudWatch logging not implemented yet");
     }
   }
 
@@ -210,9 +205,7 @@ export class Logger {
           environment: process.env.NODE_ENV,
         }),
       });
-    } catch (error) {
-      console.error("Failed to send error to webhook:", error);
-    }
+    } catch (error) {}
   }
 
   // Enhanced error tracking methods

@@ -74,7 +74,9 @@ Plataforma Astral is a comprehensive educational management platform that provid
 ### Key Documentation Files
 
 - **[START_HERE.md](./START_HERE.md)** - First-time setup and development guide
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Complete contributor guide and development standards
 - **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete deployment procedures
+- **[docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
 - **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - Complete system documentation including Clerk + Convex auth
 - **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Full documentation catalog
 
@@ -111,20 +113,30 @@ Plataforma Astral is a comprehensive educational management platform that provid
 ```bash
 # Development
 npm run dev              # Start Next.js development server
-npx convex dev           # Start Convex backend (separate terminal)
+npm run convex:dev       # Start Convex backend (separate terminal)
 npm run format           # Format code with Prettier
 npm run lint            # Run ESLint (must pass 0 warnings)
-npm run type-check      # TypeScript type checking
+npm run lint:fix         # Auto-fix ESLint issues
+npm run type-check       # TypeScript type checking
 
 # Testing
-npm run test:unit        # Unit tests with Vitest
+npm run test             # Unit tests with Vitest
+npm run test:watch       # Unit tests in watch mode
 npm run test:e2e         # E2E tests with Playwright
-npm run test:all         # Complete test suite
+npm run test:e2e:ui      # E2E tests with UI
 
-# Deployment
+# Deployment & Operations
 npm run deploy           # Automated deployment with checks
-npm run build           # Production build test
-npx convex deploy       # Deploy Convex backend
+npm run deploy:fast      # Fast deployment (skip checks)
+npm run deploy:emergency # Emergency deployment
+npm run verify-deployment # Pre-deployment verification
+npm run build            # Production build test
+npm run convex:deploy    # Deploy Convex backend
+npm run convex:dashboard # Open Convex dashboard
+
+# Database & Migration
+npm run migrate-users-to-clerk    # Migrate users to Clerk
+npm run import-convex-to-clerk    # Import Convex users to Clerk
 ```
 
 ## 📞 Support & Resources

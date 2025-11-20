@@ -235,14 +235,6 @@ export class UnifiedErrorBoundary extends Component<
     const errorType = categorizeError(error);
 
     // Enhanced logging with context
-    console.error("🚨 Unified Error Boundary:", {
-      error: error.message,
-      type: errorType,
-      context: this.props.context,
-      errorId: this.state.errorId,
-      stack: error.stack?.slice(0, 500),
-      timestamp: new Date().toISOString(),
-    });
 
     this.setState({ errorInfo });
 

@@ -1,6 +1,4 @@
-import nextConfig from "eslint-config-next";
-
-const eslintConfig = [
+export default [
   {
     ignores: [
       // Ignore generated files
@@ -18,9 +16,11 @@ const eslintConfig = [
       "build/**/*",
       // Ignore dependencies
       "node_modules/**/*",
+      // Ignore git worktree duplicates (outside workspace)
+      "../../../home/kuromatsu/.cursor/worktrees/**/*",
+      "/home/kuromatsu/.cursor/worktrees/**/*",
     ],
   },
-  ...nextConfig,
   {
     rules: {
       // Temporarily disable overly strict rules to focus on critical issues
@@ -43,5 +43,3 @@ const eslintConfig = [
     },
   },
 ];
-
-export default eslintConfig;

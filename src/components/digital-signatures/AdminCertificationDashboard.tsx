@@ -146,7 +146,6 @@ export function AdminCertificationDashboard({
       toast.success(successMessage);
       return true;
     } catch (error: any) {
-      console.error(`${errorPrefix} ${signatureId}:`, error);
       toast.error(error.message || errorPrefix);
       return false;
     } finally {

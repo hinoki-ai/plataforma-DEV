@@ -52,7 +52,6 @@ export default function AdminPlanificacionesPage() {
 
         setDocuments(result.data);
       } catch (err) {
-        console.error("Error fetching planning documents:", err);
         setError(t("admin.planificaciones.error_loading", "common"));
       } finally {
         setLoading(false);

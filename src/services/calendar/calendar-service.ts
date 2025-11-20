@@ -43,7 +43,6 @@ export async function getCalendarEvents(
 
     return { success: true, data: events };
   } catch (error: any) {
-    console.error("Failed to fetch calendar events:", error);
     const errorMessage = error?.message || "No se pudieron cargar los eventos";
     return {
       success: false,
@@ -66,7 +65,6 @@ export async function getUpcomingEvents(limit?: number) {
     });
     return { success: true, data: events };
   } catch (error: any) {
-    console.error("Failed to fetch upcoming events:", error);
     const errorMessage = error?.message || "No se pudieron cargar los eventos";
     return {
       success: false,
@@ -110,7 +108,6 @@ export async function createCalendarEvent(data: {
 
     return { success: true, data: { id: eventId } };
   } catch (error) {
-    console.error("Failed to create calendar event:", error);
     return { success: false, error: "No se pudo crear el evento" };
   }
 }
@@ -150,7 +147,6 @@ export async function updateCalendarEvent(
 
     return { success: true };
   } catch (error) {
-    console.error("Failed to update calendar event:", error);
     return { success: false, error: "No se pudo actualizar el evento" };
   }
 }
@@ -166,7 +162,6 @@ export async function deleteCalendarEvent(id: string) {
     });
     return { success: true };
   } catch (error) {
-    console.error("Failed to delete calendar event:", error);
     return { success: false, error: "No se pudo eliminar el evento" };
   }
 }
@@ -224,7 +219,6 @@ export async function getCalendarStatistics(
 
     return stats;
   } catch (error: any) {
-    console.error("Error getting calendar statistics:", error);
     // Return empty stats instead of throwing to prevent crashes
     return {
       total: 0,
@@ -344,7 +338,6 @@ END:VCALENDAR`;
       },
     };
   } catch (error) {
-    console.error("Failed to export calendar events:", error);
     return { success: false, error: "No se pudieron exportar los eventos" };
   }
 }
@@ -388,7 +381,6 @@ export async function bulkCreateCalendarEvents(
       },
     };
   } catch (error) {
-    console.error("Failed to bulk create events:", error);
     return {
       success: false,
       error: "No se pudieron crear los eventos en lote",
@@ -426,7 +418,6 @@ export async function massUpdateCalendarEvents(
       },
     };
   } catch (error) {
-    console.error("Failed to mass update events:", error);
     return {
       success: false,
       error: "No se pudieron actualizar los eventos en lote",
@@ -456,7 +447,6 @@ export async function massDeleteCalendarEvents(eventIds: string[]) {
       },
     };
   } catch (error) {
-    console.error("Failed to mass delete events:", error);
     return {
       success: false,
       error: "No se pudieron eliminar los eventos en lote",
@@ -580,7 +570,6 @@ export async function importCalendarEventsFromCSV(
 
     return bulkCreateCalendarEvents(events);
   } catch (error) {
-    console.error("Failed to import CSV:", error);
     return {
       success: false,
       error: "No se pudieron importar los eventos desde CSV",

@@ -97,30 +97,21 @@ async function sendToAnalytics(data: WebVitalsAnalytics) {
 
         // Silently ignore if endpoint doesn't exist
         if (!response.ok && response.status !== 404) {
-          console.warn(`Analytics endpoint returned ${response.status}`);
         }
       } catch (analyticsError) {
         // Silently fail - analytics should never break the app
         // Only log in development
         if ((process.env.NODE_ENV as string) === "development") {
-          console.debug("Analytics endpoint not available:", analyticsError);
         }
       }
     }
 
     // Console logging for development
     if ((process.env.NODE_ENV as string) === "development") {
-      console.log("🔥 Web Vitals:", {
-        metric: data.metric.name,
-        value: data.metric.value,
-        level: data.level,
-        budget: data.budget,
-      });
     }
   } catch (error) {
     // Silently fail - don't pollute console with analytics errors
     if (process.env.NODE_ENV === "development") {
-      console.debug("Web Vitals analytics error:", error);
     }
   }
 }
@@ -178,8 +169,6 @@ function showPerformanceAlert(data: WebVitalsAnalytics) {
       message = `${metric.name}: ${metric.value}ms - Poor Performance! (Budget: ≤${budget.good}ms)`;
       break;
   }
-
-  console.log(`${alertType} ${message}`);
 
   // Show toast notification for poor performance
   if (level === "poor" && typeof window !== "undefined") {

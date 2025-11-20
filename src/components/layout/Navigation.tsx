@@ -83,7 +83,6 @@ export default function Navigation() {
       // Use Next.js router for navigation
       router.push("/");
     } catch (error) {
-      console.error("Error during logout:", error);
       // Fallback to router push
       router.push("/");
     } finally {

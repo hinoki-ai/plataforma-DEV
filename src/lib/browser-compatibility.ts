@@ -185,9 +185,6 @@ export function applyPolyfills(): void {
   if (typeof Promise === "undefined") {
     // This is a very basic Promise polyfill
     // In production, you might want to use a more complete one
-    console.warn(
-      "Promise is not supported. Some features may not work correctly.",
-    );
   }
 }
 
@@ -265,16 +262,10 @@ export class BrowserOptimizer {
 
     // Use IntersectionObserver for lazy loading if available
     if (!features.intersectionObserver) {
-      console.warn(
-        "IntersectionObserver not supported. Some lazy loading features may not work.",
-      );
     }
 
     // Fallback for older browsers without Service Workers
     if (!features.serviceWorkers) {
-      console.info(
-        "Service Workers not supported. Offline features will not be available.",
-      );
     }
   }
 
@@ -310,9 +301,6 @@ export class BrowserOptimizer {
       );
 
       // Disable non-essential features
-      console.info(
-        "Slow device detected. Some animations and effects have been disabled for better performance.",
-      );
     }
   }
 }

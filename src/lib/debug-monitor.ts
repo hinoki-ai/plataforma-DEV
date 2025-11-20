@@ -190,9 +190,7 @@ class DebugMonitor {
       this.performanceObserver.observe({
         entryTypes: ["navigation", "resource", "measure"],
       });
-    } catch (error) {
-      console.warn("Performance monitoring not available:", error);
-    }
+    } catch (error) {}
   }
 
   private trackSessionActivity(
@@ -261,7 +259,6 @@ class DebugMonitor {
       clearTimeout(timeoutId);
     } catch (error) {
       // Silently fail - debugging should never affect user experience
-      console.debug("Debug monitoring request failed:", error);
     }
   }
 }

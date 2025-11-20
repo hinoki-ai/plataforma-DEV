@@ -121,7 +121,6 @@ function UsuariosPadresContent() {
 
       setParents(mockParents);
     } catch (err) {
-      console.error("Error fetching parents:", err);
       setError(t("profesor.usuarios_padres.error_loading", "profesor"));
     } finally {
       setLoading(false);
@@ -157,7 +156,6 @@ function UsuariosPadresContent() {
         );
       }
     } catch (error) {
-      console.error("Error creating parent user:", error);
       toast.error(
         `❌ ${t("profesor.usuarios_padres.create_error", "profesor")}`,
         {
@@ -179,7 +177,6 @@ function UsuariosPadresContent() {
       toast.success(t("profesor.usuarios_padres.delete_success", "profesor"));
       setParents(parents.filter((parent) => parent.id !== parentId));
     } catch (error) {
-      console.error("Error deleting parent:", error);
       toast.error(t("profesor.usuarios_padres.delete_error", "profesor"));
     }
   };

@@ -43,7 +43,6 @@ export async function DELETE(
       message: "Vote deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting vote:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

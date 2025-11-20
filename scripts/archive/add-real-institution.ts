@@ -8,7 +8,6 @@ import { api } from "../convex/_generated/api.js";
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL!;
 if (!CONVEX_URL) {
-  console.error("❌ NEXT_PUBLIC_CONVEX_URL is not set");
   process.exit(1);
 }
 
@@ -28,10 +27,6 @@ const realInstitution = {
 };
 
 async function addRealInstitution() {
-  console.log(
-    "🏫 Adding real institution: Escuela Especial de Lenguaje Plataforma Astral",
-  );
-
   try {
     // Check if institution already exists
     const existingInstitutions = await client.query(
@@ -43,7 +38,6 @@ async function addRealInstitution() {
     );
 
     if (existingNames.includes(realInstitution.name.toLowerCase())) {
-      console.log("⚠️ Institution already exists in database");
       return;
     }
 
@@ -53,21 +47,12 @@ async function addRealInstitution() {
       realInstitution,
     );
 
-    console.log("✅ Successfully created real institution!");
-    console.log(`📝 Name: ${realInstitution.name}`);
-    console.log(`🏢 Type: ${realInstitution.institutionType}`);
-    console.log(`📍 Address: ${realInstitution.address}`);
-    console.log(`📧 Email: ${realInstitution.email}`);
-    console.log(`🌐 Website: ${realInstitution.website}`);
-
     // Verify it was created
     const allInstitutions = await client.query(
       api.institutionInfo.getAllInstitutions,
       {},
     );
-    console.log(`📊 Total institutions in database: ${allInstitutions.length}`);
   } catch (error) {
-    console.error("❌ Failed to create institution:", error);
     process.exit(1);
   }
 }

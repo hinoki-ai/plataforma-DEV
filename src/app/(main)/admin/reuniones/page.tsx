@@ -170,7 +170,6 @@ function ReunionesContent() {
         setError(data.error || t("admin.reuniones.error_loading", "admin"));
       }
     } catch (err) {
-      console.error("Error fetching meetings:", err);
       setError(t("admin.reuniones.error_loading", "admin"));
     } finally {
       setLoading(false);
@@ -204,7 +203,6 @@ function ReunionesContent() {
         toast.error(error.error || t("admin.reuniones.create_error", "admin"));
       }
     } catch (err) {
-      console.error("Error creating meeting:", err);
       toast.error(t("admin.reuniones.create_error", "admin"));
     } finally {
       setIsCreating(false);
@@ -237,7 +235,6 @@ function ReunionesContent() {
         toast.error(error.error || t("admin.reuniones.update_error", "admin"));
       }
     } catch (err) {
-      console.error("Error updating meeting:", err);
       toast.error(t("admin.reuniones.update_error", "admin"));
     }
   };
@@ -259,7 +256,6 @@ function ReunionesContent() {
         toast.error(t("admin.reuniones.delete_error", "admin"));
       }
     } catch (err) {
-      console.error("Error deleting meeting:", err);
       toast.error(t("admin.reuniones.delete_error", "admin"));
     }
   };

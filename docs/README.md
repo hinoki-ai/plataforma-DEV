@@ -19,6 +19,10 @@
 ### Architecture & Design
 
 - **[AI_KNOWLEDGE_BASE.md](./AI_KNOWLEDGE_BASE.md)** - **PRIMARY**: Complete system architecture and documentation
+- **[API_REFERENCE.md](./API_REFERENCE.md)** - Complete Convex backend API reference with examples
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
+- **[FAQ.md](./FAQ.md)** - Frequently asked questions and answers
+- **[PERFORMANCE_GUIDE.md](./PERFORMANCE_GUIDE.md)** - Performance optimization and best practices
 - **[ANIMATION_GUIDE.md](./ANIMATION_GUIDE.md)** - UI animation patterns and components
 
 ### Authentication & Security

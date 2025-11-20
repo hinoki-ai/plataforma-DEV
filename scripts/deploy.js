@@ -47,7 +47,6 @@ class DeploymentManager {
 
   log(message, emoji = "📝") {
     const timestamp = new Date().toISOString();
-    console.log(`${emoji} [${timestamp}] ${message}`);
   }
 
   error(message) {
@@ -393,54 +392,46 @@ class DeploymentManager {
       this.log("=".repeat(70), "🚀");
       this.log("STARTING COMPREHENSIVE DEPLOYMENT PROCESS", "🚀");
       this.log("=".repeat(70), "🚀");
-      console.log();
 
       // Step 0: Quality checks
       this.log("STEP 1/5: Quality Checks", "🔍");
       await this.runQualityChecks();
       this.log("-".repeat(70));
-      console.log();
 
       // Step 1: Git commit and push
       this.log("STEP 2/5: Git Operations", "📦");
       await this.gitCommitAndPush();
       this.log("-".repeat(70));
-      console.log();
 
       // Step 2: Deploy Convex
       this.log("STEP 3/5: Convex Deployment", "☁️");
       await this.deployConvex();
       this.log("-".repeat(70));
-      console.log();
 
       // Step 3: Deploy Vercel
       this.log("STEP 4/5: Vercel Deployment", "▲");
       await this.deployVercel();
       this.log("-".repeat(70));
-      console.log();
 
       // Step 4: Verify deployment
       this.log("STEP 5/5: Deployment Verification", "✓");
       await this.verifyDeployment();
       this.log("-".repeat(70));
-      console.log();
 
       this.log("=".repeat(70));
       this.success("🎉 DEPLOYMENT COMPLETED SUCCESSFULLY! 🎉");
       this.log("=".repeat(70));
-      console.log();
+
       this.info("Next steps:");
       this.info("1. Check Vercel dashboard for deployment URL");
       this.info("2. Test the production deployment");
       this.info("3. Monitor for any errors in Vercel logs");
-      console.log();
     } catch (error) {
-      console.log();
       this.log("=".repeat(70));
       this.error("💥 DEPLOYMENT FAILED! 💥");
       this.log("=".repeat(70));
       this.error(`Error: ${error.message}`);
-      console.log();
+
       this.info("Troubleshooting tips:");
       this.info("1. Fix the error shown above");
       this.info("2. Ensure you are logged in to Vercel and Convex");
@@ -449,7 +440,7 @@ class DeploymentManager {
         "4. Use --skip-checks to bypass quality checks (not recommended)",
       );
       this.info("5. Use --skip-verification to skip deployment verification");
-      console.log();
+
       process.exit(1);
     }
   }
@@ -459,19 +450,7 @@ class DeploymentManager {
 async function main() {
   const deployer = new DeploymentManager();
 
-  console.log();
-  console.log("🚀 Plataforma Astral - Deployment Manager");
-  console.log("=".repeat(70));
-  console.log();
-
   if (process.argv.includes("--help") || process.argv.includes("-h")) {
-    console.log("Usage: npm run deploy [options]");
-    console.log();
-    console.log("Options:");
-    console.log("  --skip-checks        Skip pre-deployment quality checks");
-    console.log("  --skip-verification  Skip post-deployment verification");
-    console.log("  --help, -h          Show this help message");
-    console.log();
     process.exit(0);
   }
 
@@ -481,7 +460,6 @@ async function main() {
 // Run if called directly
 if (require.main === module) {
   main().catch((error) => {
-    console.error("💥 Script execution failed:", error);
     process.exit(1);
   });
 }

@@ -71,7 +71,6 @@ export function SystemHealthMonitor() {
 
       setLastCheck(new Date().toLocaleTimeString());
     } catch (error) {
-      console.error("Health check failed:", error);
       setStatus({
         database: "error",
         authentication: "error",

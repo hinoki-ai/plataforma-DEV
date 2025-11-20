@@ -148,8 +148,6 @@ const institutions: InstitutionData[] = [
 ];
 
 async function seedInstitutions() {
-  console.log("🌱 Starting institutions seeding...");
-
   try {
     const client = getConvexClient();
 
@@ -160,14 +158,9 @@ async function seedInstitutions() {
     );
     if (existingInstitutions.length > 1) {
       // More than just the demo one
-      console.log(
-        "⚠️ Institutions already exist in database. Skipping seeding.",
-      );
-      console.log(`Found ${existingInstitutions.length} institutions.`);
+
       return;
     }
-
-    console.log("📚 Creating 10 diverse Chilean educational institutions...");
 
     for (const institution of institutions) {
       try {
@@ -175,22 +168,14 @@ async function seedInstitutions() {
           api.institutionInfo.createInstitution,
           institution,
         );
-        console.log(
-          `✅ Created: ${institution.name} (${institution.institutionType})`,
-        );
-      } catch (error) {
-        console.error(`❌ Failed to create ${institution.name}:`, error);
-      }
+      } catch (error) {}
     }
-
-    console.log("🎉 Successfully seeded 10 institutions!");
 
     // Verify the institutions were created
     const allInstitutions = await client.query(
       api.institutionInfo.getAllInstitutions,
       {},
     );
-    console.log(`📊 Total institutions in database: ${allInstitutions.length}`);
 
     const institutionsByType = allInstitutions.reduce(
       (acc, inst) => {
@@ -200,18 +185,13 @@ async function seedInstitutions() {
       {} as Record<string, number>,
     );
 
-    console.log("📈 Institutions by type:");
-    Object.entries(institutionsByType).forEach(([type, count]) => {
-      console.log(`   ${type}: ${count}`);
-    });
+    Object.entries(institutionsByType).forEach(([type, count]) => {});
   } catch (error) {
-    console.error("❌ Error seeding institutions:", error);
     process.exit(1);
   }
 }
 
 // Run the seeding function
 seedInstitutions().catch((error) => {
-  console.error("❌ Fatal error:", error);
   process.exit(1);
 });

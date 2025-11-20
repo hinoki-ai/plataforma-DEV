@@ -249,7 +249,6 @@ export function HorariosDashboardReal({
         );
       }
     } catch (error) {
-      console.error("Error loading horarios dashboard:", error);
       setEvents([]);
       setStats(null);
       setErrorMessage("Tuvimos un problema al conectar con el planificador.");

@@ -176,7 +176,6 @@ function EstudiantesContent() {
         }
       }
     } catch (err) {
-      console.error("Error fetching students:", err);
       setError(t("parent.students.error_loading"));
     } finally {
       setLoading(false);

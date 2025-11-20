@@ -156,7 +156,6 @@ export async function validateApiRequest<T>(
       session: session as SessionData,
     };
   } catch (error) {
-    console.error("API validation error:", error);
     return {
       success: false,
       error: "Internal validation error",

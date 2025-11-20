@@ -16,7 +16,6 @@ export async function getSchoolInfo() {
 
     return { success: true, data: info };
   } catch (error) {
-    console.error("Failed to fetch school info:", error);
     return {
       success: false,
       error: "No se pudo cargar la información escolar",

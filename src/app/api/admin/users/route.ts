@@ -61,7 +61,6 @@ export async function GET(request: NextRequest) {
     try {
       session = await auth();
     } catch (error) {
-      console.error("Auth error:", error);
       return handleApiError(
         new ApiErrorResponse("Error de autenticación", 500, "AUTH_ERROR", {
           originalError: error instanceof Error ? error.message : String(error),
@@ -82,18 +81,12 @@ export async function GET(request: NextRequest) {
       allUsers = await getClerkUsers();
       // Ensure we have an array even if Clerk returns null/undefined
       if (!Array.isArray(allUsers)) {
-        console.warn("getClerkUsers returned non-array:", allUsers);
         allUsers = [];
       }
     } catch (error) {
-      console.error("Failed to get users from Clerk:", error);
       // Instead of failing completely, return empty array and continue
       allUsers = [];
       // Log the error but don't fail the request
-      console.error(
-        "Clerk user fetch failed, continuing with empty array:",
-        error,
-      );
     }
 
     // Map to match expected structure
@@ -110,7 +103,6 @@ export async function GET(request: NextRequest) {
             updatedAt: u.updatedAt ? u.updatedAt.getTime() : Date.now(),
           };
         } catch (mappingError) {
-          console.error("Error mapping user:", u, mappingError);
           return null;
         }
       })
@@ -126,7 +118,6 @@ export async function GET(request: NextRequest) {
         adminUsers = [];
       }
     } catch (error) {
-      console.error("Failed to get admin users from Clerk:", error);
       adminUsers = [];
     }
     const adminsCreated = adminUsers.length;

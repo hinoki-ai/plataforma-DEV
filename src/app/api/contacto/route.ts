@@ -36,7 +36,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.error("Unhandled contacto submission error:", error);
     return NextResponse.json(
       {
         success: false,

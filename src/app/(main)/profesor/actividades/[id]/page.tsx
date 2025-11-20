@@ -91,7 +91,6 @@ function VerActividadContent() {
         setError(data.error || "Error al cargar la actividad");
       }
     } catch (err) {
-      console.error("Error fetching activity:", err);
       setError("Error al cargar la actividad");
     } finally {
       setLoading(false);
@@ -118,7 +117,6 @@ function VerActividadContent() {
         alert(t("profesor.activities.delete_error", "profesor"));
       }
     } catch (err) {
-      console.error("Error deleting activity:", err);
       alert("Error al eliminar la actividad");
     }
   };

@@ -118,7 +118,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error("Error registering parent:", error);
     return NextResponse.json(
       { error: "Error al registrar usuario" },
       { status: 500 },

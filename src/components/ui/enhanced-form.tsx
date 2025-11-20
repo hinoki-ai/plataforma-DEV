@@ -711,9 +711,7 @@ export function SmartForm({
           form.reset(data);
           setLastSaved(savedDate);
         }
-      } catch (error) {
-        console.error("Error loading auto-saved data:", error);
-      }
+      } catch (error) {}
     }
   }, [autoSave, form]);
 
@@ -727,7 +725,6 @@ export function SmartForm({
         localStorage.removeItem("form-autosave");
       }
     } catch (error) {
-      console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }

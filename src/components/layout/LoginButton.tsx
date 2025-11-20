@@ -144,7 +144,6 @@ export default function LoginButton() {
     try {
       await signOut();
     } catch (error) {
-      console.error("Logout error:", error);
       router.push("/");
     } finally {
       setIsLoggingOut(false);

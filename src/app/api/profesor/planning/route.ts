@@ -39,16 +39,6 @@ export const GET = createApiRoute(
           grade: filters?.grade,
         });
       } catch (queryError) {
-        console.error("Convex query error in /api/profesor/planning:", {
-          error: queryError,
-          teacherId,
-          filters,
-          message:
-            queryError instanceof Error
-              ? queryError.message
-              : String(queryError),
-          stack: queryError instanceof Error ? queryError.stack : undefined,
-        });
         throw new Error(
           `Failed to fetch planning documents: ${
             queryError instanceof Error ? queryError.message : "Unknown error"
@@ -58,7 +48,6 @@ export const GET = createApiRoute(
 
       // Ensure docs is an array
       if (!Array.isArray(docs)) {
-        console.error("Unexpected response from getPlanningDocuments:", docs);
         return createSuccessResponse({
           data: [],
           page: filters?.page || 1,
@@ -93,7 +82,6 @@ export const GET = createApiRoute(
             },
           };
         } catch (error) {
-          console.error("Error adapting document:", error, doc);
           // Return document with safe defaults
           return {
             ...doc,
@@ -123,7 +111,6 @@ export const GET = createApiRoute(
         total: adaptedDocs.length,
       });
     } catch (error) {
-      console.error("Error in GET /api/profesor/planning:", error);
       throw error;
     }
   },

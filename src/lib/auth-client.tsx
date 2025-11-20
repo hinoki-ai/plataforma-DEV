@@ -71,7 +71,6 @@ export function AppSessionProvider({
 
   const fallbackSession = useMemo<SessionData | null>(() => {
     if (!isSignedIn || !user) {
-      console.log("🔐 [FALLBACK] No user signed in or user object missing");
       return null;
     }
 
@@ -91,13 +90,6 @@ export function AppSessionProvider({
       null;
 
     const roleMetadata = user.publicMetadata?.role as string | undefined;
-    console.log("🔐 [FALLBACK] User metadata:", {
-      publicMetadata: user.publicMetadata,
-      roleMetadata,
-      normalizedRole: normalizeRole(roleMetadata),
-      userId: user.id,
-      email: emailAddress,
-    });
 
     const needsRegistration = Boolean(
       (user.publicMetadata?.needsRegistration as boolean | undefined) ?? false,
@@ -130,40 +122,26 @@ export function AppSessionProvider({
       expires: undefined,
     };
 
-    console.log("🔐 [FALLBACK] Created session:", session);
     return session;
   }, [isSignedIn, user]);
 
   const status: SessionStatus = useMemo(() => {
-    console.log("🔐 [STATUS] Computing status:", {
-      isLoaded,
-      isSignedIn,
-      hasSessionQuery: !!sessionQuery,
-      sessionQuery,
-      hasFallbackSession: !!fallbackSession,
-    });
-
     if (!isLoaded) {
-      console.log("🔐 [STATUS] → loading (not loaded)");
       return "loading";
     }
     if (!isSignedIn) {
-      console.log("🔐 [STATUS] → unauthenticated (not signed in)");
       return "unauthenticated";
     }
     if (sessionQuery === undefined && !fallbackSession) {
-      console.log("🔐 [STATUS] → loading (no session data)");
       return "loading";
     }
     if (sessionQuery) {
-      console.log("🔐 [STATUS] → authenticated (convex session)");
       return "authenticated";
     }
     if (fallbackSession) {
-      console.log("🔐 [STATUS] → authenticated (fallback session)");
       return "authenticated";
     }
-    console.log("🔐 [STATUS] → unauthenticated (fallback)");
+
     return "unauthenticated";
   }, [isLoaded, isSignedIn, sessionQuery, fallbackSession]);
 

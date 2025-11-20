@@ -71,7 +71,6 @@ export async function POST(request: NextRequest) {
       level: data.level,
     });
   } catch (error) {
-    console.error("Web Vitals API error:", error);
     return NextResponse.json(
       { error: "Failed to process Web Vitals data" },
       { status: 500 },

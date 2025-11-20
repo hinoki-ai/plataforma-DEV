@@ -28,10 +28,8 @@ export function MeetingStats() {
       if (response.success && response.data) {
         setStats(response.data as MeetingStatsData);
       } else {
-        console.error("Error loading stats:", response.error);
       }
     } catch (error) {
-      console.error("Error loading stats:", error);
     } finally {
       setLoading(false);
     }

@@ -87,8 +87,6 @@ export function handleApiError(error: any, context?: string): NextResponse {
     }
   } catch (loggingError) {
     // Fallback logging if structured logging fails
-    console.error(`API Error${context ? ` in ${context}` : ""}:`, error);
-    console.error("Logging error:", loggingError);
   }
 
   // If it's already our custom error

@@ -93,10 +93,8 @@ export function useConvexConnection() {
           }, 15000); // 15 second timeout for connecting state
         } else {
           // Unknown state, assume connected but log warning
-          console.warn("Unknown Convex connection state:", connectionState);
         }
       } catch (error) {
-        console.error("Error checking Convex connection:", error);
         if (mountedRef.current) {
           setIsConnected(false);
           setConnectionError(

@@ -134,7 +134,6 @@ export default function NuevoMensajePage() {
         setError(errorData.error || "Error al enviar el mensaje");
       }
     } catch (error) {
-      console.error("Error sending message:", error);
       setError("Error de conexión. Inténtalo de nuevo.");
     } finally {
       setLoading(false);

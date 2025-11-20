@@ -10,7 +10,7 @@ import {
 import { MiniCalendarWidget } from "./MiniCalendarWidget";
 import { ActivityFeedWidget } from "./ActivityFeedWidget";
 import { SystemStatusWidget } from "./SystemStatusWidget";
-import { PerformanceMonitor } from "./PerformanceMonitor";
+import { AdminPerformanceMonitor } from "./AdminPerformanceMonitor";
 import { OACoverageWidget } from "@/components/dashboard/OACoverageWidget";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -436,7 +436,7 @@ function DashboardContent() {
       <SystemStatusWidget metrics={systemMetrics} />
 
       {/* Advanced Performance Monitoring */}
-      <PerformanceMonitor />
+      <AdminPerformanceMonitor />
     </div>
   );
 }

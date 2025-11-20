@@ -40,8 +40,6 @@ export async function GET() {
       message: "Institution configuration retrieved successfully",
     });
   } catch (error) {
-    console.error("Error fetching educational system configuration:", error);
-
     // Return default configuration on error
     return NextResponse.json({
       success: true,
@@ -129,8 +127,6 @@ export async function POST(request: NextRequest) {
       message: `Institution type successfully updated to ${institutionType}`,
     });
   } catch (error) {
-    console.error("Error updating educational system configuration:", error);
-
     return NextResponse.json(
       {
         success: false,

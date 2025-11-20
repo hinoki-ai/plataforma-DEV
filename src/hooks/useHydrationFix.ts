@@ -73,7 +73,6 @@ export function useBrowserAPI<T>(
     try {
       return getter();
     } catch (error) {
-      console.error("Browser API access error:", error);
       return defaultValue;
     }
   }, [isHydrated, getter, defaultValue]);
@@ -92,7 +91,6 @@ export function useDynamicImport<T>(
     importFn()
       .then(setModule)
       .catch((error) => {
-        console.error("Dynamic import failed:", error);
         setModule(fallback);
       });
   }, []);

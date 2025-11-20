@@ -38,8 +38,6 @@ export async function GET(request: NextRequest) {
         unread: notifications.filter((n) => !n.read).length,
       });
     } catch (dbError) {
-      console.error("Database error fetching notifications:", dbError);
-
       // Return empty notifications with a warning
       return NextResponse.json({
         notifications: [],
@@ -49,7 +47,6 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error("Error in notifications API:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
@@ -84,14 +81,12 @@ export async function PATCH(request: NextRequest) {
 
       return NextResponse.json({ success: true });
     } catch (dbError) {
-      console.error("Database error updating notifications:", dbError);
       return NextResponse.json(
         { error: "Unable to update notifications due to database issues" },
         { status: 500 },
       );
     }
   } catch (error) {
-    console.error("Error in notifications PATCH:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
@@ -146,14 +141,12 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ success: true });
     } catch (dbError) {
-      console.error("Database error creating notification:", dbError);
       return NextResponse.json(
         { error: "Unable to create notification due to database issues" },
         { status: 500 },
       );
     }
   } catch (error) {
-    console.error("Error in notifications POST:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

@@ -118,7 +118,6 @@ function ActividadesContent() {
         );
       }
     } catch (err) {
-      console.error("Error fetching activities:", err);
       setError(t("profesor.activities.error_loading", "profesor"));
     } finally {
       setLoading(false);
@@ -148,7 +147,6 @@ function ActividadesContent() {
         alert(t("profesor.activities.delete_error", "profesor"));
       }
     } catch (err) {
-      console.error("Error deleting activity:", err);
       alert(t("profesor.activities.delete_error", "profesor"));
     }
   };

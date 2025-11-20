@@ -49,24 +49,10 @@ export async function auth(): Promise<SessionData | null> {
     convexUser = await convex.query(api.users.getUserByClerkId, {
       clerkId: userId,
     });
-  } catch (error) {
-    console.error("Failed to resolve Convex user for session", {
-      clerkId: userId,
-      error,
-    });
-  }
+  } catch (error) {}
 
   // Warn if user is not found in Convex - this is a configuration issue
   if (!convexUser) {
-    console.warn(
-      `⚠️ User ${userId} (${clerkUser.user.email}) not found in Convex database. ` +
-        `This may cause issues with tenant-based operations. Consider running a sync.`,
-      {
-        clerkId: userId,
-        email: clerkUser.user.email,
-        role: clerkUser.user.role,
-      },
-    );
   }
 
   const expires = sessionClaims?.exp

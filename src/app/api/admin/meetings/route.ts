@@ -87,7 +87,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching admin meetings:", error);
     return NextResponse.json(
       { error: "Error al obtener reuniones" },
       { status: 500 },
@@ -173,7 +172,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error("Error creating admin meeting:", error);
     return NextResponse.json(
       { error: "Error al crear reunión" },
       { status: 500 },

@@ -148,7 +148,6 @@ function ProfileTab() {
         }
       }
     } catch (error) {
-      console.error("Error loading profile:", error);
       // Fallback to session data
       if (session?.user) {
         setFormData({
@@ -368,7 +367,6 @@ function NotificationsTab() {
         }
       }
     } catch (error) {
-      console.error("Error loading preferences:", error);
       // Reset to defaults on error
       setPreferences(DEFAULT_PREFERENCES);
     } finally {
@@ -416,11 +414,9 @@ function NotificationsTab() {
           body: JSON.stringify(preferences),
         });
         if (!response.ok) {
-          console.warn("Failed to sync preferences to server");
         }
       } catch (error) {
         // API call is optional, localStorage is the source of truth for now
-        console.warn("Failed to sync preferences:", error);
       }
 
       setAlert({
@@ -584,7 +580,6 @@ function PrivacyTab() {
         }
       }
     } catch (error) {
-      console.error("Error loading preferences:", error);
       // Reset to defaults on error
       setPreferences(DEFAULT_PREFERENCES);
     } finally {
@@ -632,11 +627,9 @@ function PrivacyTab() {
           body: JSON.stringify(preferences),
         });
         if (!response.ok) {
-          console.warn("Failed to sync preferences to server");
         }
       } catch (error) {
         // API call is optional, localStorage is the source of truth for now
-        console.warn("Failed to sync preferences:", error);
       }
 
       setAlert({

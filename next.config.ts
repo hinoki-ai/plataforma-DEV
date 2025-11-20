@@ -29,9 +29,6 @@ function loadClerkKeylessEnv() {
 
   if (!fs.existsSync(keylessPath)) {
     if (isDevelopment) {
-      console.warn(
-        "[Clerk] NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY or CLERK_SECRET_KEY is missing. Generate credentials with `npx clerk dev` or claim the keyless instance shown the first time the dev server runs.",
-      );
     }
     return;
   }
@@ -52,10 +49,6 @@ function loadClerkKeylessEnv() {
     }
   } catch (error) {
     if (isDevelopment) {
-      console.warn(
-        `[Clerk] Failed to hydrate missing credentials from ${keylessPath}:`,
-        error,
-      );
     }
   }
 }
@@ -93,10 +86,6 @@ function parseConvexOrigin() {
     return { http: httpOrigin, ws: wsOrigin };
   } catch (error) {
     if (isDevelopment) {
-      console.warn(
-        `[Convex] Invalid NEXT_PUBLIC_CONVEX_URL: ${url}. Update your .env.local file.`,
-        error,
-      );
     }
     return { http: undefined, ws: undefined };
   }

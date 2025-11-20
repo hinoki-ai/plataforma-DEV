@@ -34,9 +34,7 @@ export function useAudioConsent() {
           hasConsented: true,
         });
       }
-    } catch (error) {
-      console.warn("Error loading audio preferences:", error);
-    }
+    } catch (error) {}
     setIsLoaded(true);
 
     const handlePreferenceChange = (
@@ -68,9 +66,7 @@ export function useAudioConsent() {
       window.dispatchEvent(
         new CustomEvent("audio-preferences-changed", { detail: updated }),
       );
-    } catch (error) {
-      console.warn("Error saving audio preferences:", error);
-    }
+    } catch (error) {}
   };
 
   const enableMusic = () => {
@@ -100,9 +96,7 @@ export function useAudioConsent() {
     setPreferences(DEFAULT_PREFERENCES);
     try {
       localStorage.removeItem(AUDIO_CONSENT_KEY);
-    } catch (error) {
-      console.warn("Error resetting audio preferences:", error);
-    }
+    } catch (error) {}
   };
 
   return {

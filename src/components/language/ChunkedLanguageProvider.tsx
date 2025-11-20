@@ -616,7 +616,6 @@ const invokeOracle = async (
     if (!translations) {
       // Log in development only
       if (process.env.NODE_ENV === "development") {
-        console.warn(`🕊️ Oracle: No translations found for ${key}`);
       }
       return {};
     }
@@ -625,10 +624,6 @@ const invokeOracle = async (
   } catch (error) {
     // Log in development only
     if (process.env.NODE_ENV === "development") {
-      console.error(
-        `🕊️ Oracle failed to load namespace: ${namespace} for ${language}`,
-        error,
-      );
     }
     return {};
   }
@@ -714,7 +709,6 @@ const detectBrowserLanguage = (): Language => {
   } catch (error) {
     // Log in development only
     if (process.env.NODE_ENV === "development") {
-      console.warn("🕊️ Oracle: Error detecting browser language:", error);
     }
     return "es";
   }
@@ -768,7 +762,6 @@ const setStoredLanguage = (language: Language): void => {
   } catch (error) {
     // Silently fail - language state will still work with localStorage
     if (process.env.NODE_ENV === "development") {
-      console.warn("Failed to persist language preference:", error);
     }
   }
 };
@@ -900,7 +893,6 @@ const DivineParsingOracleProvider: React.FC<{
       } catch (err) {
         // Log in development only
         if (process.env.NODE_ENV === "development") {
-          console.error("🕊️ Oracle initialization failed:", err);
         }
         setError("Failed to initialize translation oracle");
       } finally {
@@ -929,12 +921,6 @@ const DivineParsingOracleProvider: React.FC<{
         // If client preference differs from current language, update it
         if (clientPreferredLang !== language) {
           if (process.env.NODE_ENV === "development") {
-            console.log("🕊️ Oracle: Synchronizing language post-hydration:", {
-              current: language,
-              preferred: clientPreferredLang,
-              stored,
-              browser,
-            });
           }
 
           // Clear cache for the language change
@@ -957,7 +943,6 @@ const DivineParsingOracleProvider: React.FC<{
         }
       } catch (err) {
         if (process.env.NODE_ENV === "development") {
-          console.warn("🕊️ Oracle: Post-hydration sync failed:", err);
         }
       }
     };
@@ -991,7 +976,6 @@ const DivineParsingOracleProvider: React.FC<{
       } catch (err) {
         // Log in development only
         if (process.env.NODE_ENV === "development") {
-          console.error("🕊️ Oracle language change failed:", err);
         }
         setError("Failed to change language");
       } finally {
@@ -1031,10 +1015,6 @@ const DivineParsingOracleProvider: React.FC<{
       } catch (err) {
         // Log in development only
         if (process.env.NODE_ENV === "development") {
-          console.error(
-            `🕊️ Failed to invoke oracle for namespace: ${namespace}`,
-            err,
-          );
         }
         setError(`Failed to load translations for ${namespace}`);
       }
@@ -1065,10 +1045,6 @@ const DivineParsingOracleProvider: React.FC<{
       } catch (err) {
         // Log in development only
         if (process.env.NODE_ENV === "development") {
-          console.error(
-            "🕊️ Failed to invoke oracles for multiple namespaces:",
-            err,
-          );
         }
         setError("Failed to load translation namespaces");
       } finally {
@@ -1103,7 +1079,6 @@ const DivineParsingOracleProvider: React.FC<{
             .catch((err) => {
               // Log in development only
               if (process.env.NODE_ENV === "development") {
-                console.warn("🕊️ Background oracle prefetch failed:", err);
               }
             });
         });
@@ -1265,9 +1240,6 @@ const DivineParsingOracleProvider: React.FC<{
             if (isValidTranslation(oppositeValue)) {
               // Log fallback usage in development
               if (process.env.NODE_ENV === "development") {
-                console.warn(
-                  `🕊️ Oracle: Using ${oppositeLang} fallback for key "${key}" in namespace "${namespace}" (${language} missing)`,
-                );
               }
               return cacheAndReturn(oppositeValue);
             }
@@ -1282,9 +1254,6 @@ const DivineParsingOracleProvider: React.FC<{
             const oppositeCommonValue = (oppositeCommon as any)[key];
             if (isValidTranslation(oppositeCommonValue)) {
               if (process.env.NODE_ENV === "development") {
-                console.warn(
-                  `🕊️ Oracle: Using ${oppositeLang} common fallback for key "${key}" in namespace "${namespace}"`,
-                );
               }
               return cacheAndReturn(oppositeCommonValue);
             }
@@ -1311,9 +1280,6 @@ const DivineParsingOracleProvider: React.FC<{
 
         // 7. Development warning for missing keys
         if (process.env.NODE_ENV === "development") {
-          console.warn(
-            `🕊️ Oracle: Missing translation key "${key}" in namespace "${namespace}" for language "${language}"`,
-          );
         }
 
         // 8. Final fallback - return a formatted version of the key
@@ -1324,10 +1290,6 @@ const DivineParsingOracleProvider: React.FC<{
       } catch (error) {
         // Log error in development
         if (process.env.NODE_ENV === "development") {
-          console.error(
-            `🕊️ Oracle: Translation error for key "${key}":`,
-            error,
-          );
         }
         const errorResult = formatMissingKey(key);
         // Cache error results too to avoid repeated errors
@@ -1416,9 +1378,6 @@ export function useDivineParsing(namespaces: string[] = []) {
   if (!context) {
     // Log warning only in development
     if (process.env.NODE_ENV === "development") {
-      console.warn(
-        "useDivineParsing used outside DivineParsingOracleProvider - returning default context",
-      );
     }
 
     // Return a safe default context to prevent crashes

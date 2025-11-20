@@ -81,7 +81,6 @@ export function HydratedDate({
         return dateFnsFormat(dateObj, format, { locale });
       }
     } catch (error) {
-      console.error("Date formatting error:", error);
       return "Invalid date";
     }
   }, [date, format, locale, relative, isHydrated, placeholder]);

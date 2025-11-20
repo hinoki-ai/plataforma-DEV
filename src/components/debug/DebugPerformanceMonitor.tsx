@@ -18,7 +18,7 @@ interface PerformanceData {
   timestamp: string;
 }
 
-export function PerformanceMonitor() {
+export function DebugPerformanceMonitor() {
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [averageResponseTime, setAverageResponseTime] = useState(0);
@@ -54,7 +54,6 @@ export function PerformanceMonitor() {
         }
       }
     } catch (error) {
-      console.error("Failed to fetch performance data:", error);
     } finally {
       setIsLoading(false);
     }

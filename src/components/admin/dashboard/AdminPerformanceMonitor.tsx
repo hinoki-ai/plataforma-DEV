@@ -55,7 +55,7 @@ interface PerformanceAlert {
   resolved?: boolean;
 }
 
-export function PerformanceMonitor() {
+export function AdminPerformanceMonitor() {
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const [alerts, setAlerts] = useState<PerformanceAlert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -163,7 +163,6 @@ export function PerformanceMonitor() {
       setAlerts(mockAlerts);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error("Failed to fetch performance data:", error);
       setAlerts([
         {
           id: "fetch-error",

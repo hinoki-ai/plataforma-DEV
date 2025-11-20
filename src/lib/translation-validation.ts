@@ -237,21 +237,14 @@ export function logValidationResults(): void {
 
   console.group("🕊️ Divine Parsing Oracle - Translation Validation");
 
-  console.log(`Total Keys: ${stats.totalKeys}`);
-  console.log(`Consistency Score: ${stats.consistencyScore.toFixed(1)}%`);
-
   if (result.errors.length > 0) {
-    console.error("❌ Errors:", result.errors);
   }
 
   if (result.warnings.length > 0) {
-    console.warn("⚠️ Warnings:", result.warnings);
   }
 
   if (result.isValid) {
-    console.log("✅ All translations are consistent!");
   } else {
-    console.error("❌ Translation inconsistencies found!");
   }
 
   console.groupEnd();

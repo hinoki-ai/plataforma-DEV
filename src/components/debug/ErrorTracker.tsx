@@ -40,7 +40,6 @@ export function ErrorTracker() {
         },
       ]);
     } catch (error) {
-      console.error("Failed to load errors:", error);
     } finally {
       setIsLoading(false);
     }

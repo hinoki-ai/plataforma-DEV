@@ -86,7 +86,6 @@ export function AttachmentList({
     try {
       await onDelete(fileId);
     } catch (error) {
-      console.error("Error deleting file:", error);
     } finally {
       setDeletingId(null);
     }

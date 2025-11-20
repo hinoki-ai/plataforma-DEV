@@ -121,7 +121,6 @@ export default function UnifiedAuthButton() {
     try {
       await signOut({ callbackUrl: "/" });
     } catch (error) {
-      console.error("Logout error:", error);
       router.push("/");
     } finally {
       setIsLoggingOut(false);
@@ -155,18 +154,7 @@ export default function UnifiedAuthButton() {
   // Only show when explicitly unauthenticated or during loading with no session
   if (!isAuthenticated) {
     // Debug: Log when public state is shown
-    console.warn(
-      "🔐 [UnifiedAuthButton] Showing PUBLIC state - Auth check failed:",
-      {
-        status,
-        hasSession: !!session,
-        hasUser: !!session?.user,
-        hasUserId: !!session?.user?.id,
-        userRole: session?.user?.role,
-        isAuthenticated,
-        timestamp: new Date().toISOString(),
-      },
-    );
+
     return (
       <div className="flex items-center space-x-2">
         {/* Portal Escolar Button */}

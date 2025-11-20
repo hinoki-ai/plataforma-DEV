@@ -23,7 +23,6 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting document:", error);
     return NextResponse.json(
       { error: "Error al eliminar el documento" },
       { status: 500 },
@@ -65,7 +64,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ documents });
   } catch (error) {
-    console.error("Error listing documents:", error);
     return NextResponse.json(
       { error: "Error al listar documentos" },
       { status: 500 },

@@ -163,7 +163,6 @@ function EditarActividadContent() {
         setError(data.error || "Error al cargar la actividad");
       }
     } catch (err) {
-      console.error("Error fetching activity:", err);
       setError("Error al cargar la actividad");
     } finally {
       setFetching(false);
@@ -217,7 +216,6 @@ function EditarActividadContent() {
         setError(data.error || "Error al actualizar la actividad");
       }
     } catch (err) {
-      console.error("Error updating activity:", err);
       setError("Error al actualizar la actividad");
     } finally {
       setLoading(false);

@@ -60,7 +60,6 @@ function PlanificacionesContent({ searchParams }: Props) {
           );
         }
       } catch (err) {
-        console.error("Error fetching planning documents:", err);
         setError(t("profesor.planning.error_loading", "profesor"));
       } finally {
         setLoading(false);

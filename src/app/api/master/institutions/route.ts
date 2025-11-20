@@ -105,12 +105,7 @@ export async function POST(request: NextRequest) {
         email: session.user.email,
       });
       createdByUserId = convexUser?._id as Id<"users"> | undefined;
-    } catch (error) {
-      console.warn("Unable to resolve Convex user for MASTER session", {
-        email: session.user.email,
-        error,
-      });
-    }
+    } catch (error) {}
 
     const result = await client.mutation(
       api.institutionInfo.createInstitutionWithAdmins,
@@ -151,8 +146,6 @@ export async function POST(request: NextRequest) {
         { status: 422 },
       );
     }
-
-    console.error("MASTER institution creation error", error);
 
     return NextResponse.json(
       {

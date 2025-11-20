@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { EnhancedDebugPanel } from "@/components/debug/EnhancedDebugPanel";
 import { SystemHealthMonitor } from "@/components/debug/SystemHealthMonitor";
-import { PerformanceMonitor } from "@/components/debug/PerformanceMonitor";
+import { DebugPerformanceMonitor } from "@/components/debug/DebugPerformanceMonitor";
 import { ErrorTracker } from "@/components/debug/ErrorTracker";
 import { SessionAnalytics } from "@/components/debug/SessionAnalytics";
 import { DebugPanel } from "@/components/admin/dashboard/DebugPanel";
@@ -56,7 +56,7 @@ export default async function AdminDebugNavigationPage() {
         </Suspense>
 
         <Suspense fallback={<div>Loading performance monitor...</div>}>
-          <PerformanceMonitor />
+          <DebugPerformanceMonitor />
         </Suspense>
 
         <Suspense fallback={<div>Loading error tracker...</div>}>

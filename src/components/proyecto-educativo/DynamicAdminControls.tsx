@@ -66,7 +66,6 @@ export function DynamicAdminControls({
         setEditModalOpen(false);
       }
     } catch (error) {
-      console.error("Error saving video capsule:", error);
     } finally {
       setIsSaving(false);
     }
@@ -88,9 +87,7 @@ export function DynamicAdminControls({
             isActive: false,
           });
         }
-      } catch (error) {
-        console.error("Error deleting video capsule:", error);
-      }
+      } catch (error) {}
     }
   };
 

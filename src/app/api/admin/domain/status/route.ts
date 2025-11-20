@@ -51,7 +51,6 @@ export async function GET() {
 
     return NextResponse.json(domainStatus);
   } catch (error) {
-    console.error("Error checking domain status:", error);
     return NextResponse.json(
       { error: "Error al verificar estado del dominio" },
       { status: 500 },
@@ -146,7 +145,6 @@ async function checkDNSRecords(domain: string): Promise<DNSRecord[]> {
       });
     }
   } catch (error) {
-    console.error("Error checking DNS records:", error);
     // Return pending status for all records if DNS lookup fails
     records.push(
       {

@@ -385,7 +385,7 @@ export function JoshProactiveSuggestions() {
           rotateX: 15,
           transition: { duration: 0.3 },
         }}
-        className="fixed bottom-24 right-6 z-40 max-w-sm"
+        className="fixed bottom-32 right-4 z-40 max-w-sm"
         style={{ perspective: 1000 }}
       >
         <motion.div
@@ -415,6 +415,8 @@ export function JoshProactiveSuggestions() {
             <button
               onClick={dismissSuggestion}
               className="p-1 hover:bg-black/10 dark:hover:bg-white/10 rounded transition-colors"
+              title="Dismiss suggestion"
+              aria-label="Dismiss suggestion"
             >
               <X className="w-4 h-4" />
             </button>

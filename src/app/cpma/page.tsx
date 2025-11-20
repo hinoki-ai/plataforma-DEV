@@ -213,9 +213,7 @@ export default function CPMAPage() {
           setVideoCapsule(data.videoCapsule);
         }
       }
-    } catch (error) {
-      console.error("Error loading video capsule:", error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -239,7 +237,6 @@ export default function CPMAPage() {
         }
       }
     } catch (error) {
-      console.error("Error loading CPA documents:", error);
       // Keep fallback URLs if API fails
     }
   };
@@ -265,7 +262,6 @@ export default function CPMAPage() {
         setEditModalOpen(false);
       }
     } catch (error) {
-      console.error("Error saving video capsule:", error);
     } finally {
       setIsSaving(false);
     }

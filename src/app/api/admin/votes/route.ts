@@ -22,32 +22,21 @@ export async function GET(request: NextRequest) {
 
     const convex = await getAuthenticatedConvexClient();
 
-    console.log("Session user:", {
-      id: session.user.id,
-      clerkId: session.user.clerkId,
-      email: session.user.email,
-      role: session.user.role,
-    });
-
     // Get query parameters
     const { searchParams } = new URL(request.url);
     const isActive = searchParams.get("isActive");
     const category = searchParams.get("category");
-
-    console.log("Query parameters:", { isActive, category });
 
     // Fetch votes from Convex
     const votes = await convex.query(api.votes.getVotes, {
       isActive: isActive ? isActive === "true" : undefined,
       category: (category as any) || undefined,
     });
-    console.log(`Found ${votes.length} votes`);
 
     // Transform votes to include calculated status and enhanced data
     const transformedVotes: any[] = [];
     for (const vote of votes) {
       try {
-        console.log(`Processing vote: ${vote._id}, title: ${vote.title}`);
         const options = await convex.query(api.votes.getVoteById, {
           id: vote._id,
         });
@@ -90,17 +79,7 @@ export async function GET(request: NextRequest) {
           })),
         });
       } catch (voteError) {
-        console.error(
-          `Error processing vote ${vote._id} (${vote.title}):`,
-          voteError,
-        );
-        console.error("Vote data:", {
-          institutionId: vote.institutionId,
-          createdBy: vote.createdBy,
-          isActive: vote.isActive,
-        });
         // Skip this vote instead of failing the entire request
-        console.log(`Skipping problematic vote: ${vote._id}`);
       }
     }
 
@@ -109,16 +88,6 @@ export async function GET(request: NextRequest) {
       success: true,
     });
   } catch (error) {
-    console.error("Error fetching votes:", error);
-    console.error(
-      "Error stack:",
-      error instanceof Error ? error.stack : "No stack trace",
-    );
-    console.error("Error details:", {
-      message: error instanceof Error ? error.message : String(error),
-      name: error instanceof Error ? error.name : "Unknown",
-      cause: error instanceof Error ? error.cause : undefined,
-    });
     return NextResponse.json(
       {
         error: "Internal server error",
@@ -144,11 +113,6 @@ export async function POST(request: NextRequest) {
 
     // Validate that we have a user ID and resolve Convex user ID
     if (!session.user.id) {
-      console.error("No user ID in session:", {
-        clerkId: session.user.clerkId,
-        email: session.user.email,
-        role: session.user.role,
-      });
       return NextResponse.json(
         { error: "User session is invalid. Please log out and log back in." },
         { status: 500 },
@@ -166,10 +130,6 @@ export async function POST(request: NextRequest) {
     } else {
       // It's a Clerk ID, look up the Convex user
       if (!session.user.clerkId) {
-        console.error("No Clerk ID available for user lookup:", {
-          id: session.user.id,
-          email: session.user.email,
-        });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
           { status: 500 },
@@ -181,10 +141,6 @@ export async function POST(request: NextRequest) {
       });
 
       if (!convexUser) {
-        console.error("User not found in Convex database:", {
-          clerkId: session.user.clerkId,
-          email: session.user.email,
-        });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
           { status: 500 },
@@ -199,7 +155,6 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
     } catch (parseError) {
-      console.error("Error parsing request body:", parseError);
       return NextResponse.json(
         { error: "Invalid request body format" },
         { status: 400 },
@@ -263,7 +218,6 @@ export async function POST(request: NextRequest) {
         throw new Error("Failed to initialize Convex client");
       }
     } catch (authError) {
-      console.error("Error with Convex client:", authError);
       return NextResponse.json(
         { error: "Authentication failed. Please log in again." },
         { status: 401 },
@@ -290,13 +244,6 @@ export async function POST(request: NextRequest) {
       success: true,
     });
   } catch (error) {
-    console.error("Error creating vote:", error);
-    console.error("Error details:", {
-      message: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      name: error instanceof Error ? error.name : undefined,
-    });
-
     // Provide more helpful error messages
     if (error instanceof Error) {
       const errorMessage = error.message.toLowerCase();
@@ -427,8 +374,6 @@ export async function PUT(request: NextRequest) {
       message: "Vote updated successfully",
     });
   } catch (error) {
-    console.error("Error updating vote:", error);
-
     if (error instanceof Error) {
       if (error.message.includes("Cannot modify options")) {
         return NextResponse.json(

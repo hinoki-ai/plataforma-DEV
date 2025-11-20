@@ -84,7 +84,6 @@ function RecursosContent() {
           setError(data.error || "Error al cargar recursos");
         }
       } catch (err) {
-        console.error("Error fetching resources:", err);
         setError("Error al cargar los recursos educativos");
       } finally {
         setLoading(false);

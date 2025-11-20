@@ -91,7 +91,6 @@ export function Sidebar({
     try {
       await signOut();
     } catch (error) {
-      console.error("Error during logout:", error);
       // Fallback navigation
       router.push("/");
     }

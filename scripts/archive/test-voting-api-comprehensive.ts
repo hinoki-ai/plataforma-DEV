@@ -41,12 +41,9 @@ const results: TestResult[] = [];
 function logResult(name: string, passed: boolean, message: string) {
   results.push({ name, passed, message });
   const icon = passed ? "✅" : "❌";
-  console.log(`${icon} ${name}: ${message}`);
 }
 
 async function testAdminGetVotes() {
-  console.log("\n📋 Test: GET /api/admin/votes");
-
   try {
     const response = await fetch(`${BASE_URL}/api/admin/votes`, {
       headers: mockAdminAuth,
@@ -117,8 +114,6 @@ async function testAdminGetVotes() {
 }
 
 async function testAdminCreateVote() {
-  console.log("\n📋 Test: POST /api/admin/votes");
-
   const payload = {
     title: "API Test Vote - Comprehensive Testing",
     description: "Testing API endpoints and constraints",
@@ -179,8 +174,6 @@ async function testAdminCreateVote() {
 }
 
 async function testAdminDeleteVote(voteId: string) {
-  console.log("\n📋 Test: DELETE /api/admin/votes/[id]");
-
   try {
     const response = await fetch(`${BASE_URL}/api/admin/votes/${voteId}`, {
       method: "DELETE",
@@ -224,8 +217,6 @@ async function testAdminDeleteVote(voteId: string) {
 }
 
 async function testParentGetVotes() {
-  console.log("\n📋 Test: GET /api/parent/votes");
-
   try {
     const response = await fetch(`${BASE_URL}/api/parent/votes`, {
       headers: mockParentAuth,
@@ -274,8 +265,6 @@ async function testParentGetVotes() {
 }
 
 async function testParentCastVote(voteId: string, optionId: string) {
-  console.log("\n📋 Test: POST /api/parent/votes (Cast Vote)");
-
   const payload = { voteId, optionId };
 
   try {
@@ -337,10 +326,8 @@ async function testParentCastVote(voteId: string, optionId: string) {
 }
 
 async function testErrorHandling() {
-  console.log("\n📋 Test: Error Handling (401, 403, 404, 409, 400)");
-
   // Test 401: Unauthenticated
-  console.log("\n  Testing 401 Unauthenticated...");
+
   const unauthResponse = await fetch(`${BASE_URL}/api/admin/votes`);
   if (unauthResponse.status === 401) {
     logResult(
@@ -353,7 +340,7 @@ async function testErrorHandling() {
   }
 
   // Test 400: Missing fields
-  console.log("\n  Testing 400 Bad Request...");
+
   const badPayload = { title: "Missing fields" }; // Missing required fields
   const badResponse = await fetch(`${BASE_URL}/api/admin/votes`, {
     method: "POST",
@@ -377,7 +364,7 @@ async function testErrorHandling() {
   }
 
   // Test 404: Invalid vote ID
-  console.log("\n  Testing 404 Not Found...");
+
   const notFoundResponse = await fetch(`${BASE_URL}/api/parent/votes`, {
     method: "POST",
     headers: {
@@ -403,17 +390,6 @@ async function testErrorHandling() {
 }
 
 async function testVotingConstraints() {
-  console.log("\n📋 Test: Voting Constraints");
-  console.log(
-    "\n  NOTE: These tests require creating votes and casting votes.",
-  );
-  console.log(
-    "  Full constraint testing should be done manually through the UI.",
-  );
-  console.log(
-    "  See docs/VOTING_SYSTEM.md for test checklist and documentation.",
-  );
-
   // This would require:
   // 1. Create vote with allowMultipleVotes: false → try to vote twice (should get 409)
   // 2. Create expired vote → try to vote (should get 403)
@@ -429,10 +405,6 @@ async function testVotingConstraints() {
 }
 
 async function runAllTests() {
-  console.log("🚀 Starting Comprehensive Voting API Tests\n");
-  console.log(`Base URL: ${BASE_URL}`);
-  console.log(`⚠️  Make sure to set valid auth tokens in the script!\n`);
-
   // Test admin endpoints
   const votes = await testAdminGetVotes();
   const createdVoteId = await testAdminCreateVote();
@@ -462,31 +434,13 @@ async function runAllTests() {
   }
 
   // Summary
-  console.log("\n" + "=".repeat(60));
-  console.log("📊 Test Summary");
-  console.log("=".repeat(60));
 
   const passed = results.filter((r) => r.passed).length;
   const failed = results.filter((r) => !r.passed).length;
 
-  console.log(`\n✅ Passed: ${passed}`);
-  console.log(`❌ Failed: ${failed}`);
-  console.log(`📝 Total: ${results.length}\n`);
-
   if (failed > 0) {
-    console.log("Failed Tests:");
-    results
-      .filter((r) => !r.passed)
-      .forEach((r) => {
-        console.log(`  - ${r.name}: ${r.message}`);
-      });
+    results.filter((r) => !r.passed).forEach((r) => {});
   }
-
-  console.log("\n💡 Note: Some tests may fail due to authentication setup.");
-  console.log(
-    "   Replace mockAdminAuth and mockParentAuth with real session tokens.",
-  );
-  console.log("\n✅ All tests completed!");
 }
 
 // Run tests

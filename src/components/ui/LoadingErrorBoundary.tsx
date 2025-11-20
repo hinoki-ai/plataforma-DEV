@@ -54,7 +54,6 @@ export class LoadingErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log error for monitoring
-    console.error("LoadingErrorBoundary caught an error:", error, errorInfo);
 
     // Call error handler if provided
     this.props.onError?.(error, errorInfo);

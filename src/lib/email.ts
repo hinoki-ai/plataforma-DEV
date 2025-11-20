@@ -17,12 +17,6 @@ const createResendClient = () => {
     return {
       emails: {
         send: async (options: any) => {
-          console.info("📨 Email preview (development)", {
-            from: options.from,
-            to: options.to,
-            subject: options.subject,
-            html: options.html?.substring(0, 200) + "...",
-          });
           return { data: { id: "dev-" + Date.now() } };
         },
       },
@@ -120,7 +114,6 @@ export async function sendConfirmationEmail({
 
     return result.data?.id ? true : false;
   } catch (error) {
-    console.error("Error sending confirmation email:", error);
     return false;
   }
 }
@@ -150,7 +143,6 @@ export async function sendWelcomeEmail({
 
     return result.data?.id ? true : false;
   } catch (error) {
-    console.error("Error sending welcome email:", error);
     return false;
   }
 }
@@ -193,7 +185,6 @@ export async function sendContactEmail(
 
     return result.data?.id ? true : false;
   } catch (error) {
-    console.error("Error sending contact email:", error);
     return false;
   }
 }
@@ -233,12 +224,7 @@ export async function sendMeetingRequestNotification(
       recipients = staff
         .map((staffMember) => staffMember.email)
         .filter((email): email is string => Boolean(email?.length));
-    } catch (convexError) {
-      console.warn(
-        "Unable to fetch staff recipients from Convex, falling back to contact recipients:",
-        convexError,
-      );
-    }
+    } catch (convexError) {}
 
     if (!recipients.length) {
       recipients = getContactRecipients();
@@ -256,7 +242,6 @@ export async function sendMeetingRequestNotification(
     await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
-    console.error("Error sending meeting request notification:", error);
     return false;
   }
 }
@@ -278,7 +263,6 @@ export async function sendMeetingConfirmation(
     await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
-    console.error("Error sending meeting confirmation:", error);
     return false;
   }
 }
@@ -314,7 +298,6 @@ export async function sendMeetingStatusUpdate(
     await dispatchMail(transporter, mailOptions);
     return true;
   } catch (error) {
-    console.error("Error sending meeting status update:", error);
     return false;
   }
 }

@@ -49,6 +49,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { developerContacts } from "@/data/developer-contacts";
 import { createBillingMetadata } from "@/data/billing-metadata";
+import { toast } from "sonner";
 
 const numberFormatter = new Intl.NumberFormat("es-CL");
 
@@ -213,31 +214,23 @@ export default function PricingCalculatorPage({
   >("monthly");
 
   const clampStudents = useCallback((value: number) => {
-    // Only clamp to global minimum, allowing values outside plan range
+    // Clamp to global minimum and maximum, but allow values outside current plan range
     // to trigger plan switching or validation warnings
-    return Math.max(1, Math.round(value));
+    const rounded = Math.round(value);
+    return Math.max(1, Math.min(10000, rounded)); // Allow up to 10000 students max
   }, []);
 
-  // Calculate initial students - use autoSelectedPlan to avoid circular dependency
+  // Calculate initial students - use fallback plan to avoid circular dependency
   const initialStudents = useMemo(() => {
     const parsed = resolvedSearchParams.students
       ? Number.parseInt(resolvedSearchParams.students, 10)
       : NaN;
     if (Number.isNaN(parsed)) {
-      return autoSelectedPlan.minStudents;
+      return fallbackPlan.minStudents;
     }
-    // Use autoSelectedPlan for clamping to avoid dependency on selectedPlan
-    const min = autoSelectedPlan.minStudents;
-    const rounded = Math.max(min, Math.round(parsed));
-    if (autoSelectedPlan.maxStudents) {
-      return Math.min(autoSelectedPlan.maxStudents, rounded);
-    }
-    return rounded;
-  }, [
-    resolvedSearchParams.students,
-    autoSelectedPlan.minStudents,
-    autoSelectedPlan.maxStudents,
-  ]);
+    // Use global clamping to avoid dependency on selectedPlan
+    return clampStudents(parsed);
+  }, [resolvedSearchParams.students, fallbackPlan.minStudents, clampStudents]);
 
   // Initialize with fallback plan initially, will be updated when params resolve
   const [students, setStudentsState] = useState<number>(
@@ -348,7 +341,7 @@ export default function PricingCalculatorPage({
     }
   }, [students, manualPlanOverride, selectedPlan.id, billingCycle, updateUrl]);
 
-  // Ensure students is valid when plan changes
+  // Ensure students is valid when plan changes - only clamp to global limits
   useEffect(() => {
     const currentStudents = students;
     const clamped = clampStudents(currentStudents);
@@ -358,13 +351,28 @@ export default function PricingCalculatorPage({
       // Update URL after clamping
       updateUrl(billingCycle, clamped);
     }
-  }, [selectedPlan.id, students, billingCycle, updateUrl, clampStudents]);
+  }, [students, billingCycle, updateUrl, clampStudents]);
 
   // Plan validation
   const planValidation = useMemo(
     () => validatePlanForStudents(selectedPlan, students),
     [selectedPlan, students],
   );
+
+  // Show toast notification when plan validation fails
+  useEffect(() => {
+    if (!planValidation.isValid && planValidation.reasonKey) {
+      toast.warning(
+        tc(planValidation.reasonKey)
+          .replace("{plan}", planValidation.reasonParams?.plan || "")
+          .replace("{min}", planValidation.reasonParams?.min || "")
+          .replace("{max}", planValidation.reasonParams?.max || ""),
+        {
+          description: tc("calculator.plan_validation_description"),
+        },
+      );
+    }
+  }, [planValidation, tc]);
 
   // Check if there's a better plan for current student count
   const recommendedPlan = useMemo(
@@ -912,12 +920,12 @@ export default function PricingCalculatorPage({
                   <div className="text-sm font-semibold text-gray-300">
                     {tc("calculator.payment_frequency")}
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     <Button
                       variant={
                         paymentFrequency === "monthly" ? "default" : "outline"
                       }
-                      className="justify-center py-2 flex-1 min-w-[175px]"
+                      className="justify-center py-2 flex-1 min-w-[155px]"
                       onClick={() => setPaymentFrequency("monthly")}
                       aria-label={tc("calculator.aria.monthly_payment")}
                       aria-pressed={paymentFrequency === "monthly"}
@@ -930,7 +938,7 @@ export default function PricingCalculatorPage({
                       variant={
                         paymentFrequency === "upfront" ? "default" : "outline"
                       }
-                      className="justify-center py-2 relative flex-[1.0] pr-8"
+                      className="justify-center py-2 relative flex-[1.2] pr-8"
                       onClick={() => setPaymentFrequency("upfront")}
                       aria-label={tc("calculator.aria.upfront_payment")}
                       aria-pressed={paymentFrequency === "upfront"}

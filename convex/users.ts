@@ -123,7 +123,6 @@ export const syncFromClerk = internalMutation({
     const email = extractPrimaryEmail(data);
 
     if (!clerkId || !email) {
-      console.warn("Clerk sync missing identifiers", { clerkId, email });
       return;
     }
 
@@ -532,10 +531,6 @@ async function requiresParentRegistration(
 
     return !profile?.registrationComplete;
   } catch (error) {
-    console.warn("Failed to check parent registration status", {
-      userId: user._id,
-      error,
-    });
     return true;
   }
 }

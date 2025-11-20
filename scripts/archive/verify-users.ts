@@ -8,8 +8,6 @@ import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api";
 
 async function verifyUsers() {
-  console.log("🔍 Verifying test users in Convex database...");
-
   const testEmails = [
     "admin@plataforma-astral.com",
     "profesor@plataforma-astral.com",
@@ -31,23 +29,13 @@ async function verifyUsers() {
       const user = await client.query(api.users.getUserByEmail, { email });
 
       if (user) {
-        console.log(`✅ ${user.name} (${user.email})`);
-        console.log(`   Role: ${user.role}`);
-        console.log(`   Active: ${user.isActive}`);
-        console.log(`   Created: ${new Date(user.createdAt).toISOString()}`);
-        console.log("");
       } else {
-        console.log(`❌ User not found: ${email}`);
-        console.log("");
       }
     }
 
     // Count total users
     const userCounts = await client.query(api.users.getUserCountByRole);
-    console.log(`📊 Total users in Convex database: ${userCounts.total}`);
-  } catch (error) {
-    console.error("❌ Error verifying users:", error);
-  }
+  } catch (error) {}
 }
 
 verifyUsers();

@@ -24,7 +24,6 @@ export function PlanningDocumentActions({
       await deletePlanningDocument(documentId);
       // The action will revalidate and redirect automatically
     } catch (error) {
-      console.error("Error deleting document:", error);
       // Error handling - will be handled by parent component or toast notification
       setIsDeleting(false);
       setShowDeleteConfirm(false);

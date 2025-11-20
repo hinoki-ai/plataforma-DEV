@@ -63,8 +63,6 @@ const teamMembers = [
 
 async function seedTeamMembers() {
   try {
-    console.log("🌱 Seeding team members...");
-
     const deploymentUrl = process.env.CONVEX_URL;
     if (!deploymentUrl) {
       throw new Error("CONVEX_URL environment variable is not set");
@@ -87,12 +85,7 @@ async function seedTeamMembers() {
     for (const member of teamMembers) {
       await client.mutation(api.teamMembers.createTeamMember, member);
     }
-
-    console.log("✅ Team members seeded successfully!");
-    console.log(`📊 Created ${teamMembers.length} team members`);
-  } catch (error) {
-    console.error("❌ Error seeding team members:", error);
-  }
+  } catch (error) {}
 }
 
 seedTeamMembers();

@@ -31,7 +31,6 @@ export function formatDateSafe(
       locale: options.locale || es,
     });
   } catch (error) {
-    console.error("Date formatting error:", error);
     return options.placeholder || "Invalid date";
   }
 }
@@ -88,7 +87,6 @@ export function getRelativeTimeSafe(
 
     return formatDateSafe(dateObj);
   } catch (error) {
-    console.error("Relative time error:", error);
     return options.placeholder || "Invalid date";
   }
 }
@@ -105,7 +103,6 @@ export function getLocalStorageSafe<T>(key: string, defaultValue: T): T {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
   } catch (error) {
-    console.error("localStorage read error:", error);
     return defaultValue;
   }
 }
@@ -122,7 +119,6 @@ export function setLocalStorageSafe<T>(key: string, value: T): boolean {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (error) {
-    console.error("localStorage write error:", error);
     return false;
   }
 }
@@ -139,7 +135,6 @@ export function getSessionStorageSafe<T>(key: string, defaultValue: T): T {
     const item = sessionStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
   } catch (error) {
-    console.error("sessionStorage read error:", error);
     return defaultValue;
   }
 }
@@ -156,7 +151,6 @@ export function setSessionStorageSafe<T>(key: string, value: T): boolean {
     sessionStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (error) {
-    console.error("sessionStorage write error:", error);
     return false;
   }
 }

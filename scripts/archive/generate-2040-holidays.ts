@@ -224,34 +224,12 @@ function generateExtendedHolidays() {
 if (require.main === module) {
   const extendedHolidays = generateExtendedHolidays();
 
-  console.log("🎄 EXTENDED CHILEAN HOLIDAYS 2031-2040");
-  console.log("=====================================");
-  console.log(`Generated ${extendedHolidays.length} holidays for 2031-2040`);
-  console.log(`Total holidays per year: ${extendedHolidays.length / 10}`);
-  console.log("");
-
   // Show sample for 2031
-  console.log("📅 Sample holidays for 2031:");
+
   const holidays2031 = extendedHolidays.filter((h) => h.id.includes("-2031"));
-  holidays2031.forEach((holiday) => {
-    console.log(`${holiday.date}: ${holiday.name}`);
-  });
+  holidays2031.forEach((holiday) => {});
 
   // Export for use in calendar
-  console.log("");
-  console.log(
-    "📤 Generated holidays ready for integration into comprehensive-calendar.ts",
-  );
 
   // You can use this data to update the calendar file
-  console.log(
-    "Copy the following array into chileanHolidays in comprehensive-calendar.ts:",
-  );
-  console.log("");
-  console.log(
-    "// ==================== 2031-2040 HOLIDAYS ====================",
-  );
-  console.log("...existing 2024-2030 holidays,");
-  console.log("// Add these extended holidays:");
-  console.log(JSON.stringify(extendedHolidays, null, 2));
 }

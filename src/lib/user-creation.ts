@@ -297,8 +297,6 @@ export function logUserCreation(
   };
 
   if (success) {
-    console.log(`✅ User Creation: ${action}`, logData);
   } else {
-    console.error(`❌ User Creation Failed: ${action}`, logData);
   }
 }

@@ -10,7 +10,6 @@ import { api } from "../convex/_generated/api";
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL!;
 
 if (!CONVEX_URL) {
-  console.error("❌ NEXT_PUBLIC_CONVEX_URL not found in environment");
   process.exit(1);
 }
 
@@ -29,15 +28,12 @@ const CORRECT_HASHES = {
 };
 
 async function fixPasswords() {
-  console.log("🔧 Fixing user passwords...\n");
-
   for (const [email, correctHash] of Object.entries(CORRECT_HASHES)) {
     try {
       // Get user by email
       const user = await client.query(api.users.getUserByEmail, { email });
 
       if (!user) {
-        console.log(`⚠️  User not found: ${email}`);
         continue;
       }
 
@@ -46,24 +42,12 @@ async function fixPasswords() {
         id: user._id,
         password: correctHash,
       });
-
-      console.log(`✅ Updated password for: ${email}`);
-    } catch (error) {
-      console.error(`❌ Error updating ${email}:`, error);
-    }
+    } catch (error) {}
   }
-
-  console.log("\n✨ Password fix complete!");
-  console.log("\nTest credentials:");
-  console.log("- master@plataforma-astral.com / master123");
-  console.log("- admin@plataforma-astral.com / admin123");
-  console.log("- profesor@plataforma-astral.com / profesor123");
-  console.log("- parent@plataforma-astral.com / parent123");
 }
 
 fixPasswords()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error("Fatal error:", error);
     process.exit(1);
   });

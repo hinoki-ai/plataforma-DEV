@@ -50,7 +50,6 @@ const useConvexAuth = () => {
 
         return token;
       } catch (error) {
-        console.error("Error fetching access token:", error);
         setCachedToken(null);
         setTokenExpiry(null);
         return null;
@@ -81,7 +80,6 @@ const convex = new ConvexReactClient(convexUrl, {
       ) {
         return; // Suppress connection-related logs
       }
-      console.log(...args);
     },
     warn: (...args: any[]) => {
       const message = args.join(" ");
@@ -91,7 +89,6 @@ const convex = new ConvexReactClient(convexUrl, {
         !message.includes("Reconnecting") &&
         !message.includes("WebSocket")
       ) {
-        console.warn(...args);
       }
     },
     error: (...args: any[]) => console.error(...args),

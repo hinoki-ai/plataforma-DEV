@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useLanguage } from "./LanguageContext";
+import { useDivineParsing } from "./ChunkedLanguageProvider";
 
 export function LanguageHtmlUpdater() {
-  const { language } = useLanguage();
+  const { language } = useDivineParsing([]);
 
   useEffect(() => {
     // Only update on client side to avoid hydration mismatches

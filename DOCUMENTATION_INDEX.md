@@ -104,11 +104,16 @@ Plataforma Astral is a comprehensive SaaS educational management platform built 
 
 - **[START_HERE.md](./START_HERE.md)** - First-time setup and development environment
 - **[CLAUDE.md](./CLAUDE.md)** - AI Assistant development guidelines
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Complete contributor guide and development standards
 - **[BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md)** - Git workflow and branching strategy
 
 ### 🏗️ Architecture & Technical
 
 - **[docs/AI_KNOWLEDGE_BASE.md](./docs/AI_KNOWLEDGE_BASE.md)** - **PRIMARY: Complete current system documentation**
+- **[docs/API_REFERENCE.md](./docs/API_REFERENCE.md)** - Complete Convex backend API reference with examples
+- **[docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide for common issues
+- **[docs/FAQ.md](./docs/FAQ.md)** - Frequently asked questions and answers
+- **[docs/PERFORMANCE_GUIDE.md](./docs/PERFORMANCE_GUIDE.md)** - Performance optimization and best practices
 - **[docs/ENVIRONMENT.md](./docs/ENVIRONMENT.md)** - Environment configuration and deployment
 - **[docs/ANIMATION_GUIDE.md](./docs/ANIMATION_GUIDE.md)** - UI animation patterns
 
@@ -308,7 +313,7 @@ npm run verify-deployment  # Verify deployment readiness
 
 ### 📜 Historical Documentation
 
-- **[archive/MIGRATION.md](./archive/MIGRATION.md)** - Historical reference: Prisma to Convex migration guide (migration complete)
+- **[.archive/old-backups/MIGRATION.md](./.archive/old-backups/MIGRATION.md)** - Historical reference: Prisma to Convex migration guide (migration complete)
 
 ---
 

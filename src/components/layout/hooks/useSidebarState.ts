@@ -14,9 +14,7 @@ function readPersistedState() {
     if (raw !== null) {
       return JSON.parse(raw) as boolean;
     }
-  } catch (error) {
-    console.warn("Failed to read sidebar state from storage", error);
-  }
+  } catch (error) {}
 
   return window.innerWidth < 768;
 }
@@ -33,9 +31,7 @@ export function useSidebarState(isHydrated: boolean) {
 
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(manualState));
-    } catch (error) {
-      console.warn("Failed to persist sidebar state", error);
-    }
+    } catch (error) {}
   }, [manualState, isHydrated]);
 
   const setIsSidebarCollapsed = useCallback(

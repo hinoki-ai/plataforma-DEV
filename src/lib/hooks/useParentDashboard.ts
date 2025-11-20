@@ -294,7 +294,6 @@ export function useRealTimeUpdates() {
         });
         setConnected(true);
       } catch (err) {
-        console.error("Failed to setup real-time updates:", err);
         setConnected(false);
       }
     };

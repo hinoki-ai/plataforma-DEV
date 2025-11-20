@@ -55,7 +55,6 @@ function LoginForm() {
     try {
       // Check if Clerk is loaded before proceeding
       if (!isLoaded) {
-        console.warn("Clerk not loaded yet, retrying...");
         // Wait a bit and try again, or show an error
         setTimeout(() => {
           if (!isLoaded) {
@@ -68,27 +67,21 @@ function LoginForm() {
         return;
       }
 
-      console.log("Attempting sign in for:", email);
       const result = await signIn.create({
         identifier: email,
         password,
       });
 
-      console.log("Sign in result:", result);
-
       if (result.status === "complete") {
-        console.log("Sign in complete, setting active session");
         await setActive({ session: result.createdSessionId });
         const target = callbackUrl ?? "/auth-success";
-        console.log("Redirecting to:", target);
+
         router.replace(target);
         return;
       }
 
-      console.error("Unexpected sign-in status:", result);
       setError(t("auth.login_error"));
     } catch (err) {
-      console.error("Error signing in:", err);
       if (isClerkAPIResponseError(err)) {
         const firstError = err.errors?.[0];
         if (

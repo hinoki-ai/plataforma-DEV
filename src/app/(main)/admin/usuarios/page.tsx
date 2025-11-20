@@ -75,7 +75,6 @@ export default function UsersPage() {
         setUsers(data);
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
@@ -116,7 +115,6 @@ export default function UsersPage() {
         );
       }
     } catch (error) {
-      console.error("Error creating user:", error);
       toast.error(`❌ ${t("admin.usuarios.create_error", "admin")}`, {
         description: t("admin.usuarios.verify_data", "admin"),
       });
@@ -147,7 +145,6 @@ export default function UsersPage() {
         );
       }
     } catch (error) {
-      console.error("Error creating parent user:", error);
       toast.error(`❌ ${t("admin.usuarios.create_parent_error", "admin")}`, {
         description: t("admin.usuarios.verify_data", "admin"),
       });
@@ -182,9 +179,7 @@ export default function UsersPage() {
         setIsEditDialogOpen(false);
         setSelectedUser(null);
       }
-    } catch (error) {
-      console.error("Error updating user:", error);
-    }
+    } catch (error) {}
   };
 
   const handleDeleteUser = async (userId: string) => {
@@ -200,9 +195,7 @@ export default function UsersPage() {
       if (response.ok) {
         setUsers(users.filter((user) => user.id !== userId));
       }
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
+    } catch (error) {}
   };
 
   const openEditDialog = (user: User) => {

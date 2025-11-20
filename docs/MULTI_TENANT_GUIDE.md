@@ -87,6 +87,7 @@ npx tsx scripts/add-manitos-pintadas.ts
 
 1. Go to Convex Dashboard → Functions
 2. Run `institutionInfo.createInstitution` with:
+
    ```json
    {
      "name": "Manitos Pintadas",
@@ -111,6 +112,7 @@ After creating the institution, create memberships:
 
 2. **Create membership**:
    - Insert into `institutionMemberships` table:
+
      ```json
      {
        "institutionId": "<institution-id>",

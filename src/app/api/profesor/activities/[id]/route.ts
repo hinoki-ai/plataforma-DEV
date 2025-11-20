@@ -109,7 +109,6 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error fetching activity:", error);
     return NextResponse.json(
       { error: "Error al obtener actividad" },
       { status: 500 },
@@ -215,7 +214,6 @@ export async function PUT(
       );
     }
 
-    console.error("Error updating activity:", error);
     return NextResponse.json(
       { error: "Error al actualizar actividad" },
       { status: 500 },
@@ -280,7 +278,6 @@ export async function DELETE(
       message: "Actividad eliminada exitosamente",
     });
   } catch (error) {
-    console.error("Error deleting activity:", error);
     return NextResponse.json(
       { error: "Error al eliminar actividad" },
       { status: 500 },

@@ -90,8 +90,6 @@ export async function apiRequest<T = unknown>(
       message: data.message,
     };
   } catch (error) {
-    console.error("API Request failed:", { url, method, error });
-
     if (error instanceof ApiError) {
       return {
         success: false,
@@ -219,8 +217,6 @@ export async function apiUpload<T = unknown>(
       message: data.message,
     };
   } catch (error) {
-    console.error("Upload failed:", { url, file: file.name, error });
-
     if (error instanceof ApiError) {
       return {
         success: false,

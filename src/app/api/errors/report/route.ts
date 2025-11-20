@@ -108,7 +108,6 @@ export async function POST(request: NextRequest) {
       }
     } catch (authError) {
       // Authentication is optional for error reporting
-      console.warn("Could not get auth info for error report:", authError);
     }
 
     // Enhanced error report
@@ -153,9 +152,7 @@ export async function POST(request: NextRequest) {
 
     // Log critical errors to console for immediate attention
     if (analysis.severity === "critical") {
-      console.error("🚨 CRITICAL ERROR REPORTED:", logData);
     } else if (analysis.severity === "high") {
-      console.warn("⚠️ HIGH PRIORITY ERROR:", logData);
     }
 
     // Prepare response
@@ -180,8 +177,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response, { status: statusCode });
   } catch (error) {
-    console.error("Error processing error report:", error);
-
     // Log the error processing failure
     dbLogger.error("Error Report Processing Failed", error, {
       context: "ErrorReportingAPI",
@@ -283,7 +278,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error("Error retrieving error reports:", error);
     return NextResponse.json(
       { error: "Failed to retrieve error reports" },
       { status: 500 },

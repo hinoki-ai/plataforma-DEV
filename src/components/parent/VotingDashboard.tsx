@@ -71,7 +71,6 @@ function VotingDashboardComponent({ className = "" }: VotingDashboardProps) {
         toast.error(t("parent.voting.error.loading", "parent"));
       }
     } catch (error) {
-      console.error("Error fetching votes:", error);
       setError(t("parent.voting.error.loading", "parent"));
       toast.error(t("parent.voting.error.loading", "parent"));
     } finally {
@@ -100,7 +99,6 @@ function VotingDashboardComponent({ className = "" }: VotingDashboardProps) {
         toast.error(error.error || t("parent.voting.error.loading", "parent"));
       }
     } catch (error) {
-      console.error("Error submitting vote:", error);
       toast.error(t("parent.voting.error.loading", "parent"));
     } finally {
       setVoting(null);

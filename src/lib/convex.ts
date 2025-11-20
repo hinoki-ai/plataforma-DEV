@@ -9,9 +9,6 @@ import { ConvexHttpClient } from "convex/browser";
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL;
 
 if (!CONVEX_URL) {
-  console.error(
-    "❌ NEXT_PUBLIC_CONVEX_URL not configured - authentication will fail",
-  );
 }
 
 // Create HTTP client for server-side operations
@@ -20,11 +17,8 @@ let convexHttpClient: ConvexHttpClient | null = null;
 try {
   if (CONVEX_URL) {
     convexHttpClient = new ConvexHttpClient(CONVEX_URL);
-    console.log("✅ Convex client initialized:", CONVEX_URL);
   }
-} catch (error) {
-  console.error("❌ Failed to initialize Convex client:", error);
-}
+} catch (error) {}
 
 // Helper function to get authenticated Convex client
 export function getConvexClient(token?: string): ConvexHttpClient {

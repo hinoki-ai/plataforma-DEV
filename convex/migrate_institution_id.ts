@@ -23,7 +23,6 @@ export const migrateInstitutionIds = mutation({
     }
 
     const institutionId = defaultInstitution._id;
-    console.log(`Using institution ${institutionId} as default for migration`);
 
     let totalCount = 0;
 
@@ -80,11 +79,8 @@ export const migrateInstitutionIds = mutation({
           }
         }
         if (count > 0) {
-          console.log(`Migrated ${count} records in ${tableName}`);
         }
-      } catch (error) {
-        console.warn(`Failed to migrate table ${tableName}:`, error);
-      }
+      } catch (error) {}
     }
 
     return {

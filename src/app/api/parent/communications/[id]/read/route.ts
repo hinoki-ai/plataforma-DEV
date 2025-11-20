@@ -60,7 +60,6 @@ export async function PUT(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error marking communication as read:", error);
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 },

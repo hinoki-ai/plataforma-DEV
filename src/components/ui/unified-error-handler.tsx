@@ -626,7 +626,6 @@ function getSeverityLabel(severity: ErrorSeverity): string {
 // Export convenience functions
 export function showError(error: any, options?: Partial<ErrorInfo>) {
   // This would integrate with your toast/notification system
-  console.error("Unified Error:", error, options);
 }
 
 export function createErrorHandler(defaultOptions?: Partial<ErrorInfo>) {

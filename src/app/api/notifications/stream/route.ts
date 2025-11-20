@@ -43,7 +43,6 @@ export async function GET(request: NextRequest) {
               })}\n\n`;
               controller.enqueue(new TextEncoder().encode(heartbeatData));
             } catch (error) {
-              console.error("Error sending heartbeat:", error);
               if (heartbeat) {
                 clearInterval(heartbeat);
                 heartbeat = null;
@@ -151,7 +150,6 @@ export async function GET(request: NextRequest) {
                 const dashboardDataStr = `data: ${JSON.stringify(dashboardData)}\n\n`;
                 controller.enqueue(new TextEncoder().encode(dashboardDataStr));
               } catch (error) {
-                console.error("Error sending dashboard update:", error);
                 // Don't close connection on dashboard update errors, just skip this update
               }
             }, 5000); // Update every 5 seconds
@@ -174,7 +172,6 @@ export async function GET(request: NextRequest) {
             }
           });
         } catch (error) {
-          console.error("Error in SSE stream start:", error);
           try {
             controller.close();
           } catch (closeError) {
@@ -204,7 +201,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error in notifications stream:", error);
     return new Response("Internal server error", { status: 500 });
   }
 }

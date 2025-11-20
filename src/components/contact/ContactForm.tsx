@@ -104,7 +104,6 @@ export function ContactForm() {
       );
       reset();
     } catch (error) {
-      console.error("Error submitting contact form:", error);
       toast.error(t("form.error.general", "contacto"));
       announce(
         "Error de conexión. Por favor verifica tu conexión a internet e intenta nuevamente.",

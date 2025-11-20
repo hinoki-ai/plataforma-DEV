@@ -42,7 +42,6 @@ export async function getPlanningDocuments(
     const adaptedDocs = docs.map(adaptPlanningDocumentForDashboard);
     return { success: true, data: adaptedDocs };
   } catch (error) {
-    console.error("Failed to fetch planning documents:", error);
     return {
       success: false,
       error: "No se pudieron cargar los documentos",
@@ -64,7 +63,6 @@ export async function getPlanningDocumentById(id: string) {
 
     return { success: true, data: doc };
   } catch (error) {
-    console.error("Failed to fetch planning document:", error);
     return { success: false, error: "No se pudo cargar el documento" };
   }
 }

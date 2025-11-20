@@ -9,8 +9,6 @@ import { api } from "../convex/_generated/api";
 import { hashUserPassword, logUserCreation } from "../src/lib/user-creation";
 
 async function createMasterUser() {
-  console.log("🔑 Creating master user...");
-
   try {
     const deploymentUrl = process.env.CONVEX_URL;
     if (!deploymentUrl) {
@@ -46,18 +44,10 @@ async function createMasterUser() {
         true,
       );
 
-      console.log("✅ Master user created:");
-      console.log(`📧 Email: ${masterEmail}`);
-      console.log(`🔑 Password: ${masterPassword}`);
-      console.log(`👤 Role: MASTER`);
-      console.log("🔒 Password is securely hashed in database");
-
       return result;
     } catch (error: any) {
       // If user already exists, try to update it
       if (error.message?.includes("already exists")) {
-        console.log("⚠️  Master user already exists, updating password...");
-
         // Get the user first
         const existingUser = await client.query(api.users.getUserByEmail, {
           email: masterEmail,
@@ -71,24 +61,16 @@ async function createMasterUser() {
             name: "Master Administrator",
           });
 
-          console.log("✅ Master user updated:");
-          console.log(`📧 Email: ${masterEmail}`);
-          console.log(`🔑 Password: ${masterPassword}`);
-          console.log(`👤 Role: ${existingUser.role}`);
-          console.log("🔒 Password is securely hashed in database");
-
           return updatedUser;
         }
       }
       throw error;
     }
   } catch (error) {
-    console.error("❌ Failed to create master user:", error);
     throw error;
   }
 }
 
 createMasterUser().catch((error) => {
-  console.error("Fatal error during master user creation:", error);
   process.exit(1);
 });

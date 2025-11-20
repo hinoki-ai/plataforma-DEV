@@ -171,17 +171,13 @@ export function useDashboardData() {
         if (!response.ok) {
           // Handle authentication errors differently from server errors
           if (response.status === 401) {
-            console.warn("User not authenticated for dashboard access");
             setError(t("error.unauthorized.title"));
             setStats(getMockData(session?.user?.role));
             setLoading(false);
             return;
           }
           // Gracefully handle server errors by falling back to mock data
-          console.warn(
-            "Dashboard endpoint returned non-OK status:",
-            response.status,
-          );
+
           setError(`${t("error.server_unavailable")} (${response.status}).`);
           setStats(getMockData(session?.user?.role));
           setLoading(false);
@@ -191,7 +187,6 @@ export function useDashboardData() {
         const data = await response.json();
         setStats(data);
       } catch (err) {
-        console.error("Error fetching dashboard data:", err);
         setError(t("dashboard.error.loading"));
 
         // Fallback to mock data on error

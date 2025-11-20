@@ -103,8 +103,6 @@ export function EducationalInstitutionSelector({
         );
       }
     } catch (error) {
-      console.error("Error saving configuration:", error);
-
       // Handle network errors
       if (error instanceof TypeError && error.message.includes("fetch")) {
         toast.error(t("educational_system.connection_error"));

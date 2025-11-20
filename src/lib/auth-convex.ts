@@ -51,11 +51,6 @@ export async function authenticateUser(
     const isValidPassword = await bcryptjs.compare(password, user.password);
 
     if (!isValidPassword || !user.isActive) {
-      console.warn("🚫 Authentication rejected", {
-        email,
-        isValidPassword,
-        isActive: user.isActive,
-      });
       return null;
     }
 
@@ -74,13 +69,6 @@ export async function authenticateUser(
       } catch (error) {
         // If no parent profile exists, they need registration
         needsRegistration = true;
-        console.warn("📝 Parent registration lookup failed", {
-          email,
-          message:
-            error instanceof Error
-              ? error.message
-              : "Unknown registration error",
-        });
       }
     }
 
@@ -97,10 +85,6 @@ export async function authenticateUser(
       isOAuthUser: user.isOAuthUser,
     };
   } catch (error) {
-    console.error("💥 authenticateUser() threw", {
-      email,
-      error,
-    });
     return null;
   }
 }
@@ -130,7 +114,6 @@ export async function findUserByEmail(email: string): Promise<User | null> {
       isActive: user.isActive,
     };
   } catch (error) {
-    console.error("Find user error:", error);
     return null;
   }
 }
@@ -161,7 +144,6 @@ export async function findUserById(
       isActive: user.isActive,
     };
   } catch (error) {
-    console.error("Find user by ID error:", error);
     return null;
   }
 }

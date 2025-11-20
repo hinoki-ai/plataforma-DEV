@@ -89,9 +89,7 @@ export function useAccessibilitySettings() {
         const parsed = JSON.parse(saved);
         return { ...DEFAULT_SETTINGS, ...parsed };
       }
-    } catch (error) {
-      console.error("Failed to load accessibility settings:", error);
-    }
+    } catch (error) {}
     return DEFAULT_SETTINGS;
   });
   const [isLoaded, setIsLoaded] = useState(true);
@@ -107,9 +105,7 @@ export function useAccessibilitySettings() {
           "accessibility-settings",
           JSON.stringify(updatedSettings),
         );
-      } catch (error) {
-        console.error("Failed to save accessibility settings:", error);
-      }
+      } catch (error) {}
     },
     [settings],
   );

@@ -64,7 +64,6 @@ export function useNotifications() {
           data.notifications?.filter((n: Notification) => !n.read).length || 0,
         );
       } catch (err) {
-        console.error("Error fetching notifications:", err);
         setError(
           err instanceof Error ? err.message : "Failed to fetch notifications",
         );
@@ -124,7 +123,6 @@ export function useNotifications() {
               ).length,
         );
       } catch (err) {
-        console.error("Error marking notifications as read:", err);
         setError(
           err instanceof Error
             ? err.message
@@ -165,7 +163,6 @@ export function useNotifications() {
         const result = await response.json();
         return result;
       } catch (err) {
-        console.error("Error creating notification:", err);
         const errorMessage =
           err instanceof Error ? err.message : "Failed to create notification";
         setError(errorMessage);
@@ -248,30 +245,22 @@ export function useNotifications() {
               // Update dashboard data for real-time updates
               setDashboardData(data.data);
             }
-          } catch (err) {
-            console.error("Error parsing SSE data:", err);
-          }
+          } catch (err) {}
         };
 
         es.onopen = () => {
-          console.log("SSE connection established");
           reconnectAttempts = 0; // Reset attempts on successful connection
           setEventSource(es);
           setError(null); // Clear any previous errors
 
           // For master users, send initial dashboard data
           if (session?.user?.role === "MASTER") {
-            console.log(
-              "Master user connected - enabling real-time dashboard updates",
-            );
           }
         };
 
         es.onerror = (error) => {
           // Check if the connection is closed (readyState 2 = CLOSED)
           if (es.readyState === EventSource.CLOSED) {
-            console.error("SSE connection closed");
-
             // Only attempt to reconnect if we haven't exceeded max attempts and we're not cleaning up
             if (!isCleaningUp && reconnectAttempts < maxReconnectAttempts) {
               reconnectAttempts++;
@@ -280,17 +269,12 @@ export function useNotifications() {
                 30000,
               ); // Exponential backoff, max 30s
 
-              console.log(
-                `Attempting to reconnect SSE in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})`,
-              );
-
               reconnectTimeout = setTimeout(() => {
                 if (!isCleaningUp) {
                   createEventSource();
                 }
               }, delay);
             } else if (reconnectAttempts >= maxReconnectAttempts) {
-              console.log("Max SSE reconnection attempts reached. Giving up.");
               setError(
                 "Real-time notifications unavailable. Please refresh the page.",
               );
@@ -298,13 +282,11 @@ export function useNotifications() {
           } else {
             // Connection is still open (readyState 0 = CONNECTING, 1 = OPEN)
             // This might be a temporary network issue, wait and see
-            console.warn("SSE connection error, but connection still open");
           }
         };
 
         return es;
       } catch (err) {
-        console.error("Failed to create EventSource:", err);
         setError("Failed to establish real-time connection");
         return null;
       }

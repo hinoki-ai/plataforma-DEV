@@ -304,9 +304,7 @@ export function useAdvancedData<T = any>(
   const prefetch = useCallback(async (prefetchUrl: string): Promise<void> => {
     try {
       await globalCache.prefetch(prefetchUrl);
-    } catch (error) {
-      console.warn("Prefetch failed:", error);
-    }
+    } catch (error) {}
   }, []);
 
   // Manual refetch
@@ -459,7 +457,6 @@ export function useRealTimeData<T>(
       wsRef.current.onopen = () => {
         setIsConnected(true);
         reconnectAttemptsRef.current = 0; // Reset attempts on successful connection
-        console.log("WebSocket connected for real-time data");
       };
 
       wsRef.current.onmessage = (event) => {
@@ -469,9 +466,7 @@ export function useRealTimeData<T>(
             baseResult.updateCache(update.payload);
             setLastUpdate(new Date());
           }
-        } catch (error) {
-          console.error("Failed to parse WebSocket message:", error);
-        }
+        } catch (error) {}
       };
 
       wsRef.current.onclose = () => {
@@ -483,10 +478,6 @@ export function useRealTimeData<T>(
           const delay = Math.min(
             reconnectInterval * Math.pow(2, reconnectAttemptsRef.current - 1),
             30000, // Max 30 seconds
-          );
-
-          console.log(
-            `WebSocket disconnected, reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current}/${maxReconnectAttempts})`,
           );
 
           // Clear any existing timeout
@@ -501,17 +492,13 @@ export function useRealTimeData<T>(
             }
           }, delay);
         } else {
-          console.log("Max WebSocket reconnection attempts reached");
         }
       };
 
       wsRef.current.onerror = (error) => {
-        console.error("WebSocket error:", error);
         setIsConnected(false);
       };
-    } catch (error) {
-      console.error("Failed to create WebSocket connection:", error);
-    }
+    } catch (error) {}
   }, [enableWebSocket, webSocketUrl, reconnectInterval, baseResult]);
 
   useEffect(() => {

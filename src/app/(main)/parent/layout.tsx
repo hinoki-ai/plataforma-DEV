@@ -23,9 +23,6 @@ export default function ParentLayout({
       if (!loadingTimeoutRef.current) {
         loadingTimeoutRef.current = setTimeout(() => {
           if (!hasRedirectedRef.current) {
-            console.warn(
-              "Session loading timeout, redirecting to login for safety",
-            );
             hasRedirectedRef.current = true;
             router.replace("/login");
           }
@@ -42,7 +39,6 @@ export default function ParentLayout({
     if (status === "unauthenticated" || !session) {
       if (!hasRedirectedRef.current) {
         if (process.env.NODE_ENV === "development") {
-          console.warn("No active session found, redirecting to login");
         }
         hasRedirectedRef.current = true;
         router.replace("/login");
@@ -52,7 +48,6 @@ export default function ParentLayout({
 
     if (!session?.user?.role) {
       if (!hasRedirectedRef.current) {
-        console.warn("Session missing user role, redirecting to login");
         hasRedirectedRef.current = true;
         router.replace("/login");
       }
@@ -64,9 +59,6 @@ export default function ParentLayout({
     // MASTER has access to all sections
     if (!roleAccess.canAccessParent && session.user.role !== "MASTER") {
       if (!hasRedirectedRef.current) {
-        console.warn(
-          `Access denied to parent section for role: ${session.user.role}`,
-        );
         hasRedirectedRef.current = true;
         router.replace("/unauthorized");
       }

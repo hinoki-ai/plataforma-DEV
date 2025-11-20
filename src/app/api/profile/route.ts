@@ -13,11 +13,6 @@ const profileUpdateSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     // Debug: Check environment variables
-    console.log("Profile API Debug:", {
-      hasConvexUrl: !!process.env.NEXT_PUBLIC_CONVEX_URL,
-      convexUrl: process.env.NEXT_PUBLIC_CONVEX_URL?.substring(0, 50) + "...",
-      nodeEnv: process.env.NODE_ENV,
-    });
 
     const session = await auth();
 
@@ -72,12 +67,6 @@ export async function GET(request: NextRequest) {
       preferences,
     });
   } catch (error) {
-    console.error("Error fetching profile:", error);
-    console.error("Error details:", {
-      message: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      name: error instanceof Error ? error.name : undefined,
-    });
     return NextResponse.json(
       {
         error: "Internal server error",
@@ -177,7 +166,6 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    console.error("Error updating profile:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

@@ -162,7 +162,6 @@ export function SignatureModal({
       onSuccess?.();
       onClose();
     } catch (error: any) {
-      console.error("Error creating signature:", error);
       toast.error(
         error.message || t("digital-signatures.signature.signature_error"),
       );

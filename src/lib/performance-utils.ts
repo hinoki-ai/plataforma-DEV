@@ -278,7 +278,6 @@ export const lazyWithErrorBoundary = <T extends React.ComponentType<any>>(
 ) => {
   return React.lazy(() =>
     importFn().catch((error) => {
-      console.error("Error loading component:", error);
       return { default: ErrorFallback as any };
     }),
   );

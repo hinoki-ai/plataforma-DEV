@@ -173,7 +173,6 @@ function CrearActividadContent() {
         setError(data.error || "Error al crear la actividad");
       }
     } catch (err) {
-      console.error("Error creating activity:", err);
       setError("Error al crear la actividad");
     } finally {
       setLoading(false);

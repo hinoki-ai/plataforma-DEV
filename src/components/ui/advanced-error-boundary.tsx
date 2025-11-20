@@ -63,11 +63,6 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
       errorId: this.state.errorId,
     };
 
-    console.error("Advanced Error Boundary caught an error:", {
-      error,
-      errorInfo: enhancedErrorInfo,
-    });
-
     this.setState({ errorInfo: enhancedErrorInfo });
 
     // Report error to external service if configured
@@ -121,9 +116,7 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reportData),
       });
-    } catch (reportError) {
-      console.error("Failed to report error:", reportError);
-    }
+    } catch (reportError) {}
   };
 
   private handleRetry = () => {
@@ -313,8 +306,6 @@ export function withAdvancedErrorBoundary<P extends object>(
 // React Hook for functional components
 export function useErrorHandler() {
   return (error: Error, errorInfo?: { componentStack?: string }) => {
-    console.error("Error caught by useErrorHandler:", error, errorInfo);
-
     // Could integrate with error reporting service here
     if (typeof window !== "undefined") {
       // Store error in session storage for debugging

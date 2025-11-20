@@ -156,13 +156,12 @@ export function MeetingForm({
         const response = await fetch("/api/profesores");
         if (!response.ok) {
           const errorText = await response.text();
-          console.error("Failed to fetch users:", response.status, errorText);
+
           throw new Error(`Failed to fetch users: ${response.status}`);
         }
         const data = await response.json();
         setUsers(Array.isArray(data.data) ? data.data : []);
       } catch (error) {
-        console.error("Error fetching users:", error);
         setUsers([]);
       } finally {
         setUsersLoading(false);
@@ -258,7 +257,6 @@ export function MeetingForm({
       onSuccess?.();
       onClose();
     } catch (error) {
-      console.error("Error saving meeting:", error);
       announce(t("form.error", "meetings"), "assertive");
     } finally {
       setIsSubmitting(false);

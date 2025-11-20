@@ -170,9 +170,6 @@ export function useLoadingState(
 
       // Set up timeout for maximum loading time
       const timeoutId = setTimeout(() => {
-        console.warn(
-          `Loading operation ${id} exceeded maximum time (${maxLoadingTime}ms)`,
-        );
         stopLoading(
           id,
           "La operación tardó demasiado tiempo. Inténtelo de nuevo.",

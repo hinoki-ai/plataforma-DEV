@@ -61,19 +61,14 @@ export const GET = createApiRoute(
 
     // Log any errors for debugging
     if (teacherInfo.status === "rejected") {
-      console.error("Error fetching teacher info:", teacherInfo.reason);
     }
     if (studentsData.status === "rejected") {
-      console.error("Error fetching students data:", studentsData.reason);
     }
     if (planningData.status === "rejected") {
-      console.error("Error fetching planning data:", planningData.reason);
     }
     if (meetingsData.status === "rejected") {
-      console.error("Error fetching meetings data:", meetingsData.reason);
     }
     if (coursesData.status === "rejected") {
-      console.error("Error fetching courses data:", coursesData.reason);
     }
 
     const now = Date.now();
@@ -105,10 +100,6 @@ export const GET = createApiRoute(
             ...stats,
           };
         } catch (error) {
-          console.error(
-            `Error getting coverage stats for course ${course._id}:`,
-            error,
-          );
           return {
             courseId: course._id,
             courseName: course.name,

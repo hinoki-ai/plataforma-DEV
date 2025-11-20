@@ -33,7 +33,6 @@ export async function getTeamMembers(isActive?: boolean) {
     const adaptedMembers = members.map(adaptTeamMember);
     return { success: true, data: adaptedMembers };
   } catch (error) {
-    console.error("Failed to fetch team members:", error);
     return {
       success: false,
       error: "No se pudieron cargar los miembros del equipo",
@@ -56,7 +55,6 @@ export async function getTeamMemberById(id: string) {
     const adaptedMember = adaptTeamMember(member);
     return { success: true, data: adaptedMember };
   } catch (error) {
-    console.error("Failed to fetch team member:", error);
     return { success: false, error: "No se pudo cargar el miembro" };
   }
 }

@@ -8,13 +8,13 @@
 
 ## 📍 Quick Navigation
 
-| I want to...                              | Go to...                                           |
-| ----------------------------------------- | -------------------------------------------------- |
-| **Set up the project for the first time** | [First Time Setup](#-first-time-setup-10-minutes)  |
-| **Understand the Convex migration**       | [archive/MIGRATION.md](./archive/MIGRATION.md)     |
-| **See all documentation**                 | [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) |
-| **Deploy to production**                  | [DEPLOYMENT.md](./DEPLOYMENT.md)                   |
-| **Work on the codebase (AI)**             | [CLAUDE.md](./CLAUDE.md)                           |
+| I want to...                              | Go to...                                                                 |
+| ----------------------------------------- | ------------------------------------------------------------------------ |
+| **Set up the project for the first time** | [First Time Setup](#-first-time-setup-10-minutes)                        |
+| **Understand the Convex migration**       | [.archive/old-backups/MIGRATION.md](./.archive/old-backups/MIGRATION.md) |
+| **See all documentation**                 | [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)                       |
+| **Deploy to production**                  | [DEPLOYMENT.md](./DEPLOYMENT.md)                                         |
+| **Work on the codebase (AI)**             | [CLAUDE.md](./CLAUDE.md)                                                 |
 
 ---
 
@@ -129,7 +129,7 @@ plataforma-astral/
 - **Real-time features**: Convex-powered live updates
 - **Production ready**: System deployed and stable
 
-**Historical reference**: See [archive/MIGRATION.md](./archive/MIGRATION.md) for migration details (migration complete).
+**Historical reference**: See [.archive/old-backups/MIGRATION.md](./.archive/old-backups/MIGRATION.md) for migration details (migration complete).
 
 ---
 
@@ -162,27 +162,30 @@ npm run type-check
 ### Testing
 
 ```bash
-# Run all tests
-npm run test:all
+# Unit tests
+npm run test
 
-# Unit tests only
-npm run test:unit
+# Unit tests in watch mode
+npm run test:watch
 
-# E2E tests only
+# E2E tests
 npm run test:e2e
+
+# E2E tests with UI
+npm run test:e2e:ui
 ```
 
 ### Convex Commands
 
 ```bash
 # Start Convex dev server
-npx convex dev
+npm run convex:dev
 
 # Open Convex dashboard
-npx convex dashboard
+npm run convex:dashboard
 
 # Deploy to production
-npx convex deploy
+npm run convex:deploy
 ```
 
 ---

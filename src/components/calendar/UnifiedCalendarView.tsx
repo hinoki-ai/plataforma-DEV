@@ -503,7 +503,6 @@ export default function UnifiedCalendarView({
   const handleExport = async (format: CalendarExportFormat) => {
     // Only run on client side
     if (typeof window === "undefined" || typeof document === "undefined") {
-      console.warn("Export only available on client side");
       setAnnounceText("Exportar solo disponible en navegador");
       return;
     }
@@ -555,7 +554,6 @@ export default function UnifiedCalendarView({
         );
       }
     } catch (error) {
-      console.error("Error exporting calendar:", error);
       setAnnounceText(t("calendar.export_generic_error"));
     }
   };

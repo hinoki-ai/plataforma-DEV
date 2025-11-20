@@ -8,7 +8,6 @@ import { api } from "../convex/_generated/api.js";
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL!;
 if (!CONVEX_URL) {
-  console.error("❌ NEXT_PUBLIC_CONVEX_URL is not set");
   process.exit(1);
 }
 
@@ -28,8 +27,6 @@ const manitosPintadasInstitution = {
 };
 
 async function addManitosPintadas() {
-  console.log("🏫 Adding institution: Manitos Pintadas");
-
   try {
     // Check if institution already exists
     const existingInstitutions = await client.query(
@@ -41,18 +38,12 @@ async function addManitosPintadas() {
     );
 
     if (existingNames.includes(manitosPintadasInstitution.name.toLowerCase())) {
-      console.log(
-        "⚠️ Institution 'Manitos Pintadas' already exists in database",
-      );
       const existing = existingInstitutions.find(
         (inst) =>
           inst.name.toLowerCase() ===
           manitosPintadasInstitution.name.toLowerCase(),
       );
       if (existing) {
-        console.log(`📝 Existing institution ID: ${existing._id}`);
-        console.log(`📍 Address: ${existing.address}`);
-        console.log(`📧 Email: ${existing.email}`);
       }
       return existing?._id;
     }
@@ -63,32 +54,18 @@ async function addManitosPintadas() {
       manitosPintadasInstitution,
     );
 
-    console.log("✅ Successfully created 'Manitos Pintadas' institution!");
-    console.log(`📝 Name: ${manitosPintadasInstitution.name}`);
-    console.log(`🏢 Type: ${manitosPintadasInstitution.institutionType}`);
-    console.log(`📍 Address: ${manitosPintadasInstitution.address}`);
-    console.log(`📧 Email: ${manitosPintadasInstitution.email}`);
-    console.log(`🌐 Website: ${manitosPintadasInstitution.website}`);
-    console.log(`🆔 Institution ID: ${institutionId}`);
-
     // Verify it was created
     const allInstitutions = await client.query(
       api.institutionInfo.getAllInstitutions,
       {},
     );
-    console.log(`📊 Total institutions in database: ${allInstitutions.length}`);
 
     // List all institutions
-    console.log("\n📋 All institutions:");
-    allInstitutions.forEach((inst) => {
-      console.log(
-        `  - ${inst.name} (${inst.institutionType}) - ID: ${inst._id}`,
-      );
-    });
+
+    allInstitutions.forEach((inst) => {});
 
     return institutionId;
   } catch (error) {
-    console.error("❌ Failed to create institution:", error);
     process.exit(1);
   }
 }

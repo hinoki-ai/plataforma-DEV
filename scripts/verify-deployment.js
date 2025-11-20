@@ -35,9 +35,6 @@ if (
   !CONVEX_URL &&
   (process.env.VERCEL || process.env.CI || process.env.GITHUB_ACTIONS)
 ) {
-  console.log("⚠️  Warning: CONVEX_URL not found during build");
-  console.log("🔄 Skipping deployment verification for build process");
-  console.log("✅ Build can proceed");
   process.exit(0);
 }
 
@@ -47,9 +44,7 @@ class DeploymentVerifier {
     this.warnings = [];
   }
 
-  log(message, emoji = "📝") {
-    console.log(`${emoji} ${message}`);
-  }
+  log(message, emoji = "📝") {}
 
   error(message) {
     this.errors.push(message);
@@ -229,25 +224,20 @@ class DeploymentVerifier {
     });
 
     return new Promise((resolve) => {
-      console.log();
-      console.log("═".repeat(70));
-      console.log();
-
       if (this.errors.length > 0) {
-        console.log("❌ ERRORS FOUND:");
-        this.errors.forEach((err) => console.log(`   • ${err}`));
-        console.log();
+        this.errors.forEach((err) => {
+          console.log(`Error: ${err}`);
+        });
       }
 
       if (this.warnings.length > 0) {
-        console.log("⚠️  WARNINGS:");
-        this.warnings.forEach((warn) => console.log(`   • ${warn}`));
-        console.log();
+        this.warnings.forEach((warn) => {
+          console.log(`Warning: ${warn}`);
+        });
       }
 
       if (this.errors.length === 0 && this.warnings.length === 0) {
-        console.log("✅ All checks passed!");
-        console.log();
+        console.log("No errors or warnings found.");
       }
 
       rl.question("Continue with deployment? (Y/n): ", (answer) => {
@@ -256,9 +246,9 @@ class DeploymentVerifier {
           answer.toLowerCase() !== "n" && answer.toLowerCase() !== "no";
 
         if (shouldContinue) {
-          console.log("✅ Deployment approved by user");
+          console.log("Continuing with deployment...");
         } else {
-          console.log("❌ Deployment cancelled by user");
+          console.log("Deployment cancelled.");
         }
 
         resolve(shouldContinue);
@@ -268,23 +258,14 @@ class DeploymentVerifier {
 
   async runVerification() {
     try {
-      console.log();
-      console.log("🔍 Plataforma Astral - Deployment Verification");
-      console.log("═".repeat(70));
-      console.log();
-
       // Run all verification checks
       await this.verifyEnvironmentVariables();
-      console.log();
 
       await this.verifyConvexConfiguration();
-      console.log();
 
       await this.verifyGitStatus();
-      console.log();
 
       await this.verifyDeploymentSafety();
-      console.log();
 
       // Check if there are critical errors
       // During builds (CI/CD), don't fail if env vars are missing
@@ -292,20 +273,9 @@ class DeploymentVerifier {
         process.env.VERCEL || process.env.CI || process.env.GITHUB_ACTIONS;
 
       if (this.errors.length > 0) {
-        console.log("═".repeat(70));
         if (isBuildEnvironment) {
-          console.log(
-            "⚠️  Verification completed with errors (build environment)",
-          );
-          console.log(
-            "✅ Build will proceed (environment variables will be provided by CI/CD)",
-          );
         } else {
-          console.log("❌ Verification failed with errors!");
-          console.log("Please fix the errors above before deploying.");
         }
-        console.log("═".repeat(70));
-        console.log();
 
         // Don't fail in build environments
         if (isBuildEnvironment) {
@@ -317,28 +287,12 @@ class DeploymentVerifier {
       // Prompt for user confirmation
       const shouldContinue = await this.promptUserConfirmation();
 
-      console.log();
-      console.log("═".repeat(70));
-
       if (shouldContinue) {
-        console.log("✅ Deployment verification completed successfully");
-        console.log("🚀 Ready for deployment!");
       } else {
-        console.log("❌ Deployment verification cancelled");
       }
-
-      console.log("═".repeat(70));
-      console.log();
 
       return shouldContinue;
     } catch (error) {
-      console.log();
-      console.log("═".repeat(70));
-      console.log("❌ Verification script failed!");
-      console.log("═".repeat(70));
-      console.log();
-      console.error("Error:", error.message);
-      console.log();
       return false;
     }
   }
@@ -355,7 +309,6 @@ async function main() {
 // Run if called directly
 if (require.main === module) {
   main().catch((error) => {
-    console.error("❌ Script failed:", error);
     process.exit(1);
   });
 }

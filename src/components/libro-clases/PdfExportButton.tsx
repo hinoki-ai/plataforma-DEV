@@ -135,7 +135,6 @@ export function PdfExportButton({
       toast.success("PDF exportado correctamente", { id: toastId });
       setIsOpen(false);
     } catch (error: any) {
-      console.error("Export error:", error);
       toast.error(error.message || "Error al exportar el PDF", { id: toastId });
     } finally {
       setIsExporting(false);
@@ -188,7 +187,6 @@ export function PdfExportButton({
 
       toast.success("PDF exportado correctamente", { id: toastId });
     } catch (error: any) {
-      console.error("Export error:", error);
       toast.error(error.message || "Error al exportar el PDF", { id: toastId });
     } finally {
       setIsExporting(false);

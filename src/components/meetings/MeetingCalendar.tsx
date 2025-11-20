@@ -60,10 +60,8 @@ export function MeetingCalendar({ isAdmin = false }: MeetingCalendarProps) {
         );
         setMeetings(convertedMeetings);
       } else {
-        console.error("Error loading meetings:", response.error);
       }
     } catch (error) {
-      console.error("Error loading meetings:", error);
     } finally {
       setLoading(false);
     }

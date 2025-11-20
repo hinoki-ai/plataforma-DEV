@@ -193,7 +193,6 @@ export async function GET(request: NextRequest) {
       data: educationalResources,
     });
   } catch (error) {
-    console.error("Error fetching educational resources:", error);
     return NextResponse.json(
       { error: "Error al obtener recursos educativos" },
       { status: 500 },

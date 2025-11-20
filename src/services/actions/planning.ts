@@ -30,7 +30,6 @@ export async function createPlanningDocument(data: {
 
     return { success: true, data: { id: docId } };
   } catch (error) {
-    console.error("Failed to create planning document:", error);
     return { success: false, error: "No se pudo crear el documento" };
   }
 }
@@ -55,7 +54,6 @@ export async function updatePlanningDocument(
 
     return { success: true };
   } catch (error) {
-    console.error("Failed to update planning document:", error);
     return { success: false, error: "No se pudo actualizar el documento" };
   }
 }
@@ -68,7 +66,6 @@ export async function deletePlanningDocument(id: string) {
     });
     return { success: true };
   } catch (error) {
-    console.error("Failed to delete planning document:", error);
     return { success: false, error: "No se pudo eliminar el documento" };
   }
 }
@@ -107,7 +104,6 @@ export async function createPlanningDocumentFromTemplate(
 
     return { success: true, data: { id: docId } };
   } catch (error) {
-    console.error("Failed to create document from template:", error);
     if (error instanceof Error && error.message === "Plantilla no válida") {
       throw error;
     }

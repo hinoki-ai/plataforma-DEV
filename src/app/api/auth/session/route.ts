@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(session, { status: 200 });
   } catch (error) {
-    console.error("Error fetching session:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

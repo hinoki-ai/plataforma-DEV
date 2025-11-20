@@ -367,7 +367,6 @@ export function AdvancedOperationsDashboard() {
       toast.error(
         `Operation failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
-      console.error(`Operation ${selectedOperation.id} failed:`, error);
     } finally {
       setExecutingOperation(null);
     }

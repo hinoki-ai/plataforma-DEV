@@ -4,8 +4,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import { ThemeProvider } from "./theme-provider";
 import { DesktopToggleProvider } from "@/lib/hooks/useDesktopToggle";
-// 🕊️ DIVINE PARSING ORACLE - Now using chunked i18n system
-import { LanguageProvider } from "@/components/language/LanguageContext";
+// 🕊️ DIVINE PARSING ORACLE - Using chunked i18n system directly
+import { DivineParsingOracleProvider } from "@/components/language/ChunkedLanguageProvider";
 import { LanguageHtmlUpdater } from "@/components/language/LanguageHtmlUpdater";
 import { ContextProvider } from "./providers/ContextProvider";
 import { WebVitalsProvider } from "./providers/WebVitalsProvider";
@@ -36,7 +36,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
             forcedTheme={undefined}
             nonce={undefined}
           >
-            <LanguageProvider>
+            <DivineParsingOracleProvider
+              initialNamespaces={[
+                "common",
+                "navigation",
+                "language",
+                "admin",
+                "profesor",
+                "parent",
+                "dashboard",
+                "programas",
+                "contacto",
+                "planes",
+              ]}
+            >
               <LanguageHtmlUpdater />
               <JoshAnalyticsProvider>
                 <ClientOnly>
@@ -53,7 +66,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                   </WebVitalsProvider>
                 </DesktopToggleProvider>
               </ContextProvider>
-            </LanguageProvider>
+            </DivineParsingOracleProvider>
           </ThemeProvider>
         </AppSessionProvider>
       </ConvexClientProvider>

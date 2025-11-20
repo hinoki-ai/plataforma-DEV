@@ -98,11 +98,9 @@ export function PlanningDocumentForm({
       if (result.success) {
         setUploadedFiles((prev) => [...prev, ...result.files]);
       } else {
-        console.error("Upload failed:", result.error);
         // Error will be handled by parent component or toast notification
       }
     } catch (error) {
-      console.error("Upload error:", error);
       // Error will be handled by parent component or toast notification
     } finally {
       setIsUploading(false);
@@ -119,11 +117,9 @@ export function PlanningDocumentForm({
       if (result.success) {
         setUploadedFiles((prev) => prev.filter((file) => file.id !== fileId));
       } else {
-        console.error("Delete failed:", result.error);
         // Error will be handled by parent component or toast notification
       }
     } catch (error) {
-      console.error("Delete error:", error);
       // Error will be handled by parent component or toast notification
     }
   };
@@ -144,12 +140,9 @@ export function PlanningDocumentForm({
       ) {
         const result = await actionResult;
         if (result && "success" in result && !result.success && result.error) {
-          console.error("Form submission error:", result.error);
         }
       }
-    } catch (error) {
-      console.error("Form submission error:", error);
-    }
+    } catch (error) {}
   };
 
   return (

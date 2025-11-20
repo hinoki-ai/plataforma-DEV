@@ -64,10 +64,6 @@ export async function GET() {
             ...stats,
           };
         } catch (error) {
-          console.error(
-            `Error getting coverage stats for course ${course._id}:`,
-            error,
-          );
           return {
             courseId: course._id,
             courseName: course.name,
