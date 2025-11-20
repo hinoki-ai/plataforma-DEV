@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { getAuthenticatedConvexClient } from "@/lib/convex-server";
 import { api } from "@/convex/_generated/api";
 import { z } from "zod";
+import { normalizePhoneNumber, isCompletePhoneNumber } from "@/lib/phone-utils";
 
 const profileUpdateSchema = z.object({
   name: z.string().min(1).optional(),
@@ -138,7 +139,18 @@ export async function PUT(request: NextRequest) {
     }
     if (validatedData.phone !== undefined) {
       const trimmedPhone = validatedData.phone.trim();
-      updateData.phone = trimmedPhone || null; // Allow empty phone
+      if (trimmedPhone) {
+        // Validate complete phone number
+        if (!isCompletePhoneNumber(trimmedPhone)) {
+          return NextResponse.json(
+            { error: "Please enter the complete phone number" },
+            { status: 400 }
+          );
+        }
+        updateData.phone = normalizePhoneNumber(trimmedPhone);
+      } else {
+        updateData.phone = null; // Allow empty phone
+      }
     }
 
     // Update user

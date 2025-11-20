@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "@/lib/auth-client";
+import { handlePhoneInputChange, normalizePhoneNumber } from "@/lib/phone-utils";
 
 interface SettingsTabsProps {
   children?: React.ReactNode;
@@ -191,7 +192,7 @@ function ProfileTab() {
         },
         body: JSON.stringify({
           name: trimmedName,
-          phone: formData.phone.trim() || undefined,
+          phone: formData.phone.trim() ? normalizePhoneNumber(formData.phone.trim()) : undefined,
         }),
       });
 
@@ -288,10 +289,14 @@ function ProfileTab() {
               <Input
                 id="phone"
                 value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                placeholder={t("settings.profile.phone_placeholder", "common")}
+                onChange={(e) => {
+                  const formatted = handlePhoneInputChange(
+                    e.target.value,
+                    formData.phone
+                  );
+                  setFormData({ ...formData, phone: formatted });
+                }}
+                placeholder="+569 8889 67763"
                 disabled={isSaving}
               />
             </div>

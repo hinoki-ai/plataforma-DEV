@@ -220,7 +220,18 @@ export const reservationSchema = z.object({
     .min(8, "Teléfono muy corto")
     .max(15, "Teléfono muy largo")
     .regex(/^[+]?[0-9\s-()]+$/, "Teléfono contiene caracteres no válidos")
-    .transform((phone) => phone.replace(/\s/g, "")), // Remove spaces
+    .refine(
+      (val) => {
+        const { isCompletePhoneNumber } = require("./phone-utils");
+        return isCompletePhoneNumber(val);
+      },
+      "Por favor ingrese el número de teléfono completo"
+    )
+    .transform((phone) => {
+      const { normalizePhoneNumber } = require("./phone-utils");
+      const normalized = normalizePhoneNumber(phone);
+      return normalized || phone.replace(/\s/g, "");
+    }),
 
   preferredDate: z
     .string()
@@ -502,7 +513,20 @@ export const commonValidationRules = {
   phone: z
     .string()
     .regex(/^[0-9+\-\s()]+$/, "Teléfono no válido")
-    .optional(),
+    .optional()
+    .transform((val) => {
+      if (!val) return val;
+      // Import dynamically to avoid circular dependencies
+      const { normalizePhoneNumber } = require("./phone-utils");
+      return normalizePhoneNumber(val) || val;
+    })
+    .refine(
+      (val) => !val || (() => {
+        const { isCompletePhoneNumber } = require("./phone-utils");
+        return isCompletePhoneNumber(val);
+      })(),
+      "Por favor ingrese el número de teléfono completo"
+    ),
   rut: rutValidation,
   name: z
     .string()

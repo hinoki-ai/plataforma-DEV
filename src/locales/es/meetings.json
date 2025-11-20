@@ -36,6 +36,7 @@
   "form.validation.guardian_name.min": "El nombre del apoderado debe tener al menos 2 caracteres",
   "form.validation.guardian_email.invalid": "Email inválido",
   "form.validation.guardian_phone.min": "El teléfono debe tener al menos 8 dígitos",
+  "form.validation.guardian_phone.incomplete": "Por favor ingrese el número de teléfono completo",
   "form.validation.date.required": "La fecha es requerida",
   "form.validation.time.required": "La hora es requerida",
   "form.validation.professor.required": "Debe seleccionar un profesor",

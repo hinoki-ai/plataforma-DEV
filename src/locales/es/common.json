@@ -1887,6 +1887,7 @@
   "validation.password_requirements": "La contraseña debe tener al menos 8 caracteres con al menos 1 número",
   "validation.passwords_mismatch": "Las contraseñas no coinciden",
   "validation.phone_required": "El teléfono es requerido",
+  "validation.phone_incomplete": "Por favor ingrese el número de teléfono completo",
   "validation.region_required": "La región es requerida",
   "validation.relationship_required": "La relación es requerida",
   "validation.required": "Este campo es obligatorio",

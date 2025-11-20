@@ -43,6 +43,11 @@ import { createMeeting, updateMeeting } from "@/services/actions/meetings";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useEnterNavigation } from "@/lib/hooks/useFocusManagement";
 import { useAriaLive } from "@/lib/hooks/useAriaLive";
+import {
+  handlePhoneInputChange,
+  isCompletePhoneNumber,
+  normalizePhoneNumber,
+} from "@/lib/phone-utils";
 
 const MEETING_TYPES = [
   "PARENT_TEACHER",
@@ -71,7 +76,11 @@ const getMeetingFormSchema = (t: (key: string, ns?: string) => string) =>
       .email(t("form.validation.guardian_email.invalid", "meetings")),
     guardianPhone: z
       .string()
-      .min(8, t("form.validation.guardian_phone.min", "meetings")),
+      .min(8, t("form.validation.guardian_phone.min", "meetings"))
+      .refine(
+        (val) => isCompletePhoneNumber(val),
+        t("form.validation.guardian_phone.incomplete", "meetings") || "Please enter the complete phone number"
+      ),
     scheduledDate: z.date({
       message: t("form.validation.date.required", "meetings"),
     }),
@@ -243,10 +252,16 @@ export function MeetingForm({
       "polite",
     );
     try {
+      // Normalize phone number before submitting
+      const normalizedData = {
+        ...data,
+        guardianPhone: normalizePhoneNumber(data.guardianPhone),
+      };
+      
       if (mode === "create") {
-        await createMeeting(data);
+        await createMeeting(normalizedData);
       } else if (meeting) {
-        await updateMeeting(meeting.id, data);
+        await updateMeeting(meeting.id, normalizedData);
       }
       announce(
         mode === "create"
@@ -478,12 +493,16 @@ export function MeetingForm({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t(
-                        "form.guardian_phone.placeholder",
-                        "meetings",
-                      )}
+                      placeholder="+569 8889 67763"
                       onKeyDown={(e) => handleKeyDown(e, "guardianPhone")}
                       {...field}
+                      onChange={(e) => {
+                        const formatted = handlePhoneInputChange(
+                          e.target.value,
+                          field.value
+                        );
+                        field.onChange(formatted);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />

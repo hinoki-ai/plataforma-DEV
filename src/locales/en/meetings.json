@@ -36,6 +36,7 @@
   "form.validation.guardian_name.min": "Guardian name must be at least 2 characters",
   "form.validation.guardian_email.invalid": "Invalid email",
   "form.validation.guardian_phone.min": "Phone must have at least 8 digits",
+  "form.validation.guardian_phone.incomplete": "Please enter the complete phone number",
   "form.validation.date.required": "Date is required",
   "form.validation.time.required": "Time is required",
   "form.validation.professor.required": "Must select a teacher",

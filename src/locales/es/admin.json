@@ -132,6 +132,7 @@
   "admin.parent_form.validation.name_min": "El nombre debe tener al menos 2 caracteres",
   "admin.parent_form.validation.email_invalid": "Ingrese un email válido",
   "admin.parent_form.validation.phone_required": "El teléfono es requerido",
+  "admin.parent_form.validation.phone_incomplete": "Por favor ingrese el número de teléfono completo",
   "admin.parent_form.validation.confirm_password_required": "Confirma la contraseña",
   "admin.parent_form.validation.password_mismatch": "Las contraseñas no coinciden",
   "admin.parent_form.validation.student_name_required": "El nombre del estudiante es requerido",

@@ -33,6 +33,12 @@ import { Eye, EyeOff, UserPlus, ChevronRight, ChevronLeft } from "lucide-react";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { cn } from "@/lib/utils";
 import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
+import {
+  formatChileanPhone,
+  handlePhoneInputChange,
+  isCompletePhoneNumber,
+  normalizePhoneNumber,
+} from "@/lib/phone-utils";
 
 // Import standardized password schema
 import { passwordSchema } from "@/lib/user-creation";
@@ -59,7 +65,11 @@ const createParentSchemaWithTranslations = (
         ),
       phone: z
         .string()
-        .min(1, t("admin.parent_form.validation.phone_required", "admin")),
+        .min(1, t("admin.parent_form.validation.phone_required", "admin"))
+        .refine(
+          (val) => !val || isCompletePhoneNumber(val),
+          t("admin.parent_form.validation.phone_incomplete", "admin") || "Please enter the complete phone number"
+        ),
       // Student information
       studentName: z
         .string()
@@ -78,7 +88,13 @@ const createParentSchemaWithTranslations = (
         .email(t("admin.parent_form.validation.student_email_invalid", "admin"))
         .optional()
         .or(z.literal("")),
-      guardianPhone: z.string().optional(),
+      guardianPhone: z
+        .string()
+        .optional()
+        .refine(
+          (val) => !val || isCompletePhoneNumber(val),
+          t("admin.parent_form.validation.phone_incomplete", "admin") || "Please enter the complete phone number"
+        ),
       relationship: z
         .string()
         .min(
@@ -262,12 +278,16 @@ export function ParentCreationForm({
   };
 
   const handleSubmit = async (data: ParentFormValues) => {
-    // Clean up empty optional fields
+    // Clean up empty optional fields and normalize phone numbers
     const { confirmPassword: _confirmPassword, ...formValues } = data;
+    const normalizedPhone = data.phone ? normalizePhoneNumber(data.phone) : "";
+    const normalizedGuardianPhone = data.guardianPhone ? normalizePhoneNumber(data.guardianPhone) : "";
+    
     const cleanedData = {
       ...formValues,
       studentEmail: data.studentEmail || undefined,
-      guardianPhone: data.guardianPhone || undefined,
+      phone: normalizedPhone || data.phone,
+      guardianPhone: normalizedGuardianPhone || data.guardianPhone || undefined,
     } satisfies ParentFormOutput;
     await onSubmit(cleanedData);
   };
@@ -377,11 +397,15 @@ export function ParentCreationForm({
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={t(
-                              "admin.parent_form.field.phone_placeholder",
-                              "admin",
-                            )}
+                            placeholder="+569 8889 67763"
                             {...field}
+                            onChange={(e) => {
+                              const formatted = handlePhoneInputChange(
+                                e.target.value,
+                                field.value
+                              );
+                              field.onChange(formatted);
+                            }}
                             onKeyDown={(e) => handleKeyDown(e, "phone")}
                           />
                         </FormControl>
@@ -653,11 +677,15 @@ export function ParentCreationForm({
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={t(
-                              "admin.parent_form.field.guardian_phone_placeholder",
-                              "admin",
-                            )}
+                            placeholder="+569 8889 67763"
                             {...field}
+                            onChange={(e) => {
+                              const formatted = handlePhoneInputChange(
+                                e.target.value,
+                                field.value
+                              );
+                              field.onChange(formatted);
+                            }}
                             onKeyDown={(e) => handleKeyDown(e, "guardianPhone")}
                           />
                         </FormControl>

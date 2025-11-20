@@ -1946,6 +1946,7 @@
   "validation.password_requirements": "Password must be at least 8 characters with at least 1 number",
   "validation.passwords_mismatch": "Passwords do not match",
   "validation.phone_required": "Phone is required",
+  "validation.phone_incomplete": "Please enter the complete phone number",
   "validation.region_required": "Region is required",
   "validation.relationship_required": "Relationship is required",
   "validation.required": "This field is required",

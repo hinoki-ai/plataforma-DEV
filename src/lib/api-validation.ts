@@ -235,7 +235,18 @@ export const ApiSchemas = {
     guardianEmail: CommonSchemas.email,
     guardianPhone: z
       .string()
-      .regex(/^\+?[\d\s\-\(\)]+$/, "Invalid phone format"),
+      .regex(/^\+?[\d\s\-\(\)]+$/, "Invalid phone format")
+      .refine(
+        (val) => {
+          const { isCompletePhoneNumber } = require("../lib/phone-utils");
+          return isCompletePhoneNumber(val);
+        },
+        "Please enter the complete phone number"
+      )
+      .transform((phone) => {
+        const { normalizePhoneNumber } = require("../lib/phone-utils");
+        return normalizePhoneNumber(phone) || phone.replace(/\s/g, "");
+      }),
     scheduledDate: z.string().datetime(),
     scheduledTime: z
       .string()
