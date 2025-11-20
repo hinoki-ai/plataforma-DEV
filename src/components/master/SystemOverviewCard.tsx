@@ -61,15 +61,6 @@ export function SystemOverviewCard() {
 
   return (
     <Card className="border-slate-200 dark:border-slate-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
-          <Monitor className="h-5 w-5 text-slate-600" />
-          Visión General del Sistema
-        </CardTitle>
-        <CardDescription className="text-slate-600 dark:text-slate-400">
-          Estado completo de todos los componentes críticos
-        </CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {systemComponents.map((component, index) => (

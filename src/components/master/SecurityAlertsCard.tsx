@@ -146,15 +146,6 @@ export function SecurityAlertsCard() {
     <div className="space-y-6">
       {/* Header */}
       <Card className="border-red-200 dark:border-red-800">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-red-700 dark:text-red-300">
-            <Shield className="h-6 w-6" />
-            Security Alert Center
-          </CardTitle>
-          <CardDescription>
-            Real-time monitoring of security threats and system vulnerabilities
-          </CardDescription>
-        </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4 mb-4">
             <div className="flex gap-2">

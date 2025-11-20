@@ -98,15 +98,6 @@ export function GodModeStatusCard() {
   return (
     <div className="space-y-6">
       <Card className="border-yellow-200 dark:border-yellow-800">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
-            <Crown className="h-6 w-6" />
-            Administration Control Status
-          </CardTitle>
-          <CardDescription className="text-blue-600 dark:text-blue-400">
-            Full system control - Maximum authority level
-          </CardDescription>
-        </CardHeader>
         <CardContent className="space-y-6">
           {/* Status Indicator */}
           <div className="flex items-center justify-between p-4 rounded-lg border border-blue-200 dark:border-blue-800">

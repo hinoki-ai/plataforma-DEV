@@ -24,15 +24,6 @@ import { AdvancedControlsCard } from "./AdvancedControlsCard";
 function CriticalActionsWarning() {
   return (
     <Card className="border-yellow-200 dark:border-yellow-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-yellow-700 dark:text-yellow-300">
-          <AlertTriangle className="h-5 w-5" />
-          Critical Actions Relocated
-        </CardTitle>
-        <CardDescription className="text-yellow-600 dark:text-yellow-400">
-          Critical system actions have been moved to a secure area
-        </CardDescription>
-      </CardHeader>
       <CardContent>
         <Alert className="border-yellow-200 mb-4">
           <AlertTriangle className="h-4 w-4 text-yellow-600" />

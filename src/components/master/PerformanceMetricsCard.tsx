@@ -62,16 +62,6 @@ export function PerformanceMetricsCard() {
 
   return (
     <Card className="border-green-200 dark:border-green-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-300">
-          <Activity className="h-5 w-5" />
-          Métricas de Rendimiento en Tiempo Real
-        </CardTitle>
-        <CardDescription className="text-green-600 dark:text-green-400">
-          Monitoreo continuo del sistema - Actualización automática cada 30
-          segundos
-        </CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="space-y-6">
           {/* Performance Metrics */}

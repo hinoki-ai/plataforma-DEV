@@ -155,13 +155,6 @@ function LocalMasterStatsCard({
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="h-5 w-5 text-blue-600" />
-          Global Statistics
-        </CardTitle>
-        <CardDescription>Critical system metrics</CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-4 rounded-lg">
@@ -231,13 +224,6 @@ function SecurityAlertsCard({ stats }: { stats: any }) {
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-blue-600" />
-          Security Alerts
-        </CardTitle>
-        <CardDescription>Recent security events</CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {alerts.map((alert) => (
@@ -340,7 +326,6 @@ export function MasterDashboard() {
     title: action.title,
     description: action.description,
     icon: action.icon,
-    badge: action.category,
     variant: action.variant as
       | "default"
       | "destructive"
@@ -351,37 +336,8 @@ export function MasterDashboard() {
 
   return (
     <MasterPageTemplate
-      title="Master Dashboard"
-      subtitle={
-        <div className="flex items-center gap-2">
-          <span>Welcome, {session?.user?.name || "Administrator"}</span>
-          <Badge
-            variant={isRealTime ? "default" : "secondary"}
-            className={`text-xs ${
-              isRealTime
-                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-            }`}
-          >
-            {isRealTime ? (
-              <>
-                <Wifi className="h-3 w-3 mr-1" />
-                Live
-              </>
-            ) : (
-              <>
-                <WifiOff className="h-3 w-3 mr-1" />
-                Static
-              </>
-            )}
-          </Badge>
-          {sseError && (
-            <Badge variant="destructive" className="text-xs">
-              SSE Error
-            </Badge>
-          )}
-        </div>
-      }
+      title=""
+      subtitle=""
       context="MASTER_DASHBOARD"
     >
       {/* Quick Actions */}

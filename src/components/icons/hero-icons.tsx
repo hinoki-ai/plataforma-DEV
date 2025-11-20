@@ -59,6 +59,9 @@ import {
   ServerStackIcon,
   CpuChipIcon,
   WrenchScrewdriverIcon,
+  CommandLineIcon,
+  DocumentIcon,
+  ScaleIcon,
   // HomeIcon as SolidHomeIcon,
   // BookOpenIcon as SolidBookOpenIcon,
   // UsersIcon as SolidUsersIcon,
@@ -125,6 +128,9 @@ export const NavigationIcons = {
   Chart: ChartBarIcon,
   Bookmark: BookmarkIcon,
   UserGroup: UserGroupIcon,
+  Terminal: CommandLineIcon,
+  DocumentList: DocumentIcon,
+  Scale: ScaleIcon,
 } as const;
 
 // Action icons

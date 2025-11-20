@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication and admin role
     const session = await auth();
-    if (!session?.user || session.data?.user.role !== "ADMIN") {
+    if (!session?.user || session?.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Unauthorized - Admin access required" },
         { status: 401 },
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       details,
       sessionId,
       timestamp: new Date().toISOString(),
-      userId: session.data?.user.id,
+      userId: session?.user.id,
       userAgent: request.headers.get("user-agent"),
       ip: request.headers.get("x-forwarded-for") || "unknown",
     });
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       details,
       sessionId,
       timestamp: new Date().toISOString(),
-      userId: session.data?.user.id,
+      userId: session?.user.id,
     };
 
     return NextResponse.json({
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
   try {
     // Check authentication and admin role
     const session = await auth();
-    if (!session?.user || session.data?.user.role !== "ADMIN") {
+    if (!session?.user || session?.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Unauthorized - Admin access required" },
         { status: 401 },
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
         details: null,
         sessionId: "session_1234567890_abc123",
         timestamp: new Date(Date.now() - 7200000).toISOString(), // 2 hours ago
-        userId: session.data?.user.id,
+        userId: session?.user.id,
         ip: "192.168.1.1",
         userAgent: "Mozilla/5.0...",
       },
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
         details: "/admin/usuarios",
         sessionId: "session_1234567890_abc123",
         timestamp: new Date(Date.now() - 6900000).toISOString(),
-        userId: session.data?.user.id,
+        userId: session?.user.id,
         ip: "192.168.1.1",
         userAgent: "Mozilla/5.0...",
       },
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
         details: "/api/admin/users",
         sessionId: "session_1234567890_abc123",
         timestamp: new Date(Date.now() - 6800000).toISOString(),
-        userId: session.data?.user.id,
+        userId: session?.user.id,
         ip: "192.168.1.1",
         userAgent: "Mozilla/5.0...",
       },
@@ -116,7 +116,7 @@ export async function GET(request: NextRequest) {
         details: "/admin/planificaciones",
         sessionId: "session_1234567890_abc123",
         timestamp: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-        userId: session.data?.user.id,
+        userId: session?.user.id,
         ip: "192.168.1.1",
         userAgent: "Mozilla/5.0...",
       },

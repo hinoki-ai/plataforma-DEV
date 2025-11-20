@@ -2,6 +2,8 @@
 
 import React, { useMemo } from "react";
 import { useSession } from "@/lib/auth-client";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import {
   Card,
   CardContent,
@@ -47,6 +49,8 @@ interface GlobalNode {
   load: number;
   latency: number;
   lastUpdate: string;
+  institutionName: string;
+  institutionType: string;
 }
 
 interface GlobalMetrics {
@@ -58,70 +62,10 @@ interface GlobalMetrics {
   uptime: string;
 }
 
-const globalNodes: GlobalNode[] = [
-  {
-    id: "us-east-1",
-    region: "US East",
-    country: "USA",
-    status: "online",
-    users: 1250,
-    load: 45,
-    latency: 12,
-    lastUpdate: "2 min ago",
-  },
-  {
-    id: "eu-west-1",
-    region: "EU West",
-    country: "Germany",
-    status: "online",
-    users: 890,
-    load: 32,
-    latency: 25,
-    lastUpdate: "1 min ago",
-  },
-  {
-    id: "ap-southeast-1",
-    region: "AP Southeast",
-    country: "Singapore",
-    status: "online",
-    users: 654,
-    load: 28,
-    latency: 45,
-    lastUpdate: "3 min ago",
-  },
-  {
-    id: "sa-east-1",
-    region: "SA East",
-    country: "Brazil",
-    status: "degraded",
-    users: 432,
-    load: 67,
-    latency: 89,
-    lastUpdate: "5 min ago",
-  },
-  {
-    id: "af-south-1",
-    region: "AF South",
-    country: "South Africa",
-    status: "online",
-    users: 298,
-    load: 23,
-    latency: 67,
-    lastUpdate: "4 min ago",
-  },
-  {
-    id: "me-central-1",
-    region: "ME Central",
-    country: "UAE",
-    status: "online",
-    users: 187,
-    load: 19,
-    latency: 54,
-    lastUpdate: "2 min ago",
-  },
-];
 
 function GlobalMapCard() {
+  const globalNodes = useQuery(api.globalOversight.getGlobalNodes) || [];
+
   return (
     <Card className="border-blue-200 dark:border-blue-800">
       <CardHeader>
@@ -130,7 +74,7 @@ function GlobalMapCard() {
           Global Node Map
         </CardTitle>
         <CardDescription>
-          Worldwide server and data center distribution
+          Worldwide institution and data center distribution
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -194,16 +138,18 @@ function GlobalMapCard() {
 }
 
 function GlobalMetricsCard() {
+  const globalMetrics = useQuery(api.globalOversight.getGlobalMetrics);
+
   const metrics: GlobalMetrics = useMemo(
     () => ({
-      totalNodes: 12,
-      activeNodes: 11,
-      totalUsers: 12456,
-      globalLatency: 34,
-      dataTransferred: "2.4 TB",
-      uptime: "99.97%",
+      totalNodes: globalMetrics?.totalNodes || 0,
+      activeNodes: globalMetrics?.activeNodes || 0,
+      totalUsers: globalMetrics?.totalUsers || 0,
+      globalLatency: globalMetrics?.globalLatency || 0,
+      dataTransferred: globalMetrics?.dataTransferred || "0 B",
+      uptime: globalMetrics?.uptime || "0%",
     }),
-    [],
+    [globalMetrics],
   );
 
   return (
@@ -273,35 +219,7 @@ function GlobalMetricsCard() {
 }
 
 function GlobalAlertsCard() {
-  const alerts = useMemo(
-    () => [
-      {
-        id: 1,
-        type: "warning",
-        region: "SA East",
-        message: "High latency detected",
-        severity: "medium",
-        time: "5 min ago",
-      },
-      {
-        id: 2,
-        type: "info",
-        region: "Global",
-        message: "Security update applied on all nodes",
-        severity: "low",
-        time: "15 min ago",
-      },
-      {
-        id: 3,
-        type: "success",
-        region: "EU West",
-        message: "Performance optimization completed",
-        severity: "low",
-        time: "1 hour ago",
-      },
-    ],
-    [],
-  );
+  const alerts = useQuery(api.globalOversight.getGlobalAlerts) || [];
 
   return (
     <Card className="border-orange-200 dark:border-orange-800">
@@ -348,6 +266,8 @@ function GlobalAlertsCard() {
 }
 
 function NetworkTopologyCard() {
+  const topology = useQuery(api.globalOversight.getNetworkTopology);
+
   return (
     <Card className="border-indigo-200 dark:border-indigo-800">
       <CardHeader>
@@ -368,26 +288,14 @@ function NetworkTopologyCard() {
               <div className="p-4 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg">
                 <h4 className="font-medium mb-2">Active Regions</h4>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>North America:</span>
-                    <span className="font-medium">3 nodes</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Europe:</span>
-                    <span className="font-medium">3 nodes</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Asia-Pacific:</span>
-                    <span className="font-medium">4 nodes</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>South America:</span>
-                    <span className="font-medium">1 node</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Africa:</span>
-                    <span className="font-medium">1 node</span>
-                  </div>
+                  {topology ? Object.entries(topology.regions).map(([region, count]) => (
+                    <div key={region} className="flex justify-between">
+                      <span>{region}:</span>
+                      <span className="font-medium">{count} institutions</span>
+                    </div>
+                  )) : (
+                    <div className="text-muted-foreground">Loading...</div>
+                  )}
                 </div>
               </div>
 
@@ -399,16 +307,16 @@ function NetworkTopologyCard() {
                     <Badge variant="secondary">Online</Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span>Backups:</span>
-                    <Badge variant="secondary">2 active</Badge>
+                    <span>Active institutions:</span>
+                    <Badge variant="secondary">{topology?.activeInstitutions || 0}</Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span>CDN:</span>
-                    <Badge variant="secondary">12 edge locations</Badge>
+                    <span>Total users:</span>
+                    <Badge variant="secondary">{topology?.totalUsers || 0}</Badge>
                   </div>
                   <div className="flex justify-between">
                     <span>Average latency:</span>
-                    <span className="font-medium">34ms</span>
+                    <span className="font-medium">{topology?.averageLatency || 0}ms</span>
                   </div>
                 </div>
               </div>
@@ -419,24 +327,26 @@ function NetworkTopologyCard() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Latency by Region</h3>
             <div className="space-y-4">
-              {globalNodes.map((node) => (
+              {topology ? Object.entries(topology.regionalLatency).map(([region, latency]) => (
                 <div
-                  key={node.id}
+                  key={region}
                   className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <MapPin className="h-4 w-4" />
-                    <span className="font-medium">{node.region}</span>
+                    <span className="font-medium">{region}</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-sm">{node.latency}ms</span>
+                    <span className="text-sm">{latency}ms</span>
                     <Progress
-                      value={Math.max(0, 100 - node.latency)}
+                      value={Math.max(0, 100 - latency)}
                       className="w-20 h-2"
                     />
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="text-muted-foreground">Loading latency data...</div>
+              )}
             </div>
           </div>
 

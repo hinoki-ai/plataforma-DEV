@@ -90,15 +90,6 @@ export function InstitutionUsersManagement() {
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5 text-blue-600" />
-          Institution Users - {institution.name}
-        </CardTitle>
-        <CardDescription>
-          Manage users and their roles for {institution.name}
-        </CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="rounded-md border">
           <Table>

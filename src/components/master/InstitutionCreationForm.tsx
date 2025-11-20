@@ -370,15 +370,6 @@ export function InstitutionCreationForm() {
       context="MASTER_INSTITUTION_CREATION"
     >
       <Card className="border-blue-200 dark:border-blue-800">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-blue-600" />
-            Basic Information
-          </CardTitle>
-          <CardDescription>
-            Institution name, contact details and basic configuration
-          </CardDescription>
-        </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -801,40 +792,6 @@ export function InstitutionCreationForm() {
                       key={field.id}
                       className="border-gray-200 dark:border-gray-700"
                     >
-                      <CardHeader className="pb-2">
-                        <div className="flex items-center justify-between">
-                          <CardTitle className="text-base">
-                            Administrator #{index + 1}
-                          </CardTitle>
-                          <div className="flex items-center gap-3">
-                            {primaryAdminIndex === index ? (
-                              <Badge
-                                className="bg-green-500 text-white"
-                                variant="secondary"
-                              >
-                                Primary
-                              </Badge>
-                            ) : (
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleSetPrimary(index)}
-                              >
-                                Mark as Primary
-                              </Button>
-                            )}
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemoveAdmin(index)}
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        </div>
-                      </CardHeader>
                       <CardContent className="grid gap-3 md:grid-cols-2">
                         <FormField
                           control={form.control}

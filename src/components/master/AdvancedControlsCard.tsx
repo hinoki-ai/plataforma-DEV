@@ -201,15 +201,6 @@ export function AdvancedControlsCard() {
 
   return (
     <Card className="border-slate-200 dark:border-slate-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
-          <Command className="h-5 w-5 text-slate-600" />
-          Controles Avanzados - MASTER Authority
-        </CardTitle>
-        <CardDescription className="text-slate-600 dark:text-slate-400">
-          Herramientas de desarrollo y configuración avanzada - Solo para MASTER
-        </CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="space-y-8">
           {controlSections.map((section, index) => (

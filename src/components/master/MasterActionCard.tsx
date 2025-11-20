@@ -54,16 +54,6 @@ export function MasterActionCard({
 }: MasterActionCardProps) {
   return (
     <Card className={`border-slate-200 dark:border-slate-800 ${className}`}>
-      <CardHeader className="pb-4">
-        <CardTitle className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-          {title}
-        </CardTitle>
-        {description && (
-          <CardDescription className="text-slate-600 dark:text-slate-400">
-            {description}
-          </CardDescription>
-        )}
-      </CardHeader>
       <CardContent>
         <div className={`grid ${gridCols[columns]} gap-4`}>
           {actions.map((action) => (

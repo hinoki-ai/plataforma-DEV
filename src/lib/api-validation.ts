@@ -100,7 +100,7 @@ export async function validateApiRequest<T>(
 
     // 2. Authorization check
     if (requiredRole && session?.user) {
-      const userRole = session.data?.user.role;
+      const userRole = session?.user.role;
       const allowedRoles = REQUIRED_ROLES[requiredRole];
 
       if (!allowedRoles.includes(userRole as any)) {

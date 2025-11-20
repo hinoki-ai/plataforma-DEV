@@ -493,7 +493,7 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.institutions",
         href: "/master/institutions",
-        icon: NavigationIcons.Home,
+        icon: NavigationIcons.Building,
       },
       {
         title: "nav.users",
@@ -550,12 +550,12 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.debug_console",
         href: "/master/debug-console",
-        icon: NavigationIcons.Folder,
+        icon: NavigationIcons.Terminal,
       },
       {
         title: "nav.audit_logs",
         href: "/master/audit-logs",
-        icon: NavigationIcons.Bookmark,
+        icon: NavigationIcons.DocumentList,
       },
       {
         title: "nav.system_monitor",
@@ -613,7 +613,7 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.protocolos_convivencia.disciplina",
         href: "/master/protocolos-convivencia/disciplina",
-        icon: NavigationIcons.Wrench,
+        icon: NavigationIcons.Scale,
       },
       {
         title: "nav.protocolos_convivencia.medidas",

@@ -55,13 +55,6 @@ export function InstitutionManagement() {
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Building2 className="h-5 w-5 text-blue-600" />
-          Institution Management
-        </CardTitle>
-        <CardDescription>Manage all institutions in the system</CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="rounded-md border">
           <Table>

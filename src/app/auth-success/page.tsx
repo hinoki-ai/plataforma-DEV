@@ -35,13 +35,13 @@ export default async function AuthSuccessPage() {
   }
 
   // Validate session has required data
-  if (!session.data?.user.role || !session.data?.user.email || !session.data?.user.id) {
+  if (!session?.user.role || !session?.user.email || !session?.user.id) {
     console.error(
       "❌ [AUTH-SUCCESS] Session missing required fields, redirecting to login",
       {
-        hasRole: !!session.data?.user.role,
-        hasEmail: !!session.data?.user.email,
-        hasId: !!session.data?.user.id,
+        hasRole: !!session?.user.role,
+        hasEmail: !!session?.user.email,
+        hasId: !!session?.user.id,
         timestamp: new Date().toISOString(),
       },
     );
