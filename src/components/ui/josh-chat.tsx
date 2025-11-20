@@ -358,7 +358,7 @@ export function JoshChat({
         aria-describedby="josh-chat-description"
       >
         {/* Header */}
-        <header className="flex items-center justify-between p-3 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
+        <header className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
           <div className="flex items-center space-x-2 flex-1 min-w-0">
             <motion.img
               src={joshImage}
