@@ -210,7 +210,7 @@ export function JoshIndicator() {
   const handleChatClose = () => {
     setIsChatOpen(false);
     setJoshDismissedForSession(true);
-    
+
     // Track dismiss
     analytics.trackInteraction({
       type: "dismiss",
@@ -246,15 +246,15 @@ export function JoshIndicator() {
         },
       });
 
-      toast.success(
-        t("josh.tour.starting", "¡Comenzando tour interactivo!"),
-        {
-          duration: 2000,
-        },
-      );
+      toast.success(t("josh.tour.starting", "¡Comenzando tour interactivo!"), {
+        duration: 2000,
+      });
     } else {
       toast.info(
-        t("josh.tour.not_available", "No hay tour disponible para esta página."),
+        t(
+          "josh.tour.not_available",
+          "No hay tour disponible para esta página.",
+        ),
         {
           duration: 2000,
         },
@@ -264,13 +264,14 @@ export function JoshIndicator() {
 
   // Calculate if Josh should be visible
   // Josh is visible when: (chat is closed OR chat is minimized) AND not dismissed for session
-  const shouldShowJosh = (!isChatOpen || isChatMinimized) && !joshDismissedForSession;
+  const shouldShowJosh =
+    (!isChatOpen || isChatMinimized) && !joshDismissedForSession;
 
   return (
     <>
       {/* Chat Interface */}
-      <JoshChat 
-        isOpen={isChatOpen} 
+      <JoshChat
+        isOpen={isChatOpen}
         onToggle={handleChatClose}
         onMinimizeChange={handleChatMinimizeChange}
         onStartTour={startTour}
@@ -399,7 +400,10 @@ export function JoshIndicator() {
                 role="tooltip"
                 id="josh-tooltip"
               >
-                {t("josh.tooltip", "¡Haz clic en mí para chatear! Arrástrame para moverme")}
+                {t(
+                  "josh.tooltip",
+                  "¡Haz clic en mí para chatear! Arrástrame para moverme",
+                )}
                 <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
               </div>
             </motion.div>

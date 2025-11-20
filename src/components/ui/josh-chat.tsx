@@ -30,8 +30,8 @@ interface JoshChatProps {
  * Enhanced Josh Chat Interface
  * Provides conversational AI assistance with contextual help and guidance
  */
-export function JoshChat({ 
-  isOpen, 
+export function JoshChat({
+  isOpen,
   onToggle,
   onMinimizeChange,
   onStartTour,
@@ -369,10 +369,16 @@ export function JoshChat({
               aria-hidden="true"
             />
             <div className="min-w-0">
-              <h3 id="josh-chat-title" className="font-semibold text-sm truncate">
+              <h3
+                id="josh-chat-title"
+                className="font-semibold text-sm truncate"
+              >
                 Josh
               </h3>
-              <p id="josh-chat-description" className="text-xs opacity-90 truncate">
+              <p
+                id="josh-chat-description"
+                className="text-xs opacity-90 truncate"
+              >
                 Tu asistente educativo
               </p>
             </div>
@@ -380,7 +386,8 @@ export function JoshChat({
           <div className="flex items-center space-x-1.5 flex-shrink-0">
             {/* Tour button - Always show if tour is available */}
             {(() => {
-              if (!onStartTour || !getTourForContext || !getPageContextProp) return null;
+              if (!onStartTour || !getTourForContext || !getPageContextProp)
+                return null;
               const context = getPageContext();
               const tourId = getTourForContext(context);
               if (!tourId) return null;
@@ -391,7 +398,10 @@ export function JoshChat({
                     onStartTour();
                   }}
                   className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
-                  aria-label={t("josh.tour.button.accessible", "Start interactive tour with Josh")}
+                  aria-label={t(
+                    "josh.tour.button.accessible",
+                    "Start interactive tour with Josh",
+                  )}
                   title={t("josh.tour.button", "Tour Interactivo")}
                 >
                   <Map className="w-4 h-4" aria-hidden="true" />
@@ -549,11 +559,11 @@ export function JoshChat({
                     <button
                       onClick={handleSendMessage}
                       disabled={!inputValue.trim() || isTyping}
-                      className="px-3 py-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0"
+                      className="ml-[5px] px-2.5 py-0.5 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0 scale-[0.85]"
                       aria-label={t("josh.chat.send", "Enviar mensaje")}
                       title={t("josh.chat.send", "Enviar mensaje")}
                     >
-                      <Send className="w-3 h-3" aria-hidden="true" />
+                      <Send className="w-2.5 h-2.5" aria-hidden="true" />
                     </button>
                   </div>
                   {isTyping && (
