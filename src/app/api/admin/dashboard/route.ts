@@ -12,7 +12,7 @@ export async function GET() {
     const client = await getAuthenticatedConvexClient();
     const session = await auth();
 
-    if (!session || session.data?.user.role !== "ADMIN") {
+    if (!session || session.user.role !== "ADMIN") {
       return handleApiError(
         new Error("Unauthorized access"),
         "GET /api/admin/dashboard",

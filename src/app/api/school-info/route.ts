@@ -34,7 +34,7 @@ export const POST = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  if (!hasPermission(session.data?.user.role, Permissions.SCHOOL_INFO_EDIT)) {
+  if (!hasPermission(session.user.role, Permissions.SCHOOL_INFO_EDIT)) {
     return NextResponse.json(
       {
         success: false,
@@ -93,7 +93,7 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  if (!hasPermission(session.data?.user.role, Permissions.SCHOOL_INFO_EDIT)) {
+  if (!hasPermission(session.user.role, Permissions.SCHOOL_INFO_EDIT)) {
     return NextResponse.json(
       {
         success: false,
@@ -138,7 +138,7 @@ export const DELETE = withApiErrorHandling(async (request: NextRequest) => {
     );
   }
 
-  if (!hasPermission(session.data?.user.role, Permissions.SCHOOL_INFO_EDIT)) {
+  if (!hasPermission(session.user.role, Permissions.SCHOOL_INFO_EDIT)) {
     return NextResponse.json(
       {
         success: false,

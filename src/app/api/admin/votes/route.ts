@@ -16,17 +16,17 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user has admin access (MASTER or ADMIN role)
-    if (!canAccessAdmin(session.data?.user.role)) {
+    if (!canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const convex = await getAuthenticatedConvexClient();
 
     console.log("Session user:", {
-      id: session.data?.user.id,
-      clerkId: session.data?.user.clerkId,
-      email: session.data?.user.email,
-      role: session.data?.user.role,
+      id: session.user.id,
+      clerkId: session.user.clerkId,
+      email: session.user.email,
+      role: session.user.role,
     });
 
     // Get query parameters
@@ -80,8 +80,8 @@ export async function GET(request: NextRequest) {
           updatedAt: new Date(vote.updatedAt).toISOString(),
           creator: {
             id: vote.createdBy,
-            name: session.data?.user?.name || "Admin",
-            email: session.data?.user?.email || "",
+            name: session.user?.name || "Admin",
+            email: session.user?.email || "",
           },
           options: options?.options?.map((opt: any) => ({
             id: opt._id,
@@ -138,16 +138,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has admin access (MASTER or ADMIN role)
-    if (!canAccessAdmin(session.data?.user.role)) {
+    if (!canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Validate that we have a user ID and resolve Convex user ID
-    if (!session.data?.user.id) {
+    if (!session.user.id) {
       console.error("No user ID in session:", {
-        clerkId: session.data?.user.clerkId,
-        email: session.data?.user.email,
-        role: session.data?.user.role,
+        clerkId: session.user.clerkId,
+        email: session.user.email,
+        role: session.user.role,
       });
       return NextResponse.json(
         { error: "User session is invalid. Please log out and log back in." },
@@ -158,17 +158,17 @@ export async function POST(request: NextRequest) {
     // Get authenticated Convex client to resolve user
     const convex = await getAuthenticatedConvexClient();
 
-    // Resolve Convex user ID - session.data?.user.id might be a Clerk ID string
+    // Resolve Convex user ID - session.user.id might be a Clerk ID string
     let convexUserId: Id<"users">;
-    if (session.data?.user.id && /^[a-z]/.test(session.data?.user.id)) {
+    if (session.user.id && /^[a-z]/.test(session.user.id)) {
       // It's already a valid Convex ID
-      convexUserId = session.data?.user.id as Id<"users">;
+      convexUserId = session.user.id as Id<"users">;
     } else {
       // It's a Clerk ID, look up the Convex user
-      if (!session.data?.user.clerkId) {
+      if (!session.user.clerkId) {
         console.error("No Clerk ID available for user lookup:", {
-          id: session.data?.user.id,
-          email: session.data?.user.email,
+          id: session.user.id,
+          email: session.user.email,
         });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
@@ -177,13 +177,13 @@ export async function POST(request: NextRequest) {
       }
 
       const convexUser = await convex.query(api.users.getUserByClerkId, {
-        clerkId: session.data?.user.clerkId,
+        clerkId: session.user.clerkId,
       });
 
       if (!convexUser) {
         console.error("User not found in Convex database:", {
-          clerkId: session.data?.user.clerkId,
-          email: session.data?.user.email,
+          clerkId: session.user.clerkId,
+          email: session.user.email,
         });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
@@ -379,7 +379,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Check if user has admin access (MASTER or ADMIN role)
-    if (!canAccessAdmin(session.data?.user.role)) {
+    if (!canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

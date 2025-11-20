@@ -81,7 +81,7 @@ export async function GET(
     const session = await auth();
     const { id } = await params;
 
-    if (!session?.user?.role || !canAccessAdmin(session.data?.user.role)) {
+    if (!session?.user?.role || !canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
@@ -133,7 +133,7 @@ export async function PUT(
     const session = await auth();
     const { id } = await params;
 
-    if (!session?.user?.role || !canAccessAdmin(session.data?.user.role)) {
+    if (!session?.user?.role || !canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
@@ -246,7 +246,7 @@ export async function DELETE(
     const session = await auth();
     const { id } = await params;
 
-    if (!session?.user?.role || !canAccessAdmin(session.data?.user.role)) {
+    if (!session?.user?.role || !canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 

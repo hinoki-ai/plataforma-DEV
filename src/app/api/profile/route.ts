@@ -27,19 +27,19 @@ export async function GET(request: NextRequest) {
 
     const client = await getAuthenticatedConvexClient();
 
-    // Resolve Convex user - session.data?.user.id might be a Clerk ID string
+    // Resolve Convex user - session.user.id might be a Clerk ID string
     let user = null;
 
-    // Check if session.data?.user.id is a valid Convex ID (starts with a letter)
+    // Check if session.user.id is a valid Convex ID (starts with a letter)
     // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
-    if (session.data?.user.id && /^[a-z]/.test(session.data?.user.id)) {
+    if (session.user.id && /^[a-z]/.test(session.user.id)) {
       // It's a valid Convex ID, use it directly
       user = await client.query(api.users.getUserById, {
-        userId: session.data?.user.id as any,
+        userId: session.user.id as any,
       });
     } else {
       // It's a Clerk ID, look up by Clerk ID
-      if (!session.data?.user.clerkId) {
+      if (!session.user.clerkId) {
         return NextResponse.json(
           { error: "User not found in database" },
           { status: 404 },
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       }
 
       user = await client.query(api.users.getUserByClerkId, {
-        clerkId: session.data?.user.clerkId,
+        clerkId: session.user.clerkId,
       });
     }
 
@@ -108,13 +108,13 @@ export async function PUT(request: NextRequest) {
 
     const client = await getAuthenticatedConvexClient();
 
-    // Resolve Convex user ID - session.data?.user.id might be a Clerk ID string
-    let convexUserId = session.data?.user.id as any;
+    // Resolve Convex user ID - session.user.id might be a Clerk ID string
+    let convexUserId = session.user.id as any;
 
-    // Check if session.data?.user.id is a valid Convex ID (starts with a letter)
+    // Check if session.user.id is a valid Convex ID (starts with a letter)
     // If not, it's likely a Clerk ID, so we need to look up the user by Clerk ID
     if (!convexUserId || !/^[a-z]/.test(convexUserId)) {
-      if (!session.data?.user.clerkId) {
+      if (!session.user.clerkId) {
         return NextResponse.json(
           { error: "User not found in database" },
           { status: 404 },
@@ -122,7 +122,7 @@ export async function PUT(request: NextRequest) {
       }
 
       const userByClerkId = await client.query(api.users.getUserByClerkId, {
-        clerkId: session.data?.user.clerkId,
+        clerkId: session.user.clerkId,
       });
 
       if (!userByClerkId) {

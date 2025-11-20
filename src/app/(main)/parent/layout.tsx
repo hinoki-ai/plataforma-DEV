@@ -50,7 +50,7 @@ export default function ParentLayout({
       return;
     }
 
-    if (!session.data?.user?.role) {
+    if (!session?.user?.role) {
       if (!hasRedirectedRef.current) {
         console.warn("Session missing user role, redirecting to login");
         hasRedirectedRef.current = true;
@@ -59,7 +59,7 @@ export default function ParentLayout({
       return;
     }
 
-    const roleAccess = getRoleAccess(session.data?.user.role);
+    const roleAccess = getRoleAccess(session.user.role);
 
     // MASTER has access to all sections
     if (!roleAccess.canAccessParent && session.data?.user.role !== "MASTER") {

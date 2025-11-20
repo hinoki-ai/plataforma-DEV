@@ -19,7 +19,7 @@ export async function DELETE(
     }
 
     // Check if user has admin access (MASTER or ADMIN role)
-    if (!canAccessAdmin(session.data?.user.role)) {
+    if (!canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

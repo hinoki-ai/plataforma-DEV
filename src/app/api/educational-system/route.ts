@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is admin or master
-    if (!["ADMIN", "MASTER"].includes(session.data?.user.role)) {
+    if (!["ADMIN", "MASTER"].includes(session.user.role)) {
       return NextResponse.json(
         {
           success: false,
