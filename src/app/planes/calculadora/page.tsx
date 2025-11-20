@@ -285,12 +285,12 @@ export default function PricingCalculatorPage({
         params.set("students", studentsToUse.toString());
         return currentStudents; // Don't change state here, just read it
       });
-      
+
       // Actually set students param properly
       setStudentsState((currentStudents) => {
         const studentsToUse = newStudents ?? currentStudents;
         params.set("students", studentsToUse.toString());
-        
+
         // Use new type if provided, otherwise keep current
         const typeToUse = newType ?? institutionType;
         params.set("type", typeToUse);
@@ -298,7 +298,7 @@ export default function PricingCalculatorPage({
         router.replace(`/planes/calculadora?${params.toString()}`, {
           scroll: false,
         });
-        
+
         return currentStudents; // Don't change state here
       });
     },
