@@ -120,15 +120,6 @@ export function InstitutionMasterCard({
 
   return (
     <Card className="border-2 border-gold-300 dark:border-gold-700 bg-linear-to-br from-gold-50 via-white to-blue-50 dark:from-gold-950/20 dark:via-card dark:to-blue-950/20">
-      <CardHeader className="border-b border-gold-200 dark:border-gold-700">
-        <CardTitle className="flex items-center gap-3 text-gold-800 dark:text-gold-200">
-          🏛️ MASTER - Configuración Educativa Suprema
-        </CardTitle>
-        <CardDescription>
-          Control absoluto del sistema educativo institucional
-        </CardDescription>
-      </CardHeader>
-
       <CardContent className="pt-6">
         <div className="space-y-6">
           {/* Current Institution Status */}

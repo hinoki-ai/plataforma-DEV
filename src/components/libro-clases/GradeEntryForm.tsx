@@ -387,7 +387,7 @@ export function GradeEntryForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "subject")}
                     >
-                      <SelectValue placeholder="Seleccione asignatura" />
+                      <SelectValue placeholder={t("form.placeholders.select_subject")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -420,7 +420,7 @@ export function GradeEntryForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "evaluationType")}
                     >
-                      <SelectValue placeholder="Seleccione tipo" />
+                      <SelectValue placeholder={t("form.placeholders.select_type")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -452,7 +452,7 @@ export function GradeEntryForm({
                     <SelectTrigger
                       onKeyDown={(e) => handleKeyDown(e, "period")}
                     >
-                      <SelectValue placeholder="Seleccione período" />
+                      <SelectValue placeholder={t("form.placeholders.select_period")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

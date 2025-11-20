@@ -284,7 +284,7 @@ export function InstitutionCreationForm() {
   const handleRemoveAdmin = (index: number) => {
     const admins = form.getValues("admins");
     if (admins.length === 1) {
-      toast.error("Debe mantener al menos un administrador");
+      toast.error(t("master.institution_creation.must_keep_admin"));
       return;
     }
 
@@ -389,647 +389,635 @@ export function InstitutionCreationForm() {
       subtitle={t("master.institution_creation.subtitle")}
       context="MASTER_INSTITUTION_CREATION"
     >
-      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <Card className="border-blue-200 dark:border-blue-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-blue-600" />
-              {t("master.institution_creation.basic_info")}
-            </CardTitle>
-            <CardDescription>
-              {t("master.institution_creation.basic_info_desc")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                {/* PLAN SELECTION */}
-                <div className="space-y-4 mb-6">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <CreditCard className="h-5 w-5 text-green-600" />
-                    {t("master.institution_creation.billing_plan")}
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    {Object.entries(BILLING_PLANS).map(([key, plan]) => (
-                      <div
-                        key={plan.id}
-                        className={`cursor-pointer border rounded-lg p-4 flex flex-col gap-2 transition-all ${
-                          selectedPlan === key
-                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-1 ring-blue-500"
-                            : "hover:border-blue-300"
-                        }`}
-                        onClick={() => form.setValue("billingPlan", key as any)}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span className="font-semibold">{plan.name}</span>
-                          {selectedPlan === key && (
-                            <Check className="h-4 w-4 text-blue-600" />
-                          )}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          Hasta {plan.maxCourses} cursos
-                          <br />
-                          Hasta {plan.maxSubjects} asignaturas
-                        </div>
+      <Card className="border-blue-200 dark:border-blue-800">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-blue-600" />
+            {t("master.institution_creation.basic_info")}
+          </CardTitle>
+          <CardDescription>
+            {t("master.institution_creation.basic_info_desc")}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* PLAN SELECTION */}
+              <div className="space-y-4 mb-6">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <CreditCard className="h-5 w-5 text-green-600" />
+                  {t("master.institution_creation.billing_plan")}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {Object.entries(BILLING_PLANS).map(([key, plan]) => (
+                    <div
+                      key={plan.id}
+                      className={`cursor-pointer border rounded-lg p-4 flex flex-col gap-2 transition-all ${
+                        selectedPlan === key
+                          ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-1 ring-blue-500"
+                          : "hover:border-blue-300"
+                      }`}
+                      onClick={() => form.setValue("billingPlan", key as any)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="font-semibold">{plan.name}</span>
+                        {selectedPlan === key && (
+                          <Check className="h-4 w-4 text-blue-600" />
+                        )}
                       </div>
+                      <div className="text-sm text-muted-foreground">
+                        {t("master.institution_creation.up_to_courses", { count: plan.maxCourses })}
+                        <br />
+                        {t("master.institution_creation.up_to_subjects", { count: plan.maxSubjects })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* BASIC INFO */}
+              <div className="grid gap-4 md:grid-cols-2 pt-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("master.institution_creation.institution_name")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t(
+                            "master.institution_creation.institution_name_placeholder",
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="institutionType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("master.institution_creation.institution_type")}
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t(
+                                "master.institution_creation.institution_type_placeholder",
+                              )}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {institutionOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              <div className="flex flex-col">
+                                <span>{option.label}</span>
+                                <span className="text-xs text-muted-foreground">
+                                  {option.description}
+                                </span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="branding.primaryColor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {t("master.institution_creation.primary_color")}
+                        </FormLabel>
+                        <div className="flex gap-2">
+                          <FormControl>
+                            <Input
+                              type="color"
+                              {...field}
+                              className="w-12 p-1 h-10"
+                            />
+                          </FormControl>
+                          <Input
+                            {...field}
+                            placeholder="#000000"
+                            className="uppercase"
+                            maxLength={7}
+                          />
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="branding.secondaryColor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {t("master.institution_creation.secondary_color")}
+                        </FormLabel>
+                        <div className="flex gap-2">
+                          <FormControl>
+                            <Input
+                              type="color"
+                              {...field}
+                              className="w-12 p-1 h-10"
+                            />
+                          </FormControl>
+                          <Input
+                            {...field}
+                            placeholder="#000000"
+                            className="uppercase"
+                            maxLength={7}
+                          />
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="supportedLevels"
+                  render={() => (
+                    <FormItem className="md:col-span-2">
+                      <div className="mb-4 mt-2">
+                        <FormLabel className="text-base">
+                          {t("master.institution_creation.supported_levels")}
+                        </FormLabel>
+                        <CardDescription>
+                          Seleccione los niveles que ofrecerá esta institución (
+                          {availableLevels.length} disponibles para{" "}
+                          {
+                            INSTITUTION_TYPE_INFO[selectedInstitutionType]
+                              .chileanName
+                          }
+                          )
+                        </CardDescription>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 bg-muted/10">
+                        {availableLevels.map((level) => (
+                          <FormField
+                            key={level.id}
+                            control={form.control}
+                            name="supportedLevels"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={level.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(level.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
+                                              ...(field.value || []),
+                                              level.id,
+                                            ])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value: string) =>
+                                                  value !== level.id,
+                                              ),
+                                            );
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-normal text-sm font-semibold">
+                                      {level.chileanName}
+                                    </FormLabel>
+                                    <p className="text-xs text-muted-foreground">
+                                      {level.ages} • {level.duration}
+                                    </p>
+                                  </div>
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("master.institution_creation.phone")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t(
+                            "master.institution_creation.phone_placeholder",
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("master.institution_creation.email")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t(
+                            "master.institution_creation.email_placeholder",
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="website"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("master.institution_creation.website")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t(
+                            "master.institution_creation.website_placeholder",
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="logoUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("master.institution_creation.logo_url")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t(
+                            "master.institution_creation.logo_url_placeholder",
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>
+                        {t("master.institution_creation.address")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t(
+                            "master.institution_creation.address_placeholder",
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mission"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>
+                        {t("master.institution_creation.mission")}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={t(
+                            "master.institution_creation.mission_placeholder",
+                          )}
+                          className="min-h-[100px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="vision"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>
+                        {t("master.institution_creation.vision")}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={t(
+                            "master.institution_creation.vision_placeholder",
+                          )}
+                          className="min-h-[100px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <Settings2 className="h-5 w-5 text-blue-600" />
+                      {t("master.institution_creation.educational_config")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {t("master.institution_creation.educational_config_desc")}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="educationalConfig.maxCourses"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Límite de Cursos</FormLabel>
+                        <FormControl>
+                          <Input type="number" min="1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="educationalConfig.maxSubjects"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Límite de Asignaturas</FormLabel>
+                        <FormControl>
+                          <Input type="number" min="1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="space-y-3 border rounded-lg p-4 bg-muted/10">
+                  <FormLabel>Módulos y Funcionalidades</FormLabel>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {Object.entries(FEATURE_LABELS).map(([key, label]) => (
+                      <FormField
+                        key={key}
+                        control={form.control}
+                        name={`educationalConfig.enabledFeatures.${key}` as any}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value as boolean}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal text-sm cursor-pointer">
+                              {label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
                     ))}
                   </div>
                 </div>
+              </div>
 
-                <Separator />
+              <Separator />
 
-                {/* BASIC INFO */}
-                <div className="grid gap-4 md:grid-cols-2 pt-4">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.institution_name")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t(
-                              "master.institution_creation.institution_name_placeholder",
-                            )}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="institutionType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.institution_type")}
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue
-                                placeholder={t(
-                                  "master.institution_creation.institution_type_placeholder",
-                                )}
-                              />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {institutionOptions.map((option) => (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                              >
-                                <div className="flex flex-col">
-                                  <span>{option.label}</span>
-                                  <span className="text-xs text-muted-foreground">
-                                    {option.description}
-                                  </span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="branding.primaryColor"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            {t("master.institution_creation.primary_color")}
-                          </FormLabel>
-                          <div className="flex gap-2">
-                            <FormControl>
-                              <Input
-                                type="color"
-                                {...field}
-                                className="w-12 p-1 h-10"
-                              />
-                            </FormControl>
-                            <Input
-                              {...field}
-                              placeholder="#000000"
-                              className="uppercase"
-                              maxLength={7}
-                            />
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="branding.secondaryColor"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            {t("master.institution_creation.secondary_color")}
-                          </FormLabel>
-                          <div className="flex gap-2">
-                            <FormControl>
-                              <Input
-                                type="color"
-                                {...field}
-                                className="w-12 p-1 h-10"
-                              />
-                            </FormControl>
-                            <Input
-                              {...field}
-                              placeholder="#000000"
-                              className="uppercase"
-                              maxLength={7}
-                            />
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <ShieldCheck className="h-5 w-5 text-blue-600" />
+                      {t("master.institution_creation.administrators")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {t("master.institution_creation.administrators_desc")}
+                    </p>
                   </div>
-
-                  <FormField
-                    control={form.control}
-                    name="supportedLevels"
-                    render={() => (
-                      <FormItem className="md:col-span-2">
-                        <div className="mb-4 mt-2">
-                          <FormLabel className="text-base">
-                            {t("master.institution_creation.supported_levels")}
-                          </FormLabel>
-                          <CardDescription>
-                            Seleccione los niveles que ofrecerá esta institución
-                            ({availableLevels.length} disponibles para{" "}
-                            {
-                              INSTITUTION_TYPE_INFO[selectedInstitutionType]
-                                .chileanName
-                            }
-                            )
-                          </CardDescription>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 bg-muted/10">
-                          {availableLevels.map((level) => (
-                            <FormField
-                              key={level.id}
-                              control={form.control}
-                              name="supportedLevels"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={level.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(
-                                          level.id,
-                                        )}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([
-                                                ...(field.value || []),
-                                                level.id,
-                                              ])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value: string) =>
-                                                    value !== level.id,
-                                                ),
-                                              );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                      <FormLabel className="font-normal text-sm font-semibold">
-                                        {level.chileanName}
-                                      </FormLabel>
-                                      <p className="text-xs text-muted-foreground">
-                                        {level.ages} • {level.duration}
-                                      </p>
-                                    </div>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.phone")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t(
-                              "master.institution_creation.phone_placeholder",
-                            )}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.email")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t(
-                              "master.institution_creation.email_placeholder",
-                            )}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="website"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.website")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t(
-                              "master.institution_creation.website_placeholder",
-                            )}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="logoUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.logo_url")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t(
-                              "master.institution_creation.logo_url_placeholder",
-                            )}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                      <FormItem className="md:col-span-2">
-                        <FormLabel>
-                          {t("master.institution_creation.address")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t(
-                              "master.institution_creation.address_placeholder",
-                            )}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="mission"
-                    render={({ field }) => (
-                      <FormItem className="md:col-span-2">
-                        <FormLabel>
-                          {t("master.institution_creation.mission")}
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t(
-                              "master.institution_creation.mission_placeholder",
-                            )}
-                            className="min-h-[100px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="vision"
-                    render={({ field }) => (
-                      <FormItem className="md:col-span-2">
-                        <FormLabel>
-                          {t("master.institution_creation.vision")}
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t(
-                              "master.institution_creation.vision_placeholder",
-                            )}
-                            className="min-h-[100px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddAdmin}
+                  >
+                    {t("master.institution_creation.add_admin")}
+                  </Button>
                 </div>
 
-                <Separator />
+                {adminsRootError && (
+                  <Alert variant="destructive">
+                    <AlertTitle>
+                      {t("master.institution_creation.configuration_error")}
+                    </AlertTitle>
+                    <AlertDescription>{adminsRootError}</AlertDescription>
+                  </Alert>
+                )}
 
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Settings2 className="h-5 w-5 text-blue-600" />
-                        {t("master.institution_creation.educational_config")}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {t(
-                          "master.institution_creation.educational_config_desc",
-                        )}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="educationalConfig.maxCourses"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Límite de Cursos</FormLabel>
-                          <FormControl>
-                            <Input type="number" min="1" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="educationalConfig.maxSubjects"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Límite de Asignaturas</FormLabel>
-                          <FormControl>
-                            <Input type="number" min="1" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="space-y-3 border rounded-lg p-4 bg-muted/10">
-                    <FormLabel>Módulos y Funcionalidades</FormLabel>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {Object.entries(FEATURE_LABELS).map(([key, label]) => (
-                        <FormField
-                          key={key}
-                          control={form.control}
-                          name={
-                            `educationalConfig.enabledFeatures.${key}` as any
-                          }
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value as boolean}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <FormLabel className="font-normal text-sm cursor-pointer">
-                                {label}
-                              </FormLabel>
-                            </FormItem>
-                          )}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <ShieldCheck className="h-5 w-5 text-blue-600" />
-                        {t("master.institution_creation.administrators")}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {t("master.institution_creation.administrators_desc")}
-                      </p>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleAddAdmin}
+                  {adminFields.map((field, index) => (
+                    <Card
+                      key={field.id}
+                      className="border-gray-200 dark:border-gray-700"
                     >
-                      {t("master.institution_creation.add_admin")}
-                    </Button>
-                  </div>
-
-                  {adminsRootError && (
-                    <Alert variant="destructive">
-                      <AlertTitle>Error de configuración</AlertTitle>
-                      <AlertDescription>{adminsRootError}</AlertDescription>
-                    </Alert>
-                  )}
-
-                  <div className="space-y-4">
-                    {adminFields.map((field, index) => (
-                      <Card
-                        key={field.id}
-                        className="border-gray-200 dark:border-gray-700"
-                      >
-                        <CardHeader className="pb-2">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-base">
-                              Administrador #{index + 1}
-                            </CardTitle>
-                            <div className="flex items-center gap-3">
-                              {primaryAdminIndex === index ? (
-                                <Badge
-                                  className="bg-green-500 text-white"
-                                  variant="secondary"
-                                >
-                                  Principal
-                                </Badge>
-                              ) : (
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleSetPrimary(index)}
-                                >
-                                  Marcar como principal
-                                </Button>
-                              )}
+                      <CardHeader className="pb-2">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-base">
+                            Administrador #{index + 1}
+                          </CardTitle>
+                          <div className="flex items-center gap-3">
+                            {primaryAdminIndex === index ? (
+                              <Badge
+                                className="bg-green-500 text-white"
+                                variant="secondary"
+                              >
+                                Principal
+                              </Badge>
+                            ) : (
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleRemoveAdmin(index)}
+                                onClick={() => handleSetPrimary(index)}
                               >
-                                Eliminar
+                                Marcar como principal
                               </Button>
-                            </div>
+                            )}
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRemoveAdmin(index)}
+                            >
+                              Eliminar
+                            </Button>
                           </div>
-                        </CardHeader>
-                        <CardContent className="grid gap-3 md:grid-cols-2">
-                          <FormField
-                            control={form.control}
-                            name={`admins.${index}.name`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  {t("master.institution_creation.admin_name")}
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder={t(
-                                      "master.institution_creation.admin_name_placeholder",
-                                    )}
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name={`admins.${index}.email`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  {t("master.institution_creation.admin_email")}
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder={t(
-                                      "master.institution_creation.admin_email_placeholder",
-                                    )}
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name={`admins.${index}.phone`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  {t("master.institution_creation.admin_phone")}
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder={t(
-                                      "master.institution_creation.admin_phone_placeholder",
-                                    )}
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name={`admins.${index}.password`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  {t(
-                                    "master.institution_creation.admin_password",
+                        </div>
+                      </CardHeader>
+                      <CardContent className="grid gap-3 md:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name={`admins.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t("master.institution_creation.admin_name")}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder={t(
+                                    "master.institution_creation.admin_name_placeholder",
                                   )}
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    type="password"
-                                    placeholder={t(
-                                      "master.institution_creation.admin_password_placeholder",
-                                    )}
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`admins.${index}.email`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t("master.institution_creation.admin_email")}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder={t(
+                                    "master.institution_creation.admin_email_placeholder",
+                                  )}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`admins.${index}.phone`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t("master.institution_creation.admin_phone")}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder={t(
+                                    "master.institution_creation.admin_phone_placeholder",
+                                  )}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`admins.${index}.password`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t(
+                                  "master.institution_creation.admin_password",
+                                )}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder={t(
+                                    "master.institution_creation.admin_password_placeholder",
+                                  )}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
+              </div>
 
-                <div className="flex justify-end gap-3 pt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => form.reset(defaultValues)}
-                    disabled={form.formState.isSubmitting}
-                  >
-                    Limpiar formulario
-                  </Button>
-                  <Button type="submit" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting
-                      ? t("master.institution_creation.creating")
-                      : t("master.institution_creation.create_institution")}
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => form.reset(defaultValues)}
+                  disabled={form.formState.isSubmitting}
+                >
+                  Limpiar formulario
+                </Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting
+                    ? t("master.institution_creation.creating")
+                    : t("master.institution_creation.create_institution")}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </MasterPageTemplate>
   );
 }

@@ -274,7 +274,7 @@ export default function PreciosPage() {
                       {plan.name}
                     </CardTitle>
                     <CardDescription className="text-muted-foreground text-sm font-medium mt-2">
-                      {plan.description}
+                      {tp(`plans.${plan.id}.description`)}
                     </CardDescription>
 
                     {/* Simple Price Display */}
@@ -326,17 +326,17 @@ export default function PreciosPage() {
                         {[
                           {
                             key: "courses",
-                            label: `${plan.features.courses} cursos`,
+                            label: `${plan.features.courses} ${tp("courses_subjects").split("/")[0]}`,
                             icon: BookOpen,
                           },
                           {
                             key: "subjects",
-                            label: `${plan.features.subjects} asignaturas`,
+                            label: `${plan.features.subjects} ${tp("courses_subjects").split("/")[1]}`,
                             icon: BookOpen,
                           },
                           {
                             key: "storage",
-                            label: `${plan.features.storage} de almacenamiento`,
+                            label: `${plan.features.storage} ${tp("storage_label")}`,
                             icon: HardDrive,
                           },
                           {

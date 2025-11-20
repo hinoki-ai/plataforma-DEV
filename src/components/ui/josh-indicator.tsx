@@ -266,7 +266,7 @@ export function JoshIndicator() {
       />
 
       <AnimatePresence>
-        {isVisible && (
+        {isVisible && !isChatOpen && (
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{

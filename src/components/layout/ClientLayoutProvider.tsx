@@ -15,6 +15,7 @@ import { useSidebarState } from "./hooks/useSidebarState";
 import { useSidebarGestures } from "./hooks/useSidebarGestures";
 import { NavigationProvider } from "./NavigationContext";
 import { NetworkErrorBoundary } from "@/components/ui/network-error-boundary";
+import { JoshOnboarding } from "@/components/onboarding/JoshOnboarding";
 
 interface ClientLayoutProviderProps {
   children: React.ReactNode;
@@ -25,6 +26,8 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
   const { data: session, status } = useSession();
   // Sidebar state management
   const pathname = usePathname();
+
+  const [isSidebarHighlighted, setIsSidebarHighlighted] = React.useState(false);
 
   const { isSidebarCollapsed, setIsSidebarCollapsed } =
     useSidebarState(isHydrated);
@@ -92,7 +95,11 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
         <Sidebar
           isCollapsed={isSidebarCollapsed}
           onToggle={handleToggleSidebar}
-          className="hidden md:flex"
+          className={cn(
+            "hidden md:flex",
+            isSidebarHighlighted &&
+              "z-50 relative shadow-2xl ring-2 ring-primary/50",
+          )}
         />
 
         {/* Mobile Sidebar Components - Always render trigger button */}
@@ -117,6 +124,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
           </main>
         </div>
       </div>
+      <JoshOnboarding onHighlightSidebar={setIsSidebarHighlighted} />
     </div>
   );
 }

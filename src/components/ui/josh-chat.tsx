@@ -334,14 +334,16 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 20 }}
-        className="fixed bottom-20 right-6 z-50 w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col"
+        className={`fixed bottom-0 right-0 z-50 w-80 ${
+          isMinimized ? "h-auto" : "h-96"
+        } bg-white dark:bg-gray-800 rounded-tl-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="josh-chat-title"
         aria-describedby="josh-chat-description"
       >
         {/* Header */}
-        <header className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
+        <header className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-tl-lg">
           <div className="flex items-center space-x-2">
             <motion.img
               src={joshImage}

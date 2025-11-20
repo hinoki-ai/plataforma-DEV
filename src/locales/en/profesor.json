@@ -127,6 +127,8 @@
       "academic_year": "Academic Year",
       "no_courses": "No courses available",
       "no_courses_desc": "No active courses found for your account",
+      "no_assigned_courses": "No courses assigned",
+      "contact_admin": "Contact the administrator to assign courses to you",
       "course_details": {
         "students": "Students",
         "subjects": "Subjects",

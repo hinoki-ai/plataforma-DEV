@@ -388,7 +388,9 @@ export function TeacherLibroClasesView({
 
             {/* Course List */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Seleccione un Curso</h2>
+              <h2 className="text-xl font-semibold">
+                {t("profesor.libro_clases.select_course")}
+              </h2>
               {courses && courses.length > 0 ? (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {courses.map((course) => (
@@ -447,10 +449,14 @@ export function TeacherLibroClasesView({
                   <CardContent className="py-12 text-center">
                     <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <h3 className="text-lg font-semibold mb-2">
-                      No tiene cursos asignados
+                      {t(
+                        "profesor.libro_clases.course_selection.no_assigned_courses",
+                      )}
                     </h3>
                     <p className="text-muted-foreground">
-                      Contacte al administrador para que le asigne cursos
+                      {t(
+                        "profesor.libro_clases.course_selection.contact_admin",
+                      )}
                     </p>
                   </CardContent>
                 </Card>

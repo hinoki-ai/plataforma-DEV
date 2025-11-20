@@ -69,19 +69,18 @@ export function MasterActionCard({
           {actions.map((action) => (
             <div
               key={action.id}
-              className="group relative p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
+              className="group relative p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors min-h-[140px] flex flex-col"
             >
-              <div className="flex items-start justify-between mb-3">
-                <action.icon className="h-5 w-5 text-slate-600 dark:text-slate-400 mt-0.5" />
-                {action.badge && (
+              {action.badge && (
+                <div className="flex justify-end mb-3">
                   <Badge
                     variant={action.badgeVariant || "secondary"}
                     className="text-xs"
                   >
                     {action.badge}
                   </Badge>
-                )}
-              </div>
+                </div>
+              )}
 
               <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-1 text-sm">
                 {action.title}
@@ -104,12 +103,10 @@ export function MasterActionCard({
                     href={action.href}
                     className="flex items-center justify-center"
                   >
-                    <action.icon className="h-3 w-3 mr-2" />
                     Ejecutar
                   </a>
                 ) : (
                   <>
-                    <action.icon className="h-3 w-3 mr-2" />
                     Ejecutar
                   </>
                 )}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "@/components/layout/Header";
 import MinEducFooter from "@/components/layout/MinEducFooter";
 import CompactFooter from "@/components/layout/CompactFooter";
@@ -247,13 +247,16 @@ export default function PricingCalculatorPage({
   const [inputValue, setInputValue] = useState<string>(
     String(fallbackPlan.minStudents),
   );
+  const isEditingInput = useRef(false);
 
   // Update students state when initialStudents changes (e.g., when URL params change)
   useEffect(() => {
     // Only update if the value actually changed to avoid unnecessary re-renders
     if (students !== initialStudents) {
       setStudentsState(initialStudents);
-      setInputValue(String(initialStudents));
+      if (!isEditingInput.current) {
+        setInputValue(String(initialStudents));
+      }
     }
   }, [initialStudents, students]);
 
@@ -317,7 +320,9 @@ export default function PricingCalculatorPage({
 
   // Sync inputValue when students changes externally (slider, buttons, plan change)
   useEffect(() => {
-    setInputValue(String(students));
+    if (!isEditingInput.current) {
+      setInputValue(String(students));
+    }
   }, [students]);
 
   // Auto-switch plan when student count changes (if not manually overridden)
@@ -447,7 +452,7 @@ export default function PricingCalculatorPage({
             "{count}",
             String(billingInfo.months),
           ) + ` (${billingInfo.label})`,
-    [billingInfo.months, billingInfo.label, tc],
+    [billingCycle, tc],
   );
 
   const monthlyPriceFormatted = formatCLP(monthlyPrice);
@@ -492,6 +497,7 @@ export default function PricingCalculatorPage({
   };
 
   const handleStudentInputChange = (value: string) => {
+    isEditingInput.current = true;
     // Allow empty string or partial input while typing
     if (value === "" || value === "-") {
       setInputValue(value);
@@ -502,10 +508,14 @@ export default function PricingCalculatorPage({
     const numeric = Number.parseInt(value.replace(/\D/g, ""), 10);
     if (!Number.isNaN(numeric)) {
       setInputValue(value.replace(/\D/g, ""));
+      // Live update of calculations
+      const clamped = Math.max(1, numeric);
+      setStudents(clamped);
     }
   };
 
   const handleStudentInputBlur = () => {
+    isEditingInput.current = false;
     // On blur, validate and clamp the value
     const numeric = Number.parseInt(inputValue, 10);
     if (Number.isNaN(numeric) || inputValue === "") {
@@ -565,6 +575,31 @@ export default function PricingCalculatorPage({
                     <CardDescription className="text-gray-300 text-base mt-2">
                       {selectedPlan.description}
                     </CardDescription>
+
+                    {/* Plan Selector */}
+                    <div className="flex flex-wrap gap-2 mt-4 mb-2">
+                      {pricingPlans.map((plan) => (
+                        <Button
+                          key={plan.id}
+                          variant={
+                            selectedPlan.id === plan.id ? "default" : "outline"
+                          }
+                          size="sm"
+                          onClick={() => {
+                            setSelectedPlanId(plan.id);
+                            setManualPlanOverride(true);
+                            updateUrl(billingCycle, students, plan.id);
+                          }}
+                          className={
+                            selectedPlan.id === plan.id
+                              ? "bg-primary text-primary-foreground"
+                              : "border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
+                          }
+                        >
+                          {plan.name}
+                        </Button>
+                      ))}
+                    </div>
 
                     {/* Plan Validation Warning */}
                     {!planValidation.isValid && (
@@ -666,56 +701,6 @@ export default function PricingCalculatorPage({
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* Institution Type Selector */}
-                <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5">
-                  <div className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-4">
-                    {tc("educational_system.institution_type")}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(INSTITUTION_TYPE_INFO).map(
-                      ([key, info]) => (
-                        <Button
-                          key={key}
-                          onClick={() =>
-                            setInstitutionType(
-                              key as EducationalInstitutionType,
-                            )
-                          }
-                          variant={
-                            institutionType === key ? "default" : "outline"
-                          }
-                          size="sm"
-                          className={`${
-                            institutionType === key
-                              ? info.color
-                              : "border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
-                          }`}
-                        >
-                          {info.chileanName}
-                        </Button>
-                      ),
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-500 mt-3">
-                    {INSTITUTION_TYPE_INFO[institutionType].description}
-                  </p>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {highlightItems.map((item) => (
-                    <div
-                      key={item.label}
-                      className="rounded-xl border border-gray-800 bg-gray-900/60 p-4"
-                    >
-                      <div className="text-xs uppercase tracking-wide text-gray-400">
-                        {item.label}
-                      </div>
-                      <div className="mt-2 text-lg font-semibold text-white">
-                        {item.value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
                 <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5">
                   <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gray-300">
                     <Users className="w-4 h-4" />{" "}
@@ -794,6 +779,57 @@ export default function PricingCalculatorPage({
                       aria-valuenow={students}
                     />
                   </div>
+                </div>
+
+                {/* Institution Type Selector */}
+                <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5">
+                  <div className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-4">
+                    {tc("educational_system.institution_type")}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(INSTITUTION_TYPE_INFO).map(
+                      ([key, info]) => (
+                        <Button
+                          key={key}
+                          onClick={() =>
+                            setInstitutionType(
+                              key as EducationalInstitutionType,
+                            )
+                          }
+                          variant={
+                            institutionType === key ? "default" : "outline"
+                          }
+                          size="sm"
+                          className={`${
+                            institutionType === key
+                              ? info.color
+                              : "border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
+                          }`}
+                        >
+                          {info.chileanName}
+                        </Button>
+                      ),
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-500 mt-3">
+                    {INSTITUTION_TYPE_INFO[institutionType].description}
+                  </p>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {highlightItems.map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-xl border border-gray-800 bg-gray-900/60 p-4"
+                    >
+                      <div className="text-xs uppercase tracking-wide text-gray-400">
+                        {item.label}
+                      </div>
+                      <div className="mt-2 text-lg font-semibold text-white">
+                        {item.value}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>

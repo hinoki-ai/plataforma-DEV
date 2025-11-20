@@ -1186,6 +1186,65 @@
   "nav.parent_dashboard": "Parent Dashboard",
   "nav.professor_area": "Professor Area",
   "nav.quick_search": "Quick search",
+
+  "nav.main.categories.principal": "Principal",
+  "nav.main.categories.management": "User Management",
+  "nav.main.categories.academic": "Academic",
+  "nav.main.categories.libro_clases": "Libro de Clases",
+  "nav.main.categories.convivencia": "Convivencia",
+  "nav.main.categories.communication": "Communication",
+  "nav.main.categories.resources": "Resources",
+  "nav.main.categories.personal": "Personal",
+  "nav.main.categories.system": "System",
+  "nav.main.categories.debug": "Debug",
+  "nav.main.categories.information": "Information",
+
+  "nav.docs": "Documentation",
+  "nav.configuration": "Configuration",
+  "nav.profile": "Profile",
+  "nav.logout": "Logout",
+
+  "nav.home": "Home",
+  "nav.dashboard": "Dashboard",
+  "nav.admin.panel": "Admin Panel",
+  "nav.users": "Users",
+  "nav.students": "Students",
+  "nav.calendar": "Calendar",
+  "nav.calificaciones": "Grades",
+  "nav.documents": "Documents",
+  "nav.planning": "Planning",
+  "nav.schedule": "Schedule",
+  "nav.pme": "PME",
+  "nav.class_content": "Class Content",
+  "nav.parent.meetings": "Parent Meetings",
+  "nav.meetings": "Meetings",
+  "nav.voting": "Voting",
+  "nav.communication": "Communication",
+  "nav.resources": "Resources",
+
+  "nav.global_oversight": "Global Oversight",
+  "nav.system_stats": "System Stats",
+  "nav.system_health": "System Health",
+  "nav.institutions": "Institutions",
+  "nav.roles": "Roles",
+  "nav.user_analytics": "User Analytics",
+  "nav.security": "Security",
+  "nav.database": "Database",
+  "nav.global_settings": "Global Settings",
+  "nav.god_mode": "God Mode",
+  "nav.debug_console": "Debug Console",
+  "nav.audit_logs": "Audit Logs",
+  "nav.system_monitor": "System Monitor",
+  "nav.performance": "Performance",
+
+  "nav.protocolos_convivencia": "Convivencia Protocols",
+  "nav.protocolos_convivencia.normas": "Norms",
+  "nav.protocolos_convivencia.disciplina": "Discipline",
+  "nav.protocolos_convivencia.medidas": "Measures",
+  "nav.protocolos_convivencia.reconocimientos": "Recognitions",
+  "nav.protocolos_convivencia.actas_apoderados": "Parent Meeting Minutes",
+  "nav.protocolos_convivencia.actas_alumnos": "Student Meeting Minutes",
+
   "navigation.category.academic": "Academic",
   "navigation.category.admin": "Administration",
   "navigation.category.parent": "Parent/Guardian",
@@ -1947,5 +2006,12 @@
       "settings": "Settings"
     },
     "empty": "No institutions registered"
+  },
+  "form": {
+    "placeholders": {
+      "select_subject": "Select subject",
+      "select_type": "Select type",
+      "select_period": "Select period"
+    }
   }
 }

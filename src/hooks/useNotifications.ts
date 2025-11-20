@@ -29,6 +29,7 @@ export function useNotifications() {
   const [error, setError] = useState<string | null>(null);
   const [eventSource, setEventSource] = useState<EventSource | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
+  const [dashboardData, setDashboardData] = useState<any>(null);
 
   // Fetch notifications from API
   const fetchNotifications = useCallback(
@@ -242,6 +243,11 @@ export function useNotifications() {
               setNotifications((prev) => [newNotification, ...prev]);
               setUnreadCount((prev) => prev + 1);
             }
+
+            if (data.type === "dashboard_update") {
+              // Update dashboard data for real-time updates
+              setDashboardData(data.data);
+            }
           } catch (err) {
             console.error("Error parsing SSE data:", err);
           }
@@ -252,6 +258,13 @@ export function useNotifications() {
           reconnectAttempts = 0; // Reset attempts on successful connection
           setEventSource(es);
           setError(null); // Clear any previous errors
+
+          // For master users, send initial dashboard data
+          if (session?.user?.role === "MASTER") {
+            console.log(
+              "Master user connected - enabling real-time dashboard updates",
+            );
+          }
         };
 
         es.onerror = (error) => {
@@ -334,5 +347,6 @@ export function useNotifications() {
     fetchNotifications,
     markAsRead,
     createNotification,
+    dashboardData,
   };
 }

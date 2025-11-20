@@ -26,7 +26,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import { useDashboardData } from "@/hooks/useDashboardData";
+import { useNotifications } from "@/hooks/useNotifications";
 import { LucideIcon } from "lucide-react";
 import {
   Crown,
@@ -38,6 +40,8 @@ import {
   Zap,
   CheckCircle,
   Building2,
+  Wifi,
+  WifiOff,
 } from "lucide-react";
 import { MasterPageTemplate } from "./MasterPageTemplate";
 import { MasterActionCard } from "./MasterActionCard";
@@ -263,7 +267,13 @@ function SecurityAlertsCard({ stats }: { stats: any }) {
 
 export function MasterDashboard() {
   const { data: session } = useSession();
-  const { stats, loading } = useDashboardData();
+  const { stats: initialStats, loading: initialLoading } = useDashboardData();
+  const { dashboardData, error: sseError } = useNotifications();
+
+  // Use real-time data if available, otherwise fall back to initial data
+  const stats = dashboardData || initialStats;
+  const loading = initialLoading && !dashboardData;
+  const isRealTime = !!dashboardData;
 
   const masterQuickActions: QuickAction[] = useMemo(
     () => [
@@ -341,17 +351,40 @@ export function MasterDashboard() {
   return (
     <MasterPageTemplate
       title="Master Dashboard"
-      subtitle={`Welcome, ${session?.user?.name || "Administrator"}`}
+      subtitle={
+        <div className="flex items-center gap-2">
+          <span>Welcome, {session?.user?.name || "Administrator"}</span>
+          <Badge
+            variant={isRealTime ? "default" : "secondary"}
+            className={`text-xs ${
+              isRealTime
+                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+            }`}
+          >
+            {isRealTime ? (
+              <>
+                <Wifi className="h-3 w-3 mr-1" />
+                Live
+              </>
+            ) : (
+              <>
+                <WifiOff className="h-3 w-3 mr-1" />
+                Static
+              </>
+            )}
+          </Badge>
+          {sseError && (
+            <Badge variant="destructive" className="text-xs">
+              SSE Error
+            </Badge>
+          )}
+        </div>
+      }
       context="MASTER_DASHBOARD"
     >
       {/* Quick Actions */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4">
-          Quick Actions - Administrative Tools
-        </h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Advanced tools for system administrators
-        </p>
         <MasterActionCard
           title=""
           description=""

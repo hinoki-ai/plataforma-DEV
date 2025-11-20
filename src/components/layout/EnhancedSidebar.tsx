@@ -389,12 +389,12 @@ export function EnhancedSidebar({
                   <p className="text-sm font-medium">{session?.user?.name}</p>
                   <p className="text-xs text-muted-foreground">
                     {session?.user?.role === "ADMIN"
-                      ? "Administrador"
+                      ? t("nav.roles.admin")
                       : session?.user?.role === "PROFESOR"
-                        ? "Profesor"
+                        ? t("nav.roles.profesor")
                         : session?.user?.role === "MASTER"
-                          ? "🏛️ SUPREMO MASTER"
-                          : "Padre/Apoderado"}
+                          ? t("nav.roles.master")
+                          : t("nav.roles.parent")}
                   </p>
                 </div>
               )}

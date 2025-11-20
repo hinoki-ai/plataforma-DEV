@@ -163,7 +163,20 @@
       "curriculum_tracking": "Curriculum Tracking",
       "advanced_reporting": "Advanced Reporting",
       "api_access": "API Access"
-    }
+    },
+    "select_levels_description": "Select the levels that this institution will offer",
+    "course_limit": "Course Limit",
+    "subject_limit": "Subject Limit",
+    "modules_and_features": "Modules and Features",
+    "administrator_number": "Administrator #{number}",
+    "primary": "Primary",
+    "mark_as_primary": "Mark as Primary",
+    "remove": "Remove",
+    "clear_form": "Clear Form",
+    "must_keep_admin": "You must keep at least one administrator",
+    "configuration_error": "Configuration Error",
+    "up_to_courses": "Up to {count} courses",
+    "up_to_subjects": "Up to {count} subjects"
   },
   "master.institution_users": {
     "title": "Institution Users",
