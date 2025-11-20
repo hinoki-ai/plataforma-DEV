@@ -19,7 +19,7 @@ export async function createPlanningDocumentAction(formData: FormData) {
   const { getConvexClient } = await import("@/lib/convex");
   const client = getConvexClient();
   const convexUser = await client.query(api.users.getUserByClerkId, {
-    clerkId: session.user.id,
+    clerkId: session.data?.user.id,
   });
 
   if (!convexUser) {

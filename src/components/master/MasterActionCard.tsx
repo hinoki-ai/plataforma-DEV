@@ -106,9 +106,7 @@ export function MasterActionCard({
                     Execute
                   </a>
                 ) : (
-                  <>
-                    Execute
-                  </>
+                  <>Execute</>
                 )}
               </Button>
             </div>

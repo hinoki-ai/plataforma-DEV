@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
     // Check if user is a parent
     const user = await client.query(api.users.getUserByEmail, {
-      email: session.user.email,
+      email: session.data?.user.email,
     });
 
     if (!user || user.role !== "PARENT" || !user.isActive) {
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     // Get meetings for this parent
     const result = await client.query(api.meetings.getMeetingsByGuardian, {
-      guardianEmail: session.user.email,
+      guardianEmail: session.data?.user.email,
     });
 
     const meetings = result;
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user is a parent
     const user = await client.query(api.users.getUserByEmail, {
-      email: session.user.email,
+      email: session.data?.user.email,
     });
 
     if (!user || user.role !== "PARENT" || !user.isActive) {
@@ -111,8 +111,8 @@ export async function POST(request: NextRequest) {
     const meetingRequest = await client.mutation(api.meetings.requestMeeting, {
       studentName: studentName || "Estudiante",
       studentGrade: effectiveStudentGrade,
-      guardianName: session.user.name || user.name || "Padre/Madre",
-      guardianEmail: session.user.email,
+      guardianName: session.data?.user.name || user.name || "Padre/Madre",
+      guardianEmail: session.data?.user.email,
       guardianPhone: guardianPhone || user.phone || "",
       preferredDate: effectivePreferredDate,
       preferredTime: effectivePreferredTime,

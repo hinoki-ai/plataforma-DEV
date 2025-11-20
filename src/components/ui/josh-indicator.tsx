@@ -40,7 +40,7 @@ export function JoshIndicator() {
   // Get user role from session
   const getUserRole = () => {
     if (!session?.user) return "guest";
-    const role = session.user.publicMetadata?.role as string;
+    const role = session.data?.user.publicMetadata?.role as string;
     return role || "guest";
   };
 

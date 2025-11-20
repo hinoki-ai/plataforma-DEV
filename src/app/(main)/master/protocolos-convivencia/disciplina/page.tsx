@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 
 function DisciplinaMasterContent() {
-
   const globalDisciplineStats = {
     activeCases: 23,
     resolvedThisMonth: 156,
@@ -58,8 +57,7 @@ function DisciplinaMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro -{" "}
-              English Title
+              Control Maestro - English Title
             </h1>
             <p className="text-muted-foreground mt-2">
               Supervisión global de casos disciplinarios en todas las

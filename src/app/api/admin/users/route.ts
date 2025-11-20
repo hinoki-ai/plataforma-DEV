@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return handleApiError(
         new ApiErrorResponse("Acceso no autorizado", 401, "UNAUTHORIZED"),
         "GET /api/admin/users",
@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
     const validatedData = adminUserCreationSchema.parse(sanitizedBody);
 
     // Check if user has permission to create the target role
-    if (!canCreateUser(session.user.role, validatedData.role)) {
+    if (!canCreateUser(session.data?.user.role, validatedData.role)) {
       return handleApiError(
         new ApiErrorResponse(
           `No tienes permisos para crear usuarios ${validatedData.role.toLowerCase()}`,
@@ -260,7 +260,7 @@ export async function POST(request: NextRequest) {
           role: validatedData.role,
           name: validatedData.name,
         },
-        session.user.id,
+        session.data?.user.id,
         true,
       );
 
@@ -295,7 +295,7 @@ export async function POST(request: NextRequest) {
       logUserCreation(
         "createUserClerk",
         { email: validatedData.email, role: validatedData.role },
-        session.user.id,
+        session.data?.user.id,
         false,
         error,
       );

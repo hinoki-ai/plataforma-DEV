@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { getRoleAccess } from "@/lib/role-utils";
 import {
@@ -246,11 +246,11 @@ function VotacionesContent() {
   }
 
   // Ensure user has access to parent section
-  if (!session || !session.user) {
+  if (!session || !session.data?.user) {
     redirect("/login");
   }
 
-  const roleAccess = getRoleAccess(session.user.role);
+  const roleAccess = getRoleAccess(session.data?.user.role);
   if (!roleAccess.canAccessParent) {
     redirect("/unauthorized");
   }

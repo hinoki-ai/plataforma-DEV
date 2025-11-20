@@ -12,30 +12,30 @@ export default async function ProfesorLayout({
   // Debug logging for troubleshooting
   console.log(
     "ProfesorLayout - User:",
-    session.user?.email,
+    session.data?.user?.email,
     "Role:",
-    session.user?.role,
+    session.data?.user?.role,
   );
 
   // Ensure user has a valid role
-  if (!session.user?.role) {
+  if (!session.data?.user?.role) {
     console.error(
       "ProfesorLayout - No user role found, redirecting to unauthorized",
     );
     redirect("/unauthorized");
   }
 
-  const roleAccess = getRoleAccess(session.user.role);
+  const roleAccess = getRoleAccess(session.data?.user.role);
 
   // Ensure user has access to profesor section
   if (!roleAccess.canAccessProfesor) {
     console.log(
       "ProfesorLayout - User does not have profesor access, role:",
-      session.user.role,
+      session.data?.user.role,
     );
     redirect("/unauthorized");
   }
 
-  console.log("ProfesorLayout - Access granted for role:", session.user.role);
+  console.log("ProfesorLayout - Access granted for role:", session.data?.user.role);
   return <>{children}</>;
 }

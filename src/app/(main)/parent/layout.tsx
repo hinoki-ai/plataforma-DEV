@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { getRoleAccess } from "@/lib/role-utils";
@@ -50,7 +50,7 @@ export default function ParentLayout({
       return;
     }
 
-    if (!session.user?.role) {
+    if (!session.data?.user?.role) {
       if (!hasRedirectedRef.current) {
         console.warn("Session missing user role, redirecting to login");
         hasRedirectedRef.current = true;
@@ -59,13 +59,13 @@ export default function ParentLayout({
       return;
     }
 
-    const roleAccess = getRoleAccess(session.user.role);
+    const roleAccess = getRoleAccess(session.data?.user.role);
 
     // MASTER has access to all sections
-    if (!roleAccess.canAccessParent && session.user.role !== "MASTER") {
+    if (!roleAccess.canAccessParent && session.data?.user.role !== "MASTER") {
       if (!hasRedirectedRef.current) {
         console.warn(
-          `Access denied to parent section for role: ${session.user.role}`,
+          `Access denied to parent section for role: ${session.data?.user.role}`,
         );
         hasRedirectedRef.current = true;
         router.replace("/unauthorized");

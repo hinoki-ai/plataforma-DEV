@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user has profesor role
-    if (session.user.role !== "PROFESOR") {
+    if (session.data?.user.role !== "PROFESOR") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -67,8 +67,8 @@ export async function GET(request: NextRequest) {
           updatedAt: new Date(vote.updatedAt).toISOString(),
           creator: {
             id: vote.createdBy,
-            name: session.user?.name || "Profesor",
-            email: session.user?.email || "",
+            name: session.data?.user?.name || "Profesor",
+            email: session.data?.user?.email || "",
           },
           options: options?.options?.map((opt: any) => ({
             id: opt._id,
@@ -101,16 +101,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has profesor role
-    if (session.user.role !== "PROFESOR") {
+    if (session.data?.user.role !== "PROFESOR") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Validate that we have a user ID and resolve Convex user ID
-    if (!session.user.id) {
+    if (!session.data?.user.id) {
       console.error("No user ID in session:", {
-        clerkId: session.user.clerkId,
-        email: session.user.email,
-        role: session.user.role,
+        clerkId: session.data?.user.clerkId,
+        email: session.data?.user.email,
+        role: session.data?.user.role,
       });
       return NextResponse.json(
         { error: "User session is invalid. Please log out and log back in." },
@@ -121,17 +121,17 @@ export async function POST(request: NextRequest) {
     // Get authenticated Convex client to resolve user
     const convex = await getAuthenticatedConvexClient();
 
-    // Resolve Convex user ID - session.user.id might be a Clerk ID string
+    // Resolve Convex user ID - session.data?.user.id might be a Clerk ID string
     let convexUserId: Id<"users">;
-    if (session.user.id && /^[a-z]/.test(session.user.id)) {
+    if (session.data?.user.id && /^[a-z]/.test(session.data?.user.id)) {
       // It's already a valid Convex ID
-      convexUserId = session.user.id as Id<"users">;
+      convexUserId = session.data?.user.id as Id<"users">;
     } else {
       // It's a Clerk ID, look up the Convex user
-      if (!session.user.clerkId) {
+      if (!session.data?.user.clerkId) {
         console.error("No Clerk ID available for user lookup:", {
-          id: session.user.id,
-          email: session.user.email,
+          id: session.data?.user.id,
+          email: session.data?.user.email,
         });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
@@ -140,13 +140,13 @@ export async function POST(request: NextRequest) {
       }
 
       const convexUser = await convex.query(api.users.getUserByClerkId, {
-        clerkId: session.user.clerkId,
+        clerkId: session.data?.user.clerkId,
       });
 
       if (!convexUser) {
         console.error("User not found in Convex database:", {
-          clerkId: session.user.clerkId,
-          email: session.user.email,
+          clerkId: session.data?.user.clerkId,
+          email: session.data?.user.email,
         });
         return NextResponse.json(
           { error: "User not found in database. Please contact support." },
@@ -229,7 +229,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Check if user has profesor role
-    if (session.user.role !== "PROFESOR") {
+    if (session.data?.user.role !== "PROFESOR") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

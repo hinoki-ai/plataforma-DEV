@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { motion } from "motion/react";
 import { Vote, Calendar, Users, CheckCircle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";

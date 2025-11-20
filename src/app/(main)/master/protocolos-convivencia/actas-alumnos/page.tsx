@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { FileText, Database, Globe, BarChart3, Settings } from "lucide-react";
 
 function ActasAlumnosMasterContent() {
-
   const globalStats = {
     totalActas: 2156,
     institutions: 12,
@@ -36,8 +35,7 @@ function ActasAlumnosMasterContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Control Maestro -{" "}
-              English Title
+              Control Maestro - English Title
             </h1>
             <p className="text-muted-foreground mt-2">
               Supervisión global de actas de entrevistas con alumnos en todas

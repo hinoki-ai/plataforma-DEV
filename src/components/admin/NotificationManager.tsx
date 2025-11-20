@@ -17,7 +17,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useNotifications } from "@/hooks/useNotifications";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 
 interface NotificationManagerProps {
   className?: string;

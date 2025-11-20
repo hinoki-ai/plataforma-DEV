@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { PageTransition } from "@/components/ui/page-transition";
 import { HorariosDashboardReal } from "@/components/horarios/HorariosDashboardReal";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,7 @@ export default function AdminHorariosPage() {
                     {session?.user?.name
                       ? t("admin.horarios.subtitle_greeting", "admin").replace(
                           "{name}",
-                          session.user.name.split(" ")[0],
+                          session.data?.user.name.split(" ")[0],
                         )
                       : t("admin.horarios.subtitle", "admin")}
                   </p>

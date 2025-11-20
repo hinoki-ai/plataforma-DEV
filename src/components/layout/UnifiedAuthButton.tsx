@@ -238,8 +238,8 @@ export default function UnifiedAuthButton() {
           >
             <Avatar className="h-8 w-8 border-2 border-border">
               <AvatarImage
-                src={session.user.image || undefined}
-                alt={session.user.name || "Usuario"}
+                src={session.data?.user.image || undefined}
+                alt={session.data?.user.name || "Usuario"}
               />
               <AvatarFallback
                 className={cn(
@@ -257,7 +257,7 @@ export default function UnifiedAuthButton() {
                 {roleData.name}
               </span>
               <span className="text-sm font-semibold text-foreground">
-                {session.user.name?.split(" ")[0]}
+                {session.data?.user.name?.split(" ")[0]}
               </span>
             </div>
 
@@ -275,8 +275,8 @@ export default function UnifiedAuthButton() {
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10">
                 <AvatarImage
-                  src={session.user.image || undefined}
-                  alt={session.user.name || "Usuario"}
+                  src={session.data?.user.image || undefined}
+                  alt={session.data?.user.name || "Usuario"}
                 />
                 <AvatarFallback
                   className={cn(
@@ -291,10 +291,10 @@ export default function UnifiedAuthButton() {
               </Avatar>
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  {session.user.name}
+                  {session.data?.user.name}
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  {session.user.email}
+                  {session.data?.user.email}
                 </p>
                 <div className="flex items-center space-x-1">
                   <RoleIcon className={cn("h-3 w-3", roleData.color)} />

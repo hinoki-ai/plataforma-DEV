@@ -96,15 +96,15 @@ export function JoshAnalyticsProvider({
   // Initialize analytics for user
   useEffect(() => {
     if (session?.user?.id) {
-      const sessionId = `${session.user.id}_${Date.now()}`;
+      const sessionId = `${session.data?.user.id}_${Date.now()}`;
       const storedData = localStorage.getItem(
-        `josh_analytics_${session.user.id}`,
+        `josh_analytics_${session.data?.user.id}`,
       );
 
       const initialData: JoshAnalyticsData = storedData
         ? JSON.parse(storedData)
         : {
-            userId: session.user.id,
+            userId: session.data?.user.id,
             sessionId,
             interactions: [],
             preferences: {
@@ -377,7 +377,7 @@ export function JoshAnalyticsDashboard() {
   // Only show for admin/master users
   if (
     !session?.user?.publicMetadata?.role ||
-    !["admin", "master"].includes(session.user.publicMetadata.role as string)
+    !["admin", "master"].includes(session.data?.user.publicMetadata.role as string)
   ) {
     return null;
   }

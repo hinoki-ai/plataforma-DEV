@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AdaptiveButton } from "@/components/ui/adaptive-button";

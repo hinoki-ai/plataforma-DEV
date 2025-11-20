@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user has parent role
-    if (session.user.role !== "PARENT") {
+    if (session.data?.user.role !== "PARENT") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
           api.votes.getUserVoteResponses,
           {
             voteId: vote._id,
-            userId: session.user.id as any,
+            userId: session.data?.user.id as any,
           },
         );
 
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has parent role
-    if (session.user.role !== "PARENT") {
+    if (session.data?.user.role !== "PARENT") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
     const result = await convex.mutation(api.votes.castVotes, {
       voteId,
       optionIds: targetOptionIds,
-      userId: session.user.id as any,
+      userId: session.data?.user.id as any,
     });
 
     return NextResponse.json({

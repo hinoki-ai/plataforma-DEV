@@ -15,7 +15,7 @@ export async function PUT(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (session.user.role !== "PARENT") {
+    if (session.data?.user.role !== "PARENT") {
       return NextResponse.json(
         { error: "Acceso restringido" },
         { status: 403 },
@@ -32,7 +32,7 @@ export async function PUT(
     }
 
     const client = await getAuthenticatedConvexClient();
-    const parentId = session.user.id as unknown as Id<"users">;
+    const parentId = session.data?.user.id as unknown as Id<"users">;
 
     const notifications = await client.query(
       api.notifications.getNotifications,

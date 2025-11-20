@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -213,9 +213,7 @@ function GlobalMetricsCard() {
           <TrendingUp className="h-5 w-5 text-green-600" />
           Global Metrics
         </CardTitle>
-        <CardDescription>
-          General status of distributed system
-        </CardDescription>
+        <CardDescription>General status of distributed system</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -232,9 +230,7 @@ function GlobalMetricsCard() {
             <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
               {metrics.totalUsers.toLocaleString()}
             </div>
-            <div className="text-sm text-muted-foreground">
-              Global Users
-            </div>
+            <div className="text-sm text-muted-foreground">Global Users</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
@@ -314,9 +310,7 @@ function GlobalAlertsCard() {
           <Eye className="h-5 w-5 text-orange-600" />
           Global Alerts
         </CardTitle>
-        <CardDescription>
-          Important distributed network events
-        </CardDescription>
+        <CardDescription>Important distributed network events</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">

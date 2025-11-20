@@ -15,7 +15,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { signOut } from "@/lib/auth-client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -138,9 +138,16 @@ export function Sidebar({
   React.useEffect(() => {
     setOpenGroups((prev) => {
       const newState = { ...prev };
+      let hasNewDefaultOpenGroup = false;
+
       navigationGroups.forEach((group) => {
         if (!(group.title in newState)) {
-          newState[group.title] = group.defaultOpen ?? false;
+          // Only set defaultOpen to true for the first new group that has defaultOpen: true
+          const shouldBeOpen = group.defaultOpen && !hasNewDefaultOpenGroup;
+          if (shouldBeOpen) {
+            hasNewDefaultOpenGroup = true;
+          }
+          newState[group.title] = shouldBeOpen;
         }
       });
       return newState;
@@ -213,7 +220,10 @@ export function Sidebar({
               onClick={onToggle}
               aria-label={t("nav.sidebar.collapse")}
             >
-              <NavigationIcons.ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              <NavigationIcons.ChevronLeft
+                className="h-4 w-4"
+                aria-hidden="true"
+              />
             </Button>
           )}
           {isCollapsed && (

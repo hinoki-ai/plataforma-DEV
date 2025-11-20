@@ -15,14 +15,10 @@ export default function SystemMonitorPage() {
   try {
     // System monitor will show real-time data but remain functional
   } catch (error) {
-    dbLogger.error(
-      "SYSTEM MONITOR FAILURE",
-      error,
-      {
-        context: "SystemMonitorPage",
-        systemMonitor: true,
-      },
-    );
+    dbLogger.error("SYSTEM MONITOR FAILURE", error, {
+      context: "SystemMonitorPage",
+      systemMonitor: true,
+    });
     // System monitor will show degraded state but remain functional
   }
 

@@ -12,7 +12,6 @@ import { InstitutionMasterCard } from "@/components/master/InstitutionMasterCard
 export const dynamic = "force-dynamic";
 
 export default function MasterDashboardPage() {
-
   // Handle critical failures gracefully
   try {
     // Dashboard will show enhanced state but remain functional

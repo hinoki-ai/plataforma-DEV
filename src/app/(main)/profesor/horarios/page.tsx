@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { PageTransition } from "@/components/ui/page-transition";
 import { HorariosDashboardReal } from "@/components/horarios/HorariosDashboardReal";
 

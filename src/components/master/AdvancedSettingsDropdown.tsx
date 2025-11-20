@@ -219,9 +219,7 @@ export function AdvancedSettingsDropdown({
           >
             <Settings2 className="mr-3 h-4 w-4 text-slate-600" />
             <div className="flex flex-col items-start flex-1">
-              <span className="font-medium text-sm">
-                Advanced Settings
-              </span>
+              <span className="font-medium text-sm">Advanced Settings</span>
               <span className="text-[10px] opacity-70">
                 View, dev tools & more
               </span>

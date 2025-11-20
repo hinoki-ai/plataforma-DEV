@@ -166,7 +166,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user can access profesor resources
-    if (!canAccessProfesor(session.user.role)) {
+    if (!canAccessProfesor(session.data?.user.role)) {
       return NextResponse.json(
         {
           error: "No tienes permisos para acceder a estos recursos",

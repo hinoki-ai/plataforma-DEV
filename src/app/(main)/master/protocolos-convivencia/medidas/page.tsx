@@ -37,7 +37,6 @@ import {
 } from "lucide-react";
 
 function MedidasMasterContent() {
-
   const globalMeasuresStats = {
     totalApplications: 1247,
     averageEffectiveness: 82.5,

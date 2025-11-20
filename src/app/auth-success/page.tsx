@@ -35,20 +35,20 @@ export default async function AuthSuccessPage() {
   }
 
   // Validate session has required data
-  if (!session.user.role || !session.user.email || !session.user.id) {
+  if (!session.data?.user.role || !session.data?.user.email || !session.data?.user.id) {
     console.error(
       "❌ [AUTH-SUCCESS] Session missing required fields, redirecting to login",
       {
-        hasRole: !!session.user.role,
-        hasEmail: !!session.user.email,
-        hasId: !!session.user.id,
+        hasRole: !!session.data?.user.role,
+        hasEmail: !!session.data?.user.email,
+        hasId: !!session.data?.user.id,
         timestamp: new Date().toISOString(),
       },
     );
     redirect("/login");
   }
 
-  const role = session.user.role as UserRole;
+  const role = session.data?.user.role as UserRole;
 
   // Validate role exists
   if (!ROLE_PATHS[role]) {
@@ -60,7 +60,7 @@ export default async function AuthSuccessPage() {
   }
 
   // Handle PARENT with registration requirement
-  if (role === "PARENT" && session.user.needsRegistration) {
+  if (role === "PARENT" && session.data?.user.needsRegistration) {
     console.log(
       "📝 [AUTH-SUCCESS] Parent needs registration, redirecting to cpma",
       {

@@ -58,11 +58,9 @@ export function InstitutionManagement() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Building2 className="h-5 w-5 text-blue-600" />
-Institution Management
+          Institution Management
         </CardTitle>
-        <CardDescription>
-Manage all institutions in the system
-        </CardDescription>
+        <CardDescription>Manage all institutions in the system</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
@@ -71,18 +69,10 @@ Manage all institutions in the system
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>
-Contact
-                </TableHead>
-                <TableHead>
-Status
-                </TableHead>
-                <TableHead>
-Created
-                </TableHead>
-                <TableHead className="text-right">
-Actions
-                </TableHead>
+                <TableHead>Contact</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Created</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -120,9 +110,7 @@ Actions
                           inst.isActive ? "bg-green-500 hover:bg-green-600" : ""
                         }
                       >
-                        {inst.isActive
-                          ? "Active"
-                          : "Inactive"}
+                        {inst.isActive ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -142,7 +130,7 @@ Actions
                           }
                         >
                           <Users className="h-4 w-4 mr-1" />
-Users
+                          Users
                         </Button>
                         <Button
                           variant="ghost"
@@ -154,7 +142,7 @@ Users
                           }
                         >
                           <Settings className="h-4 w-4 mr-1" />
-Settings
+                          Settings
                         </Button>
                       </div>
                     </TableCell>
@@ -167,7 +155,7 @@ Settings
                     colSpan={6}
                     className="text-center py-8 text-muted-foreground"
                   >
-No institutions found
+                    No institutions found
                   </TableCell>
                 </TableRow>
               )}

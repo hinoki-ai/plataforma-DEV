@@ -101,8 +101,8 @@ export async function POST(request: NextRequest) {
       const session = await auth();
       if (session?.user) {
         userInfo = {
-          userId: session.user.id,
-          userRole: session.user.role,
+          userId: session.data?.user.id,
+          userRole: session.data?.user.role,
           sessionId: `session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`,
         };
       }
@@ -203,7 +203,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Unauthorized - Admin access required" },
         { status: 401 },

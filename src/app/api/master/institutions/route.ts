@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session?.user || session.user.role !== "MASTER") {
+    if (!session?.user || session.data?.user.role !== "MASTER") {
       return NextResponse.json(
         { success: false, error: "Acceso restringido a usuarios MASTER" },
         { status: 403 },
@@ -102,12 +102,12 @@ export async function POST(request: NextRequest) {
     let createdByUserId: Id<"users"> | undefined;
     try {
       const convexUser = await client.query(api.users.getUserByEmail, {
-        email: session.user.email,
+        email: session.data?.user.email,
       });
       createdByUserId = convexUser?._id as Id<"users"> | undefined;
     } catch (error) {
       console.warn("Unable to resolve Convex user for MASTER session", {
-        email: session.user.email,
+        email: session.data?.user.email,
         error,
       });
     }

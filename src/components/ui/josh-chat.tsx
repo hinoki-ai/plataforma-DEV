@@ -44,7 +44,7 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
   // Get user role and context
   const getUserRole = () => {
     if (!session?.user) return "guest";
-    const role = session.user.publicMetadata?.role as string;
+    const role = session.data?.user.publicMetadata?.role as string;
     return role || "guest";
   };
 

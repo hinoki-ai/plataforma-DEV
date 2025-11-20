@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useRouter, usePathname } from "next/navigation";
 import { useHydrationSafe } from "@/components/ui/hydration-error-boundary";
 
@@ -34,10 +34,10 @@ export function useAuthSync() {
       const isProfesorPath = pathname?.startsWith("/profesor");
       const isParentPath = pathname?.startsWith("/parent");
       const isCpaPath = pathname?.startsWith("/cpma");
-      const userRole = session.user.role;
+      const userRole = session.data?.user.role;
 
       // Ensure session is fully loaded before redirecting
-      if (!session.user.id) {
+      if (!session.data?.user.id) {
         await update();
         return;
       }

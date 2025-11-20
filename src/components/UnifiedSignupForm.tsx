@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select";
 import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useSignIn } from "@clerk/nextjs";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useStepNavigation } from "@/lib/hooks/useFocusManagement";

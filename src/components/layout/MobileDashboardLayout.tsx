@@ -16,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useResponsive } from "@/components/ui/responsive-container";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { getRoleDisplayName } from "@/lib/role-utils";
 
 interface MobileDashboardLayoutProps {
@@ -179,17 +179,17 @@ export function MobileDashboardLayout({
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                     <span className="text-primary-foreground text-sm font-medium">
-                      {session.user.name?.charAt(0) ||
-                        session.user.email?.charAt(0) ||
+                      {session.data?.user.name?.charAt(0) ||
+                        session.data?.user.email?.charAt(0) ||
                         "U"}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
-                      {session.user.name || "Usuario"}
+                      {session.data?.user.name || "Usuario"}
                     </p>
                     <p className="text-xs text-muted-foreground truncate">
-                      {session.user.email}
+                      {session.data?.user.email}
                     </p>
                   </div>
                 </div>

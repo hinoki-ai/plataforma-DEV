@@ -79,9 +79,7 @@ export function InstitutionUsersManagement() {
     return (
       <div className="flex justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="mt-2 text-muted-foreground">
-Loading users...
-        </p>
+        <p className="mt-2 text-muted-foreground">Loading users...</p>
       </div>
     );
   }
@@ -95,10 +93,10 @@ Loading users...
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5 text-blue-600" />
-Institution Users - {institution.name}
+          Institution Users - {institution.name}
         </CardTitle>
         <CardDescription>
-Manage users and their roles for {institution.name}
+          Manage users and their roles for {institution.name}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -107,16 +105,10 @@ Manage users and their roles for {institution.name}
             <TableHeader>
               <TableRow>
                 <TableHead>User</TableHead>
-                <TableHead>
-Role in Institution
-                </TableHead>
+                <TableHead>Role in Institution</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>
-Membership Status
-                </TableHead>
-                <TableHead>
-Registered Date
-                </TableHead>
+                <TableHead>Membership Status</TableHead>
+                <TableHead>Registered Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -165,7 +157,7 @@ Registered Date
                     colSpan={5}
                     className="text-center py-8 text-muted-foreground"
                   >
-No users found
+                    No users found
                   </TableCell>
                 </TableRow>
               )}

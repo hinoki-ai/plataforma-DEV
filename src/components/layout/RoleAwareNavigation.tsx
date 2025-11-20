@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -223,7 +223,9 @@ export function RoleAwareNavigation({
               {isProfesorRoute && "Docente"}
               {isParentRoute && "Familiar"}
               {isPublicRoute && "Público"}
-              {navCurrentRole === "MASTER" && pathname.startsWith("/master") && "Master Control"}
+              {navCurrentRole === "MASTER" &&
+                pathname.startsWith("/master") &&
+                "Master Control"}
             </Badge>
           </div>
         </div>

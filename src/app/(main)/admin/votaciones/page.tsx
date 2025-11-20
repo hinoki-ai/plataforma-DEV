@@ -482,46 +482,50 @@ export default function AdminVotesPage() {
               </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="title">
-                  {t("admin.votaciones.form.title.label", "common")}
-                </Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, title: e.target.value }))
-                  }
-                  placeholder={t(
-                    "admin.votaciones.form.title.placeholder",
-                    "common",
-                  )}
-                />
-              </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-2">
+              {/* Left Column - Basic Information */}
+              <div className="space-y-5">
+                <div>
+                  <Label htmlFor="title">
+                    {t("admin.votaciones.form.title.label", "common")}
+                  </Label>
+                  <Input
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
+                    }
+                    placeholder={t(
+                      "admin.votaciones.form.title.placeholder",
+                      "common",
+                    )}
+                  />
+                </div>
 
-              <div>
-                <Label htmlFor="description">
-                  {t("admin.votaciones.form.description.label", "common")}
-                </Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  placeholder={t(
-                    "admin.votaciones.form.description.placeholder",
-                    "common",
-                  )}
-                  rows={3}
-                />
-              </div>
+                <div>
+                  <Label htmlFor="description">
+                    {t("admin.votaciones.form.description.label", "common")}
+                  </Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
+                    placeholder={t(
+                      "admin.votaciones.form.description.placeholder",
+                      "common",
+                    )}
+                    rows={3}
+                  />
+                </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="category">
                     {t("admin.votaciones.form.category.label", "common")}
@@ -594,130 +598,154 @@ export default function AdminVotesPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="isActive"
-                    checked={formData.isActive}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({ ...prev, isActive: checked }))
-                    }
-                  />
-                  <Label htmlFor="isActive">
-                    {t("admin.votaciones.form.active.label", "common")}
+              {/* Right Column - Settings and Options */}
+              <div className="space-y-5">
+                {/* Settings Switches */}
+                <div className="space-y-4 py-1">
+                  <Label className="text-sm font-medium text-gray-700">
+                    {t("admin.votaciones.form.settings.label", "Configuración")}
                   </Label>
-                </div>
 
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="isPublic"
-                    checked={formData.isPublic}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({ ...prev, isPublic: checked }))
-                    }
-                  />
-                  <Label htmlFor="isPublic">
-                    {t("admin.votaciones.form.public.label", "common")}
-                  </Label>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="allowMultipleVotes"
-                    checked={formData.allowMultipleVotes}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        allowMultipleVotes: checked,
-                      }))
-                    }
-                  />
-                  <Label htmlFor="allowMultipleVotes">
-                    {t("admin.votaciones.form.multiple_votes.label", "common")}
-                  </Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="requireAuthentication"
-                    checked={formData.requireAuthentication}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        requireAuthentication: checked,
-                      }))
-                    }
-                  />
-                  <Label htmlFor="requireAuthentication">
-                    {t("admin.votaciones.form.auth_required.label", "common")}
-                  </Label>
-                </div>
-              </div>
-
-              {formData.allowMultipleVotes && (
-                <div>
-                  <Label htmlFor="maxVotesPerUser">
-                    {t("admin.votaciones.form.max_votes.label", "common")}
-                  </Label>
-                  <Input
-                    id="maxVotesPerUser"
-                    type="number"
-                    min="1"
-                    max="10"
-                    value={formData.maxVotesPerUser || ""}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        maxVotesPerUser: e.target.value
-                          ? parseInt(e.target.value)
-                          : undefined,
-                      }))
-                    }
-                    placeholder={t(
-                      "admin.votaciones.form.max_votes.placeholder",
-                      "common",
-                    )}
-                  />
-                </div>
-              )}
-
-              <div>
-                <Label>
-                  {t("admin.votaciones.form.options.label", "common")}
-                </Label>
-                <div className="space-y-2">
-                  {formData.options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Input
-                        value={option.text}
-                        onChange={(e) => updateOption(index, e.target.value)}
-                        placeholder={`${t("admin.votaciones.form.options.placeholder", "common")} ${index + 1}`}
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="flex items-center space-x-3">
+                      <Switch
+                        id="isActive"
+                        checked={formData.isActive}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            isActive: checked,
+                          }))
+                        }
                       />
-                      {formData.options.length > 2 && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => removeOption(index)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
+                      <Label htmlFor="isActive" className="text-sm">
+                        {t("admin.votaciones.form.active.label", "common")}
+                      </Label>
                     </div>
-                  ))}
-                  {formData.options.length < 10 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={addOption}
-                      className="w-full"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      {t("admin.votaciones.form.add_option", "common")}
-                    </Button>
-                  )}
+
+                    <div className="flex items-center space-x-3">
+                      <Switch
+                        id="isPublic"
+                        checked={formData.isPublic}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            isPublic: checked,
+                          }))
+                        }
+                      />
+                      <Label htmlFor="isPublic" className="text-sm">
+                        {t("admin.votaciones.form.public.label", "common")}
+                      </Label>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      <Switch
+                        id="allowMultipleVotes"
+                        checked={formData.allowMultipleVotes}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            allowMultipleVotes: checked,
+                          }))
+                        }
+                      />
+                      <Label htmlFor="allowMultipleVotes" className="text-sm">
+                        {t(
+                          "admin.votaciones.form.multiple_votes.label",
+                          "common",
+                        )}
+                      </Label>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      <Switch
+                        id="requireAuthentication"
+                        checked={formData.requireAuthentication}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            requireAuthentication: checked,
+                          }))
+                        }
+                      />
+                      <Label
+                        htmlFor="requireAuthentication"
+                        className="text-sm"
+                      >
+                        {t(
+                          "admin.votaciones.form.auth_required.label",
+                          "common",
+                        )}
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+
+                {formData.allowMultipleVotes && (
+                  <div>
+                    <Label htmlFor="maxVotesPerUser">
+                      {t("admin.votaciones.form.max_votes.label", "common")}
+                    </Label>
+                    <Input
+                      id="maxVotesPerUser"
+                      type="number"
+                      min="1"
+                      max="10"
+                      value={formData.maxVotesPerUser || ""}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          maxVotesPerUser: e.target.value
+                            ? parseInt(e.target.value)
+                            : undefined,
+                        }))
+                      }
+                      placeholder={t(
+                        "admin.votaciones.form.max_votes.placeholder",
+                        "common",
+                      )}
+                    />
+                  </div>
+                )}
+
+                {/* Voting Options */}
+                <div className="pt-1">
+                  <Label>
+                    {t("admin.votaciones.form.options.label", "common")}
+                  </Label>
+                  <div className="space-y-3 mt-3">
+                    {formData.options.map((option, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <Input
+                          value={option.text}
+                          onChange={(e) => updateOption(index, e.target.value)}
+                          placeholder={`${t("admin.votaciones.form.options.placeholder", "common")} ${index + 1}`}
+                        />
+                        {formData.options.length > 2 && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeOption(index)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                    {formData.options.length < 10 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={addOption}
+                        className="w-full"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        {t("admin.votaciones.form.add_option", "common")}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

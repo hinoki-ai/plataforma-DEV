@@ -10,7 +10,7 @@ export default async function MasterLayout({
   const session = await requireAuth();
 
   // Ensure user has MASTER access
-  if (!hasMasterGodModeAccess(session.user.role)) {
+  if (!hasMasterGodModeAccess(session.data?.user.role)) {
     redirect("/unauthorized");
   }
 

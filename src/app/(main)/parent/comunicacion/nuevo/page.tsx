@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { getRoleAccess } from "@/lib/role-utils";
 import { redirect } from "next/navigation";
@@ -90,11 +90,11 @@ export default function NuevoMensajePage() {
   }
 
   // Ensure user has access to parent section
-  if (!session || !session.user) {
+  if (!session || !session.data?.user) {
     redirect("/login");
   }
 
-  const roleAccess = getRoleAccess(session.user.role);
+  const roleAccess = getRoleAccess(session.data?.user.role);
   if (!roleAccess.canAccessParent) {
     redirect("/unauthorized");
   }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -110,9 +110,7 @@ export function GodModeDashboard() {
       {/* MASTER Status Indicator - Always Visible */}
       <MasterStatusIndicator />
 
-      <MasterPageTemplate
-        context="ADVANCED_ADMIN_DASHBOARD"
-      >
+      <MasterPageTemplate context="ADVANCED_ADMIN_DASHBOARD">
         {/* Critical Warning */}
         <Alert className="border-yellow-200">
           <AlertTriangle className="h-4 w-4 text-yellow-600" />

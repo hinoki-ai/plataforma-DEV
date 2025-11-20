@@ -49,22 +49,14 @@ export default function SystemOverviewPage() {
         {/* System Health */}
         <Card className="border-green-200 dark:border-green-800">
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">
-              System Health
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">System Health</h3>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>
-                  Overall Status
-                </span>
-                <span className="text-green-600 font-medium">
-                  Excellent
-                </span>
+                <span>Overall Status</span>
+                <span className="text-green-600 font-medium">Excellent</span>
               </div>
               <div className="flex justify-between">
-                <span>
-                  Database
-                </span>
+                <span>Database</span>
                 <span className="text-green-600 font-medium">99.2%</span>
               </div>
               <div className="flex justify-between">
@@ -78,26 +70,18 @@ export default function SystemOverviewPage() {
         {/* System Statistics */}
         <Card className="border-blue-200 dark:border-blue-800">
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">
-              System Statistics
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">System Statistics</h3>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>
-                  Total Users
-                </span>
+                <span>Total Users</span>
                 <span className="font-medium">1,247</span>
               </div>
               <div className="flex justify-between">
-                <span>
-                  Active Sessions
-                </span>
+                <span>Active Sessions</span>
                 <span className="font-medium">89</span>
               </div>
               <div className="flex justify-between">
-                <span>
-                  Queries/Hour
-                </span>
+                <span>Queries/Hour</span>
                 <span className="font-medium">15.4K</span>
               </div>
             </div>
@@ -107,26 +91,18 @@ export default function SystemOverviewPage() {
         {/* Performance Metrics */}
         <Card className="border-purple-200 dark:border-purple-800">
           <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">
-              Performance Metrics
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>
-                  Response Time
-                </span>
+                <span>Response Time</span>
                 <span className="font-medium">45ms</span>
               </div>
               <div className="flex justify-between">
-                <span>
-                  Throughput
-                </span>
+                <span>Throughput</span>
                 <span className="font-medium">1,200 req/s</span>
               </div>
               <div className="flex justify-between">
-                <span>
-                  Uptime
-                </span>
+                <span>Uptime</span>
                 <span className="text-green-600 font-medium">99.98%</span>
               </div>
             </div>
@@ -137,15 +113,11 @@ export default function SystemOverviewPage() {
       {/* Real-time Monitoring */}
       <Card className="border-orange-200 dark:border-orange-800">
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">
-            Real-time Monitoring
-          </h3>
+          <h3 className="text-lg font-semibold mb-4">Real-time Monitoring</h3>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>
-                  CPU Usage
-                </span>
+                <span>CPU Usage</span>
                 <span>23%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -154,9 +126,7 @@ export default function SystemOverviewPage() {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>
-                  Memory Usage
-                </span>
+                <span>Memory Usage</span>
                 <span>67%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">

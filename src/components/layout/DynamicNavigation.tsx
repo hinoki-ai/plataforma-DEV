@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { signOut } from "next-auth/react";
+import { signOut } from "@/lib/auth-client";
 
 // Static navigation structure that renders immediately
 export function NavigationShell() {
@@ -118,14 +118,14 @@ export function DynamicUserMenu() {
         <Button variant="ghost" className="flex items-center space-x-2">
           <Avatar className="h-8 w-8">
             <AvatarImage
-              src={session.user.image || ""}
-              alt={session.user.name || ""}
+              src={session.data?.user.image || ""}
+              alt={session.data?.user.name || ""}
             />
             <AvatarFallback>
-              {session.user.name?.charAt(0).toUpperCase() || "U"}
+              {session.data?.user.name?.charAt(0).toUpperCase() || "U"}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium">{session.user.name}</span>
+          <span className="text-sm font-medium">{session.data?.user.name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

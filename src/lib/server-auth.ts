@@ -26,8 +26,8 @@ export async function requirePermission(
   const session = await requireAuth();
 
   if (
-    !isStandardUserRole(session.user.role) ||
-    !hasPermission(session.user.role, permission)
+    !isStandardUserRole(session.data?.user.role) ||
+    !hasPermission(session.data?.user.role, permission)
   ) {
     redirect("/unauthorized");
   }
@@ -40,7 +40,7 @@ export async function hasServerPermission(
 ) {
   const session = await getServerSession();
   if (!session?.user) return false;
-  return hasPermission(session.user.role, permission);
+  return hasPermission(session.data?.user.role, permission);
 }
 
 export async function getUserRole(): Promise<ExtendedUserRole | null> {

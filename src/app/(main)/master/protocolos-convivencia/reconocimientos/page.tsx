@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { Award, Trophy, Star, TrendingUp, Globe, Users } from "lucide-react";
 
 function ReconocimientosMasterContent() {
-
   const globalRecognitionStats = {
     totalRecognitions: 892,
     institutionsActive: 12,

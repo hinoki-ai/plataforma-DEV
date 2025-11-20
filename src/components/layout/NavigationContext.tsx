@@ -7,7 +7,7 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { usePathname, useRouter } from "next/navigation";
 import { UserRole } from "@/lib/prisma-compat-types";
 import { getRoleAccess } from "@/lib/role-utils";

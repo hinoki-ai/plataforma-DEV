@@ -11,7 +11,7 @@ export async function DELETE(
   try {
     const session = await auth();
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Acceso denegado - solo administradores" },
         { status: 403 },
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Acceso denegado" }, { status: 403 });
     }
 

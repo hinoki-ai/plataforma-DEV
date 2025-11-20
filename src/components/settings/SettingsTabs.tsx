@@ -141,9 +141,9 @@ function ProfileTab() {
         // Fallback to session data
         if (session?.user) {
           setFormData({
-            name: session.user.name || "",
+            name: session.data?.user.name || "",
             phone: "",
-            email: session.user.email || "",
+            email: session.data?.user.email || "",
           });
         }
       }
@@ -152,9 +152,9 @@ function ProfileTab() {
       // Fallback to session data
       if (session?.user) {
         setFormData({
-          name: session.user.name || "",
+          name: session.data?.user.name || "",
           phone: "",
-          email: session.user.email || "",
+          email: session.data?.user.email || "",
         });
       }
     } finally {

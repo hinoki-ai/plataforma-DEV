@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
@@ -35,7 +35,7 @@ export function AuthWrapper({
     }
 
     if (status === "authenticated" && allowedRoles?.length && session?.user) {
-      const userRole = session.user.role;
+      const userRole = session.data?.user.role;
       if (!userRole || !allowedRoles.includes(userRole)) {
         // Redirect to appropriate dashboard based on role
         switch (userRole) {
@@ -79,7 +79,7 @@ export function AuthWrapper({
   }
 
   if (status === "authenticated" && allowedRoles?.length && session?.user) {
-    const userRole = session.user.role;
+    const userRole = session.data?.user.role;
     if (!allowedRoles.includes(userRole)) {
       return null; // Will redirect via useEffect
     }

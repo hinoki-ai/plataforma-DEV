@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,8 +43,8 @@ export function ProfileCompletionBadge({
 
   // Check if profile is complete
   const isProfileComplete = checkProfileCompletion({
-    ...(session.user as SessionUser),
-    role: session.user.role as UserRole,
+    ...(session.data?.user as SessionUser),
+    role: session.data?.user.role as UserRole,
   } as ExtendedUser);
 
   // Don't show if profile is already complete

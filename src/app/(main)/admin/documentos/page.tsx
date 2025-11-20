@@ -4,7 +4,7 @@ import { useState } from "react";
 
 // Force dynamic rendering to prevent static generation issues with authentication
 export const dynamic = "force-dynamic";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { FileText, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

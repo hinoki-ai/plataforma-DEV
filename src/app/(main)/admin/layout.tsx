@@ -8,7 +8,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await requireAuth();
-  const roleAccess = getRoleAccess(session.user.role);
+  const roleAccess = getRoleAccess(session.data?.user.role);
 
   // Ensure user has access to admin section
   if (!roleAccess.canAccessAdmin) {

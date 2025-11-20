@@ -13,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { signOut } from "@/lib/auth-client";
 import { usePathname, useRouter } from "next/navigation";
 import { NavigationIcons, ThemeIcons } from "@/components/icons/hero-icons";

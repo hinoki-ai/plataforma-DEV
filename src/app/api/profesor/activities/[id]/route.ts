@@ -59,7 +59,7 @@ export async function GET(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (!canAccessProfesor(session.user.role)) {
+    if (!canAccessProfesor(session.data?.user.role)) {
       return NextResponse.json(
         {
           error: "No tienes permisos para acceder a esta actividad",
@@ -81,7 +81,7 @@ export async function GET(
     }
 
     // Check if the activity belongs to the current teacher
-    if (activity.teacherId !== session.user.id) {
+    if (activity.teacherId !== session.data?.user.id) {
       return NextResponse.json(
         {
           error: "No tienes permisos para ver esta actividad",
@@ -130,7 +130,7 @@ export async function PUT(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (!canAccessProfesor(session.user.role)) {
+    if (!canAccessProfesor(session.data?.user.role)) {
       return NextResponse.json(
         {
           error: "No tienes permisos para editar esta actividad",
@@ -159,7 +159,7 @@ export async function PUT(
       );
     }
 
-    if (existingActivity.teacherId !== session.user.id) {
+    if (existingActivity.teacherId !== session.data?.user.id) {
       return NextResponse.json(
         {
           error: "No tienes permisos para editar esta actividad",
@@ -236,7 +236,7 @@ export async function DELETE(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (!canAccessProfesor(session.user.role)) {
+    if (!canAccessProfesor(session.data?.user.role)) {
       return NextResponse.json(
         {
           error: "No tienes permisos para eliminar esta actividad",
@@ -262,7 +262,7 @@ export async function DELETE(
       );
     }
 
-    if (existingActivity.teacherId !== session.user.id) {
+    if (existingActivity.teacherId !== session.data?.user.id) {
       return NextResponse.json(
         {
           error: "No tienes permisos para eliminar esta actividad",

@@ -12,7 +12,7 @@ export async function GET() {
     const client = await getAuthenticatedConvexClient();
     const session = await auth();
 
-    if (!session || session.user.role !== "PARENT") {
+    if (!session || session.data?.user.role !== "PARENT") {
       return handleApiError(
         new Error("Unauthorized access"),
         "GET /api/parent/dashboard/overview",
@@ -21,7 +21,7 @@ export async function GET() {
 
     // Get student's data
     const students = await client.query(api.students.getStudents, {
-      parentId: session.user.id as any, // Convex ID type
+      parentId: session.data?.user.id as any, // Convex ID type
       isActive: true,
     });
 
@@ -29,7 +29,7 @@ export async function GET() {
     const upcomingMeetings = await client.query(
       api.meetings.getMeetingsByParent,
       {
-        parentId: session.user.id as any, // Convex ID type
+        parentId: session.data?.user.id as any, // Convex ID type
       },
     );
 
@@ -37,7 +37,7 @@ export async function GET() {
     const recentNotifications = await client.query(
       api.notifications.getNotifications,
       {
-        recipientId: session.user.id as any, // Convex ID type
+        recipientId: session.data?.user.id as any, // Convex ID type
         limit: 5,
       },
     );
@@ -51,7 +51,7 @@ export async function GET() {
     const unreadCommunications = await client.query(
       api.notifications.getNotifications,
       {
-        recipientId: session.user.id as any,
+        recipientId: session.data?.user.id as any,
         read: false,
         limit: 100,
       },

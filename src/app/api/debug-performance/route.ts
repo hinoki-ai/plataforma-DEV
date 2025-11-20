@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication and admin role
     const session = await auth();
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || session.data?.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Unauthorized - Admin access required" },
         { status: 401 },
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       type,
       data,
       timestamp: new Date().toISOString(),
-      userId: session.user.id,
+      userId: session.data?.user.id,
       userAgent: request.headers.get("user-agent"),
     });
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       type,
       data,
       timestamp: new Date().toISOString(),
-      userId: session.user.id,
+      userId: session.data?.user.id,
     };
 
     return NextResponse.json({
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
   try {
     // Check authentication and admin role
     const session = await auth();
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || session.data?.user.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Unauthorized - Admin access required" },
         { status: 401 },

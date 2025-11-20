@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { ParentCreationForm } from "@/components/users/ParentCreationForm";
 import { PageTransition } from "@/components/ui/page-transition";

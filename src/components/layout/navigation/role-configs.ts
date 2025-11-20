@@ -10,7 +10,7 @@ import { NavigationIcons } from "@/components/icons/hero-icons";
 // ADMIN Navigation Configuration
 export const ADMIN_NAVIGATION = [
   {
-    title: STANDARD_SECTION_ORDER.USER_MANAGEMENT,
+    title: STANDARD_SECTION_ORDER.PRIMARY,
     defaultOpen: true,
     items: [
       {
@@ -18,6 +18,12 @@ export const ADMIN_NAVIGATION = [
         href: "/admin",
         icon: NavigationIcons.Analytics,
       },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.USER_MANAGEMENT,
+    defaultOpen: false,
+    items: [
       {
         title: "nav.users",
         href: "/admin/usuarios",
@@ -27,7 +33,7 @@ export const ADMIN_NAVIGATION = [
   },
   {
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       {
         title: "nav.dashboard",
@@ -175,7 +181,7 @@ export const PROFESOR_NAVIGATION = [
   },
   {
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       {
         title: "nav.dashboard",
@@ -213,7 +219,7 @@ export const PROFESOR_NAVIGATION = [
   },
   {
     title: ROLE_SPECIFIC_SECTIONS.PROFESOR.academic,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       {
         title: "nav.planning",
@@ -326,7 +332,7 @@ export const PARENT_NAVIGATION = [
   },
   {
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       {
         title: "nav.dashboard",
@@ -358,7 +364,7 @@ export const PARENT_NAVIGATION = [
   },
   {
     title: ROLE_SPECIFIC_SECTIONS.PARENT.academic,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       {
         title: "nav.students",
@@ -466,12 +472,12 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.global_oversight",
         href: "/master/global-oversight",
-        icon: NavigationIcons.Analytics,
+        icon: NavigationIcons.Eye,
       },
       {
         title: "nav.system_stats",
         href: "/master/system-stats",
-        icon: NavigationIcons.Analytics,
+        icon: NavigationIcons.Chart,
       },
       {
         title: "nav.system_health",
@@ -482,7 +488,7 @@ export const MASTER_NAVIGATION = [
   },
   {
     title: STANDARD_SECTION_ORDER.USER_MANAGEMENT,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       {
         title: "nav.institutions",
@@ -518,17 +524,17 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.security",
         href: "/master/security-center",
-        icon: NavigationIcons.Settings, // Using Settings as placeholder for Shield if not available in NavigationIcons
+        icon: NavigationIcons.Shield,
       },
       {
         title: "nav.database",
         href: "/master/database-tools",
-        icon: NavigationIcons.ServerStack,
+        icon: NavigationIcons.Archive,
       },
       {
         title: "nav.global_settings",
         href: "/master/global-settings",
-        icon: NavigationIcons.Settings,
+        icon: NavigationIcons.Wrench,
       },
     ],
   },
@@ -539,17 +545,17 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.god_mode",
         href: "/master/god-mode",
-        icon: NavigationIcons.ServerStack,
+        icon: NavigationIcons.Key,
       },
       {
         title: "nav.debug_console",
         href: "/master/debug-console",
-        icon: NavigationIcons.ServerStack,
+        icon: NavigationIcons.Folder,
       },
       {
         title: "nav.audit_logs",
         href: "/master/audit-logs",
-        icon: NavigationIcons.Documents,
+        icon: NavigationIcons.Bookmark,
       },
       {
         title: "nav.system_monitor",
@@ -575,7 +581,7 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.calificaciones",
         href: "/admin/libro-clases/calificaciones",
-        icon: NavigationIcons.Analytics,
+        icon: NavigationIcons.Academic,
         requiredFeature: "grading_system",
       },
       {
@@ -586,7 +592,7 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.students",
         href: "/admin/libro-clases/estudiantes",
-        icon: NavigationIcons.Profile,
+        icon: NavigationIcons.UserGroup,
       },
     ],
   },
@@ -602,32 +608,32 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.protocolos_convivencia.normas",
         href: "/master/protocolos-convivencia/normas",
-        icon: NavigationIcons.Documents,
+        icon: NavigationIcons.Shield,
       },
       {
         title: "nav.protocolos_convivencia.disciplina",
         href: "/master/protocolos-convivencia/disciplina",
-        icon: NavigationIcons.Documents,
+        icon: NavigationIcons.Wrench,
       },
       {
         title: "nav.protocolos_convivencia.medidas",
         href: "/master/protocolos-convivencia/medidas",
-        icon: NavigationIcons.Documents,
+        icon: NavigationIcons.Clock,
       },
       {
         title: "nav.protocolos_convivencia.reconocimientos",
         href: "/master/protocolos-convivencia/reconocimientos",
-        icon: NavigationIcons.Documents,
+        icon: NavigationIcons.Star,
       },
       {
         title: "nav.protocolos_convivencia.actas_apoderados",
         href: "/master/protocolos-convivencia/actas-apoderados",
-        icon: NavigationIcons.Documents,
+        icon: NavigationIcons.UserGroup, // Use UserGroup instead of Team
       },
       {
         title: "nav.protocolos_convivencia.actas_alumnos",
         href: "/master/protocolos-convivencia/actas-alumnos",
-        icon: NavigationIcons.Documents,
+        icon: NavigationIcons.Building, // Use Building for school context
       },
     ],
   },

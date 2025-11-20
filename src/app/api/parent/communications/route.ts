@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (session.user.role !== "PARENT") {
+    if (session.data?.user.role !== "PARENT") {
       return NextResponse.json(
         { error: "Acceso restringido" },
         { status: 403 },
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     }
 
     const client = await getAuthenticatedConvexClient();
-    const parentId = session.user.id as unknown as Id<"users">;
+    const parentId = session.data?.user.id as unknown as Id<"users">;
     const searchParams = request.nextUrl.searchParams;
     const status = mapStatus(searchParams.get("status"));
     const limitParam = searchParams.get("limit");
@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (session.user.role !== "PARENT") {
+    if (session.data?.user.role !== "PARENT") {
       return NextResponse.json(
         { error: "Acceso restringido" },
         { status: 403 },
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
     const convexPriority = PRIORITY_MAP[normalizedPriority] ?? "MEDIUM";
 
     const client = await getAuthenticatedConvexClient();
-    const parentId = session.user.id as unknown as Id<"users">;
+    const parentId = session.data?.user.id as unknown as Id<"users">;
 
     const recipient = await client.query(api.users.getUserByEmail, {
       email: String(to).trim().toLowerCase(),

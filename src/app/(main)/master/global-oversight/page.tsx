@@ -15,14 +15,10 @@ export default function GlobalOversightPage() {
   try {
     // System monitoring will show system status but remain functional
   } catch (error) {
-    dbLogger.error(
-      "SYSTEM MONITORING FAILURE",
-      error,
-      {
-        context: "SystemMonitoringPage",
-        systemMonitoring: true,
-      },
-    );
+    dbLogger.error("SYSTEM MONITORING FAILURE", error, {
+      context: "SystemMonitoringPage",
+      systemMonitoring: true,
+    });
     // System monitoring will show error state but remain functional
   }
 

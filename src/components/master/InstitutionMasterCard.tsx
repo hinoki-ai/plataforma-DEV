@@ -138,8 +138,7 @@ export function InstitutionMasterCard({
               <AlertDescription>
                 <div className="flex items-center justify-between w-full">
                   <div>
-                    <strong>Current Institution:</strong>{" "}
-                    {currentInfo.name}
+                    <strong>Current Institution:</strong> {currentInfo.name}
                     <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       {currentInfo.levels.length} educational levels • ISCED{" "}
                       {Math.min(...currentInfo.levels.map((l) => l.isced))}-

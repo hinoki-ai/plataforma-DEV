@@ -9,7 +9,7 @@ import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 import { StudentManagement } from "@/components/libro-clases/StudentManagement";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useAuth } from "@clerk/nextjs";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 
 export default function AdminEstudiantesPage() {
   const { userId } = useAuth();

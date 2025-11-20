@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -128,9 +128,9 @@ export default function PerfilPage() {
     if (session?.user) {
       setUserProfile({
         name:
-          session.user.name || t("profesor.perfil.default_name", "profesor"),
+          session.data?.user.name || t("profesor.perfil.default_name", "profesor"),
         email:
-          session.user.email || t("profesor.perfil.default_email", "profesor"),
+          session.data?.user.email || t("profesor.perfil.default_email", "profesor"),
         phone: t("profesor.perfil.default_phone", "profesor"),
         bio: t("profesor.perfil.default_bio", "profesor"),
         avatar: "/public/images/avatar-placeholder.png",

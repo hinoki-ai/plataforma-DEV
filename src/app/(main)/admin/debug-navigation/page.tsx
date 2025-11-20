@@ -30,7 +30,7 @@ export default async function AdminDebugNavigationPage() {
   const session = await requireAuth();
 
   // Ensure only MASTER role can access this page
-  if (!hasMasterGodModeAccess(session.user.role)) {
+  if (!hasMasterGodModeAccess(session.data?.user.role)) {
     redirect("/unauthorized");
   }
   return (

@@ -27,7 +27,7 @@
  */
 
 import React, { useMemo } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -94,15 +94,6 @@ function SystemHealthCard({ stats }: { stats: any }) {
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-blue-600" />
-          System Health
-        </CardTitle>
-        <CardDescription>
-          Overall status of all system components
-        </CardDescription>
-      </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           {Object.entries(healthMetrics).map(([key, value]) => (

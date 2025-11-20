@@ -24,13 +24,13 @@ export const metadata: Metadata = {
 
 export default async function ParentReunionesPage() {
   const session = await requireAuth();
-  const roleAccess = getRoleAccess(session.user.role);
+  const roleAccess = getRoleAccess(session.data?.user.role);
 
   // Ensure user has access to parent dashboard
   if (
     !roleAccess.canAccessParent &&
-    session.user.role !== "PROFESOR" &&
-    session.user.role !== "ADMIN"
+    session.data?.user.role !== "PROFESOR" &&
+    session.data?.user.role !== "ADMIN"
   ) {
     redirect("/unauthorized");
   }
@@ -71,7 +71,7 @@ export default async function ParentReunionesPage() {
 
         {/* Meetings Section */}
         <div className="container mx-auto px-4 py-8">
-          <ParentMeetingTabs userId={session.user.id} />
+          <ParentMeetingTabs userId={session.data?.user.id} />
         </div>
       </div>
     </PageTransition>

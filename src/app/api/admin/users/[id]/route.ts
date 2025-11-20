@@ -33,7 +33,7 @@ export async function GET(
     const session = await auth();
     const { id } = await params;
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
@@ -79,7 +79,7 @@ export async function PUT(
     const session = await auth();
     const { id } = await params;
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
@@ -88,7 +88,7 @@ export async function PUT(
 
     // Prevent admin from demoting themselves
     if (
-      id === session.user.id &&
+      id === session.data?.user.id &&
       validatedData.role &&
       validatedData.role !== "ADMIN"
     ) {
@@ -146,12 +146,12 @@ export async function DELETE(
     const session = await auth();
     const { id } = await params;
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
     // Prevent admin from deleting themselves
-    if (id === session.user.id) {
+    if (id === session.data?.user.id) {
       return NextResponse.json(
         { error: "No puedes eliminar tu propia cuenta" },
         { status: 400 },
@@ -188,7 +188,7 @@ export async function POST(
     const session = await auth();
     const { id } = await params;
 
-    if (!session || session.user.role !== "ADMIN") {
+    if (!session || session.data?.user.role !== "ADMIN") {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 

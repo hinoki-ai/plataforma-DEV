@@ -5,7 +5,7 @@ import { MeetingCard } from "./MeetingCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import type { Meeting } from "@/lib/prisma-compat-types";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import {
   getMeetingsAction,
   getMeetingsByTeacherAction,
@@ -41,7 +41,7 @@ export function MeetingList({
       if (isAdmin) {
         response = await getMeetingsAction();
       } else if (session?.user?.id) {
-        response = await getMeetingsByTeacherAction(session.user.id);
+        response = await getMeetingsByTeacherAction(session.data?.user.id);
       } else {
         setMeetings([]);
         return;

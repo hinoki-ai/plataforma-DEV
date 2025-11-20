@@ -73,11 +73,11 @@ export default function ComunicacionPage() {
   }
 
   // Ensure user has access to parent section
-  if (!session || !session.user) {
+  if (!session || !session.data?.user) {
     redirect("/login");
   }
 
-  const roleAccess = getRoleAccess(session.user.role);
+  const roleAccess = getRoleAccess(session.data?.user.role);
   if (!roleAccess.canAccessParent) {
     redirect("/unauthorized");
   }

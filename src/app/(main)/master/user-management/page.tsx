@@ -61,9 +61,7 @@ export default function UserManagementPage() {
               <Users className="h-8 w-8 text-blue-600" />
               <div>
                 <div className="text-2xl font-bold">1,247</div>
-                <div className="text-sm text-muted-foreground">
-                  Total Users
-                </div>
+                <div className="text-sm text-muted-foreground">Total Users</div>
               </div>
             </div>
           </div>
@@ -115,16 +113,12 @@ export default function UserManagementPage() {
       {/* Role Distribution */}
       <Card className="border-slate-200 dark:border-slate-800">
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-6">
-Role Distribution
-          </h3>
+          <h3 className="text-lg font-semibold mb-6">Role Distribution</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <Crown className="h-5 w-5 text-purple-600" />
-                <span className="font-medium">
-                  Master
-                </span>
+                <span className="font-medium">Master</span>
               </div>
               <Badge variant="secondary">12 users</Badge>
             </div>
@@ -132,9 +126,7 @@ Role Distribution
             <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <Shield className="h-5 w-5 text-blue-600" />
-                <span className="font-medium">
-                  Administrator
-                </span>
+                <span className="font-medium">Administrator</span>
               </div>
               <Badge variant="secondary">45 users</Badge>
             </div>
@@ -142,9 +134,7 @@ Role Distribution
             <div className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <GraduationCap className="h-5 w-5 text-green-600" />
-                <span className="font-medium">
-                  Teacher
-                </span>
+                <span className="font-medium">Teacher</span>
               </div>
               <Badge variant="secondary">234 users</Badge>
             </div>
@@ -152,9 +142,7 @@ Role Distribution
             <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <Users className="h-5 w-5 text-orange-600" />
-                <span className="font-medium">
-                  Parent
-                </span>
+                <span className="font-medium">Parent</span>
               </div>
               <Badge variant="secondary">956 users</Badge>
             </div>
@@ -165,29 +153,27 @@ Role Distribution
       {/* Quick Actions */}
       <Card className="border-slate-200 dark:border-slate-800">
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-6">
-            Quick Actions
-          </h3>
+          <h3 className="text-lg font-semibold mb-6">Quick Actions</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Button variant="outline" className="h-auto p-4 justify-start">
               <Users className="h-4 w-4 mr-3" />
-View All Users
+              View All Users
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <Shield className="h-4 w-4 mr-3" />
-Manage Roles
+              Manage Roles
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <UserCheck className="h-4 w-4 mr-3" />
-Bulk Operations
+              Bulk Operations
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <Crown className="h-4 w-4 mr-3" />
-Role Permissions
+              Role Permissions
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
               <UserX className="h-4 w-4 mr-3" />
-Deactivated Users
+              Deactivated Users
             </Button>
           </div>
         </div>

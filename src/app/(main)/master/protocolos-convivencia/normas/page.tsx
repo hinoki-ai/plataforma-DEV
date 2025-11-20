@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 
 function NormasMasterContent() {
-
   const globalNormsStats = {
     totalNorms: 145,
     institutions: 12,

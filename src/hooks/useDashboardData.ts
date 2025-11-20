@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth-client";
 import { UserRole } from "@/lib/prisma-compat-types";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
@@ -141,7 +141,7 @@ export function useDashboardData() {
 
         let endpoint = "";
 
-        switch (session.user.role) {
+        switch (session.data?.user.role) {
           case "MASTER":
             endpoint = "/api/master/dashboard";
             break;

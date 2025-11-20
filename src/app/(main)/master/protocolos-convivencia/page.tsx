@@ -44,7 +44,6 @@ import {
 import Link from "next/link";
 
 function ProtocolosComportamientoMasterContent() {
-
   const systemOverview = {
     totalNormas: 145,
     activeCases: 23,
@@ -88,8 +87,7 @@ function ProtocolosComportamientoMasterContent() {
     },
     {
       title: "Discipline",
-      description:
-        "Supervision of disciplinary cases across all institutions",
+      description: "Supervision of disciplinary cases across all institutions",
       href: "/master/protocolos-convivencia/disciplina",
       icon: Shield,
       color: "bg-red-500",
@@ -390,11 +388,7 @@ function ProtocolosComportamientoMasterContent() {
 export default function ProtocolosComportamientoMasterPage() {
   return (
     <ErrorBoundary
-      fallback={
-        <div>
-          Error loading the master behavior protocols panel
-        </div>
-      }
+      fallback={<div>Error loading the master behavior protocols panel</div>}
     >
       <Suspense fallback={<LoadingState />}>
         <ProtocolosComportamientoMasterContent />

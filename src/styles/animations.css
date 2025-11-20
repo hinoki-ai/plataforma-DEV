@@ -330,7 +330,8 @@ html {
 
 /* Pulse highlight for tour overlays */
 @keyframes pulse-highlight {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85);
   }
   50% {

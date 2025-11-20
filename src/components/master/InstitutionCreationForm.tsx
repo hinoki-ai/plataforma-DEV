@@ -51,42 +51,22 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 function createInstitutionCreationSchema() {
   const adminSchema = z.object({
-    name: z
-      .string()
-      .min(2, "Administrator name is required"),
-    email: z
-      .string()
-      .email("Please enter a valid email address"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters"),
+    name: z.string().min(2, "Administrator name is required"),
+    email: z.string().email("Please enter a valid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
     phone: z.string().optional(),
     isPrimary: z.boolean(),
   });
 
   return z
     .object({
-      name: z
-        .string()
-        .min(3, "Institution name is required"),
-      mission: z
-        .string()
-        .min(20, "Mission must be at least 20 characters"),
-      vision: z
-        .string()
-        .min(20, "Vision must be at least 20 characters"),
-      address: z
-        .string()
-        .min(5, "Address is required"),
-      phone: z
-        .string()
-        .min(7, "Phone number is required"),
-      email: z
-        .string()
-        .email("Please enter a valid email address"),
-      website: z
-        .string()
-        .url("Please enter a valid URL"),
+      name: z.string().min(3, "Institution name is required"),
+      mission: z.string().min(20, "Mission must be at least 20 characters"),
+      vision: z.string().min(20, "Vision must be at least 20 characters"),
+      address: z.string().min(5, "Address is required"),
+      phone: z.string().min(7, "Phone number is required"),
+      email: z.string().email("Please enter a valid email address"),
+      website: z.string().url("Please enter a valid URL"),
       logoUrl: z
         .string()
         .url("Please enter a valid URL")
@@ -95,10 +75,16 @@ function createInstitutionCreationSchema() {
       branding: z.object({
         primaryColor: z
           .string()
-          .regex(/^#([0-9a-f]{3}){1,2}$/i, "Please enter a valid hex color (e.g., #2563eb)"),
+          .regex(
+            /^#([0-9a-f]{3}){1,2}$/i,
+            "Please enter a valid hex color (e.g., #2563eb)",
+          ),
         secondaryColor: z
           .string()
-          .regex(/^#([0-9a-f]{3}){1,2}$/i, "Please enter a valid hex color (e.g., #2563eb)"),
+          .regex(
+            /^#([0-9a-f]{3}){1,2}$/i,
+            "Please enter a valid hex color (e.g., #2563eb)",
+          ),
       }),
       institutionType: z.enum([
         "PRESCHOOL",
@@ -347,7 +333,9 @@ export function InstitutionCreationForm() {
         throw new Error(data.error || "No se pudo crear la institución");
       }
 
-      toast.success("The institution has been created and administrators have been notified.");
+      toast.success(
+        "The institution has been created and administrators have been notified.",
+      );
       setCreationResult({
         institutionId: data.institutionId,
         admins: data.admins ?? [],
@@ -383,13 +371,13 @@ export function InstitutionCreationForm() {
     >
       <Card className="border-blue-200 dark:border-blue-800">
         <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-blue-600" />
-              Basic Information
-            </CardTitle>
-            <CardDescription>
-              Institution name, contact details and basic configuration
-            </CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-blue-600" />
+            Basic Information
+          </CardTitle>
+          <CardDescription>
+            Institution name, contact details and basic configuration
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -436,15 +424,13 @@ export function InstitutionCreationForm() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                        <FormLabel>
-                          Institution Name
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter institution name"
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Institution Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter institution name"
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -454,20 +440,16 @@ export function InstitutionCreationForm() {
                   name="institutionType"
                   render={({ field }) => (
                     <FormItem>
-                        <FormLabel>
-                          Institution Type
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue
-                                placeholder="Select institution type"
-                              />
-                            </SelectTrigger>
-                          </FormControl>
+                      <FormLabel>Institution Type</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select institution type" />
+                          </SelectTrigger>
+                        </FormControl>
                         <SelectContent>
                           {institutionOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
@@ -492,9 +474,7 @@ export function InstitutionCreationForm() {
                     name="branding.primaryColor"
                     render={({ field }) => (
                       <FormItem>
-                          <FormLabel>
-                            Primary Color
-                          </FormLabel>
+                        <FormLabel>Primary Color</FormLabel>
                         <div className="flex gap-2">
                           <FormControl>
                             <Input
@@ -519,9 +499,7 @@ export function InstitutionCreationForm() {
                     name="branding.secondaryColor"
                     render={({ field }) => (
                       <FormItem>
-                          <FormLabel>
-                            Secondary Color
-                          </FormLabel>
+                        <FormLabel>Secondary Color</FormLabel>
                         <div className="flex gap-2">
                           <FormControl>
                             <Input
@@ -549,18 +527,14 @@ export function InstitutionCreationForm() {
                   render={() => (
                     <FormItem className="md:col-span-2">
                       <div className="mb-4 mt-2">
-                          <FormLabel className="text-base">
-                            Supported Educational Levels
-                          </FormLabel>
-                          <CardDescription>
-                            Select the levels that this institution will offer (
-                            {availableLevels.length} available for{" "}
-                            {
-                              INSTITUTION_TYPE_INFO[selectedInstitutionType]
-                                .name
-                            }
-                            )
-                          </CardDescription>
+                        <FormLabel className="text-base">
+                          Supported Educational Levels
+                        </FormLabel>
+                        <CardDescription>
+                          Select the levels that this institution will offer (
+                          {availableLevels.length} available for{" "}
+                          {INSTITUTION_TYPE_INFO[selectedInstitutionType].name})
+                        </CardDescription>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 bg-muted/10">
                         {availableLevels.map((level) => (
@@ -616,15 +590,10 @@ export function InstitutionCreationForm() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                        <FormLabel>
-                          Phone Number
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="+1 (555) 123-4567"
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="+1 (555) 123-4567" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -634,15 +603,13 @@ export function InstitutionCreationForm() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                        <FormLabel>
-                          Institutional Email
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="contact@institution.edu"
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Institutional Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="contact@institution.edu"
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -652,15 +619,13 @@ export function InstitutionCreationForm() {
                   name="website"
                   render={({ field }) => (
                     <FormItem>
-                        <FormLabel>
-                          Website
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="https://www.institution.edu"
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Website</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://www.institution.edu"
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -670,15 +635,10 @@ export function InstitutionCreationForm() {
                   name="logoUrl"
                   render={({ field }) => (
                     <FormItem>
-                        <FormLabel>
-                          Logo URL (Optional)
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="https://..."
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Logo URL (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="https://..." {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -688,15 +648,13 @@ export function InstitutionCreationForm() {
                   name="address"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                        <FormLabel>
-                          Address
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter complete address"
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter complete address"
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -706,16 +664,14 @@ export function InstitutionCreationForm() {
                   name="mission"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                        <FormLabel>
-                          Mission Statement
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Describe the institution's mission"
-                            className="min-h-[100px]"
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Mission Statement</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Describe the institution's mission"
+                          className="min-h-[100px]"
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -725,16 +681,14 @@ export function InstitutionCreationForm() {
                   name="vision"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                        <FormLabel>
-                          Vision Statement
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Describe the institution's vision"
-                            className="min-h-[100px]"
-                            {...field}
-                          />
-                        </FormControl>
+                      <FormLabel>Vision Statement</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Describe the institution's vision"
+                          className="min-h-[100px]"
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -746,13 +700,13 @@ export function InstitutionCreationForm() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Settings2 className="h-5 w-5 text-blue-600" />
-                        Educational Configuration
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Configure levels, subjects and educational features
-                      </p>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <Settings2 className="h-5 w-5 text-blue-600" />
+                      Educational Configuration
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Configure levels, subjects and educational features
+                    </p>
                   </div>
                 </div>
 
@@ -817,28 +771,26 @@ export function InstitutionCreationForm() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <ShieldCheck className="h-5 w-5 text-blue-600" />
-                        Institution Administrators
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Create primary and additional administrators
-                      </p>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <ShieldCheck className="h-5 w-5 text-blue-600" />
+                      Institution Administrators
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Create primary and additional administrators
+                    </p>
                   </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleAddAdmin}
-                    >
-                      Add Administrator
-                    </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddAdmin}
+                  >
+                    Add Administrator
+                  </Button>
                 </div>
 
                 {adminsRootError && (
                   <Alert variant="destructive">
-                    <AlertTitle>
-                      Configuration Error
-                    </AlertTitle>
+                    <AlertTitle>Configuration Error</AlertTitle>
                     <AlertDescription>{adminsRootError}</AlertDescription>
                   </Alert>
                 )}
@@ -863,23 +815,23 @@ export function InstitutionCreationForm() {
                                 Primary
                               </Badge>
                             ) : (
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleSetPrimary(index)}
-                                >
-                                  Mark as Primary
-                                </Button>
-                            )}
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleRemoveAdmin(index)}
+                                onClick={() => handleSetPrimary(index)}
                               >
-                                Remove
+                                Mark as Primary
                               </Button>
+                            )}
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRemoveAdmin(index)}
+                            >
+                              Remove
+                            </Button>
                           </div>
                         </div>
                       </CardHeader>
@@ -889,15 +841,13 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.name`}
                           render={({ field }) => (
                             <FormItem>
-                                <FormLabel>
-                                  Administrator Name
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="Enter full name"
-                                    {...field}
-                                  />
-                                </FormControl>
+                              <FormLabel>Administrator Name</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter full name"
+                                  {...field}
+                                />
+                              </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -907,15 +857,13 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.email`}
                           render={({ field }) => (
                             <FormItem>
-                                <FormLabel>
-                                  Email Address
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="admin@institution.edu"
-                                    {...field}
-                                  />
-                                </FormControl>
+                              <FormLabel>Email Address</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="admin@institution.edu"
+                                  {...field}
+                                />
+                              </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -925,15 +873,13 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.phone`}
                           render={({ field }) => (
                             <FormItem>
-                                <FormLabel>
-                                  Phone (Optional)
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="+1 (555) 123-4567"
-                                    {...field}
-                                  />
-                                </FormControl>
+                              <FormLabel>Phone (Optional)</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="+1 (555) 123-4567"
+                                  {...field}
+                                />
+                              </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -943,16 +889,14 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.password`}
                           render={({ field }) => (
                             <FormItem>
-                                <FormLabel>
-                                  Password
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    type="password"
-                                    placeholder="Minimum 8 characters"
-                                    {...field}
-                                  />
-                                </FormControl>
+                              <FormLabel>Password</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder="Minimum 8 characters"
+                                  {...field}
+                                />
+                              </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -964,19 +908,19 @@ export function InstitutionCreationForm() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => form.reset(defaultValues)}
-                    disabled={form.formState.isSubmitting}
-                  >
-                    Clear Form
-                  </Button>
-                  <Button type="submit" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting
-                      ? "Creating Institution..."
-                      : "Create Institution"}
-                  </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => form.reset(defaultValues)}
+                  disabled={form.formState.isSubmitting}
+                >
+                  Clear Form
+                </Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting
+                    ? "Creating Institution..."
+                    : "Create Institution"}
+                </Button>
               </div>
             </form>
           </Form>

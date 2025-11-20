@@ -49,7 +49,7 @@ export const PUT = withApiErrorHandling(async (request: NextRequest) => {
   }
 
   // Check permissions - only ADMIN can update
-  if (session.user.role !== "ADMIN") {
+  if (session.data?.user.role !== "ADMIN") {
     throw new AuthenticationError(
       "Only administrators can update video capsules",
     );
@@ -96,7 +96,7 @@ export const DELETE = withApiErrorHandling(async (request: NextRequest) => {
   }
 
   // Check permissions - only ADMIN can delete
-  if (session.user.role !== "ADMIN") {
+  if (session.data?.user.role !== "ADMIN") {
     throw new AuthenticationError(
       "Only administrators can delete video capsules",
     );

@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    if (session.user.role !== "PARENT") {
+    if (session.data?.user.role !== "PARENT") {
       return NextResponse.json(
         { error: "Acceso restringido" },
         { status: 403 },
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     }
 
     const client = await getAuthenticatedConvexClient();
-    const parentId = session.user.id as unknown as Id<"users">;
+    const parentId = session.data?.user.id as unknown as Id<"users">;
 
     const [students, meetings] = await Promise.all([
       client.query(api.students.getStudents, {
