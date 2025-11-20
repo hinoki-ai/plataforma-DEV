@@ -14,5 +14,5 @@ export const pages = defineTable({
   content: v.string(),
   embedding: v.array(v.float64()),
   chunkIdx: v.number(),
-  createdAt: v.optional(v.number())
+  createdAt: v.optional(v.number()),
 });

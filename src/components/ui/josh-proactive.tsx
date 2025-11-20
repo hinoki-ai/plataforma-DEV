@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
@@ -86,207 +86,393 @@ export function JoshProactiveSuggestions() {
   };
 
   // Proactive suggestions database
-  const suggestions: ProactiveSuggestion[] = [
-    {
-      id: "teacher-attendance-reminder",
-      type: "reminder",
-      title: t(
-        "proactive.teacher.attendance.title",
-        "Don't forget to mark attendance",
-      ),
-      message: t(
-        "proactive.teacher.attendance.message",
-        "It's been a while since you updated student attendance. Keeping records current helps with school administration.",
-      ),
-      action: {
-        label: t("proactive.teacher.attendance.action", "Go to Attendance"),
-        onClick: () =>
-          (window.location.href = "/profesor/libro-clases/asistencia"),
-      },
-      priority: "high",
-      conditions: {
-        page: "/profesor/libro-clases",
-        role: "teacher",
-        timeSpent: 300000, // 5 minutes
-      },
-      cooldown: 480, // 8 hours
-    },
-    {
-      id: "parent-communication-tip",
-      type: "tip",
-      title: t(
-        "proactive.parent.communication.title",
-        "Stay connected with teachers",
-      ),
-      message: t(
-        "proactive.parent.communication.message",
-        "Regular communication with teachers helps monitor your child's progress. Check for new messages or updates.",
-      ),
-      action: {
-        label: t(
-          "proactive.parent.communication.action",
-          "View Communications",
+  const suggestions: ProactiveSuggestion[] = useMemo(
+    () => [
+      {
+        id: "teacher-attendance-reminder",
+        type: "reminder",
+        title: t(
+          "proactive.teacher.attendance.title",
+          "Don't forget to mark attendance",
         ),
-        onClick: () => (window.location.href = "/parent/comunicacion"),
-      },
-      priority: "medium",
-      conditions: {
-        role: "parent",
-        timeSpent: 180000, // 3 minutes on any parent page
-      },
-      cooldown: 1440, // 24 hours
-    },
-    {
-      id: "admin-calendar-check",
-      type: "warning",
-      title: t("proactive.admin.calendar.title", "Review upcoming events"),
-      message: t(
-        "proactive.admin.calendar.message",
-        "There might be upcoming school events that need your attention. Regular calendar reviews ensure smooth school operations.",
-      ),
-      action: {
-        label: t("proactive.admin.calendar.action", "Check Calendar"),
-        onClick: () => (window.location.href = "/admin/calendario-escolar"),
-      },
-      priority: "medium",
-      conditions: {
-        role: "admin",
-        page: "/admin",
-        timeSpent: 120000, // 2 minutes
-      },
-      cooldown: 720, // 12 hours
-    },
-    {
-      id: "teacher-grade-entry",
-      type: "tip",
-      title: t("proactive.teacher.grades.title", "Time to enter grades"),
-      message: t(
-        "proactive.teacher.grades.message",
-        "Regular grade entry helps students and parents track academic progress. Consider updating recent assessments.",
-      ),
-      action: {
-        label: t("proactive.teacher.grades.action", "Enter Grades"),
-        onClick: () =>
-          (window.location.href = "/profesor/libro-clases/calificaciones"),
-      },
-      priority: "medium",
-      conditions: {
-        page: "/profesor/libro-clases",
-        role: "teacher",
-        actions: ["click:button"], // After clicking buttons (likely navigation)
-        timeSpent: 240000, // 4 minutes
-      },
-      cooldown: 1440, // 24 hours
-    },
-    {
-      id: "first-time-admin",
-      type: "achievement",
-      title: t("proactive.admin.welcome.title", "Welcome to Administration!"),
-      message: t(
-        "proactive.admin.welcome.message",
-        "As a new administrator, take a moment to explore the key features. Would you like a guided tour of the admin panel?",
-      ),
-      action: {
-        label: t("proactive.admin.welcome.action", "Start Tour"),
-        onClick: () => {
-          // This would trigger the tour system
-          const event = new CustomEvent("startJoshTour", {
-            detail: { tourId: "admin-dashboard" },
-          });
-          window.dispatchEvent(event);
+        message: t(
+          "proactive.teacher.attendance.message",
+          "It's been a while since you updated student attendance. Keeping records current helps with school administration.",
+        ),
+        action: {
+          label: t("proactive.teacher.attendance.action", "Go to Attendance"),
+          onClick: () =>
+            (window.location.href = "/profesor/libro-clases/asistencia"),
         },
-      },
-      priority: "high",
-      conditions: {
-        role: "admin",
-        timeSpent: 60000, // 1 minute
-      },
-      cooldown: 10080, // 1 week
-    },
-    {
-      id: "inactive-user-help",
-      type: "tip",
-      title: t("proactive.general.help.title", "Need some help?"),
-      message: t(
-        "proactive.general.help.message",
-        "I notice you haven't interacted much. I'm here to help you get the most out of the platform. Click here to chat with me!",
-      ),
-      action: {
-        label: t("proactive.general.help.action", "Chat with Josh"),
-        onClick: () => {
-          const event = new CustomEvent("openJoshChat");
-          window.dispatchEvent(event);
+        priority: "high",
+        conditions: {
+          page: "/profesor/libro-clases",
+          role: "teacher",
+          timeSpent: 300000, // 5 minutes
         },
+        cooldown: 480, // 8 hours
       },
-      priority: "low",
-      conditions: {
-        timeSpent: 300000, // 5 minutes without significant interaction
+      {
+        id: "parent-communication-tip",
+        type: "tip",
+        title: t(
+          "proactive.parent.communication.title",
+          "Stay connected with teachers",
+        ),
+        message: t(
+          "proactive.parent.communication.message",
+          "Regular communication with teachers helps monitor your child's progress. Check for new messages or updates.",
+        ),
+        action: {
+          label: t(
+            "proactive.parent.communication.action",
+            "View Communications",
+          ),
+          onClick: () => (window.location.href = "/parent/comunicacion"),
+        },
+        priority: "medium",
+        conditions: {
+          role: "parent",
+          timeSpent: 180000, // 3 minutes on any parent page
+        },
+        cooldown: 1440, // 24 hours
       },
-      cooldown: 60, // 1 hour
-    },
-  ];
+      {
+        id: "admin-calendar-check",
+        type: "warning",
+        title: t("proactive.admin.calendar.title", "Review upcoming events"),
+        message: t(
+          "proactive.admin.calendar.message",
+          "There might be upcoming school events that need your attention. Regular calendar reviews ensure smooth school operations.",
+        ),
+        action: {
+          label: t("proactive.admin.calendar.action", "Check Calendar"),
+          onClick: () => (window.location.href = "/admin/calendario-escolar"),
+        },
+        priority: "medium",
+        conditions: {
+          role: "admin",
+          page: "/admin",
+          timeSpent: 120000, // 2 minutes
+        },
+        cooldown: 720, // 12 hours
+      },
+      {
+        id: "teacher-grade-entry",
+        type: "tip",
+        title: t("proactive.teacher.grades.title", "Time to enter grades"),
+        message: t(
+          "proactive.teacher.grades.message",
+          "Regular grade entry helps students and parents track academic progress. Consider updating recent assessments.",
+        ),
+        action: {
+          label: t("proactive.teacher.grades.action", "Enter Grades"),
+          onClick: () =>
+            (window.location.href = "/profesor/libro-clases/calificaciones"),
+        },
+        priority: "medium",
+        conditions: {
+          page: "/profesor/libro-clases",
+          role: "teacher",
+          actions: ["click:button"], // After clicking buttons (likely navigation)
+          timeSpent: 240000, // 4 minutes
+        },
+        cooldown: 1440, // 24 hours
+      },
+      {
+        id: "first-time-admin",
+        type: "achievement",
+        title: t("proactive.admin.welcome.title", "Welcome to Administration!"),
+        message: t(
+          "proactive.admin.welcome.message",
+          "As a new administrator, take a moment to explore the key features. Would you like a guided tour of the admin panel?",
+        ),
+        action: {
+          label: t("proactive.admin.welcome.action", "Start Tour"),
+          onClick: () => {
+            // This would trigger the tour system
+            const event = new CustomEvent("startJoshTour", {
+              detail: { tourId: "admin-dashboard" },
+            });
+            window.dispatchEvent(event);
+          },
+        },
+        priority: "high",
+        conditions: {
+          role: "admin",
+          timeSpent: 60000, // 1 minute
+        },
+        cooldown: 10080, // 1 week
+      },
+      {
+        id: "inactive-user-help",
+        type: "tip",
+        title: t("proactive.general.help.title", "Need some help?"),
+        message: t(
+          "proactive.general.help.message",
+          "I notice you haven't interacted much. I'm here to help you get the most out of the platform. Click here to chat with me!",
+        ),
+        action: {
+          label: t("proactive.general.help.action", "Chat with Josh"),
+          onClick: () => {
+            const event = new CustomEvent("openJoshChat");
+            window.dispatchEvent(event);
+          },
+        },
+        priority: "low",
+        conditions: {
+          timeSpent: 300000, // 5 minutes without significant interaction
+        },
+        cooldown: 60, // 1 hour
+      },
+    ],
+    [t],
+  );
+
+  // Check if there are unselected options on the page that user needs to interact with
+  const hasUnselectedOptions = useCallback((): boolean => {
+    if (typeof window === "undefined" || typeof document === "undefined")
+      return false;
+
+    try {
+      // Check if we're on a voting or selection page
+      const isVotingPage =
+        pathname.includes("/votaciones") || pathname.includes("/vote");
+
+      // Check for RadioGroup components (Radix UI) - most common case
+      const radioGroupElements = document.querySelectorAll(
+        '[role="radiogroup"]',
+      );
+      if (radioGroupElements.length > 0) {
+        for (const group of radioGroupElements) {
+          const radios = group.querySelectorAll('input[type="radio"]');
+          const hasSelected = Array.from(radios).some(
+            (radio) => (radio as HTMLInputElement).checked,
+          );
+          // If there are 2+ options and none selected, user needs to make a choice
+          // Be more strict on voting pages
+          if (radios.length >= 2 && !hasSelected) {
+            // On voting pages, always return true if options are unselected
+            if (isVotingPage) {
+              return true;
+            }
+            // On other pages, check if it's in a selection context
+            const parent = group.closest(
+              'form, [class*="vote"], [class*="option"], [class*="select"]',
+            );
+            if (parent) {
+              return true;
+            }
+          }
+        }
+      }
+
+      // Check for radio buttons that are part of a group but none are selected
+      const radioGroups = document.querySelectorAll('input[type="radio"]');
+      const radioGroupsMap = new Map<string, HTMLInputElement[]>();
+
+      radioGroups.forEach((radio) => {
+        const name = (radio as HTMLInputElement).name;
+        if (name && name !== "" && name !== "vote-option") {
+          if (!radioGroupsMap.has(name)) {
+            radioGroupsMap.set(name, []);
+          }
+          radioGroupsMap.get(name)!.push(radio as HTMLInputElement);
+        }
+      });
+
+      // Check if any radio group has no selected option
+      for (const [name, radios] of radioGroupsMap) {
+        const hasSelected = radios.some((radio) => radio.checked);
+        // Only consider it unselected if there are 2+ options and none are selected
+        if (radios.length >= 2 && !hasSelected) {
+          // Check if it's in a voting or selection context
+          const firstRadio = radios[0];
+          const parent = firstRadio?.closest(
+            'form, [class*="vote"], [class*="option"], [class*="select"], [class*="RadioGroup"]',
+          );
+          if (parent) {
+            return true;
+          }
+        }
+      }
+
+      // Special check for voting page with "vote-option" name
+      const voteOptions = document.querySelectorAll(
+        'input[name="vote-option"]',
+      );
+      if (voteOptions.length >= 2) {
+        const hasSelectedVote = Array.from(voteOptions).some(
+          (radio) => (radio as HTMLInputElement).checked,
+        );
+        if (!hasSelectedVote) {
+          return true;
+        }
+      }
+
+      // Also check for any radio buttons with name="vote-option" (case-insensitive)
+      const allVoteInputs = document.querySelectorAll(
+        'input[type="radio"][name*="vote"], input[type="radio"][name*="option"]',
+      );
+      if (allVoteInputs.length >= 2) {
+        const voteInputsArray = Array.from(allVoteInputs) as HTMLInputElement[];
+        const voteInputsByName = new Map<string, HTMLInputElement[]>();
+
+        voteInputsArray.forEach((input) => {
+          const name = input.name;
+          if (name) {
+            if (!voteInputsByName.has(name)) {
+              voteInputsByName.set(name, []);
+            }
+            voteInputsByName.get(name)!.push(input);
+          }
+        });
+
+        // Check each group
+        for (const [name, inputs] of voteInputsByName) {
+          if (inputs.length >= 2) {
+            const hasSelected = inputs.some((input) => input.checked);
+            if (!hasSelected) {
+              return true;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // If there's any error checking, don't block suggestions
+      console.warn("Error checking for unselected options:", error);
+      return false;
+    }
+
+    return false;
+  }, [pathname]);
 
   // Check if suggestion should be shown
-  const shouldShowSuggestion = (suggestion: ProactiveSuggestion): boolean => {
-    const context = getUserContext();
-    const timeSpent = Date.now() - pageStartTime;
+  const shouldShowSuggestion = useCallback(
+    (suggestion: ProactiveSuggestion): boolean => {
+      const context = getUserContext();
+      const timeSpent = Date.now() - pageStartTime;
 
-    // Check if already dismissed
-    if (dismissedSuggestions.has(suggestion.id)) return false;
+      // Check if already dismissed
+      if (dismissedSuggestions.has(suggestion.id)) return false;
 
-    // Check role condition
-    if (
-      suggestion.conditions.role &&
-      context.role !== suggestion.conditions.role
-    )
-      return false;
+      // For the inactive-user-help suggestion, check if user has unselected options
+      // Don't show Josh if user needs to select from options first
+      if (suggestion.id === "inactive-user-help" && hasUnselectedOptions()) {
+        return false;
+      }
 
-    // Check page condition
-    if (
-      suggestion.conditions.page &&
-      !pathname.includes(suggestion.conditions.page)
-    )
-      return false;
+      // Check role condition
+      if (
+        suggestion.conditions.role &&
+        context.role !== suggestion.conditions.role
+      )
+        return false;
 
-    // Check time spent condition
-    if (
-      suggestion.conditions.timeSpent &&
-      timeSpent < suggestion.conditions.timeSpent
-    )
-      return false;
+      // Check page condition
+      if (
+        suggestion.conditions.page &&
+        !pathname.includes(suggestion.conditions.page)
+      )
+        return false;
 
-    // Check actions condition
-    if (suggestion.conditions.actions) {
-      const hasRequiredActions = suggestion.conditions.actions.some((action) =>
-        userActions.some((userAction) => userAction.includes(action)),
+      // Check time spent condition
+      if (
+        suggestion.conditions.timeSpent &&
+        timeSpent < suggestion.conditions.timeSpent
+      )
+        return false;
+
+      // Check actions condition
+      if (suggestion.conditions.actions) {
+        const hasRequiredActions = suggestion.conditions.actions.some(
+          (action) =>
+            userActions.some((userAction) => userAction.includes(action)),
+        );
+        if (!hasRequiredActions) return false;
+      }
+
+      // Check cooldown (simplified - in real app would use localStorage)
+      const lastShown = localStorage.getItem(
+        `josh_suggestion_${suggestion.id}`,
       );
-      if (!hasRequiredActions) return false;
-    }
+      if (lastShown) {
+        const timeSinceLastShown = Date.now() - parseInt(lastShown);
+        const cooldownMs = suggestion.cooldown * 60 * 1000;
+        if (timeSinceLastShown < cooldownMs) return false;
+      }
 
-    // Check cooldown (simplified - in real app would use localStorage)
-    const lastShown = localStorage.getItem(`josh_suggestion_${suggestion.id}`);
-    if (lastShown) {
-      const timeSinceLastShown = Date.now() - parseInt(lastShown);
-      const cooldownMs = suggestion.cooldown * 60 * 1000;
-      if (timeSinceLastShown < cooldownMs) return false;
-    }
+      return true;
+    },
+    [
+      pageStartTime,
+      dismissedSuggestions,
+      pathname,
+      userActions,
+      hasUnselectedOptions,
+      session,
+    ],
+  );
 
-    return true;
-  };
+  // Monitor for option selection changes and hide Josh if user has unselected options
+  useEffect(() => {
+    const checkAndHideIfNeeded = () => {
+      if (
+        hasUnselectedOptions() &&
+        currentSuggestion?.id === "inactive-user-help"
+      ) {
+        setCurrentSuggestion(null);
+      }
+    };
+
+    // Check immediately
+    checkAndHideIfNeeded();
+
+    const handleOptionChange = () => {
+      checkAndHideIfNeeded();
+    };
+
+    // Listen for changes on radio buttons and checkboxes
+    document.addEventListener("change", handleOptionChange);
+    document.addEventListener("click", handleOptionChange);
+
+    // Also check periodically
+    const interval = setInterval(checkAndHideIfNeeded, 2000);
+
+    return () => {
+      document.removeEventListener("change", handleOptionChange);
+      document.removeEventListener("click", handleOptionChange);
+      clearInterval(interval);
+    };
+  }, [currentSuggestion, hasUnselectedOptions]);
 
   // Find and show appropriate suggestion
   useEffect(() => {
     const checkSuggestions = () => {
+      // Always check if user has unselected options first
+      const hasUnselected = hasUnselectedOptions();
+
+      // Don't show the inactive-user-help suggestion if user has unselected options
+      if (hasUnselected && currentSuggestion?.id === "inactive-user-help") {
+        setCurrentSuggestion(null);
+      }
+
+      // If user has unselected options, don't show the inactive-user-help suggestion
+      // But allow other high/medium priority suggestions
+      const filteredSuggestions = hasUnselected
+        ? suggestions.filter((s) => s.id !== "inactive-user-help")
+        : suggestions;
+
       // Prioritize high priority suggestions
-      const highPriority = suggestions.filter(
+      const highPriority = filteredSuggestions.filter(
         (s) => s.priority === "high" && shouldShowSuggestion(s),
       );
 
-      const mediumPriority = suggestions.filter(
+      const mediumPriority = filteredSuggestions.filter(
         (s) => s.priority === "medium" && shouldShowSuggestion(s),
       );
 
-      const lowPriority = suggestions.filter(
+      const lowPriority = filteredSuggestions.filter(
         (s) => s.priority === "low" && shouldShowSuggestion(s),
       );
 
@@ -296,7 +482,13 @@ export function JoshProactiveSuggestions() {
         ...lowPriority,
       ];
 
+      // Only set a new suggestion if we don't have one, or if current one should be replaced
       if (candidateSuggestions.length > 0) {
+        // Don't replace if we already have a suggestion and it's still valid
+        if (currentSuggestion && shouldShowSuggestion(currentSuggestion)) {
+          return;
+        }
+
         const randomSuggestion =
           candidateSuggestions[
             Math.floor(Math.random() * candidateSuggestions.length)
@@ -319,7 +511,16 @@ export function JoshProactiveSuggestions() {
       clearTimeout(timer);
       clearInterval(interval);
     };
-  }, [pathname, userActions, pageStartTime, dismissedSuggestions]);
+  }, [
+    pathname,
+    userActions,
+    pageStartTime,
+    dismissedSuggestions,
+    shouldShowSuggestion,
+    hasUnselectedOptions,
+    currentSuggestion,
+    suggestions,
+  ]);
 
   const dismissSuggestion = () => {
     if (currentSuggestion) {

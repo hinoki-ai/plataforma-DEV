@@ -63,6 +63,15 @@ export const renderNavigationItem = (
     handleLogout,
   );
 
+  // Determine namespace based on key prefix
+  const getNamespace = (key: string): string => {
+    if (key.startsWith("nav.")) return "navigation";
+    return "common";
+  };
+
+  const namespace = getNamespace(item.title);
+  const translatedTitle = t(item.title, namespace);
+
   if (item.action === "logout") {
     // Render as button for actions
     return (
@@ -71,11 +80,11 @@ export const renderNavigationItem = (
           "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ml-2 w-full text-left",
           "text-muted-foreground hover:text-foreground",
         )}
-        aria-label={t(item.title)}
+        aria-label={translatedTitle}
         onClick={handleClick}
       >
         <item.icon className="h-4 w-4 shrink-0" />
-        <span className="flex-1">{t(item.title)}</span>
+        <span className="flex-1">{translatedTitle}</span>
       </button>
     );
   }
@@ -92,11 +101,11 @@ export const renderNavigationItem = (
           : "text-muted-foreground hover:text-foreground",
       )}
       aria-current={isActive ? "page" : undefined}
-      aria-label={`${t(item.title)}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
+      aria-label={`${translatedTitle}${(item as any).shortcut ? ` (${(item as any).shortcut})` : ""}`}
       onClick={handleClick}
     >
       <item.icon className="h-4 w-4 shrink-0" />
-      <span className="flex-1">{t(item.title)}</span>
+      <span className="flex-1">{translatedTitle}</span>
       {(item as any).badge && (
         <span className="ml-auto bg-accent text-accent-foreground text-xs px-1.5 py-0.5 rounded">
           {(item as any).badge}
@@ -128,7 +137,14 @@ export const renderCollapsedNavigationItem = (
     ? "bg-accent text-accent-foreground shadow-sm"
     : "text-muted-foreground hover:bg-accent/80 hover:text-accent-foreground";
 
-  const label = t ? t(item.title) : item.title;
+  // Determine namespace based on key prefix
+  const getNamespace = (key: string): string => {
+    if (key.startsWith("nav.")) return "navigation";
+    return "common";
+  };
+
+  const namespace = getNamespace(item.title);
+  const label = t ? t(item.title, namespace) : item.title;
 
   if (item.action === "logout") {
     return (

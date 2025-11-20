@@ -30,7 +30,7 @@ import {
   ROLE_SPECIFIC_SECTIONS,
   getNavigationGroupsForRole,
 } from "./navigation";
-import { useLanguage } from "@/components/language/useDivineLanguage";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -72,8 +72,8 @@ export function Sidebar({
     institutionId ? { institutionId } : "skip",
   );
 
-  // Load navigation translations
-  const { t } = useLanguage();
+  // Load navigation translations - include navigation namespace for nav keys
+  const { t } = useDivineParsing(["common", "navigation", "language"]);
 
   // Pulsating icon effect state
   const [pulseCount, setPulseCount] = React.useState(0);
@@ -307,7 +307,7 @@ export function Sidebar({
                         id={`group-${group.title}`}
                         aria-label={`${openGroups[group.title] ? "Contraer" : "Expandir"} grupo ${group.title}`}
                       >
-                        <span>{t(group.title)}</span>
+                        <span>{t(group.title, "navigation")}</span>
                         <NavigationIcons.ChevronDown
                           className={cn(
                             "h-3 w-3 transition-transform",
@@ -340,7 +340,14 @@ export function Sidebar({
                             </TooltipTrigger>
                             <TooltipContent side="right">
                               <div>
-                                <span>{t(item.title)}</span>
+                                <span>
+                                  {t(
+                                    item.title,
+                                    item.title.startsWith("nav.")
+                                      ? "navigation"
+                                      : "common",
+                                  )}
+                                </span>
                               </div>
                             </TooltipContent>
                           </Tooltip>
@@ -384,12 +391,12 @@ export function Sidebar({
                   </p>
                   <p className="text-xs text-muted-foreground" id="user-role">
                     {session?.user?.role === "MASTER"
-                      ? t("nav.roles.master")
+                      ? t("nav.roles.master", "navigation")
                       : session?.user?.role === "ADMIN"
-                        ? t("nav.roles.admin")
+                        ? t("nav.roles.admin", "navigation")
                         : session?.user?.role === "PROFESOR"
-                          ? t("nav.roles.profesor")
-                          : t("nav.roles.parent")}
+                          ? t("nav.roles.profesor", "navigation")
+                          : t("nav.roles.parent", "navigation")}
                   </p>
                 </div>
               )}

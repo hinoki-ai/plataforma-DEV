@@ -17,10 +17,11 @@ import {
   LogOut,
   User,
 } from "lucide-react";
-import { getRoleDisplayName } from "@/lib/role-utils";
+import { getRoleDisplayName, getRoleTranslationKey } from "@/lib/role-utils";
 import { UserRole } from "@/lib/prisma-compat-types";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 interface RoleAwareNavigationProps {
   className?: string;
@@ -81,6 +82,7 @@ export function RoleIndicator({
   size?: "sm" | "default" | "lg";
   className?: string;
 }) {
+  const { t } = useDivineParsing(["common", "navigation"]);
   const theme = roleThemes[role];
   const Icon = theme.icon;
 
@@ -89,6 +91,10 @@ export function RoleIndicator({
     default: "h-4 w-4",
     lg: "h-5 w-5",
   };
+
+  // Use navigation namespace for role display in navigation context
+  const roleKey = getRoleTranslationKey(role, true);
+  const roleName = t(roleKey, "navigation");
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
@@ -112,7 +118,7 @@ export function RoleIndicator({
             size === "sm" && "text-[10px] px-1.5 py-0.5",
           )}
         >
-          {getRoleDisplayName(role)}
+          {roleName}
         </Badge>
       )}
     </div>
@@ -127,6 +133,7 @@ export function RoleAwareNavigation({
 }: RoleAwareNavigationProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const { t } = useDivineParsing(["common", "navigation"]);
 
   const currentRole = session?.user?.role as UserRole;
   const user = session?.user;
@@ -209,7 +216,7 @@ export function RoleAwareNavigation({
               {navCurrentRole === "MASTER" ? "Role:" : "Rol:"}
             </span>
             <span className="font-medium">
-              {getRoleDisplayName(navCurrentRole)}
+              {t(getRoleTranslationKey(navCurrentRole, true), "navigation")}
             </span>
           </div>
 

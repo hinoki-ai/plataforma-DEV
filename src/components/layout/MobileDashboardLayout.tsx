@@ -17,7 +17,8 @@ import { cn } from "@/lib/utils";
 import { useResponsive } from "@/components/ui/responsive-container";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { useSession } from "@/lib/auth-client";
-import { getRoleDisplayName } from "@/lib/role-utils";
+import { getRoleDisplayName, getRoleTranslationKey } from "@/lib/role-utils";
+import { useDivineParsing } from "@/components/language/useDivineLanguage";
 
 interface MobileDashboardLayoutProps {
   children: React.ReactNode;
@@ -80,6 +81,7 @@ export function MobileDashboardLayout({
   const { data: session } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("dashboard");
+  const { t } = useDivineParsing(["common", "navigation"]);
 
   const userRole = session?.user?.role;
   const filteredNavItems = navigationItems.filter(
@@ -130,7 +132,7 @@ export function MobileDashboardLayout({
                 <h2 className="text-lg font-semibold">Menú</h2>
                 {userRole && (
                   <Badge variant="secondary" className="text-xs">
-                    {getRoleDisplayName(userRole)}
+                    {t(getRoleTranslationKey(userRole, true), "navigation")}
                   </Badge>
                 )}
               </div>

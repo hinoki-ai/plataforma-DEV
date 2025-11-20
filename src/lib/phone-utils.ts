@@ -1,10 +1,10 @@
 /**
  * Utility functions for formatting and validating Chilean phone numbers
- * Format: +569 XXXX XXXXX (country code + mobile prefix, 4 digits, 5 digits)
+ * Format: +569 XXXX XXXX (country code + mobile prefix, 4 digits, 4 digits = 8 digits total)
  */
 
 /**
- * Formats a phone number to the standard Chilean mobile format: +569 XXXX XXXXX
+ * Formats a phone number to the standard Chilean mobile format: +569 XXXX XXXX
  * @param phone - The phone number to format
  * @returns Formatted phone number or empty string if invalid
  */
@@ -38,12 +38,12 @@ export function formatChileanPhone(phone: string): string {
   // Remove any remaining non-digit characters
   digits = digits.replace(/\D/g, "");
 
-  // Limit to 9 digits (standard Chilean mobile number length)
-  if (digits.length > 9) {
-    digits = digits.slice(0, 9);
+  // Limit to 8 digits (standard Chilean mobile number length after +569)
+  if (digits.length > 8) {
+    digits = digits.slice(0, 8);
   }
 
-  // Format as +569 XXXX XXXXX
+  // Format as +569 XXXX XXXX
   if (digits.length === 0) {
     return "";
   }
@@ -53,7 +53,7 @@ export function formatChileanPhone(phone: string): string {
 
   if (digits.length > 0) {
     const firstPart = digits.slice(0, 4);
-    const secondPart = digits.slice(4, 9);
+    const secondPart = digits.slice(4, 8);
 
     if (secondPart.length > 0) {
       formatted = `+569 ${firstPart} ${secondPart}`;
@@ -68,7 +68,7 @@ export function formatChileanPhone(phone: string): string {
 /**
  * Validates if a phone number is complete (has all required digits)
  * @param phone - The phone number to validate
- * @returns true if the phone number is complete (has 9 digits after +569)
+ * @returns true if the phone number is complete (has exactly 8 digits after +569)
  */
 export function isCompletePhoneNumber(phone: string): boolean {
   if (!phone) return false;
@@ -76,24 +76,28 @@ export function isCompletePhoneNumber(phone: string): boolean {
   // Remove all non-digit characters
   const digits = phone.replace(/\D/g, "");
 
-  // Check if it has the Chilean mobile format: 569 + 9 digits = 12 digits total
-  // Or just 9 digits (without country code)
+  // Check if it has the Chilean mobile format: 569 + 8 digits = 11 digits total
+  // Or just 8 digits (without country code)
   if (digits.startsWith("569")) {
-    return digits.length === 12; // 569 + 9 digits
-  } else if (digits.startsWith("56") && digits.length > 2 && digits[2] === "9") {
-    return digits.length === 12; // 569 + 9 digits
+    return digits.length === 11; // 569 + 8 digits = 11 total
+  } else if (
+    digits.startsWith("56") &&
+    digits.length > 2 &&
+    digits[2] === "9"
+  ) {
+    return digits.length === 11; // 569 + 8 digits = 11 total
   } else if (digits.startsWith("9")) {
-    return digits.length === 10; // 9 + 9 digits
+    return digits.length === 9; // 9 + 8 digits = 9 total
   } else {
-    // Just digits, should be 9 digits for Chilean mobile
-    return digits.length === 9;
+    // Just digits, should be exactly 8 digits for Chilean mobile
+    return digits.length === 8;
   }
 }
 
 /**
  * Normalizes a phone number by removing formatting and keeping only digits with +569 prefix
  * @param phone - The phone number to normalize
- * @returns Normalized phone number in format +569XXXXXXXXX (no spaces)
+ * @returns Normalized phone number in format +569XXXXXXXX (8 digits, no spaces)
  */
 export function normalizePhoneNumber(phone: string): string {
   if (!phone) return "";
@@ -106,7 +110,11 @@ export function normalizePhoneNumber(phone: string): string {
   // Ensure it starts with 569
   if (digits.startsWith("569")) {
     digits = digits.slice(3);
-  } else if (digits.startsWith("56") && digits.length > 2 && digits[2] === "9") {
+  } else if (
+    digits.startsWith("56") &&
+    digits.length > 2 &&
+    digits[2] === "9"
+  ) {
     digits = digits.slice(3);
   } else if (digits.startsWith("9")) {
     digits = digits.slice(1);
@@ -117,17 +125,18 @@ export function normalizePhoneNumber(phone: string): string {
   // Remove any remaining non-digit characters
   digits = digits.replace(/\D/g, "");
 
-  // Limit to 9 digits
-  if (digits.length > 9) {
-    digits = digits.slice(0, 9);
+  // Limit to exactly 8 digits for Chilean mobile
+  if (digits.length > 8) {
+    digits = digits.slice(0, 8);
   }
 
-  // Return in format +569XXXXXXXXX
-  return digits.length === 9 ? `+569${digits}` : "";
+  // Return in format +569XXXXXXXX (only if exactly 8 digits)
+  return digits.length === 8 ? `+569${digits}` : "";
 }
 
 /**
  * Handles phone number input changes, formatting as the user types
+ * Prevents entering more than 8 digits after +569
  * @param value - The current input value
  * @param previousValue - The previous value to determine if user is deleting
  * @returns Formatted phone number
@@ -141,6 +150,48 @@ export function handlePhoneInputChange(
     return formatChileanPhone(value);
   }
 
+  // Extract digits to check length
+  const digitsOnly = value.replace(/\D/g, "");
+
+  // Check if it starts with 569
+  let actualDigits = digitsOnly;
+  if (digitsOnly.startsWith("569")) {
+    actualDigits = digitsOnly.slice(3);
+  } else if (
+    digitsOnly.startsWith("56") &&
+    digitsOnly.length > 2 &&
+    digitsOnly[2] === "9"
+  ) {
+    actualDigits = digitsOnly.slice(3);
+  } else if (digitsOnly.startsWith("9")) {
+    actualDigits = digitsOnly.slice(1);
+  }
+
+  // Prevent entering more than 8 digits after the prefix
+  // If user is typing (not pasting) and exceeds 8 digits, prevent it
+  if (actualDigits.length > 8) {
+    // Check if this looks like typing (small increase) vs pasting (large increase)
+    const prevDigitsOnly = previousValue.replace(/\D/g, "");
+    let prevActualDigits = prevDigitsOnly;
+    if (prevDigitsOnly.startsWith("569")) {
+      prevActualDigits = prevDigitsOnly.slice(3);
+    } else if (
+      prevDigitsOnly.startsWith("56") &&
+      prevDigitsOnly.length > 2 &&
+      prevDigitsOnly[2] === "9"
+    ) {
+      prevActualDigits = prevDigitsOnly.slice(3);
+    } else if (prevDigitsOnly.startsWith("9")) {
+      prevActualDigits = prevDigitsOnly.slice(1);
+    }
+
+    // If it's a small increase (typing), prevent it. If large (pasting), allow formatting to limit it
+    if (actualDigits.length - prevActualDigits.length <= 1) {
+      // User is typing, prevent the 9th digit
+      return previousValue;
+    }
+    // User is pasting, let formatChileanPhone handle the limiting
+  }
+
   return formatChileanPhone(value);
 }
-

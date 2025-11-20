@@ -1208,7 +1208,7 @@ const DivineParsingOracleProvider: React.FC<{
           translations[language as keyof typeof translations];
         if (langTranslations) {
           const namespaceTranslations =
-            langTranslations[namespace as keyof typeof langTranslations];
+            langTranslations[actualNamespace as keyof typeof langTranslations];
           if (
             namespaceTranslations &&
             typeof namespaceTranslations === "object"
@@ -1228,7 +1228,7 @@ const DivineParsingOracleProvider: React.FC<{
         }
 
         // 2. Fallback to registry for compatibility
-        const registryKey = `${language}-${namespace}`;
+        const registryKey = `${language}-${actualNamespace}`;
         const registryTranslations = translationRegistry[registryKey];
         if (registryTranslations) {
           const registryValue = registryTranslations[key];
@@ -1243,7 +1243,7 @@ const DivineParsingOracleProvider: React.FC<{
         }
 
         // 3. Try alternative namespace lookup (common namespace often has shared keys)
-        if (namespace !== "common") {
+        if (actualNamespace !== "common") {
           const commonTranslations =
             translations[language as keyof typeof translations]?.common;
           if (commonTranslations) {
@@ -1261,7 +1261,7 @@ const DivineParsingOracleProvider: React.FC<{
         if (oppositeTranslations) {
           const oppositeNamespaceTranslations =
             oppositeTranslations[
-              namespace as keyof typeof oppositeTranslations
+              actualNamespace as keyof typeof oppositeTranslations
             ];
           if (oppositeNamespaceTranslations) {
             const oppositeValue = (oppositeNamespaceTranslations as any)[key];
@@ -1275,7 +1275,7 @@ const DivineParsingOracleProvider: React.FC<{
         }
 
         // 5. Try common namespace in opposite language
-        if (namespace !== "common") {
+        if (actualNamespace !== "common") {
           const oppositeCommon =
             translations[oppositeLang as keyof typeof translations]?.common;
           if (oppositeCommon) {
@@ -1296,7 +1296,9 @@ const DivineParsingOracleProvider: React.FC<{
           const langTranslations =
             translations[language as keyof typeof translations];
           const namespaceTranslations =
-            langTranslations?.[namespace as keyof typeof langTranslations];
+            langTranslations?.[
+              actualNamespace as keyof typeof langTranslations
+            ];
           const transformedValue = getNestedValue(
             namespaceTranslations || {},
             transformedKey,

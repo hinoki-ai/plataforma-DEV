@@ -220,13 +220,10 @@ export const reservationSchema = z.object({
     .min(8, "Teléfono muy corto")
     .max(15, "Teléfono muy largo")
     .regex(/^[+]?[0-9\s-()]+$/, "Teléfono contiene caracteres no válidos")
-    .refine(
-      (val) => {
-        const { isCompletePhoneNumber } = require("./phone-utils");
-        return isCompletePhoneNumber(val);
-      },
-      "Por favor ingrese el número de teléfono completo"
-    )
+    .refine((val) => {
+      const { isCompletePhoneNumber } = require("./phone-utils");
+      return isCompletePhoneNumber(val);
+    }, "Por favor verifique el número de teléfono. Debe tener 8 dígitos después de +569 (ejemplo: +569 1234 5678)")
     .transform((phone) => {
       const { normalizePhoneNumber } = require("./phone-utils");
       const normalized = normalizePhoneNumber(phone);
@@ -521,11 +518,13 @@ export const commonValidationRules = {
       return normalizePhoneNumber(val) || val;
     })
     .refine(
-      (val) => !val || (() => {
-        const { isCompletePhoneNumber } = require("./phone-utils");
-        return isCompletePhoneNumber(val);
-      })(),
-      "Por favor ingrese el número de teléfono completo"
+      (val) =>
+        !val ||
+        (() => {
+          const { isCompletePhoneNumber } = require("./phone-utils");
+          return isCompletePhoneNumber(val);
+        })(),
+      "Por favor verifique el número de teléfono. Debe tener 8 dígitos después de +569 (ejemplo: +569 1234 5678)",
     ),
   rut: rutValidation,
   name: z

@@ -68,7 +68,8 @@ const createParentSchemaWithTranslations = (
         .min(1, t("admin.parent_form.validation.phone_required", "admin"))
         .refine(
           (val) => !val || isCompletePhoneNumber(val),
-          t("admin.parent_form.validation.phone_incomplete", "admin") || "Please enter the complete phone number"
+          t("admin.parent_form.validation.phone_incomplete", "admin") ||
+            "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)",
         ),
       // Student information
       studentName: z
@@ -93,7 +94,8 @@ const createParentSchemaWithTranslations = (
         .optional()
         .refine(
           (val) => !val || isCompletePhoneNumber(val),
-          t("admin.parent_form.validation.phone_incomplete", "admin") || "Please enter the complete phone number"
+          t("admin.parent_form.validation.phone_incomplete", "admin") ||
+            "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)",
         ),
       relationship: z
         .string()
@@ -281,8 +283,10 @@ export function ParentCreationForm({
     // Clean up empty optional fields and normalize phone numbers
     const { confirmPassword: _confirmPassword, ...formValues } = data;
     const normalizedPhone = data.phone ? normalizePhoneNumber(data.phone) : "";
-    const normalizedGuardianPhone = data.guardianPhone ? normalizePhoneNumber(data.guardianPhone) : "";
-    
+    const normalizedGuardianPhone = data.guardianPhone
+      ? normalizePhoneNumber(data.guardianPhone)
+      : "";
+
     const cleanedData = {
       ...formValues,
       studentEmail: data.studentEmail || undefined,
@@ -397,12 +401,12 @@ export function ParentCreationForm({
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="+569 8889 67763"
+                            placeholder="+569 1234 5678"
                             {...field}
                             onChange={(e) => {
                               const formatted = handlePhoneInputChange(
                                 e.target.value,
-                                field.value
+                                field.value,
                               );
                               field.onChange(formatted);
                             }}
@@ -677,12 +681,12 @@ export function ParentCreationForm({
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="+569 8889 67763"
+                            placeholder="+569 1234 5678"
                             {...field}
                             onChange={(e) => {
                               const formatted = handlePhoneInputChange(
                                 e.target.value,
-                                field.value
+                                field.value,
                               );
                               field.onChange(formatted);
                             }}

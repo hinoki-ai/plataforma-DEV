@@ -79,7 +79,8 @@ const getMeetingFormSchema = (t: (key: string, ns?: string) => string) =>
       .min(8, t("form.validation.guardian_phone.min", "meetings"))
       .refine(
         (val) => isCompletePhoneNumber(val),
-        t("form.validation.guardian_phone.incomplete", "meetings") || "Please enter the complete phone number"
+        t("form.validation.guardian_phone.incomplete", "meetings") ||
+          "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)",
       ),
     scheduledDate: z.date({
       message: t("form.validation.date.required", "meetings"),
@@ -257,7 +258,7 @@ export function MeetingForm({
         ...data,
         guardianPhone: normalizePhoneNumber(data.guardianPhone),
       };
-      
+
       if (mode === "create") {
         await createMeeting(normalizedData);
       } else if (meeting) {
@@ -493,13 +494,13 @@ export function MeetingForm({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="+569 8889 67763"
+                      placeholder="+569 1234 5678"
                       onKeyDown={(e) => handleKeyDown(e, "guardianPhone")}
                       {...field}
                       onChange={(e) => {
                         const formatted = handlePhoneInputChange(
                           e.target.value,
-                          field.value
+                          field.value,
                         );
                         field.onChange(formatted);
                       }}

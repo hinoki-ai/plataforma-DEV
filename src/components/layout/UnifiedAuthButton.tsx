@@ -106,7 +106,7 @@ export default function UnifiedAuthButton() {
 
   const router = useRouter();
   const { isAuthRoute } = useAppContext();
-  const { t } = useDivineParsing(["common"]);
+  const { t } = useDivineParsing(["common", "navigation"]);
 
   // More robust authentication check - consistent with ContextProvider
   // Only consider authenticated if we have a complete session with user data
@@ -137,6 +137,7 @@ export default function UnifiedAuthButton() {
       initials: getInitials(session?.user?.name),
       icon: config.icon,
       color: config.color,
+      // user.role.* keys are in common namespace
       name: t(config.nameKey, "common"),
     };
   })();

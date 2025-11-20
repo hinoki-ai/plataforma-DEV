@@ -7,7 +7,14 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "@clerk/nextjs";
-import { Send, X, ChevronDown, ChevronUp, Map, GripVertical } from "lucide-react";
+import {
+  Send,
+  X,
+  ChevronDown,
+  ChevronUp,
+  Map,
+  GripVertical,
+} from "lucide-react";
 
 interface Message {
   id: string;
@@ -367,18 +374,21 @@ export function JoshChat({
     if (target.closest("button") || target.closest("a")) {
       return;
     }
-    
+
     e.preventDefault();
     e.stopPropagation();
     setIsResizing(true);
     resizeStartY.current = e.clientY;
     resizeStartHeight.current = chatHeight;
-    
+
     let currentHeight = chatHeight;
-    
+
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaY = resizeStartY.current - moveEvent.clientY; // Positive when dragging up (north)
-      currentHeight = Math.max(200, Math.min(800, resizeStartHeight.current + deltaY));
+      currentHeight = Math.max(
+        200,
+        Math.min(800, resizeStartHeight.current + deltaY),
+      );
       setChatHeight(currentHeight);
     };
 
@@ -415,10 +425,13 @@ export function JoshChat({
         aria-describedby="josh-chat-description"
       >
         {/* Header */}
-        <header 
+        <header
           className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg select-none relative group"
           onMouseDown={handleResizeStart}
-          title={t("josh.chat.resize", "Arrastra hacia arriba para redimensionar")}
+          title={t(
+            "josh.chat.resize",
+            "Arrastra hacia arriba para redimensionar",
+          )}
         >
           {/* Resize indicator */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-white/30 rounded-b-full opacity-0 group-hover:opacity-100 transition-opacity cursor-ns-resize" />
@@ -446,30 +459,25 @@ export function JoshChat({
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-1.5 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
-            {/* Tour button - Always show if tour is available */}
-            {(() => {
-              if (!onStartTour || !getTourForContext) return null;
-              const context = getPageContext();
-              const tourId = getTourForContext(context);
-              if (!tourId) return null;
-              return (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onStartTour();
-                  }}
-                  className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
-                  aria-label={t(
-                    "josh.tour.button.accessible",
-                    "Start interactive tour with Josh",
-                  )}
-                  title={t("josh.tour.button", "Tour Interactivo")}
-                >
-                  <Map className="w-4 h-4" aria-hidden="true" />
-                </button>
-              );
-            })()}
+          <div
+            className="flex items-center space-x-1.5 flex-shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Tour button - ALWAYS visible and active, positioned to the left of collapse button. Users can redo tours anytime, independently of previous tour status. */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onStartTour?.();
+              }}
+              className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
+              aria-label={t(
+                "josh.tour.button.accessible",
+                "Start interactive tour with Josh",
+              )}
+              title={t("josh.tour.button", "Tour Interactivo")}
+            >
+              <Map className="w-4 h-4" aria-hidden="true" />
+            </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -504,128 +512,123 @@ export function JoshChat({
           exit={{ height: 0 }}
           className="flex-1 overflow-hidden rounded-b-lg"
         >
-              <div className="h-full flex flex-col">
-                <div
-                  className="flex-1 overflow-y-auto p-4 space-y-4"
-                  role="log"
-                  aria-label={t("josh.chat.messages", "Mensajes del chat")}
-                  aria-live="polite"
-                  aria-atomic="false"
+          <div className="h-full flex flex-col">
+            <div
+              className="flex-1 overflow-y-auto p-4 space-y-4"
+              role="log"
+              aria-label={t("josh.chat.messages", "Mensajes del chat")}
+              aria-live="polite"
+              aria-atomic="false"
+            >
+              {messages.map((message) => (
+                <motion.div
+                  key={message.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  {messages.map((message) => (
-                    <motion.div
-                      key={message.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                    >
-                      <div
-                        className={`max-w-[80%] p-3 rounded-lg ${
-                          message.sender === "user"
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                        }`}
-                      >
-                        {message.sender === "josh" && (
-                          <div className="flex items-center space-x-2 mb-1">
-                            <img
-                              src={joshImage}
-                              alt=""
-                              className="w-4 h-4 rounded-full"
-                              aria-hidden="true"
-                            />
-                            <span className="text-xs font-medium">Josh</span>
-                          </div>
-                        )}
-                        <p className="text-sm">{message.content}</p>
-                        <time
-                          className="text-xs opacity-70 mt-1 block"
-                          dateTime={message.timestamp.toISOString()}
-                        >
-                          {message.timestamp.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </time>
+                  <div
+                    className={`max-w-[80%] p-3 rounded-lg ${
+                      message.sender === "user"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                    }`}
+                  >
+                    {message.sender === "josh" && (
+                      <div className="flex items-center space-x-2 mb-1">
+                        <img
+                          src={joshImage}
+                          alt=""
+                          className="w-4 h-4 rounded-full"
+                          aria-hidden="true"
+                        />
+                        <span className="text-xs font-medium">Josh</span>
                       </div>
-                    </motion.div>
-                  ))}
-
-                  {isTyping && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="flex justify-start"
+                    )}
+                    <p className="text-sm">{message.content}</p>
+                    <time
+                      className="text-xs opacity-70 mt-1 block"
+                      dateTime={message.timestamp.toISOString()}
                     >
-                      <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                        <div className="flex items-center space-x-2">
-                          <img
-                            src={joshImage}
-                            alt="Josh"
-                            className="w-4 h-4 rounded-full"
-                          />
-                          <div className="flex space-x-1">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-150"></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-300"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  <div ref={messagesEndRef} />
-                </div>
-
-                {/* Input */}
-                <div className="px-3 py-3 pl-2 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex space-x-1">
-                    <label htmlFor="josh-chat-input" className="sr-only">
-                      {t(
-                        "josh.chat.input.label",
-                        "Escribe tu mensaje para Josh",
-                      )}
-                    </label>
-                    <input
-                      ref={inputRef}
-                      id="josh-chat-input"
-                      type="text"
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      placeholder={t(
-                        "josh.chat.placeholder",
-                        "Escribe tu mensaje...",
-                      )}
-                      className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                      disabled={isTyping}
-                      aria-describedby={
-                        isTyping ? "josh-typing-status" : undefined
-                      }
-                      autoComplete="off"
-                    />
-                    <button
-                      onClick={handleSendMessage}
-                      disabled={!inputValue.trim() || isTyping}
-                      className="ml-[5px] px-2.5 py-0.5 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0 scale-[0.85]"
-                      aria-label={t("josh.chat.send", "Enviar mensaje")}
-                      title={t("josh.chat.send", "Enviar mensaje")}
-                    >
-                      <Send className="w-2.5 h-2.5" aria-hidden="true" />
-                    </button>
+                      {message.timestamp.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </time>
                   </div>
-                  {isTyping && (
-                    <div
-                      id="josh-typing-status"
-                      className="sr-only"
-                      aria-live="assertive"
-                    >
-                      {t("josh.chat.typing", "Josh está escribiendo")}
+                </motion.div>
+              ))}
+
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex justify-start"
+                >
+                  <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <img
+                        src={joshImage}
+                        alt="Josh"
+                        className="w-4 h-4 rounded-full"
+                      />
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-150"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-300"></div>
+                      </div>
                     </div>
+                  </div>
+                </motion.div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="px-3 py-3 pl-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex space-x-1">
+                <label htmlFor="josh-chat-input" className="sr-only">
+                  {t("josh.chat.input.label", "Escribe tu mensaje para Josh")}
+                </label>
+                <input
+                  ref={inputRef}
+                  id="josh-chat-input"
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder={t(
+                    "josh.chat.placeholder",
+                    "Escribe tu mensaje...",
                   )}
-                </div>
+                  className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  disabled={isTyping}
+                  aria-describedby={isTyping ? "josh-typing-status" : undefined}
+                  autoComplete="off"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!inputValue.trim() || isTyping}
+                  className="ml-[5px] px-2.5 py-0.5 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0 scale-[0.85]"
+                  aria-label={t("josh.chat.send", "Enviar mensaje")}
+                  title={t("josh.chat.send", "Enviar mensaje")}
+                >
+                  <Send className="w-2.5 h-2.5" aria-hidden="true" />
+                </button>
               </div>
-            </motion.div>
+              {isTyping && (
+                <div
+                  id="josh-typing-status"
+                  className="sr-only"
+                  aria-live="assertive"
+                >
+                  {t("josh.chat.typing", "Josh está escribiendo")}
+                </div>
+              )}
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   );

@@ -682,7 +682,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
-      
+
       // Handle phone number fields with automatic formatting
       const phoneFields = [
         "phone",
@@ -691,7 +691,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         "secondaryEmergencyPhone",
         "tertiaryEmergencyPhone",
       ];
-      
+
       if (phoneFields.includes(name)) {
         const previousValue = formData[name as keyof FormData] as string;
         const formattedValue = handlePhoneInputChange(value, previousValue);
@@ -699,7 +699,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
       } else {
         setFormData((prev) => ({ ...prev, [name]: value }));
       }
-      
+
       setErrors((prev) => ({ ...prev, [name]: "" }));
     },
     [formData],
@@ -737,7 +737,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           if (!formData.phone.trim())
             newErrors.phone = t("validation.phone_required");
           else if (!isCompletePhoneNumber(formData.phone))
-            newErrors.phone = t("validation.phone_incomplete") || "Please enter the complete phone number";
+            newErrors.phone =
+              t("validation.phone_incomplete") ||
+              "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)";
           if (!formData.rut.trim())
             newErrors.rut = t("validation.rut_required");
           else {
@@ -761,7 +763,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           if (!formData.childPhone.trim())
             newErrors.childPhone = t("validation.child_phone_required");
           else if (!isCompletePhoneNumber(formData.childPhone))
-            newErrors.childPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
+            newErrors.childPhone =
+              t("validation.phone_incomplete") ||
+              "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)";
           if (!formData.relationship)
             newErrors.relationship = t("validation.relationship_required");
           if (
@@ -795,7 +799,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           if (!formData.emergencyPhone.trim()) {
             newErrors.emergencyPhone = t("validation.emergency_phone_required");
           } else if (!isCompletePhoneNumber(formData.emergencyPhone)) {
-            newErrors.emergencyPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
+            newErrors.emergencyPhone =
+              t("validation.phone_incomplete") ||
+              "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)";
           }
           // Secondary emergency contact is optional but if provided, phone is required
           if (
@@ -809,7 +815,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             formData.secondaryEmergencyPhone.trim() &&
             !isCompletePhoneNumber(formData.secondaryEmergencyPhone)
           ) {
-            newErrors.secondaryEmergencyPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
+            newErrors.secondaryEmergencyPhone =
+              t("validation.phone_incomplete") ||
+              "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)";
           }
           if (
             formData.secondaryEmergencyPhone.trim() &&
@@ -831,7 +839,9 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             formData.tertiaryEmergencyPhone.trim() &&
             !isCompletePhoneNumber(formData.tertiaryEmergencyPhone)
           ) {
-            newErrors.tertiaryEmergencyPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
+            newErrors.tertiaryEmergencyPhone =
+              t("validation.phone_incomplete") ||
+              "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)";
           }
           if (
             formData.tertiaryEmergencyPhone.trim() &&
@@ -1182,7 +1192,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         id="phone"
                         name="phone"
                         type="tel"
-                        placeholder="+569 8889 67763"
+                        placeholder="+569 1234 5678"
                         value={formData.phone}
                         onChange={handleChange}
                         onKeyDown={(e) => handleKeyDown(e, "phone")}
@@ -1203,7 +1213,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         id="childPhone"
                         name="childPhone"
                         type="tel"
-                        placeholder="+569 8889 67763"
+                        placeholder="+569 1234 5678"
                         value={formData.childPhone}
                         onChange={handleChange}
                         onKeyDown={(e) => handleKeyDown(e, "childPhone")}

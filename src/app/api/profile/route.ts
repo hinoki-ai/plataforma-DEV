@@ -143,8 +143,11 @@ export async function PUT(request: NextRequest) {
         // Validate complete phone number
         if (!isCompletePhoneNumber(trimmedPhone)) {
           return NextResponse.json(
-            { error: "Please enter the complete phone number" },
-            { status: 400 }
+            {
+              error:
+                "Please check the phone number. It must have exactly 8 digits after +569 (example: +569 1234 5678)",
+            },
+            { status: 400 },
           );
         }
         updateData.phone = normalizePhoneNumber(trimmedPhone);

@@ -195,6 +195,8 @@ export function getRoleFilter(
 }
 
 // MASTER Almighty Display Names - Supreme Authority
+// NOTE: This function is deprecated in favor of using translations directly
+// Use t("user.role.master", "common") or t("nav.roles.master", "navigation") instead
 export function getRoleDisplayName(role: ExtendedUserRole): string {
   switch (role) {
     case "MASTER":
@@ -210,4 +212,19 @@ export function getRoleDisplayName(role: ExtendedUserRole): string {
     default:
       return role;
   }
+}
+
+// Helper to get role translation key for use with t() function
+export function getRoleTranslationKey(
+  role: ExtendedUserRole,
+  useNavKey = false,
+): string {
+  const keyMap = {
+    MASTER: useNavKey ? "nav.roles.master" : "user.role.master",
+    ADMIN: useNavKey ? "nav.roles.admin" : "user.role.admin",
+    PROFESOR: useNavKey ? "nav.roles.profesor" : "user.role.profesor",
+    PARENT: useNavKey ? "nav.roles.parent" : "user.role.parent",
+    PUBLIC: useNavKey ? "nav.roles.public" : "user.role.public",
+  };
+  return keyMap[role] || "user.role.default";
 }

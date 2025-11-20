@@ -236,13 +236,10 @@ export const ApiSchemas = {
     guardianPhone: z
       .string()
       .regex(/^\+?[\d\s\-\(\)]+$/, "Invalid phone format")
-      .refine(
-        (val) => {
-          const { isCompletePhoneNumber } = require("../lib/phone-utils");
-          return isCompletePhoneNumber(val);
-        },
-        "Please enter the complete phone number"
-      )
+      .refine((val) => {
+        const { isCompletePhoneNumber } = require("../lib/phone-utils");
+        return isCompletePhoneNumber(val);
+      }, "Please check the phone number. It must have 8 digits after +569 (example: +569 1234 5678)")
       .transform((phone) => {
         const { normalizePhoneNumber } = require("../lib/phone-utils");
         return normalizePhoneNumber(phone) || phone.replace(/\s/g, "");

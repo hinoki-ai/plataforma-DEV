@@ -36,6 +36,10 @@ export * from "./planning";
 import * as mediaSchema from "./media";
 export * from "./media";
 
+// AI Assistant
+import * as aiSchema from "./ai";
+export * from "./ai";
+
 // Export combined schema object for use in defineSchema
 export const schemaObject = {
   ...authSchema,
@@ -45,4 +49,5 @@ export const schemaObject = {
   ...convivenciaSchema,
   ...planningSchema,
   ...mediaSchema,
+  ...aiSchema,
 };

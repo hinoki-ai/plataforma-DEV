@@ -41,10 +41,15 @@ export async function POST(request: Request) {
     );
 
     // Helper function to validate and normalize phone numbers
-    const validateAndNormalizePhone = (phone: string | null, fieldName: string): string => {
+    const validateAndNormalizePhone = (
+      phone: string | null,
+      fieldName: string,
+    ): string => {
       if (!phone) return "";
       if (!isCompletePhoneNumber(phone)) {
-        throw new Error(`${fieldName} is incomplete. Please enter the complete phone number.`);
+        throw new Error(
+          `${fieldName} is invalid. Please check the number - it must have exactly 8 digits after +569 (example: +569 1234 5678).`,
+        );
       }
       return normalizePhoneNumber(phone);
     };
@@ -53,8 +58,12 @@ export async function POST(request: Request) {
     const rawPhone = formData.get("phone") as string;
     const rawChildPhone = formData.get("childPhone") as string;
     const rawEmergencyPhone = formData.get("emergencyPhone") as string;
-    const rawSecondaryEmergencyPhone = formData.get("secondaryEmergencyPhone") as string;
-    const rawTertiaryEmergencyPhone = formData.get("tertiaryEmergencyPhone") as string;
+    const rawSecondaryEmergencyPhone = formData.get(
+      "secondaryEmergencyPhone",
+    ) as string;
+    const rawTertiaryEmergencyPhone = formData.get(
+      "tertiaryEmergencyPhone",
+    ) as string;
 
     const data = {
       fullName: formData.get("fullName") as string,
@@ -68,30 +77,36 @@ export async function POST(request: Request) {
       region: formData.get("region") as string,
       comuna: formData.get("comuna") as string,
       emergencyContact: formData.get("emergencyContact") as string,
-      emergencyPhone: validateAndNormalizePhone(rawEmergencyPhone, "Emergency phone number"),
+      emergencyPhone: validateAndNormalizePhone(
+        rawEmergencyPhone,
+        "Emergency phone number",
+      ),
       secondaryEmergencyContact: formData.get(
         "secondaryEmergencyContact",
       ) as string,
       secondaryEmergencyPhone: validateAndNormalizePhone(
         rawSecondaryEmergencyPhone,
-        "Secondary emergency phone number"
+        "Secondary emergency phone number",
       ),
       tertiaryEmergencyContact: formData.get(
         "tertiaryEmergencyContact",
       ) as string,
       tertiaryEmergencyPhone: validateAndNormalizePhone(
         rawTertiaryEmergencyPhone,
-        "Tertiary emergency phone number"
+        "Tertiary emergency phone number",
       ),
       institutionId: formData.get("institutionId") as string,
       password: formData.get("password") as string | undefined,
       provider: formData.get("provider") as string | undefined,
       isOAuthUser: formData.get("provider") ? true : false,
     };
-    
+
     // Handle childPhone if it exists
     if (rawChildPhone) {
-      (data as any).childPhone = validateAndNormalizePhone(rawChildPhone, "Child phone number");
+      (data as any).childPhone = validateAndNormalizePhone(
+        rawChildPhone,
+        "Child phone number",
+      );
     }
 
     // Validate required fields

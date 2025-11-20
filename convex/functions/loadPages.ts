@@ -1,7 +1,7 @@
-import { action, internalMutation } from "../_generated/server"
-import { v } from "convex/values"
-import { embed } from "../lib/ai"
-import { internal } from "../_generated/api"
+import { action, internalMutation } from "../_generated/server";
+import { v } from "convex/values";
+import { embed } from "../lib/ai";
+import { internal } from "../_generated/api";
 
 export const savePage = internalMutation({
   args: {
@@ -15,9 +15,9 @@ export const savePage = internalMutation({
     await ctx.db.insert("pages", {
       ...args,
       createdAt: Date.now(),
-    })
+    });
   },
-})
+});
 
 export const ingest = action({
   args: {
@@ -28,7 +28,7 @@ export const ingest = action({
   },
   handler: async (ctx, { url, title, text, chunkIdx }) => {
     // Compute embedding using Convex-provided embed wrapper
-    const vector = await embed(ctx, "text-embedding-3-large", text)
+    const vector = await embed(ctx, "text-embedding-3-large", text);
 
     // Save to DB
     await ctx.runMutation(internal.functions.loadPages.savePage, {
@@ -37,8 +37,8 @@ export const ingest = action({
       content: text,
       embedding: vector,
       chunkIdx,
-    })
+    });
 
-    return { ok: true }
+    return { ok: true };
   },
-})
+});
