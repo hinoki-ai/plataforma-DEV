@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { motion, Variants } from "motion/react";
+import { ClientOnly } from "@/components/ui/client-only";
 
 const fadeInUp: Variants = {
   initial: { opacity: 0, y: 60 },
@@ -29,24 +30,8 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Handle SSR issue - only use translations after component mounts
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Always call the hook to follow React rules, but use fallback when not mounted
+  // Now safe to use translation hook since component is wrapped in ClientOnly
   const { t } = useDivineParsing(["common"]);
-
-  // Use fallback translation function when not mounted to avoid SSR issues
-  const safeT = isMounted
-    ? t
-    : (key: string) =>
-        key
-          .replace(/auth\./g, "")
-          .replace(/\./g, " ")
-          .replace(/\b\w/g, (l) => l.toUpperCase());
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,7 +74,7 @@ function LoginForm() {
       }
 
       console.error("Unexpected sign-in status:", result);
-      setError(safeT("auth.login_error"));
+      setError(t("auth.login_error"));
     } catch (err) {
       console.error("Error signing in:", err);
       if (isClerkAPIResponseError(err)) {
@@ -99,12 +84,12 @@ function LoginForm() {
           firstError?.code === "form_identifier_not_found" ||
           firstError?.code === "form_identifier_invalid"
         ) {
-          setError(safeT("auth.invalid_credentials"));
+          setError(t("auth.invalid_credentials"));
         } else {
-          setError(firstError?.longMessage ?? safeT("auth.login_error"));
+          setError(firstError?.longMessage ?? t("auth.login_error"));
         }
       } else {
-        setError(safeT("auth.login_error"));
+        setError(t("auth.login_error"));
       }
     } finally {
       setIsLoading(false);
@@ -126,7 +111,7 @@ function LoginForm() {
             variants={fadeInUp}
             className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl"
           >
-            {safeT("auth.portal_title")}
+            {t("auth.portal_title")}
           </motion.h1>
         </div>
       </div>
@@ -139,7 +124,7 @@ function LoginForm() {
               htmlFor="email"
               className="text-left block text-foreground font-medium"
             >
-              {safeT("auth.email.label")}
+              {t("auth.email.label")}
             </Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -160,7 +145,7 @@ function LoginForm() {
               htmlFor="password"
               className="text-left block text-foreground font-medium"
             >
-              {safeT("auth.password.label")}
+              {t("auth.password.label")}
             </Label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -205,10 +190,10 @@ function LoginForm() {
             className="w-full rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none disabled:opacity-50"
           >
             {isLoading
-              ? safeT("auth.signing_in_button")
+              ? t("auth.signing_in_button")
               : !isLoaded
                 ? "Cargando..."
-                : safeT("auth.sign_in_button")}
+                : t("auth.sign_in_button")}
           </Button>
         </form>
 
@@ -216,7 +201,7 @@ function LoginForm() {
         <div className="w-full border-t border-border pt-6 mt-6">
           <div className="text-center">
             <p className="mb-4 text-sm text-muted-foreground">
-              {safeT("auth.new_parent_question")}
+              {t("auth.new_parent_question")}
             </p>
             <Button asChild variant="outline" className="w-full rounded-xl">
               <Link
@@ -224,7 +209,7 @@ function LoginForm() {
                 className="flex items-center justify-center gap-2"
               >
                 <UserPlus className="h-4 w-4" />
-                {safeT("auth.register_as_parent")}
+                {t("auth.register_as_parent")}
               </Link>
             </Button>
           </div>
@@ -236,7 +221,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense
+    <ClientOnly
       fallback={
         <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
           {/* Title Panel with Glass Blur */}
@@ -256,7 +241,28 @@ export default function LoginPage() {
         </div>
       }
     >
-      <LoginForm />
-    </Suspense>
+      <Suspense
+        fallback={
+          <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
+            {/* Title Panel with Glass Blur */}
+            <div className="mb-6 w-full max-w-md">
+              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-2 mx-auto text-center -mt-20">
+                <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
+                  Portal de Acceso
+                </h1>
+              </div>
+            </div>
+
+            <div className="glass-panel mx-auto flex w-full max-w-md items-center justify-center p-6 text-foreground sm:p-10">
+              <div className="flex items-center justify-center p-8">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <LoginForm />
+      </Suspense>
+    </ClientOnly>
   );
 }
