@@ -1,46 +1,28 @@
 #!/usr/bin/env bash
-# Verification/view shortcut
-# Usage: vv [command]
+# Quick deployment shortcut
+# Usage: vv [options]
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 cd "$PROJECT_DIR" || exit 1
 
-# If no arguments, show help
-if [[ $# -eq 0 ]] || [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
-  echo "Verification/View Shortcut (vv)"
+# Check if emergency flag is passed
+if [[ "$1" == "--emergency" ]] || [[ "$1" == "-e" ]]; then
+  node scripts/emergency-deploy.js "${@:2}"
+elif [[ "$1" == "--fast" ]] || [[ "$1" == "-f" ]]; then
+  node scripts/deploy.js --skip-checks "${@:2}"
+elif [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+  echo "Quick Deployment Shortcut (vv)"
   echo ""
   echo "Usage:"
-  echo "  vv deploy              # Verify deployment"
-  echo "  vv users               # Check Convex users"
-  echo "  vv clerk               # Debug Clerk integration"
-  echo "  vv convex              # Open Convex dashboard"
-  echo "  vv status              # Git status"
-  echo "  vv --help              # Show this help"
-  exit 0
+  echo "  vv                    # Run full deployment"
+  echo "  vv --fast             # Fast deployment (skip checks)"
+  echo "  vv --emergency        # Emergency deployment"
+  echo "  vv --help             # Show this help"
+  echo ""
+  echo "All other options are passed to the deploy script."
+else
+  node scripts/deploy.js "$@"
 fi
-
-case "$1" in
-  deploy|deployment)
-    node scripts/verify-deployment.js "${@:2}"
-    ;;
-  users|user)
-    node scripts/check-convex-users.mjs "${@:2}"
-    ;;
-  clerk|auth)
-    node scripts/debug-clerk.mjs "${@:2}"
-    ;;
-  convex|dashboard)
-    npx convex dashboard
-    ;;
-  status|git)
-    git status
-    ;;
-  *)
-    echo "Unknown command: $1"
-    echo "Run 'vv --help' for usage information"
-    exit 1
-    ;;
-esac
 
