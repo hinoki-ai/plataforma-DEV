@@ -23,14 +23,7 @@ import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Users,
-  UserCheck,
-  UserX,
-  Crown,
-  Shield,
-  GraduationCap,
-} from "lucide-react";
+import { Users, UserCheck, UserX, Shield, GraduationCap } from "lucide-react";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
@@ -98,7 +91,7 @@ export default function UserManagementPage() {
         <Card className="border-purple-200 dark:border-purple-800">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-4">
-              <Crown className="h-8 w-8 text-purple-600" />
+              <Shield className="h-8 w-8 text-purple-600" />
               <div>
                 <div className="text-2xl font-bold">12</div>
                 <div className="text-sm text-muted-foreground">
@@ -117,7 +110,7 @@ export default function UserManagementPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
               <div className="flex items-center gap-3">
-                <Crown className="h-5 w-5 text-purple-600" />
+                <Shield className="h-5 w-5 text-purple-600" />
                 <span className="font-medium">Master</span>
               </div>
               <Badge variant="secondary">12 users</Badge>
@@ -168,7 +161,7 @@ export default function UserManagementPage() {
               Bulk Operations
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">
-              <Crown className="h-4 w-4 mr-3" />
+              <Shield className="h-4 w-4 mr-3" />
               Role Permissions
             </Button>
             <Button variant="outline" className="h-auto p-4 justify-start">

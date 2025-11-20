@@ -26,7 +26,7 @@ fi
 
 echo "📧 Creating user with email: agustin@astral.cl"
 echo "🔑 Password: 59163476a"
-echo "👑 Role: MASTER"
+echo "Role: MASTER"
 echo ""
 
 # Create user in Clerk
@@ -53,7 +53,7 @@ if [ "$http_code" -eq 200 ] || [ "$http_code" -eq 201 ]; then
     echo "$response_body" | jq -r '.id, .email_addresses[0].email_address, .public_metadata.role' | while read -r id email role; do
         echo "🆔 User ID: $id"
         echo "📧 Email: $email"
-        echo "👑 Role: $role"
+        echo "Role: $role"
     done
     
     echo ""
@@ -79,7 +79,7 @@ elif echo "$response_body" | grep -q "already exists"; then
     if [ -n "$user_id" ]; then
         echo "✅ Found existing user: $user_id"
         current_role=$(echo "$existing_response" | jq -r '.data[0].public_metadata.role // "Not set"')
-        echo "👑 Current Role: $current_role"
+        echo "Current Role: $current_role"
         
         # Update the role if it's not MASTER
         if [ "$current_role" != "MASTER" ]; then

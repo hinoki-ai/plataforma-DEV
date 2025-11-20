@@ -435,7 +435,7 @@ export function AdvancedOperationsDashboard() {
         {/* Supreme Operations */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-red-700 dark:text-red-300 flex items-center gap-2">
-            👑 Operaciones Supremas
+            Operaciones Supremas
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
             {operationsByCategory.supreme.map((operation) => (

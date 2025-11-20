@@ -45,7 +45,7 @@ if [ "$user_count" -gt 0 ]; then
     
     echo "🆔 User ID: $user_id"
     echo "📧 Email: $email"
-    echo "👑 Role: $role"
+    echo "Role: $role"
     echo "✅ Email Verified: $verified"
     
     if [ "$role" = "MASTER" ]; then

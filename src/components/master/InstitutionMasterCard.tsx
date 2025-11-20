@@ -29,7 +29,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
-  Crown,
   School,
   GraduationCap,
   BookOpen,
@@ -216,7 +215,7 @@ export function InstitutionMasterCard({
               className="w-full bg-linear-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 dark:from-gold-600 dark:to-gold-700 dark:hover:from-gold-700 dark:hover:to-gold-800 text-white"
               size="lg"
             >
-              <Crown className="h-5 w-5 mr-2" />
+              <Shield className="h-5 w-5 mr-2" />
               {isConfiguring
                 ? "Reconfiguring System..."
                 : "🏛️ MASTER EDUCATIONAL RECONFIGURATION"}

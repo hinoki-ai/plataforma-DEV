@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        logger.info("👑 MASTER User Role Override", {
+        logger.info("MASTER User Role Override", {
           masterId: session.user.id,
           targetUser: target,
           overrideType: parameters?.overrideType || "ROLE_CHANGE",
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({
           success: true,
-          message: `👑 MASTER Override Applied to User: ${target}`,
+          message: `MASTER Override Applied to User: ${target}`,
           overrideId: `MASTER_OVERRIDE_${Date.now()}`,
           targetUser: target,
           overrideType: parameters?.overrideType || "ROLE_CHANGE",

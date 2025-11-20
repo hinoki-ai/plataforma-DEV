@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
-  Crown,
   Shield,
   Key,
   Users,
@@ -270,7 +269,7 @@ function RolesTableCard() {
                 <TableRow key={role.id}>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
-                      <Crown className="h-4 w-4 text-yellow-600" />
+                      <Shield className="h-4 w-4 text-yellow-600" />
                       {role.name}
                     </div>
                   </TableCell>

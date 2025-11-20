@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Crown, Sparkles } from "lucide-react";
+import { Shield, Sparkles, Activity } from "lucide-react";
 import { MasterStatsCard } from "./MasterStatsCard";
 
 interface AdminControlMetrics {
@@ -70,7 +70,7 @@ export function GodModeStatusCard() {
 
   const systemStats = [
     {
-      icon: Crown,
+      icon: Shield,
       value: metrics.threats.active,
       label: "Active Threats",
       color: "red" as const,
@@ -82,7 +82,7 @@ export function GodModeStatusCard() {
       color: "green" as const,
     },
     {
-      icon: Crown,
+      icon: Activity,
       value: `${metrics.performance.responseTime}ms`,
       label: "Response Time",
       color: "blue" as const,

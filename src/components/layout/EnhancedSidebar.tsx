@@ -27,7 +27,6 @@ import {
   Search,
   HelpCircle,
   Zap,
-  Crown,
   Globe,
   Settings,
   Eye,

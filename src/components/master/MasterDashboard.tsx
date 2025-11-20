@@ -41,7 +41,6 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { useNotifications } from "@/hooks/useNotifications";
 import { LucideIcon } from "lucide-react";
 import {
-  Crown,
   Shield,
   Database,
   Activity,
@@ -312,7 +311,7 @@ export function MasterDashboard() {
         id: "advanced-admin",
         title: "Advanced Administration",
         description: "Full system control and monitoring",
-        icon: Crown,
+        icon: Shield,
         href: "/master/god-mode",
         variant: "secondary",
         category: "Advanced",

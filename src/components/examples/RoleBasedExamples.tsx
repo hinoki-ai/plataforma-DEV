@@ -26,7 +26,6 @@ import {
 } from "@/components/layout/RoleAwareNavigation";
 import { useNavigation } from "@/components/layout/NavigationContext";
 import {
-  Crown,
   Shield,
   GraduationCap,
   Users,
@@ -108,7 +107,7 @@ export function RoleBasedExamples() {
             {/* MASTER Only */}
             <RoleGuard roles={["MASTER"]} showUnauthorized={false}>
               <Alert>
-                <Crown className="h-4 w-4" />
+                <Shield className="h-4 w-4" />
                 <AlertDescription>
                   🎯 Solo visible para MASTER - Herramientas de desarrollo
                 </AlertDescription>
@@ -120,7 +119,7 @@ export function RoleBasedExamples() {
               <Alert>
                 <Shield className="h-4 w-4" />
                 <AlertDescription>
-                  👑 Visible para ADMIN y MASTER - Gestión administrativa
+                  Visible para ADMIN y MASTER - Gestión administrativa
                 </AlertDescription>
               </Alert>
             </RoleGuard>
@@ -226,7 +225,7 @@ export function RoleBasedExamples() {
                 <Card className="border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/20">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <Crown className="h-4 w-4 text-yellow-600" />
+                      <Shield className="h-4 w-4 text-yellow-600" />
                       <Badge variant="secondary">MASTER</Badge>
                     </div>
                     <p className="text-sm">
@@ -309,7 +308,6 @@ export function RoleBasedExamples() {
           <div className="space-y-4">
             <FeatureToggle feature="role-switching">
               <Alert>
-                <Crown className="h-4 w-4" />
                 <AlertDescription>
                   🎭 Feature &quot;role-switching&quot; está habilitada para
                   este rol

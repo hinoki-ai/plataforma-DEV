@@ -22,7 +22,6 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  Crown,
   Shield,
   User,
   Eye,
@@ -78,7 +77,7 @@ const quickActions: Record<UserRole, QuickAction[]> = {
       id: "supreme-control",
       title: "Supreme Control",
       description: "Panel de control absoluto",
-      icon: Crown,
+      icon: Shield,
       href: "/master",
       variant: "default",
     },
@@ -789,7 +788,7 @@ export function RoleAwareDashboard() {
                 variant="outline"
                 className="text-yellow-600 border-yellow-600"
               >
-                <Crown className="h-3 w-3 mr-1" />
+                <Code className="h-3 w-3 mr-1" />
                 Modo Desarrollador
               </Badge>
               <Badge variant="outline">Cambio de Rol Activo</Badge>

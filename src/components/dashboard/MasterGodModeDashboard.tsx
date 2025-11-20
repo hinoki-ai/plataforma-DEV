@@ -11,7 +11,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Crown,
   Shield,
   Settings,
   Users,
@@ -40,7 +39,7 @@ export function MasterGodModeDashboard() {
 
   const godModeFeatures = [
     {
-      icon: Crown,
+      icon: Shield,
       title: "SYSTEM GOD MODE",
       description: "Ultimate system control and oversight",
       permission: MasterPermissions.SYSTEM_GOD_MODE,

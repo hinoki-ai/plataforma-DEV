@@ -123,7 +123,7 @@ async function seedProduction() {
   console.log("=".repeat(70));
   USERS.forEach((user) => {
     const roleEmoji = {
-      MASTER: "👑",
+      MASTER: "👨‍💼",
       ADMIN: "👨‍💼",
       PROFESOR: "👨‍🏫",
       PARENT: "👨‍👩‍👧‍👦",

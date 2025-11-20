@@ -12,6 +12,7 @@ import {
   User,
   LogOut,
   ChevronDown,
+  Crown,
   Shield,
   Calendar,
   BookOpen,
@@ -21,7 +22,6 @@ import {
   Moon,
   Sun,
   Globe,
-  Crown,
   Users as UsersIcon,
   Eye,
 } from "lucide-react";

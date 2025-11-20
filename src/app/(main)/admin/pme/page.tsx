@@ -284,7 +284,7 @@ export default function AdminPMEPage() {
   };
 
   const handleForceCompleteGoal = (goalId: string) => {
-    toast.success("👑 Admin: Objetivo marcado como completado");
+    toast.success("Admin: Objetivo marcado como completado");
     setAllGoals((prev) =>
       prev.map((goal) =>
         goal.id === goalId
@@ -301,7 +301,7 @@ export default function AdminPMEPage() {
   };
 
   const handleBulkAction = (action: string) => {
-    toast.info(`👑 Admin: Acción masiva - ${action}`);
+    toast.info(`Admin: Acción masiva - ${action}`);
   };
 
   const handleExportAllData = () => {
@@ -549,7 +549,7 @@ export default function AdminPMEPage() {
 
             <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>👑 Privilegios de Administrador:</strong> Tienes control
+                <strong>Privilegios de Administrador:</strong> Tienes control
                 total sobre todos los objetivos PME. Puedes crear, editar,
                 aprobar, rechazar y eliminar cualquier objetivo de cualquier
                 profesor.
