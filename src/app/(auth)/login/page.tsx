@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { UserPlus, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { motion, Variants } from "motion/react";
 import { ClientOnly } from "@/components/ui/client-only";
 
@@ -30,8 +29,21 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  // Now safe to use translation hook since component is wrapped in ClientOnly
-  const { t } = useDivineParsing(["common"]);
+  // Hardcoded translations for login page to avoid SSR issues
+  const t = (key: string) => {
+    const translations: Record<string, string> = {
+      "auth.portal_title": "Portal de Acceso",
+      "auth.email.label": "Correo electrónico",
+      "auth.password.label": "Contraseña",
+      "auth.signing_in_button": "Iniciando sesión...",
+      "auth.sign_in_button": "Iniciar sesión",
+      "auth.new_parent_question": "¿Eres padre/madre o apoderado?",
+      "auth.register_as_parent": "Registrar como padre/madre",
+      "auth.login_error": "Error al iniciar sesión",
+      "auth.invalid_credentials": "Credenciales inválidas",
+    };
+    return translations[key] || key;
+  };
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
