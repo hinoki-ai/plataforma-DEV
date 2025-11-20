@@ -9,7 +9,7 @@ import React, { useContext, createContext } from "react";
 import {
   DivineParsingOracleProvider,
   useDivineParsing,
-} from "./ChunkedLanguageProvider";
+} from "@/components/language/ChunkedLanguageProvider";
 
 type Language = "es" | "en";
 
