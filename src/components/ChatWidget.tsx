@@ -147,11 +147,16 @@ export default function ChatWidget() {
           role: context.role,
           section: context.section,
           userId: session?.user?.id,
-        }
+        },
       });
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: result.success ? result.response : "Lo siento, tuve un problema procesando tu mensaje." },
+        {
+          role: "assistant",
+          content: result.success
+            ? result.response
+            : "Lo siento, tuve un problema procesando tu mensaje.",
+        },
       ]);
     } catch (error: any) {
       console.error("Chat error:", error);

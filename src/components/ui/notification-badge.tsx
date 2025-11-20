@@ -1,33 +1,36 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-const badgeVariants = cva("absolute flex h-3 w-3 rounded-full z-50 pointer-events-none", {
-  variants: {
-    variant: {
-      default: "bg-red-500",
-      mineduc: "bg-[#E30613]", // Mineduc Red
-      success: "bg-green-500",
-      warning: "bg-yellow-500",
+const badgeVariants = cva(
+  "absolute flex h-3 w-3 rounded-full z-50 pointer-events-none",
+  {
+    variants: {
+      variant: {
+        default: "bg-red-500",
+        mineduc: "bg-[#E30613]", // Mineduc Red
+        success: "bg-green-500",
+        warning: "bg-yellow-500",
+      },
+      position: {
+        "top-right": "top-0 right-0 -mt-1 -mr-1",
+        "top-left": "top-0 left-0 -mt-1 -ml-1",
+        "bottom-right": "bottom-0 right-0 -mb-1 -mr-1",
+        "bottom-left": "bottom-0 left-0 -mb-1 -ml-1",
+      },
     },
-    position: {
-      "top-right": "top-0 right-0 -mt-1 -mr-1",
-      "top-left": "top-0 left-0 -mt-1 -ml-1",
-      "bottom-right": "bottom-0 right-0 -mb-1 -mr-1",
-      "bottom-left": "bottom-0 left-0 -mb-1 -ml-1",
+    defaultVariants: {
+      variant: "mineduc",
+      position: "top-right",
     },
   },
-  defaultVariants: {
-    variant: "mineduc",
-    position: "top-right",
-  },
-})
+);
 
 export interface NotificationBadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {
-  show?: boolean
-  animate?: boolean
+  show?: boolean;
+  animate?: boolean;
 }
 
 export const NotificationBadge = React.memo(function NotificationBadge({
@@ -38,7 +41,7 @@ export const NotificationBadge = React.memo(function NotificationBadge({
   animate = true,
   ...props
 }: NotificationBadgeProps) {
-  if (!show) return null
+  if (!show) return null;
 
   return (
     <span
@@ -77,22 +80,24 @@ export const NotificationBadge = React.memo(function NotificationBadge({
         aria-hidden="true"
       ></span>
     </span>
-  )
-})
+  );
+});
 
 export function withNotification<P extends object>(
   Component: React.ComponentType<P>,
   badgeProps?: NotificationBadgeProps,
 ) {
-  const WrappedComponent = React.memo(function WrappedComponent(props: P & { showBadge?: boolean }) {
-    const { showBadge, ...rest } = props
+  const WrappedComponent = React.memo(function WrappedComponent(
+    props: P & { showBadge?: boolean },
+  ) {
+    const { showBadge, ...rest } = props;
     return (
       <div className="relative inline-flex">
         <Component {...(rest as P)} />
         <NotificationBadge show={showBadge} {...badgeProps} />
       </div>
-    )
-  })
-  WrappedComponent.displayName = `withNotification(${Component.displayName || Component.name})`
-  return WrappedComponent
+    );
+  });
+  WrappedComponent.displayName = `withNotification(${Component.displayName || Component.name})`;
+  return WrappedComponent;
 }

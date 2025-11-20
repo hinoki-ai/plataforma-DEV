@@ -10,6 +10,7 @@ import { useSession } from "@clerk/nextjs";
 import { CognitoChat } from "./cognito-chat";
 import { CognitoTour } from "./cognito-tour";
 import { useCognitoAnalytics } from "./cognito-analytics";
+import { ErrorBoundary } from "./error-boundary";
 
 /**
  * Floating Cognito indicator that appears in the bottom-right corner
@@ -286,14 +287,34 @@ export function CognitoIndicator() {
   return (
     <>
       {/* Chat Interface */}
-      <CognitoChat
-        isOpen={isChatOpen}
-        onToggle={handleChatClose}
-        onMinimizeChange={handleChatMinimizeChange}
-        onStartTour={startTour}
-        getTourForContext={getTourForContext}
-        getPageContext={getPageContext}
-      />
+      <ErrorBoundary
+        fallback={
+          <div className="fixed bottom-4 right-4 z-50 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 max-w-sm">
+            <h3 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-2">
+              Error en el chat
+            </h3>
+            <p className="text-xs text-red-700 dark:text-red-300 mb-3">
+              Lo sentimos, el asistente Cognito no está disponible
+              temporalmente.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-xs bg-red-100 dark:bg-red-800 hover:bg-red-200 dark:hover:bg-red-700 text-red-800 dark:text-red-200 px-3 py-1 rounded transition-colors"
+            >
+              Recargar página
+            </button>
+          </div>
+        }
+      >
+        <CognitoChat
+          isOpen={isChatOpen}
+          onToggle={handleChatClose}
+          onMinimizeChange={handleChatMinimizeChange}
+          onStartTour={startTour}
+          getTourForContext={getTourForContext}
+          getPageContext={getPageContext}
+        />
+      </ErrorBoundary>
 
       {/* Tour Interface */}
       <CognitoTour

@@ -325,7 +325,11 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
   // Combine individual and grouped notifications
   const allNotifications = showGrouped
     ? [
-        ...groupedNotifications.map((g: NotificationGroup) => ({ ...g, isGroup: true, id: g.key })),
+        ...groupedNotifications.map((g: NotificationGroup) => ({
+          ...g,
+          isGroup: true,
+          id: g.key,
+        })),
         ...notifications,
       ]
     : notifications;
@@ -408,7 +412,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
             <ScrollArea className="h-96">
               <div className="p-4 space-y-3">
                 {displayedNotifications.map((item) =>
-                  'isGroup' in item && item.isGroup ? (
+                  "isGroup" in item && item.isGroup ? (
                     <NotificationGroupItem
                       key={item.key}
                       group={item as NotificationGroup}

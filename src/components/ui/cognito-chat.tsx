@@ -142,13 +142,15 @@ export function CognitoChat({
   }, []);
 
   // Initialize with welcome message
+  const welcomeInitializedRef = useRef(false);
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
+    if (isOpen && !welcomeInitializedRef.current) {
       const context = getPageContext();
       const welcomeMessage = getWelcomeMessage(context);
       setMessages([welcomeMessage]);
+      welcomeInitializedRef.current = true;
     }
-  }, [isOpen, messages.length]);
+  }, [isOpen]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -210,7 +212,7 @@ export function CognitoChat({
     // Simulate typing delay
     setTimeout(
       async () => {
-        const cognitoResponse = await generateCognitoResponse(inputValue);
+        const cognitoResponse = await generateCognitoResponse(userMessage);
         const cognitoMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: cognitoResponse,
