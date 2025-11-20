@@ -36,24 +36,24 @@ export function Providers({ children }: { children: React.ReactNode }) {
             forcedTheme={undefined}
             nonce={undefined}
           >
-            <JoshAnalyticsProvider>
-              <ClientOnly>
-                <JoshWelcomeToast />
-                <JoshIndicator />
-                <JoshProactiveSuggestions />
-                <JoshAnalyticsDashboard />
-              </ClientOnly>
-            </JoshAnalyticsProvider>
-            <ContextProvider>
-              <LanguageProvider>
-                <LanguageHtmlUpdater />
+            <LanguageProvider>
+              <LanguageHtmlUpdater />
+              <JoshAnalyticsProvider>
+                <ClientOnly>
+                  <JoshWelcomeToast />
+                  <JoshIndicator />
+                  <JoshProactiveSuggestions />
+                  <JoshAnalyticsDashboard />
+                </ClientOnly>
+              </JoshAnalyticsProvider>
+              <ContextProvider>
                 <DesktopToggleProvider>
                   <WebVitalsProvider>
                     <PreloadingProvider>{children}</PreloadingProvider>
                   </WebVitalsProvider>
                 </DesktopToggleProvider>
-              </LanguageProvider>
-            </ContextProvider>
+              </ContextProvider>
+            </LanguageProvider>
           </ThemeProvider>
         </AppSessionProvider>
       </ConvexClientProvider>
