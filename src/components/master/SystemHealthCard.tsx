@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import {
   Card,
   CardContent,
@@ -37,88 +39,41 @@ interface SystemComponent {
 }
 
 export function SystemHealthCard() {
-  const [components, setComponents] = useState<SystemComponent[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
+  const systemHealth = useQuery(api.globalOversight.getSystemHealth);
 
-  // Mock system health data
-  useEffect(() => {
-    const mockComponents: SystemComponent[] = [
-      {
-        id: "1",
-        name: "PostgreSQL Database",
-        status: "healthy",
-        type: "database",
-        uptime: "99.98%",
-        responseTime: 12,
-        load: 23,
-        lastChecked: "Just now",
-      },
-      {
-        id: "2",
-        name: "Next.js Application Server",
-        status: "healthy",
-        type: "server",
-        uptime: "99.95%",
-        responseTime: 45,
-        load: 67,
-        lastChecked: "1 minute ago",
-      },
-      {
-        id: "3",
-        name: "Redis Cache",
-        status: "warning",
-        type: "cache",
-        uptime: "98.2%",
-        responseTime: 8,
-        load: 89,
-        lastChecked: "2 minutes ago",
-        issues: ["High memory usage detected"],
-      },
-      {
-        id: "4",
-        name: "Authentication Service",
-        status: "healthy",
-        type: "security",
-        uptime: "100%",
-        responseTime: 15,
-        load: 12,
-        lastChecked: "30 seconds ago",
-      },
-      {
-        id: "5",
-        name: "CDN Network",
-        status: "healthy",
-        type: "network",
-        uptime: "99.99%",
-        responseTime: 25,
-        load: 34,
-        lastChecked: "1 minute ago",
-      },
-    ];
-
-    setTimeout(() => {
-      setComponents(mockComponents);
-      setIsLoading(false);
-    }, 1000);
-  }, [lastRefresh]);
+  const components = useMemo(() => {
+    if (!systemHealth) return [];
+    return systemHealth.components.map((component) => ({
+      id: component.id,
+      name: component.name,
+      status: component.status,
+      type: component.type,
+      uptime: component.uptime,
+      responseTime: component.responseTime,
+      load: component.load,
+      lastChecked: component.lastChecked,
+      issues: component.issues,
+    }));
+  }, [systemHealth]);
 
   const healthStats = useMemo(() => {
-    const total = components.length;
-    const healthy = components.filter((c) => c.status === "healthy").length;
-    const warning = components.filter((c) => c.status === "warning").length;
-    const critical = components.filter((c) => c.status === "critical").length;
-    const offline = components.filter((c) => c.status === "offline").length;
+    if (!systemHealth?.summary) {
+      return {
+        total: 0,
+        healthy: 0,
+        warning: 0,
+        critical: 0,
+        offline: 0,
+        healthPercentage: 0,
+      };
+    }
 
+    const { total, healthy } = systemHealth.summary;
     return {
-      total,
-      healthy,
-      warning,
-      critical,
-      offline,
+      ...systemHealth.summary,
       healthPercentage: total > 0 ? Math.round((healthy / total) * 100) : 0,
     };
-  }, [components]);
+  }, [systemHealth]);
 
   const getStatusIcon = (status: SystemComponent["status"]) => {
     switch (status) {
@@ -167,11 +122,7 @@ export function SystemHealthCard() {
     return "bg-red-500";
   };
 
-  const refreshData = () => {
-    setLastRefresh(new Date());
-  };
-
-  if (isLoading) {
+  if (!systemHealth) {
     return (
       <div className="space-y-4">
         <Card className="animate-pulse">
@@ -240,11 +191,14 @@ export function SystemHealthCard() {
             <Progress value={healthStats.healthPercentage} className="h-2" />
           </div>
 
-          <div className="flex justify-end mt-4">
-            <Button variant="outline" size="sm" onClick={refreshData}>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
-            </Button>
+          <div className="flex justify-between items-center mt-4 text-xs text-muted-foreground">
+            <span>
+              Last updated:{" "}
+              {systemHealth?.lastUpdated
+                ? new Date(systemHealth.lastUpdated).toLocaleTimeString()
+                : "Never"}
+            </span>
+            <span className="text-green-600">Real-time data</span>
           </div>
         </CardContent>
       </Card>

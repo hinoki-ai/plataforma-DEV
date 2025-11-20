@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -436,20 +435,11 @@ function PerformanceProfilerCard() {
 }
 
 export function DebugConsoleDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
-      {/* Debug Console Header */}
-      <RoleAwareHeader />
-
-      {/* Debug Tools Sections */}
-      <div className="space-y-6">
-        <DebugConsoleCard />
-        <CommandHistoryCard />
-        <SystemLogsCard />
-        <PerformanceProfilerCard />
-      </div>
+      <CommandHistoryCard />
+      <SystemLogsCard />
+      <PerformanceProfilerCard />
     </div>
   );
 }

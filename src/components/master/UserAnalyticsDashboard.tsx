@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -388,20 +387,8 @@ function UserEngagementCard() {
 }
 
 export function UserAnalyticsDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
-      {/* User Analytics Header */}
-      <RoleAwareHeader
-        actions={
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Exportar Reporte
-          </Button>
-        }
-      />
-
       {/* User Overview */}
       <UserOverviewCard />
 

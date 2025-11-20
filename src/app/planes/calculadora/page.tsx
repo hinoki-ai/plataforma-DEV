@@ -278,19 +278,31 @@ export default function PricingCalculatorPage({
       const billingToUse = newBillingCycle ?? billingCycle;
       params.set("billing", billingToUse);
 
-      // Use new students if provided, otherwise keep current
-      const studentsToUse = newStudents ?? students;
-      params.set("students", studentsToUse.toString());
+      // Use new students if provided, otherwise use current students state
+      // We need to read the current state value, not from closure
+      setStudentsState((currentStudents) => {
+        const studentsToUse = newStudents ?? currentStudents;
+        params.set("students", studentsToUse.toString());
+        return currentStudents; // Don't change state here, just read it
+      });
+      
+      // Actually set students param properly
+      setStudentsState((currentStudents) => {
+        const studentsToUse = newStudents ?? currentStudents;
+        params.set("students", studentsToUse.toString());
+        
+        // Use new type if provided, otherwise keep current
+        const typeToUse = newType ?? institutionType;
+        params.set("type", typeToUse);
 
-      // Use new type if provided, otherwise keep current
-      const typeToUse = newType ?? institutionType;
-      params.set("type", typeToUse);
-
-      router.replace(`/planes/calculadora?${params.toString()}`, {
-        scroll: false,
+        router.replace(`/planes/calculadora?${params.toString()}`, {
+          scroll: false,
+        });
+        
+        return currentStudents; // Don't change state here
       });
     },
-    [router, selectedPlan.id, billingCycle, students, institutionType],
+    [router, selectedPlan.id, billingCycle, institutionType],
   );
 
   // Wrapper functions to update state and URL
@@ -490,31 +502,42 @@ export default function PricingCalculatorPage({
       `\n${tc("calculator.institution_type_prefix")} ${INSTITUTION_TYPE_INFO[institutionType].chileanName}`,
   );
 
-  const updateStudents = (value: number) => {
-    const clamped = clampStudents(value);
-    setStudents(clamped);
-    setInputValue(String(clamped));
-  };
+  const updateStudents = useCallback(
+    (value: number) => {
+      const clamped = clampStudents(value);
+      setStudentsState(clamped);
+      // Always update input value when called from slider or buttons
+      // The isEditingInput check is only for preventing updates while typing
+      setInputValue(String(clamped));
+      isEditingInput.current = false; // Reset editing flag
+      updateUrl(billingCycle, clamped);
+    },
+    [clampStudents, billingCycle, updateUrl],
+  );
 
-  const handleStudentInputChange = (value: string) => {
-    isEditingInput.current = true;
-    // Allow empty string or partial input while typing
-    if (value === "" || value === "-") {
-      setInputValue(value);
-      return;
-    }
+  const handleStudentInputChange = useCallback(
+    (value: string) => {
+      isEditingInput.current = true;
+      // Allow empty string or partial input while typing
+      if (value === "" || value === "-") {
+        setInputValue(value);
+        return;
+      }
 
-    // Allow typing numbers freely
-    const numeric = Number.parseInt(value.replace(/\D/g, ""), 10);
-    if (!Number.isNaN(numeric)) {
-      setInputValue(value.replace(/\D/g, ""));
-      // Live update of calculations
-      const clamped = Math.max(1, numeric);
-      setStudents(clamped);
-    }
-  };
+      // Allow typing numbers freely
+      const numeric = Number.parseInt(value.replace(/\D/g, ""), 10);
+      if (!Number.isNaN(numeric)) {
+        setInputValue(value.replace(/\D/g, ""));
+        // Live update of calculations - use clampStudents for consistency
+        const clamped = clampStudents(numeric);
+        setStudentsState(clamped);
+        updateUrl(billingCycle, clamped);
+      }
+    },
+    [billingCycle, updateUrl, clampStudents],
+  );
 
-  const handleStudentInputBlur = () => {
+  const handleStudentInputBlur = useCallback(() => {
     isEditingInput.current = false;
     // On blur, validate and clamp the value
     const numeric = Number.parseInt(inputValue, 10);
@@ -523,13 +546,23 @@ export default function PricingCalculatorPage({
       setInputValue(String(students));
     } else {
       // Clamp and apply the value
-      updateStudents(numeric);
+      const clamped = clampStudents(numeric);
+      setStudentsState(clamped);
+      setInputValue(String(clamped));
+      updateUrl(billingCycle, clamped);
     }
-  };
+  }, [inputValue, students, clampStudents, billingCycle, updateUrl]);
 
-  const adjustStudents = (delta: number) => {
-    updateStudents(students + delta);
-  };
+  const adjustStudents = useCallback(
+    (delta: number) => {
+      const newValue = students + delta;
+      const clamped = clampStudents(newValue);
+      setStudentsState(clamped);
+      setInputValue(String(clamped));
+      updateUrl(billingCycle, clamped);
+    },
+    [students, clampStudents, billingCycle, updateUrl],
+  );
 
   const highlightItems = [
     {
@@ -577,7 +610,7 @@ export default function PricingCalculatorPage({
                     </CardDescription>
 
                     {/* Plan Selector */}
-                    <div className="flex flex-wrap gap-2 mt-4 mb-2">
+                    <div className="flex flex-nowrap gap-2 mt-4 mb-2">
                       {pricingPlans.map((plan) => (
                         <Button
                           key={plan.id}
@@ -590,11 +623,11 @@ export default function PricingCalculatorPage({
                             setManualPlanOverride(true);
                             updateUrl(billingCycle, students, plan.id);
                           }}
-                          className={
+                          className={`flex-1 ${
                             selectedPlan.id === plan.id
                               ? "bg-primary text-primary-foreground"
                               : "border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
-                          }
+                          }`}
                         >
                           {plan.name}
                         </Button>
@@ -603,33 +636,37 @@ export default function PricingCalculatorPage({
 
                     {/* Plan Validation Warning */}
                     {!planValidation.isValid && (
-                      <div className="mt-3 rounded-lg border border-yellow-500/50 bg-yellow-500/10 p-3 flex items-start gap-2">
-                        <AlertTriangle className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-yellow-400">
-                            {tc("calculator.plan_not_compatible")}
-                          </p>
-                          <p className="text-xs text-yellow-300/80 mt-1">
-                            {planValidation.reasonKey
-                              ? tc(planValidation.reasonKey)
-                                  .replace(
-                                    "{plan}",
-                                    planValidation.reasonParams?.plan,
-                                  )
-                                  .replace(
-                                    "{min}",
-                                    planValidation.reasonParams?.min,
-                                  )
-                                  .replace(
-                                    "{max}",
-                                    planValidation.reasonParams?.max,
-                                  )
-                              : ""}
-                          </p>
+                      <div className="mt-3 rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-3 py-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-semibold text-yellow-400 leading-tight">
+                                {tc("calculator.plan_not_compatible")}
+                              </p>
+                              <p className="text-xs text-yellow-300/80 mt-0 leading-tight">
+                                {planValidation.reasonKey
+                                  ? tc(planValidation.reasonKey)
+                                      .replace(
+                                        "{plan}",
+                                        planValidation.reasonParams?.plan,
+                                      )
+                                      .replace(
+                                        "{min}",
+                                        planValidation.reasonParams?.min,
+                                      )
+                                      .replace(
+                                        "{max}",
+                                        planValidation.reasonParams?.max,
+                                      )
+                                  : ""}
+                              </p>
+                            </div>
+                          </div>
                           <Button
                             variant="outline"
-                            size="sm"
-                            className="mt-2 text-yellow-400 border-yellow-400/50 hover:bg-yellow-400/20"
+                            size="icon"
+                            className="shrink-0 h-8 w-8 text-yellow-400 border-yellow-400/50 hover:bg-yellow-400/20 hover:border-yellow-400"
                             onClick={() => {
                               setSelectedPlanId(recommendedPlan.id);
                               setManualPlanOverride(false);
@@ -639,37 +676,42 @@ export default function PricingCalculatorPage({
                                 recommendedPlan.id,
                               );
                             }}
-                          >
-                            {tc("calculator.change_to").replace(
+                            title={tc("calculator.change_to").replace(
                               "{plan}",
                               recommendedPlan.name,
                             )}
+                          >
+                            <ChevronRight className="w-4 h-4" />
                           </Button>
                         </div>
                       </div>
                     )}
                     {/* Plan Recommendation */}
                     {shouldRecommendPlan && (
-                      <div className="mt-3 rounded-lg border border-primary/50 bg-primary/10 p-3 flex items-start gap-2">
-                        <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-primary">
-                            {tc("calculator.recommended_plan_available")}
-                          </p>
-                          <p
-                            className="text-xs text-primary/80 mt-1"
-                            dangerouslySetInnerHTML={{
-                              __html: tc(
-                                "calculator.recommended_plan_description",
-                              )
-                                .replace("{students}", studentsFormatted)
-                                .replace("{plan}", recommendedPlan.name),
-                            }}
-                          />
+                      <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <Info className="w-4 h-4 text-primary shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-semibold text-primary leading-tight">
+                                {tc("calculator.recommended_plan_available")}
+                              </p>
+                              <p
+                                className="text-xs text-primary/80 mt-0 leading-tight"
+                                dangerouslySetInnerHTML={{
+                                  __html: tc(
+                                    "calculator.recommended_plan_description",
+                                  )
+                                    .replace("{students}", studentsFormatted)
+                                    .replace("{plan}", recommendedPlan.name),
+                                }}
+                              />
+                            </div>
+                          </div>
                           <Button
                             variant="outline"
-                            size="sm"
-                            className="mt-2 text-primary border-primary/50 hover:bg-primary/20"
+                            size="icon"
+                            className="shrink-0 h-8 w-8 text-primary border-primary/50 hover:bg-primary/20 hover:border-primary"
                             onClick={() => {
                               setSelectedPlanId(recommendedPlan.id);
                               setManualPlanOverride(false);
@@ -679,12 +721,12 @@ export default function PricingCalculatorPage({
                                 recommendedPlan.id,
                               );
                             }}
-                          >
-                            {tc("calculator.change_to").replace(
+                            title={tc("calculator.change_to").replace(
                               "{plan}",
                               recommendedPlan.name,
                             )}
-                            <ChevronRight className="w-4 h-4 ml-1" />
+                          >
+                            <ChevronRight className="w-4 h-4" />
                           </Button>
                         </div>
                       </div>
@@ -914,48 +956,62 @@ export default function PricingCalculatorPage({
                 {bestBillingCycle &&
                   bestBillingCycle.cycle !== billingCycle &&
                   bestBillingCycle.savings > 0 && (
-                    <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-4">
-                      <div className="flex items-start gap-2">
-                        <TrendingDown className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-green-400">
-                            {tc("calculator.best_option_available")}
-                          </p>
-                          <p className="text-xs text-green-300/80 mt-1">
-                            {tc("calculator.best_option_description")
-                              .replace(
-                                "{cycle}",
-                                billingMetadata[bestBillingCycle.cycle].label,
-                              )
-                              .replace(
-                                "{amount}",
-                                formatCLP(
+                    <div className="rounded-lg border border-green-500/20 bg-green-500/5 px-3 py-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <TrendingDown className="w-4 h-4 text-green-400 shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-baseline gap-1.5 flex-wrap leading-tight">
+                              <span className="text-xs font-medium text-green-400 uppercase tracking-wide">
+                                {tc("calculator.best_option_available")}
+                              </span>
+                              <span className="text-sm font-bold text-green-300">
+                                {formatCLP(
                                   (priceBreakdown.totalPerMonth -
                                     bestBillingCycle.monthlyCost) *
                                     billingInfo.months,
-                                ),
-                              )
-                              .replace("{months}", String(billingInfo.months))
-                              .replace(
-                                "{percent}",
-                                String(bestBillingCycle.savingsPercent),
-                              )}
-                          </p>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="mt-2 text-green-400 border-green-400/50 hover:bg-green-400/20"
-                            onClick={() =>
-                              setBillingCycle(bestBillingCycle.cycle)
-                            }
-                          >
-                            {tc("calculator.change_to_cycle").replace(
-                              "{cycle}",
-                              billingMetadata[bestBillingCycle.cycle].label,
-                            )}
-                            <ChevronRight className="w-4 h-4 ml-1" />
-                          </Button>
+                                )}
+                              </span>
+                              <span className="text-xs text-green-300/70">
+                                {tc("calculator.savings")}
+                              </span>
+                            </div>
+                            <p className="text-xs text-gray-300 mt-0 leading-tight">
+                              {tc("calculator.best_option_description")
+                                .replace(
+                                  "{cycle}",
+                                  billingMetadata[bestBillingCycle.cycle].label,
+                                )
+                                .replace(
+                                  "{amount}",
+                                  formatCLP(
+                                    (priceBreakdown.totalPerMonth -
+                                      bestBillingCycle.monthlyCost) *
+                                      billingInfo.months,
+                                  ),
+                                )
+                                .replace("{months}", String(billingInfo.months))
+                                .replace(
+                                  "{percent}",
+                                  String(bestBillingCycle.savingsPercent),
+                                )}
+                            </p>
+                          </div>
                         </div>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="shrink-0 h-8 w-8 text-green-400 border-green-400/50 hover:bg-green-400/20 hover:border-green-400"
+                          onClick={() =>
+                            setBillingCycle(bestBillingCycle.cycle)
+                          }
+                          title={tc("calculator.change_to_cycle").replace(
+                            "{cycle}",
+                            billingMetadata[bestBillingCycle.cycle].label,
+                          )}
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
                   )}

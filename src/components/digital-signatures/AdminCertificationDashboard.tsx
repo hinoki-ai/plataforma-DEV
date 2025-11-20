@@ -220,18 +220,6 @@ export function AdminCertificationDashboard({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            {t("digital-signatures.certification.title")}
-          </h2>
-          <p className="text-muted-foreground">
-            {t("digital-signatures.certification.description")}
-          </p>
-        </div>
-      </div>
-
       {/* Statistics */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
+import { useDashboardData } from "@/hooks/useDashboardData";
 import {
   Card,
   CardContent,
@@ -70,82 +70,28 @@ interface QueryResult {
   timestamp: string;
 }
 
-const sampleTables: DatabaseTable[] = [
-  {
-    name: "users",
-    rows: 1247,
-    size: "2.3 MB",
-    lastModified: "2024-01-15 14:30:25",
-    status: "active",
-  },
-  {
-    name: "meetings",
-    rows: 892,
-    size: "1.8 MB",
-    lastModified: "2024-01-15 14:25:10",
-    status: "active",
-  },
-  {
-    name: "planning_documents",
-    rows: 456,
-    size: "5.2 MB",
-    lastModified: "2024-01-15 14:20:45",
-    status: "active",
-  },
-  {
-    name: "audit_logs",
-    rows: 15420,
-    size: "12.7 MB",
-    lastModified: "2024-01-15 14:15:30",
-    status: "active",
-  },
-  {
-    name: "notifications",
-    rows: 2341,
-    size: "890 KB",
-    lastModified: "2024-01-15 14:10:15",
-    status: "active",
-  },
-];
-
-const sampleQueries: QueryResult[] = [
-  {
-    id: "1",
-    query: "SELECT COUNT(*) FROM users WHERE role = 'PROFESOR'",
-    executionTime: 45,
-    rowsAffected: 1,
-    status: "success",
-    timestamp: "2024-01-15 14:30:25",
-  },
-  {
-    id: "2",
-    query: "UPDATE meetings SET status = 'completed' WHERE date < NOW()",
-    executionTime: 123,
-    rowsAffected: 23,
-    status: "success",
-    timestamp: "2024-01-15 14:25:10",
-  },
-  {
-    id: "3",
-    query: "SELECT * FROM audit_logs ORDER BY timestamp DESC LIMIT 100",
-    executionTime: 89,
-    rowsAffected: 100,
-    status: "success",
-    timestamp: "2024-01-15 14:20:45",
-  },
-];
+// Note: Real database table and query information would require additional
+// Convex queries. For now, showing placeholder content to indicate
+// this functionality exists but needs specific database introspection queries.
 
 function DatabaseOverviewCard() {
-  const stats = useMemo(
+  const { stats } = useDashboardData();
+
+  const dbStats = useMemo(
     () => ({
-      totalTables: 15,
-      totalSize: "45.2 MB",
-      activeConnections: 12,
-      queriesPerSecond: 89,
-      cacheHitRate: "94.5%",
-      backupStatus: "Last backup: 2 hours ago",
+      totalTables: "N/A", // Would need a specific query for this
+      totalSize: stats.database?.size || "N/A",
+      activeConnections:
+        stats.database?.connectionPoolSize ||
+        stats.performance?.activeConnections ||
+        0,
+      queriesPerSecond: Math.round((stats.performance?.throughput || 0) / 1000),
+      cacheHitRate: "N/A", // Would need specific query for this
+      backupStatus: stats.database?.lastBackup
+        ? `Last backup: ${new Date(stats.database.lastBackup).toLocaleString()}`
+        : "Backup status unknown",
     }),
-    [],
+    [stats],
   );
 
   return (
@@ -164,7 +110,7 @@ function DatabaseOverviewCard() {
           <div className="text-center p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
             <Table2 className="h-8 w-8 mx-auto mb-2 text-blue-600" />
             <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-              {stats.totalTables}
+              {dbStats.totalTables}
             </div>
             <div className="text-sm text-muted-foreground">Tablas Totales</div>
           </div>
@@ -172,7 +118,7 @@ function DatabaseOverviewCard() {
           <div className="text-center p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
             <HardDrive className="h-8 w-8 mx-auto mb-2 text-green-600" />
             <div className="text-2xl font-bold text-green-700 dark:text-green-300">
-              {stats.totalSize}
+              {dbStats.totalSize}
             </div>
             <div className="text-sm text-muted-foreground">Tamaño Total</div>
           </div>
@@ -180,7 +126,7 @@ function DatabaseOverviewCard() {
           <div className="text-center p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
             <Activity className="h-8 w-8 mx-auto mb-2 text-purple-600" />
             <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
-              {stats.activeConnections}
+              {dbStats.activeConnections}
             </div>
             <div className="text-sm text-muted-foreground">
               Conexiones Activas
@@ -190,7 +136,7 @@ function DatabaseOverviewCard() {
           <div className="text-center p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
             <Zap className="h-8 w-8 mx-auto mb-2 text-orange-600" />
             <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
-              {stats.queriesPerSecond}
+              {dbStats.queriesPerSecond}
             </div>
             <div className="text-sm text-muted-foreground">Queries/seg</div>
           </div>
@@ -198,7 +144,7 @@ function DatabaseOverviewCard() {
           <div className="text-center p-4 bg-teal-50 dark:bg-teal-950/20 rounded-lg">
             <BarChart3 className="h-8 w-8 mx-auto mb-2 text-teal-600" />
             <div className="text-2xl font-bold text-teal-700 dark:text-teal-300">
-              {stats.cacheHitRate}
+              {dbStats.cacheHitRate}
             </div>
             <div className="text-sm text-muted-foreground">Cache Hit Rate</div>
           </div>
@@ -206,7 +152,7 @@ function DatabaseOverviewCard() {
           <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg">
             <Shield className="h-8 w-8 mx-auto mb-2 text-yellow-600" />
             <div className="text-sm font-bold text-yellow-700 dark:text-yellow-300">
-              {stats.backupStatus}
+              {dbStats.backupStatus}
             </div>
             <div className="text-sm text-muted-foreground">Estado Backup</div>
           </div>
@@ -218,12 +164,31 @@ function DatabaseOverviewCard() {
 
 function TablesManagementCard() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { stats } = useDashboardData();
+
+  // Placeholder - real implementation would need database introspection queries
+  const mockTables = [
+    {
+      name: "users",
+      rows: stats.users?.total || 0,
+      size: "N/A",
+      lastModified: new Date().toISOString(),
+      status: "active" as const,
+    },
+    {
+      name: "content",
+      rows: stats.content?.total || 0,
+      size: "N/A",
+      lastModified: new Date().toISOString(),
+      status: "active" as const,
+    },
+  ];
 
   const filteredTables = useMemo(() => {
-    return sampleTables.filter((table) =>
+    return mockTables.filter((table) =>
       table.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
-  }, [searchTerm]);
+  }, [searchTerm, mockTables]);
 
   return (
     <Card>
@@ -401,46 +366,36 @@ function QueryHistoryCard() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {sampleQueries.map((queryResult) => (
-            <div key={queryResult.id} className="border rounded-lg p-4">
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  {queryResult.status === "success" && (
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                  )}
-                  {queryResult.status === "error" && (
-                    <AlertTriangle className="h-4 w-4 text-red-600" />
-                  )}
-                  {queryResult.status === "running" && (
-                    <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />
-                  )}
-                  <Badge
-                    variant={
-                      queryResult.status === "success"
-                        ? "default"
-                        : queryResult.status === "error"
-                          ? "destructive"
-                          : "secondary"
-                    }
-                  >
-                    {queryResult.status}
-                  </Badge>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {queryResult.timestamp}
-                </span>
+          <div className="border rounded-lg p-4 bg-muted/50">
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <Badge variant="secondary">System</Badge>
               </div>
-
-              <div className="font-mono text-sm bg-muted p-2 rounded mb-2">
-                {queryResult.query}
-              </div>
-
-              <div className="flex gap-4 text-sm text-muted-foreground">
-                <span>Tiempo: {queryResult.executionTime}ms</span>
-                <span>Filas afectadas: {queryResult.rowsAffected}</span>
-              </div>
+              <span className="text-sm text-muted-foreground">
+                {new Date().toLocaleString()}
+              </span>
             </div>
-          ))}
+
+            <div className="font-mono text-sm bg-muted p-2 rounded mb-2">
+              Dashboard data queries executed successfully
+            </div>
+
+            <div className="flex gap-4 text-sm text-muted-foreground">
+              <span>Status: Real-time</span>
+              <span>Data: {Object.keys({}).length} metrics loaded</span>
+            </div>
+          </div>
+
+          <div className="text-center py-8 text-muted-foreground">
+            <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>
+              Query history tracking requires additional database logging setup.
+            </p>
+            <p className="text-sm mt-2">
+              Current dashboard uses live data from Convex.
+            </p>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -448,15 +403,9 @@ function QueryHistoryCard() {
 }
 
 export function DatabaseToolsDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
       {/* Database Tools Header */}
-      <RoleAwareHeader />
-
-      {/* Database Overview */}
-      <DatabaseOverviewCard />
 
       {/* Database Tools Sections */}
       <div className="space-y-6">

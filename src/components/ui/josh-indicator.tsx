@@ -9,12 +9,7 @@ import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider"
 import { useSession } from "@clerk/nextjs";
 import { JoshChat } from "./josh-chat";
 import { JoshTour } from "./josh-tour";
-import {
-  JoshAnimated,
-  RippleButton,
-  FloatingElement,
-  PulseNotification,
-} from "./josh-animations";
+import { RippleButton, PulseNotification } from "./josh-animations";
 import { useJoshAnalytics } from "./josh-analytics";
 import { MessageCircle, Map } from "lucide-react";
 
@@ -289,38 +284,29 @@ export function JoshIndicator() {
               onClick={handleClick}
             >
               {/* Josh Image */}
-              <FloatingElement intensity={1.5} speed={1}>
-                <JoshAnimated
-                  variant="idle"
-                  isHovered={false}
-                  isActive={isChatOpen}
-                  size="md"
-                >
-                  <motion.img
-                    src={joshImage}
-                    alt={t("josh.alt", "Josh - Educational Assistant")}
-                    className="w-12 h-12 rounded-full object-cover shadow-lg border-3 border-white dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
-                    role="button"
-                    tabIndex={0}
-                    aria-label={t(
-                      "josh.click.label",
-                      "Click to interact with Josh, your educational assistant",
-                    )}
-                    onClick={handleClick}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        handleClick();
-                      }
-                    }}
-                    whileHover={{
-                      scale: 1.1,
-                      boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  />
-                </JoshAnimated>
-              </FloatingElement>
+              <motion.img
+                src={joshImage}
+                alt={t("josh.alt", "Josh - Educational Assistant")}
+                className="w-12 h-12 object-cover shadow-lg border-3 border-white dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
+                role="button"
+                tabIndex={0}
+                aria-label={t(
+                  "josh.click.label",
+                  "Click to interact with Josh, your educational assistant",
+                )}
+                onClick={handleClick}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleClick();
+                  }
+                }}
+                whileHover={{
+                  scale: 1.1,
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+                }}
+                whileTap={{ scale: 0.95 }}
+              />
 
               {/* Notification dot */}
               <motion.div

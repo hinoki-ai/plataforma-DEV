@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -494,15 +493,9 @@ function SecurityAlertsCard() {
 }
 
 export function MasterAuditDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
       {/* Master Audit Header */}
-      <RoleAwareHeader
-        title="MASTER AUDIT - SUPREME AUDIT LOGS"
-        subtitle={`Auditoría completa del sistema - Arquitecto ${session?.user?.name || "Master Developer"}`}
-      />
 
       {/* Audit Stats */}
       <AuditStatsCard />

@@ -532,58 +532,6 @@ export function HorariosDashboardReal({
 
   return (
     <div className="space-y-10">
-      <section className="space-y-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge className="border border-primary/40 bg-primary/10 text-primary shadow-none">
-            {persona === "admin"
-              ? "Gobernanza MINEDUC"
-              : "Planificación Docente"}
-          </Badge>
-          <Badge
-            variant="outline"
-            className="border-sky-300 bg-sky-100/60 text-sky-700 dark:border-sky-500/60 dark:bg-sky-500/10 dark:text-sky-200"
-          >
-            Jornada Escolar Completa 2024
-          </Badge>
-          <Badge
-            variant="outline"
-            className="border-emerald-300 bg-emerald-100/70 text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-200"
-          >
-            Decreto 67 • Evaluación para Aprendizaje
-          </Badge>
-        </div>
-
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              {persona === "admin"
-                ? "Horarios Institucionales Inteligentes"
-                : "Agenda Docente Integral"}
-            </h1>
-            <p className="max-w-3xl text-base text-muted-foreground sm:text-lg">
-              {persona === "admin"
-                ? "Orquesta todos los bloques horarios con indicadores ministeriales, cobertura JEC y focos UTP en un mismo tablero para la red educativa Astral."
-                : "Visualiza tu semana con métricas ministeriales, focos pedagógicos y recomendaciones UTP que potencian tu acción en aula."}
-            </p>
-          </div>
-
-          <Card className="bg-linear-to-br from-primary/20 via-primary/10 to-transparent shadow-lg">
-            <CardContent className="flex flex-col gap-1 p-4">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary/80">
-                <ShieldCheck className="h-4 w-4" />
-                Sello Astral
-              </div>
-              <div className="text-lg font-semibold text-primary">
-                Coordinación pedagógica en tiempo real
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Datos sincronizados desde Convex • Firmado con trazabilidad UTP
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
       {errorMessage && (
         <Card className="border-amber-300/60 bg-amber-50/70 dark:border-amber-500/50 dark:bg-amber-500/10">
           <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">

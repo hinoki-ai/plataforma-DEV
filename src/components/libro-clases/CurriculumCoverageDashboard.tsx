@@ -123,82 +123,57 @@ export function CurriculumCoverageDashboard({
 
   return (
     <div className="space-y-6">
-      {/* Header with Filters */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5" />
-                Cobertura Curricular - {course.name}
-              </CardTitle>
-              <CardDescription>
-                Seguimiento de Objetivos de Aprendizaje según Decreto 67
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Filtrar por Asignatura
-              </label>
-              <Select
-                value={selectedSubject || "all"}
-                onValueChange={(value) =>
-                  setSelectedSubject(value === "all" ? undefined : value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Todas las asignaturas" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todas las asignaturas</SelectItem>
-                  {course.subjects.map((subject: string) => (
-                    <SelectItem key={subject} value={subject}>
-                      {subject}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="text-sm font-medium mb-2 block">
+            Filtrar por Asignatura
+          </label>
+          <Select
+            value={selectedSubject || "all"}
+            onValueChange={(value) =>
+              setSelectedSubject(value === "all" ? undefined : value)
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Todas las asignaturas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas las asignaturas</SelectItem>
+              {course.subjects.map((subject: string) => (
+                <SelectItem key={subject} value={subject}>
+                  {subject}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Filtrar por Período
-              </label>
-              <Select
-                value={selectedPeriod || "all"}
-                onValueChange={(value) =>
-                  setSelectedPeriod(
-                    value === "all"
-                      ? undefined
-                      : (value as
-                          | "PRIMER_SEMESTRE"
-                          | "SEGUNDO_SEMESTRE"
-                          | "ANUAL"),
-                  )
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Todos los períodos" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos los períodos</SelectItem>
-                  <SelectItem value="PRIMER_SEMESTRE">
-                    Primer Semestre
-                  </SelectItem>
-                  <SelectItem value="SEGUNDO_SEMESTRE">
-                    Segundo Semestre
-                  </SelectItem>
-                  <SelectItem value="ANUAL">Anual</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        <div>
+          <label className="text-sm font-medium mb-2 block">
+            Filtrar por Período
+          </label>
+          <Select
+            value={selectedPeriod || "all"}
+            onValueChange={(value) =>
+              setSelectedPeriod(
+                value === "all"
+                  ? undefined
+                  : (value as "PRIMER_SEMESTRE" | "SEGUNDO_SEMESTRE" | "ANUAL"),
+              )
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Todos los períodos" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos los períodos</SelectItem>
+              <SelectItem value="PRIMER_SEMESTRE">Primer Semestre</SelectItem>
+              <SelectItem value="SEGUNDO_SEMESTRE">Segundo Semestre</SelectItem>
+              <SelectItem value="ANUAL">Anual</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">

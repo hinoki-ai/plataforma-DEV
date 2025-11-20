@@ -13,15 +13,6 @@ export function PMEDashboard() {
   const { t } = useDivineParsing(["common"]);
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          {t("pme.management", "common")}
-        </h1>
-        <p className="text-muted-foreground">
-          {t("pme.active_plans", "common")}
-        </p>
-      </div>
-
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -485,15 +484,9 @@ function IncidentResponseCard() {
 }
 
 export function SecurityCenterDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
       {/* Security Center Header */}
-      <RoleAwareHeader
-        title="SECURITY CENTER - SUPREME SECURITY AUTHORITY"
-        subtitle={`Centro de seguridad absoluto - Arquitecto ${session?.user?.name || "Master Developer"}`}
-      />
 
       {/* Security Overview */}
       <SecurityOverviewCard />

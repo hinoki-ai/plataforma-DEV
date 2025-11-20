@@ -5,7 +5,6 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { PageTransition } from "@/components/ui/page-transition";
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 import { StudentManagement } from "@/components/libro-clases/StudentManagement";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useAuth } from "@clerk/nextjs";

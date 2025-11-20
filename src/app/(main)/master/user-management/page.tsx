@@ -24,6 +24,7 @@ import { MasterPageTemplate } from "@/components/master/MasterPageTemplate";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Users, UserCheck, UserX, Shield, GraduationCap } from "lucide-react";
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
@@ -39,13 +40,32 @@ const userManagementFallback = (
   </div>
 );
 
-export default function UserManagementPage() {
+function UserManagementContent() {
+  const { stats, loading } = useDashboardData();
+
+  if (loading) {
+    return (
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i} className="border-blue-200 dark:border-blue-800">
+            <div className="p-6">
+              <Skeleton className="h-8 w-8 mb-4" />
+              <Skeleton className="h-8 w-16 mb-2" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  const totalUsers = stats.users?.total || 0;
+  const activeUsers = stats.users?.active || totalUsers; // Fallback to total if active not available
+  const inactiveUsers = totalUsers - activeUsers;
+  const masterUsers = stats.users?.breakdown?.master || 0;
+
   return (
-    <MasterPageTemplate
-      context="USER_MANAGEMENT"
-      errorContext="UserManagementPage"
-      fallbackContent={userManagementFallback}
-    >
+    <>
       {/* User Statistics */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-blue-200 dark:border-blue-800">
@@ -53,7 +73,9 @@ export default function UserManagementPage() {
             <div className="flex items-center gap-3 mb-4">
               <Users className="h-8 w-8 text-blue-600" />
               <div>
-                <div className="text-2xl font-bold">1,247</div>
+                <div className="text-2xl font-bold">
+                  {totalUsers.toLocaleString()}
+                </div>
                 <div className="text-sm text-muted-foreground">Total Users</div>
               </div>
             </div>
@@ -65,7 +87,9 @@ export default function UserManagementPage() {
             <div className="flex items-center gap-3 mb-4">
               <UserCheck className="h-8 w-8 text-green-600" />
               <div>
-                <div className="text-2xl font-bold">1,189</div>
+                <div className="text-2xl font-bold">
+                  {activeUsers.toLocaleString()}
+                </div>
                 <div className="text-sm text-muted-foreground">
                   Active Users
                 </div>
@@ -79,7 +103,9 @@ export default function UserManagementPage() {
             <div className="flex items-center gap-3 mb-4">
               <UserX className="h-8 w-8 text-red-600" />
               <div>
-                <div className="text-2xl font-bold">58</div>
+                <div className="text-2xl font-bold">
+                  {inactiveUsers.toLocaleString()}
+                </div>
                 <div className="text-sm text-muted-foreground">
                   Inactive Users
                 </div>
@@ -93,7 +119,9 @@ export default function UserManagementPage() {
             <div className="flex items-center gap-3 mb-4">
               <Shield className="h-8 w-8 text-purple-600" />
               <div>
-                <div className="text-2xl font-bold">12</div>
+                <div className="text-2xl font-bold">
+                  {masterUsers.toLocaleString()}
+                </div>
                 <div className="text-sm text-muted-foreground">
                   Master Users
                 </div>
@@ -108,36 +136,44 @@ export default function UserManagementPage() {
         <div className="p-6">
           <h3 className="text-lg font-semibold mb-6">Role Distribution</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <Shield className="h-5 w-5 text-purple-600" />
                 <span className="font-medium">Master</span>
               </div>
-              <Badge variant="secondary">12 users</Badge>
+              <Badge variant="secondary">
+                {stats.users?.breakdown?.master || 0} users
+              </Badge>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <Shield className="h-5 w-5 text-blue-600" />
                 <span className="font-medium">Administrator</span>
               </div>
-              <Badge variant="secondary">45 users</Badge>
+              <Badge variant="secondary">
+                {stats.users?.breakdown?.admin || 0} users
+              </Badge>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <GraduationCap className="h-5 w-5 text-green-600" />
                 <span className="font-medium">Teacher</span>
               </div>
-              <Badge variant="secondary">234 users</Badge>
+              <Badge variant="secondary">
+                {stats.users?.breakdown?.profesor || 0} users
+              </Badge>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
               <div className="flex items-center gap-3">
                 <Users className="h-5 w-5 text-orange-600" />
                 <span className="font-medium">Parent</span>
               </div>
-              <Badge variant="secondary">956 users</Badge>
+              <Badge variant="secondary">
+                {stats.users?.breakdown?.parent || 0} users
+              </Badge>
             </div>
           </div>
         </div>
@@ -171,6 +207,18 @@ export default function UserManagementPage() {
           </div>
         </div>
       </Card>
+    </>
+  );
+}
+
+export default function UserManagementPage() {
+  return (
+    <MasterPageTemplate
+      context="USER_MANAGEMENT"
+      errorContext="UserManagementPage"
+      fallbackContent={userManagementFallback}
+    >
+      <UserManagementContent />
     </MasterPageTemplate>
   );
 }

@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { dbLogger } from "@/lib/logger";
-import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 
 interface MasterPageTemplateProps {
   title: string;
@@ -69,8 +68,6 @@ export function MasterPageTemplate({
 
   return (
     <div className={containerClass}>
-      <RoleAwareHeader title={title} subtitle={subtitle} />
-
       <AdvancedErrorBoundary
         context={context}
         enableRetry={true}

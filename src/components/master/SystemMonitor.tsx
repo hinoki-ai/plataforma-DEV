@@ -93,18 +93,6 @@ export function SystemMonitor() {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            System Monitor
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Real-time system performance and health monitoring
-          </p>
-        </div>
-      </div>
-
       {/* Last Update */}
       <div className="text-sm text-muted-foreground">
         Last updated: {lastUpdate.toLocaleTimeString()}

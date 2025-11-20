@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -414,15 +413,9 @@ function SystemStatusCard() {
 }
 
 export function SystemConfigDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
       {/* System Config Header */}
-      <RoleAwareHeader />
-
-      {/* System Status */}
-      <SystemStatusCard />
 
       {/* Configuration Sections */}
       <div className="space-y-6">

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -459,15 +458,9 @@ function RoleAssignmentCard() {
 }
 
 export function RoleManagementDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
       {/* Role Management Header */}
-      <RoleAwareHeader />
-
-      {/* Role Overview */}
-      <RoleOverviewCard />
 
       {/* Management Sections */}
       <div className="space-y-6">

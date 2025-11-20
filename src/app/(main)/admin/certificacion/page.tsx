@@ -28,20 +28,6 @@ export default function CertificacionPage() {
   return (
     <PageTransition skeletonType="page" duration={700}>
       <div className="container mx-auto px-4 py-6 space-y-6">
-        {/* Header */}
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Shield className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <p className="text-muted-foreground">
-                {t("admin.certificacion.subtitle", "admin")}
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Tabs */}
         {currentUser && (
           <Tabs value={activeTab} onValueChange={setActiveTab}>

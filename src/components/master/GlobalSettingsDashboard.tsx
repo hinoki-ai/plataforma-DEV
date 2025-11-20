@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -386,8 +385,6 @@ function SystemHealthCard() {
 }
 
 export function GlobalSettingsDashboard() {
-  const { data: session } = useSession();
-
   const settingsByCategory = {
     system: globalSettings.filter((s) => s.category === "system"),
     security: globalSettings.filter((s) => s.category === "security"),
@@ -399,10 +396,6 @@ export function GlobalSettingsDashboard() {
   return (
     <div className="space-y-6 p-6">
       {/* Global Settings Header */}
-      <RoleAwareHeader />
-
-      {/* Settings Overview */}
-      <SettingsOverviewCard />
 
       {/* Settings Sections */}
       <div className="space-y-6">

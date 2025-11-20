@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import {
@@ -34,10 +33,6 @@ import {
   Network,
   Globe,
 } from "lucide-react";
-import {
-  RoleAwareBreadcrumb,
-  RoleAwareHeader,
-} from "@/components/layout/RoleAwareNavigation";
 
 interface GlobalNode {
   id: string;
@@ -404,16 +399,8 @@ function NetworkTopologyCard() {
 }
 
 export function GlobalOversightDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
-      {/* Global Oversight Header */}
-      <RoleAwareHeader
-        title="GLOBAL OVERSIGHT - SUPREME MONITORING"
-        subtitle={`Absolute global supervision - Architect ${session?.user?.name || "Master Developer"}`}
-      />
-
       {/* Global Metrics */}
       <GlobalMetricsCard />
 

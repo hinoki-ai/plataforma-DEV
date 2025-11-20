@@ -45,22 +45,6 @@ export function PlanningDashboard({
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1
-          className={`${typography.heading(isDesktopForced)} font-bold text-foreground`}
-        >
-          {t("planning.dashboard.title", "common")}
-        </h1>
-        <Button
-          asChild
-          className={isDesktopForced ? "h-12 px-8 text-base" : ""}
-        >
-          <Link href="/profesor/planificaciones/crear">
-            {t("planning.dashboard.new_button", "common")}
-          </Link>
-        </Button>
-      </div>
-
       <PlanningDocumentSearch />
 
       {documents.length === 0 ? (

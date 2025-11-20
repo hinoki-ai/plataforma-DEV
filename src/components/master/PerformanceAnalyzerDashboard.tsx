@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -405,15 +404,9 @@ function PerformanceReportsCard() {
 }
 
 export function PerformanceAnalyzerDashboard() {
-  const { data: session } = useSession();
-
   return (
     <div className="space-y-6 p-6">
       {/* Performance Analyzer Header */}
-      <RoleAwareHeader />
-
-      {/* Performance Overview */}
-      <PerformanceOverviewCard />
 
       {/* Performance Analysis Sections */}
       <div className="space-y-6">

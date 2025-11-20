@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSession } from "@/lib/auth-client";
 import {
   Card,
   CardContent,
@@ -31,10 +30,6 @@ import {
   Zap,
   AlertTriangle,
 } from "lucide-react";
-import {
-  RoleAwareBreadcrumb,
-  RoleAwareHeader,
-} from "@/components/layout/RoleAwareNavigation";
 import { DangerConfirmationDialog } from "@/components/ui/danger-confirmation-dialog";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
 import { dbLogger } from "@/lib/logger";
@@ -350,7 +345,6 @@ function DangerZoneHeader() {
 }
 
 export function AdvancedOperationsDashboard() {
-  const { data: session } = useSession();
   const [selectedOperation, setSelectedOperation] =
     useState<DangerousOperation | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
@@ -387,12 +381,6 @@ export function AdvancedOperationsDashboard() {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Advanced Operations Header */}
-      <RoleAwareHeader
-        title="ADVANCED OPERATIONS - SUPREME DANGER ZONE"
-        subtitle={`High-risk operations - Architect ${session?.user?.name || "Master Developer"}`}
-      />
-
       {/* Critical Warning */}
       <DangerZoneHeader />
 
