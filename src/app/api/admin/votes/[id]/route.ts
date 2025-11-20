@@ -3,6 +3,7 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { getServerSession } from "@/lib/server-auth";
 import { getAuthenticatedConvexClient } from "@/lib/convex-server";
+import { canAccessAdmin } from "@/lib/role-utils";
 
 export const runtime = "nodejs";
 
@@ -17,8 +18,8 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if user has admin role
-    if (session.user.role !== "ADMIN") {
+    // Check if user has admin access (MASTER or ADMIN role)
+    if (!canAccessAdmin(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
