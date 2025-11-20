@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "@clerk/nextjs";
-import { Send, X, Minimize2, Maximize2, MessageCircle } from "lucide-react";
+import { Send, X, Minimize2, Maximize2, Map } from "lucide-react";
 
 interface Message {
   id: string;
@@ -20,13 +20,24 @@ interface Message {
 interface JoshChatProps {
   isOpen: boolean;
   onToggle: () => void;
+  onMinimizeChange?: (minimized: boolean) => void;
+  onStartTour?: () => void;
+  getTourForContext?: (context: any) => string | null;
+  getPageContext?: () => any;
 }
 
 /**
  * Enhanced Josh Chat Interface
  * Provides conversational AI assistance with contextual help and guidance
  */
-export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
+export function JoshChat({ 
+  isOpen, 
+  onToggle,
+  onMinimizeChange,
+  onStartTour,
+  getTourForContext,
+  getPageContext: getPageContextProp,
+}: JoshChatProps) {
   const { resolvedTheme } = useTheme();
   const { t } = useDivineParsing();
   const { session } = useSession();
@@ -49,6 +60,10 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
   };
 
   const getPageContext = () => {
+    // Use provided context function if available, otherwise use local implementation
+    if (getPageContextProp) {
+      return getPageContextProp();
+    }
     const role = getUserRole();
     if (pathname.includes("/admin")) return { role: "admin", section: "admin" };
     if (pathname.includes("/profesor"))
@@ -363,8 +378,30 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
             </div>
           </div>
           <div className="flex items-center space-x-1">
+            {/* Tour button */}
+            {onStartTour && getTourForContext && getPageContextProp && (() => {
+              const context = getPageContext();
+              const tourId = getTourForContext(context);
+              return tourId ? (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onStartTour();
+                  }}
+                  className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
+                  aria-label={t("josh.tour.button.accessible", "Start interactive tour with Josh")}
+                  title={t("josh.tour.button", "Tour Interactivo")}
+                >
+                  <Map className="w-4 h-4" aria-hidden="true" />
+                </button>
+              ) : null;
+            })()}
             <button
-              onClick={() => setIsMinimized(!isMinimized)}
+              onClick={() => {
+                const newMinimized = !isMinimized;
+                setIsMinimized(newMinimized);
+                onMinimizeChange?.(newMinimized);
+              }}
               className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
               aria-label={
                 isMinimized

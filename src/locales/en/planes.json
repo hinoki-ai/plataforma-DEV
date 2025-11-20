@@ -34,6 +34,9 @@
       },
       "integral": {
         "description": "Up to 1,000 students"
+      },
+      "institucional": {
+        "description": "More than 1,000 students"
       }
     },
     "view_all_features": "View all features",

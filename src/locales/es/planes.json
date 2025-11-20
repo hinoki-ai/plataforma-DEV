@@ -25,6 +25,20 @@
   "pricing": {
     "select_plan": "Seleccionar Plan",
     "key_features": "Características Principales",
+    "plans": {
+      "esencial": {
+        "description": "Hasta 50 estudiantes"
+      },
+      "aula": {
+        "description": "Hasta 350 estudiantes"
+      },
+      "integral": {
+        "description": "Hasta 1.000 estudiantes"
+      },
+      "institucional": {
+        "description": "Más de 1.000 estudiantes"
+      }
+    },
     "view_all_features": "Ver todas las características",
     "hide_all_features": "Ocultar detalles completos",
     "platform": "Plataforma",
