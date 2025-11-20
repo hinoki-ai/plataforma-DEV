@@ -270,10 +270,10 @@ export default function PreciosPage() {
                   )}
 
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-2xl font-bold text-foreground min-h-[3rem] flex items-center justify-center text-center">
+                    <CardTitle className="text-2xl font-bold text-foreground min-h-[3rem] flex items-center justify-center text-center w-full">
                       {plan.name}
                     </CardTitle>
-                    <CardDescription className="text-muted-foreground text-sm font-medium mt-2">
+                    <CardDescription className="text-muted-foreground text-sm font-medium mt-2 text-center w-full">
                       {tp(`pricing.plans.${plan.id}.description`)}
                     </CardDescription>
 

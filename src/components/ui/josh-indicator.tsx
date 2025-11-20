@@ -373,7 +373,7 @@ export function JoshIndicator() {
               <motion.img
                 src={joshImage}
                 alt={t("josh.alt", "Josh - Educational Assistant")}
-                className="w-20 h-20 cursor-pointer"
+                className="w-20 h-20 cursor-pointer object-contain"
                 role="button"
                 tabIndex={0}
                 aria-label={t(

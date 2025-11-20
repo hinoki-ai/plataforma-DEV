@@ -47,6 +47,7 @@ class DeploymentManager {
 
   log(message, emoji = "📝") {
     const timestamp = new Date().toISOString();
+    console.log(`${emoji} [${timestamp}] ${message}`);
   }
 
   error(message) {

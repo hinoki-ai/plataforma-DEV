@@ -150,6 +150,20 @@ const planesESInline = {
     virtual_meetings_per_month: "reuniones virtuales/mes",
     support_label: "Soporte",
     sla_availability: "SLA {sla} disponibilidad",
+    plans: {
+      esencial: {
+        description: "Hasta 50 estudiantes",
+      },
+      aula: {
+        description: "Hasta 350 estudiantes",
+      },
+      integral: {
+        description: "Hasta 1.000 estudiantes",
+      },
+      institucional: {
+        description: "Más de 1.000 estudiantes",
+      },
+    },
   },
   comparison: {
     title: "Comparación Detallada de Planes",
@@ -368,6 +382,20 @@ const planesENInline = {
     virtual_meetings_per_month: "virtual meetings/month",
     support_label: "Support",
     sla_availability: "SLA {sla} availability",
+    plans: {
+      esencial: {
+        description: "Up to 50 students",
+      },
+      aula: {
+        description: "Up to 350 students",
+      },
+      integral: {
+        description: "Up to 1,000 students",
+      },
+      institucional: {
+        description: "More than 1,000 students",
+      },
+    },
   },
   comparison: {
     title: "Detailed Plan Comparison",

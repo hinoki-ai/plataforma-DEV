@@ -358,51 +358,54 @@ export function JoshChat({
         aria-describedby="josh-chat-description"
       >
         {/* Header */}
-        <header className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-tl-lg">
-          <div className="flex items-center space-x-2">
+        <header className="flex items-center justify-between p-3 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
+          <div className="flex items-center space-x-2 flex-1 min-w-0">
             <motion.img
               src={joshImage}
               alt=""
-              className="w-8 h-8 rounded-full border-2 border-white"
+              className="w-8 h-8 rounded-full border-2 border-white object-contain flex-shrink-0"
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               aria-hidden="true"
             />
-            <div>
-              <h3 id="josh-chat-title" className="font-semibold text-sm">
+            <div className="min-w-0">
+              <h3 id="josh-chat-title" className="font-semibold text-sm truncate">
                 Josh
               </h3>
-              <p id="josh-chat-description" className="text-xs opacity-90">
+              <p id="josh-chat-description" className="text-xs opacity-90 truncate">
                 Tu asistente educativo
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-1">
-            {/* Tour button */}
-            {onStartTour && getTourForContext && getPageContextProp && (() => {
+          <div className="flex items-center space-x-1.5 flex-shrink-0">
+            {/* Tour button - Always show if tour is available */}
+            {(() => {
+              if (!onStartTour || !getTourForContext || !getPageContextProp) return null;
               const context = getPageContext();
               const tourId = getTourForContext(context);
-              return tourId ? (
+              if (!tourId) return null;
+              return (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onStartTour();
                   }}
-                  className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
+                  className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
                   aria-label={t("josh.tour.button.accessible", "Start interactive tour with Josh")}
                   title={t("josh.tour.button", "Tour Interactivo")}
                 >
                   <Map className="w-4 h-4" aria-hidden="true" />
                 </button>
-              ) : null;
+              );
             })()}
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 const newMinimized = !isMinimized;
                 setIsMinimized(newMinimized);
                 onMinimizeChange?.(newMinimized);
               }}
-              className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
+              className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
               aria-label={
                 isMinimized
                   ? t("josh.chat.maximize", "Maximizar chat")
@@ -421,8 +424,11 @@ export function JoshChat({
               )}
             </button>
             <button
-              onClick={onToggle}
-              className="p-1 hover:bg-white/20 rounded transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggle();
+              }}
+              className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
               aria-label={t("josh.chat.close", "Cerrar chat")}
               title={t("josh.chat.close", "Cerrar chat")}
             >
@@ -438,7 +444,7 @@ export function JoshChat({
               initial={{ height: 0 }}
               animate={{ height: "auto" }}
               exit={{ height: 0 }}
-              className="flex-1 overflow-hidden"
+              className="flex-1 overflow-hidden rounded-b-lg"
             >
               <div className="h-full flex flex-col">
                 <div
