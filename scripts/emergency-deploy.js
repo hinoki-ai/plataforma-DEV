@@ -18,7 +18,6 @@ class EmergencyDeployer {
 
   log(message, emoji = "📝") {
     const timestamp = new Date().toISOString();
-    console.log(`${emoji} [${timestamp}] ${message}`);
   }
 
   error(message) {
@@ -80,17 +79,6 @@ class EmergencyDeployer {
 
   async emergencyConfirmation(driftDetected) {
     if (driftDetected) {
-      this.error("⚠️  WARNING: Production drift detected!");
-      this.error("Production contains uncommitted changes.");
-      console.log("\nOptions:");
-      console.log("  1. Cancel deployment (recommended)");
-      console.log("  2. Force deploy anyway (dangerous)");
-      console.log("  3. Create backup and deploy");
-    } else {
-      console.log("\nEmergency deployment ready:");
-      console.log("  1. Cancel");
-      console.log("  2. Proceed with deployment");
-      console.log("  3. Create backup and deploy");
     }
 
     if (!this.force) {
@@ -106,18 +94,13 @@ class EmergencyDeployer {
           const choice = answer.toLowerCase().trim();
 
           if (choice === "1" || choice === "cancel") {
-            this.log("Deployment cancelled by user", "❌");
             process.exit(0);
           } else if (choice === "2") {
-            this.warning("Proceeding with deployment...");
             resolve(true);
           } else if (choice === "3") {
-            this.warning(
-              "Backup creation not yet implemented, proceeding with deployment...",
-            );
+            // TODO: Implement backup creation
             resolve(true);
           } else {
-            this.log("Invalid choice, cancelling", "❌");
             process.exit(0);
           }
         });
@@ -181,3 +164,4 @@ if (require.main === module) {
 }
 
 module.exports = { EmergencyDeployer };
+
