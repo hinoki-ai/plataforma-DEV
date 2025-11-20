@@ -46,7 +46,6 @@ import {
   EyeOff,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -420,13 +419,7 @@ export function SystemConfigDashboard() {
   return (
     <div className="space-y-6 p-6">
       {/* System Config Header */}
-      <RoleAwareHeader
-        actions={
-          <div className="flex items-center gap-4">
-            <RoleIndicator role="MASTER" />
-          </div>
-        }
-      />
+      <RoleAwareHeader />
 
       {/* System Status */}
       <SystemStatusCard />

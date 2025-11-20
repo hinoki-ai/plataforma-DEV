@@ -39,8 +39,8 @@ const systemOverviewFallback = (
 export default function SystemOverviewPage() {
   return (
     <MasterPageTemplate
-      title="🔍 System Overview"
-      subtitle="Comprehensive system monitoring and performance analytics"
+      title=""
+      subtitle=""
       context="SYSTEM_OVERVIEW"
       errorContext="SystemOverviewPage"
       fallbackContent={systemOverviewFallback}

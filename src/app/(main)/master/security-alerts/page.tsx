@@ -30,8 +30,8 @@ const securityAlertsFallback = (
 export default function SecurityAlertsPage() {
   return (
     <MasterPageTemplate
-      title="🛡️ Security Alerts"
-      subtitle="Real-time security monitoring and threat detection"
+      title=""
+      subtitle=""
       context="🛡️ Security Alerts"
       errorContext="SecurityAlertsPage"
       fallbackContent={securityAlertsFallback}

@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AlertTriangle, Flame, Power, Lock, Skull } from "lucide-react";
-import { RoleIndicator } from "@/components/layout/RoleAwareNavigation";
 import { MasterPageTemplate } from "./MasterPageTemplate";
 import { MasterStatusIndicator } from "./MasterStatusIndicator";
 import { GodModeStatusCard } from "./GodModeStatusCard";

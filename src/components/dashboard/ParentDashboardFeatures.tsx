@@ -215,22 +215,12 @@ export default function ParentDashboardFeatures() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Panel de Apoderados
-          </h1>
-          <p className="text-muted-foreground">
-            Monitoreo académico y comunicación con la escuela
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/parent/settings">
-            <Settings className="h-4 w-4 mr-2" />
-            Configuración
-          </Link>
-        </Button>
-      </div>
+      <Button asChild>
+        <Link href="/parent/settings">
+          <Settings className="h-4 w-4 mr-2" />
+          Configuración
+        </Link>
+      </Button>
 
       <Tabs
         value={activeTab}

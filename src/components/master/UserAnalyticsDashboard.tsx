@@ -36,7 +36,6 @@ import {
   Download,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -396,13 +395,10 @@ export function UserAnalyticsDashboard() {
       {/* User Analytics Header */}
       <RoleAwareHeader
         actions={
-          <div className="flex items-center gap-4">
-            <RoleIndicator role="MASTER" />
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Exportar Reporte
-            </Button>
-          </div>
+          <Button variant="outline" size="sm">
+            <Download className="h-4 w-4 mr-2" />
+            Exportar Reporte
+          </Button>
         }
       />
 

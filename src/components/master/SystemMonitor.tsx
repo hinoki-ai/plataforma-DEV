@@ -8,11 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
-  Activity,
   Cpu,
   HardDrive,
   Wifi,
@@ -105,10 +103,6 @@ export function SystemMonitor() {
             Real-time system performance and health monitoring
           </p>
         </div>
-        <Badge variant="outline" className="text-green-600 border-green-600">
-          <Activity className="h-3 w-3 mr-1" />
-          All Systems Operational
-        </Badge>
       </div>
 
       {/* Last Update */}

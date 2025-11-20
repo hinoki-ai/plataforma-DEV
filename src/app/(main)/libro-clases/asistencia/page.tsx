@@ -112,9 +112,6 @@ export default async function LibroClasesAttendancePage() {
             Módulo de asistencia digital
           </Badge>
           <div className="space-y-4 md:max-w-3xl">
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Control de asistencia trazable para toda la comunidad escolar
-            </h1>
             <p className="text-lg text-muted-foreground md:text-xl">
               Registra asistencia, atrasos, justificativos y retiros en tiempo
               real. Todas las acciones quedan documentadas y listas para
@@ -156,9 +153,6 @@ export default async function LibroClasesAttendancePage() {
           <Badge variant="outline" className="text-sm">
             Impacto directo
           </Badge>
-          <h2 className="text-2xl font-semibold md:text-3xl">
-            Reduce ausentismo y mejora la respuesta ante eventualidades
-          </h2>
           <p className="text-muted-foreground md:text-lg">
             Un módulo diseñado junto a equipos de inspectoría y convivencia
             escolar.
@@ -182,9 +176,6 @@ export default async function LibroClasesAttendancePage() {
           <Badge variant="secondary" className="text-sm">
             Flujos operativos
           </Badge>
-          <h2 className="text-2xl font-semibold md:text-3xl">
-            Cada actor tiene una vista focalizada
-          </h2>
           <p className="text-muted-foreground md:text-lg">
             Implementamos procesos simples para registrar, justificar y
             monitorear asistencia desde cualquier dispositivo.
@@ -213,10 +204,6 @@ export default async function LibroClasesAttendancePage() {
       </section>
 
       <section className="rounded-3xl border border-primary/20 bg-primary/5 p-8 text-center md:p-12">
-        <h2 className="text-2xl font-semibold md:text-3xl">
-          Controla asistencia con la misma plataforma que gestiona
-          calificaciones y convivencia
-        </h2>
         <p className="mx-auto mt-3 max-w-2xl text-muted-foreground md:text-lg">
           Libera planillas manuales, evita reprocesos y entrega información al
           instante a quienes toman decisiones.

@@ -353,16 +353,6 @@ export default function AdminVotesPage() {
 
   return (
     <div className="w-full px-4 py-8 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          {t("admin.votaciones.title", "common")}
-        </h1>
-        <p className="text-gray-600">
-          {t("admin.votaciones.description", "common")}
-        </p>
-      </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <Card>

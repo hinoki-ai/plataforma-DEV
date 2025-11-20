@@ -15,9 +15,6 @@ export default function CalendarioEscolarProfesorPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
             <CalendarDays className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            {t("profesor.calendar.title")}
-          </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("profesor.calendar.description")}
           </p>

@@ -37,102 +37,37 @@ export default async function AdminDebugNavigationPage() {
     <div className="w-full px-4 py-8 sm:px-6 lg:px-8">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Enhanced Debug Panel</h1>
-        <p className="text-muted-foreground mt-2">
-          Comprehensive system monitoring and debugging tools for
-          administrators.
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Enhanced Debug Panel
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
+          Advanced debugging and monitoring dashboard for MASTER administrators
         </p>
       </div>
 
-      {/* System Overview */}
-      <div className="mb-8">
-        <Suspense
-          fallback={<div className="h-32 bg-muted animate-pulse rounded-lg" />}
-        >
+      {/* Debug Components */}
+      <div className="space-y-6">
+        <Suspense fallback={<div>Loading debug panel...</div>}>
+          <EnhancedDebugPanel />
+        </Suspense>
+
+        <Suspense fallback={<div>Loading system health...</div>}>
           <SystemHealthMonitor />
         </Suspense>
-      </div>
 
-      {/* Debug Panels Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Performance Monitoring */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle>Performance Metrics</CardTitle>
-            <CardDescription>
-              Real-time performance monitoring and optimization insights
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Suspense
-              fallback={<div className="h-64 bg-muted animate-pulse rounded" />}
-            >
-              <PerformanceMonitor />
-            </Suspense>
-          </CardContent>
-        </Card>
+        <Suspense fallback={<div>Loading performance monitor...</div>}>
+          <PerformanceMonitor />
+        </Suspense>
 
-        {/* Error Tracking */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle>Error Tracking</CardTitle>
-            <CardDescription>
-              Monitor and analyze system errors and exceptions
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Suspense
-              fallback={<div className="h-64 bg-muted animate-pulse rounded" />}
-            >
-              <ErrorTracker />
-            </Suspense>
-          </CardContent>
-        </Card>
-      </div>
+        <Suspense fallback={<div>Loading error tracker...</div>}>
+          <ErrorTracker />
+        </Suspense>
 
-      {/* Session Analytics */}
-      <div className="mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Session Analytics</CardTitle>
-            <CardDescription>
-              User session tracking and behavior analysis
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Suspense
-              fallback={<div className="h-64 bg-muted animate-pulse rounded" />}
-            >
-              <SessionAnalytics />
-            </Suspense>
-          </CardContent>
-        </Card>
-      </div>
+        <Suspense fallback={<div>Loading session analytics...</div>}>
+          <SessionAnalytics />
+        </Suspense>
 
-      {/* Enhanced Debug Panel */}
-      <div className="mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Advanced Debug Console</CardTitle>
-            <CardDescription>
-              Interactive debugging interface with real-time monitoring
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Suspense
-              fallback={<div className="h-96 bg-muted animate-pulse rounded" />}
-            >
-              <EnhancedDebugPanel />
-            </Suspense>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Divine Oracle Debug Panel */}
-      <div className="mb-8">
-        <Suspense
-          fallback={<div className="h-32 bg-muted animate-pulse rounded" />}
-        >
+        <Suspense fallback={<div>Loading debug panel...</div>}>
           <DebugPanel />
         </Suspense>
       </div>

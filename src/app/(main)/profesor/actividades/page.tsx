@@ -161,9 +161,6 @@ function ActividadesContent() {
     return (
       <div className="space-y-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            {t("profesor.activities.title", "Actividades")}
-          </h1>
           <p className="text-muted-foreground">
             {t(
               "profesor.activities.description",
@@ -209,9 +206,6 @@ function ActividadesContent() {
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              {t("profesor.activities.title", "Actividades")}
-            </h1>
             <p className="text-muted-foreground">
               {t(
                 "profesor.activities.description",

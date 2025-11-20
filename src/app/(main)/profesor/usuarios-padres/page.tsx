@@ -204,9 +204,6 @@ function UsuariosPadresContent() {
     return (
       <div className="space-y-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            Usuarios Padres
-          </h1>
           <p className="text-muted-foreground">
             Gestiona los usuarios padres registrados en el sistema
           </p>
@@ -242,9 +239,6 @@ function UsuariosPadresContent() {
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              {t("profesor.usuarios_padres.title", "profesor")}
-            </h1>
             <p className="text-muted-foreground">
               {t("profesor.usuarios_padres.description", "profesor")}
             </p>

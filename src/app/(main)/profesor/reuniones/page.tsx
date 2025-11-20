@@ -14,9 +14,6 @@ export default function ReunionesPage() {
     <PageTransition skeletonType="page" duration={700}>
       <div className="space-y-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">
-            {t("profesor.reuniones.title")}
-          </h1>
           <p className="mt-2 text-muted-foreground">
             {t("profesor.reuniones.description")}
           </p>

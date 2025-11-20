@@ -39,9 +39,6 @@ export default async function EditarPlanificacionPage({ params }: Props) {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              {t("profesor.planning.edit", "profesor")}
-            </h1>
             <p className="text-muted-foreground mt-1">{doc.title}</p>
           </div>
         </div>

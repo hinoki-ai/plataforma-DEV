@@ -25,9 +25,6 @@ export default function CrearPlanificacionPage() {
               {t("profesor.planning.back")}
             </Button>
           </Link>
-          <h1 className="text-3xl font-bold text-foreground">
-            {t("profesor.planning.new")}
-          </h1>
         </div>
 
         <PlanningDocumentForm action={createPlanningDocumentAction} />

@@ -85,9 +85,6 @@ export default function SettingsPage() {
       <div className="space-y-6">
         {/* Header Section */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-4">
-            {t("settings.title", "common")}
-          </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("settings.description", "common")}
           </p>

@@ -21,9 +21,6 @@ export default function CalendarioEscolarAdminPage() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
                 <CalendarDays className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
-                {t("admin.calendario.title", "admin")}
-              </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 {t("admin.calendario.description", "admin")}
               </p>
@@ -35,9 +32,6 @@ export default function CalendarioEscolarAdminPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-2">
-                {t("admin.calendario.panel_title", "admin")}
-              </h2>
               <p className="text-muted-foreground">
                 {t("admin.calendario.panel_description", "admin")}
               </p>

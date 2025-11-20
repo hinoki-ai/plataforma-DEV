@@ -100,44 +100,6 @@ export default function AdminEstudiantesPage() {
     <RoleGuard roles={["ADMIN", "MASTER", "PROFESOR", "PARENT"]}>
       <PageTransition>
         <div className="space-y-6">
-          <RoleAwareHeader
-            title={pageTitle}
-            subtitle={pageSubtitle}
-            actions={
-              <div className="flex gap-2 items-center">
-                <select
-                  value={selectedYear || ""}
-                  onChange={(e) =>
-                    setSelectedYear(
-                      e.target.value ? parseInt(e.target.value) : undefined,
-                    )
-                  }
-                  className="px-3 py-2 border border-input rounded-md bg-background text-sm"
-                  aria-label={t(
-                    "admin.libro_clases.estudiantes.year_label",
-                    "admin",
-                  )}
-                  title={t(
-                    "admin.libro_clases.estudiantes.year_label",
-                    "admin",
-                  )}
-                >
-                  <option value="">
-                    {t("admin.libro_clases.estudiantes.year_all", "admin")}
-                  </option>
-                  {Array.from({ length: 5 }, (_, i) => {
-                    const year = new Date().getFullYear() - i;
-                    return (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-            }
-          />
-
           <StudentManagement
             courses={displayCourses}
             allStudents={displayStudents}

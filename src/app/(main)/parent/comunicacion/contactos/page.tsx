@@ -163,9 +163,6 @@ export default function ContactosPage() {
                 Volver
               </Link>
             </Button>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Directorio de Contactos
-            </h1>
             <p className="text-muted-foreground">
               Encuentra y contacta al personal del establecimiento educativo
             </p>

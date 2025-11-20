@@ -102,9 +102,6 @@ function RecursosContent() {
     return (
       <div className="space-y-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            {t("profesor.resources.title")}
-          </h1>
           <p className="text-muted-foreground">
             {t("profesor.resources.description")}
           </p>
@@ -144,9 +141,6 @@ function RecursosContent() {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          {t("profesor.resources.title")}
-        </h1>
         <p className="text-muted-foreground">
           {t("profesor.resources.description")}
         </p>
@@ -193,9 +187,6 @@ function RecursosContent() {
               {t("profesor.recursos.back_categories", "profesor")}
             </Button>
             <div>
-              <h2 className="text-2xl font-bold text-foreground">
-                {selectedResource?.title}
-              </h2>
               <p className="text-muted-foreground">
                 {selectedResource?.description}
               </p>

@@ -114,9 +114,6 @@ export default async function LibroClasesLandingPage() {
             <Badge variant="secondary" className="w-fit text-sm">
               Libro de Clases Digital Certificado
             </Badge>
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Control académico integral alineado con normativa chilena
-            </h1>
             <p className="text-lg text-muted-foreground md:text-xl">
               Centraliza asistencia, calificaciones, contenidos y observaciones
               en un solo panel. Diseñado para cumplir con las exigencias del
@@ -169,9 +166,6 @@ export default async function LibroClasesLandingPage() {
           </Badge>
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold md:text-3xl">
-                Cada rol accede a la misma verdad institucional
-              </h2>
               <p className="text-muted-foreground md:text-lg">
                 Flujos diseñados para directivos, docentes y familias con
                 accesos controlados.
@@ -219,9 +213,6 @@ export default async function LibroClasesLandingPage() {
           <Badge variant="secondary" className="text-sm">
             Marco normativo chileno
           </Badge>
-          <h2 className="text-2xl font-semibold md:text-3xl">
-            Cumplimiento garantizado en inspecciones y supervisiones
-          </h2>
           <p className="text-muted-foreground md:text-lg">
             Diseñamos cada módulo junto a equipos UTP e inspectoría para
             asegurar trazabilidad en auditorías y cierres de año escolar.
@@ -275,9 +266,6 @@ export default async function LibroClasesLandingPage() {
       </section>
 
       <section className="rounded-3xl border bg-muted/20 p-8 text-center md:p-12">
-        <h2 className="text-2xl font-semibold md:text-3xl">
-          Listo para modernizar el libro de clases de tu institución?
-        </h2>
         <p className="mx-auto mt-3 max-w-2xl text-muted-foreground md:text-lg">
           Agenda una demostración personalizada y descubre cómo centralizar
           gestión académica, convivencia escolar y comunicación con familias.

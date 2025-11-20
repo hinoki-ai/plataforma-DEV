@@ -76,7 +76,7 @@ const quickActions: Record<UserRole, QuickAction[]> = {
   MASTER: [
     {
       id: "supreme-control",
-      title: "🏛️ Supreme Control",
+      title: "Supreme Control",
       description: "Panel de control absoluto",
       icon: Crown,
       href: "/master",
@@ -511,7 +511,7 @@ export function RoleAwareDashboard() {
         <RoleBasedComponent
           master={
             <DashboardCard
-              title="🏛️ Estado del Sistema Supremo"
+              title="Estado del Sistema Supremo"
               description="Monitoreo absoluto del sistema"
             >
               <div className="space-y-4">
@@ -737,7 +737,7 @@ export function RoleAwareDashboard() {
 
             {/* Votaciones Section */}
             <DashboardCard
-              title="🗳️ Votaciones"
+              title="Votaciones"
               description="Participa en decisiones escolares"
             >
               <div className="space-y-4">

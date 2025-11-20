@@ -173,38 +173,28 @@ export default function ParentAnalytics() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Analytics Avanzados
-          </h2>
-          <p className="text-muted-foreground">
-            Métricas detalladas del progreso académico y comportamiento
-          </p>
-        </div>
-        <div className="flex space-x-2">
-          <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="week">Semana</SelectItem>
-              <SelectItem value="month">Mes</SelectItem>
-              <SelectItem value="quarter">Trimestre</SelectItem>
-              <SelectItem value="year">Año</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={selectedStudent} onValueChange={setSelectedStudent}>
-            <SelectTrigger className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los estudiantes</SelectItem>
-              <SelectItem value="maria">María González</SelectItem>
-              <SelectItem value="juan">Juan Pérez</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="flex space-x-2">
+        <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+          <SelectTrigger className="w-32">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="week">Semana</SelectItem>
+            <SelectItem value="month">Mes</SelectItem>
+            <SelectItem value="quarter">Trimestre</SelectItem>
+            <SelectItem value="year">Año</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={selectedStudent} onValueChange={setSelectedStudent}>
+          <SelectTrigger className="w-40">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos los estudiantes</SelectItem>
+            <SelectItem value="maria">María González</SelectItem>
+            <SelectItem value="juan">Juan Pérez</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Key Metrics */}

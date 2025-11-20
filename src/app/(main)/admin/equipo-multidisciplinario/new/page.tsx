@@ -27,9 +27,6 @@ export default function NewTeamMemberPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              {t("admin.equipo.new.title", "admin")}
-            </h1>
             <p className="text-muted-foreground">
               {t("admin.equipo.new.description", "admin")}
             </p>

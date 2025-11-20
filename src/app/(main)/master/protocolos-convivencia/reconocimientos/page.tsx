@@ -41,9 +41,6 @@ function ReconocimientosMasterContent() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Master Control - Recognitions
-            </h1>
             <p className="text-muted-foreground mt-2">
               Sistema global de reconocimientos y premios en todas las
               instituciones

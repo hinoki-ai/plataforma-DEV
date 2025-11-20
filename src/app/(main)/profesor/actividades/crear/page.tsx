@@ -187,9 +187,6 @@ function CrearActividadContent() {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver
         </Button>
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Crear Nueva Actividad
-        </h1>
         <p className="text-muted-foreground">
           Completa la información para crear una nueva actividad educativa
         </p>

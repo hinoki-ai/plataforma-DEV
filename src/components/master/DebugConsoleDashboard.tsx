@@ -46,7 +46,6 @@ import {
   Globe,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -442,13 +441,7 @@ export function DebugConsoleDashboard() {
   return (
     <div className="space-y-6 p-6">
       {/* Debug Console Header */}
-      <RoleAwareHeader
-        actions={
-          <div className="flex items-center gap-4">
-            <RoleIndicator role="MASTER" />
-          </div>
-        }
-      />
+      <RoleAwareHeader />
 
       {/* Debug Tools Sections */}
       <div className="space-y-6">

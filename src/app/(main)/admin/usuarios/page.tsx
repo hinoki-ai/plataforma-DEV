@@ -233,9 +233,6 @@ export default function UsersPage() {
     <PageTransition skeletonType="page" duration={700}>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            {t("users.management.title", "common")}
-          </h1>
           <p className="text-muted-foreground">
             {t("users.management.description", "common")}
           </p>

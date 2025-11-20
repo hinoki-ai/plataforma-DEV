@@ -124,10 +124,6 @@ function ReconocimientosAdminContent() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Gestión de{" "}
-              {t("nav.protocolos_convivencia.reconocimientos", "navigation")}
-            </h1>
             <p className="text-muted-foreground mt-2">
               Administración del sistema de reconocimientos y premios
             </p>

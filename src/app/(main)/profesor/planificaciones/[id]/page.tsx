@@ -46,9 +46,6 @@ export default async function PlanificacionDetailPage({ params }: Props) {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">
-                {doc.title}
-              </h1>
               <p className="text-muted-foreground mt-1">
                 {doc.subject} • {doc.grade}
               </p>

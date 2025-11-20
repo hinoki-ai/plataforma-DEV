@@ -105,9 +105,6 @@ function ProtocolosComportamientoParentContent() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              {t("nav.protocolos_convivencia", "navigation")}
-            </h1>
             <p className="text-muted-foreground mt-2">
               {t("parent.protocols.page_description")}
             </p>

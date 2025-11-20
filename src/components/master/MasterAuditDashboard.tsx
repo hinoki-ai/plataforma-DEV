@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -28,8 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import {
-  Eye,
   Search,
   Filter,
   Download,
@@ -45,9 +44,9 @@ import {
   Activity,
   Calendar,
   Users,
+  Eye,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -501,17 +500,8 @@ export function MasterAuditDashboard() {
     <div className="space-y-6 p-6">
       {/* Master Audit Header */}
       <RoleAwareHeader
-        title="📋 MASTER AUDIT - SUPREME AUDIT LOGS"
+        title="MASTER AUDIT - SUPREME AUDIT LOGS"
         subtitle={`Auditoría completa del sistema - Arquitecto ${session?.user?.name || "Master Developer"}`}
-        actions={
-          <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-blue-600 border-blue-600">
-              <Eye className="h-3 w-3 mr-1" />
-              MASTER AUDIT
-            </Badge>
-            <RoleIndicator role="MASTER" />
-          </div>
-        }
       />
 
       {/* Audit Stats */}

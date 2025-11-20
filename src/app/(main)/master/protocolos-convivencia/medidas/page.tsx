@@ -76,9 +76,6 @@ function MedidasMasterContent() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Master Control - Measures
-            </h1>
             <p className="text-muted-foreground mt-2">
               Global management and analytics of corrective measures
             </p>

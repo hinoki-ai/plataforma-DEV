@@ -59,9 +59,6 @@ export default async function ParentReunionesPage() {
                   />
                 </svg>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
-                {t("parent.meetings.page_title")}
-              </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 {t("parent.meetings.page_description")}
               </p>

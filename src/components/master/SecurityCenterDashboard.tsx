@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,6 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import {
   Shield,
   AlertTriangle,
@@ -49,7 +49,6 @@ import {
   Target,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -492,17 +491,8 @@ export function SecurityCenterDashboard() {
     <div className="space-y-6 p-6">
       {/* Security Center Header */}
       <RoleAwareHeader
-        title="🛡️ SECURITY CENTER - SUPREME SECURITY AUTHORITY"
+        title="SECURITY CENTER - SUPREME SECURITY AUTHORITY"
         subtitle={`Centro de seguridad absoluto - Arquitecto ${session?.user?.name || "Master Developer"}`}
-        actions={
-          <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-red-600 border-red-600">
-              <Shield className="h-3 w-3 mr-1" />
-              SECURITY CENTER
-            </Badge>
-            <RoleIndicator role="MASTER" />
-          </div>
-        }
       />
 
       {/* Security Overview */}

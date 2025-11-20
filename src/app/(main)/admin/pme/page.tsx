@@ -319,13 +319,6 @@ export default function AdminPMEPage() {
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-                PME - Control Administrativo Total
-                <Badge className="bg-yellow-100 text-yellow-800 gap-1">
-                  <Shield className="w-3 h-3" />
-                  ADMIN
-                </Badge>
-              </h1>
               <p className="text-muted-foreground">
                 Gestión completa de todos los Planes de Mejoramiento Educativo •
                 Control total sobre {adminStats.totalTeachers} profesores

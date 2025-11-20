@@ -187,9 +187,6 @@ export default function ArchivoPage() {
                 Volver
               </Link>
             </Button>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Archivo de Mensajes
-            </h1>
             <p className="text-muted-foreground">
               Accede a tus mensajes archivados organizados por fecha y categoría
             </p>

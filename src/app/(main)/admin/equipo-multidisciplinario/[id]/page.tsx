@@ -49,9 +49,6 @@ export default async function EditTeamMemberPage({
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Editar miembro del equipo
-            </h1>
             <p className="text-muted-foreground">
               Actualiza los datos y la visibilidad de este profesional.
             </p>

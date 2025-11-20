@@ -155,9 +155,6 @@ function ProtocolosComportamientoMasterContent() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Behavior Protocols - Master Control
-            </h1>
             <p className="text-muted-foreground mt-2">
               Global supervision of the behavior system across all institutions
             </p>

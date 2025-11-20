@@ -112,9 +112,6 @@ const _AdminErrorFallback: React.ComponentType<{
       <Card className="max-w-md w-full border-red-200 bg-red-50 dark:bg-red-950/20">
         <div className="p-6 text-center space-y-4">
           <Shield className="h-16 w-16 mx-auto text-red-600" />
-          <h2 className="text-xl font-bold text-red-800 dark:text-red-200">
-            System Error
-          </h2>
           <p className="text-red-700 dark:text-red-300">
             Administration system encountered a critical error. Please try
             again.
@@ -142,9 +139,6 @@ export default function AdvancedAdminPage() {
         <div className="min-h-screen flex items-center justify-center bg-background">
           <Card className="p-8 text-center border-red-200 bg-red-50 dark:bg-red-950/20">
             <Shield className="h-16 w-16 mx-auto text-red-600 mb-4" />
-            <h2 className="text-2xl font-bold text-red-800 dark:text-red-200 mb-2">
-              Access Denied
-            </h2>
             <p className="text-red-700 dark:text-red-300">
               Only MASTER administrators can access Advanced Administration.
             </p>

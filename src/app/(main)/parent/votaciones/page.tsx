@@ -263,9 +263,6 @@ function VotacionesContent() {
     return (
       <div className="space-y-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            {t("parent.voting.page_title")}
-          </h1>
           <p className="text-muted-foreground">
             {t("parent.voting.page_description")}
           </p>
@@ -302,9 +299,6 @@ function VotacionesContent() {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          {t("parent.voting.page_title")}
-        </h1>
         <p className="text-muted-foreground">
           {t("parent.voting.page_description")}
         </p>

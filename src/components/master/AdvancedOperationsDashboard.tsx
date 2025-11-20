@@ -9,12 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import {
-  AlertTriangle,
   Database,
   Key,
   Server,
@@ -30,11 +28,10 @@ import {
   Upload,
   Shield,
   Settings,
-  Crown,
   Zap,
+  AlertTriangle,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -392,27 +389,8 @@ export function AdvancedOperationsDashboard() {
     <div className="space-y-6 p-6">
       {/* Advanced Operations Header */}
       <RoleAwareHeader
-        title="⚠️ ADVANCED OPERATIONS - SUPREME DANGER ZONE"
+        title="ADVANCED OPERATIONS - SUPREME DANGER ZONE"
         subtitle={`High-risk operations - Architect ${session?.user?.name || "Master Developer"}`}
-        actions={
-          <div className="flex items-center gap-4">
-            <Badge
-              variant="destructive"
-              className="text-white bg-red-600 border-red-600 animate-pulse"
-            >
-              <AlertTriangle className="h-3 w-3 mr-1" />
-              DANGER ZONE
-            </Badge>
-            <Badge
-              variant="outline"
-              className="text-purple-600 border-purple-600"
-            >
-              <Crown className="h-3 w-3 mr-1" />
-              SUPREME AUTHORITY
-            </Badge>
-            <RoleIndicator role="MASTER" />
-          </div>
-        }
       />
 
       {/* Critical Warning */}

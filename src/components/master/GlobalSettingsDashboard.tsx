@@ -39,7 +39,6 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -400,13 +399,7 @@ export function GlobalSettingsDashboard() {
   return (
     <div className="space-y-6 p-6">
       {/* Global Settings Header */}
-      <RoleAwareHeader
-        actions={
-          <div className="flex items-center gap-4">
-            <RoleIndicator role="MASTER" />
-          </div>
-        }
-      />
+      <RoleAwareHeader />
 
       {/* Settings Overview */}
       <SettingsOverviewCard />

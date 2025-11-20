@@ -32,7 +32,7 @@ export default function InstitutionSettingsPage() {
   return (
     <MasterPageTemplate
       title={`Configuración - ${institution.name}`}
-      subtitle="Detalles de la institución"
+      subtitle=""
       context="MASTER_INSTITUTION_SETTINGS"
     >
       <Card className="border-blue-200 dark:border-blue-800">

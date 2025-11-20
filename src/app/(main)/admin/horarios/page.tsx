@@ -26,9 +26,6 @@ export default function AdminHorariosPage() {
                     <Sparkles className="h-3.5 w-3.5" />
                     {t("admin.horarios.badge", "admin")}
                   </Badge>
-                  <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                    {t("admin.horarios.title", "admin")}
-                  </h1>
                   <p className="text-sm text-muted-foreground sm:text-base">
                     {session?.user?.name
                       ? t("admin.horarios.subtitle_greeting", "admin").replace(

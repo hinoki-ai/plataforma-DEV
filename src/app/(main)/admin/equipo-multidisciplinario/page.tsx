@@ -71,31 +71,6 @@ export default function AdminTeamMembersPage() {
       duration={700}
     >
       <div className="space-y-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              {t("admin.equipo.title", "admin")}
-            </h1>
-            <p className="text-muted-foreground">
-              {t("admin.equipo.description", "admin")}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link href="/equipo-multidisciplinario" target="_blank">
-              <Button variant="outline" className="gap-2">
-                <Eye className="h-4 w-4" />{" "}
-                {t("admin.equipo.view_public", "admin")}
-              </Button>
-            </Link>
-            <Link href="/admin/equipo-multidisciplinario/new">
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />{" "}
-                {t("admin.equipo.new_member", "admin")}
-              </Button>
-            </Link>
-          </div>
-        </div>
-
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">

@@ -17,9 +17,6 @@ export default function AdminObjetivosAprendizajePage() {
             <BookOpen className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">
-              {t("admin.objetivos.title", "admin")}
-            </h1>
             <p className="text-muted-foreground">
               {t("admin.objetivos.subtitle", "admin")}
             </p>

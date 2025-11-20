@@ -136,12 +136,6 @@ export default function AdminDocumentosPage() {
     >
       <div className={layout.container(isDesktopForced)}>
         <div className={layout.spacing.section(isDesktopForced)}>
-          <h1
-            className={`${typography.heading(isDesktopForced)} font-bold text-foreground mb-6`}
-          >
-            {t("documents.title", "common")}
-          </h1>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {getDocumentCategories(t).map(({ type, label, count }) => (
               <Card key={type} className="border-primary/40 shadow-lg">

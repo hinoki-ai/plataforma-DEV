@@ -35,13 +35,6 @@ export default function CertificacionPage() {
               <Shield className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-                {t("admin.certificacion.title", "admin")}
-                <Badge className="bg-primary/10 text-primary">
-                  <Shield className="w-3 h-3" />
-                  {t("admin.certificacion.badge", "admin")}
-                </Badge>
-              </h1>
               <p className="text-muted-foreground">
                 {t("admin.certificacion.subtitle", "admin")}
               </p>

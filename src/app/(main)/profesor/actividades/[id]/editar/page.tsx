@@ -262,9 +262,6 @@ function EditarActividadContent() {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Volver
         </Button>
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Editar Actividad
-        </h1>
         <p className="text-muted-foreground">
           Modifica la información de la actividad
         </p>

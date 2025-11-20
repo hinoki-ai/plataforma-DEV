@@ -11,11 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import {
-  Globe,
   MapPin,
   Users,
   Activity,
@@ -33,9 +32,9 @@ import {
   Cpu,
   HardDrive,
   Network,
+  Globe,
 } from "lucide-react";
 import {
-  RoleIndicator,
   RoleAwareBreadcrumb,
   RoleAwareHeader,
 } from "@/components/layout/RoleAwareNavigation";
@@ -411,17 +410,8 @@ export function GlobalOversightDashboard() {
     <div className="space-y-6 p-6">
       {/* Global Oversight Header */}
       <RoleAwareHeader
-        title="🌍 GLOBAL OVERSIGHT - SUPREME MONITORING"
+        title="GLOBAL OVERSIGHT - SUPREME MONITORING"
         subtitle={`Absolute global supervision - Architect ${session?.user?.name || "Master Developer"}`}
-        actions={
-          <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-blue-600 border-blue-600">
-              <Globe className="h-3 w-3 mr-1" />
-              GLOBAL OVERSIGHT
-            </Badge>
-            <RoleIndicator role="MASTER" />
-          </div>
-        }
       />
 
       {/* Global Metrics */}

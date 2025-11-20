@@ -174,9 +174,6 @@ function VerActividadContent() {
         </Button>
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              {activity.title}
-            </h1>
             <div className="flex flex-wrap gap-2 mb-4">
               <Badge
                 className={

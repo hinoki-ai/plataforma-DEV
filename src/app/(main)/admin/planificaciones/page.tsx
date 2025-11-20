@@ -88,9 +88,6 @@ export default function AdminPlanificacionesPage() {
     >
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-3xl font-bold">
-            {t("admin.planificaciones.title", "common")}
-          </h1>
           <p className="text-muted-foreground">
             {t("admin.planificaciones.description", "common")}
           </p>
