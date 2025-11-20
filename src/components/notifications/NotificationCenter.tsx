@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { NotificationGroup } from "@/hooks/useNotifications";
 import {
   Bell,
   Check,
@@ -96,7 +95,7 @@ function NotificationGroupItem({ group }: { group: NotificationGroup }) {
             </Badge>
             {group.unreadCount > 0 && (
               <Badge variant="destructive" className="text-xs px-2 py-0.5">
-                {group.unreadCount} nuevas
+                {group.unreadCount > 99 ? "99+" : group.unreadCount} nuevas
               </Badge>
             )}
           </div>
@@ -326,7 +325,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
   // Combine individual and grouped notifications
   const allNotifications = showGrouped
     ? [
-        ...groupedNotifications.map((g: NotificationGroup) => ({ ...g, isGroup: true })),
+        ...groupedNotifications.map((g: NotificationGroup) => ({ ...g, isGroup: true, id: g.key })),
         ...notifications,
       ]
     : notifications;
@@ -366,7 +365,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
             Centro de Notificaciones
             {unreadCount > 0 && (
               <Badge variant="destructive" className="ml-2">
-                {unreadCount}
+                {unreadCount > 99 ? "99+" : unreadCount}
               </Badge>
             )}
           </CardTitle>
@@ -409,7 +408,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
             <ScrollArea className="h-96">
               <div className="p-4 space-y-3">
                 {displayedNotifications.map((item) =>
-                  item.isGroup ? (
+                  'isGroup' in item && item.isGroup ? (
                     <NotificationGroupItem
                       key={item.key}
                       group={item as NotificationGroup}

@@ -140,6 +140,9 @@ const nextConfig: NextConfig = {
     webpackBuildWorker: false, // Disable webpack build workers to avoid memory issues
   },
 
+  // Configure Turbopack to work with webpack config
+  turbopack: {},
+
   // Disable source maps in production build to reduce memory usage
   productionBrowserSourceMaps: false,
 

@@ -3,38 +3,37 @@
 import React, { useState } from "react";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { NotificationBadge } from "@/components/ui/notification-badge";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useUnreadNotifications } from "@/hooks/use-unread-notifications";
 import { NotificationCenter } from "./NotificationCenter";
 
 export function NotificationBell() {
-  const { unreadCount } = useNotifications();
+  const { unreadCount } = useUnreadNotifications();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="relative h-9 w-9 rounded-full"
-          aria-label="Notificaciones"
-        >
-          <Bell className="h-4 w-4" />
-          {unreadCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-            >
-              {unreadCount > 99 ? "99+" : unreadCount}
-            </Badge>
-          )}
-        </Button>
+        <div className="relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-9 w-9 rounded-full"
+            aria-label={
+              unreadCount > 0
+                ? `Notificaciones: ${unreadCount} sin leer`
+                : "Notificaciones: sin notificaciones nuevas"
+            }
+          >
+            <Bell className="h-4 w-4" />
+          </Button>
+          <NotificationBadge show={unreadCount > 0} position="top-right" />
+        </div>
       </PopoverTrigger>
       <PopoverContent className="w-96 p-0" align="end" sideOffset={8}>
         <NotificationCenter />

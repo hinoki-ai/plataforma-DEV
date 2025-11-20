@@ -1,4 +1,4 @@
-import type * as React from "react"
+import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
@@ -30,7 +30,7 @@ export interface NotificationBadgeProps
   animate?: boolean
 }
 
-export function NotificationBadge({
+export const NotificationBadge = React.memo(function NotificationBadge({
   className,
   variant,
   position,
@@ -41,7 +41,13 @@ export function NotificationBadge({
   if (!show) return null
 
   return (
-    <span className={cn(badgeVariants({ variant, position }), className)} {...props}>
+    <span
+      className={cn(badgeVariants({ variant, position }), className)}
+      role="status"
+      aria-label="Notificación no leída"
+      aria-live="polite"
+      {...props}
+    >
       {animate && (
         <span
           className={cn(
@@ -54,6 +60,7 @@ export function NotificationBadge({
                   ? "bg-yellow-500"
                   : "bg-red-500",
           )}
+          aria-hidden="true"
         ></span>
       )}
       <span
@@ -67,16 +74,17 @@ export function NotificationBadge({
                 ? "bg-yellow-500"
                 : "bg-red-500",
         )}
+        aria-hidden="true"
       ></span>
     </span>
   )
-}
+})
 
 export function withNotification<P extends object>(
   Component: React.ComponentType<P>,
   badgeProps?: NotificationBadgeProps,
 ) {
-  return function WrappedComponent(props: P & { showBadge?: boolean }) {
+  const WrappedComponent = React.memo(function WrappedComponent(props: P & { showBadge?: boolean }) {
     const { showBadge, ...rest } = props
     return (
       <div className="relative inline-flex">
@@ -84,5 +92,7 @@ export function withNotification<P extends object>(
         <NotificationBadge show={showBadge} {...badgeProps} />
       </div>
     )
-  }
+  })
+  WrappedComponent.displayName = `withNotification(${Component.displayName || Component.name})`
+  return WrappedComponent
 }

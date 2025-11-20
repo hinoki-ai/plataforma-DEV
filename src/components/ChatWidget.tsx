@@ -35,8 +35,8 @@ export default function ChatWidget() {
   const { session } = useSession();
   const pathname = usePathname();
 
-  // Use the new 'chat' action instead of 'ask' query
-  const askAction = useAction(api.functions.ask.chat);
+  // Use the new 'cognitoChat' action for AI-powered responses
+  const askAction = useAction(api.functions.ask.cognitoChat);
 
   // Get time-based greeting
   const getTimeBasedGreeting = () => {
@@ -140,10 +140,18 @@ export default function ChatWidget() {
     setIsLoading(true);
 
     try {
-      const response = await askAction({ question: userMessage });
+      const context = getPageContext();
+      const result = await askAction({
+        message: userMessage,
+        context: {
+          role: context.role,
+          section: context.section,
+          userId: session?.user?.id,
+        }
+      });
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: response as string },
+        { role: "assistant", content: result.success ? result.response : "Lo siento, tuve un problema procesando tu mensaje." },
       ]);
     } catch (error: any) {
       console.error("Chat error:", error);
