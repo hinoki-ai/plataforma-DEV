@@ -241,7 +241,7 @@ describe("Role Access System", () => {
 
   describe("Role Display Names", () => {
     it("should display MASTER with god mode indicator", () => {
-      expect(getRoleDisplayName("MASTER")).toBe("Master Administrator");
+      expect(getRoleDisplayName("MASTER")).toBe("Master");
     });
 
     it("should display ADMIN correctly", () => {

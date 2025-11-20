@@ -35,41 +35,12 @@ export default function ParentDashboardPage() {
       <Suspense
         fallback={
           <div className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <div className="p-6">
-                    <Skeleton className="h-4 w-24 mb-2" />
-                    <Skeleton className="h-8 w-16 mb-2" />
-                    <Skeleton className="h-3 w-20" />
-                  </div>
-                </Card>
-              ))}
-            </div>
-
-            {/* Enhanced loading states */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <div className="p-6">
-                  <Skeleton className="h-6 w-32 mb-4" />
-                  <div className="space-y-3">
-                    {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="flex items-center space-x-3">
-                        <Skeleton className="h-4 w-4 rounded-full" />
-                        <Skeleton className="h-4 w-48" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-
-              <Card>
-                <div className="p-6">
-                  <Skeleton className="h-6 w-40 mb-4" />
-                  <Skeleton className="h-32 w-full rounded" />
-                </div>
-              </Card>
-            </div>
+            <Card className="animate-pulse border-blue-200 dark:border-blue-800">
+              <div className="p-6">
+                <Skeleton className="h-6 w-40 mb-4" />
+                <Skeleton className="h-32 w-full rounded" />
+              </div>
+            </Card>
           </div>
         }
       >

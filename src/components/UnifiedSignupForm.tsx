@@ -34,6 +34,12 @@ import { useStepNavigation } from "@/lib/hooks/useFocusManagement";
 import { UserPlus } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { validateRUT } from "@/lib/rut-utils";
+import {
+  formatChileanPhone,
+  handlePhoneInputChange,
+  isCompletePhoneNumber,
+  normalizePhoneNumber,
+} from "@/lib/phone-utils";
 
 interface FormData {
   fullName: string;
@@ -676,10 +682,27 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      
+      // Handle phone number fields with automatic formatting
+      const phoneFields = [
+        "phone",
+        "childPhone",
+        "emergencyPhone",
+        "secondaryEmergencyPhone",
+        "tertiaryEmergencyPhone",
+      ];
+      
+      if (phoneFields.includes(name)) {
+        const previousValue = formData[name as keyof FormData] as string;
+        const formattedValue = handlePhoneInputChange(value, previousValue);
+        setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+      } else {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+      
       setErrors((prev) => ({ ...prev, [name]: "" }));
     },
-    [],
+    [formData],
   );
 
   const validateStep = useCallback(
@@ -713,6 +736,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.fullName = t("validation.full_name_required");
           if (!formData.phone.trim())
             newErrors.phone = t("validation.phone_required");
+          else if (!isCompletePhoneNumber(formData.phone))
+            newErrors.phone = t("validation.phone_incomplete") || "Please enter the complete phone number";
           if (!formData.rut.trim())
             newErrors.rut = t("validation.rut_required");
           else {
@@ -735,6 +760,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           }
           if (!formData.childPhone.trim())
             newErrors.childPhone = t("validation.child_phone_required");
+          else if (!isCompletePhoneNumber(formData.childPhone))
+            newErrors.childPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
           if (!formData.relationship)
             newErrors.relationship = t("validation.relationship_required");
           if (
@@ -767,6 +794,8 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
           }
           if (!formData.emergencyPhone.trim()) {
             newErrors.emergencyPhone = t("validation.emergency_phone_required");
+          } else if (!isCompletePhoneNumber(formData.emergencyPhone)) {
+            newErrors.emergencyPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
           }
           // Secondary emergency contact is optional but if provided, phone is required
           if (
@@ -776,6 +805,11 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.secondaryEmergencyPhone = t(
               "validation.secondary_emergency_phone_required",
             );
+          } else if (
+            formData.secondaryEmergencyPhone.trim() &&
+            !isCompletePhoneNumber(formData.secondaryEmergencyPhone)
+          ) {
+            newErrors.secondaryEmergencyPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
           }
           if (
             formData.secondaryEmergencyPhone.trim() &&
@@ -793,6 +827,11 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             newErrors.tertiaryEmergencyPhone = t(
               "validation.tertiary_emergency_phone_required",
             );
+          } else if (
+            formData.tertiaryEmergencyPhone.trim() &&
+            !isCompletePhoneNumber(formData.tertiaryEmergencyPhone)
+          ) {
+            newErrors.tertiaryEmergencyPhone = t("validation.phone_incomplete") || "Please enter the complete phone number";
           }
           if (
             formData.tertiaryEmergencyPhone.trim() &&
@@ -851,7 +890,20 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
             key !== "confirmPassword" &&
             key !== "customRelationship"
           ) {
-            form.append(key, value);
+            // Normalize phone numbers before submitting (remove formatting, keep +569XXXXXXXXX)
+            const phoneFields = [
+              "phone",
+              "childPhone",
+              "emergencyPhone",
+              "secondaryEmergencyPhone",
+              "tertiaryEmergencyPhone",
+            ];
+            if (phoneFields.includes(key)) {
+              const normalized = normalizePhoneNumber(value as string);
+              form.append(key, normalized);
+            } else {
+              form.append(key, value);
+            }
           }
         });
 
@@ -1130,7 +1182,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         id="phone"
                         name="phone"
                         type="tel"
-                        placeholder="+56 9 1234 5678"
+                        placeholder="+569 8889 67763"
                         value={formData.phone}
                         onChange={handleChange}
                         onKeyDown={(e) => handleKeyDown(e, "phone")}
@@ -1151,7 +1203,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                         id="childPhone"
                         name="childPhone"
                         type="tel"
-                        placeholder="+56 9 1234 5678"
+                        placeholder="+569 8889 67763"
                         value={formData.childPhone}
                         onChange={handleChange}
                         onKeyDown={(e) => handleKeyDown(e, "childPhone")}
@@ -1515,7 +1567,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       id="emergencyPhone"
                       name="emergencyPhone"
                       type="tel"
-                      placeholder="+56 9 1234 5678"
+                      placeholder="+569 8889 67763"
                       value={formData.emergencyPhone}
                       onChange={handleChange}
                       onKeyDown={(e) => handleKeyDown(e, "emergencyPhone")}
@@ -1569,7 +1621,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       id="secondaryEmergencyPhone"
                       name="secondaryEmergencyPhone"
                       type="tel"
-                      placeholder="+56 9 1234 5678"
+                      placeholder="+569 8889 67763"
                       value={formData.secondaryEmergencyPhone}
                       onChange={handleChange}
                       onKeyDown={(e) =>
@@ -1623,7 +1675,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
                       id="tertiaryEmergencyPhone"
                       name="tertiaryEmergencyPhone"
                       type="tel"
-                      placeholder="+56 9 1234 5678"
+                      placeholder="+569 8889 67763"
                       value={formData.tertiaryEmergencyPhone}
                       onChange={handleChange}
                       onKeyDown={(e) =>

@@ -9,6 +9,8 @@ export const dynamic = "force-dynamic";
 export default function SystemHealthPage() {
   return (
     <MasterPageTemplate
+      title=""
+      subtitle=""
       context="System Health Monitor"
       errorContext="SystemHealthPage"
     >

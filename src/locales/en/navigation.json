@@ -51,7 +51,7 @@
   "nav.roles.admin": "Administrator",
   "nav.roles.profesor": "Teacher",
   "nav.roles.parent": "Parent/Guardian",
-  "nav.roles.master": "🏛️ SUPREME MASTER",
+  "nav.roles.master": "Master",
   "nav.main.categories.debug": "Debug & Development",
   "nav.libro_clases": "Libro de Clases",
   "nav.libro_clases.description": "Daily class book summary",

@@ -385,7 +385,7 @@ export function JoshProactiveSuggestions() {
           rotateX: 15,
           transition: { duration: 0.3 },
         }}
-        className="fixed bottom-32 right-4 z-40 max-w-sm"
+        className="fixed bottom-4 right-4 z-40 max-w-sm"
         style={{ perspective: 1000 }}
       >
         <motion.div

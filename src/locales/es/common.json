@@ -1838,7 +1838,7 @@
   "user.role.default": "Usuario",
   "user.role.description": "Define los permisos del usuario en el sistema",
   "user.role.label": "Rol",
-  "user.role.master": "Desarrollador",
+  "user.role.master": "Master",
   "user.role.parent": "Padre/Apoderado",
   "user.role.placeholder": "Seleccione un rol",
   "user.role.profesor": "Profesor",

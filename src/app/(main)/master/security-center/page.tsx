@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 const securityCenterFallback = (
   <div className="space-y-8">
-    <Card className="animate-pulse border-red-200 dark:border-red-800">
+    <Card className="animate-pulse border-blue-200 dark:border-blue-800">
       <div className="p-6">
         <Skeleton className="h-6 w-40 mb-4" />
         <Skeleton className="h-32 w-full rounded" />
@@ -237,6 +237,8 @@ function SecurityCenterContent() {
 export default function SecurityCenterPage() {
   return (
     <MasterPageTemplate
+      title=""
+      subtitle=""
       context="SECURITY_CENTER"
       errorContext="SecurityCenterPage"
       fallbackContent={securityCenterFallback}

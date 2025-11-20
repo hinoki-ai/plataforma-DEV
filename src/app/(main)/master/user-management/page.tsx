@@ -214,6 +214,8 @@ function UserManagementContent() {
 export default function UserManagementPage() {
   return (
     <MasterPageTemplate
+      title=""
+      subtitle=""
       context="USER_MANAGEMENT"
       errorContext="UserManagementPage"
       fallbackContent={userManagementFallback}

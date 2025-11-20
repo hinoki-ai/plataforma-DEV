@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "@clerk/nextjs";
-import { Send, X, Minimize2, Maximize2, Map } from "lucide-react";
+import { Send, X, ChevronDown, ChevronUp, Map, GripVertical } from "lucide-react";
 
 interface Message {
   id: string;
@@ -46,8 +46,12 @@ export function JoshChat({
   const [inputValue, setInputValue] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [chatHeight, setChatHeight] = useState(384); // Default h-96 (384px)
+  const [isResizing, setIsResizing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const resizeStartY = useRef<number>(0);
+  const resizeStartHeight = useRef<number>(384);
 
   const isDark = resolvedTheme === "dark";
   const joshImage = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
@@ -109,6 +113,21 @@ export function JoshChat({
       type: "text",
     };
   };
+
+  // Load saved chat height from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedHeight = localStorage.getItem("josh_chat_height");
+      if (savedHeight) {
+        const height = parseInt(savedHeight, 10);
+        if (height >= 200 && height <= 800) {
+          // Validate height is within reasonable bounds
+          setChatHeight(height);
+          resizeStartHeight.current = height;
+        }
+      }
+    }
+  }, []);
 
   // Initialize with welcome message
   useEffect(() => {
@@ -341,7 +360,46 @@ export function JoshChat({
     }
   };
 
+  // Resize handlers
+  const handleResizeStart = (e: React.MouseEvent) => {
+    // Don't start resize if clicking on buttons or interactive elements
+    const target = e.target as HTMLElement;
+    if (target.closest("button") || target.closest("a")) {
+      return;
+    }
+    
+    e.preventDefault();
+    e.stopPropagation();
+    setIsResizing(true);
+    resizeStartY.current = e.clientY;
+    resizeStartHeight.current = chatHeight;
+    
+    let currentHeight = chatHeight;
+    
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaY = resizeStartY.current - moveEvent.clientY; // Positive when dragging up (north)
+      currentHeight = Math.max(200, Math.min(800, resizeStartHeight.current + deltaY));
+      setChatHeight(currentHeight);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      // Save final height to localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("josh_chat_height", currentHeight.toString());
+      }
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+
   if (!isOpen) return null;
+
+  // Don't render chat at all when minimized - let Josh indicator handle it
+  if (isMinimized) return null;
 
   return (
     <AnimatePresence>
@@ -349,16 +407,21 @@ export function JoshChat({
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 20 }}
-        className={`fixed bottom-0 right-0 z-50 w-80 ${
-          isMinimized ? "h-auto" : "h-96"
-        } bg-white dark:bg-gray-800 rounded-tl-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out`}
+        className="fixed bottom-0 right-0 z-50 w-80 bg-white dark:bg-gray-800 rounded-tl-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out"
+        style={{ height: `${chatHeight}px` }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="josh-chat-title"
         aria-describedby="josh-chat-description"
       >
         {/* Header */}
-        <header className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
+        <header 
+          className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg select-none relative group"
+          onMouseDown={handleResizeStart}
+          title={t("josh.chat.resize", "Arrastra hacia arriba para redimensionar")}
+        >
+          {/* Resize indicator */}
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-white/30 rounded-b-full opacity-0 group-hover:opacity-100 transition-opacity cursor-ns-resize" />
           <div className="flex items-center space-x-2 flex-1 min-w-0">
             <motion.img
               src={joshImage}
@@ -383,11 +446,10 @@ export function JoshChat({
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-1.5 flex-shrink-0">
+          <div className="flex items-center space-x-1.5 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
             {/* Tour button - Always show if tour is available */}
             {(() => {
-              if (!onStartTour || !getTourForContext || !getPageContextProp)
-                return null;
+              if (!onStartTour || !getTourForContext) return null;
               const context = getPageContext();
               const tourId = getTourForContext(context);
               if (!tourId) return null;
@@ -397,7 +459,7 @@ export function JoshChat({
                     e.stopPropagation();
                     onStartTour();
                   }}
-                  className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                  className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
                   aria-label={t(
                     "josh.tour.button.accessible",
                     "Start interactive tour with Josh",
@@ -415,30 +477,18 @@ export function JoshChat({
                 setIsMinimized(newMinimized);
                 onMinimizeChange?.(newMinimized);
               }}
-              className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
-              aria-label={
-                isMinimized
-                  ? t("josh.chat.maximize", "Maximizar chat")
-                  : t("josh.chat.minimize", "Minimizar chat")
-              }
-              title={
-                isMinimized
-                  ? t("josh.chat.maximize", "Maximizar chat")
-                  : t("josh.chat.minimize", "Minimizar chat")
-              }
+              className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
+              aria-label={t("josh.chat.minimize", "Minimizar chat")}
+              title={t("josh.chat.minimize", "Minimizar chat")}
             >
-              {isMinimized ? (
-                <Maximize2 className="w-4 h-4" aria-hidden="true" />
-              ) : (
-                <Minimize2 className="w-4 h-4" aria-hidden="true" />
-              )}
+              <ChevronDown className="w-4 h-4" aria-hidden="true" />
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onToggle();
               }}
-              className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none"
+              className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
               aria-label={t("josh.chat.close", "Cerrar chat")}
               title={t("josh.chat.close", "Cerrar chat")}
             >
@@ -448,14 +498,12 @@ export function JoshChat({
         </header>
 
         {/* Messages */}
-        <AnimatePresence>
-          {!isMinimized && (
-            <motion.div
-              initial={{ height: 0 }}
-              animate={{ height: "auto" }}
-              exit={{ height: 0 }}
-              className="flex-1 overflow-hidden rounded-b-lg"
-            >
+        <motion.div
+          initial={{ height: 0 }}
+          animate={{ height: "auto" }}
+          exit={{ height: 0 }}
+          className="flex-1 overflow-hidden rounded-b-lg"
+        >
               <div className="h-full flex flex-col">
                 <div
                   className="flex-1 overflow-y-auto p-4 space-y-4"
@@ -578,8 +626,6 @@ export function JoshChat({
                 </div>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
       </motion.div>
     </AnimatePresence>
   );

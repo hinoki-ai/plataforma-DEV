@@ -51,6 +51,7 @@
   "nav.roles.admin": "Administrador",
   "nav.roles.profesor": "Profesor",
   "nav.roles.parent": "Padre/Apoderado",
+  "nav.roles.master": "Master",
   "nav.main.categories.debug": "Debug & Development",
   "nav.libro_clases": "Libro de Clases",
   "nav.libro_clases.description": "Resumen diario del libro de clases",

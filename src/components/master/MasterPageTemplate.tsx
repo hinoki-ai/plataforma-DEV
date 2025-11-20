@@ -46,19 +46,13 @@ export function MasterPageTemplate({
   }
 
   const defaultFallback = (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <Card
-          key={i}
-          className="animate-pulse border-slate-200 dark:border-slate-800"
-        >
-          <div className="p-6">
-            <Skeleton className="h-4 w-24 mb-3" />
-            <Skeleton className="h-8 w-16 mb-2" />
-            <Skeleton className="h-3 w-20" />
-          </div>
-        </Card>
-      ))}
+    <div className="space-y-8">
+      <Card className="animate-pulse border-blue-200 dark:border-blue-800">
+        <div className="p-6">
+          <Skeleton className="h-6 w-40 mb-4" />
+          <Skeleton className="h-32 w-full rounded" />
+        </div>
+      </Card>
     </div>
   );
 
@@ -74,7 +68,7 @@ export function MasterPageTemplate({
         showDetails={process.env.NODE_ENV === "development"}
       >
         <Suspense fallback={fallbackContent || defaultFallback}>
-          <div className={`${maxWidth} space-y-8`}>{children}</div>
+          <div className={`${maxWidth} space-y-4`}>{children}</div>
         </Suspense>
       </AdvancedErrorBoundary>
     </div>

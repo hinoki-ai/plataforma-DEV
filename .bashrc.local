@@ -1,0 +1,7 @@
+# Local bashrc for plataforma project
+# This ensures project scripts take precedence over global commands
+
+if [[ "$PWD" == "/mnt/Secondary/projects/websites/plataforma" ]]; then
+    export PATH="/mnt/Secondary/projects/websites/plataforma/scripts:$PATH"
+    echo "✅ Project scripts loaded (zz = dev server, vv = deployment)"
+fi

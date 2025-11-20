@@ -22,6 +22,8 @@ const systemStatsFallback = (
 export default function SystemStatsPage() {
   return (
     <MasterPageTemplate
+      title=""
+      subtitle=""
       context="System Statistics"
       errorContext="SystemStatsPage"
       fallbackContent={systemStatsFallback}

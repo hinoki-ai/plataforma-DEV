@@ -1897,7 +1897,7 @@
   "user.role.default": "User",
   "user.role.description": "Define user permissions in the system",
   "user.role.label": "Role",
-  "user.role.master": "Developer",
+  "user.role.master": "Master",
   "user.role.parent": "Parent/Guardian",
   "user.role.placeholder": "Select a role",
   "user.role.profesor": "Teacher",

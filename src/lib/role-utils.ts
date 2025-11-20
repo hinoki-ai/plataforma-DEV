@@ -198,7 +198,7 @@ export function getRoleFilter(
 export function getRoleDisplayName(role: ExtendedUserRole): string {
   switch (role) {
     case "MASTER":
-      return "Master Administrator";
+      return "Master";
     case "ADMIN":
       return "Administrador";
     case "PROFESOR":

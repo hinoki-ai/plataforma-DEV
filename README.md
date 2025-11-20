@@ -29,6 +29,9 @@ cp .env.example .env
 
 # Start development
 npm run dev
+
+# Quick shortcuts are automatically available when you cd to this directory!
+# If not working, run: source setup-env.sh
 ```
 
 ### Test Credentials
@@ -133,6 +136,16 @@ npm run verify-deployment # Pre-deployment verification
 npm run build            # Production build test
 npm run convex:deploy    # Deploy Convex backend
 npm run convex:dashboard # Open Convex dashboard
+
+# Quick Shortcuts (automatic when cd'ing to project directory)
+zz                      # Start development server (npm run dev)
+vv                      # Deployment shortcuts (--help for options)
+vv --fast               # Fast deployment
+vv --emergency          # Emergency deployment
+
+# Troubleshooting
+source setup-env.sh     # Manual setup if automatic doesn't work
+hash -r                 # Clear command cache if shortcuts aren't working
 
 # Database & Migration
 npm run migrate-users-to-clerk    # Migrate users to Clerk

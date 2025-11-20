@@ -383,11 +383,13 @@ export function Sidebar({
                     {session?.user?.name}
                   </p>
                   <p className="text-xs text-muted-foreground" id="user-role">
-                    {session?.user?.role === "ADMIN"
-                      ? t("nav.roles.admin")
-                      : session?.user?.role === "PROFESOR"
-                        ? t("nav.roles.profesor")
-                        : t("nav.roles.parent")}
+                    {session?.user?.role === "MASTER"
+                      ? t("nav.roles.master")
+                      : session?.user?.role === "ADMIN"
+                        ? t("nav.roles.admin")
+                        : session?.user?.role === "PROFESOR"
+                          ? t("nav.roles.profesor")
+                          : t("nav.roles.parent")}
                   </p>
                 </div>
               )}

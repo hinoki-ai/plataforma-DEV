@@ -202,8 +202,18 @@ export function JoshIndicator() {
       },
     });
 
-    // Simply open chat
-    openChat("avatar");
+    // If chat is minimized, reopen it by unminimizing
+    if (isChatMinimized) {
+      setIsChatMinimized(false);
+      handleChatMinimizeChange(false);
+      // Ensure chat is open
+      if (!isChatOpen) {
+        setIsChatOpen(true);
+      }
+    } else {
+      // Simply open chat
+      openChat("avatar");
+    }
   };
 
   // Handle chat close - dismiss Josh for session

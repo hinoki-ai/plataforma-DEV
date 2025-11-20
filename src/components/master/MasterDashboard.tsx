@@ -336,7 +336,7 @@ export function MasterDashboard() {
   return (
     <MasterPageTemplate title="" subtitle="" context="MASTER_DASHBOARD">
       {/* Quick Actions */}
-      <div className="mb-6">
+      <div className="mb-4">
         <MasterActionCard
           title=""
           description=""
