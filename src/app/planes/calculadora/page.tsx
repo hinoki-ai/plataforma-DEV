@@ -584,8 +584,8 @@ export default function PricingCalculatorPage({
           <div className="grid gap-6 xl:grid-cols-[1.1fr_1fr] lg:grid-cols-1">
             <Card className="backdrop-blur-xl bg-gray-900/80 border border-gray-700/60 text-white">
               <CardHeader>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
+                <div className="flex items-start justify-between gap-3 min-w-0">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <CardTitle className="text-3xl font-semibold">
                         {selectedPlan.name}
@@ -601,7 +601,7 @@ export default function PricingCalculatorPage({
                     </CardDescription>
 
                     {/* Plan Selector */}
-                    <div className="flex flex-nowrap gap-2 mt-4 mb-2">
+                    <div className="flex flex-wrap gap-2 mt-4 mb-2">
                       {pricingPlans.map((plan) => (
                         <Button
                           key={plan.id}
@@ -614,7 +614,7 @@ export default function PricingCalculatorPage({
                             setManualPlanOverride(true);
                             updateUrl({ plan: plan.id });
                           }}
-                          className={`flex-1 ${
+                          className={`flex-1 min-w-[120px] ${
                             selectedPlan.id === plan.id
                               ? "bg-primary text-primary-foreground"
                               : "border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-200"
@@ -715,11 +715,11 @@ export default function PricingCalculatorPage({
                       </div>
                     )}
                   </div>
-                  <div className="text-right">
-                    <div className="text-sm text-gray-400">
+                  <div className="text-right shrink-0 ml-3">
+                    <div className="text-sm text-gray-400 whitespace-nowrap">
                       {tc("calculator.price_per_student")}
                     </div>
-                    <div className="text-2xl font-bold text-primary">
+                    <div className="text-2xl font-bold text-primary whitespace-nowrap">
                       {formatCLP(selectedPlan.pricePerStudent)}
                     </div>
                   </div>
@@ -789,7 +789,8 @@ export default function PricingCalculatorPage({
                         id="students-range-description"
                         className="text-sm text-gray-400 text-center sm:text-left"
                       >
-                        {studentsLabel}
+                        {studentsFormatted}{" "}
+                        {tc("calculator.students_count").replace("{count}", "")}
                       </span>
                     </div>
                     <Slider
@@ -803,6 +804,9 @@ export default function PricingCalculatorPage({
                       aria-valuemax={sliderUpperBound}
                       aria-valuenow={students}
                     />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {studentsLabel}
+                    </div>
                   </div>
                 </div>
 

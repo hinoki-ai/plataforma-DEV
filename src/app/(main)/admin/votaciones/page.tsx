@@ -294,14 +294,15 @@ export default function AdminVotesPage() {
   };
 
   const filteredVotes = votes.filter((vote) => {
+    const normalizedSearch = searchTerm.toLowerCase();
     const matchesFilter =
       filter === "all" ||
       (filter === "active" && vote.status === "active") ||
       (filter === "closed" && vote.status === "closed");
 
     const matchesSearch =
-      vote.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vote.description?.toLowerCase().includes(searchTerm.toLowerCase());
+      vote.title.toLowerCase().includes(normalizedSearch) ||
+      (vote.description ?? "").toLowerCase().includes(normalizedSearch);
 
     return matchesFilter && matchesSearch;
   });
@@ -632,6 +633,9 @@ export default function AdminVotesPage() {
                           setFormData((prev) => ({
                             ...prev,
                             allowMultipleVotes: checked,
+                            maxVotesPerUser: checked
+                              ? prev.maxVotesPerUser
+                              : undefined,
                           }))
                         }
                       />
@@ -667,32 +671,35 @@ export default function AdminVotesPage() {
                   </div>
                 </div>
 
-                {formData.allowMultipleVotes && (
-                  <div>
-                    <Label htmlFor="maxVotesPerUser">
-                      {t("admin.votaciones.form.max_votes.label", "common")}
-                    </Label>
-                    <Input
-                      id="maxVotesPerUser"
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={formData.maxVotesPerUser || ""}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          maxVotesPerUser: e.target.value
-                            ? parseInt(e.target.value)
-                            : undefined,
-                        }))
-                      }
-                      placeholder={t(
-                        "admin.votaciones.form.max_votes.placeholder",
-                        "common",
-                      )}
-                    />
-                  </div>
-                )}
+                <div>
+                  <Label htmlFor="maxVotesPerUser">
+                    {t("admin.votaciones.form.max_votes.label", "common")}
+                  </Label>
+                  <Input
+                    id="maxVotesPerUser"
+                    type="number"
+                    min="1"
+                    max="10"
+                    value={
+                      formData.allowMultipleVotes
+                        ? (formData.maxVotesPerUser ?? "")
+                        : ""
+                    }
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        maxVotesPerUser: e.target.value
+                          ? parseInt(e.target.value)
+                          : undefined,
+                      }))
+                    }
+                    placeholder={t(
+                      "admin.votaciones.form.max_votes.placeholder",
+                      "common",
+                    )}
+                    disabled={!formData.allowMultipleVotes}
+                  />
+                </div>
 
                 {/* Voting Options */}
                 <div className="pt-1">
@@ -811,27 +818,37 @@ export default function AdminVotesPage() {
 
                   {/* Vote Results Preview */}
                   <div className="mt-4 space-y-2">
-                    {vote.options.slice(0, 3).map((option) => {
-                      const percentage =
-                        vote.totalVotes > 0
-                          ? (option.votes / vote.totalVotes) * 100
-                          : 0;
-                      return (
-                        <div
-                          key={option.id}
-                          className="flex items-center justify-between text-sm"
-                        >
-                          <span className="truncate flex-1">{option.text}</span>
-                          <span className="text-gray-500 ml-2">
-                            {option.votes} ({percentage.toFixed(1)}%)
-                          </span>
-                        </div>
-                      );
-                    })}
-                    {vote.options.length > 3 && (
-                      <p className="text-xs text-gray-400">
-                        +{vote.options.length - 3}{" "}
-                        {t("admin.votaciones.more_options", "common")}
+                    {vote.options?.length ? (
+                      <>
+                        {(vote.options?.slice(0, 3) ?? []).map((option) => {
+                          const percentage =
+                            vote.totalVotes > 0
+                              ? (option.votes / vote.totalVotes) * 100
+                              : 0;
+                          return (
+                            <div
+                              key={option.id}
+                              className="flex items-center justify-between text-sm"
+                            >
+                              <span className="truncate flex-1">
+                                {option.text}
+                              </span>
+                              <span className="text-gray-500 ml-2">
+                                {option.votes} ({percentage.toFixed(1)}%)
+                              </span>
+                            </div>
+                          );
+                        })}
+                        {vote.options.length > 3 && (
+                          <p className="text-xs text-gray-400">
+                            +{vote.options.length - 3}{" "}
+                            {t("admin.votaciones.more_options", "common")}
+                          </p>
+                        )}
+                      </>
+                    ) : (
+                      <p className="text-sm text-gray-400 italic">
+                        {t("admin.votaciones.results.no_options", "common")}
                       </p>
                     )}
                   </div>

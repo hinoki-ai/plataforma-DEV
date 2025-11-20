@@ -29,6 +29,7 @@ interface JoshInteraction {
     action?: string;
     response?: string;
     duration?: number;
+    source?: string;
   };
   metadata?: Record<string, any>;
 }

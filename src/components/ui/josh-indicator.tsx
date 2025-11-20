@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -28,9 +28,112 @@ export function JoshIndicator() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeTour, setActiveTour] = useState<string | null>(null);
   const [isTourActive, setIsTourActive] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [hasInitialPosition, setHasInitialPosition] = useState(false);
+  const [justFinishedDragging, setJustFinishedDragging] = useState(false);
 
   const isDark = resolvedTheme === "dark";
   const joshImage = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
+
+  // Load saved position from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedPosition = localStorage.getItem("josh_position");
+      if (savedPosition) {
+        try {
+          const { x, y } = JSON.parse(savedPosition);
+          setPosition({ x, y });
+        } catch (e) {
+          // If parsing fails, use default position
+          setPosition({
+            x: window.innerWidth - 100,
+            y: window.innerHeight - 100,
+          });
+        }
+      } else {
+        // Default position: bottom-right corner
+        setPosition({
+          x: window.innerWidth - 100,
+          y: window.innerHeight - 100,
+        });
+      }
+      setHasInitialPosition(true);
+    }
+  }, []);
+
+  // Save position to localStorage when dragging ends
+  const handleDragEnd = (event: any, info: any) => {
+    setIsDragging(false);
+    setJustFinishedDragging(true);
+
+    const newX = position.x + info.offset.x;
+    const newY = position.y + info.offset.y;
+
+    // Constrain to viewport bounds (accounting for element size ~80px)
+    const maxX = typeof window !== "undefined" ? window.innerWidth - 80 : 0;
+    const maxY = typeof window !== "undefined" ? window.innerHeight - 80 : 0;
+    const constrainedX = Math.max(0, Math.min(newX, maxX));
+    const constrainedY = Math.max(0, Math.min(newY, maxY));
+
+    const newPosition = { x: constrainedX, y: constrainedY };
+    setPosition(newPosition);
+
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("josh_position", JSON.stringify(newPosition));
+    }
+
+    // Track drag interaction
+    analytics.trackInteraction({
+      type: "click",
+      page: pathname,
+      context: {
+        role: getUserRole(),
+        action: "josh_repositioned",
+      },
+      metadata: { position: newPosition },
+    });
+
+    // Reset the flag after a short delay to allow clicks again
+    setTimeout(() => {
+      setJustFinishedDragging(false);
+    }, 100);
+  };
+
+  // Get drag constraints based on viewport size
+  const [dragConstraints, setDragConstraints] = useState({
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const updateConstraints = () => {
+        const maxX = window.innerWidth - 80;
+        const maxY = window.innerHeight - 80;
+
+        setDragConstraints({
+          left: 0,
+          right: maxX,
+          top: 0,
+          bottom: maxY,
+        });
+
+        // Adjust position if Josh is outside viewport after resize
+        setPosition((prev) => ({
+          x: Math.max(0, Math.min(prev.x, maxX)),
+          y: Math.max(0, Math.min(prev.y, maxY)),
+        }));
+      };
+
+      updateConstraints();
+      window.addEventListener("resize", updateConstraints);
+      return () => window.removeEventListener("resize", updateConstraints);
+    }
+  }, []);
 
   // Get user role from session
   const getUserRole = () => {
@@ -61,7 +164,35 @@ export function JoshIndicator() {
     return null;
   };
 
+  const openChat = (
+    source: "avatar" | "button" = "button",
+    options?: { showGreeting?: boolean },
+  ) => {
+    setIsChatOpen(true);
+
+    analytics.trackInteraction({
+      type: "chat",
+      page: pathname,
+      context: {
+        role: getUserRole(),
+        action: "chat_opened",
+      },
+      metadata: { source },
+    });
+
+    if (options?.showGreeting !== false) {
+      toast.success(t("josh.chat.open", "¡Hola! ¿En qué puedo ayudarte?"), {
+        duration: 2000,
+      });
+    }
+  };
+
   const handleClick = () => {
+    // Don't trigger click if we're dragging or just finished dragging
+    if (isDragging || justFinishedDragging) {
+      return;
+    }
+
     const newCount = clickCount + 1;
     setClickCount(newCount);
 
@@ -161,6 +292,8 @@ export function JoshIndicator() {
         },
       );
     }
+
+    openChat("avatar", { showGreeting: false });
   };
 
   const handleDismiss = () => {
@@ -261,25 +394,38 @@ export function JoshIndicator() {
       />
 
       <AnimatePresence>
-        {isVisible && !isChatOpen && (
+        {isVisible && !isChatOpen && hasInitialPosition && (
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
+            initial={{ scale: 0, opacity: 0, x: position.x, y: position.y }}
             animate={{
               scale: 1,
               opacity: 1,
+              x: position.x,
+              y: position.y,
               transition: {
                 type: "spring",
                 stiffness: 260,
                 damping: 20,
-                delay: 2, // Show after welcome toast
+                delay: hasInitialPosition ? 2 : 0, // Show after welcome toast
               },
             }}
             exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-2 right-2 z-50"
+            drag
+            dragMomentum={false}
+            dragElastic={0.1}
+            dragConstraints={dragConstraints}
+            onDragStart={() => setIsDragging(true)}
+            onDragEnd={handleDragEnd}
+            className="fixed z-50 cursor-grab active:cursor-grabbing"
+            style={{
+              left: 0,
+              top: 0,
+            }}
           >
             <motion.div
               className="relative group cursor-pointer"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: isDragging ? 1 : 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleClick}
             >
@@ -313,7 +459,7 @@ export function JoshIndicator() {
                 role="tooltip"
                 id="josh-tooltip"
               >
-                {t("josh.tooltip", "¡Haz clic en mí!")}
+                {t("josh.tooltip", "¡Haz clic en mí! Arrástrame para moverme")}
                 <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
               </div>
 
@@ -361,24 +507,7 @@ export function JoshIndicator() {
               <RippleButton
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsChatOpen(true);
-
-                  // Track chat open
-                  analytics.trackInteraction({
-                    type: "chat",
-                    page: pathname,
-                    context: {
-                      role: getUserRole(),
-                      action: "chat_opened",
-                    },
-                  });
-
-                  toast.success(
-                    t("josh.chat.open", "¡Hola! ¿En qué puedo ayudarte?"),
-                    {
-                      duration: 2000,
-                    },
-                  );
+                  openChat("button");
                 }}
                 className="absolute -top-1 -left-1 w-6 h-6 bg-green-500 hover:bg-green-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center focus:opacity-100 focus:ring-2 focus:ring-green-300"
                 title={t("josh.chat.button", "Chatear con Josh")}
