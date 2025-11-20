@@ -24,6 +24,7 @@ export default async function AuthSuccessPage() {
     userId: session?.user?.id,
     needsRegistration: session?.user?.needsRegistration,
     isOAuthUser: session?.user?.isOAuthUser,
+    fullSession: session,
   });
 
   // Not authenticated - redirect to login
@@ -42,13 +43,14 @@ export default async function AuthSuccessPage() {
         hasRole: !!session?.user.role,
         hasEmail: !!session?.user.email,
         hasId: !!session?.user.id,
+        sessionUser: session?.user,
         timestamp: new Date().toISOString(),
       },
     );
     redirect("/login");
   }
 
-  const role = session.data?.user.role as UserRole;
+  const role = session.user.role as UserRole;
 
   // Validate role exists
   if (!ROLE_PATHS[role]) {
