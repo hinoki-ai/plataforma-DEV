@@ -100,16 +100,8 @@ export function useIntelligentPreloading() {
 
   // Smart component preloading based on user behavior
   const preloadComponents = useCallback(() => {
-    // Preload heavy components that are likely to be used
-    const components = [
-      "/components/ui/data-table",
-      "/components/ui/dialog",
-      "/components/ui/dropdown-menu",
-    ];
-
-    components.forEach((component) => {
-      preloadResource(`/dynamic${component}`, { priority: "low" });
-    });
+    // Component preloading removed due to invalid preload link generation
+    // Next.js handles component preloading automatically via dynamic imports
   }, []);
 
   // Image preloading for critical images

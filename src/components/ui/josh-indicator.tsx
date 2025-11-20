@@ -275,7 +275,7 @@ export function JoshIndicator() {
               },
             }}
             exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-6 right-6 z-50"
+            className="fixed bottom-2 right-2 z-50"
           >
             <motion.div
               className="relative group cursor-pointer"
@@ -287,7 +287,7 @@ export function JoshIndicator() {
               <motion.img
                 src={joshImage}
                 alt={t("josh.alt", "Josh - Educational Assistant")}
-                className="shadow-lg border-3 border-white dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
+                className="w-12 h-12 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
                 role="button"
                 tabIndex={0}
                 aria-label={t(
@@ -306,18 +306,6 @@ export function JoshIndicator() {
                   boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
                 }}
                 whileTap={{ scale: 0.95 }}
-              />
-
-              {/* Notification dot */}
-              <motion.div
-                className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800"
-                animate={{
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                }}
               />
 
               {/* Tooltip */}
