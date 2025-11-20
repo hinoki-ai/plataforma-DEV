@@ -1400,10 +1400,36 @@ const DivineParsingOracleProvider: React.FC<{
 export function useDivineParsing(namespaces: string[] = []) {
   const context = useContext(DivineParsingOracleContext);
 
+  // Graceful fallback for build time or missing provider
   if (!context) {
-    throw new Error(
-      "useDivineParsing must be used within DivineParsingOracleProvider",
-    );
+    // Log warning only in development
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "useDivineParsing used outside DivineParsingOracleProvider - returning default context",
+      );
+    }
+
+    // Return a safe default context to prevent crashes
+    return {
+      language: "es" as Language,
+      setLanguage: () => {},
+      t: (key: string, _ns?: string | Record<string, any>) => key,
+      isLoading: false,
+      loadedNamespaces: [] as string[],
+      invokeOracle: async () => {},
+      invokeOracles: async () => ({}),
+      preinvokeOracles: () => {},
+      getLoadedNamespaces: () => [],
+      isOracleActive: () => false,
+      getTranslationStats: () => ({
+        totalKeys: 0,
+        loadedNamespaces: 0,
+        cacheSize: 0,
+        cacheHitRate: 0,
+        loadTime: 0,
+      }),
+      error: null,
+    };
   }
 
   // Auto-load required namespaces
