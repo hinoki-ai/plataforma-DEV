@@ -77,6 +77,24 @@ CLOUDINARY_URL="cloudinary://api_key:api_secret@cloud_name"
 2. Get API credentials from dashboard
 3. Format: `cloudinary://KEY:SECRET@CLOUD_NAME`
 
+### AI Assistant (Optional)
+
+```bash
+# OpenAI API Key (for embeddings)
+OPENAI_API_KEY="sk-..."
+
+# Groq API Key (for fast LLM inference)
+GROQ_API_KEY="gsk_..."
+```
+
+**Setup AI Assistant**:
+
+1. Sign up at [OpenAI](https://platform.openai.com) for embeddings
+2. Get API key from OpenAI dashboard
+3. Sign up at [Groq](https://groq.com) for fast LLM inference
+4. Get API key from Groq dashboard
+5. Add both keys to Convex Dashboard → Settings → Environment Variables
+
 ---
 
 ## Environment Files

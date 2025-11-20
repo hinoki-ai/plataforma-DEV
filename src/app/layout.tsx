@@ -7,6 +7,7 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { ThemeAwareFavicon } from "@/components/ui/theme-aware-favicon";
 import { HomepageMusic } from "@/components/shared/HomepageMusic";
 import { AudioConsentBanner } from "@/components/shared/AudioConsentBanner";
+import ChatWidget from "@/components/ChatWidget";
 import "./globals.css";
 
 // Using system fonts instead of Google Fonts to avoid network dependencies during build
@@ -100,6 +101,10 @@ function RootLayoutInner({
             <ThemeAwareFavicon />
             {/* Audio consent banner */}
             <AudioConsentBanner />
+            {/* AI Assistant Chat Widget */}
+            <div className="fixed bottom-4 right-4 z-50">
+              <ChatWidget />
+            </div>
           </Providers>
         </ErrorBoundary>
       </body>
