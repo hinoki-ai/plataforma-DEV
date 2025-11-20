@@ -5,23 +5,11 @@ import { dbLogger } from "@/lib/logger";
 import { DynamicDashboard } from "@/components/dashboard/DynamicDashboard";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
-// Enable PPR for better performance - static shell renders first, dynamic data loads after
-export const experimental_ppr = true;
+// PPR removed due to TypeScript compatibility issues
+// export const experimental_ppr = true;
 
 export default function ProfesorDashboardPage() {
   const { t } = useDivineParsing(["common", "profesor"]);
-
-  // 🚨 EMERGENCY: Handle database failures gracefully
-  try {
-    // Dashboard will show empty state but remain functional
-  } catch (error) {
-    dbLogger.error(
-      "Database unavailable in profesor dashboard, showing empty state",
-      error,
-      { context: "ProfesorDashboardPage", emergencyMode: true },
-    );
-    // Dashboard will show empty state but remain functional
-  }
 
   return (
     <AdvancedErrorBoundary

@@ -829,12 +829,12 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
     currentStep,
     totalSteps,
     nextStep,
-    () => handleSubmit({} as any),
+    () => handleSubmit(),
   );
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
+    async (e?: React.FormEvent) => {
+      e?.preventDefault();
       if (!validateStep(totalSteps)) return;
 
       setIsLoading(true);
@@ -1656,7 +1656,7 @@ export const UnifiedSignupForm = memo(function UnifiedSignupForm() {
         <CardHeader>
           <div className="text-center">
             <p className="text-sm font-medium text-primary">
-              {t("signup.step_indicator", { currentStep, totalSteps })}{" "}
+              {`Paso ${currentStep} de ${totalSteps}: `}
               {stepTitles[currentStep - 1]}
             </p>
             <p className="text-xs text-muted-foreground mt-1">

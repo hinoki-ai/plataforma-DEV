@@ -46,6 +46,7 @@ import { CurriculumCoverageDashboard } from "@/components/libro-clases/Curriculu
 import { PdfExportButton } from "@/components/libro-clases/PdfExportButton";
 import { Id } from "@/convex/_generated/dataModel";
 import { usePathname, useRouter } from "next/navigation";
+import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 type TabValue =
   | "overview"
@@ -87,6 +88,7 @@ export function TeacherLibroClasesView({
   const { userId, isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useDivineParsing(["common", "profesor"]);
   const [selectedCourseId, setSelectedCourseId] =
     useState<Id<"courses"> | null>(null);
   const [activeTab, setActiveTab] = useState<TabValue>(view);

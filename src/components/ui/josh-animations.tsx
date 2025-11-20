@@ -28,7 +28,7 @@ export const joshAnimations = {
     transition: {
       duration: 3,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
   thinking: {
@@ -37,7 +37,7 @@ export const joshAnimations = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
   excited: {
@@ -47,7 +47,7 @@ export const joshAnimations = {
     transition: {
       duration: 1.5,
       repeat: Infinity,
-      ease: "easeOut",
+      ease: "easeOut" as const,
     },
   },
   helpful: {
@@ -60,7 +60,7 @@ export const joshAnimations = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
   celebrating: {
@@ -68,7 +68,7 @@ export const joshAnimations = {
     rotate: [0, 360],
     transition: {
       duration: 1,
-      ease: "easeOut",
+      ease: "easeOut" as const,
     },
   },
 };
@@ -258,7 +258,7 @@ export function RippleButton({
   ...props
 }: {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
   className?: string;
   [key: string]: any;
 }) {
@@ -280,7 +280,7 @@ export function RippleButton({
       setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
     }, 600);
 
-    onClick?.();
+    onClick?.(e);
   };
 
   return (

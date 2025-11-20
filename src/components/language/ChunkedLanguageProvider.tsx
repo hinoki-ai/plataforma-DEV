@@ -26,7 +26,11 @@ interface DivineParsingOracleContextType {
   // Core translation functionality
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string, namespace?: string) => string;
+  t: (
+    key: string,
+    namespace?: string | Record<string, any>,
+    variables?: Record<string, any>,
+  ) => string;
   isLoading: boolean;
 
   // Oracle namespace management
@@ -1151,15 +1155,42 @@ const DivineParsingOracleProvider: React.FC<{
 
   // Enhanced translation function with robust fallback chains and caching
   const t = useMemo(() => {
-    return (key: string, namespace: string = "common"): string => {
+    return (
+      key: string,
+      namespace: string | Record<string, any> = "common",
+      variables?: Record<string, any>,
+    ): string => {
+      let actualNamespace = "common";
+      let actualVariables: Record<string, any> | undefined = variables;
+
+      if (typeof namespace === "string") {
+        actualNamespace = namespace;
+      } else if (typeof namespace === "object" && namespace !== null) {
+        actualVariables = namespace;
+      }
+
+      const performInterpolation = (text: string): string => {
+        if (!actualVariables) return text;
+        return text.replace(
+          /\{(\w+)\}/g,
+          (_, k) => actualVariables![k]?.toString() || `{${k}}`,
+        );
+      };
+
       // Create cache key outside try block for error handling
-      const cacheKey = getCacheKey(key, namespace, language);
+      const cacheKey = getCacheKey(key, actualNamespace, language);
+
+      // Helper to cache and return
+      const cacheAndReturn = (value: string) => {
+        translationCache.set(cacheKey, value);
+        return performInterpolation(value);
+      };
 
       try {
         // Check cache first for performance
         const cachedResult = translationCache.get(cacheKey);
         if (cachedResult !== undefined) {
-          return cachedResult;
+          return performInterpolation(cachedResult);
         }
         // Fallback chain priority:
         // 1. Direct translations object lookup (fastest)
@@ -1182,15 +1213,13 @@ const DivineParsingOracleProvider: React.FC<{
             // Try flat key lookup (backward compatibility)
             const flatValue = (namespaceTranslations as any)[key];
             if (isValidTranslation(flatValue)) {
-              translationCache.set(cacheKey, flatValue);
-              return flatValue;
+              return cacheAndReturn(flatValue);
             }
 
             // Try nested path lookup
             const nestedValue = getNestedValue(namespaceTranslations, key);
             if (isValidTranslation(nestedValue)) {
-              translationCache.set(cacheKey, nestedValue);
-              return nestedValue;
+              return cacheAndReturn(nestedValue);
             }
           }
         }
@@ -1201,14 +1230,12 @@ const DivineParsingOracleProvider: React.FC<{
         if (registryTranslations) {
           const registryValue = registryTranslations[key];
           if (isValidTranslation(registryValue)) {
-            translationCache.set(cacheKey, registryValue);
-            return registryValue;
+            return cacheAndReturn(registryValue);
           }
 
           const nestedRegistryValue = getNestedValue(registryTranslations, key);
           if (isValidTranslation(nestedRegistryValue)) {
-            translationCache.set(cacheKey, nestedRegistryValue);
-            return nestedRegistryValue;
+            return cacheAndReturn(nestedRegistryValue);
           }
         }
 
@@ -1219,8 +1246,7 @@ const DivineParsingOracleProvider: React.FC<{
           if (commonTranslations) {
             const commonValue = (commonTranslations as any)[key];
             if (isValidTranslation(commonValue)) {
-              translationCache.set(cacheKey, commonValue);
-              return commonValue;
+              return cacheAndReturn(commonValue);
             }
           }
         }
@@ -1243,8 +1269,7 @@ const DivineParsingOracleProvider: React.FC<{
                   `🕊️ Oracle: Using ${oppositeLang} fallback for key "${key}" in namespace "${namespace}" (${language} missing)`,
                 );
               }
-              translationCache.set(cacheKey, oppositeValue);
-              return oppositeValue;
+              return cacheAndReturn(oppositeValue);
             }
           }
         }
@@ -1261,8 +1286,7 @@ const DivineParsingOracleProvider: React.FC<{
                   `🕊️ Oracle: Using ${oppositeLang} common fallback for key "${key}" in namespace "${namespace}"`,
                 );
               }
-              translationCache.set(cacheKey, oppositeCommonValue);
-              return oppositeCommonValue;
+              return cacheAndReturn(oppositeCommonValue);
             }
           }
         }
@@ -1281,8 +1305,7 @@ const DivineParsingOracleProvider: React.FC<{
             transformedKey,
           );
           if (isValidTranslation(transformedValue)) {
-            translationCache.set(cacheKey, transformedValue);
-            return transformedValue;
+            return cacheAndReturn(transformedValue);
           }
         }
 
@@ -1297,8 +1320,7 @@ const DivineParsingOracleProvider: React.FC<{
         const finalResult = formatMissingKey(key);
 
         // Cache the result for future lookups
-        translationCache.set(cacheKey, finalResult);
-        return finalResult;
+        return cacheAndReturn(finalResult);
       } catch (error) {
         // Log error in development
         if (process.env.NODE_ENV === "development") {
@@ -1309,8 +1331,7 @@ const DivineParsingOracleProvider: React.FC<{
         }
         const errorResult = formatMissingKey(key);
         // Cache error results too to avoid repeated errors
-        translationCache.set(cacheKey, errorResult);
-        return errorResult;
+        return cacheAndReturn(errorResult);
       }
     };
   }, [language]);

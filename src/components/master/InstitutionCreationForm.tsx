@@ -20,7 +20,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,7 +46,6 @@ import {
   Check,
   ShieldCheck,
   Settings2,
-  Palette,
   CreditCard,
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -147,8 +145,6 @@ function createInstitutionCreationSchema(t: (key: string) => string) {
     });
 }
 
-type InstitutionCreationFormValues = z.infer<typeof institutionCreationSchema>;
-
 type CreationResult = {
   institutionId: string | null;
   admins: Array<{
@@ -159,54 +155,58 @@ type CreationResult = {
   }>;
 };
 
-const defaultValues: InstitutionCreationFormValues = {
-  name: "",
-  mission: "",
-  vision: "",
-  address: "",
-  phone: "",
-  email: "",
-  website: "https://",
-  logoUrl: "",
-  branding: {
-    primaryColor: "#2563eb", // blue-600
-    secondaryColor: "#475569", // slate-600
-  },
-  institutionType: "PRESCHOOL",
-  billingPlan: "ESENCIAL",
-  supportedLevels: [],
-  educationalConfig: {
-    maxCourses: 12,
-    maxSubjects: 10,
-    enabledFeatures: {},
-  },
-  admins: [
-    {
-      name: "",
-      email: "",
-      password: "",
-      phone: "",
-      isPrimary: true,
-    },
-  ],
-};
-
 export function InstitutionCreationForm() {
   const { t } = useLanguage();
   const [creationResult, setCreationResult] = useState<CreationResult | null>(
     null,
   );
 
-  const institutionCreationSchema = createInstitutionCreationSchema(t);
+  const institutionCreationSchema = useMemo(
+    () => createInstitutionCreationSchema(t),
+    [t],
+  );
+
+  type InstitutionCreationFormValues = z.infer<
+    typeof institutionCreationSchema
+  >;
+
+  const defaultValues: InstitutionCreationFormValues = {
+    name: "",
+    mission: "",
+    vision: "",
+    address: "",
+    phone: "",
+    email: "",
+    website: "https://",
+    logoUrl: "",
+    branding: {
+      primaryColor: "#2563eb", // blue-600
+      secondaryColor: "#475569", // slate-600
+    },
+    institutionType: "PRESCHOOL",
+    billingPlan: "ESENCIAL",
+    supportedLevels: [],
+    educationalConfig: {
+      maxCourses: 12,
+      maxSubjects: 10,
+      enabledFeatures: {},
+    },
+    admins: [
+      {
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        isPrimary: true,
+      },
+    ],
+  };
 
   const form = useForm<InstitutionCreationFormValues>({
     resolver: zodResolver(institutionCreationSchema) as any,
     defaultValues,
     mode: "onSubmit",
   });
-
-  // Type assertion helper to work around react-hook-form type issues
-  const formControl = form.control as any;
 
   const {
     fields: adminFields,
@@ -403,7 +403,7 @@ export function InstitutionCreationForm() {
           <CardContent>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit as any)}
+                onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
               >
                 {/* PLAN SELECTION */}
@@ -421,7 +421,9 @@ export function InstitutionCreationForm() {
                             ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-1 ring-blue-500"
                             : "hover:border-blue-300"
                         }`}
-                        onClick={() => form.setValue("billingPlan", key as any)}
+                        onClick={() =>
+                          form.setValue("billingPlan", key as any)
+                        }
                       >
                         <div className="flex justify-between items-center">
                           <span className="font-semibold">{plan.name}</span>
@@ -444,7 +446,7 @@ export function InstitutionCreationForm() {
                 {/* BASIC INFO */}
                 <div className="grid gap-4 md:grid-cols-2 pt-4">
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
@@ -464,7 +466,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="institutionType"
                     render={({ field }) => (
                       <FormItem>
@@ -507,7 +509,7 @@ export function InstitutionCreationForm() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
-                      control={formControl}
+                      control={form.control}
                       name="branding.primaryColor"
                       render={({ field }) => (
                         <FormItem>
@@ -534,7 +536,7 @@ export function InstitutionCreationForm() {
                       )}
                     />
                     <FormField
-                      control={formControl}
+                      control={form.control}
                       name="branding.secondaryColor"
                       render={({ field }) => (
                         <FormItem>
@@ -563,7 +565,7 @@ export function InstitutionCreationForm() {
                   </div>
 
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="supportedLevels"
                     render={() => (
                       <FormItem className="md:col-span-2">
@@ -585,7 +587,7 @@ export function InstitutionCreationForm() {
                           {availableLevels.map((level) => (
                             <FormField
                               key={level.id}
-                              control={formControl}
+                              control={form.control}
                               name="supportedLevels"
                               render={({ field }) => {
                                 return (
@@ -633,7 +635,7 @@ export function InstitutionCreationForm() {
                   />
 
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
@@ -653,7 +655,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
@@ -673,7 +675,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="website"
                     render={({ field }) => (
                       <FormItem>
@@ -693,7 +695,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="logoUrl"
                     render={({ field }) => (
                       <FormItem>
@@ -713,7 +715,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="address"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
@@ -733,7 +735,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="mission"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
@@ -754,7 +756,7 @@ export function InstitutionCreationForm() {
                     )}
                   />
                   <FormField
-                    control={formControl}
+                    control={form.control}
                     name="vision"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
@@ -795,7 +797,7 @@ export function InstitutionCreationForm() {
 
                   <div className="grid gap-4 md:grid-cols-2">
                     <FormField
-                      control={formControl}
+                      control={form.control}
                       name="educationalConfig.maxCourses"
                       render={({ field }) => (
                         <FormItem>
@@ -808,7 +810,7 @@ export function InstitutionCreationForm() {
                       )}
                     />
                     <FormField
-                      control={formControl}
+                      control={form.control}
                       name="educationalConfig.maxSubjects"
                       render={({ field }) => (
                         <FormItem>
@@ -911,7 +913,7 @@ export function InstitutionCreationForm() {
                               )}
                               <Button
                                 type="button"
-                                variant="ghost"
+                                  variant="ghost"
                                 size="sm"
                                 onClick={() => handleRemoveAdmin(index)}
                               >
@@ -922,7 +924,7 @@ export function InstitutionCreationForm() {
                         </CardHeader>
                         <CardContent className="grid gap-3 md:grid-cols-2">
                           <FormField
-                            control={formControl}
+                            control={form.control}
                             name={`admins.${index}.name`}
                             render={({ field }) => (
                               <FormItem>
@@ -942,7 +944,7 @@ export function InstitutionCreationForm() {
                             )}
                           />
                           <FormField
-                            control={formControl}
+                            control={form.control}
                             name={`admins.${index}.email`}
                             render={({ field }) => (
                               <FormItem>
@@ -962,7 +964,7 @@ export function InstitutionCreationForm() {
                             )}
                           />
                           <FormField
-                            control={formControl}
+                            control={form.control}
                             name={`admins.${index}.phone`}
                             render={({ field }) => (
                               <FormItem>
@@ -982,7 +984,7 @@ export function InstitutionCreationForm() {
                             )}
                           />
                           <FormField
-                            control={formControl}
+                            control={form.control}
                             name={`admins.${index}.password`}
                             render={({ field }) => (
                               <FormItem>
