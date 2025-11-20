@@ -24,7 +24,7 @@ interface Message {
   type?: "text" | "suggestion" | "help";
 }
 
-interface JoshChatProps {
+interface CognitoChatProps {
   isOpen: boolean;
   onToggle: () => void;
   onMinimizeChange?: (minimized: boolean) => void;
@@ -34,17 +34,17 @@ interface JoshChatProps {
 }
 
 /**
- * Enhanced Josh Chat Interface
+ * Enhanced Cognito Chat Interface
  * Provides conversational AI assistance with contextual help and guidance
  */
-export function JoshChat({
+export function CognitoChat({
   isOpen,
   onToggle,
   onMinimizeChange,
   onStartTour,
   getTourForContext,
   getPageContext: getPageContextProp,
-}: JoshChatProps) {
+}: CognitoChatProps) {
   const { resolvedTheme } = useTheme();
   const { t } = useDivineParsing();
   const { session } = useSession();
@@ -157,7 +157,7 @@ export function JoshChat({
     }
   }, [isOpen, isMinimized]);
 
-  const generateJoshResponse = async (userMessage: string): Promise<string> => {
+  const generateCognitoResponse = async (userMessage: string): Promise<string> => {
     const context = getPageContext();
     const lowerMessage = userMessage.toLowerCase();
 
@@ -344,10 +344,10 @@ export function JoshChat({
     // Simulate typing delay
     setTimeout(
       async () => {
-        const joshResponse = await generateJoshResponse(inputValue);
-        const joshMessage: Message = {
+        const cognitoResponse = await generateCognitoResponse(inputValue);
+        const cognitoMessage: Message = {
           id: (Date.now() + 1).toString(),
-          content: joshResponse,
+          content: cognitoResponse,
           sender: "josh",
           timestamp: new Date(),
           type: "text",
@@ -408,7 +408,7 @@ export function JoshChat({
 
   if (!isOpen) return null;
 
-  // Don't render chat at all when minimized - let Josh indicator handle it
+  // Don't render chat at all when minimized - let Cognito indicator handle it
   if (isMinimized) return null;
 
   return (
@@ -436,12 +436,10 @@ export function JoshChat({
           {/* Resize indicator */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-white/30 rounded-b-full opacity-0 group-hover:opacity-100 transition-opacity cursor-ns-resize" />
           <div className="flex items-center space-x-2 flex-1 min-w-0">
-            <motion.img
+            <img
               src={joshImage}
               alt=""
               className="w-8 h-8 rounded-full border-2 border-white object-contain flex-shrink-0"
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               aria-hidden="true"
             />
             <div className="min-w-0">
@@ -534,17 +532,6 @@ export function JoshChat({
                         : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
                     }`}
                   >
-                    {message.sender === "josh" && (
-                      <div className="flex items-center space-x-2 mb-1">
-                        <img
-                          src={joshImage}
-                          alt=""
-                          className="w-4 h-4 rounded-full"
-                          aria-hidden="true"
-                        />
-                        <span className="text-xs font-medium">Josh</span>
-                      </div>
-                    )}
                     <p className="text-sm">{message.content}</p>
                     <time
                       className="text-xs opacity-70 mt-1 block"
