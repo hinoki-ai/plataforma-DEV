@@ -1400,6 +1400,18 @@ const DivineParsingOracleProvider: React.FC<{
 export function useDivineParsing(namespaces: string[] = []) {
   const context = useContext(DivineParsingOracleContext);
 
+  // Auto-load required namespaces - Hook must be called unconditionally
+  useEffect(() => {
+    if (context && namespaces.length > 0) {
+      const unloadedNamespaces = namespaces.filter(
+        (ns) => !context.loadedNamespaces.includes(ns),
+      );
+      if (unloadedNamespaces.length > 0) {
+        context.invokeOracles(unloadedNamespaces);
+      }
+    }
+  }, [namespaces, context]);
+
   // Graceful fallback for build time or missing provider
   if (!context) {
     // Log warning only in development
@@ -1431,18 +1443,6 @@ export function useDivineParsing(namespaces: string[] = []) {
       error: null,
     };
   }
-
-  // Auto-load required namespaces
-  useEffect(() => {
-    if (namespaces.length > 0) {
-      const unloadedNamespaces = namespaces.filter(
-        (ns) => !context.loadedNamespaces.includes(ns),
-      );
-      if (unloadedNamespaces.length > 0) {
-        context.invokeOracles(unloadedNamespaces);
-      }
-    }
-  }, [namespaces, context]);
 
   return context;
 }
