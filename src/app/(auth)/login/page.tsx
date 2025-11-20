@@ -5,7 +5,7 @@ import { useSignIn } from "@clerk/nextjs";
 export const dynamic = "force-dynamic";
 import { isClerkAPIResponseError } from "@clerk/shared/error";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Mail, Lock, Eye, EyeOff } from "lucide-react";
@@ -24,12 +24,29 @@ function LoginForm() {
   const callbackUrl = params.get("callbackUrl");
   const router = useRouter();
   const { signIn, isLoaded, setActive } = useSignIn();
-  const { t } = useDivineParsing(["common"]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Handle SSR issue - only use translations after component mounts
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Always call the hook to follow React rules, but use fallback when not mounted
+  const { t } = useDivineParsing(["common"]);
+
+  // Use fallback translation function when not mounted to avoid SSR issues
+  const safeT = isMounted
+    ? t
+    : (key: string) =>
+        key
+          .replace(/auth\./g, "")
+          .replace(/\./g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +89,7 @@ function LoginForm() {
       }
 
       console.error("Unexpected sign-in status:", result);
-      setError(t("auth.login_error"));
+      setError(safeT("auth.login_error"));
     } catch (err) {
       console.error("Error signing in:", err);
       if (isClerkAPIResponseError(err)) {
@@ -82,12 +99,12 @@ function LoginForm() {
           firstError?.code === "form_identifier_not_found" ||
           firstError?.code === "form_identifier_invalid"
         ) {
-          setError(t("auth.invalid_credentials"));
+          setError(safeT("auth.invalid_credentials"));
         } else {
-          setError(firstError?.longMessage ?? t("auth.login_error"));
+          setError(firstError?.longMessage ?? safeT("auth.login_error"));
         }
       } else {
-        setError(t("auth.login_error"));
+        setError(safeT("auth.login_error"));
       }
     } finally {
       setIsLoading(false);
@@ -109,7 +126,7 @@ function LoginForm() {
             variants={fadeInUp}
             className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl"
           >
-            {t("auth.portal_title")}
+            {safeT("auth.portal_title")}
           </motion.h1>
         </div>
       </div>
@@ -122,7 +139,7 @@ function LoginForm() {
               htmlFor="email"
               className="text-left block text-foreground font-medium"
             >
-              {t("auth.email.label")}
+              {safeT("auth.email.label")}
             </Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -143,7 +160,7 @@ function LoginForm() {
               htmlFor="password"
               className="text-left block text-foreground font-medium"
             >
-              {t("auth.password.label")}
+              {safeT("auth.password.label")}
             </Label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -188,10 +205,10 @@ function LoginForm() {
             className="w-full rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none disabled:opacity-50"
           >
             {isLoading
-              ? t("auth.signing_in_button")
+              ? safeT("auth.signing_in_button")
               : !isLoaded
                 ? "Cargando..."
-                : t("auth.sign_in_button")}
+                : safeT("auth.sign_in_button")}
           </Button>
         </form>
 
@@ -199,7 +216,7 @@ function LoginForm() {
         <div className="w-full border-t border-border pt-6 mt-6">
           <div className="text-center">
             <p className="mb-4 text-sm text-muted-foreground">
-              {t("auth.new_parent_question")}
+              {safeT("auth.new_parent_question")}
             </p>
             <Button asChild variant="outline" className="w-full rounded-xl">
               <Link
@@ -207,7 +224,7 @@ function LoginForm() {
                 className="flex items-center justify-center gap-2"
               >
                 <UserPlus className="h-4 w-4" />
-                {t("auth.register_as_parent")}
+                {safeT("auth.register_as_parent")}
               </Link>
             </Button>
           </div>
