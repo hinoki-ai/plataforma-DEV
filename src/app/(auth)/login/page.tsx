@@ -1,6 +1,8 @@
 "use client";
 
 import { useSignIn } from "@clerk/nextjs";
+
+export const dynamic = "force-dynamic";
 import { isClerkAPIResponseError } from "@clerk/shared/error";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
