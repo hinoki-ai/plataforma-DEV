@@ -103,11 +103,11 @@ export function MasterActionCard({
                     href={action.href}
                     className="flex items-center justify-center"
                   >
-                    Ejecutar
+                    Execute
                   </a>
                 ) : (
                   <>
-                    Ejecutar
+                    Execute
                   </>
                 )}
               </Button>

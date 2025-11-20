@@ -1,19 +1,29 @@
 "use client";
 
 /**
- * MASTER DASHBOARD - ENGLISH ONLY
+ * =======================================================================
+ * MASTER DASHBOARD - ENGLISH ONLY - CRITICAL RULE
+ * =======================================================================
  *
- * IMPORTANT: This component is intentionally English-only and should NEVER be internationalized.
+ * ⚠️  CRITICAL REQUIREMENT: This component MUST remain English-only.
+ *    This is a strict rule that CANNOT be broken under any circumstances.
  *
- * Reasons:
+ * REASONS FOR ENGLISH-ONLY POLICY:
  * - Master dashboard is only used by system administrators/developers
  * - i18n adds unnecessary complexity, maintenance overhead, and disk usage
  * - Translation quality for technical admin interfaces is not critical
  * - Avoids wasting developer time on translating technical terminology
  * - Reduces bundle size and improves performance
  *
- * DO NOT ADD i18n, useDivineParsing, or translation hooks to this component.
- * All text must remain hardcoded in English.
+ * STRICT PROHIBITIONS:
+ * ❌ DO NOT add i18n, useDivineParsing, or translation hooks
+ * ❌ DO NOT add useLanguage or any translation utilities
+ * ❌ DO NOT internationalize any text in this component
+ * ✅ All text must remain hardcoded in English
+ * ✅ Future developers: Follow this rule without exception
+ *
+ * If you need to add new text, hardcode it in English only.
+ * =======================================================================
  */
 
 import React, { useMemo } from "react";

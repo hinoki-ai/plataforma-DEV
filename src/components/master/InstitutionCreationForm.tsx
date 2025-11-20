@@ -5,7 +5,6 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { useLanguage } from "@/components/language/useDivineLanguage";
 import {
   Card,
   CardContent,
@@ -50,17 +49,17 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
-function createInstitutionCreationSchema(t: (key: string) => string) {
+function createInstitutionCreationSchema() {
   const adminSchema = z.object({
     name: z
       .string()
-      .min(2, t("master.institution_creation.validation.admin_name_required")),
+      .min(2, "Administrator name is required"),
     email: z
       .string()
-      .email(t("master.institution_creation.validation.admin_email_invalid")),
+      .email("Please enter a valid email address"),
     password: z
       .string()
-      .min(8, t("master.institution_creation.validation.admin_password_min")),
+      .min(8, "Password must be at least 8 characters"),
     phone: z.string().optional(),
     isPrimary: z.boolean(),
   });
@@ -69,46 +68,37 @@ function createInstitutionCreationSchema(t: (key: string) => string) {
     .object({
       name: z
         .string()
-        .min(3, t("master.institution_creation.validation.name_required")),
+        .min(3, "Institution name is required"),
       mission: z
         .string()
-        .min(
-          20,
-          t("master.institution_creation.validation.mission_min_length"),
-        ),
+        .min(20, "Mission must be at least 20 characters"),
       vision: z
         .string()
-        .min(20, t("master.institution_creation.validation.vision_min_length")),
+        .min(20, "Vision must be at least 20 characters"),
       address: z
         .string()
-        .min(5, t("master.institution_creation.validation.address_required")),
+        .min(5, "Address is required"),
       phone: z
         .string()
-        .min(7, t("master.institution_creation.validation.phone_required")),
+        .min(7, "Phone number is required"),
       email: z
         .string()
-        .email(t("master.institution_creation.validation.email_invalid")),
+        .email("Please enter a valid email address"),
       website: z
         .string()
-        .url(t("master.institution_creation.validation.website_invalid")),
+        .url("Please enter a valid URL"),
       logoUrl: z
         .string()
-        .url(t("master.institution_creation.validation.logo_invalid"))
+        .url("Please enter a valid URL")
         .optional()
         .or(z.literal("")),
       branding: z.object({
         primaryColor: z
           .string()
-          .regex(
-            /^#([0-9a-f]{3}){1,2}$/i,
-            t("master.institution_creation.validation.color_invalid"),
-          ),
+          .regex(/^#([0-9a-f]{3}){1,2}$/i, "Please enter a valid hex color (e.g., #2563eb)"),
         secondaryColor: z
           .string()
-          .regex(
-            /^#([0-9a-f]{3}){1,2}$/i,
-            t("master.institution_creation.validation.color_invalid"),
-          ),
+          .regex(/^#([0-9a-f]{3}){1,2}$/i, "Please enter a valid hex color (e.g., #2563eb)"),
       }),
       institutionType: z.enum([
         "PRESCHOOL",
@@ -132,15 +122,10 @@ function createInstitutionCreationSchema(t: (key: string) => string) {
         .optional(),
       admins: z
         .array(adminSchema)
-        .min(
-          1,
-          t("master.institution_creation.validation.primary_admin_required"),
-        ),
+        .min(1, "At least one primary administrator is required"),
     })
     .refine((data) => data.admins.some((admin) => admin.isPrimary), {
-      message: t(
-        "master.institution_creation.validation.primary_admin_required",
-      ),
+      message: "At least one primary administrator is required",
       path: ["admins"],
     });
 }
@@ -155,15 +140,22 @@ type CreationResult = {
   }>;
 };
 
+/**
+ * INSTITUTION CREATION FORM - ENGLISH ONLY
+ *
+ * IMPORTANT: This component is intentionally English-only for Master users.
+ * Master users are system administrators who speak English.
+ * This avoids translation complexity for technical administrative interfaces.
+ */
+
 export function InstitutionCreationForm() {
-  const { t } = useLanguage();
   const [creationResult, setCreationResult] = useState<CreationResult | null>(
     null,
   );
 
   const institutionCreationSchema = useMemo(
-    () => createInstitutionCreationSchema(t),
-    [t],
+    () => createInstitutionCreationSchema(),
+    [],
   );
 
   type InstitutionCreationFormValues = z.infer<
@@ -284,7 +276,7 @@ export function InstitutionCreationForm() {
   const handleRemoveAdmin = (index: number) => {
     const admins = form.getValues("admins");
     if (admins.length === 1) {
-      toast.error(t("master.institution_creation.must_keep_admin"));
+      toast.error("You must keep at least one administrator");
       return;
     }
 
@@ -355,7 +347,7 @@ export function InstitutionCreationForm() {
         throw new Error(data.error || "No se pudo crear la institución");
       }
 
-      toast.success(t("master.institution_creation.success_message"));
+      toast.success("The institution has been created and administrators have been notified.");
       setCreationResult({
         institutionId: data.institutionId,
         admins: data.admins ?? [],
@@ -385,19 +377,19 @@ export function InstitutionCreationForm() {
 
   return (
     <MasterPageTemplate
-      title={t("master.institution_creation.title")}
-      subtitle={t("master.institution_creation.subtitle")}
+      title="Institution Creation"
+      subtitle="Create and configure new educational institutions"
       context="MASTER_INSTITUTION_CREATION"
     >
       <Card className="border-blue-200 dark:border-blue-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-blue-600" />
-            {t("master.institution_creation.basic_info")}
-          </CardTitle>
-          <CardDescription>
-            {t("master.institution_creation.basic_info_desc")}
-          </CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-blue-600" />
+              Basic Information
+            </CardTitle>
+            <CardDescription>
+              Institution name, contact details and basic configuration
+            </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -406,7 +398,7 @@ export function InstitutionCreationForm() {
               <div className="space-y-4 mb-6">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <CreditCard className="h-5 w-5 text-green-600" />
-                  {t("master.institution_creation.billing_plan")}
+                  Billing Plan
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {Object.entries(BILLING_PLANS).map(([key, plan]) => (
@@ -426,9 +418,9 @@ export function InstitutionCreationForm() {
                         )}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        {t("master.institution_creation.up_to_courses", { count: plan.maxCourses })}
+                        Up to {plan.maxCourses} courses
                         <br />
-                        {t("master.institution_creation.up_to_subjects", { count: plan.maxSubjects })}
+                        Up to {plan.maxSubjects} subjects
                       </div>
                     </div>
                   ))}
@@ -444,17 +436,15 @@ export function InstitutionCreationForm() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {t("master.institution_creation.institution_name")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t(
-                            "master.institution_creation.institution_name_placeholder",
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Institution Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter institution name"
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -464,22 +454,20 @@ export function InstitutionCreationForm() {
                   name="institutionType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {t("master.institution_creation.institution_type")}
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              placeholder={t(
-                                "master.institution_creation.institution_type_placeholder",
-                              )}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
+                        <FormLabel>
+                          Institution Type
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                placeholder="Select institution type"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
                         <SelectContent>
                           {institutionOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
@@ -504,9 +492,9 @@ export function InstitutionCreationForm() {
                     name="branding.primaryColor"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.primary_color")}
-                        </FormLabel>
+                          <FormLabel>
+                            Primary Color
+                          </FormLabel>
                         <div className="flex gap-2">
                           <FormControl>
                             <Input
@@ -531,9 +519,9 @@ export function InstitutionCreationForm() {
                     name="branding.secondaryColor"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          {t("master.institution_creation.secondary_color")}
-                        </FormLabel>
+                          <FormLabel>
+                            Secondary Color
+                          </FormLabel>
                         <div className="flex gap-2">
                           <FormControl>
                             <Input
@@ -561,18 +549,18 @@ export function InstitutionCreationForm() {
                   render={() => (
                     <FormItem className="md:col-span-2">
                       <div className="mb-4 mt-2">
-                        <FormLabel className="text-base">
-                          {t("master.institution_creation.supported_levels")}
-                        </FormLabel>
-                        <CardDescription>
-                          Seleccione los niveles que ofrecerá esta institución (
-                          {availableLevels.length} disponibles para{" "}
-                          {
-                            INSTITUTION_TYPE_INFO[selectedInstitutionType]
-                              .chileanName
-                          }
-                          )
-                        </CardDescription>
+                          <FormLabel className="text-base">
+                            Supported Educational Levels
+                          </FormLabel>
+                          <CardDescription>
+                            Select the levels that this institution will offer (
+                            {availableLevels.length} available for{" "}
+                            {
+                              INSTITUTION_TYPE_INFO[selectedInstitutionType]
+                                .name
+                            }
+                            )
+                          </CardDescription>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 bg-muted/10">
                         {availableLevels.map((level) => (
@@ -628,17 +616,15 @@ export function InstitutionCreationForm() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {t("master.institution_creation.phone")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t(
-                            "master.institution_creation.phone_placeholder",
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Phone Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="+1 (555) 123-4567"
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -648,17 +634,15 @@ export function InstitutionCreationForm() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {t("master.institution_creation.email")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t(
-                            "master.institution_creation.email_placeholder",
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Institutional Email
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="contact@institution.edu"
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -668,17 +652,15 @@ export function InstitutionCreationForm() {
                   name="website"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {t("master.institution_creation.website")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t(
-                            "master.institution_creation.website_placeholder",
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Website
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://www.institution.edu"
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -688,17 +670,15 @@ export function InstitutionCreationForm() {
                   name="logoUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {t("master.institution_creation.logo_url")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t(
-                            "master.institution_creation.logo_url_placeholder",
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Logo URL (Optional)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://..."
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -708,17 +688,15 @@ export function InstitutionCreationForm() {
                   name="address"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>
-                        {t("master.institution_creation.address")}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t(
-                            "master.institution_creation.address_placeholder",
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Address
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter complete address"
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -728,18 +706,16 @@ export function InstitutionCreationForm() {
                   name="mission"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>
-                        {t("master.institution_creation.mission")}
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder={t(
-                            "master.institution_creation.mission_placeholder",
-                          )}
-                          className="min-h-[100px]"
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Mission Statement
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Describe the institution's mission"
+                            className="min-h-[100px]"
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -749,18 +725,16 @@ export function InstitutionCreationForm() {
                   name="vision"
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
-                      <FormLabel>
-                        {t("master.institution_creation.vision")}
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder={t(
-                            "master.institution_creation.vision_placeholder",
-                          )}
-                          className="min-h-[100px]"
-                          {...field}
-                        />
-                      </FormControl>
+                        <FormLabel>
+                          Vision Statement
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Describe the institution's vision"
+                            className="min-h-[100px]"
+                            {...field}
+                          />
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -772,13 +746,13 @@ export function InstitutionCreationForm() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold flex items-center gap-2">
-                      <Settings2 className="h-5 w-5 text-blue-600" />
-                      {t("master.institution_creation.educational_config")}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {t("master.institution_creation.educational_config_desc")}
-                    </p>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Settings2 className="h-5 w-5 text-blue-600" />
+                        Educational Configuration
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Configure levels, subjects and educational features
+                      </p>
                   </div>
                 </div>
 
@@ -843,27 +817,27 @@ export function InstitutionCreationForm() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold flex items-center gap-2">
-                      <ShieldCheck className="h-5 w-5 text-blue-600" />
-                      {t("master.institution_creation.administrators")}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {t("master.institution_creation.administrators_desc")}
-                    </p>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <ShieldCheck className="h-5 w-5 text-blue-600" />
+                        Institution Administrators
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Create primary and additional administrators
+                      </p>
                   </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleAddAdmin}
-                  >
-                    {t("master.institution_creation.add_admin")}
-                  </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleAddAdmin}
+                    >
+                      Add Administrator
+                    </Button>
                 </div>
 
                 {adminsRootError && (
                   <Alert variant="destructive">
                     <AlertTitle>
-                      {t("master.institution_creation.configuration_error")}
+                      Configuration Error
                     </AlertTitle>
                     <AlertDescription>{adminsRootError}</AlertDescription>
                   </Alert>
@@ -878,7 +852,7 @@ export function InstitutionCreationForm() {
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">
                           <CardTitle className="text-base">
-                            Administrador #{index + 1}
+                            Administrator #{index + 1}
                           </CardTitle>
                           <div className="flex items-center gap-3">
                             {primaryAdminIndex === index ? (
@@ -886,26 +860,26 @@ export function InstitutionCreationForm() {
                                 className="bg-green-500 text-white"
                                 variant="secondary"
                               >
-                                Principal
+                                Primary
                               </Badge>
                             ) : (
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleSetPrimary(index)}
+                                >
+                                  Mark as Primary
+                                </Button>
+                            )}
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleSetPrimary(index)}
+                                onClick={() => handleRemoveAdmin(index)}
                               >
-                                Marcar como principal
+                                Remove
                               </Button>
-                            )}
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemoveAdmin(index)}
-                            >
-                              Eliminar
-                            </Button>
                           </div>
                         </div>
                       </CardHeader>
@@ -915,17 +889,15 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.name`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>
-                                {t("master.institution_creation.admin_name")}
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder={t(
-                                    "master.institution_creation.admin_name_placeholder",
-                                  )}
-                                  {...field}
-                                />
-                              </FormControl>
+                                <FormLabel>
+                                  Administrator Name
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter full name"
+                                    {...field}
+                                  />
+                                </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -935,17 +907,15 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.email`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>
-                                {t("master.institution_creation.admin_email")}
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder={t(
-                                    "master.institution_creation.admin_email_placeholder",
-                                  )}
-                                  {...field}
-                                />
-                              </FormControl>
+                                <FormLabel>
+                                  Email Address
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="admin@institution.edu"
+                                    {...field}
+                                  />
+                                </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -955,17 +925,15 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.phone`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>
-                                {t("master.institution_creation.admin_phone")}
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder={t(
-                                    "master.institution_creation.admin_phone_placeholder",
-                                  )}
-                                  {...field}
-                                />
-                              </FormControl>
+                                <FormLabel>
+                                  Phone (Optional)
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="+1 (555) 123-4567"
+                                    {...field}
+                                  />
+                                </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -975,20 +943,16 @@ export function InstitutionCreationForm() {
                           name={`admins.${index}.password`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>
-                                {t(
-                                  "master.institution_creation.admin_password",
-                                )}
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  type="password"
-                                  placeholder={t(
-                                    "master.institution_creation.admin_password_placeholder",
-                                  )}
-                                  {...field}
-                                />
-                              </FormControl>
+                                <FormLabel>
+                                  Password
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="password"
+                                    placeholder="Minimum 8 characters"
+                                    {...field}
+                                  />
+                                </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -1000,19 +964,19 @@ export function InstitutionCreationForm() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => form.reset(defaultValues)}
-                  disabled={form.formState.isSubmitting}
-                >
-                  Limpiar formulario
-                </Button>
-                <Button type="submit" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting
-                    ? t("master.institution_creation.creating")
-                    : t("master.institution_creation.create_institution")}
-                </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => form.reset(defaultValues)}
+                    disabled={form.formState.isSubmitting}
+                  >
+                    Clear Form
+                  </Button>
+                  <Button type="submit" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting
+                      ? "Creating Institution..."
+                      : "Create Institution"}
+                  </Button>
               </div>
             </form>
           </Form>

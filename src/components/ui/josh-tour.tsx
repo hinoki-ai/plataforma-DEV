@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { useSession } from "@clerk/nextjs";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
-import { X, ArrowRight, ArrowLeft, Play, Pause } from "lucide-react";
+import { ArrowRight, ArrowLeft, Play, Pause } from "lucide-react";
 
 interface TourStep {
   id: string;
@@ -280,7 +280,7 @@ export function JoshTour({
           height: ${rect.height + 8}px;
           border: 3px solid #3b82f6;
           border-radius: 8px;
-          box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85);
           pointer-events: none;
           z-index: 9998;
           animation: pulse-highlight 2s infinite;
@@ -349,8 +349,7 @@ export function JoshTour({
         {/* Dark overlay with highlight */}
         <div
           ref={overlayRef}
-          className="absolute inset-0 bg-black/50 pointer-events-auto"
-          onClick={skipTour}
+          className="absolute inset-0 bg-black/50 pointer-events-none"
         />
 
         {/* Tour tooltip */}
@@ -394,14 +393,6 @@ export function JoshTour({
                   <p className="text-sm opacity-75">{tour.title}</p>
                 </div>
               </div>
-              <button
-                onClick={skipTour}
-                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors focus:ring-2 focus:ring-red-300"
-                aria-label={t("tour.skip", "Omitir tour")}
-                title={t("tour.skip", "Omitir tour")}
-              >
-                <X className="w-5 h-5" aria-hidden="true" />
-              </button>
             </div>
 
             {/* Content */}

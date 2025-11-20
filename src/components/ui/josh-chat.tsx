@@ -486,8 +486,8 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                 </div>
 
                 {/* Input */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex space-x-2">
+                <div className="px-3 py-3 pl-2 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex space-x-1">
                     <label htmlFor="josh-chat-input" className="sr-only">
                       {t(
                         "josh.chat.input.label",
@@ -505,7 +505,7 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                         "josh.chat.placeholder",
                         "Escribe tu mensaje...",
                       )}
-                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                       disabled={isTyping}
                       aria-describedby={
                         isTyping ? "josh-typing-status" : undefined
@@ -515,11 +515,11 @@ export function JoshChat({ isOpen, onToggle }: JoshChatProps) {
                     <button
                       onClick={handleSendMessage}
                       disabled={!inputValue.trim() || isTyping}
-                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0"
+                      className="px-3 py-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0"
                       aria-label={t("josh.chat.send", "Enviar mensaje")}
                       title={t("josh.chat.send", "Enviar mensaje")}
                     >
-                      <Send className="w-4 h-4" aria-hidden="true" />
+                      <Send className="w-3 h-3" aria-hidden="true" />
                     </button>
                   </div>
                   {isTyping && (

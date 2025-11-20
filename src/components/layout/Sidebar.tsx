@@ -188,7 +188,7 @@ export function Sidebar({
         role="navigation"
         {...props}
       >
-        <div className="flex h-16 items-center justify-between border-b border-border px-4">
+        <div className="flex h-16 items-center justify-center border-b border-border px-4">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -197,30 +197,49 @@ export function Sidebar({
               <span className="font-semibold text-sm">Plataforma Astral</span>
             </div>
           )}
-          {isCollapsed && (
-            <div className="flex flex-col items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                <NavigationIcons.Planning className="h-4 w-4 text-primary" />
-              </div>
-            </div>
+          {!isCollapsed && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 ml-auto"
+              onClick={onToggle}
+              aria-label={t("nav.sidebar.collapse")}
+            >
+              <NavigationIcons.ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            </Button>
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={onToggle}
-            aria-label={
-              isCollapsed ? t("nav.sidebar.expand") : t("nav.sidebar.collapse")
-            }
-          >
-            <NavigationIcons.ChevronRight
-              className={cn(
-                "h-4 w-4 transition-transform duration-200",
-                isCollapsed && "rotate-180",
-              )}
-              aria-hidden="true"
-            />
-          </Button>
+          {isCollapsed && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/15 to-primary/5 hover:from-primary/25 hover:to-primary/10 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
+                  onClick={onToggle}
+                  aria-label={t("nav.sidebar.expand")}
+                >
+                  <svg
+                    className="w-5 h-5 text-primary"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
+                      d="M9 3.5v17M3 9.4c0-2.24 0-3.36.436-4.216a4 4 0 0 1 1.748-1.748C6.04 3 7.16 3 9.4 3h5.2c2.24 0 3.36 0 4.216.436a4 4 0 0 1 1.748 1.748C21 6.04 21 7.16 21 9.4v5.2c0 2.24 0 3.36-.436 4.216a4 4 0 0 1-1.748 1.748C17.96 21 16.84 21 14.6 21H9.4c-2.24 0-3.36 0-4.216-.436a4 4 0 0 1-1.748-1.748C3 17.96 3 16.84 3 14.6z"
+                    />
+                  </svg>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>{t("nav.sidebar.expand")}</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
 
         <ScrollArea

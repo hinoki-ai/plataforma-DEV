@@ -115,15 +115,7 @@ export function JoshOnboarding({
                       : "A tu izquierda encontrarás el menú principal. Aquí podrás acceder a todas las herramientas que necesitas: Planificación, Asistencia, Notas y más."}
                   </p>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                    <Button
-                      variant="ghost"
-                      onClick={handleDismiss}
-                      className="text-muted-foreground hover:text-foreground"
-                    >
-                      Omitir
-                    </Button>
-
+                  <div className="flex items-center justify-center pt-4 border-t border-border/50">
                     <Button
                       onClick={step === 0 ? handleNext : handleComplete}
                       className="group"

@@ -1,13 +1,23 @@
 /**
- * 🏛️ Institution Master Control Card
- * Supreme educational institution configuration for master users
+ * 🏛️ INSTITUTION MASTER CONTROL CARD - ENGLISH ONLY
+ *
+ * CRITICAL RULE: This component MUST remain English-only and hardcoded.
+ * No translations, i18n hooks, or internationalization allowed.
+ *
+ * This is a strict requirement that cannot be broken for:
+ * - Master dashboard consistency
+ * - Technical admin interface standards
+ * - Performance optimization
+ * - Avoiding translation overhead for system administrators
+ *
+ * If you need to add text, hardcode it in English only.
+ * DO NOT add useDivineParsing, useLanguage, or any translation hooks.
  */
 
 "use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import {
   Card,
   CardContent,
@@ -44,7 +54,6 @@ interface InstitutionMasterCardProps {
 export function InstitutionMasterCard({
   currentType = "PRESCHOOL",
 }: InstitutionMasterCardProps) {
-  const { t } = useDivineParsing(["common"]);
   const router = useRouter();
   const [isConfiguring, setIsConfiguring] = useState(false);
   const currentInfo = INSTITUTION_TYPE_INFO[currentType];
@@ -67,9 +76,9 @@ export function InstitutionMasterCard({
     try {
       // Simulate master-level reconfiguration
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      toast.success(t("master.config_updated", "common"));
+      toast.success("Configuration updated successfully");
     } catch (error) {
-      toast.error(t("master.config_error", "common"));
+      toast.error("Configuration update failed");
     } finally {
       setIsConfiguring(false);
     }
@@ -77,42 +86,42 @@ export function InstitutionMasterCard({
 
   const masterActions = [
     {
-      label: "Provisionar nueva institución",
+      label: "Provision New Institution",
       icon: Building2,
-      description: "Crear y vincular un tenant completo",
+      description: "Create and link a complete tenant",
       action: () => router.push("/master/institution-creation"),
       color:
         "bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700",
     },
     {
-      label: "Configurar Sistema Educativo",
+      label: "Configure Educational System",
       icon: Settings,
-      description: "Control supremo de niveles educativos",
-      action: () => toast.info(t("master.accessing_config", "common")),
+      description: "Supreme control of educational levels",
+      action: () => toast.info("Accessing system configuration"),
       color:
         "bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700",
     },
     {
-      label: "Migrar Estructura Educativa",
+      label: "Migrate Educational Structure",
       icon: Database,
-      description: "Migración masiva de datos educativos",
+      description: "Mass migration of educational data",
       action: () => toast.info("🏛️ MASTER: Iniciendo migración educativa"),
       color:
         "bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700",
     },
     {
-      label: "Gestión de Instituciones",
+      label: "Institution Management",
       icon: Building2,
-      description: "Administrar tenants y sus usuarios",
+      description: "Manage tenants and their users",
       action: () => router.push("/master/institutions"),
       color:
         "bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700",
     },
     {
-      label: "Analytics Institucional",
+      label: "Institutional Analytics",
       icon: BarChart3,
-      description: "Métricas avanzadas del sistema educativo",
-      action: () => toast.info("🏛️ MASTER: Cargando analytics educativos"),
+      description: "Advanced metrics of the educational system",
+      action: () => toast.info("🏛️ MASTER: Loading educational analytics"),
       color:
         "bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700",
     },
@@ -129,7 +138,7 @@ export function InstitutionMasterCard({
               <AlertDescription>
                 <div className="flex items-center justify-between w-full">
                   <div>
-                    <strong>{t("institution.current_institution")}</strong>{" "}
+                    <strong>Current Institution:</strong>{" "}
                     {currentInfo.chileanName}
                     <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       {currentInfo.levels.length} niveles educativos • ISCED{" "}
@@ -171,7 +180,7 @@ export function InstitutionMasterCard({
           <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
             <h4 className="font-medium mb-3 flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Shield className="h-4 w-4" />
-              Niveles Educativos Disponibles
+              Available Educational Levels
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
               {Object.entries(INSTITUTION_TYPE_INFO).map(([type, info]) => {
@@ -190,7 +199,7 @@ export function InstitutionMasterCard({
                       </div>
                       {isActive && (
                         <Badge className="mt-1" variant="secondary">
-                          Activo
+                          Active
                         </Badge>
                       )}
                     </div>
@@ -210,8 +219,8 @@ export function InstitutionMasterCard({
             >
               <Crown className="h-5 w-5 mr-2" />
               {isConfiguring
-                ? "Reconfigurando Sistema..."
-                : "🏛️ MASTER RECONFIGURACIÓN EDUCATIVA"}
+                ? "Reconfiguring System..."
+                : "🏛️ MASTER EDUCATIONAL RECONFIGURATION"}
             </Button>
           </div>
         </div>

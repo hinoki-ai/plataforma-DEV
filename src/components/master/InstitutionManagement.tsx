@@ -1,3 +1,19 @@
+/**
+ * INSTITUTION MANAGEMENT - ENGLISH ONLY
+ *
+ * CRITICAL RULE: This component MUST remain English-only and hardcoded.
+ * No translations, i18n hooks, or internationalization allowed.
+ *
+ * This is a strict requirement that cannot be broken for:
+ * - Master dashboard consistency
+ * - Technical admin interface standards
+ * - Performance optimization
+ * - Avoiding translation overhead for system administrators
+ *
+ * If you need to add text, hardcode it in English only.
+ * DO NOT add useDivineParsing, useLanguage, or any translation hooks.
+ */
+
 "use client";
 
 import { useQuery } from "convex/react";
@@ -22,15 +38,12 @@ import { Button } from "@/components/ui/button";
 import { INSTITUTION_TYPE_INFO } from "@/lib/educational-system";
 import { Building2, Users, Settings, Loader2 } from "lucide-react";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { useRouter } from "next/navigation";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 export function InstitutionManagement() {
   const institutions = useQuery(api.institutionInfo.getAllInstitutions);
   const router = useRouter();
-  const { t } = useDivineParsing(["common"]);
-  const tc = (key: string) => t(key, "common");
 
   if (institutions === undefined) {
     return (
@@ -45,10 +58,10 @@ export function InstitutionManagement() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Building2 className="h-5 w-5 text-blue-600" />
-          {tc("institution_management.title")}
+Institution Management
         </CardTitle>
         <CardDescription>
-          {tc("institution_management.subtitle")}
+Manage all institutions in the system
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -56,19 +69,19 @@ export function InstitutionManagement() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{tc("institution_management.table.name")}</TableHead>
-                <TableHead>{tc("institution_management.table.type")}</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Type</TableHead>
                 <TableHead>
-                  {tc("institution_management.table.contact")}
+Contact
                 </TableHead>
                 <TableHead>
-                  {tc("institution_management.table.status")}
+Status
                 </TableHead>
                 <TableHead>
-                  {tc("institution_management.table.created")}
+Created
                 </TableHead>
                 <TableHead className="text-right">
-                  {tc("institution_management.table.actions")}
+Actions
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -108,13 +121,13 @@ export function InstitutionManagement() {
                         }
                       >
                         {inst.isActive
-                          ? tc("institution_management.status.active")
-                          : tc("institution_management.status.inactive")}
+                          ? "Active"
+                          : "Inactive"}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm text-muted-foreground">
-                        {format(inst._creationTime, "PP", { locale: es })}
+                        {format(inst._creationTime, "PP", { locale: enUS })}
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
@@ -129,7 +142,7 @@ export function InstitutionManagement() {
                           }
                         >
                           <Users className="h-4 w-4 mr-1" />
-                          {tc("institution_management.buttons.users")}
+Users
                         </Button>
                         <Button
                           variant="ghost"
@@ -141,7 +154,7 @@ export function InstitutionManagement() {
                           }
                         >
                           <Settings className="h-4 w-4 mr-1" />
-                          {tc("institution_management.buttons.settings")}
+Settings
                         </Button>
                       </div>
                     </TableCell>
@@ -154,7 +167,7 @@ export function InstitutionManagement() {
                     colSpan={6}
                     className="text-center py-8 text-muted-foreground"
                   >
-                    {tc("institution_management.empty")}
+No institutions found
                   </TableCell>
                 </TableRow>
               )}

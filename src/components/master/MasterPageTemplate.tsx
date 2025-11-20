@@ -69,19 +69,17 @@ export function MasterPageTemplate({
 
   return (
     <div className={containerClass}>
-      <div className="container mx-auto px-6 py-8 space-y-8">
-        <RoleAwareHeader title={title} subtitle={subtitle} />
+      <RoleAwareHeader title={title} subtitle={subtitle} />
 
-        <AdvancedErrorBoundary
-          context={context}
-          enableRetry={true}
-          showDetails={process.env.NODE_ENV === "development"}
-        >
-          <Suspense fallback={fallbackContent || defaultFallback}>
-            <div className={`${maxWidth} mx-auto space-y-8`}>{children}</div>
-          </Suspense>
-        </AdvancedErrorBoundary>
-      </div>
+      <AdvancedErrorBoundary
+        context={context}
+        enableRetry={true}
+        showDetails={process.env.NODE_ENV === "development"}
+      >
+        <Suspense fallback={fallbackContent || defaultFallback}>
+          <div className={`${maxWidth} space-y-8`}>{children}</div>
+        </Suspense>
+      </AdvancedErrorBoundary>
     </div>
   );
 }

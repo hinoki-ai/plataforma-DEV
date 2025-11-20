@@ -7,13 +7,11 @@ import { AdvancedErrorBoundary } from "@/components/ui/advanced-error-boundary";
 import { dbLogger } from "@/lib/logger";
 import { MasterDashboard } from "@/components/master/MasterDashboard";
 import { InstitutionMasterCard } from "@/components/master/InstitutionMasterCard";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 
 // Force dynamic rendering for Vercel compatibility
 export const dynamic = "force-dynamic";
 
 export default function MasterDashboardPage() {
-  const { t } = useDivineParsing(["master", "common"]);
 
   // Handle critical failures gracefully
   try {
@@ -28,7 +26,7 @@ export default function MasterDashboardPage() {
 
   return (
     <AdvancedErrorBoundary
-      context={t("master.dashboard.title", "master")}
+      context="Master Dashboard"
       enableRetry={true}
       showDetails={process.env.NODE_ENV === "development"}
     >

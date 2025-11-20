@@ -88,7 +88,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
             "w-8 h-8 relative transition-all duration-200",
             className,
           )}
-          title="Configuración Avanzada"
+          title="Advanced Settings"
           enhancement="minimal"
         >
           <Settings2 className="h-4 w-4" />
@@ -101,7 +101,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
       <DropdownMenuContent align="end" className="w-64" sideOffset={8}>
         <DropdownMenuLabel className="flex items-center gap-2">
           <Settings2 className="h-4 w-4" />
-          <span>Configuración Avanzada</span>
+          <span>Advanced Settings</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
@@ -153,9 +153,9 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
         >
           <Code2 className="mr-2 h-4 w-4" />
           <div className="flex flex-col">
-            <span className="font-medium">Panel Desarrollador</span>
+            <span className="font-medium">Developer Panel</span>
             <span className="text-xs text-muted-foreground">
-              {showDevPanel ? "Activado" : "Desactivado"}
+              {showDevPanel ? "Enabled" : "Disabled"}
             </span>
           </div>
         </DropdownMenuItem>
@@ -166,7 +166,7 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
         >
           <Gauge className="mr-2 h-4 w-4" />
           <div className="flex flex-col">
-            <span className="font-medium">Modo Rendimiento</span>
+            <span className="font-medium">Performance Mode</span>
             <span className="text-xs text-muted-foreground">
               {performanceMode ? "Activado" : "Desactivado"}
             </span>
@@ -178,18 +178,18 @@ export function AdvancedButton({ className }: AdvancedButtonProps) {
         {/* Quick Actions */}
         <div className="px-2 py-1">
           <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-            ⚡ Acciones Rápidas
+            ⚡ Quick Actions
           </span>
         </div>
 
         <DropdownMenuItem className="cursor-pointer">
           <Zap className="mr-2 h-4 w-4" />
-          <span>Limpiar Cache</span>
+          <span>Clear Cache</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="cursor-pointer">
           <Eye className="mr-2 h-4 w-4" />
-          <span>Modo Inspector</span>
+          <span>Inspector Mode</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

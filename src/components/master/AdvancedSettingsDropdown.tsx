@@ -180,7 +180,7 @@ export function AdvancedSettingsDropdown({
 
           <DropdownMenuItem className="cursor-pointer">
             <Zap className="h-4 w-4 mr-2" />
-            <span>Limpiar Cache</span>
+            <span>Clear Cache</span>
           </DropdownMenuItem>
 
           <DropdownMenuItem className="cursor-pointer">
@@ -349,7 +349,7 @@ export function AdvancedSettingsDropdown({
           <DropdownMenuItem className="cursor-pointer">
             <Zap className="h-4 w-4 mr-2 text-yellow-600" />
             <div className="flex flex-col">
-              <span className="font-medium">Limpiar Cache Local</span>
+              <span className="font-medium">Clear Local Cache</span>
               <span className="text-xs text-muted-foreground">
                 Elimina datos temporales
               </span>

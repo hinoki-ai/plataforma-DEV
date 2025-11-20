@@ -602,18 +602,17 @@ export function RoleAwareDashboard() {
               <DashboardCard
                 title="📢 Centro de Notificaciones"
                 description="Gestiona notificaciones del sistema"
+                className="relative"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Bell className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                    <div>
-                      <p className="text-sm font-medium">
-                        Sistema de notificaciones activo
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Envía notificaciones en tiempo real
-                      </p>
-                    </div>
+                <Bell className="absolute top-3 right-3 h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div className="space-y-3 pt-2">
+                  <div>
+                    <p className="text-sm font-medium">
+                      Sistema de notificaciones activo
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Envía notificaciones en tiempo real
+                    </p>
                   </div>
                   <div className="pt-2">
                     <Button variant="outline" size="sm" className="w-full">

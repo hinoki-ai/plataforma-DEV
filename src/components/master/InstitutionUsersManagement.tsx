@@ -1,3 +1,19 @@
+/**
+ * INSTITUTION USERS MANAGEMENT - ENGLISH ONLY
+ *
+ * CRITICAL RULE: This component MUST remain English-only and hardcoded.
+ * No translations, i18n hooks, or internationalization allowed.
+ *
+ * This is a strict requirement that cannot be broken for:
+ * - Master dashboard consistency
+ * - Technical admin interface standards
+ * - Performance optimization
+ * - Avoiding translation overhead for system administrators
+ *
+ * If you need to add text, hardcode it in English only.
+ * DO NOT add useDivineParsing, useLanguage, or any translation hooks.
+ */
+
 "use client";
 
 import { useQuery } from "convex/react";
@@ -28,9 +44,8 @@ import {
   Baby,
 } from "lucide-react";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { useParams } from "next/navigation";
-import { useLanguage } from "@/components/language/LanguageContext";
 
 const ROLE_ICONS: Record<string, React.ReactNode> = {
   MASTER: <Shield className="h-4 w-4 text-red-500" />,
@@ -41,15 +56,14 @@ const ROLE_ICONS: Record<string, React.ReactNode> = {
 };
 
 const ROLE_LABELS: Record<string, string> = {
-  MASTER: "master.institution_users.role_master",
-  ADMIN: "master.institution_users.role_admin",
-  PROFESOR: "master.institution_users.role_teacher",
-  PARENT: "master.institution_users.role_parent",
-  PUBLIC: "master.institution_users.role_public",
+  MASTER: "Master",
+  ADMIN: "Administrator",
+  PROFESOR: "Teacher",
+  PARENT: "Parent",
+  PUBLIC: "Public",
 };
 
 export function InstitutionUsersManagement() {
-  const { t } = useLanguage();
   const params = useParams();
   const institutionId = params.institutionId as Id<"institutionInfo">;
 
@@ -66,7 +80,7 @@ export function InstitutionUsersManagement() {
       <div className="flex justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <p className="mt-2 text-muted-foreground">
-          {t("master.institution_users.loading")}
+Loading users...
         </p>
       </div>
     );
@@ -81,13 +95,10 @@ export function InstitutionUsersManagement() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5 text-blue-600" />
-          {t("master.institution_users.title")} - {institution.name}
+Institution Users - {institution.name}
         </CardTitle>
         <CardDescription>
-          {t("master.institution_users.subtitle").replace(
-            "{institutionName}",
-            institution.name,
-          )}
+Manage users and their roles for {institution.name}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -95,16 +106,16 @@ export function InstitutionUsersManagement() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("master.institution_users.user")}</TableHead>
+                <TableHead>User</TableHead>
                 <TableHead>
-                  {t("master.institution_users.role_in_institution")}
+Role in Institution
                 </TableHead>
-                <TableHead>{t("master.institution_users.email")}</TableHead>
+                <TableHead>Email</TableHead>
                 <TableHead>
-                  {t("master.institution_users.membership_status")}
+Membership Status
                 </TableHead>
                 <TableHead>
-                  {t("master.institution_users.registered_date")}
+Registered Date
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -122,10 +133,7 @@ export function InstitutionUsersManagement() {
                         <User className="h-4 w-4" />
                       )}
                       <Badge variant="outline">
-                        {t(
-                          ROLE_LABELS[user.role as string] ||
-                            "master.institution_users.role_public",
-                        )}
+                        {ROLE_LABELS[user.role as string] || "Public"}
                       </Badge>
                     </div>
                   </TableCell>
@@ -141,14 +149,12 @@ export function InstitutionUsersManagement() {
                           : ""
                       }
                     >
-                      {user.status === "ACTIVE"
-                        ? t("master.institution_users.status_active")
-                        : t("master.institution_users.status_inactive")}
+                      {user.status === "ACTIVE" ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm text-muted-foreground">
-                      {format(user._creationTime, "PP", { locale: es })}
+                      {format(user._creationTime, "PP", { locale: enUS })}
                     </span>
                   </TableCell>
                 </TableRow>
@@ -159,7 +165,7 @@ export function InstitutionUsersManagement() {
                     colSpan={5}
                     className="text-center py-8 text-muted-foreground"
                   >
-                    {t("master.institution_users.no_users")}
+No users found
                   </TableCell>
                 </TableRow>
               )}
