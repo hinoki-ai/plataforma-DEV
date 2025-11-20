@@ -18,10 +18,12 @@ export function ThemeAwareFavicon() {
       ) as NodeListOf<HTMLLinkElement>;
 
       faviconLinks.forEach((link) => {
-        // Only update links that point to our theme-aware favicons (josh-happy images)
+        // Only update links that point to our theme-aware favicons (cognito-happy images)
         const currentHref = link.href;
-        if (currentHref.includes("josh-happy")) {
-          link.href = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
+        if (currentHref.includes("cognito-happy")) {
+          link.href = isDark
+            ? "/cognito-happy-dark.png"
+            : "/cognito-happy-light.png";
         }
       });
     };

@@ -32,7 +32,7 @@ interface ProactiveSuggestion {
  * Proactive Suggestions System
  * Monitors user behavior and provides timely, helpful suggestions
  */
-export function JoshProactiveSuggestions() {
+export function CognitoProactiveSuggestions() {
   const { t } = useDivineParsing();
   const { session } = useSession();
   const pathname = usePathname();
@@ -191,7 +191,7 @@ export function JoshProactiveSuggestions() {
           label: t("proactive.admin.welcome.action", "Start Tour"),
           onClick: () => {
             // This would trigger the tour system
-            const event = new CustomEvent("startJoshTour", {
+            const event = new CustomEvent("startCognitoTour", {
               detail: { tourId: "admin-dashboard" },
             });
             window.dispatchEvent(event);
@@ -213,9 +213,9 @@ export function JoshProactiveSuggestions() {
           "I notice you haven't interacted much. I'm here to help you get the most out of the platform. Click here to chat with me!",
         ),
         action: {
-          label: t("proactive.general.help.action", "Chat with Josh"),
+          label: t("proactive.general.help.action", "Chat with Cognito"),
           onClick: () => {
-            const event = new CustomEvent("openJoshChat");
+            const event = new CustomEvent("openCognitoChat");
             window.dispatchEvent(event);
           },
         },
@@ -357,7 +357,7 @@ export function JoshProactiveSuggestions() {
       if (dismissedSuggestions.has(suggestion.id)) return false;
 
       // For the inactive-user-help suggestion, check if user has unselected options
-      // Don't show Josh if user needs to select from options first
+      // Don't show Cognito if user needs to select from options first
       if (suggestion.id === "inactive-user-help" && hasUnselectedOptions()) {
         return false;
       }
@@ -394,7 +394,7 @@ export function JoshProactiveSuggestions() {
 
       // Check cooldown (simplified - in real app would use localStorage)
       const lastShown = localStorage.getItem(
-        `josh_suggestion_${suggestion.id}`,
+        `cognito_suggestion_${suggestion.id}`,
       );
       if (lastShown) {
         const timeSinceLastShown = Date.now() - parseInt(lastShown);
@@ -414,7 +414,7 @@ export function JoshProactiveSuggestions() {
     ],
   );
 
-  // Monitor for option selection changes and hide Josh if user has unselected options
+  // Monitor for option selection changes and hide Cognito if user has unselected options
   useEffect(() => {
     const checkAndHideIfNeeded = () => {
       if (
@@ -497,7 +497,7 @@ export function JoshProactiveSuggestions() {
 
         // Mark as shown
         localStorage.setItem(
-          `josh_suggestion_${randomSuggestion.id}`,
+          `cognito_suggestion_${randomSuggestion.id}`,
           Date.now().toString(),
         );
       }

@@ -1,0 +1,49 @@
+# Backup directories
+backup_*
+ai_assistant_temp/
+
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/
+
+# Cache directories
+.cache/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Package manager files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+
+# Documentation builds
+.vercel/
+convex/_generated/
+
+# Testing
+coverage/
+playwright-report/
+
+# Temporary files
+*.tmp
+*.temp

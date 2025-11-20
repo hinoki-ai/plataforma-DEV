@@ -13,13 +13,13 @@ import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { AppSessionProvider } from "@/lib/auth-client";
 import { clerkConfig } from "@/lib/clerk-config";
 import { PreloadingProvider } from "./providers/PreloadingProvider";
-import { JoshWelcomeToast } from "./ui/josh-welcome-toast";
-import { JoshIndicator } from "./ui/josh-indicator";
-import { JoshProactiveSuggestions } from "./ui/josh-proactive";
+import { CognitoWelcomeToast } from "./ui/cognito-welcome-toast";
+import { CognitoIndicator } from "./ui/cognito-indicator";
+import { CognitoProactiveSuggestions } from "./ui/cognito-proactive";
 import {
-  JoshAnalyticsProvider,
-  JoshAnalyticsDashboard,
-} from "./ui/josh-analytics";
+  CognitoAnalyticsProvider,
+  CognitoAnalyticsDashboard,
+} from "./ui/cognito-analytics";
 import { ClientOnly } from "./ui/client-only";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -51,14 +51,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
               ]}
             >
               <LanguageHtmlUpdater />
-              <JoshAnalyticsProvider>
+              <CognitoAnalyticsProvider>
                 <ClientOnly>
-                  <JoshWelcomeToast />
-                  <JoshIndicator />
-                  <JoshProactiveSuggestions />
-                  <JoshAnalyticsDashboard />
+                  <CognitoWelcomeToast />
+                  <CognitoIndicator />
+                  <CognitoProactiveSuggestions />
+                  <CognitoAnalyticsDashboard />
                 </ClientOnly>
-              </JoshAnalyticsProvider>
+              </CognitoAnalyticsProvider>
               <ContextProvider>
                 <DesktopToggleProvider>
                   <WebVitalsProvider>

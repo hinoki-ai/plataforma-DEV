@@ -9,10 +9,10 @@ import { motion } from "motion/react";
 import { useSession } from "@clerk/nextjs";
 
 /**
- * Enhanced Josh welcome toast with animations, time-based greetings, and interactive elements
- * Shows personalized welcome messages with theme-aware Josh images
+ * Enhanced Cognito welcome toast with animations, time-based greetings, and interactive elements
+ * Shows personalized welcome messages with theme-aware Cognito images
  */
-export function JoshWelcomeToast() {
+export function CognitoWelcomeToast() {
   const { resolvedTheme } = useTheme();
   const { t } = useDivineParsing();
   const { session } = useSession();
@@ -47,67 +47,70 @@ export function JoshWelcomeToast() {
     return { role, section: "general" };
   };
 
-  // Get contextual Josh personality message based on page and role
-  const getJoshMessage = () => {
+  // Get contextual Cognito personality message based on page and role
+  const getCognitoMessage = () => {
     const context = getPageContext();
 
     const contextualMessages = {
       admin: [
         t(
-          "welcome.josh.admin.1",
+          "welcome.cognito.admin.1",
           "¡Hola administrador! ¿Qué vamos a gestionar hoy?",
         ),
         t(
-          "welcome.josh.admin.2",
+          "welcome.cognito.admin.2",
           "¡Listo para mantener todo funcionando perfectamente!",
         ),
         t(
-          "welcome.josh.admin.3",
+          "welcome.cognito.admin.3",
           "¡Tu centro educativo te necesita! Vamos a trabajar juntos.",
         ),
       ],
       teacher: [
         t(
-          "welcome.josh.teacher.1",
+          "welcome.cognito.teacher.1",
           "¡Hola profesor! ¿Qué clase vamos a preparar hoy?",
         ),
         t(
-          "welcome.josh.teacher.2",
+          "welcome.cognito.teacher.2",
           "¡Tus estudiantes te esperan con entusiasmo!",
         ),
         t(
-          "welcome.josh.teacher.3",
+          "welcome.cognito.teacher.3",
           "¡Vamos a hacer una jornada educativa increíble!",
         ),
       ],
       parent: [
         t(
-          "welcome.josh.parent.1",
+          "welcome.cognito.parent.1",
           "¡Hola apoderado! ¿Cómo podemos ayudar a tu estudiante?",
         ),
         t(
-          "welcome.josh.parent.2",
+          "welcome.cognito.parent.2",
           "¡Bienvenido a seguir el progreso de tu hijo!",
         ),
-        t("welcome.josh.parent.3", "¡Estamos aquí para mantenerte informado!"),
+        t(
+          "welcome.cognito.parent.3",
+          "¡Estamos aquí para mantenerte informado!",
+        ),
       ],
       master: [
         t(
-          "welcome.josh.master.1",
+          "welcome.cognito.master.1",
           "¡Hola maestro del sistema! ¿Qué operaciones avanzadas realizaremos?",
         ),
-        t("welcome.josh.master.2", "¡Todo el sistema está bajo control!"),
+        t("welcome.cognito.master.2", "¡Todo el sistema está bajo control!"),
         t(
-          "welcome.josh.master.3",
+          "welcome.cognito.master.3",
           "¡Listo para optimizar la plataforma educativa!",
         ),
       ],
       general: [
-        t("welcome.josh.1", "¡Estoy feliz de verte!"),
-        t("welcome.josh.2", "¡Vamos a aprender juntos!"),
-        t("welcome.josh.3", "¡Tu plataforma favorita te da la bienvenida!"),
-        t("welcome.josh.4", "¡Listo para una jornada educativa increíble!"),
-        t("welcome.josh.5", "¡Hola! ¿Qué vamos a crear hoy?"),
+        t("welcome.cognito.1", "¡Estoy feliz de verte!"),
+        t("welcome.cognito.2", "¡Vamos a aprender juntos!"),
+        t("welcome.cognito.3", "¡Tu plataforma favorita te da la bienvenida!"),
+        t("welcome.cognito.4", "¡Listo para una jornada educativa increíble!"),
+        t("welcome.cognito.5", "¡Hola! ¿Qué vamos a crear hoy?"),
       ],
     };
 
@@ -142,12 +145,12 @@ export function JoshWelcomeToast() {
     // Only show if we haven't shown it this session and theme is resolved
     if (!hasShown && resolvedTheme) {
       const isDark = resolvedTheme === "dark";
-      const joshImage = isDark
-        ? "/josh-happy-dark.png"
-        : "/josh-happy-light.png";
+      const cognitoImage = isDark
+        ? "/cognito-happy-dark.png"
+        : "/cognito-happy-light.png";
 
-      // Create animated Josh icon
-      const JoshIcon = () => (
+      // Create animated Cognito icon
+      const CognitoIcon = () => (
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{
@@ -168,8 +171,8 @@ export function JoshWelcomeToast() {
           className="relative"
         >
           <motion.img
-            src={joshImage}
-            alt="Josh"
+            src={cognitoImage}
+            alt="Cognito"
             className="w-10 h-10 rounded-full object-cover border-2 border-white dark:border-gray-700"
             animate={{
               y: [0, -2, 0],
@@ -217,7 +220,7 @@ export function JoshWelcomeToast() {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="mt-2"
             >
-              <div className="text-sm">{getJoshMessage()}</div>
+              <div className="text-sm">{getCognitoMessage()}</div>
               <div className="text-xs opacity-75 mt-1">
                 {t(
                   "welcome.description",
@@ -227,12 +230,12 @@ export function JoshWelcomeToast() {
             </motion.div>
           ),
           duration: 8000, // Longer duration for enhanced experience
-          icon: <JoshIcon />,
+          icon: <CognitoIcon />,
           action: {
             label: t("welcome.action", "¡Genial!"),
             onClick: () => {
               // Add some fun interaction
-              toast.success(t("welcome.fun", "¡Josh está feliz! 🎉"), {
+              toast.success(t("welcome.fun", "¡Cognito está feliz! 🎉"), {
                 duration: 2000,
               });
             },

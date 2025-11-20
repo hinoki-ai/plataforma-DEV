@@ -9,11 +9,11 @@ import {
 import { useEffect, useState } from "react";
 
 /**
- * Advanced Animation System for Josh
+ * Advanced Animation System for Cognito
  * Provides sophisticated micro-interactions and visual feedback
  */
 
-export interface JoshAnimationProps {
+export interface CognitoAnimationProps {
   children: React.ReactNode;
   variant?: "idle" | "thinking" | "excited" | "helpful" | "celebrating";
   isHovered?: boolean;
@@ -21,8 +21,8 @@ export interface JoshAnimationProps {
   size?: "sm" | "md" | "lg";
 }
 
-// Josh's personality-based animations
-export const joshAnimations = {
+// Cognito's personality-based animations
+export const cognitoAnimations = {
   idle: {
     y: [0, -2, 0],
     transition: {
@@ -118,7 +118,7 @@ export function TypingIndicator({ isTyping }: { isTyping: boolean }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
     >
-      <span className="text-xs text-gray-500">Josh is typing</span>
+      <span className="text-xs text-gray-500">Cognito is typing</span>
       <div className="flex space-x-1">
         {[0, 1, 2].map((i) => (
           <motion.div
@@ -406,14 +406,14 @@ export function MorphingBackground({ isActive }: { isActive: boolean }) {
   );
 }
 
-// Main Josh animation component
-export function JoshAnimated({
+// Main Cognito animation component
+export function CognitoAnimated({
   children,
   variant = "idle",
   isHovered = false,
   isActive = false,
   size = "md",
-}: JoshAnimationProps) {
+}: CognitoAnimationProps) {
   const controls = useAnimation();
   const [currentVariant, setCurrentVariant] = useState(variant);
 
@@ -436,7 +436,7 @@ export function JoshAnimated({
   return (
     <motion.div
       className={`relative ${sizeClasses[size]}`}
-      animate={joshAnimations[currentVariant]}
+      animate={cognitoAnimations[currentVariant]}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
     >

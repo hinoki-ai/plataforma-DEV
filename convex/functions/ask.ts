@@ -111,3 +111,67 @@ export const chat = action({
     return text;
   },
 });
+
+export const cognitoChat = action({
+  args: {
+    message: v.string(),
+    context: v.optional(
+      v.object({
+        role: v.string(),
+        section: v.string(),
+        userId: v.optional(v.string()),
+      }),
+    ),
+  },
+  handler: async (ctx, { message, context }) => {
+    const systemPrompt = `You are Cognito, a helpful AI assistant for an educational platform called Plataforma Astral.
+You help teachers, parents, administrators, and students navigate and use the platform effectively.
+
+Current user context:
+- Role: ${context?.role || "general user"}
+- Section: ${context?.section || "general"}
+
+Guidelines:
+1. Be friendly, helpful, and professional
+2. Provide clear, actionable guidance
+3. Offer to start guided tours when users seem confused
+4. Keep responses conversational but informative
+5. Use Spanish for Spanish-speaking users, English otherwise
+6. Don't make assumptions about user capabilities
+7. If you can't help with something specific, guide them to the right resources
+
+Platform features you can help with:
+- User management and registration
+- Class management and libro de clases
+- Grade book and attendance tracking
+- Parent communication and meetings
+- Administrative functions
+- Planning and curriculum
+- Reports and analytics
+
+Always end responses by offering further assistance.`;
+
+    try {
+      const response = await ai.chat(ctx, "llama3-8b-8192", {
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message },
+        ],
+        max_tokens: 1024,
+      });
+
+      return {
+        success: true,
+        response: response.text,
+      };
+    } catch (error) {
+      console.error("Cognito chat error:", error);
+      return {
+        success: false,
+        response:
+          "Lo siento, tuve un problema procesando tu mensaje. ¿Puedes intentarlo de nuevo?",
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  },
+});

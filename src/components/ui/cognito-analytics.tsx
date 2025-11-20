@@ -10,16 +10,16 @@ import {
 import { useSession } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 
-// Analytics context for Josh interactions
-interface JoshAnalyticsData {
+// Analytics context for Cognito interactions
+interface CognitoAnalyticsData {
   userId: string;
   sessionId: string;
-  interactions: JoshInteraction[];
+  interactions: CognitoInteraction[];
   preferences: UserPreferences;
   insights: AnalyticsInsights;
 }
 
-interface JoshInteraction {
+interface CognitoInteraction {
   id: string;
   type: "click" | "chat" | "tour" | "suggestion" | "dismiss";
   timestamp: Date;
@@ -59,39 +59,38 @@ interface AnalyticsInsights {
   recommendations: string[];
 }
 
-interface JoshAnalyticsContextType {
+interface CognitoAnalyticsContextType {
   trackInteraction: (
-    interaction: Omit<JoshInteraction, "id" | "timestamp">,
+    interaction: Omit<CognitoInteraction, "id" | "timestamp">,
   ) => void;
   getInsights: () => AnalyticsInsights;
   updatePreferences: (preferences: Partial<UserPreferences>) => void;
   getPersonalizedSuggestions: () => string[];
 }
 
-const JoshAnalyticsContext = createContext<JoshAnalyticsContextType | null>(
-  null,
-);
+const CognitoAnalyticsContext =
+  createContext<CognitoAnalyticsContextType | null>(null);
 
 // Custom hook for analytics
-export function useJoshAnalytics() {
-  const context = useContext(JoshAnalyticsContext);
+export function useCognitoAnalytics() {
+  const context = useContext(CognitoAnalyticsContext);
   if (!context) {
     throw new Error(
-      "useJoshAnalytics must be used within JoshAnalyticsProvider",
+      "useCognitoAnalytics must be used within CognitoAnalyticsProvider",
     );
   }
   return context;
 }
 
 // Analytics provider component
-export function JoshAnalyticsProvider({
+export function CognitoAnalyticsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { session } = useSession();
   const pathname = usePathname();
-  const [analytics, setAnalytics] = useState<JoshAnalyticsData | null>(null);
+  const [analytics, setAnalytics] = useState<CognitoAnalyticsData | null>(null);
   const [sessionStart, setSessionStart] = useState<Date>(new Date());
 
   // Initialize analytics for user
@@ -99,10 +98,10 @@ export function JoshAnalyticsProvider({
     if (session?.user?.id) {
       const sessionId = `${session.user.id}_${Date.now()}`;
       const storedData = localStorage.getItem(
-        `josh_analytics_${session.user.id}`,
+        `cognito_analytics_${session.user.id}`,
       );
 
-      const initialData: JoshAnalyticsData = storedData
+      const initialData: CognitoAnalyticsData = storedData
         ? JSON.parse(storedData)
         : {
             userId: session.user.id,
@@ -139,8 +138,11 @@ export function JoshAnalyticsProvider({
   }, [session?.user?.id]);
 
   // Save analytics data
-  const saveAnalytics = (data: JoshAnalyticsData) => {
-    localStorage.setItem(`josh_analytics_${data.userId}`, JSON.stringify(data));
+  const saveAnalytics = (data: CognitoAnalyticsData) => {
+    localStorage.setItem(
+      `cognito_analytics_${data.userId}`,
+      JSON.stringify(data),
+    );
     setAnalytics(data);
   };
 
@@ -151,7 +153,7 @@ export function JoshAnalyticsProvider({
 
   // Generate insights from interaction data
   const generateInsights = useCallback(
-    (data: JoshAnalyticsData): AnalyticsInsights => {
+    (data: CognitoAnalyticsData): AnalyticsInsights => {
       const interactions = data.interactions;
       const recentInteractions = interactions.filter(
         (i) =>
@@ -268,10 +270,10 @@ export function JoshAnalyticsProvider({
 
   // Track user interactions
   const trackInteraction = useCallback(
-    (interaction: Omit<JoshInteraction, "id" | "timestamp">) => {
+    (interaction: Omit<CognitoInteraction, "id" | "timestamp">) => {
       if (!analytics) return;
 
-      const newInteraction: JoshInteraction = {
+      const newInteraction: CognitoInteraction = {
         ...interaction,
         id: generateInteractionId(),
         timestamp: new Date(),
@@ -347,7 +349,7 @@ export function JoshAnalyticsProvider({
     return suggestions;
   };
 
-  const contextValue: JoshAnalyticsContextType = {
+  const contextValue: CognitoAnalyticsContextType = {
     trackInteraction,
     getInsights: () =>
       analytics?.insights || {
@@ -363,16 +365,16 @@ export function JoshAnalyticsProvider({
   };
 
   return (
-    <JoshAnalyticsContext.Provider value={contextValue}>
+    <CognitoAnalyticsContext.Provider value={contextValue}>
       {children}
-    </JoshAnalyticsContext.Provider>
+    </CognitoAnalyticsContext.Provider>
   );
 }
 
 // Analytics dashboard component (for admin/master users)
-export function JoshAnalyticsDashboard() {
+export function CognitoAnalyticsDashboard() {
   const { session } = useSession();
-  const analytics = useJoshAnalytics();
+  const analytics = useCognitoAnalytics();
   const [showDashboard, setShowDashboard] = useState(false);
 
   // Only show for admin/master users
@@ -390,14 +392,14 @@ export function JoshAnalyticsDashboard() {
       <button
         onClick={() => setShowDashboard(!showDashboard)}
         className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg"
-        title="Josh Analytics Dashboard"
+        title="Cognito Analytics Dashboard"
       >
         📊
       </button>
 
       {showDashboard && (
         <div className="absolute bottom-16 left-0 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xl border max-w-sm">
-          <h3 className="font-bold mb-3">Josh Analytics</h3>
+          <h3 className="font-bold mb-3">Cognito Analytics</h3>
 
           <div className="space-y-2 text-sm">
             <div>
@@ -462,7 +464,7 @@ export function JoshAnalyticsDashboard() {
 
 // Hook for tracking page views and time spent
 export function usePageAnalytics() {
-  const analytics = useJoshAnalytics();
+  const analytics = useCognitoAnalytics();
   const pathname = usePathname();
   const [pageStartTime, setPageStartTime] = useState<number>(0);
 

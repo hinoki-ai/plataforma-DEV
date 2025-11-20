@@ -28,7 +28,7 @@ interface Tour {
   autoStart?: boolean;
 }
 
-interface JoshTourProps {
+interface CognitoTourProps {
   isActive: boolean;
   tourId: string | null;
   onComplete: () => void;
@@ -36,15 +36,15 @@ interface JoshTourProps {
 }
 
 /**
- * Interactive Tour System with Josh Guidance
+ * Interactive Tour System with Cognito Guidance
  * Provides step-by-step onboarding and feature discovery
  */
-export function JoshTour({
+export function CognitoTour({
   isActive,
   tourId,
   onComplete,
   onSkip,
-}: JoshTourProps) {
+}: CognitoTourProps) {
   const { resolvedTheme } = useTheme();
   const { t } = useDivineParsing();
   const { session } = useSession();
@@ -381,7 +381,9 @@ export function JoshTour({
                 >
                   <img
                     src={
-                      isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png"
+                      isDark
+                        ? "/cognito-happy-dark.png"
+                        : "/cognito-happy-light.png"
                     }
                     alt=""
                     className="w-10 h-10 rounded-full border-2 border-white shadow-lg"
@@ -486,7 +488,7 @@ export function JoshTour({
   );
 }
 
-// Tour trigger component for Josh
+// Tour trigger component for Cognito
 export function TourTrigger({
   tourId,
   onStartTour,

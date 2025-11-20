@@ -6,25 +6,27 @@ import { Button } from "@/components/ui/button";
 import { X, ArrowRight, Check } from "lucide-react";
 import Image from "next/image";
 
-interface JoshOnboardingProps {
+interface CognitoOnboardingProps {
   onStart?: () => void;
   onComplete?: () => void;
   onDismiss?: () => void;
   onHighlightSidebar?: (highlight: boolean) => void;
 }
 
-export function JoshOnboarding({
+export function CognitoOnboarding({
   onStart,
   onComplete,
   onDismiss,
   onHighlightSidebar,
-}: JoshOnboardingProps) {
+}: CognitoOnboardingProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     // Check if user has seen the onboarding
-    const hasSeenOnboarding = localStorage.getItem("josh_onboarding_completed");
+    const hasSeenOnboarding = localStorage.getItem(
+      "cognito_onboarding_completed",
+    );
     if (!hasSeenOnboarding) {
       setIsVisible(true);
       onStart?.();
@@ -44,14 +46,14 @@ export function JoshOnboarding({
   };
 
   const handleComplete = () => {
-    localStorage.setItem("josh_onboarding_completed", "true");
+    localStorage.setItem("cognito_onboarding_completed", "true");
     setIsVisible(false);
     onHighlightSidebar?.(false);
     onComplete?.();
   };
 
   const handleDismiss = () => {
-    localStorage.setItem("josh_onboarding_completed", "true");
+    localStorage.setItem("cognito_onboarding_completed", "true");
     setIsVisible(false);
     onHighlightSidebar?.(false);
     onDismiss?.();
@@ -74,7 +76,7 @@ export function JoshOnboarding({
           {/* Content Container */}
           <div className="relative z-50 w-full max-w-4xl p-4 md:p-8 pointer-events-none">
             <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-              {/* Josh Character */}
+              {/* Cognito Character */}
               <motion.div
                 initial={{ scale: 0.8, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -83,8 +85,8 @@ export function JoshOnboarding({
               >
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-3xl animate-pulse" />
                 <Image
-                  src="/josh-happy-light.png"
-                  alt="Josh"
+                  src="/cognito-happy-light.png"
+                  alt="Cognito"
                   fill
                   className="object-contain"
                   priority
@@ -106,7 +108,9 @@ export function JoshOnboarding({
 
                 <div className="relative z-10">
                   <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                    {step === 0 ? "¡Hola! Soy Josh 👋" : "Tu Panel de Control"}
+                    {step === 0
+                      ? "¡Hola! Soy Cognito 👋"
+                      : "Tu Panel de Control"}
                   </h2>
 
                   <p className="text-muted-foreground mb-6 text-lg leading-relaxed">

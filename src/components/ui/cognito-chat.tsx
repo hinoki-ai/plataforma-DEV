@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "@clerk/nextjs";
+import { useAction } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import {
   Send,
   X,
@@ -19,7 +21,7 @@ import {
 interface Message {
   id: string;
   content: string;
-  sender: "user" | "josh";
+  sender: "user" | "cognito";
   timestamp: Date;
   type?: "text" | "suggestion" | "help";
 }
@@ -61,7 +63,9 @@ export function CognitoChat({
   const resizeStartHeight = useRef<number>(384);
 
   const isDark = resolvedTheme === "dark";
-  const joshImage = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
+  const cognitoImage = isDark
+    ? "/cognito-happy-dark.png"
+    : "/cognito-happy-light.png";
 
   // Get user role and context
   const getUserRole = () => {
@@ -89,24 +93,24 @@ export function CognitoChat({
   const getWelcomeMessage = (context: any): Message => {
     const welcomeMessages = {
       admin: t(
-        "josh.chat.welcome.admin",
-        "¡Hola! Soy Josh, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?",
+        "cognito.chat.welcome.admin",
+        "¡Hola! Soy Cognito, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?",
       ),
       teacher: t(
-        "josh.chat.welcome.teacher",
-        "¡Hola profesor! Soy Josh, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
+        "cognito.chat.welcome.teacher",
+        "¡Hola profesor! Soy Cognito, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
       ),
       parent: t(
-        "josh.chat.welcome.parent",
-        "¡Hola apoderado! Soy Josh, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?",
+        "cognito.chat.welcome.parent",
+        "¡Hola apoderado! Soy Cognito, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?",
       ),
       master: t(
-        "josh.chat.welcome.master",
-        "¡Hola maestro del sistema! Soy Josh, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?",
+        "cognito.chat.welcome.master",
+        "¡Hola maestro del sistema! Soy Cognito, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?",
       ),
       general: t(
-        "josh.chat.welcome.general",
-        "¡Hola! Soy Josh, tu asistente educativo. ¿En qué puedo ayudarte hoy?",
+        "cognito.chat.welcome.general",
+        "¡Hola! Soy Cognito, tu asistente educativo. ¿En qué puedo ayudarte hoy?",
       ),
     };
 
@@ -115,7 +119,7 @@ export function CognitoChat({
       content:
         welcomeMessages[context.section as keyof typeof welcomeMessages] ||
         welcomeMessages.general,
-      sender: "josh",
+      sender: "cognito",
       timestamp: new Date(),
       type: "text",
     };
@@ -124,7 +128,7 @@ export function CognitoChat({
   // Load saved chat height from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedHeight = localStorage.getItem("josh_chat_height");
+      const savedHeight = localStorage.getItem("cognito_chat_height");
       if (savedHeight) {
         const height = parseInt(savedHeight, 10);
         if (height >= 200 && height <= 800) {
@@ -157,173 +161,34 @@ export function CognitoChat({
     }
   }, [isOpen, isMinimized]);
 
-  const generateCognitoResponse = async (userMessage: string): Promise<string> => {
-    const context = getPageContext();
-    const lowerMessage = userMessage.toLowerCase();
+  const cognitoChatAction = useAction(api.functions.ask.cognitoChat);
 
-    // Check for tour requests
-    if (
-      lowerMessage.includes("tour") ||
-      lowerMessage.includes("guia") ||
-      lowerMessage.includes("guide")
-    ) {
-      if (context.section === "admin") {
-        return t(
-          "josh.chat.tour.admin",
-          "¿Te gustaría que te guíe por el panel de administración? Puedo mostrarte cómo gestionar usuarios, calendario y todas las funciones principales. Solo di 'sí' para comenzar el tour.",
-        );
+  const generateCognitoResponse = async (
+    userMessage: string,
+  ): Promise<string> => {
+    try {
+      const context = getPageContext();
+      const result = await cognitoChatAction({
+        message: userMessage,
+        context: {
+          role: context.role,
+          section: context.section,
+          userId: session?.user?.id,
+        },
+      });
+
+      if (result.success) {
+        return result.response;
+      } else {
+        console.error("Cognito chat failed:", result.error);
+        // Fallback to a basic response if AI fails
+        return "Lo siento, tuve un problema procesando tu mensaje. ¿Puedes intentarlo de nuevo o preguntarme sobre otra cosa?";
       }
-      if (context.section === "teacher") {
-        return t(
-          "josh.chat.tour.teacher",
-          "¿Quieres que te enseñe a usar el libro de clases? Te mostraré cómo registrar asistencia, calificaciones y observaciones. Solo di 'sí' para comenzar el tour.",
-        );
-      }
-      if (context.section === "parent") {
-        return t(
-          "josh.chat.tour.parent",
-          "¿Te gustaría un tour por el portal de apoderados? Te explicaré cómo ver el progreso de tu estudiante y comunicarte con profesores. Solo di 'sí' para comenzar.",
-        );
-      }
+    } catch (error) {
+      console.error("Cognito chat error:", error);
+      // Fallback response
+      return "¡Hola! Soy Cognito, tu asistente educativo. ¿En qué puedo ayudarte hoy?";
     }
-
-    // Check for tour confirmation
-    if (
-      lowerMessage.includes("si") ||
-      lowerMessage.includes("yes") ||
-      lowerMessage.includes("comenzar") ||
-      lowerMessage.includes("start")
-    ) {
-      // This would trigger the tour - handled by parent component
-      return t(
-        "josh.chat.tour.starting",
-        "¡Perfecto! Iniciando el tour interactivo. Te guiaré paso a paso por las funciones principales.",
-      );
-    }
-
-    // Contextual responses based on user role and page
-    if (context.section === "admin") {
-      if (
-        lowerMessage.includes("calendario") ||
-        lowerMessage.includes("calendar")
-      ) {
-        return t(
-          "josh.chat.admin.calendar",
-          "Para gestionar el calendario escolar, ve a 'Calendario Escolar' en el menú lateral. Puedes agregar eventos, feriados y actividades importantes para mantener a todos informados.",
-        );
-      }
-      if (lowerMessage.includes("usuario") || lowerMessage.includes("user")) {
-        return t(
-          "josh.chat.admin.users",
-          "Para gestionar usuarios, accede a 'Usuarios' en el panel administrativo. Puedes crear, editar o desactivar cuentas de profesores, apoderados y personal administrativo.",
-        );
-      }
-      if (
-        lowerMessage.includes("planificación") ||
-        lowerMessage.includes("planning")
-      ) {
-        return t(
-          "josh.chat.admin.planning",
-          "Las planificaciones de profesores están en 'Planificaciones'. Puedes revisar, aprobar o solicitar modificaciones para asegurar el cumplimiento curricular.",
-        );
-      }
-    }
-
-    if (context.section === "teacher") {
-      if (
-        lowerMessage.includes("asistencia") ||
-        lowerMessage.includes("attendance")
-      ) {
-        return t(
-          "josh.chat.teacher.attendance",
-          "Para registrar asistencia, ve a 'Libro de Clases > Asistencia'. Marca presente/ausente para cada estudiante y agrega observaciones si es necesario.",
-        );
-      }
-      if (
-        lowerMessage.includes("calificación") ||
-        lowerMessage.includes("grade")
-      ) {
-        return t(
-          "josh.chat.teacher.grades",
-          "Las calificaciones se registran en 'Libro de Clases > Calificaciones'. Ingresa notas por asignatura y período académico.",
-        );
-      }
-      if (
-        lowerMessage.includes("planificación") ||
-        lowerMessage.includes("planning")
-      ) {
-        return t(
-          "josh.chat.teacher.planning",
-          "Crea planificaciones en 'Planificaciones'. Incluye objetivos, actividades y materiales para cada clase.",
-        );
-      }
-    }
-
-    if (context.section === "parent") {
-      if (
-        lowerMessage.includes("progreso") ||
-        lowerMessage.includes("progress")
-      ) {
-        return t(
-          "josh.chat.parent.progress",
-          "Revisa el progreso de tu estudiante en 'Libro de Clases'. Verás calificaciones, asistencia y observaciones de profesores.",
-        );
-      }
-      if (
-        lowerMessage.includes("reunión") ||
-        lowerMessage.includes("meeting")
-      ) {
-        return t(
-          "josh.chat.parent.meeting",
-          "Programa reuniones con profesores en 'Reuniones'. Coordina horarios y temas a discutir sobre tu estudiante.",
-        );
-      }
-      if (
-        lowerMessage.includes("comunicación") ||
-        lowerMessage.includes("communication")
-      ) {
-        return t(
-          "josh.chat.parent.communication",
-          "Las comunicaciones del centro están en 'Comunicación'. Recibe anuncios importantes y noticias relevantes.",
-        );
-      }
-    }
-
-    // General responses
-    if (lowerMessage.includes("ayuda") || lowerMessage.includes("help")) {
-      return t(
-        "josh.chat.help.general",
-        "¿En qué área específica necesitas ayuda? Puedo guiarte por las funciones de administración, enseñanza, seguimiento parental o configuración del sistema.",
-      );
-    }
-
-    if (
-      lowerMessage.includes("problema") ||
-      lowerMessage.includes("error") ||
-      lowerMessage.includes("issue")
-    ) {
-      return t(
-        "josh.chat.help.problem",
-        "Si encuentras un problema, intenta refrescar la página. Si persiste, contacta al administrador del sistema. ¿Puedes describir qué está pasando?",
-      );
-    }
-
-    // Default responses
-    const defaultResponses = [
-      t(
-        "josh.chat.default.1",
-        "¡Entiendo! Déjame ayudarte con eso. ¿Puedes darme más detalles sobre lo que necesitas?",
-      ),
-      t(
-        "josh.chat.default.2",
-        "Estoy aquí para ayudarte. ¿Hay algo específico en lo que pueda asistirte?",
-      ),
-      t("josh.chat.default.3", "¡Perfecto! ¿Qué más puedo hacer por ti hoy?"),
-    ];
-
-    return defaultResponses[
-      Math.floor(Math.random() * defaultResponses.length)
-    ];
   };
 
   const handleSendMessage = async () => {
@@ -348,12 +213,12 @@ export function CognitoChat({
         const cognitoMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: cognitoResponse,
-          sender: "josh",
+          sender: "cognito",
           timestamp: new Date(),
           type: "text",
         };
 
-        setMessages((prev) => [...prev, joshMessage]);
+        setMessages((prev) => [...prev, cognitoMessage]);
         setIsTyping(false);
       },
       1000 + Math.random() * 2000,
@@ -396,7 +261,7 @@ export function CognitoChat({
       setIsResizing(false);
       // Save final height to localStorage
       if (typeof window !== "undefined") {
-        localStorage.setItem("josh_chat_height", currentHeight.toString());
+        localStorage.setItem("cognito_chat_height", currentHeight.toString());
       }
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
@@ -421,15 +286,15 @@ export function CognitoChat({
         style={{ height: `${chatHeight}px` }}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="josh-chat-title"
-        aria-describedby="josh-chat-description"
+        aria-labelledby="cognito-chat-title"
+        aria-describedby="cognito-chat-description"
       >
         {/* Header */}
         <header
           className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg select-none relative group"
           onMouseDown={handleResizeStart}
           title={t(
-            "josh.chat.resize",
+            "cognito.chat.resize",
             "Arrastra hacia arriba para redimensionar",
           )}
         >
@@ -437,20 +302,20 @@ export function CognitoChat({
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-white/30 rounded-b-full opacity-0 group-hover:opacity-100 transition-opacity cursor-ns-resize" />
           <div className="flex items-center space-x-2 flex-1 min-w-0">
             <img
-              src={joshImage}
+              src={cognitoImage}
               alt=""
               className="w-8 h-8 rounded-full border-2 border-white object-contain flex-shrink-0"
               aria-hidden="true"
             />
             <div className="min-w-0">
               <h3
-                id="josh-chat-title"
+                id="cognito-chat-title"
                 className="font-semibold text-sm truncate"
               >
-                Josh
+                Cognito
               </h3>
               <p
-                id="josh-chat-description"
+                id="cognito-chat-description"
                 className="text-xs opacity-90 truncate"
               >
                 Tu asistente educativo
@@ -469,10 +334,10 @@ export function CognitoChat({
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
               aria-label={t(
-                "josh.tour.button.accessible",
-                "Start interactive tour with Josh",
+                "cognito.tour.button.accessible",
+                "Start interactive tour with Cognito",
               )}
-              title={t("josh.tour.button", "Tour Interactivo")}
+              title={t("cognito.tour.button", "Tour Interactivo")}
             >
               <Map className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -484,8 +349,8 @@ export function CognitoChat({
                 onMinimizeChange?.(newMinimized);
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
-              aria-label={t("josh.chat.minimize", "Minimizar chat")}
-              title={t("josh.chat.minimize", "Minimizar chat")}
+              aria-label={t("cognito.chat.minimize", "Minimizar chat")}
+              title={t("cognito.chat.minimize", "Minimizar chat")}
             >
               <ChevronDown className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -495,8 +360,8 @@ export function CognitoChat({
                 onToggle();
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
-              aria-label={t("josh.chat.close", "Cerrar chat")}
-              title={t("josh.chat.close", "Cerrar chat")}
+              aria-label={t("cognito.chat.close", "Cerrar chat")}
+              title={t("cognito.chat.close", "Cerrar chat")}
             >
               <X className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -514,7 +379,7 @@ export function CognitoChat({
             <div
               className="flex-1 overflow-y-auto p-4 space-y-4"
               role="log"
-              aria-label={t("josh.chat.messages", "Mensajes del chat")}
+              aria-label={t("cognito.chat.messages", "Mensajes del chat")}
               aria-live="polite"
               aria-atomic="false"
             >
@@ -555,8 +420,8 @@ export function CognitoChat({
                   <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                     <div className="flex items-center space-x-2">
                       <img
-                        src={joshImage}
-                        alt="Josh"
+                        src={cognitoImage}
+                        alt="Cognito"
                         className="w-4 h-4 rounded-full"
                       />
                       <div className="flex space-x-1">
@@ -575,42 +440,47 @@ export function CognitoChat({
             {/* Input */}
             <div className="px-3 py-3 pl-2 border-t border-gray-200 dark:border-gray-700">
               <div className="flex space-x-1">
-                <label htmlFor="josh-chat-input" className="sr-only">
-                  {t("josh.chat.input.label", "Escribe tu mensaje para Josh")}
+                <label htmlFor="cognito-chat-input" className="sr-only">
+                  {t(
+                    "cognito.chat.input.label",
+                    "Escribe tu mensaje para Cognito",
+                  )}
                 </label>
                 <input
                   ref={inputRef}
-                  id="josh-chat-input"
+                  id="cognito-chat-input"
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder={t(
-                    "josh.chat.placeholder",
+                    "cognito.chat.placeholder",
                     "Escribe tu mensaje...",
                   )}
                   className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                   disabled={isTyping}
-                  aria-describedby={isTyping ? "josh-typing-status" : undefined}
+                  aria-describedby={
+                    isTyping ? "cognito-typing-status" : undefined
+                  }
                   autoComplete="off"
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isTyping}
                   className="ml-[5px] px-2.5 py-0.5 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0 scale-[0.85]"
-                  aria-label={t("josh.chat.send", "Enviar mensaje")}
-                  title={t("josh.chat.send", "Enviar mensaje")}
+                  aria-label={t("cognito.chat.send", "Enviar mensaje")}
+                  title={t("cognito.chat.send", "Enviar mensaje")}
                 >
                   <Send className="w-2.5 h-2.5" aria-hidden="true" />
                 </button>
               </div>
               {isTyping && (
                 <div
-                  id="josh-typing-status"
+                  id="cognito-typing-status"
                   className="sr-only"
                   aria-live="assertive"
                 >
-                  {t("josh.chat.typing", "Josh está escribiendo")}
+                  {t("cognito.chat.typing", "Cognito está escribiendo")}
                 </div>
               )}
             </div>

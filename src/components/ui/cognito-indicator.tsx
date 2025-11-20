@@ -7,24 +7,25 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
 import { useSession } from "@clerk/nextjs";
-import { JoshChat } from "./josh-chat";
-import { JoshTour } from "./josh-tour";
-import { useJoshAnalytics } from "./josh-analytics";
+import { CognitoChat } from "./cognito-chat";
+import { CognitoTour } from "./cognito-tour";
+import { useCognitoAnalytics } from "./cognito-analytics";
 
 /**
- * Floating Josh indicator that appears in the bottom-right corner
+ * Floating Cognito indicator that appears in the bottom-right corner
  * Users can interact with it for fun messages and tips
  */
-export function JoshIndicator() {
+export function CognitoIndicator() {
   const { resolvedTheme } = useTheme();
   const { t } = useDivineParsing();
   const { session } = useSession();
   const pathname = usePathname();
-  const analytics = useJoshAnalytics();
+  const analytics = useCognitoAnalytics();
   const [isVisible, setIsVisible] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatMinimized, setIsChatMinimized] = useState(false);
-  const [joshDismissedForSession, setJoshDismissedForSession] = useState(false);
+  const [cognitoDismissedForSession, setCognitoDismissedForSession] =
+    useState(false);
   const [activeTour, setActiveTour] = useState<string | null>(null);
   const [isTourActive, setIsTourActive] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -33,12 +34,14 @@ export function JoshIndicator() {
   const [justFinishedDragging, setJustFinishedDragging] = useState(false);
 
   const isDark = resolvedTheme === "dark";
-  const joshImage = isDark ? "/josh-happy-dark.png" : "/josh-happy-light.png";
+  const cognitoImage = isDark
+    ? "/cognito-happy-dark.png"
+    : "/cognito-happy-light.png";
 
   // Load saved position from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedPosition = localStorage.getItem("josh_position");
+      const savedPosition = localStorage.getItem("cognito_position");
       if (savedPosition) {
         try {
           const { x, y } = JSON.parse(savedPosition);
@@ -80,7 +83,7 @@ export function JoshIndicator() {
 
     // Save to localStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("josh_position", JSON.stringify(newPosition));
+      localStorage.setItem("cognito_position", JSON.stringify(newPosition));
     }
 
     // Track drag interaction
@@ -89,7 +92,7 @@ export function JoshIndicator() {
       page: pathname,
       context: {
         role: getUserRole(),
-        action: "josh_repositioned",
+        action: "cognito_repositioned",
       },
       metadata: { position: newPosition },
     });
@@ -121,7 +124,7 @@ export function JoshIndicator() {
           bottom: maxY,
         });
 
-        // Adjust position if Josh is outside viewport after resize
+        // Adjust position if Cognito is outside viewport after resize
         setPosition((prev) => ({
           x: Math.max(0, Math.min(prev.x, maxX)),
           y: Math.max(0, Math.min(prev.y, maxY)),
@@ -180,7 +183,7 @@ export function JoshIndicator() {
     });
 
     if (options?.showGreeting !== false) {
-      toast.success(t("josh.chat.open", "¡Hola! ¿En qué puedo ayudarte?"), {
+      toast.success(t("cognito.chat.open", "¡Hola! ¿En qué puedo ayudarte?"), {
         duration: 2000,
       });
     }
@@ -216,10 +219,10 @@ export function JoshIndicator() {
     }
   };
 
-  // Handle chat close - dismiss Josh for session
+  // Handle chat close - dismiss Cognito for session
   const handleChatClose = () => {
     setIsChatOpen(false);
-    setJoshDismissedForSession(true);
+    setCognitoDismissedForSession(true);
 
     // Track dismiss
     analytics.trackInteraction({
@@ -256,13 +259,16 @@ export function JoshIndicator() {
         },
       });
 
-      toast.success(t("josh.tour.starting", "¡Comenzando tour interactivo!"), {
-        duration: 2000,
-      });
+      toast.success(
+        t("cognito.tour.starting", "¡Comenzando tour interactivo!"),
+        {
+          duration: 2000,
+        },
+      );
     } else {
       toast.info(
         t(
-          "josh.tour.not_available",
+          "cognito.tour.not_available",
           "No hay tour disponible para esta página.",
         ),
         {
@@ -272,15 +278,15 @@ export function JoshIndicator() {
     }
   };
 
-  // Calculate if Josh should be visible
-  // Josh is visible when: (chat is closed OR chat is minimized) AND not dismissed for session
-  const shouldShowJosh =
-    (!isChatOpen || isChatMinimized) && !joshDismissedForSession;
+  // Calculate if Cognito should be visible
+  // Cognito is visible when: (chat is closed OR chat is minimized) AND not dismissed for session
+  const shouldShowCognito =
+    (!isChatOpen || isChatMinimized) && !cognitoDismissedForSession;
 
   return (
     <>
       {/* Chat Interface */}
-      <JoshChat
+      <CognitoChat
         isOpen={isChatOpen}
         onToggle={handleChatClose}
         onMinimizeChange={handleChatMinimizeChange}
@@ -290,7 +296,7 @@ export function JoshIndicator() {
       />
 
       {/* Tour Interface */}
-      <JoshTour
+      <CognitoTour
         isActive={isTourActive}
         tourId={activeTour}
         onComplete={() => {
@@ -310,7 +316,7 @@ export function JoshIndicator() {
 
           toast.success(
             t(
-              "josh.tour.completed",
+              "cognito.tour.completed",
               "¡Tour completado! Ya sabes cómo usar esta sección.",
             ),
             {
@@ -335,7 +341,7 @@ export function JoshIndicator() {
 
           toast.info(
             t(
-              "josh.tour.skipped",
+              "cognito.tour.skipped",
               "Tour omitido. Puedes iniciarlo nuevamente cuando lo necesites.",
             ),
             {
@@ -346,7 +352,7 @@ export function JoshIndicator() {
       />
 
       <AnimatePresence>
-        {shouldShowJosh && hasInitialPosition && (
+        {shouldShowCognito && hasInitialPosition && (
           <motion.div
             initial={{ scale: 0, opacity: 0, x: position.x, y: position.y }}
             animate={{
@@ -380,16 +386,16 @@ export function JoshIndicator() {
               whileTap={{ scale: 0.95 }}
               onClick={handleClick}
             >
-              {/* Josh Image */}
+              {/* Cognito Image */}
               <motion.img
-                src={joshImage}
-                alt={t("josh.alt", "Josh - Educational Assistant")}
+                src={cognitoImage}
+                alt={t("cognito.alt", "Cognito - Educational Assistant")}
                 className="w-20 h-20 cursor-pointer object-contain"
                 role="button"
                 tabIndex={0}
                 aria-label={t(
-                  "josh.click.label",
-                  "Click to interact with Josh, your educational assistant",
+                  "cognito.click.label",
+                  "Click to interact with Cognito, your educational assistant",
                 )}
                 onClick={handleClick}
                 onKeyDown={(e) => {
@@ -408,10 +414,10 @@ export function JoshIndicator() {
               <div
                 className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
                 role="tooltip"
-                id="josh-tooltip"
+                id="cognito-tooltip"
               >
                 {t(
-                  "josh.tooltip",
+                  "cognito.tooltip",
                   "¡Haz clic en mí para chatear! Arrástrame para moverme",
                 )}
                 <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>

@@ -15,7 +15,7 @@ import { useSidebarState } from "./hooks/useSidebarState";
 import { useSidebarGestures } from "./hooks/useSidebarGestures";
 import { NavigationProvider } from "./NavigationContext";
 import { NetworkErrorBoundary } from "@/components/ui/network-error-boundary";
-import { JoshOnboarding } from "@/components/onboarding/JoshOnboarding";
+import { CognitoOnboarding } from "@/components/onboarding/CognitoOnboarding";
 
 interface ClientLayoutProviderProps {
   children: React.ReactNode;
@@ -124,7 +124,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
           </main>
         </div>
       </div>
-      <JoshOnboarding onHighlightSidebar={setIsSidebarHighlighted} />
+      <CognitoOnboarding onHighlightSidebar={setIsSidebarHighlighted} />
     </div>
   );
 }
