@@ -10,17 +10,6 @@ import { NavigationIcons } from "@/components/icons/hero-icons";
 // ADMIN Navigation Configuration
 export const ADMIN_NAVIGATION = [
   {
-    title: STANDARD_SECTION_ORDER.PRIMARY,
-    defaultOpen: true,
-    items: [
-      {
-        title: "nav.admin.panel",
-        href: "/admin",
-        icon: NavigationIcons.Analytics,
-      },
-    ],
-  },
-  {
     title: STANDARD_SECTION_ORDER.USER_MANAGEMENT,
     defaultOpen: false,
     items: [
@@ -35,11 +24,6 @@ export const ADMIN_NAVIGATION = [
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
     defaultOpen: false,
     items: [
-      {
-        title: "nav.dashboard",
-        href: "/admin/libro-clases",
-        icon: NavigationIcons.Analytics,
-      },
       {
         title: "nav.calendar",
         href: "/admin/libro-clases/asistencia",
@@ -169,25 +153,9 @@ export const ADMIN_NAVIGATION = [
 // PROFESOR Navigation Configuration
 export const PROFESOR_NAVIGATION = [
   {
-    title: STANDARD_SECTION_ORDER.PRIMARY,
-    defaultOpen: true,
-    items: [
-      {
-        title: "nav.home",
-        href: "/profesor",
-        icon: NavigationIcons.Home,
-      },
-    ],
-  },
-  {
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
     defaultOpen: false,
     items: [
-      {
-        title: "nav.dashboard",
-        href: "/profesor/libro-clases",
-        icon: NavigationIcons.Documents,
-      },
       {
         title: "nav.calendar",
         href: "/profesor/libro-clases/asistencia",
@@ -320,25 +288,9 @@ export const PROFESOR_NAVIGATION = [
 // PARENT Navigation Configuration
 export const PARENT_NAVIGATION = [
   {
-    title: STANDARD_SECTION_ORDER.PRIMARY,
-    defaultOpen: true,
-    items: [
-      {
-        title: "nav.home",
-        href: "/parent",
-        icon: NavigationIcons.Home,
-      },
-    ],
-  },
-  {
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
     defaultOpen: false,
     items: [
-      {
-        title: "nav.dashboard",
-        href: "/parent/libro-clases",
-        icon: NavigationIcons.Documents,
-      },
       {
         title: "nav.calendar",
         href: "/parent/libro-clases/asistencia",
@@ -465,11 +417,6 @@ export const MASTER_NAVIGATION = [
     defaultOpen: true,
     items: [
       {
-        title: "nav.dashboard",
-        href: "/master",
-        icon: NavigationIcons.Cpu,
-      },
-      {
         title: "nav.global_oversight",
         href: "/master/global-oversight",
         icon: NavigationIcons.Eye,
@@ -478,6 +425,74 @@ export const MASTER_NAVIGATION = [
         title: "nav.system_health",
         href: "/master/system-health",
         icon: NavigationIcons.ServerStack,
+      },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
+    defaultOpen: false,
+    items: [
+      {
+        title: "nav.asistencia",
+        href: "/master/libro-clases/asistencia",
+        icon: NavigationIcons.Calendar,
+      },
+      {
+        title: "nav.calificaciones",
+        href: "/master/libro-clases/calificaciones",
+        icon: NavigationIcons.Analytics,
+        requiredFeature: "grading_system",
+      },
+      {
+        title: "nav.observaciones",
+        href: "/master/libro-clases/observaciones",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.students",
+        href: "/master/libro-clases/estudiantes",
+        icon: NavigationIcons.Profile,
+      },
+    ],
+  },
+  {
+    title: STANDARD_SECTION_ORDER.CONVIVENCIA,
+    defaultOpen: false,
+    items: [
+      {
+        title: "nav.protocolos_convivencia",
+        href: "/master/protocolos-convivencia",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.normas",
+        href: "/master/protocolos-convivencia/normas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.disciplina",
+        href: "/master/protocolos-convivencia/disciplina",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.medidas",
+        href: "/master/protocolos-convivencia/medidas",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.reconocimientos",
+        href: "/master/protocolos-convivencia/reconocimientos",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_apoderados",
+        href: "/master/protocolos-convivencia/actas-apoderados",
+        icon: NavigationIcons.Documents,
+      },
+      {
+        title: "nav.protocolos_convivencia.actas_alumnos",
+        href: "/master/protocolos-convivencia/actas-alumnos",
+        icon: NavigationIcons.Documents,
       },
     ],
   },

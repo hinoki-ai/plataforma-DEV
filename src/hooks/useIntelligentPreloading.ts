@@ -177,7 +177,10 @@ export function useIntelligentPreloading() {
   // Hover-based preloading for interactive elements
   const setupHoverPreloading = useCallback(() => {
     const handleMouseEnter = (e: Event) => {
-      const target = e.target as HTMLElement;
+      // Check if target is an HTMLElement before accessing element methods
+      if (!(e.target instanceof HTMLElement)) return;
+
+      const target = e.target;
       const href =
         target.getAttribute("href") || target.getAttribute("data-preload");
 
@@ -195,7 +198,10 @@ export function useIntelligentPreloading() {
     };
 
     const handleMouseLeave = (e: Event) => {
-      const target = e.target as HTMLElement;
+      // Check if target is an HTMLElement before accessing element methods
+      if (!(e.target instanceof HTMLElement)) return;
+
+      const target = e.target;
       if ((target as any)._preloadTimeout) {
         clearTimeout((target as any)._preloadTimeout);
         delete (target as any)._preloadTimeout;

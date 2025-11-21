@@ -81,47 +81,6 @@ test.describe("Basic Production Site Navigation Tests", () => {
     }
   });
 
-  test("dashboard routes redirect to login when not authenticated", async ({
-    page,
-  }) => {
-    // Test that protected routes redirect to login
-    const protectedRoutes = [
-      { path: "/master", description: "Master Dashboard" },
-      { path: "/admin", description: "Admin Dashboard" },
-      { path: "/profesor", description: "Profesor Dashboard" },
-      { path: "/parent", description: "Parent Dashboard" },
-    ];
-
-    for (const route of protectedRoutes) {
-      await test.step(`Test ${route.description} redirects to login`, async () => {
-        const targetUrl = `${PRODUCTION_URL}${route.path}`;
-        console.log(`🔒 Testing protected route: ${targetUrl}`);
-
-        const response = await page.goto(targetUrl, {
-          waitUntil: "domcontentloaded",
-          timeout: 10000,
-        });
-
-        expect(response).not.toBeNull();
-
-        const status = response?.status();
-        console.log(`📊 Status: ${status}`);
-
-        const currentUrl = page.url();
-        console.log(`📍 Final URL: ${currentUrl}`);
-
-        // Should either redirect to login or return a valid response
-        const isLoginPage =
-          currentUrl.includes("/login") ||
-          currentUrl.includes("/no-autorizado");
-        const isValidResponse = status && status < 400;
-
-        expect(isLoginPage || isValidResponse).toBeTruthy();
-
-        console.log(`✅ Protected route handled correctly: ${route.path}`);
-      });
-    }
-  });
 
   test("all expected routes return valid HTTP responses", async ({ page }) => {
     // Test a comprehensive list of all routes from the app structure

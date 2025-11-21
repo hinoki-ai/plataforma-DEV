@@ -116,7 +116,7 @@ function ClientLayoutContent({ children }: ClientLayoutProviderProps) {
           <main
             className={cn(
               "flex-1 w-full transition-all duration-300",
-              "px-4 md:px-6 lg:px-8 pt-2 md:pt-3 lg:pt-4 pb-4 md:pb-6 lg:pb-8",
+              "px-4 md:px-6 lg:px-8 pt-1 pb-4 md:pb-6 lg:pb-8",
               "max-w-full overflow-y-auto",
             )}
           >

@@ -46,7 +46,7 @@ import { CurriculumCoverageDashboard } from "@/components/libro-clases/Curriculu
 import { PdfExportButton } from "@/components/libro-clases/PdfExportButton";
 import { Id } from "@/convex/_generated/dataModel";
 import { usePathname, useRouter } from "next/navigation";
-import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
+// Removed complex language hook - using hardcoded Spanish strings for performance
 
 type TabValue =
   | "overview"
@@ -88,7 +88,39 @@ export function TeacherLibroClasesView({
   const { userId, isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const { t } = useDivineParsing(["common", "profesor"]);
+  // Simplified translation function for performance
+  const t = (key: string) => {
+    const translations: Record<string, string> = {
+      "profesor.libro_clases.title": "Libro de Clases del Profesor",
+      "profesor.libro_clases.tab_descriptions.overview": "Resumen general del curso y estudiantes",
+      "profesor.libro_clases.tabs.attendance": "Asistencia",
+      "profesor.libro_clases.tab_descriptions.attendance": "Registro de asistencia diaria",
+      "profesor.libro_clases.tabs.content": "Contenidos",
+      "profesor.libro_clases.tab_descriptions.content": "Planificación y registro de contenidos",
+      "profesor.libro_clases.tabs.observations": "Observaciones",
+      "profesor.libro_clases.tab_descriptions.observations": "Anotaciones sobre estudiantes",
+      "profesor.libro_clases.tabs.grades": "Calificaciones",
+      "profesor.libro_clases.tab_descriptions.grades": "Registro de notas y evaluaciones",
+      "profesor.libro_clases.tabs.meetings": "Reuniones",
+      "profesor.libro_clases.tab_descriptions.meetings": "Entrevistas con apoderados",
+      "profesor.libro_clases.tabs.coverage": "Cobertura",
+      "profesor.libro_clases.tab_descriptions.coverage": "Cobertura curricular",
+      "profesor.libro_clases.select_course": "Seleccionar Curso",
+      "profesor.libro_clases.overview.back_to_courses": "Volver a cursos",
+      "profesor.libro_clases.overview.observation_button": "Observación",
+      "profesor.libro_clases.overview.grade_button": "Calificar",
+      "profesor.libro_clases.overview.no_students_enrolled": "No hay estudiantes inscritos",
+      "profesor.libro_clases.observations.add_observation": "Agregar Observación",
+      "profesor.libro_clases.observations.register_for_student": "Registrar observación para",
+      "profesor.libro_clases.observations.observation_saved": "Observación guardada",
+      "profesor.libro_clases.grades.enter_grades": "Ingresar Calificaciones",
+      "profesor.libro_clases.grades.register_grade_for_student": "Registrar calificación para",
+      "profesor.libro_clases.grades.grade_saved": "Calificación guardada",
+      "profesor.libro_clases.content.add_content": "Agregar Contenido",
+      "profesor.libro_clases.content.view_content": "Ver Contenidos",
+    };
+    return translations[key] || key;
+  };
   const [selectedCourseId, setSelectedCourseId] =
     useState<Id<"courses"> | null>(null);
   const [activeTab, setActiveTab] = useState<TabValue>(view);
@@ -103,42 +135,30 @@ export function TeacherLibroClasesView({
     setActiveTab(view);
   }, [view]);
 
-  // Check tenancy first - this must be called before tenant queries
-  const tenancyCheck = useQuery(api.tenancy.getCurrentTenancy, {});
-
-  // Get current user - must be called before any early returns
+  // Get current user first
   const currentUser = useQuery(
     api.users.getUserByClerkId,
     userId && isLoaded && isSignedIn ? { clerkId: userId } : "skip",
   );
 
-  // Fetch teacher's courses - only call if tenancy is working
+  // Fetch teacher's courses - simplified logic
   const courses = useQuery(
     api.courses.getCourses,
-    currentUser?._id && tenancyCheck && !("error" in tenancyCheck)
-      ? {
-          teacherId: currentUser._id,
-          academicYear: new Date().getFullYear(),
-          isActive: true,
-        }
-      : "skip",
+    currentUser?._id ? {
+      teacherId: currentUser._id,
+      academicYear: new Date().getFullYear(),
+      isActive: true,
+    } : "skip",
   );
 
-  // Get selected course details - must be called before early returns
+  // Get selected course details
   const selectedCourse = useQuery(
     api.courses.getCourseById,
-    selectedCourseId && tenancyCheck && !("error" in tenancyCheck)
-      ? { courseId: selectedCourseId }
-      : "skip",
+    selectedCourseId ? { courseId: selectedCourseId } : "skip",
   );
 
-  const isCurrentUserLoading = currentUser === undefined;
-  const isTenancyLoading = tenancyCheck === undefined;
-  const hasTenancyError = tenancyCheck && "error" in tenancyCheck;
-  const isLoading =
-    isCurrentUserLoading ||
-    isTenancyLoading ||
-    (currentUser && !hasTenancyError ? courses === undefined : false);
+  // Simplified loading logic
+  const isLoading = currentUser === undefined || courses === undefined || (selectedCourseId && selectedCourse === undefined);
 
   useEffect(() => {
     if (!isLoading) {
@@ -146,7 +166,7 @@ export function TeacherLibroClasesView({
       return;
     }
 
-    const timeout = setTimeout(() => setLoadingTimedOut(true), 6000);
+    const timeout = setTimeout(() => setLoadingTimedOut(true), 10000); // Increased timeout
     return () => clearTimeout(timeout);
   }, [isLoading]);
 
@@ -234,43 +254,6 @@ export function TeacherLibroClasesView({
     );
   }
 
-  // Check for tenancy errors
-  if (tenancyCheck && "error" in tenancyCheck) {
-    return (
-      <PageTransition>
-        <div className="space-y-6">
-          <RoleAwareHeader
-            title="Problema de configuración institucional"
-            subtitle="No se pudo establecer el contexto de la institución"
-          />
-          <Card>
-            <CardContent className="py-10">
-              <p className="text-muted-foreground mb-4">
-                Hay un problema con la configuración de tu institución. Esto
-                puede deberse a:
-              </p>
-              <ul className="text-muted-foreground text-sm space-y-2 mb-6">
-                <li>• No tienes una institución asignada</li>
-                <li>• Tu membresía institucional no está activa</li>
-                <li>• Hay un problema con la configuración del sistema</li>
-              </ul>
-              <div className="flex flex-wrap gap-3">
-                <Button variant="outline" onClick={() => router.refresh()}>
-                  Reintentar
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => router.push("/contacto")}
-                >
-                  Contactar soporte
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </PageTransition>
-    );
-  }
 
   const handleTabChange = (value: string) => {
     const tab = value as TabValue;

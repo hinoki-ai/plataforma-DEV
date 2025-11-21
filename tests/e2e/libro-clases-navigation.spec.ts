@@ -96,22 +96,54 @@ async function performLogin(
       .first();
 
     await loginButton.waitFor({ state: "visible", timeout: 10000 });
-    await page.waitForTimeout(1000); // Brief wait for form to be ready
 
+    // Wait for button to be enabled (not disabled due to loading)
+    let attempts = 0;
+    while (attempts < 10) {
+      const isEnabled = await loginButton.isEnabled();
+      if (isEnabled) break;
+      console.log(`⏳ Waiting for login button to be enabled...`);
+      await page.waitForTimeout(1000);
+      attempts++;
+    }
+
+    console.log(`📝 Clicking login button`);
     await loginButton.click();
 
     // In dev mode, the form submission redirects to autenticacion-exitosa which then redirects to the dashboard
     console.log(`⏳ Waiting for dev authentication redirect...`);
-    await page.waitForTimeout(3000);
 
-    // Check if redirect happened
-    const postSubmitUrl = page.url();
-    console.log(`📍 URL after form submission: ${postSubmitUrl}`);
+    // Wait for URL to change from login
+    let redirectAttempts = 0;
+    while (redirectAttempts < 15) {
+      const currentUrl = page.url();
+      console.log(`📍 Current URL: ${currentUrl} (attempt ${redirectAttempts + 1})`);
 
-    if (postSubmitUrl.includes("/login")) {
-      console.log(`Dev authentication failed - still on login page`);
+      if (!currentUrl.includes("/login")) {
+        console.log(`✅ Redirected away from login page!`);
+        break;
+      }
+
+      await page.waitForTimeout(1000);
+      redirectAttempts++;
+    }
+
+    const finalUrl = page.url();
+    console.log(`📍 Final URL after login: ${finalUrl}`);
+
+    if (finalUrl.includes("/login")) {
+      console.log(`❌ Dev authentication failed - still on login page after ${redirectAttempts} attempts`);
       return false;
     }
+
+    console.log(`✅ Dev authentication successful!`);
+
+    // Wait a bit more for final redirect to dashboard
+    await page.waitForTimeout(2000);
+    const dashboardUrl = page.url();
+    console.log(`📍 Dashboard URL: ${dashboardUrl}`);
+
+    return true;
   } else {
     // Production mode login
     console.log(`🚀 Waiting for login button to be enabled...`);
@@ -770,11 +802,11 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
         await performLogin(page, CREDENTIALS.admin, "/admin");
       });
 
-      // Test admin libro clases routes
+      // Test admin libro clases routes (no main dashboard, direct to sub-pages)
       const masterLibroClasesRoutes = [
         {
-          path: "/admin/libro-clases",
-          description: "Admin - Libro de Clases Main",
+          path: "/admin/libro-clases/asistencia",
+          description: "Admin - Libro de Clases - Attendance",
         },
         {
           path: "/admin/libro-clases/estudiantes",
@@ -788,10 +820,6 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
           path: "/admin/libro-clases/observaciones",
           description: "Admin - Libro de Clases - Observations",
         },
-        {
-          path: "/admin/libro-clases/asistencia",
-          description: "Admin - Libro de Clases - Attendance",
-        },
       ];
 
       for (const route of masterLibroClasesRoutes) {
@@ -799,7 +827,7 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
           page,
           route.path,
           route.description,
-          "/master",
+          "/admin",
         );
       }
     });
@@ -813,12 +841,12 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
 
       const profesorLibroClasesRoutes = [
         {
-          path: "/profesor/libro-clases",
-          description: "Profesor Libro de Clases Main",
+          path: "/profesor/libro-clases/asistencia",
+          description: "Profesor Libro de Clases - Attendance",
         },
         {
-          path: "/profesor/libro-clases/estudiantes",
-          description: "Profesor Libro de Clases - Students Management",
+          path: "/profesor/libro-clases/contenidos",
+          description: "Profesor Libro de Clases - Content",
         },
         {
           path: "/profesor/libro-clases/calificaciones",
@@ -829,16 +857,12 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
           description: "Profesor Libro de Clases - Observations",
         },
         {
-          path: "/profesor/libro-clases/asistencia",
-          description: "Profesor Libro de Clases - Attendance",
+          path: "/profesor/libro-clases/reuniones",
+          description: "Profesor Libro de Clases - Parent Meetings",
         },
         {
-          path: "/profesor/libro-clases/planificaciones",
-          description: "Profesor Libro de Clases - Planning",
-        },
-        {
-          path: "/profesor/libro-clases/contenido",
-          description: "Profesor Libro de Clases - Content",
+          path: "/profesor/libro-clases/cobertura",
+          description: "Profesor Libro de Clases - Curriculum Coverage",
         },
       ];
 
@@ -861,24 +885,20 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
 
       const parentLibroClasesRoutes = [
         {
-          path: "/parent/libro-clases",
-          description: "Parent Libro de Clases Main",
+          path: "/parent/libro-clases/asistencia",
+          description: "Parent Libro de Clases - Attendance",
         },
         {
           path: "/parent/libro-clases/calificaciones",
           description: "Parent Libro de Clases - Grades",
         },
         {
-          path: "/parent/libro-clases/asistencia",
-          description: "Parent Libro de Clases - Attendance",
-        },
-        {
           path: "/parent/libro-clases/observaciones",
           description: "Parent Libro de Clases - Observations",
         },
         {
-          path: "/parent/libro-clases/planificaciones",
-          description: "Parent Libro de Clases - Planning",
+          path: "/parent/libro-clases/reuniones",
+          description: "Parent Libro de Clases - Parent Meetings",
         },
       ];
 
@@ -910,10 +930,9 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
       ];
 
       const libroClasesPaths = [
-        "/libro-clases",
+        "/libro-clases/asistencia",
         "/libro-clases/estudiantes",
         "/libro-clases/calificaciones",
-        "/libro-clases/asistencia",
         "/libro-clases/observaciones",
       ];
 

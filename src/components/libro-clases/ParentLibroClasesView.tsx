@@ -29,7 +29,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 import { usePathname, useRouter } from "next/navigation";
 import { useConvexConnection } from "@/hooks/useConvexConnection";
-import { useLanguage } from "@/components/language/useDivineLanguage";
+// Removed complex language hook - using hardcoded Spanish strings for performance
 import Link from "next/link";
 
 type TabValue =
