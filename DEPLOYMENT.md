@@ -106,7 +106,7 @@ The automated system handles:
   - Code formatting (Prettier)
   - TypeScript type checking
   - ESLint linting (zero warnings)
-  - Optional test execution
+  - Tests skipped for fast deployments 🚀
 
 - ✅ **Git Operations**
   - Auto-staging changes

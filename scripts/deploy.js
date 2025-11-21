@@ -171,8 +171,8 @@ class DeploymentManager {
       // Linting
       await this.runCommand("npm run lint", "Linting code");
 
-      // Run tests (optional - comment out if tests take too long)
-      // await this.runCommand('npm run test', 'Running tests')
+      // Tests are permanently skipped for faster deployments
+      this.info("Skipping tests for nice deployments 🚀");
 
       this.success("All quality checks passed!");
       return true;
