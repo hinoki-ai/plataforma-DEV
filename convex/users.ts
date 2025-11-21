@@ -18,6 +18,7 @@ import {
 } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 import { api } from "./_generated/api";
+import { logAuthenticationEvent } from "./audit";
 import {
   hashUserPassword,
   logUserCreation,
@@ -1207,11 +1208,28 @@ export const authenticateUser = query({
  * Update user's last login
  */
 export const updateLastLogin = mutation({
-  args: { userId: v.id("users") },
-  handler: async (ctx, { userId }) => {
+  args: { userId: v.id("users"), ipAddress: v.optional(v.string()), userAgent: v.optional(v.string()) },
+  handler: async (ctx, { userId, ipAddress, userAgent }) => {
+    const user = await ctx.db.get(userId);
+    if (!user) return;
+
     await ctx.db.patch(userId, {
       updatedAt: Date.now(),
     });
+
+    // Log successful login
+    if (ipAddress) {
+      await logAuthenticationEvent(ctx, {
+        userId,
+        userEmail: user.email,
+        userRole: user.role as any,
+        action: "USER_LOGIN",
+        status: "success",
+        ipAddress,
+        userAgent,
+        details: `User logged in successfully`,
+      });
+    }
   },
 });
 

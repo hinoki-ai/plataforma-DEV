@@ -18,12 +18,16 @@ function HydratedLayoutWrapper({
 }: HydratedLayoutWrapperProps) {
   const isHydrated = useHydrationSafe();
 
-  // Don't show any loading - let pages handle their own loading states
-  if (!isHydrated) {
-    // Still wait for hydration but don't show loader
-    return null;
-  }
+  // DEBUG: Log hydration status
+  console.log('[HYDRATION DEBUG] HydratedLayoutWrapper - isHydrated:', isHydrated, 'typeof window:', typeof window);
 
+  // TEMPORARILY DISABLE HYDRATION CHECK FOR DEBUGGING
+  // if (!isHydrated) {
+  //   console.log('[HYDRATION DEBUG] HydratedLayoutWrapper - Returning null (not hydrated)');
+  //   return null;
+  // }
+
+  console.log('[HYDRATION DEBUG] HydratedLayoutWrapper - Rendering children (hydration check disabled)');
   return <>{children}</>;
 }
 

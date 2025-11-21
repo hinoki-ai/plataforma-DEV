@@ -365,47 +365,47 @@ async function testPageLoad(
 
     // Check 2: Look for common UI elements
     const checks = {
-      "navigation/sidebar": [
+      "navigation/sidebar": await Promise.all([
         "nav",
         '[data-testid="sidebar"]',
         "aside",
         ".sidebar",
-      ].some((sel) => {
+      ].map(async (sel) => {
         try {
-          return page.locator(sel).count() > 0;
+          return await page.locator(sel).count() > 0;
         } catch {
           return false;
         }
-      }),
-      "main content": [
+      })).then(results => results.some(Boolean)),
+      "main content": await Promise.all([
         "main",
         '[data-testid="main-content"]',
         ".main-content",
-      ].some((sel) => {
+      ].map(async (sel) => {
         try {
-          return page.locator(sel).count() > 0;
+          return await page.locator(sel).count() > 0;
         } catch {
           return false;
         }
-      }),
-      header: ["header", ".header", "nav.navbar"].some((sel) => {
+      })).then(results => results.some(Boolean)),
+      header: await Promise.all(["header", ".header", "nav.navbar"].map(async (sel) => {
         try {
-          return page.locator(sel).count() > 0;
+          return await page.locator(sel).count() > 0;
         } catch {
           return false;
         }
-      }),
-      buttons: page.locator("button").count() > 0,
-      forms: page.locator("form").count() > 0,
-      links: page.locator("a").count() > 0,
-      tables: page.locator("table").count() > 0,
-      cards: [".card", '[data-testid*="card"]', "article"].some((sel) => {
+      })).then(results => results.some(Boolean)),
+      buttons: await page.locator("button").count() > 0,
+      forms: await page.locator("form").count() > 0,
+      links: await page.locator("a").count() > 0,
+      tables: await page.locator("table").count() > 0,
+      cards: await Promise.all([".card", '[data-testid*="card"]', "article"].map(async (sel) => {
         try {
-          return page.locator(sel).count() > 0;
+          return await page.locator(sel).count() > 0;
         } catch {
           return false;
         }
-      }),
+      })).then(results => results.some(Boolean)),
     };
 
     console.log(`🔍 UI Elements found:`);
@@ -438,7 +438,7 @@ async function testPageLoad(
     }
 
     // Check 4: JavaScript errors
-    const jsErrors = [];
+    const jsErrors: string[] = [];
     page.on("pageerror", (error) => {
       jsErrors.push(error.message);
     });

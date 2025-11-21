@@ -3,7 +3,7 @@
 import { useSession } from "@/lib/auth-client";
 import { hasMasterGodModeAccess } from "@/lib/role-utils";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SkeletonLoader } from "@/components/ui/dashboard-loader";
 
 interface ClientMasterLayoutProps {
@@ -15,6 +15,11 @@ export default function ClientMasterLayout({
 }: ClientMasterLayoutProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -30,6 +35,15 @@ export default function ClientMasterLayout({
     }
   }, [status, session, router]);
 
+  // Show loading while hydrating to prevent hydration mismatches
+  if (!isHydrated) {
+    return (
+      <div className="p-8">
+        <SkeletonLoader variant="list" lines={6} />
+      </div>
+    );
+  }
+
   // Show loading while checking authentication
   if (status === "loading") {
     return (
@@ -41,11 +55,19 @@ export default function ClientMasterLayout({
 
   // Don't render children if not authenticated or not authorized
   if (status === "unauthenticated" || !session?.user) {
-    return null;
+    return (
+      <div className="p-8">
+        <SkeletonLoader variant="list" lines={6} />
+      </div>
+    );
   }
 
   if (!hasMasterGodModeAccess(session.user.role)) {
-    return null;
+    return (
+      <div className="p-8">
+        <SkeletonLoader variant="list" lines={6} />
+      </div>
+    );
   }
 
   return <>{children}</>;

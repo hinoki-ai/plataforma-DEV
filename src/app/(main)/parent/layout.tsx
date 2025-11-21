@@ -2,7 +2,7 @@
 
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getRoleAccess } from "@/lib/role-utils";
 import { DashboardLoader } from "@/components/ui/dashboard-loader";
 import { useDivineParsing } from "@/components/language/ChunkedLanguageProvider";
@@ -17,6 +17,11 @@ export default function ParentLayout({
   const { t } = useDivineParsing(["parent"]);
   const hasRedirectedRef = useRef(false);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (status === "loading") {
@@ -76,6 +81,11 @@ export default function ParentLayout({
       }
     };
   }, []);
+
+  // Show loading while hydrating to prevent hydration mismatches
+  if (!isHydrated) {
+    return <DashboardLoader text={t("parent.layout.checking_access")} />;
+  }
 
   if (status === "loading") {
     return <DashboardLoader text={t("parent.layout.checking_access")} />;

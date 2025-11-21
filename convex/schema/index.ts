@@ -40,6 +40,10 @@ export * from "./media";
 import * as aiSchema from "./ai";
 export * from "./ai";
 
+// Audit Logging
+import * as auditSchema from "./audit";
+export * from "./audit";
+
 // Export combined schema object for use in defineSchema
 export const schemaObject = {
   ...authSchema,
@@ -50,4 +54,5 @@ export const schemaObject = {
   ...planningSchema,
   ...mediaSchema,
   ...aiSchema,
+  ...auditSchema,
 };

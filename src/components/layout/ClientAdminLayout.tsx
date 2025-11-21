@@ -3,8 +3,9 @@
 import { useSession } from "@/lib/auth-client";
 import { getRoleAccess } from "@/lib/role-utils";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SkeletonLoader } from "@/components/ui/dashboard-loader";
+import { ClientOnly } from "@/components/ui/client-only";
 
 interface ClientAdminLayoutProps {
   children: React.ReactNode;
@@ -15,6 +16,11 @@ export default function ClientAdminLayout({
 }: ClientAdminLayoutProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -31,6 +37,15 @@ export default function ClientAdminLayout({
     }
   }, [status, session, router]);
 
+  // Show loading while hydrating to prevent hydration mismatches
+  if (!isHydrated) {
+    return (
+      <div className="p-8">
+        <SkeletonLoader variant="list" lines={6} />
+      </div>
+    );
+  }
+
   // Show loading while checking authentication
   if (status === "loading") {
     return (
@@ -42,12 +57,20 @@ export default function ClientAdminLayout({
 
   // Don't render children if not authenticated or not authorized
   if (status === "unauthenticated" || !session?.user) {
-    return null;
+    return (
+      <div className="p-8">
+        <SkeletonLoader variant="list" lines={6} />
+      </div>
+    );
   }
 
   const roleAccess = getRoleAccess(session.user.role);
   if (!roleAccess.canAccessAdmin) {
-    return null;
+    return (
+      <div className="p-8">
+        <SkeletonLoader variant="list" lines={6} />
+      </div>
+    );
   }
 
   return <>{children}</>;

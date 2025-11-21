@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import {
   Card,
   CardContent,
@@ -50,107 +52,68 @@ import {
 } from "@/components/layout/RoleAwareNavigation";
 
 interface AuditLogEntry {
-  id: string;
-  timestamp: string;
-  user: string;
-  role: string;
+  _id: string;
+  _creationTime: number;
+  timestamp: number;
+  userId?: string;
+  userEmail: string;
+  userRole: "MASTER" | "ADMIN" | "PROFESOR" | "PARENT" | "STUDENT" | "SYSTEM";
   action: string;
   resource: string;
   status: "success" | "warning" | "error";
   ipAddress: string;
-  userAgent: string;
+  userAgent?: string;
   details: string;
+  metadata?: any;
   category:
     | "authentication"
     | "authorization"
     | "data_access"
     | "system_config"
-    | "user_management";
+    | "user_management"
+    | "system_operation"
+    | "security_event";
+  institutionId?: string;
+  sessionId?: string;
 }
 
-const auditLogEntries: AuditLogEntry[] = [
-  {
-    id: "1",
-    timestamp: "2024-01-15 14:30:25",
-    user: "admin@school.com",
-    role: "ADMIN",
-    action: "USER_LOGIN",
-    resource: "authentication",
-    status: "success",
-    ipAddress: "192.168.1.100",
-    userAgent: "Chrome/120.0",
-    details: "Successful login from admin panel",
-    category: "authentication",
-  },
-  {
-    id: "2",
-    timestamp: "2024-01-15 14:25:10",
-    user: "profesor@school.com",
-    role: "PROFESOR",
-    action: "DATA_ACCESS",
-    resource: "student_records",
-    status: "success",
-    ipAddress: "192.168.1.105",
-    userAgent: "Firefox/119.0",
-    details: "Accessed student grades for Mathematics 3A",
-    category: "data_access",
-  },
-  {
-    id: "3",
-    timestamp: "2024-01-15 14:20:45",
-    user: "master@system.com",
-    role: "MASTER",
-    action: "SYSTEM_CONFIG_UPDATE",
-    resource: "database_settings",
-    status: "success",
-    ipAddress: "10.0.0.1",
-    userAgent: "System/1.0",
-    details: "Updated database connection pool size to 25",
-    category: "system_config",
-  },
-  {
-    id: "4",
-    timestamp: "2024-01-15 14:15:30",
-    user: "parent@school.com",
-    role: "PARENT",
-    action: "UNAUTHORIZED_ACCESS_ATTEMPT",
-    resource: "admin_panel",
-    status: "error",
-    ipAddress: "192.168.1.110",
-    userAgent: "Safari/17.0",
-    details: "Attempted access to admin panel without proper permissions",
-    category: "authorization",
-  },
-  {
-    id: "5",
-    timestamp: "2024-01-15 14:10:15",
-    user: "system@internal",
-    role: "SYSTEM",
-    action: "USER_ROLE_UPDATE",
-    resource: "user_management",
-    status: "success",
-    ipAddress: "127.0.0.1",
-    userAgent: "System/1.0",
-    details:
-      "Updated role for user estudiante@school.com from STUDENT to GRADUATE",
-    category: "user_management",
-  },
-];
-
 function AuditLogsOverviewCard() {
-  const stats = useMemo(
-    () => ({
-      totalLogs: auditLogEntries.length,
-      todayLogs: auditLogEntries.filter((log) =>
-        log.timestamp.startsWith("2024-01-15"),
-      ).length,
-      errorLogs: auditLogEntries.filter((log) => log.status === "error").length,
-      successLogs: auditLogEntries.filter((log) => log.status === "success")
-        .length,
-      uniqueUsers: new Set(auditLogEntries.map((log) => log.user)).size,
-    }),
-    [],
-  );
+  const auditStats = useQuery(api.audit.getAuditStats);
+  const populateSampleLogs = useMutation(api.audit.populateSampleAuditLogs);
+  const [isPopulating, setIsPopulating] = useState(false);
+
+  const stats = useMemo(() => {
+    if (!auditStats) {
+      return {
+        totalLogs: 0,
+        todayLogs: 0,
+        errorLogs: 0,
+        successLogs: 0,
+        uniqueUsers: 0,
+      };
+    }
+
+    return {
+      totalLogs: auditStats.totalLogs,
+      todayLogs: auditStats.todayLogs,
+      errorLogs: auditStats.errorLogs,
+      successLogs: auditStats.successLogs,
+      uniqueUsers: auditStats.uniqueUsers,
+    };
+  }, [auditStats]);
+
+  const handlePopulateSampleData = async () => {
+    setIsPopulating(true);
+    try {
+      await populateSampleLogs({});
+      // Refresh the stats
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to populate sample data:", error);
+    } finally {
+      setIsPopulating(false);
+    }
+  };
 
   return (
     <Card className="border-gray-200 dark:border-gray-800">
@@ -164,6 +127,17 @@ function AuditLogsOverviewCard() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="flex justify-between items-center mb-4">
+          <div></div>
+          <Button
+            onClick={handlePopulateSampleData}
+            disabled={isPopulating}
+            variant="outline"
+            size="sm"
+          >
+            {isPopulating ? "Cargando..." : "Cargar Datos de Prueba"}
+          </Button>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <div className="text-center p-4 bg-gray-50 dark:bg-gray-950/20 rounded-lg">
             <FileText className="h-8 w-8 mx-auto mb-2 text-gray-600" />
@@ -212,23 +186,31 @@ function AuditLogsOverviewCard() {
 
 function AuditLogsTableCard() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedLog, setSelectedLog] = useState<AuditLogEntry | null>(null);
 
-  const filteredLogs = useMemo(() => {
-    return auditLogEntries.filter((log) => {
-      const matchesSearch =
-        log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        log.details.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory =
-        categoryFilter === "all" || log.category === categoryFilter;
-      const matchesStatus =
-        statusFilter === "all" || log.status === statusFilter;
-      return matchesSearch && matchesCategory && matchesStatus;
+  // Fetch audit logs from Convex
+  const auditLogsData = useQuery(api.audit.getAuditLogs, {
+    limit: 100,
+    searchTerm: searchTerm || undefined,
+    category: categoryFilter !== "all" ? categoryFilter as any : undefined,
+    status: statusFilter !== "all" ? statusFilter as any : undefined,
+  });
+
+  const auditLogs = auditLogsData?.logs || [];
+
+  // Convert timestamp to readable format
+  const formatTimestamp = (timestamp: number) => {
+    return new Date(timestamp).toLocaleString('es-ES', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
     });
-  }, [searchTerm, categoryFilter, statusFilter]);
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -325,12 +307,12 @@ function AuditLogsTableCard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredLogs.map((log) => (
-                  <TableRow key={log.id}>
+                {auditLogs.map((log) => (
+                  <TableRow key={log._id}>
                     <TableCell className="font-mono text-sm">
-                      {log.timestamp}
+                      {formatTimestamp(log.timestamp)}
                     </TableCell>
-                    <TableCell className="font-medium">{log.user}</TableCell>
+                    <TableCell className="font-medium">{log.userEmail}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         {getCategoryIcon(log.category)}
@@ -380,7 +362,7 @@ function AuditLogsTableCard() {
 
           <div className="flex justify-between items-center">
             <div className="text-sm text-muted-foreground">
-              Mostrando {filteredLogs.length} de {auditLogEntries.length} logs
+              Mostrando {auditLogs.length} de {auditLogsData?.totalCount || 0} logs
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
@@ -401,20 +383,42 @@ function AuditLogsTableCard() {
               <AlertDescription>
                 <div className="mt-2 space-y-1 text-sm">
                   <div>
-                    <strong>ID:</strong> {selectedLog.id}
+                    <strong>ID:</strong> {selectedLog._id}
                   </div>
                   <div>
-                    <strong>Rol:</strong> {selectedLog.role}
+                    <strong>Email:</strong> {selectedLog.userEmail}
+                  </div>
+                  <div>
+                    <strong>Rol:</strong> {selectedLog.userRole}
                   </div>
                   <div>
                     <strong>Recurso:</strong> {selectedLog.resource}
                   </div>
                   <div>
-                    <strong>User Agent:</strong> {selectedLog.userAgent}
+                    <strong>Categoría:</strong> {selectedLog.category.replace("_", " ")}
                   </div>
+                  <div>
+                    <strong>Estado:</strong> {selectedLog.status}
+                  </div>
+                  <div>
+                    <strong>IP:</strong> {selectedLog.ipAddress}
+                  </div>
+                  {selectedLog.userAgent && (
+                    <div>
+                      <strong>User Agent:</strong> {selectedLog.userAgent}
+                    </div>
+                  )}
                   <div>
                     <strong>Detalles:</strong> {selectedLog.details}
                   </div>
+                  {selectedLog.metadata && (
+                    <div>
+                      <strong>Metadata:</strong>{" "}
+                      <pre className="text-xs bg-muted p-2 rounded mt-1">
+                        {JSON.stringify(selectedLog.metadata, null, 2)}
+                      </pre>
+                    </div>
+                  )}
                 </div>
               </AlertDescription>
             </Alert>

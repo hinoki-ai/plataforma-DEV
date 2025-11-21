@@ -20,32 +20,32 @@ export const GET = createApiRoute(
         environment: process.env.NODE_ENV,
       }),
 
-      // User analytics - wrapped for error tracking
+      // User analytics - wrapped for error tracking with fallback
       client.query(api.users.getUsers, { isActive: true }).catch((error) => {
         console.error("Dashboard: getUsers query failed:", error);
-        throw new Error(`getUsers query failed: ${error.message}`);
+        return []; // Return empty array as fallback
       }),
 
-      // Content metrics - wrapped for error tracking
+      // Content metrics - wrapped for error tracking with fallbacks
       client.query(api.calendar.getCalendarEvents, {}).catch((error) => {
         console.error("Dashboard: getCalendarEvents query failed:", error);
-        throw new Error(`getCalendarEvents query failed: ${error.message}`);
+        return { events: [] }; // Return empty structure as fallback
       }),
       client.query(api.planning.getPlanningDocuments, {}).catch((error) => {
         console.error("Dashboard: getPlanningDocuments query failed:", error);
-        throw new Error(`getPlanningDocuments query failed: ${error.message}`);
+        return []; // Return empty array as fallback
       }),
       client.query(api.meetings.getMeetings, {}).catch((error) => {
         console.error("Dashboard: getMeetings query failed:", error);
-        throw new Error(`getMeetings query failed: ${error.message}`);
+        return { meetings: [] }; // Return empty structure as fallback
       }),
       client.query(api.media.getPhotos, {}).catch((error) => {
         console.error("Dashboard: getPhotos query failed:", error);
-        throw new Error(`getPhotos query failed: ${error.message}`);
+        return []; // Return empty array as fallback
       }),
       client.query(api.media.getVideos, {}).catch((error) => {
         console.error("Dashboard: getVideos query failed:", error);
-        throw new Error(`getVideos query failed: ${error.message}`);
+        return []; // Return empty array as fallback
       }),
 
       // Error tracking (will work once ErrorLog model is added)
