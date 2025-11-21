@@ -231,7 +231,7 @@ export default function UsersPage() {
           </p>
         </div>
 
-        <Card>
+        <Card data-tour="user-management-card">
           <CardHeader>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
@@ -244,6 +244,7 @@ export default function UsersPage() {
               </div>
               <div className="flex gap-2">
                 <Button
+                  data-tour="add-user"
                   onClick={() => setIsCreateDialogOpen(true)}
                   className="bg-primary hover:bg-primary-90 text-white"
                 >
@@ -264,7 +265,7 @@ export default function UsersPage() {
 
           <CardContent>
             {/* Search Bar */}
-            <div className="mb-6">
+            <div className="mb-6" data-tour="user-search">
               <div className="relative">
                 <Search className="absolute left-3 top-50 transform -translate-y-50 text-muted-foreground w-4 h-4" />
                 <Input
@@ -277,7 +278,7 @@ export default function UsersPage() {
             </div>
 
             {/* Users Table */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto" data-tour="user-list">
               <Table>
                 <TableHeader>
                   <TableRow>

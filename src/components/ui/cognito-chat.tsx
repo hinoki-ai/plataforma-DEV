@@ -212,7 +212,9 @@ export function CognitoChat({
     // Simulate typing delay
     setTimeout(
       async () => {
-        const cognitoResponse = await generateCognitoResponse(userMessage);
+        const cognitoResponse = await generateCognitoResponse(
+          userMessage.content,
+        );
         const cognitoMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: cognitoResponse,

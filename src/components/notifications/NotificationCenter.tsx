@@ -414,12 +414,12 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                 {displayedNotifications.map((item) =>
                   "isGroup" in item && item.isGroup ? (
                     <NotificationGroupItem
-                      key={item.key}
+                      key={(item as NotificationGroup).key}
                       group={item as NotificationGroup}
                     />
                   ) : (
                     <NotificationItem
-                      key={item.id}
+                      key={(item as Notification).id}
                       notification={item as Notification}
                     />
                   ),

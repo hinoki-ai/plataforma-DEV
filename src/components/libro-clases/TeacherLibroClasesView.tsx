@@ -676,7 +676,7 @@ export function TeacherLibroClasesView({
                 </div>
               </TabsContent>
 
-              <TabsContent value="attendance">
+              <TabsContent value="attendance" data-tour="attendance-section">
                 {selectedCourseId && currentUser?._id && (
                   <AttendanceRecorder
                     courseId={selectedCourseId}
@@ -719,7 +719,10 @@ export function TeacherLibroClasesView({
                 )}
               </TabsContent>
 
-              <TabsContent value="observations">
+              <TabsContent
+                value="observations"
+                data-tour="observations-section"
+              >
                 <Card>
                   <CardHeader>
                     <CardTitle>Observaciones de Estudiantes</CardTitle>
@@ -737,7 +740,7 @@ export function TeacherLibroClasesView({
                 </Card>
               </TabsContent>
 
-              <TabsContent value="grades">
+              <TabsContent value="grades" data-tour="grades-section">
                 {selectedCourseId && currentUser?._id && (
                   <GradesTable
                     courseId={selectedCourseId}

@@ -293,6 +293,15 @@ function QuickActionsGrid({ actions }: { actions: QuickAction[] }) {
               variant={action.variant || "default"}
               className="h-auto p-4 flex flex-col items-center gap-2 text-center"
               asChild
+              data-tour={
+                action.id === "new-user"
+                  ? "admin-users"
+                  : action.id === "calendar"
+                    ? "admin-calendar"
+                    : action.id === "schedule-meeting"
+                      ? "parent-meetings"
+                      : undefined
+              }
             >
               <a href={action.href}>
                 <Icon className="h-6 w-6" />
@@ -468,6 +477,7 @@ export function RoleAwareDashboard() {
       <DashboardCard
         title="Acciones Rápidas"
         description="Accede rápidamente a las funciones más utilizadas"
+        data-tour="admin-dashboard"
       >
         <QuickActionsGrid actions={userActions} />
       </DashboardCard>
@@ -671,6 +681,7 @@ export function RoleAwareDashboard() {
             <DashboardCard
               title="📢 Comunicados Generales"
               description="Mensajes importantes y anuncios"
+              data-tour="parent-overview"
             >
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
@@ -703,6 +714,7 @@ export function RoleAwareDashboard() {
             <DashboardCard
               title="💬 Comunicación General"
               description="Mensajes, notificaciones y contactos"
+              data-tour="parent-communication"
             >
               <div className="space-y-4">
                 <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">

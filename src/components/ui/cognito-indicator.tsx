@@ -160,6 +160,8 @@ export function CognitoIndicator() {
 
   // Get appropriate tour for current context
   const getTourForContext = (context: any) => {
+    if (context.section === "admin" && pathname.includes("usuarios"))
+      return "admin-users";
     if (context.section === "admin") return "admin-dashboard";
     if (context.section === "profesor" && pathname.includes("libro-clases"))
       return "teacher-classbook";

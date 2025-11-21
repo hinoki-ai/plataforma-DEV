@@ -12,7 +12,7 @@ interface TourStep {
   id: string;
   title: string;
   content: string;
-  target: string; // CSS selector
+  target: string | string[]; // CSS selector or array of selectors
   position: "top" | "bottom" | "left" | "right";
   action?: "click" | "type" | "scroll";
   highlight?: boolean;
@@ -80,7 +80,7 @@ export function CognitoTour({
           ),
           content: t(
             "tour.admin.dashboard.step1.content",
-            "This is your central hub for managing the entire educational platform. Let's explore the key features.",
+            "This is your central hub for managing the entire educational platform. Let's explore all the key features together.",
           ),
           target: "[data-tour='admin-dashboard']",
           position: "bottom",
@@ -88,31 +88,24 @@ export function CognitoTour({
         },
         {
           id: "navigation",
-          title: t("tour.admin.dashboard.step2.title", "Navigation Menu"),
+          title: t(
+            "tour.admin.dashboard.step2.title",
+            "Navigation & User Management",
+          ),
           content: t(
             "tour.admin.dashboard.step2.content",
-            "Use this sidebar to access different management sections like users, calendar, and reports.",
+            "Use the sidebar to navigate between sections. The user management area lets you create accounts and assign roles for teachers, parents, and students.",
           ),
-          target: "[data-tour='admin-sidebar']",
+          target: "[data-tour='admin-users']",
           position: "right",
           action: "click",
         },
         {
-          id: "users",
-          title: t("tour.admin.dashboard.step3.title", "User Management"),
+          id: "calendar",
+          title: t("tour.admin.dashboard.step3.title", "School Calendar"),
           content: t(
             "tour.admin.dashboard.step3.content",
-            "Manage teachers, parents, and students. Create accounts and assign roles.",
-          ),
-          target: "[data-tour='admin-users']",
-          position: "top",
-        },
-        {
-          id: "calendar",
-          title: t("tour.admin.dashboard.step4.title", "School Calendar"),
-          content: t(
-            "tour.admin.dashboard.step4.content",
-            "Schedule events, holidays, and important dates for the entire school community.",
+            "Schedule events, holidays, and important dates for the entire school community. This keeps everyone coordinated and informed.",
           ),
           target: "[data-tour='admin-calendar']",
           position: "top",
@@ -131,38 +124,49 @@ export function CognitoTour({
       autoStart: false,
       steps: [
         {
-          id: "attendance",
-          title: t("tour.teacher.classbook.step1.title", "Daily Attendance"),
+          id: "overview",
+          title: t("tour.teacher.classbook.step1.title", "Class Book Overview"),
           content: t(
             "tour.teacher.classbook.step1.content",
-            "Start each day by marking student attendance. Click 'Marcar Todos Presentes' for quick entry.",
+            "Welcome to your digital class book. Here you can manage attendance, grades, and student observations all in one place.",
+          ),
+          target: [
+            "[data-tour='attendance-section']",
+            "[data-tour='grades-section']",
+            "[data-tour='observations-section']",
+          ],
+          position: "right",
+          highlight: true,
+        },
+        {
+          id: "attendance",
+          title: t(
+            "tour.teacher.classbook.step2.title",
+            "Daily Attendance Management",
+          ),
+          content: t(
+            "tour.teacher.classbook.step2.content",
+            "Start each day by marking student attendance. Click 'Marcar Todos Presentes' for quick entry when the whole class is present.",
           ),
           target: "[data-tour='attendance-section']",
           position: "right",
           action: "click",
         },
         {
-          id: "grades",
-          title: t("tour.teacher.classbook.step2.title", "Grade Management"),
-          content: t(
-            "tour.teacher.classbook.step2.content",
-            "Enter and update student grades regularly. Use the summary view to track progress.",
-          ),
-          target: "[data-tour='grades-section']",
-          position: "left",
-        },
-        {
-          id: "observations",
+          id: "grades-observations",
           title: t(
             "tour.teacher.classbook.step3.title",
-            "Student Observations",
+            "Grades & Observations",
           ),
           content: t(
             "tour.teacher.classbook.step3.content",
-            "Record important observations about student behavior and academic performance.",
+            "Enter and update student grades regularly. Also record important observations about student behavior and academic performance.",
           ),
-          target: "[data-tour='observations-section']",
-          position: "top",
+          target: [
+            "[data-tour='grades-section']",
+            "[data-tour='observations-section']",
+          ],
+          position: "left",
         },
       ],
     },
@@ -179,36 +183,95 @@ export function CognitoTour({
       steps: [
         {
           id: "overview",
-          title: t("tour.parent.dashboard.step1.title", "Student Overview"),
+          title: t(
+            "tour.parent.dashboard.step1.title",
+            "Parent Portal Overview",
+          ),
           content: t(
             "tour.parent.dashboard.step1.content",
-            "Get a quick overview of your child's academic performance and recent activities.",
+            "Welcome to your parent portal! Here you can track your child's progress, communicate with teachers, and schedule meetings.",
+          ),
+          target: [
+            "[data-tour='parent-overview']",
+            "[data-tour='parent-communication']",
+            "[data-tour='parent-meetings']",
+          ],
+          position: "bottom",
+          highlight: true,
+        },
+        {
+          id: "tracking",
+          title: t("tour.parent.dashboard.step2.title", "Academic Tracking"),
+          content: t(
+            "tour.parent.dashboard.step2.content",
+            "Get a quick overview of your child's academic performance, attendance, and recent activities in the overview section.",
           ),
           target: "[data-tour='parent-overview']",
           position: "bottom",
         },
         {
-          id: "communication",
-          title: t("tour.parent.dashboard.step2.title", "Communication Hub"),
-          content: t(
-            "tour.parent.dashboard.step2.content",
-            "Stay updated with school announcements and communicate with teachers.",
-          ),
-          target: "[data-tour='parent-communication']",
-          position: "right",
-        },
-        {
-          id: "meetings",
+          id: "communication-meetings",
           title: t(
             "tour.parent.dashboard.step3.title",
-            "Parent-Teacher Meetings",
+            "Communication & Meetings",
           ),
           content: t(
             "tour.parent.dashboard.step3.content",
-            "Schedule and manage meetings with your child's teachers.",
+            "Stay updated with school announcements and schedule meetings with your child's teachers to discuss their progress.",
           ),
-          target: "[data-tour='parent-meetings']",
-          position: "left",
+          target: [
+            "[data-tour='parent-communication']",
+            "[data-tour='parent-meetings']",
+          ],
+          position: "right",
+        },
+      ],
+    },
+    "admin-users": {
+      id: "admin-users",
+      title: t("tour.admin.users.title", "Managing School Users"),
+      description: t(
+        "tour.admin.users.description",
+        "Add and manage teachers, parents, and students",
+      ),
+      role: "admin",
+      page: "/admin/usuarios",
+      autoStart: false,
+      steps: [
+        {
+          id: "overview",
+          title: t("tour.admin.users.step1.title", "All User Tools"),
+          content: t(
+            "tour.admin.users.step1.content",
+            "See all users, add new ones, and find people here. This is your main area for managing school accounts.",
+          ),
+          target: [
+            "[data-tour='user-list']",
+            "[data-tour='add-user']",
+            "[data-tour='user-search']",
+          ],
+          position: "bottom",
+          highlight: true,
+        },
+        {
+          id: "search",
+          title: t("tour.admin.users.step2.title", "Finding Users"),
+          content: t(
+            "tour.admin.users.step2.content",
+            "Type a name or email in the search box to quickly find any user. This helps when you have many people to manage.",
+          ),
+          target: "[data-tour='user-search']",
+          position: "right",
+        },
+        {
+          id: "adding",
+          title: t("tour.admin.users.step3.title", "Adding New Users"),
+          content: t(
+            "tour.admin.users.step3.content",
+            "Click 'Add User' to create accounts for teachers and parents. Fill in their name, email, and choose their role.",
+          ),
+          target: "[data-tour='add-user']",
+          position: "right",
         },
       ],
     },
@@ -223,33 +286,64 @@ export function CognitoTour({
     }
   }, [tourId]);
 
-  // Position tooltip relative to target element
-  const getTooltipPosition = (targetElement: Element | null) => {
-    if (!targetElement || !tooltipRef.current) return { top: 0, left: 0 };
+  // Position tooltip relative to target element(s)
+  const getTooltipPosition = (targetElements: Element | Element[] | null) => {
+    if (!targetElements || !tooltipRef.current) return { top: 0, left: 0 };
 
-    const rect = targetElement.getBoundingClientRect();
+    const elements = Array.isArray(targetElements)
+      ? targetElements
+      : [targetElements];
     const tooltipRect = tooltipRef.current.getBoundingClientRect();
     const step = tour?.steps[currentStep];
+
+    // Calculate combined bounding rectangle for all elements
+    let minTop = Infinity,
+      minLeft = Infinity,
+      maxBottom = -Infinity,
+      maxRight = -Infinity;
+
+    elements.forEach((element) => {
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        minTop = Math.min(minTop, rect.top);
+        minLeft = Math.min(minLeft, rect.left);
+        maxBottom = Math.max(maxBottom, rect.bottom);
+        maxRight = Math.max(maxRight, rect.right);
+      }
+    });
+
+    const combinedRect = {
+      top: minTop,
+      left: minLeft,
+      bottom: maxBottom,
+      right: maxRight,
+      width: maxRight - minLeft,
+      height: maxBottom - minTop,
+    };
 
     let top = 0;
     let left = 0;
 
     switch (step?.position) {
       case "top":
-        top = rect.top - tooltipRect.height - 10;
-        left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+        top = combinedRect.top - tooltipRect.height - 10;
+        left =
+          combinedRect.left + combinedRect.width / 2 - tooltipRect.width / 2;
         break;
       case "bottom":
-        top = rect.bottom + 10;
-        left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+        top = combinedRect.bottom + 10;
+        left =
+          combinedRect.left + combinedRect.width / 2 - tooltipRect.width / 2;
         break;
       case "left":
-        top = rect.top + rect.height / 2 - tooltipRect.height / 2;
-        left = rect.left - tooltipRect.width - 10;
+        top =
+          combinedRect.top + combinedRect.height / 2 - tooltipRect.height / 2;
+        left = combinedRect.left - tooltipRect.width - 10;
         break;
       case "right":
-        top = rect.top + rect.height / 2 - tooltipRect.height / 2;
-        left = rect.right + 10;
+        top =
+          combinedRect.top + combinedRect.height / 2 - tooltipRect.height / 2;
+        left = combinedRect.right + 10;
         break;
     }
 
@@ -263,16 +357,22 @@ export function CognitoTour({
     return { top, left };
   };
 
-  // Highlight target element
-  const highlightElement = (selector: string) => {
-    const element = document.querySelector(selector);
-    if (element && overlayRef.current) {
-      const rect = element.getBoundingClientRect();
-      const overlay = overlayRef.current;
+  // Highlight target element(s)
+  const highlightElement = (selector: string | string[]) => {
+    if (!overlayRef.current) return;
 
-      // Create highlight effect
-      overlay.innerHTML = `
-        <div style="
+    const selectors = Array.isArray(selector) ? selector : [selector];
+    const overlay = overlayRef.current;
+    overlay.innerHTML = "";
+
+    selectors.forEach((sel) => {
+      const element = document.querySelector(sel);
+      if (element) {
+        const rect = element.getBoundingClientRect();
+
+        // Create highlight effect for each element
+        const highlightDiv = document.createElement("div");
+        highlightDiv.style.cssText = `
           position: absolute;
           top: ${rect.top - 4}px;
           left: ${rect.left - 4}px;
@@ -284,9 +384,10 @@ export function CognitoTour({
           pointer-events: none;
           z-index: 9998;
           animation: pulse-highlight 2s infinite;
-        "></div>
-      `;
-    }
+        `;
+        overlay.appendChild(highlightDiv);
+      }
+    });
   };
 
   // Handle step progression
@@ -320,10 +421,22 @@ export function CognitoTour({
         setTimeout(() => {
           highlightElement(step.target);
           // Calculate position after element is highlighted
-          const position = getTooltipPosition(
-            document.querySelector(step.target),
-          );
-          setTooltipPosition(position);
+          const selectors = Array.isArray(step.target)
+            ? step.target
+            : [step.target];
+          const elements = selectors
+            .map((sel) => document.querySelector(sel))
+            .filter((el) => el !== null);
+          if (elements.length > 0) {
+            const position = getTooltipPosition(elements);
+            setTooltipPosition(position);
+          } else {
+            // If no elements found, center the tooltip
+            setTooltipPosition({
+              top: window.innerHeight / 2 - 100,
+              left: window.innerWidth / 2 - 150,
+            });
+          }
         }, 100);
       }
     }
