@@ -57,13 +57,20 @@ async function performLogin(
   await page.locator('input[type="email"]').first().fill(credentials.email);
 
   console.log(`🔑 Filling password`);
-  await page.locator('input[type="password"]').first().fill(credentials.password);
+  await page
+    .locator('input[type="password"]')
+    .first()
+    .fill(credentials.password);
 
   await dismissAudioBanner(page);
 
   console.log(`🚀 Clicking login button`);
   // Click the first submit button or button containing login text
-  const loginButton = page.locator('button[type="submit"], button:has-text("Ingresar"), button:has-text("Login"), button:has-text("Sign in")').first();
+  const loginButton = page
+    .locator(
+      'button[type="submit"], button:has-text("Ingresar"), button:has-text("Login"), button:has-text("Sign in")',
+    )
+    .first();
   await loginButton.click();
 
   console.log(`⏳ Waiting for redirect...`);
@@ -75,7 +82,7 @@ async function performLogin(
   const currentUrl = page.url();
   console.log(`📍 Current URL after login: ${currentUrl}`);
 
-  if (currentUrl.includes('/login')) {
+  if (currentUrl.includes("/login")) {
     throw new Error(`Still on login page after login attempt: ${currentUrl}`);
   }
 

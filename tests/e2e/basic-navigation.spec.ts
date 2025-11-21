@@ -55,7 +55,9 @@ async function testPageLoad(page: Page, path: string, description: string) {
 test.describe("Basic Production Site Navigation Tests", () => {
   test.setTimeout(30000); // 30 seconds per test
 
-  test("production site loads and basic pages are accessible", async ({ page }) => {
+  test("production site loads and basic pages are accessible", async ({
+    page,
+  }) => {
     // Test basic public pages without login
     const publicRoutes = [
       { path: "/", description: "Home Page" },
@@ -65,7 +67,10 @@ test.describe("Basic Production Site Navigation Tests", () => {
       { path: "/privacidad", description: "Privacy Policy" },
       { path: "/terminos", description: "Terms of Service" },
       { path: "/docs", description: "Documentation" },
-      { path: "/equipo-multidisciplinario", description: "Multidisciplinary Team" },
+      {
+        path: "/equipo-multidisciplinario",
+        description: "Multidisciplinary Team",
+      },
       { path: "/programas", description: "Programs" },
       { path: "/planes", description: "Plans" },
       { path: "/cpma", description: "CPMA" },
@@ -76,7 +81,9 @@ test.describe("Basic Production Site Navigation Tests", () => {
     }
   });
 
-  test("dashboard routes redirect to login when not authenticated", async ({ page }) => {
+  test("dashboard routes redirect to login when not authenticated", async ({
+    page,
+  }) => {
     // Test that protected routes redirect to login
     const protectedRoutes = [
       { path: "/master", description: "Master Dashboard" },
@@ -104,7 +111,9 @@ test.describe("Basic Production Site Navigation Tests", () => {
         console.log(`📍 Final URL: ${currentUrl}`);
 
         // Should either redirect to login or return a valid response
-        const isLoginPage = currentUrl.includes('/login') || currentUrl.includes('/no-autorizado');
+        const isLoginPage =
+          currentUrl.includes("/login") ||
+          currentUrl.includes("/no-autorizado");
         const isValidResponse = status && status < 400;
 
         expect(isLoginPage || isValidResponse).toBeTruthy();
@@ -289,7 +298,9 @@ test.describe("Basic Production Site Navigation Tests", () => {
       }
     }
 
-    console.log(`\n📊 Results: ${successCount} successful, ${failCount} failed`);
+    console.log(
+      `\n📊 Results: ${successCount} successful, ${failCount} failed`,
+    );
 
     // At least 80% should be successful
     const totalRoutes = allRoutes.length;
