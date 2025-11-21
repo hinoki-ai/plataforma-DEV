@@ -34,4 +34,3 @@
 - Other master components may still use i18n if they serve multi-lingual users
 
 This decision was made to optimize development efficiency and system performance for admin-only interfaces.
-

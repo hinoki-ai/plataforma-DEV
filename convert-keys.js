@@ -45,4 +45,3 @@ fs.writeFileSync(
 );
 
 console.log("Conversion complete!");
-

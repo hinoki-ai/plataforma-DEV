@@ -520,58 +520,50 @@ async function performLogin(
       logger.log(
         "info",
         "auth",
-        `🛠️  Using dev mode login for ${credentials.email}`,
+        `🛠️  Using dev mode login for ${credentials.email} - filling form`,
       );
 
-      // Map email to role for dev mode buttons
-      const roleMap: Record<string, string> = {
-        "agustinarancibia@live.cl": "MASTER",
-        "admin@astral.cl": "ADMIN",
-        "profesor@astral.cl": "PROFESOR",
-        "apoderado@astral.cl": "PARENT",
-      };
+      // In dev mode, just fill the form and submit it - the page handles dev authentication internally
+      logger.log("info", "auth", `📝 Filling email: ${credentials.email}`);
+      await page.locator('input[type="email"]').first().fill(credentials.email);
 
-      const role = roleMap[credentials.email];
-      if (!role) {
-        logger.log(
-          "error",
-          "auth",
-          `No dev role mapping found for email: ${credentials.email}`,
-        );
-        return false;
-      }
+      logger.log("info", "auth", `🔑 Filling password`);
+      await page
+        .locator('input[type="password"]')
+        .first()
+        .fill(credentials.password);
 
-      logger.log("info", "auth", `🎯 Clicking ${role} dev login button`);
-      const buttonText =
-        role === "MASTER"
-          ? "Master"
-          : role === "ADMIN"
-            ? "Admin"
-            : role === "PROFESOR"
-              ? "Profesor"
-              : "Parent";
-      const devButton = page.locator(`button:has-text("${buttonText}")`);
+      await dismissAudioBanner(page, logger);
 
-      await devButton.waitFor({ state: "visible", timeout: 5000 });
-      await devButton.click();
+      logger.log("info", "auth", `🚀 Clicking login button in dev mode`);
+      const loginButton = page
+        .locator(
+          'button[type="submit"], button:has-text("Iniciar"), button:has-text("Login")',
+        )
+        .first();
 
-      // In dev mode, the button redirects to autenticacion-exitosa which then redirects to the dashboard
+      await loginButton.waitFor({ state: "visible", timeout: 10000 });
+      await page.waitForTimeout(1000); // Brief wait for form to be ready
+
+      await loginButton.click();
+
+      // In dev mode, the form submission redirects to autenticacion-exitosa which then redirects to the dashboard
       logger.log(
         "info",
         "auth",
         "⏳ Waiting for dev authentication redirect...",
       );
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(3000);
 
       // Check if redirect happened
-      const postClickUrl = page.url();
+      const postSubmitUrl = page.url();
       logger.log(
         "info",
         "navigation",
-        `📍 URL after dev button click: ${postClickUrl}`,
+        `📍 URL after form submission: ${postSubmitUrl}`,
       );
 
-      if (postClickUrl.includes("/login")) {
+      if (postSubmitUrl.includes("/login")) {
         logger.log(
           "error",
           "auth",

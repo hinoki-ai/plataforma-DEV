@@ -66,8 +66,8 @@ export function AdminLibroClasesView({
   const { t } = useDivineParsing(["libro-clases", "common"]);
   const [searchQuery, setSearchQuery] = useState("");
   // Initialize with current year - safe for client components
-  const [selectedYear, setSelectedYear] = useState<number | undefined>(
-    () => new Date().getFullYear()
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(() =>
+    new Date().getFullYear(),
   );
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);

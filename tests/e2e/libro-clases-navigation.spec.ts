@@ -1,7 +1,11 @@
 import { expect, Page, test } from "@playwright/test";
 
 // Use environment variable or default to localhost for dev mode
-const PRODUCTION_URL = process.env.E2E_BASE_URL || (process.env.NODE_ENV === "development" || process.env.E2E_DEV_MODE ? "http://localhost:3000" : "https://plataforma.aramac.dev");
+const PRODUCTION_URL =
+  process.env.E2E_BASE_URL ||
+  (process.env.NODE_ENV === "development" || process.env.E2E_DEV_MODE
+    ? "http://localhost:3000"
+    : "https://plataforma.aramac.dev");
 
 // User credentials for different roles
 const CREDENTIALS = {
@@ -68,45 +72,43 @@ async function performLogin(
   const isDevMode = PRODUCTION_URL.includes("localhost");
 
   if (isDevMode) {
-    console.log(`🛠️  Using dev mode login for ${credentials.email}`);
+    console.log(
+      `🛠️  Using dev mode login for ${credentials.email} - filling form`,
+    );
 
-    // Map email to role for dev mode buttons
-    const roleMap: Record<string, string> = {
-      "agustinarancibia@live.cl": "MASTER",
-      "admin@astral.cl": "ADMIN",
-      "profesor@astral.cl": "PROFESOR",
-      "apoderado@astral.cl": "PARENT",
-    };
+    // In dev mode, just fill the form and submit it - the page handles dev authentication internally
+    console.log(`📝 Filling email: ${credentials.email}`);
+    await page.locator('input[type="email"]').first().fill(credentials.email);
 
-    const role = roleMap[credentials.email];
-    if (!role) {
-      console.log(`No dev role mapping found for email: ${credentials.email}`);
-      return false;
-    }
+    console.log(`🔑 Filling password`);
+    await page
+      .locator('input[type="password"]')
+      .first()
+      .fill(credentials.password);
 
-    console.log(`🎯 Clicking ${role} dev login button`);
-    const buttonText =
-      role === "MASTER"
-        ? "Master"
-        : role === "ADMIN"
-          ? "Admin"
-          : role === "PROFESOR"
-            ? "Profesor"
-            : "Parent";
-    const devButton = page.locator(`button:has-text("${buttonText}")`);
+    await dismissAudioBanner(page);
 
-    await devButton.waitFor({ state: "visible", timeout: 5000 });
-    await devButton.click();
+    console.log(`🚀 Clicking login button in dev mode`);
+    const loginButton = page
+      .locator(
+        'button[type="submit"], button:has-text("Iniciar"), button:has-text("Login")',
+      )
+      .first();
 
-    // In dev mode, the button redirects to autenticacion-exitosa which then redirects to the dashboard
+    await loginButton.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(1000); // Brief wait for form to be ready
+
+    await loginButton.click();
+
+    // In dev mode, the form submission redirects to autenticacion-exitosa which then redirects to the dashboard
     console.log(`⏳ Waiting for dev authentication redirect...`);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
 
     // Check if redirect happened
-    const postClickUrl = page.url();
-    console.log(`📍 URL after dev button click: ${postClickUrl}`);
+    const postSubmitUrl = page.url();
+    console.log(`📍 URL after form submission: ${postSubmitUrl}`);
 
-    if (postClickUrl.includes("/login")) {
+    if (postSubmitUrl.includes("/login")) {
       console.log(`Dev authentication failed - still on login page`);
       return false;
     }

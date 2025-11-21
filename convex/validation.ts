@@ -124,4 +124,3 @@ export function filterActive<T extends { isActive?: boolean }>(
 ): T[] {
   return items.filter((item) => item.isActive !== false);
 }
-

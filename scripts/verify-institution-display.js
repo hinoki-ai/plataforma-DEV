@@ -182,4 +182,3 @@ console.log(
   "The institution name display functionality is properly implemented.",
 );
 console.log("All core SaaS multi-tenancy requirements are met.");
-
