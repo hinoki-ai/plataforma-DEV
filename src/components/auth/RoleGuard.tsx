@@ -32,6 +32,19 @@ export function RoleGuard({
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // DEV MODE: Allow access to libro-clases pages on localhost
+  const isDev =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1");
+  const isLibroClases =
+    typeof window !== "undefined" &&
+    window.location.pathname.includes("/libro-clases");
+
+  if (isDev && isLibroClases) {
+    return <>{children}</>;
+  }
+
   // Loading state
   if (status === "loading") {
     return (

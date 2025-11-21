@@ -279,7 +279,10 @@ export class HydrationErrorBoundary extends Component<Props, State> {
 // Hook for client components to detect hydration
 export function useHydrationSafe() {
   const subscribe = (callback: () => void) => {
-    console.log('[HYDRATION DEBUG] useHydrationSafe subscribe called, typeof window:', typeof window);
+    console.log(
+      "[HYDRATION DEBUG] useHydrationSafe subscribe called, typeof window:",
+      typeof window,
+    );
     if (typeof window === "undefined") {
       return () => {};
     }
@@ -294,16 +297,20 @@ export function useHydrationSafe() {
   };
 
   const getClientSnapshot = () => {
-    console.log('[HYDRATION DEBUG] useHydrationSafe getClientSnapshot called');
+    console.log("[HYDRATION DEBUG] useHydrationSafe getClientSnapshot called");
     return true;
   };
   const getServerSnapshot = () => {
-    console.log('[HYDRATION DEBUG] useHydrationSafe getServerSnapshot called');
+    console.log("[HYDRATION DEBUG] useHydrationSafe getServerSnapshot called");
     return false;
   };
 
-  const result = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
-  console.log('[HYDRATION DEBUG] useHydrationSafe result:', result);
+  const result = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+  console.log("[HYDRATION DEBUG] useHydrationSafe result:", result);
   return result;
 }
 

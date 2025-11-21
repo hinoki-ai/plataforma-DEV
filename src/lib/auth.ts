@@ -4,6 +4,7 @@ import { getConvexClient } from "@/lib/convex";
 import type { SessionData } from "@/lib/auth-client";
 import type { ExtendedUserRole } from "@/lib/authorization";
 import { getClerkUserById } from "@/services/actions/clerk-users";
+import { cookies } from "next/headers";
 
 async function resolveClerkUser(clerkUserId: string) {
   const user = await getClerkUserById(clerkUserId);
@@ -29,6 +30,29 @@ async function determineParentRegistrationStatus(user: any) {
 }
 
 export async function auth(): Promise<SessionData | null> {
+  // DEV MODE: Check for development session cookie
+  const host =
+    process.env.NODE_ENV === "development" ||
+    (typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"));
+
+  if (host) {
+    try {
+      const cookieStore = await cookies();
+      const devSessionCookie = cookieStore.get("dev-session");
+
+      if (devSessionCookie?.value) {
+        const devSession = JSON.parse(devSessionCookie.value);
+        if (devSession && devSession.user) {
+          return devSession as SessionData;
+        }
+      }
+    } catch (error) {
+      // Ignore cookie parsing errors in dev mode
+    }
+  }
+
   const { userId, sessionId, sessionClaims } = await clerkAuth();
 
   if (!userId || !sessionId) {

@@ -30,8 +30,68 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // If it's a protected route and user is not authenticated, redirect to login
+  // DEV MODE: Handle development authentication redirects
+  if (req.nextUrl.pathname === "/autenticacion-exitosa") {
+    const devRole = req.nextUrl.searchParams.get("dev_role");
+    const devName = req.nextUrl.searchParams.get("dev_name");
+    const devEmail = req.nextUrl.searchParams.get("dev_email");
+    if (
+      devRole &&
+      (req.nextUrl.hostname === "localhost" ||
+        req.nextUrl.hostname === "127.0.0.1")
+    ) {
+      // Development mode: redirect based on dev_role parameter and set dev auth cookie
+      const rolePaths = {
+        MASTER: "/master",
+        ADMIN: "/admin",
+        PROFESOR: "/profesor",
+        PARENT: "/parent",
+      };
+      const targetPath =
+        rolePaths[devRole as keyof typeof rolePaths] || "/master";
+
+      const response = NextResponse.redirect(new URL(targetPath, req.url));
+      // Set a cookie to indicate dev authentication
+      response.cookies.set(
+        "dev_auth",
+        JSON.stringify({
+          role: devRole,
+          name: devName,
+          email: devEmail,
+          authenticated: true,
+        }),
+        {
+          httpOnly: false, // Allow client-side access
+          secure: false, // Allow on localhost
+          sameSite: "lax",
+          path: "/",
+        },
+      );
+
+      return response;
+    }
+  }
+
+  // DEV MODE: Allow access to protected routes with dev authentication
   if (isProtectedRoute(req) && !(await auth()).userId) {
+    // Check for dev mode authentication cookie
+    const devAuthCookie = req.cookies.get("dev_auth")?.value;
+    if (
+      (req.nextUrl.hostname === "localhost" ||
+        req.nextUrl.hostname === "127.0.0.1") &&
+      devAuthCookie
+    ) {
+      try {
+        const devAuth = JSON.parse(devAuthCookie);
+        if (devAuth.authenticated) {
+          // Allow dev access - skip authentication check
+          return NextResponse.next();
+        }
+      } catch (e) {
+        // Invalid cookie, continue to login redirect
+      }
+    }
+
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("redirect_url", req.url);
     return NextResponse.redirect(loginUrl);

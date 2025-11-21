@@ -27,6 +27,7 @@ export async function getCalendarEvents(
   filters: {
     startDate?: Date;
     endDate?: Date;
+    categories?: string[];
     category?: string;
     isActive?: boolean;
   } = {},
@@ -37,6 +38,7 @@ export async function getCalendarEvents(
     const events = await client.query(api.calendar.getCalendarEvents, {
       startDate: filters.startDate?.getTime(),
       endDate: filters.endDate?.getTime(),
+      categories: filters.categories as any,
       category: filters.category as any,
       isActive: filters.isActive,
     });

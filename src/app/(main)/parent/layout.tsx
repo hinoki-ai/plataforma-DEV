@@ -24,6 +24,17 @@ export default function ParentLayout({
   }, []);
 
   useEffect(() => {
+    // DEV MODE: Allow access to parent pages on localhost
+    const isDev =
+      typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1");
+
+    if (isDev) {
+      hasRedirectedRef.current = false;
+      return;
+    }
+
     if (status === "loading") {
       if (!loadingTimeoutRef.current) {
         loadingTimeoutRef.current = setTimeout(() => {
@@ -42,13 +53,21 @@ export default function ParentLayout({
     }
 
     if (status === "unauthenticated" || !session) {
-      if (!hasRedirectedRef.current) {
-        if (process.env.NODE_ENV === "development") {
+      // DEV MODE: Don't redirect on localhost
+      const isDev =
+        typeof window !== "undefined" &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1");
+
+      if (!isDev) {
+        if (!hasRedirectedRef.current) {
+          if (process.env.NODE_ENV === "development") {
+          }
+          hasRedirectedRef.current = true;
+          router.replace("/login");
         }
-        hasRedirectedRef.current = true;
-        router.replace("/login");
+        return;
       }
-      return;
     }
 
     if (!session?.user?.role) {

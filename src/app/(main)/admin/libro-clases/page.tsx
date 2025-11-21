@@ -12,7 +12,9 @@ export default function AdminLibroClasesPage() {
         <Button className="mr-2">Test Button 1</Button>
         <Button variant="secondary">Test Button 2</Button>
         <Button variant="destructive">Test Button 3</Button>
-        <p className="mt-2 text-red-700">If you see this and buttons, UI library works!</p>
+        <p className="mt-2 text-red-700">
+          If you see this and buttons, UI library works!
+        </p>
       </div>
 
       {/* Original component */}

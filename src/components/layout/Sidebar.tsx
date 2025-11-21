@@ -220,6 +220,7 @@ export function Sidebar({
               className="h-8 w-8 ml-auto"
               onClick={onToggle}
               aria-label={t("nav.sidebar.collapse", "navigation")}
+              suppressHydrationWarning
             >
               <NavigationIcons.ChevronLeft
                 className="h-4 w-4"
@@ -307,7 +308,8 @@ export function Sidebar({
                         aria-expanded={openGroups[group.title]}
                         aria-controls={`group-content-${group.title}`}
                         id={`group-${group.title}`}
-                        aria-label={`${openGroups[group.title] ? "Contraer" : "Expandir"} grupo ${group.title}`}
+                        aria-label={`${openGroups[group.title] ? t("nav.collapse", "Collapse") : t("nav.expand", "Expand")} ${t("nav.group", "group")} ${group.title}`}
+                        suppressHydrationWarning
                       >
                         <span>{t(group.title, "navigation")}</span>
                         <NavigationIcons.ChevronDown

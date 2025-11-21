@@ -78,7 +78,7 @@ interface AuditLogEntry {
 }
 
 function AuditLogsOverviewCard() {
-  const auditStats = useQuery(api.audit.getAuditStats);
+  const auditStats = useQuery(api.audit.getAuditStats, {});
   const populateSampleLogs = useMutation(api.audit.populateSampleAuditLogs);
   const [isPopulating, setIsPopulating] = useState(false);
 
@@ -194,21 +194,21 @@ function AuditLogsTableCard() {
   const auditLogsData = useQuery(api.audit.getAuditLogs, {
     limit: 100,
     searchTerm: searchTerm || undefined,
-    category: categoryFilter !== "all" ? categoryFilter as any : undefined,
-    status: statusFilter !== "all" ? statusFilter as any : undefined,
+    category: categoryFilter !== "all" ? (categoryFilter as any) : undefined,
+    status: statusFilter !== "all" ? (statusFilter as any) : undefined,
   });
 
   const auditLogs = auditLogsData?.logs || [];
 
   // Convert timestamp to readable format
   const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString('es-ES', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
+    return new Date(timestamp).toLocaleString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
   };
 
@@ -312,7 +312,9 @@ function AuditLogsTableCard() {
                     <TableCell className="font-mono text-sm">
                       {formatTimestamp(log.timestamp)}
                     </TableCell>
-                    <TableCell className="font-medium">{log.userEmail}</TableCell>
+                    <TableCell className="font-medium">
+                      {log.userEmail}
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         {getCategoryIcon(log.category)}
@@ -362,7 +364,8 @@ function AuditLogsTableCard() {
 
           <div className="flex justify-between items-center">
             <div className="text-sm text-muted-foreground">
-              Mostrando {auditLogs.length} de {auditLogsData?.totalCount || 0} logs
+              Mostrando {auditLogs.length} de {auditLogsData?.totalCount || 0}{" "}
+              logs
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
@@ -395,7 +398,8 @@ function AuditLogsTableCard() {
                     <strong>Recurso:</strong> {selectedLog.resource}
                   </div>
                   <div>
-                    <strong>Categoría:</strong> {selectedLog.category.replace("_", " ")}
+                    <strong>Categoría:</strong>{" "}
+                    {selectedLog.category.replace("_", " ")}
                   </div>
                   <div>
                     <strong>Estado:</strong> {selectedLog.status}

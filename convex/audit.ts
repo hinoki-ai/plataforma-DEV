@@ -118,35 +118,44 @@ export const getAuditLogs = query({
     let filteredLogs = allLogs;
 
     if (args.userId) {
-      filteredLogs = filteredLogs.filter(log => log.userId === args.userId);
+      filteredLogs = filteredLogs.filter((log) => log.userId === args.userId);
     }
     if (args.category) {
-      filteredLogs = filteredLogs.filter(log => log.category === args.category);
+      filteredLogs = filteredLogs.filter(
+        (log) => log.category === args.category,
+      );
     }
     if (args.status) {
-      filteredLogs = filteredLogs.filter(log => log.status === args.status);
+      filteredLogs = filteredLogs.filter((log) => log.status === args.status);
     }
     if (args.action) {
-      filteredLogs = filteredLogs.filter(log => log.action === args.action);
+      filteredLogs = filteredLogs.filter((log) => log.action === args.action);
     }
     if (args.institutionId) {
-      filteredLogs = filteredLogs.filter(log => log.institutionId === args.institutionId);
+      filteredLogs = filteredLogs.filter(
+        (log) => log.institutionId === args.institutionId,
+      );
     }
     if (args.startDate) {
-      filteredLogs = filteredLogs.filter(log => log.timestamp >= args.startDate!);
+      filteredLogs = filteredLogs.filter(
+        (log) => log.timestamp >= args.startDate!,
+      );
     }
     if (args.endDate) {
-      filteredLogs = filteredLogs.filter(log => log.timestamp <= args.endDate!);
+      filteredLogs = filteredLogs.filter(
+        (log) => log.timestamp <= args.endDate!,
+      );
     }
 
     // Search term filtering
     if (args.searchTerm) {
       const searchTerm = args.searchTerm.toLowerCase();
-      filteredLogs = filteredLogs.filter(log =>
-        log.userEmail.toLowerCase().includes(searchTerm) ||
-        log.action.toLowerCase().includes(searchTerm) ||
-        log.details.toLowerCase().includes(searchTerm) ||
-        log.resource.toLowerCase().includes(searchTerm)
+      filteredLogs = filteredLogs.filter(
+        (log) =>
+          log.userEmail.toLowerCase().includes(searchTerm) ||
+          log.action.toLowerCase().includes(searchTerm) ||
+          log.details.toLowerCase().includes(searchTerm) ||
+          log.resource.toLowerCase().includes(searchTerm),
       );
     }
 
@@ -188,10 +197,14 @@ export const getAuditStats = query({
       );
 
     // Date range filtering
-    if (args.startDate)
-      query = query.filter((q) => q.gte(q.field("timestamp"), args.startDate));
-    if (args.endDate)
-      query = query.filter((q) => q.lte(q.field("timestamp"), args.endDate));
+    if (args.startDate !== undefined) {
+      const startDate = args.startDate;
+      query = query.filter((q) => q.gte(q.field("timestamp"), startDate));
+    }
+    if (args.endDate !== undefined) {
+      const endDate = args.endDate;
+      query = query.filter((q) => q.lte(q.field("timestamp"), endDate));
+    }
 
     const allLogs = await query.collect();
 

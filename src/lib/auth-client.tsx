@@ -6,6 +6,7 @@ import {
   useContext,
   useMemo,
   useState,
+  useEffect,
 } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
@@ -66,8 +67,31 @@ export function AppSessionProvider({
 }) {
   const { isLoaded, isSignedIn, user } = useUser();
   const [version, setVersion] = useState(0);
+  const [devSession, setDevSession] = useState<SessionData | null>(null);
 
   const sessionQuery = useQuery(api.users.currentSession, { version });
+
+  // Check for dev session in cookies
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cookies = document.cookie.split(";");
+        const devSessionCookie = cookies.find((cookie) =>
+          cookie.trim().startsWith("dev-session="),
+        );
+
+        if (devSessionCookie) {
+          const cookieValue = devSessionCookie.split("=")[1];
+          const parsedSession = JSON.parse(decodeURIComponent(cookieValue));
+          if (parsedSession && parsedSession.user) {
+            setDevSession(parsedSession);
+          }
+        }
+      } catch (error) {
+        // Ignore cookie parsing errors
+      }
+    }
+  }, []);
 
   const fallbackSession = useMemo<SessionData | null>(() => {
     if (!isSignedIn || !user) {
@@ -126,6 +150,11 @@ export function AppSessionProvider({
   }, [isSignedIn, user]);
 
   const status: SessionStatus = useMemo(() => {
+    // Check for dev session first
+    if (devSession) {
+      return "authenticated";
+    }
+
     if (!isLoaded) {
       return "loading";
     }
@@ -143,9 +172,14 @@ export function AppSessionProvider({
     }
 
     return "unauthenticated";
-  }, [isLoaded, isSignedIn, sessionQuery, fallbackSession]);
+  }, [isLoaded, isSignedIn, sessionQuery, fallbackSession, devSession]);
 
   const sessionData: SessionData | null = useMemo(() => {
+    // Return dev session if available
+    if (devSession) {
+      return devSession;
+    }
+
     if (sessionQuery) {
       return {
         user: {
@@ -164,7 +198,13 @@ export function AppSessionProvider({
     }
 
     return fallbackSession;
-  }, [sessionQuery, fallbackSession, user?.fullName, user?.imageUrl]);
+  }, [
+    sessionQuery,
+    fallbackSession,
+    user?.fullName,
+    user?.imageUrl,
+    devSession,
+  ]);
 
   const update = useCallback(async () => {
     setVersion((current) => current + 1);

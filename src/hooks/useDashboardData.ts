@@ -133,7 +133,13 @@ export function useDashboardData() {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      if (!session?.user?.role) return;
+      // DEV MODE: Allow fetching even without session for localhost
+      const isDev =
+        typeof window !== "undefined" &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1");
+
+      if (!isDev && !session?.user?.role) return;
 
       try {
         setLoading(true);
@@ -141,24 +147,29 @@ export function useDashboardData() {
 
         let endpoint = "";
 
-        switch (session.user.role) {
-          case "MASTER":
-            endpoint = "/api/master/dashboard";
-            break;
-          case "ADMIN":
-            endpoint = "/api/admin/dashboard";
-            break;
-          case "PROFESOR":
-            endpoint = "/api/profesor/dashboard";
-            break;
-          case "PARENT":
-            endpoint = "/api/parent/dashboard/overview";
-            break;
-          default:
-            // For public users or other roles, use mock data
-            setStats({});
-            setLoading(false);
-            return;
+        // DEV MODE: Default to master dashboard
+        if (isDev) {
+          endpoint = "/api/master/dashboard";
+        } else {
+          switch (session.user.role) {
+            case "MASTER":
+              endpoint = "/api/master/dashboard";
+              break;
+            case "ADMIN":
+              endpoint = "/api/admin/dashboard";
+              break;
+            case "PROFESOR":
+              endpoint = "/api/profesor/dashboard";
+              break;
+            case "PARENT":
+              endpoint = "/api/parent/dashboard/overview";
+              break;
+            default:
+              // For public users or other roles, use mock data
+              setStats({});
+              setLoading(false);
+              return;
+          }
         }
 
         const response = await fetch(endpoint, {
@@ -184,7 +195,8 @@ export function useDashboardData() {
         }
 
         const data = await response.json();
-        setStats(data);
+        // Extract the actual data from the API response wrapper
+        setStats(data.success ? data.data : {});
       } catch (err) {
         setError(t("dashboard.error.loading"));
         setStats({});

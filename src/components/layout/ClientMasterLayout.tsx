@@ -22,6 +22,17 @@ export default function ClientMasterLayout({
   }, []);
 
   useEffect(() => {
+    // DEV MODE: Skip all authentication checks for localhost development
+    const isDev =
+      typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1");
+
+    if (isDev) {
+      // In dev mode, allow access to master dashboard without authentication
+      return;
+    }
+
     if (status === "unauthenticated") {
       router.push("/login");
       return;
@@ -53,21 +64,29 @@ export default function ClientMasterLayout({
     );
   }
 
-  // Don't render children if not authenticated or not authorized
-  if (status === "unauthenticated" || !session?.user) {
-    return (
-      <div className="p-8">
-        <SkeletonLoader variant="list" lines={6} />
-      </div>
-    );
-  }
+  // DEV MODE: Allow rendering in dev mode
+  const isDev =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1");
 
-  if (!hasMasterGodModeAccess(session.user.role)) {
-    return (
-      <div className="p-8">
-        <SkeletonLoader variant="list" lines={6} />
-      </div>
-    );
+  if (!isDev) {
+    // Don't render children if not authenticated or not authorized in production
+    if (status === "unauthenticated" || !session?.user) {
+      return (
+        <div className="p-8">
+          <SkeletonLoader variant="list" lines={6} />
+        </div>
+      );
+    }
+
+    if (!hasMasterGodModeAccess(session.user.role)) {
+      return (
+        <div className="p-8">
+          <SkeletonLoader variant="list" lines={6} />
+        </div>
+      );
+    }
   }
 
   return <>{children}</>;

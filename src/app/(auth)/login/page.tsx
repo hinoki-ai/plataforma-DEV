@@ -20,6 +20,20 @@ const fadeInUp: Variants = {
 };
 
 function LoginForm() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <LoginFormInner />
+    </Suspense>
+  );
+}
+
+function LoginFormInner() {
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl");
   const router = useRouter();
@@ -29,6 +43,20 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // Handle SSR by only accessing window on client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Check if we're in development mode (localhost)
+  const isDev =
+    isClient &&
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1");
+
   // Hardcoded translations for login page to avoid SSR issues
   const t = (key: string) => {
     const translations: Record<string, string> = {
@@ -47,13 +75,69 @@ function LoginForm() {
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("HANDLE EMAIL SIGNIN CALLED");
 
     // Reset loading state at the start
     setIsLoading(true);
     setError(null);
 
     try {
-      // Check if Clerk is loaded before proceeding
+      // DEV MODE: Check for development authentication bypass (always enabled on localhost)
+      const isDev =
+        isClient &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1");
+      console.log("LOGIN ATTEMPT:", {
+        email,
+        hostname: isClient ? window.location.hostname : "SSR",
+        isDev,
+      });
+      if (isDev) {
+        console.log("DEV MODE ENABLED");
+        // Development mode authentication - bypass Clerk for testing
+        const devCredentials = {
+          "agustinarancibia@live.cl": {
+            password: "59163476a",
+            role: "MASTER",
+            name: "Agustin Master Arancibia",
+          },
+          "admin@astral.cl": {
+            password: "adminastral123.",
+            role: "ADMIN",
+            name: "Admin User",
+          },
+          "profesor@astral.cl": {
+            password: "profesorastral123.",
+            role: "PROFESOR",
+            name: "Profesor User",
+          },
+          "apoderado@astral.cl": {
+            password: "apoderadoastral123.",
+            role: "PARENT",
+            name: "Parent User",
+          },
+        };
+
+        const userCred = devCredentials[email as keyof typeof devCredentials];
+        console.log("USER CRED CHECK:", {
+          userCred: !!userCred,
+          passwordMatch: userCred?.password === password,
+        });
+        if (userCred && userCred.password === password) {
+          // Simulate successful login by redirecting to success page with role info
+          const target = `${callbackUrl ?? "/autenticacion-exitosa"}?dev_role=${userCred.role}&dev_name=${encodeURIComponent(userCred.name)}&dev_email=${encodeURIComponent(email)}`;
+          console.log("DEV AUTH SUCCESS: Redirecting to:", target);
+          window.location.href = target; // Use window.location for immediate redirect
+          return;
+        } else {
+          console.log("DEV AUTH FAILED: Invalid credentials");
+          setError(t("auth.invalid_credentials"));
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // PRODUCTION MODE: Check if Clerk is loaded before proceeding
       if (!isLoaded) {
         // Wait a bit and try again, or show an error
         setTimeout(() => {
@@ -123,6 +207,7 @@ function LoginForm() {
 
       <div className="glass-panel mx-auto flex w-full max-w-md flex-col items-center p-6 text-center text-foreground sm:p-10">
         {/* Email/Password Form */}
+
         <form onSubmit={handleEmailSignIn} className="w-full space-y-4">
           <div className="space-y-2">
             <Label
@@ -191,12 +276,12 @@ function LoginForm() {
 
           <Button
             type="submit"
-            disabled={isLoading || !isLoaded}
+            disabled={isLoading || (!isLoaded && !isDev)}
             className="w-full rounded-xl bg-linear-to-r from-primary-400 via-primary-500 to-primary-600 text-white font-semibold transition hover:from-primary-500 hover:via-primary-600 hover:to-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-primary/60 focus:outline-none disabled:opacity-50"
           >
             {isLoading
               ? t("auth.signing_in_button")
-              : !isLoaded
+              : !isLoaded && !isDev
                 ? "Cargando..."
                 : t("auth.sign_in_button")}
           </Button>
@@ -224,50 +309,20 @@ function LoginForm() {
   );
 }
 
-export default function LoginPage() {
+function LoginFormWithSuspense() {
   return (
-    <ClientOnly
+    <Suspense
       fallback={
-        <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
-          {/* Title Panel with Glass Blur */}
-          <div className="mb-6 w-full max-w-md">
-            <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-2 mx-auto text-center -mt-20">
-              <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
-                Portal de Acceso
-              </h1>
-            </div>
-          </div>
-
-          <div className="glass-panel mx-auto flex w-full max-w-md items-center justify-center p-6 text-foreground sm:p-10">
-            <div className="flex items-center justify-center p-8">
-              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
-            </div>
-          </div>
+        <div className="flex items-center justify-center min-h-screen">
+          Loading...
         </div>
       }
     >
-      <Suspense
-        fallback={
-          <div className="flex w-full flex-col items-center justify-center px-4 sm:px-6">
-            {/* Title Panel with Glass Blur */}
-            <div className="mb-6 w-full max-w-md">
-              <div className="backdrop-blur-md bg-white/5 dark:bg-black/20 rounded-2xl border border-white/10 dark:border-white/5 shadow-2xl px-6 pt-2 pb-2 mx-auto text-center -mt-20">
-                <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white drop-shadow-2xl transition-all duration-700 ease-out sm:text-3xl md:text-4xl">
-                  Portal de Acceso
-                </h1>
-              </div>
-            </div>
-
-            <div className="glass-panel mx-auto flex w-full max-w-md items-center justify-center p-6 text-foreground sm:p-10">
-              <div className="flex items-center justify-center p-8">
-                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
-              </div>
-            </div>
-          </div>
-        }
-      >
-        <LoginForm />
-      </Suspense>
-    </ClientOnly>
+      <LoginForm />
+    </Suspense>
   );
+}
+
+export default function LoginPage() {
+  return <LoginFormWithSuspense />;
 }

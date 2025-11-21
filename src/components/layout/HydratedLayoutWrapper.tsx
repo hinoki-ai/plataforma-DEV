@@ -19,7 +19,12 @@ function HydratedLayoutWrapper({
   const isHydrated = useHydrationSafe();
 
   // DEBUG: Log hydration status
-  console.log('[HYDRATION DEBUG] HydratedLayoutWrapper - isHydrated:', isHydrated, 'typeof window:', typeof window);
+  console.log(
+    "[HYDRATION DEBUG] HydratedLayoutWrapper - isHydrated:",
+    isHydrated,
+    "typeof window:",
+    typeof window,
+  );
 
   // TEMPORARILY DISABLE HYDRATION CHECK FOR DEBUGGING
   // if (!isHydrated) {
@@ -27,7 +32,9 @@ function HydratedLayoutWrapper({
   //   return null;
   // }
 
-  console.log('[HYDRATION DEBUG] HydratedLayoutWrapper - Rendering children (hydration check disabled)');
+  console.log(
+    "[HYDRATION DEBUG] HydratedLayoutWrapper - Rendering children (hydration check disabled)",
+  );
   return <>{children}</>;
 }
 

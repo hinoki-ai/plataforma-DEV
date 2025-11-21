@@ -27,7 +27,7 @@ export const auditLogs = defineTable({
     v.literal("PROFESOR"),
     v.literal("PARENT"),
     v.literal("STUDENT"),
-    v.literal("SYSTEM")
+    v.literal("SYSTEM"),
   ),
 
   // Action details
@@ -36,7 +36,7 @@ export const auditLogs = defineTable({
   status: v.union(
     v.literal("success"),
     v.literal("warning"),
-    v.literal("error")
+    v.literal("error"),
   ),
 
   // Network and client information
@@ -55,7 +55,7 @@ export const auditLogs = defineTable({
     v.literal("system_config"),
     v.literal("user_management"),
     v.literal("system_operation"),
-    v.literal("security_event")
+    v.literal("security_event"),
   ),
 
   // Optional institution context

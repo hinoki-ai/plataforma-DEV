@@ -934,10 +934,13 @@ const DivineParsingOracleProvider: React.FC<{
     }
   }, [initialNamespaces, language, initialLang]);
 
-  // Post-hydration language synchronization
+  // Post-hydration language synchronization - only run if no initialLanguage was provided
   useEffect(() => {
     // Only run on client after hydration
     if (typeof window === "undefined") return;
+
+    // Skip synchronization if initialLanguage was provided (server-side detection takes precedence)
+    if (initialLanguage) return;
 
     const synchronizeLanguage = async () => {
       try {
@@ -978,7 +981,7 @@ const DivineParsingOracleProvider: React.FC<{
     // Small delay to ensure hydration is complete
     const timeoutId = setTimeout(synchronizeLanguage, 100);
     return () => clearTimeout(timeoutId);
-  }, []); // Empty dependency array - run once after mount
+  }, [initialLanguage, language, loadedNamespaces]); // Include dependencies
 
   // Language change handler
   const setLanguage = useCallback(

@@ -44,6 +44,13 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
+    const categories = searchParams.get("categories")
+      ? searchParams
+          .get("categories")!
+          .split(",")
+          .map((cat) => cat.trim())
+      : undefined;
+
     const query = {
       startDate: searchParams.get("startDate")
         ? new Date(searchParams.get("startDate")!)
@@ -51,9 +58,7 @@ export async function GET(request: NextRequest) {
       endDate: searchParams.get("endDate")
         ? new Date(searchParams.get("endDate")!)
         : undefined,
-      categories: searchParams.get("categories")
-        ? (searchParams.get("categories")!.split(",") as any[])
-        : undefined,
+      categories: categories,
       priority: searchParams.get("priority") as any,
       search: searchParams.get("search") || undefined,
     };

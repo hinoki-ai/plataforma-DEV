@@ -22,7 +22,13 @@ import {
 } from "./ui/cognito-analytics";
 import { ClientOnly } from "./ui/client-only";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+  initialLanguage,
+}: {
+  children: React.ReactNode;
+  initialLanguage?: "es" | "en";
+}) {
   return (
     <ClerkProvider {...clerkConfig}>
       <ConvexClientProvider>
@@ -49,6 +55,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 "contacto",
                 "planes",
               ]}
+              initialLanguage={initialLanguage}
             >
               <LanguageHtmlUpdater />
               <CognitoAnalyticsProvider>

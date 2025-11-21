@@ -31,12 +31,13 @@ export const getCalendarEvents = tenantQuery({
   args: {
     startDate: v.optional(v.number()),
     endDate: v.optional(v.number()),
-    category: v.optional(eventCategoryValidator),
+    categories: v.optional(v.array(eventCategoryValidator)),
+    category: v.optional(eventCategoryValidator), // Keep for backward compatibility
     isActive: v.optional(v.boolean()),
   },
   handler: async (
     ctx: any,
-    { startDate, endDate, category, isActive }: any,
+    { startDate, endDate, categories, category, isActive }: any,
     tenancy: any,
   ) => {
     // Get all events for this institution first (using the institution index)
@@ -48,8 +49,12 @@ export const getCalendarEvents = tenantQuery({
       .collect();
 
     // Apply filters in memory (this is much better than loading all events from all institutions)
-    if (category !== undefined) {
-      events = events.filter((event: any) => event.category === category);
+    // Support both single category and multiple categories for backward compatibility
+    const categoryFilter = categories || (category ? [category] : undefined);
+    if (categoryFilter !== undefined && categoryFilter.length > 0) {
+      events = events.filter((event: any) =>
+        categoryFilter.includes(event.category),
+      );
     }
 
     if (isActive !== undefined) {

@@ -7,6 +7,7 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { ThemeAwareFavicon } from "@/components/ui/theme-aware-favicon";
 import { HomepageMusic } from "@/components/shared/HomepageMusic";
 import { AudioConsentBanner } from "@/components/shared/AudioConsentBanner";
+import { cookies, headers } from "next/headers";
 import "./globals.css";
 
 // Using system fonts instead of Google Fonts to avoid network dependencies during build
@@ -50,11 +51,51 @@ export const viewport = {
   colorScheme: "light dark",
 };
 
-function RootLayoutInner({
+async function RootLayoutInner({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Server-side language detection to prevent hydration mismatches
+  const detectServerLanguage = async (): Promise<"es" | "en"> => {
+    try {
+      const cookieStore = await cookies();
+      const languageCookie = cookieStore.get(
+        "aramac-language-preference",
+      )?.value;
+
+      // If we have a stored language preference, use it (highest priority)
+      if (languageCookie === "es" || languageCookie === "en") {
+        return languageCookie as "es" | "en";
+      }
+
+      // Check Accept-Language header to match client-side browser language detection
+      const headersStore = await headers();
+      const acceptLanguage = headersStore.get("accept-language");
+
+      if (acceptLanguage) {
+        const browserLang = acceptLanguage.toLowerCase();
+
+        // Check for exact matches first
+        if (browserLang.startsWith("es")) return "es";
+        if (browserLang.startsWith("en")) return "en";
+
+        // Check language code without region
+        const langCode = browserLang.split("-")[0];
+        if (langCode === "es") return "es";
+        if (langCode === "en") return "en";
+      }
+
+      // Default to Spanish for Chile-based application
+      return "es";
+    } catch (error) {
+      // Fallback to Spanish if detection fails
+      return "es";
+    }
+  };
+
+  const initialLanguage = await detectServerLanguage();
+
   return (
     <html lang="es-CL" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
@@ -93,7 +134,7 @@ function RootLayoutInner({
         />
 
         <ErrorBoundary>
-          <Providers>
+          <Providers initialLanguage={initialLanguage}>
             <HomepageMusic />
             {children}
             {/* Theme-aware favicon handling */}

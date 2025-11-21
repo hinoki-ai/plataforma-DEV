@@ -14,6 +14,18 @@ if (isDevelopment) {
 }
 
 function loadClerkKeylessEnv() {
+  // In development, use the provided development keys
+  if (isDevelopment) {
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY =
+      "pk_test_bWlnaHR5LWdhdG9yLTUwLmNsZXJrLmFjY291bnRzLmRldiQ";
+    process.env.CLERK_SECRET_KEY =
+      "sk_test_hi5sO9OxSTOb328NKmZIdpVfJ8bHFqOFyv1ST1IeEl";
+    // Clear webhook secret for development (not needed)
+    process.env.CLERK_WEBHOOK_SECRET = undefined;
+    return;
+  }
+
+  // Production: use environment variables as-is
   const missingPublishable =
     !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
     process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.trim().length === 0;
@@ -29,6 +41,9 @@ function loadClerkKeylessEnv() {
 
   if (!fs.existsSync(keylessPath)) {
     if (isDevelopment) {
+      console.warn(
+        "Clerk keyless config not found. Using environment variables.",
+      );
     }
     return;
   }
@@ -49,6 +64,7 @@ function loadClerkKeylessEnv() {
     }
   } catch (error) {
     if (isDevelopment) {
+      console.warn("Failed to load Clerk keyless config:", error);
     }
   }
 }
@@ -293,6 +309,7 @@ const nextConfig: NextConfig = {
                     "*.local",
                     ...clerkAssetHosts,
                   ]),
+                  directive("worker-src", ["'self'", "blob:"]),
                   directive("style-src", [
                     "'self'",
                     "'unsafe-inline'",

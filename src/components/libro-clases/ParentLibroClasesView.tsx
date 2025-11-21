@@ -113,10 +113,15 @@ export function ParentLibroClasesView({
     setActiveTab(view);
   }, [view]);
 
+  // DEV MODE: Use mock user ID for testing
+  const mockUserId = isDev ? "dev-parent-user" : userId;
+
   // Get current user - must be called before any early returns
   const currentUser = useQuery(
     api.users.getUserByClerkId,
-    userId && isLoaded && isSignedIn ? { clerkId: userId } : "skip",
+    (mockUserId || userId) && (isLoaded || isDev) && (isSignedIn || isDev)
+      ? { clerkId: mockUserId || userId }
+      : "skip",
   );
 
   // Fetch parent's courses (where their children are enrolled) - must be called before early returns
@@ -181,8 +186,14 @@ export function ParentLibroClasesView({
     );
   }
 
+  // DEV MODE: Allow access on localhost even without Clerk auth
+  const isDev =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1");
+
   // Check if user is signed in
-  if (!isSignedIn || !userId) {
+  if (!isDev && (!isSignedIn || !userId)) {
     return (
       <PageTransition>
         <div className="space-y-6">
@@ -300,7 +311,11 @@ export function ParentLibroClasesView({
                   </div>
                 )}
                 <div className="flex flex-wrap gap-3 mt-6">
-                  <Button onClick={() => window.location.reload()}>
+                  <Button
+                    onClick={() =>
+                      typeof window !== "undefined" && window.location.reload()
+                    }
+                  >
                     {t("parent.libro_clases.loading.reload_page")}
                   </Button>
                   <Button variant="outline" onClick={() => router.refresh()}>

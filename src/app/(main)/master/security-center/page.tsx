@@ -235,6 +235,30 @@ function SecurityCenterContent() {
 }
 
 export default function SecurityCenterPage() {
+  // DEV MODE: Skip layout wrapper for easier testing
+  const isDev =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1");
+
+  if (isDev) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Security Center - DEV MODE
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Testing security monitoring and controls
+            </p>
+          </div>
+          <SecurityCenterContent />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <MasterPageTemplate
       title=""

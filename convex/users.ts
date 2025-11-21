@@ -17,7 +17,7 @@ import {
   type MutationCtx,
 } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
-import { api } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 import { logAuthenticationEvent } from "./audit";
 import {
   hashUserPassword,
@@ -1208,7 +1208,11 @@ export const authenticateUser = query({
  * Update user's last login
  */
 export const updateLastLogin = mutation({
-  args: { userId: v.id("users"), ipAddress: v.optional(v.string()), userAgent: v.optional(v.string()) },
+  args: {
+    userId: v.id("users"),
+    ipAddress: v.optional(v.string()),
+    userAgent: v.optional(v.string()),
+  },
   handler: async (ctx, { userId, ipAddress, userAgent }) => {
     const user = await ctx.db.get(userId);
     if (!user) return;
@@ -1219,7 +1223,7 @@ export const updateLastLogin = mutation({
 
     // Log successful login
     if (ipAddress) {
-      await logAuthenticationEvent(ctx, {
+      await ctx.runMutation(api.audit.logAuthenticationEvent, {
         userId,
         userEmail: user.email,
         userRole: user.role as any,

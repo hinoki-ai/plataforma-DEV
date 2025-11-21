@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Sync Clerk Users to Convex
- * Manually sync all users from Clerk to Convex database
+ * Manually sync all users from Clerk to Convex database using createUser mutation
  */
 
 import { createClerkClient } from "@clerk/backend";
@@ -36,37 +36,50 @@ async function syncClerkUsers() {
 
     for (const clerkUser of usersResponse.data) {
       try {
-        console.log(
-          `\n🔄 Processing: ${clerkUser.emailAddresses[0]?.emailAddress}`,
-        );
+        const email = clerkUser.emailAddresses[0]?.emailAddress;
+        console.log(`\n🔄 Processing: ${email}`);
 
-        // Extract user data in the format expected by Convex
+        // Extract role from public metadata, default to PUBLIC if not set
+        const role = clerkUser.publicMetadata?.role || "PUBLIC";
+
+        // Check if user already exists in Convex
+        const existingUsers = await convexClient.query("users:getUsers", {});
+        const existingUser = existingUsers.find((u) => u.email === email);
+
+        if (existingUser) {
+          console.log(`   ⚠️  User already exists in Convex, skipping`);
+          skipped++;
+          continue;
+        }
+
+        // Create user in Convex
         const userData = {
-          id: clerkUser.id,
-          first_name: clerkUser.firstName,
-          last_name: clerkUser.lastName,
-          username: clerkUser.username,
-          image_url: clerkUser.imageUrl,
-          primary_email_address_id: clerkUser.primaryEmailAddressId,
-          email_addresses: clerkUser.emailAddresses.map((email) => ({
-            id: email.id,
-            email_address: email.emailAddress,
-            verification: {
-              status: email.verification.status,
-              strategy: email.verification.strategy,
-            },
-          })),
-          public_metadata: clerkUser.publicMetadata,
-          private_metadata: clerkUser.privateMetadata,
-          banned: clerkUser.banned,
-          created_at: clerkUser.createdAt,
-          updated_at: clerkUser.updatedAt,
+          name:
+            [clerkUser.firstName, clerkUser.lastName]
+              .filter(Boolean)
+              .join(" ") ||
+            clerkUser.username ||
+            email,
+          email: email,
+          role: role,
+          image: clerkUser.imageUrl,
+          provider: "clerk",
+          isOAuthUser: true,
+          status: "ACTIVE",
         };
 
-        // Call the sync mutation
-        await convexClient.mutation("users:syncFromClerk", {
-          data: userData,
-        });
+        await convexClient.mutation("users:createUser", userData);
+
+        // Now update the user with Clerk ID
+        const createdUsers = await convexClient.query("users:getUsers", {});
+        const newUser = createdUsers.find((u) => u.email === email);
+
+        if (newUser) {
+          await convexClient.mutation("users:linkClerkIdentity", {
+            userId: newUser._id,
+            clerkId: clerkUser.id,
+          });
+        }
 
         console.log(`   ✅ Synced`);
         synced++;
@@ -78,7 +91,8 @@ async function syncClerkUsers() {
 
     console.log(`\n📊 Sync Complete:`);
     console.log(`   ✅ Synced: ${synced}`);
-    console.log(`   ⚠️  Errors: ${errors}`);
+    console.log(`   ⚠️  Skipped: ${skipped}`);
+    console.log(`   ❌ Errors: ${errors}`);
     console.log(`   📋 Total: ${usersResponse.data.length}`);
   } catch (error) {
     console.error("❌ Sync failed:", error.message);

@@ -6,3 +6,4 @@ if [[ "$PWD" == "/mnt/Secondary/projects/websites/plataforma" ]]; then
     echo "✅ Project scripts loaded (zz = dev server, vv = deployment)"
 fi
 
+

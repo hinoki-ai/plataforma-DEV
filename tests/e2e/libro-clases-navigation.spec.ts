@@ -713,9 +713,7 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
   test.describe.configure({ mode: "serial", retries: 2 });
 
   test.describe("Master LIBRO CLASES (Admin Role)", () => {
-    test("admin can access all libro clases pages", async ({
-      page,
-    }) => {
+    test("admin can access all libro clases pages", async ({ page }) => {
       await test.step("Login as admin user", async () => {
         await performLogin(page, CREDENTIALS.admin, "/admin");
       });
