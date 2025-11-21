@@ -713,34 +713,34 @@ test.describe("LIBRO CLASES Navigation Tests - Production Site", () => {
   test.describe.configure({ mode: "serial", retries: 2 });
 
   test.describe("Master LIBRO CLASES (Admin Role)", () => {
-    test("master can access all libro clases pages as admin", async ({
+    test("admin can access all libro clases pages", async ({
       page,
     }) => {
-      await test.step("Login as master user (admin role)", async () => {
-        await performLogin(page, CREDENTIALS.master, "/master");
+      await test.step("Login as admin user", async () => {
+        await performLogin(page, CREDENTIALS.admin, "/admin");
       });
 
-      // Test admin libro clases routes (since master should have admin access)
+      // Test admin libro clases routes
       const masterLibroClasesRoutes = [
         {
           path: "/admin/libro-clases",
-          description: "Master Admin - Libro de Clases Main",
+          description: "Admin - Libro de Clases Main",
         },
         {
           path: "/admin/libro-clases/estudiantes",
-          description: "Master Admin - Libro de Clases - Students",
+          description: "Admin - Libro de Clases - Students",
         },
         {
           path: "/admin/libro-clases/calificaciones",
-          description: "Master Admin - Libro de Clases - Grades",
+          description: "Admin - Libro de Clases - Grades",
         },
         {
           path: "/admin/libro-clases/observaciones",
-          description: "Master Admin - Libro de Clases - Observations",
+          description: "Admin - Libro de Clases - Observations",
         },
         {
           path: "/admin/libro-clases/asistencia",
-          description: "Master Admin - Libro de Clases - Attendance",
+          description: "Admin - Libro de Clases - Attendance",
         },
       ];
 
