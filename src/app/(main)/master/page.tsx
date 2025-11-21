@@ -41,7 +41,7 @@ export default function MasterDashboardPage() {
           </div>
         }
       >
-        <div className="space-y-8">
+        <div className="space-y-4">
           {/* Institution Control */}
           <InstitutionMasterCard currentType="PRESCHOOL" />
 

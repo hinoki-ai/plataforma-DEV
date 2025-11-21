@@ -101,7 +101,6 @@ These functions have some validation but lack proper authentication/tenancy:
 
 - `schoolInfo.ts` - Public institution info (intentional)
 - `users.ts` - Some public queries for auth (intentional)
-- `seed.ts` - Development only (intentional)
 
 ## ✅ Best Practices Verified
 

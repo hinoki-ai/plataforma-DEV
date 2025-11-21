@@ -46,11 +46,12 @@ export const GET = createApiRoute(
       }),
     ]);
 
-    // Performance metrics - using realistic calculations based on user count
+    // Performance metrics - not available (would need proper monitoring infrastructure)
     const performanceMetrics = {
-      avgResponseTime: Math.round(50 + allUsers.length / 10), // Base 50ms + load factor
-      throughput: Math.round(500 + allUsers.length * 2), // Base throughput + user load
-      activeConnections: Math.round(10 + allUsers.length / 20), // Base connections + user factor
+      // These would be populated from actual monitoring tools like New Relic, DataDog, etc.
+      avgResponseTime: null,
+      throughput: null,
+      activeConnections: null,
     };
 
     // Transform user metrics for easy consumption
@@ -116,28 +117,26 @@ export const GET = createApiRoute(
 
       errors: errorMetrics,
 
+      // Note: Performance, security, and detailed database metrics require proper monitoring infrastructure
+      // These would be populated from tools like New Relic, DataDog, CloudWatch, etc.
       performance: {
-        avgResponseTime: performanceMetrics.avgResponseTime,
-        throughput: performanceMetrics.throughput,
-        activeConnections: performanceMetrics.activeConnections,
-        healthScore: 98.5, // Calculated from various metrics
+        avgResponseTime: null,
+        throughput: null,
+        activeConnections: null,
       },
 
       security: {
-        activeThreats: Math.max(
-          0,
-          Math.round((allUsers.length - activeUsers.length) / 10),
-        ), // Based on inactive users as proxy
-        blockedAttempts: Math.round(allUsers.length * 0.05), // 5% of users might have failed attempts
-        lastSecurityScan: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-        securityScore: allUsers.length > 100 ? "A" : "A+", // Better score for larger systems
+        // Real security metrics would come from security monitoring systems
+        activeThreats: null,
+        blockedAttempts: null,
+        securityScore: null,
       },
 
       database: {
-        status: "connected",
-        connectionPoolSize: Math.max(10, Math.round(allUsers.length / 50) + 5), // Scale with user count
-        queryPerformance: allUsers.length > 500 ? "good" : "optimal",
-        lastBackup: new Date(Date.now() - 86400000).toISOString(), // 24 hours ago
+        status: "connected", // Basic connection status from Convex
+        // Detailed metrics would require database monitoring tools
+        connectionPoolSize: null,
+        queryPerformance: null,
       },
     };
 

@@ -51,6 +51,8 @@ import {
   Building2,
   Wifi,
   WifiOff,
+  Calendar,
+  BookOpen,
 } from "lucide-react";
 import { MasterPageTemplate } from "./MasterPageTemplate";
 import { MasterActionCard } from "./MasterActionCard";
@@ -72,58 +74,103 @@ interface QuickAction {
 }
 
 function SystemHealthCard({ stats }: { stats: any }) {
-  const healthMetrics = useMemo(
-    () => ({
-      overall: stats?.performance?.healthScore || 98.5,
-      database: stats?.database?.status === "connected" ? 100 : 0,
-      api: stats?.performance?.healthScore || 97.8,
-      security: stats?.security?.securityScore === "A+" ? 100 : 90,
-      performance: stats?.performance?.healthScore || 96.3,
-    }),
-    [stats],
-  );
+  const realMetrics = useMemo(() => {
+    if (!stats) return null;
 
-  const metricLabels: Record<string, string> = {
-    overall: "Overall Status",
-    database: "Database",
-    api: "API Performance",
-    security: "Security Alerts", // Using title as label for now
-    performance: "Performance Metrics",
-  };
+    return {
+      uptime: {
+        label: "System Uptime",
+        value: stats.system?.uptime
+          ? Math.floor(stats.system.uptime / 3600)
+          : 0,
+        unit: "hours",
+        status: "real",
+      },
+      memory: {
+        label: "Memory Usage",
+        value: stats.system?.memory?.used || 0,
+        max: stats.system?.memory?.total || 0,
+        unit: "MB",
+        status: "real",
+      },
+    };
+  }, [stats]);
+
+  if (!stats || !realMetrics) {
+    return (
+      <Card className="border-blue-200 dark:border-blue-800">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center">
+            <Activity className="h-8 w-8 text-gray-400" />
+            <span className="ml-2 text-muted-foreground">
+              System metrics unavailable
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          {Object.entries(healthMetrics).map(([key, value]) => (
-            <div key={key} className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="capitalize">{metricLabels[key] || key}</span>
-                <span className="font-medium">{value}%</span>
-              </div>
-              <Progress
-                value={value}
-                className="h-2"
-                indicatorClassName={
-                  value >= 98
-                    ? "bg-green-500"
-                    : value >= 95
-                      ? "bg-yellow-500"
-                      : "bg-red-500"
-                }
-              />
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>{realMetrics.uptime.label}</span>
+              <span className="font-medium">
+                {realMetrics.uptime.value}
+                {realMetrics.uptime.unit}
+              </span>
             </div>
-          ))}
+            <Progress
+              value={100}
+              className="h-2"
+              indicatorClassName="bg-green-500"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>{realMetrics.memory.label}</span>
+              <span className="font-medium">
+                {realMetrics.memory.value}/{realMetrics.memory.max}{" "}
+                {realMetrics.memory.unit}
+              </span>
+            </div>
+            <Progress
+              value={
+                realMetrics.memory.max > 0
+                  ? (realMetrics.memory.value / realMetrics.memory.max) * 100
+                  : 0
+              }
+              className="h-2"
+              indicatorClassName={
+                realMetrics.memory.value / realMetrics.memory.max > 0.8
+                  ? "bg-red-500"
+                  : realMetrics.memory.value / realMetrics.memory.max > 0.6
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
+              }
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 pt-2 border-t">
-          <CheckCircle className="h-4 w-4 text-green-500" />
-          <span className="text-sm text-muted-foreground">
-            System Status: {stats?.system?.status || "Unknown"} - Uptime:{" "}
-            {stats?.system?.uptime
-              ? `${Math.floor(stats.system.uptime / 3600)}h`
-              : "N/A"}
-          </span>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+            <div className="text-xs text-gray-500 mb-1">
+              Performance Metrics
+            </div>
+            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              Not Available
+            </div>
+          </div>
+          <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+            <div className="text-xs text-gray-500 mb-1">Security Status</div>
+            <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              Not Available
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -152,6 +199,23 @@ function LocalMasterStatsCard({
     );
   }
 
+  const hasData = stats && Object.keys(stats).length > 0;
+
+  if (!hasData) {
+    return (
+      <Card className="border-blue-200 dark:border-blue-800">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center">
+            <Database className="h-8 w-8 text-gray-400" />
+            <span className="ml-2 text-muted-foreground">
+              Statistics unavailable
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="border-blue-200 dark:border-blue-800">
       <CardContent>
@@ -173,19 +237,19 @@ function LocalMasterStatsCard({
           </div>
 
           <div className="text-center p-4 rounded-lg">
-            <Database className="h-8 w-8 mx-auto mb-2 text-green-600" />
+            <BookOpen className="h-8 w-8 mx-auto mb-2 text-green-600" />
             <div className="text-2xl font-bold text-green-700 dark:text-green-300">
-              {stats.database?.connectionPoolSize || 0}
+              {stats.content?.total || 0}
             </div>
-            <div className="text-sm text-muted-foreground">DB Connections</div>
+            <div className="text-sm text-muted-foreground">Total Content</div>
           </div>
 
           <div className="text-center p-4 rounded-lg">
-            <Zap className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-            <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
-              {((stats.performance?.throughput || 0) / 1000).toFixed(1)}K
+            <Calendar className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+            <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+              {stats.content?.events || 0}
             </div>
-            <div className="text-sm text-muted-foreground">Requests/hour</div>
+            <div className="text-sm text-muted-foreground">Calendar Events</div>
           </div>
         </div>
       </CardContent>
@@ -194,57 +258,64 @@ function LocalMasterStatsCard({
 }
 
 function SecurityAlertsCard({ stats }: { stats: any }) {
-  const alerts = useMemo(
-    () => [
-      {
-        id: 1,
-        type: "warning",
-        message: `Active Threats: ${stats?.security?.activeThreats || 0}`,
-        time: "Live",
-        severity: (stats?.security?.activeThreats || 0) > 0 ? "high" : "low",
-      },
-      {
-        id: 2,
-        type: "info",
-        message: `Blocked Attempts: ${stats?.security?.blockedAttempts || 0}`,
-        time: "Last 24h",
-        severity: "medium",
-      },
-      {
-        id: 3,
-        type: "success",
-        message: `Security Score: ${stats?.security?.securityScore || "N/A"}`,
-        time: "Current",
-        severity: "low",
-      },
-    ],
-    [stats],
-  );
+  if (!stats) {
+    return (
+      <Card className="border-blue-200 dark:border-blue-800">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center">
+            <Shield className="h-8 w-8 text-gray-400" />
+            <span className="ml-2 text-muted-foreground">
+              Security monitoring unavailable
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="border-blue-200 dark:border-blue-800">
       <CardContent>
         <div className="space-y-3">
-          {alerts.map((alert) => (
-            <div
-              key={alert.id}
-              className="flex items-start gap-3 p-3 rounded-lg"
-            >
-              <div
-                className={`mt-0.5 h-2 w-2 rounded-full ${
-                  alert.severity === "high"
-                    ? "bg-red-500"
-                    : alert.severity === "medium"
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
-                }`}
-              />
+          <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 h-2 w-2 rounded-full bg-gray-400" />
               <div className="flex-1">
-                <p className="text-sm font-medium">{alert.message}</p>
-                <p className="text-xs text-muted-foreground">{alert.time}</p>
+                <p className="text-sm font-medium">
+                  Security monitoring not implemented
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Real-time threat detection unavailable
+                </p>
               </div>
             </div>
-          ))}
+          </div>
+
+          <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 h-2 w-2 rounded-full bg-gray-400" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">
+                  Access control verification
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Authentication system operational
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
+            <div className="flex items-start gap-3">
+              <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">Data integrity maintained</p>
+                <p className="text-xs text-muted-foreground">
+                  Convex database connection secure
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

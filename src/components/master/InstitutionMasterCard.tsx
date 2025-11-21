@@ -128,8 +128,8 @@ export function InstitutionMasterCard({
 
   return (
     <Card className="border-2 border-gold-300 dark:border-gold-700 bg-linear-to-br from-gold-50 via-white to-blue-50 dark:from-gold-950/20 dark:via-card dark:to-blue-950/20">
-      <CardContent className="pt-6">
-        <div className="space-y-6">
+      <CardContent className="pt-0 pb-4">
+        <div className="space-y-1">
           {/* Current Institution Status */}
           <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/20">
             <div className="flex items-center gap-3">

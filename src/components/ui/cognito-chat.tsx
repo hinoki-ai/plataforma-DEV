@@ -17,6 +17,8 @@ import {
   ChevronUp,
   Map,
   GripVertical,
+  User,
+  Bot,
 } from "lucide-react";
 
 interface Message {
@@ -238,7 +240,10 @@ export function CognitoChat({
   };
 
   // Resize handlers
-  const handleResizeStart = (e: React.MouseEvent) => {
+  const handleResizeStart = (
+    e: React.MouseEvent,
+    direction: "top" | "bottom" = "top",
+  ) => {
     // Don't start resize if clicking on buttons or interactive elements
     const target = e.target as HTMLElement;
     if (target.closest("button") || target.closest("a")) {
@@ -254,7 +259,11 @@ export function CognitoChat({
     let currentHeight = chatHeight;
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
-      const deltaY = resizeStartY.current - moveEvent.clientY; // Positive when dragging up (north)
+      const deltaY =
+        direction === "top"
+          ? resizeStartY.current - moveEvent.clientY // Dragging up from top increases height
+          : moveEvent.clientY - resizeStartY.current; // Dragging down from bottom increases height
+
       currentHeight = Math.max(
         200,
         Math.min(800, resizeStartHeight.current + deltaY),
@@ -287,7 +296,7 @@ export function CognitoChat({
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 20 }}
-        className="fixed bottom-0 right-0 z-50 w-80 bg-white dark:bg-gray-800 rounded-tl-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out"
+        className="fixed bottom-4 right-4 z-50 w-80 bg-white dark:bg-gray-800 rounded-tl-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out"
         style={{ height: `${chatHeight}px` }}
         role="dialog"
         aria-modal="true"
@@ -297,7 +306,7 @@ export function CognitoChat({
         {/* Header */}
         <header
           className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg select-none relative group"
-          onMouseDown={handleResizeStart}
+          onMouseDown={(e) => handleResizeStart(e, "top")}
           title={t(
             "Cogníto.chat.resize",
             "Arrastra hacia arriba para redimensionar",
@@ -394,16 +403,33 @@ export function CognitoChat({
                   key={message.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex gap-3 max-w-[85%] ${
+                    message.sender === "user"
+                      ? "ml-auto flex-row-reverse"
+                      : "mr-auto"
+                  }`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                       message.sender === "user"
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
                     }`}
                   >
-                    <p className="text-sm">{message.content}</p>
+                    {message.sender === "user" ? (
+                      <User className="w-4 h-4" />
+                    ) : (
+                      <Bot className="w-4 h-4" />
+                    )}
+                  </div>
+                  <div
+                    className={`p-3 rounded-lg text-sm ${
+                      message.sender === "user"
+                        ? "bg-primary text-primary-foreground rounded-tr-none"
+                        : "bg-muted text-foreground rounded-tl-none"
+                    }`}
+                  >
+                    <p>{message.content}</p>
                     <time
                       className="text-xs opacity-70 mt-1 block"
                       dateTime={message.timestamp.toISOString()}
@@ -421,20 +447,16 @@ export function CognitoChat({
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex justify-start"
+                  className="flex gap-3 mr-auto max-w-[85%]"
                 >
-                  <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={cognitoImage}
-                        alt="Cogníto"
-                        className="w-4 h-4 rounded-full"
-                      />
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-150"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce stagger-300"></div>
-                      </div>
+                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+                    <Bot className="w-4 h-4" />
+                  </div>
+                  <div className="bg-muted p-3 rounded-lg rounded-tl-none flex items-center">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.1s]"></div>
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.2s]"></div>
                     </div>
                   </div>
                 </motion.div>
@@ -492,6 +514,22 @@ export function CognitoChat({
             </div>
           </div>
         </motion.div>
+
+        {/* Bottom resize handle */}
+        <div
+          className="h-2 cursor-ns-resize hover:bg-blue-500/20 transition-colors flex items-center justify-center group"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleResizeStart(e, "bottom");
+          }}
+          title={t(
+            "Cogníto.chat.resize",
+            "Arrastra hacia abajo para agrandar, hacia arriba para achicar",
+          )}
+        >
+          <div className="w-8 h-0.5 bg-gray-400 dark:bg-gray-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
       </motion.div>
     </AnimatePresence>
   );

@@ -4,6 +4,7 @@ enum EnvVar {
   BaseUrl = "E2E_BASE_URL",
 }
 
+// Default to production for e2e testing
 const baseURL = process.env[EnvVar.BaseUrl] ?? "https://plataforma.aramac.dev";
 
 export default defineConfig({

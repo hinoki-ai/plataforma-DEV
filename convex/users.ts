@@ -29,7 +29,7 @@ import {
 // Maps email domains to institution IDs
 const INSTITUTION_DOMAIN_MAPPING: Record<string, Id<"institutionInfo">> = {
   // Academia Astral institution for astral.cl emails
-  "astral.cl": "n571tjxrjdrnktzzrg9zp8p6a97vtxna",
+  "astral.cl": "n571tjxrjdrnktzzrg9zp8p6a97vtxna" as Id<"institutionInfo">,
   // Add more domain mappings here as needed
 };
 
@@ -205,7 +205,7 @@ async function createUserWithInstitutionMembership(
     userId = await ctx.db.insert("users", {
       name: name ?? email,
       email,
-      image,
+      image: image || undefined,
       role: normalizedRole,
       isActive: !isBanned,
       parentRole: undefined,

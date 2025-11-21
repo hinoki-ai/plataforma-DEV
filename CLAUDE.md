@@ -287,11 +287,7 @@ const isAdmin = session?.user?.role === "ADMIN";
 
 ### Test Users
 
-Create test users via Convex dashboard or use the seed script:
-
-```bash
-npx tsx scripts/seed-convex.ts
-```
+Create test users via Convex dashboard.
 
 ## Environment Configuration
 
@@ -389,9 +385,6 @@ GOOGLE_CLIENT_SECRET=...
 npm install
 npx convex dev              # Terminal 1: Start Convex dev server
 npm run dev                 # Terminal 2: Start Next.js dev server
-
-# Seed database (optional)
-npx tsx scripts/seed-convex.ts
 ```
 
 ### Pre-commit Quality Check
@@ -411,7 +404,6 @@ npm run analyze             # Bundle analysis
 npm run test:performance    # Lighthouse performance tests
 npm run verify-env          # Check environment configuration
 npx convex dashboard        # View Convex dashboard
-tsx scripts/seed-team-members.ts # Seed team member data
 npm run env:status          # Check environment status
 ```
 
@@ -454,7 +446,6 @@ The `scripts/` directory contains several utility scripts for development and de
 ```bash
 # Database utilities
 npx convex dashboard            # Manage Convex data
-npx tsx scripts/seed-convex.ts  # Seed database with test data
 
 # Development utilities
 ./scripts/clean.sh              # Clean build artifacts and cache

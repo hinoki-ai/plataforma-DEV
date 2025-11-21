@@ -169,17 +169,16 @@ export function useDashboardData() {
         });
 
         if (!response.ok) {
-          // Handle authentication errors differently from server errors
+          // Handle authentication errors
           if (response.status === 401) {
             setError(t("error.unauthorized.title"));
-            setStats(getMockData(session?.user?.role));
+            setStats({});
             setLoading(false);
             return;
           }
-          // Gracefully handle server errors by falling back to mock data
-
+          // For server errors, show error state instead of mock data
           setError(`${t("error.server_unavailable")} (${response.status}).`);
-          setStats(getMockData(session?.user?.role));
+          setStats({});
           setLoading(false);
           return;
         }
@@ -188,9 +187,7 @@ export function useDashboardData() {
         setStats(data);
       } catch (err) {
         setError(t("dashboard.error.loading"));
-
-        // Fallback to mock data on error
-        setStats(getMockData(session?.user?.role));
+        setStats({});
       } finally {
         setLoading(false);
       }
@@ -200,71 +197,4 @@ export function useDashboardData() {
   }, [session?.user?.role, t]);
 
   return { stats, loading, error };
-}
-
-function getMockData(role: UserRole | undefined): DashboardStats {
-  switch (role) {
-    case "MASTER":
-      return {
-        users: {
-          total: 1247,
-          active: 892,
-          newToday: 5,
-          breakdown: { master: 2, admin: 15, profesor: 45, parent: 1185 },
-        },
-        system: { health: 98.5, uptime: 359928, status: "healthy" },
-        security: {
-          threats: 3,
-          activeThreats: 3,
-          blocked: 47,
-          blockedAttempts: 47,
-          securityScore: "A+",
-        },
-        performance: {
-          responseTime: 45,
-          throughput: 15420,
-          healthScore: 98.5,
-          activeConnections: 23,
-        },
-        database: {
-          connections: 23,
-          connectionPoolSize: 10,
-          size: "2.4GB",
-          status: "connected",
-        },
-        api: { requests: 45280, errors: 12 },
-        content: {
-          events: 150,
-          documents: 320,
-          meetings: 45,
-          photos: 1200,
-          videos: 50,
-          total: 1765,
-          117: 0,
-        },
-      };
-    case "ADMIN":
-      return {
-        users: { total: 145, active: 140 },
-        meetings: { total: 20, upcoming: 6 },
-        documents: { total: 100, recent: 12 },
-        votings: { total: 8, active: 3 },
-      };
-    case "PROFESOR":
-      return {
-        plannings: { total: 45, completed: 38 },
-        meetings: { total: 15, upcoming: 4 },
-        students: { total: 25, active: 24 },
-        resources: { total: 30, shared: 12 },
-      };
-    case "PARENT":
-      return {
-        children: { total: 2, enrolled: 2 },
-        meetings: { total: 6, upcoming: 2 },
-        communications: { total: 12, unread: 3 },
-        resources: { total: 25, shared: 12, downloaded: 8 },
-      };
-    default:
-      return {};
-  }
 }

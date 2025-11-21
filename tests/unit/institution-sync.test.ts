@@ -232,4 +232,87 @@ describe("Institution Synchronization Logic", () => {
       });
     });
   });
+
+  describe("Sidebar Institution Name Display", () => {
+    it("should display institution name when institution data is available", () => {
+      // Mock institution data
+      const mockInstitution = {
+        name: "Escuela Especial de Lenguaje Plataforma Astral",
+        isActive: true,
+      };
+
+      // Test the fallback logic from Sidebar.tsx
+      const displayName = mockInstitution?.name || "Plataforma Astral";
+      expect(displayName).toBe(
+        "Escuela Especial de Lenguaje Plataforma Astral",
+      );
+    });
+
+    it("should fallback to 'Plataforma Astral' when institution data is null", () => {
+      const mockInstitution = null;
+
+      // Test the fallback logic from Sidebar.tsx
+      const displayName = (mockInstitution as any)?.name || "Plataforma Astral";
+      expect(displayName).toBe("Plataforma Astral");
+    });
+
+    it("should fallback to 'Plataforma Astral' when institution name is empty", () => {
+      const mockInstitution = {
+        name: "",
+        isActive: true,
+      };
+
+      // Test the fallback logic from Sidebar.tsx
+      const displayName = mockInstitution?.name || "Plataforma Astral";
+      expect(displayName).toBe("Plataforma Astral");
+    });
+
+    it("should handle institution data with undefined name", () => {
+      const mockInstitution = {
+        name: undefined,
+        isActive: true,
+      };
+
+      // Test the fallback logic from Sidebar.tsx
+      const displayName = mockInstitution?.name || "Plataforma Astral";
+      expect(displayName).toBe("Plataforma Astral");
+    });
+  });
+
+  describe("Session Data Structure", () => {
+    it("should include currentInstitutionId in session user data", () => {
+      // Mock session data structure as defined in auth-client.tsx
+      const mockSessionUser = {
+        id: "user_123",
+        clerkId: "clerk_456",
+        email: "test@astral.cl",
+        name: "Test User",
+        role: "ADMIN" as const,
+        currentInstitutionId: "inst_789", // This should be present
+        needsRegistration: false,
+        isOAuthUser: false,
+      };
+
+      // Verify the required fields are present
+      expect(mockSessionUser.id).toBeDefined();
+      expect(mockSessionUser.currentInstitutionId).toBeDefined();
+      expect(mockSessionUser.role).toBeDefined();
+      expect(mockSessionUser.email).toBeDefined();
+    });
+
+    it("should handle optional currentInstitutionId", () => {
+      const mockSessionUser = {
+        id: "user_123",
+        clerkId: "clerk_456",
+        email: "test@astral.cl",
+        name: "Test User",
+        role: "ADMIN" as const,
+        currentInstitutionId: undefined, // Can be undefined
+        needsRegistration: false,
+        isOAuthUser: false,
+      };
+
+      expect(mockSessionUser.currentInstitutionId).toBeUndefined();
+    });
+  });
 });

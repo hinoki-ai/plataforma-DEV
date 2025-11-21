@@ -467,7 +467,7 @@ export const MASTER_NAVIGATION = [
       {
         title: "nav.dashboard",
         href: "/master",
-        icon: NavigationIcons.Analytics,
+        icon: NavigationIcons.Cpu,
       },
       {
         title: "nav.global_oversight",
