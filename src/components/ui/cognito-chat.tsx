@@ -89,49 +89,87 @@ export function CognitoChat({
   const ROLE_RESTRICTIONS = {
     parent: {
       forbiddenTopics: [
-        'admin', 'administrador', 'profesor', 'teacher', 'maestro', 'configurar',
-        'gestionar', 'manejar', 'sistema', 'servidor', 'base de datos', 'usuarios',
-        'permisos', 'roles', 'clases', 'estudiantes', 'calificaciones'
+        "admin",
+        "administrador",
+        "profesor",
+        "teacher",
+        "maestro",
+        "configurar",
+        "gestionar",
+        "manejar",
+        "sistema",
+        "servidor",
+        "base de datos",
+        "usuarios",
+        "permisos",
+        "roles",
+        "clases",
+        "estudiantes",
+        "calificaciones",
       ],
       redirectMessage: t(
         "cognito.chat.role.parent.restriction",
-        "Lo siento, como apoderado no puedo ayudarte con temas relacionados con la gestión docente o administrativa. ¿Quieres saber sobre el progreso de tu estudiante o contactar a profesores?"
-      )
+        "Lo siento, como apoderado no puedo ayudarte con temas relacionados con la gestión docente o administrativa. ¿Quieres saber sobre el progreso de tu estudiante o contactar a profesores?",
+      ),
     },
     teacher: {
       forbiddenTopics: [
-        'admin', 'administrador', 'master', 'maestro', 'sistema', 'servidor',
-        'base de datos', 'configurar', 'usuarios', 'permisos', 'roles',
-        'finanzas', 'presupuesto', 'institución', 'centro educativo'
+        "admin",
+        "administrador",
+        "master",
+        "maestro",
+        "sistema",
+        "servidor",
+        "base de datos",
+        "configurar",
+        "usuarios",
+        "permisos",
+        "roles",
+        "finanzas",
+        "presupuesto",
+        "institución",
+        "centro educativo",
       ],
       redirectMessage: t(
         "cognito.chat.role.teacher.restriction",
-        "Lo siento, como profesor no puedo ayudarte con temas administrativos o de configuración del sistema. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?"
-      )
+        "Lo siento, como profesor no puedo ayudarte con temas administrativos o de configuración del sistema. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
+      ),
     },
     admin: {
       forbiddenTopics: [
-        'master', 'maestro', 'sistema', 'servidor', 'base de datos',
-        'configurar', 'usuarios', 'permisos', 'roles', 'finanzas'
+        "master",
+        "maestro",
+        "sistema",
+        "servidor",
+        "base de datos",
+        "configurar",
+        "usuarios",
+        "permisos",
+        "roles",
+        "finanzas",
       ],
       redirectMessage: t(
         "cognito.chat.role.admin.restriction",
-        "Lo siento, como administrador no puedo ayudarte con temas técnicos avanzados del sistema. ¿Necesitas ayuda con la gestión del centro educativo?"
-      )
+        "Lo siento, como administrador no puedo ayudarte con temas técnicos avanzados del sistema. ¿Necesitas ayuda con la gestión del centro educativo?",
+      ),
     },
     master: {
       forbiddenTopics: [], // Master can ask about everything
-      redirectMessage: ""
-    }
+      redirectMessage: "",
+    },
   };
 
-  const checkRoleViolation = (message: string, userRole: string): string | null => {
-    const restrictions = ROLE_RESTRICTIONS[userRole as keyof typeof ROLE_RESTRICTIONS];
+  const checkRoleViolation = (
+    message: string,
+    userRole: string,
+  ): string | null => {
+    const restrictions =
+      ROLE_RESTRICTIONS[userRole as keyof typeof ROLE_RESTRICTIONS];
     if (!restrictions) return null;
 
     const lowerMessage = message.toLowerCase();
-    const hasForbiddenTopic = restrictions.forbiddenTopics.some(topic =>
-      lowerMessage.includes(topic.toLowerCase())
+    const hasForbiddenTopic = restrictions.forbiddenTopics.some((topic) =>
+      lowerMessage.includes(topic.toLowerCase()),
     );
 
     return hasForbiddenTopic ? restrictions.redirectMessage : null;

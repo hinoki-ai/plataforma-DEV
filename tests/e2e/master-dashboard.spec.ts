@@ -168,9 +168,18 @@ test.describe("Master Dashboard - Production E2E", () => {
           // Verify dashboard loads with key metrics or overview content
           await currentPage.waitForTimeout(3000);
           const hasDashboardContent = await Promise.race([
-            currentPage.getByText(/overview|resumen|sistema|system/i).isVisible().catch(() => false),
-            currentPage.getByText(/institutions|instituciones/i).isVisible().catch(() => false),
-            currentPage.getByText(/users|usuarios/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/overview|resumen|sistema|system/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/institutions|instituciones/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/users|usuarios/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasDashboardContent).toBeTruthy();
@@ -182,8 +191,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasOversightContent = await Promise.race([
-            currentPage.getByText(/oversight|vigilancia/i).isVisible().catch(() => false),
-            currentPage.getByText(/monitoring|monitoreo/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/oversight|vigilancia/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/monitoring|monitoreo/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasOversightContent).toBeTruthy();
@@ -195,8 +210,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasStatsContent = await Promise.race([
-            currentPage.getByText(/stats|estadísticas|metrics/i).isVisible().catch(() => false),
-            currentPage.getByText(/system|systema/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/stats|estadísticas|metrics/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/system|systema/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasStatsContent).toBeTruthy();
@@ -208,8 +229,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasHealthContent = await Promise.race([
-            currentPage.getByText(/health|salud/i).isVisible().catch(() => false),
-            currentPage.getByText(/status|estado/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/health|salud/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/status|estado/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasHealthContent).toBeTruthy();
@@ -222,8 +249,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasInstitutionContent = await Promise.race([
-            currentPage.getByRole("button", { name: /crear|create|nueva/i }).isVisible().catch(() => false),
-            currentPage.getByText(/institution|institución|centro/i).isVisible().catch(() => false),
+            currentPage
+              .getByRole("button", { name: /crear|create|nueva/i })
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/institution|institución|centro/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasInstitutionContent).toBeTruthy();
@@ -231,12 +264,19 @@ test.describe("Master Dashboard - Production E2E", () => {
       },
       {
         path: "/master/institution-creation",
-        headingPattern: /create institution|crear institución|nueva institución/i,
+        headingPattern:
+          /create institution|crear institución|nueva institución/i,
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasCreationForm = await Promise.race([
-            currentPage.getByRole("form").isVisible().catch(() => false),
-            currentPage.getByText(/create|crear/i).isVisible().catch(() => false),
+            currentPage
+              .getByRole("form")
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/create|crear/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasCreationForm).toBeTruthy();
@@ -249,8 +289,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasUserManagement = await Promise.race([
-            currentPage.getByRole("button", { name: /crear|create/i }).isVisible().catch(() => false),
-            currentPage.getByText(/user|usuario/i).isVisible().catch(() => false),
+            currentPage
+              .getByRole("button", { name: /crear|create/i })
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/user|usuario/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasUserManagement).toBeTruthy();
@@ -262,8 +308,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasRoleManagement = await Promise.race([
-            currentPage.getByText(/role|rol/i).isVisible().catch(() => false),
-            currentPage.getByText(/permission|permiso/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/role|rol/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/permission|permiso/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasRoleManagement).toBeTruthy();
@@ -275,8 +327,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasAnalytics = await Promise.race([
-            currentPage.getByText(/analytics|análisis/i).isVisible().catch(() => false),
-            currentPage.getByText(/chart|gráfico/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/analytics|análisis/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/chart|gráfico/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasAnalytics).toBeTruthy();
@@ -289,8 +347,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasConfig = await Promise.race([
-            currentPage.getByText(/config|configuración/i).isVisible().catch(() => false),
-            currentPage.getByText(/settings|ajustes/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/config|configuración/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/settings|ajustes/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasConfig).toBeTruthy();
@@ -302,8 +366,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasSettings = await Promise.race([
-            currentPage.getByText(/settings|ajustes/i).isVisible().catch(() => false),
-            currentPage.getByText(/global|global/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/settings|ajustes/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/global|global/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasSettings).toBeTruthy();
@@ -316,8 +386,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasSecurity = await Promise.race([
-            currentPage.getByText(/security|seguridad/i).isVisible().catch(() => false),
-            currentPage.getByText(/alert|alerta/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/security|seguridad/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/alert|alerta/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasSecurity).toBeTruthy();
@@ -329,7 +405,10 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasSecurityPage = await Promise.race([
-            currentPage.getByText(/security|seguridad/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/security|seguridad/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasSecurityPage).toBeTruthy();
@@ -341,8 +420,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasAlerts = await Promise.race([
-            currentPage.getByText(/alert|alerta/i).isVisible().catch(() => false),
-            currentPage.getByText(/security|seguridad/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/alert|alerta/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/security|seguridad/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasAlerts).toBeTruthy();
@@ -351,12 +436,19 @@ test.describe("Master Dashboard - Production E2E", () => {
       // Advanced/Development Routes
       {
         path: "/master/database-tools",
-        headingPattern: /database tools|herramientas de base de datos|database/i,
+        headingPattern:
+          /database tools|herramientas de base de datos|database/i,
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasDatabaseTools = await Promise.race([
-            currentPage.getByText(/database|base de datos/i).isVisible().catch(() => false),
-            currentPage.getByText(/tools|herramientas/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/database|base de datos/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/tools|herramientas/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasDatabaseTools).toBeTruthy();
@@ -368,8 +460,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasGodMode = await Promise.race([
-            currentPage.getByText(/god mode|modo dios/i).isVisible().catch(() => false),
-            currentPage.getByText(/advanced|avanzado/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/god mode|modo dios/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/advanced|avanzado/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasGodMode).toBeTruthy();
@@ -381,8 +479,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasDebugConsole = await Promise.race([
-            currentPage.getByText(/debug|depuración/i).isVisible().catch(() => false),
-            currentPage.getByText(/console|consola/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/debug|depuración/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/console|consola/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasDebugConsole).toBeTruthy();
@@ -394,8 +498,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasAdvancedOps = await Promise.race([
-            currentPage.getByText(/advanced|avanzado/i).isVisible().catch(() => false),
-            currentPage.getByText(/operations|operaciones/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/advanced|avanzado/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/operations|operaciones/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasAdvancedOps).toBeTruthy();
@@ -408,8 +518,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasAuditLogs = await Promise.race([
-            currentPage.getByText(/audit|auditoría/i).isVisible().catch(() => false),
-            currentPage.getByText(/logs|registros/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/audit|auditoría/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/logs|registros/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasAuditLogs).toBeTruthy();
@@ -421,8 +537,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasAuditMaster = await Promise.race([
-            currentPage.getByText(/audit|auditoría/i).isVisible().catch(() => false),
-            currentPage.getByText(/master|maestra/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/audit|auditoría/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/master|maestra/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasAuditMaster).toBeTruthy();
@@ -434,8 +556,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasSystemMonitor = await Promise.race([
-            currentPage.getByText(/monitor|monitoreo/i).isVisible().catch(() => false),
-            currentPage.getByText(/system|sistema/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/monitor|monitoreo/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/system|sistema/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasSystemMonitor).toBeTruthy();
@@ -447,8 +575,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasPerformance = await Promise.race([
-            currentPage.getByText(/performance|rendimiento/i).isVisible().catch(() => false),
-            currentPage.getByText(/metrics|métricas/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/performance|rendimiento/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/metrics|métricas/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasPerformance).toBeTruthy();
@@ -460,8 +594,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasSystemOverview = await Promise.race([
-            currentPage.getByText(/overview|resumen/i).isVisible().catch(() => false),
-            currentPage.getByText(/system|sistema/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/overview|resumen/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/system|sistema/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasSystemOverview).toBeTruthy();
@@ -474,8 +614,14 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasProtocolos = await Promise.race([
-            currentPage.getByText(/protocolos|convivencia/i).isVisible().catch(() => false),
-            currentPage.getByText(/disciplina|normas/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/protocolos|convivencia/i)
+              .isVisible()
+              .catch(() => false),
+            currentPage
+              .getByText(/disciplina|normas/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasProtocolos).toBeTruthy();
@@ -487,7 +633,10 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasActasAlumnos = await Promise.race([
-            currentPage.getByText(/actas|alumnos/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/actas|alumnos/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasActasAlumnos).toBeTruthy();
@@ -499,7 +648,10 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasActasApoderados = await Promise.race([
-            currentPage.getByText(/actas|apoderados/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/actas|apoderados/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasActasApoderados).toBeTruthy();
@@ -511,7 +663,10 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasDisciplina = await Promise.race([
-            currentPage.getByText(/disciplina/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/disciplina/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasDisciplina).toBeTruthy();
@@ -523,7 +678,10 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasMedidas = await Promise.race([
-            currentPage.getByText(/medidas/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/medidas/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasMedidas).toBeTruthy();
@@ -535,7 +693,10 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasNormas = await Promise.race([
-            currentPage.getByText(/normas/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/normas/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasNormas).toBeTruthy();
@@ -547,7 +708,10 @@ test.describe("Master Dashboard - Production E2E", () => {
         assert: async (currentPage) => {
           await currentPage.waitForTimeout(3000);
           const hasReconocimientos = await Promise.race([
-            currentPage.getByText(/reconocimientos/i).isVisible().catch(() => false),
+            currentPage
+              .getByText(/reconocimientos/i)
+              .isVisible()
+              .catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
           expect(hasReconocimientos).toBeTruthy();

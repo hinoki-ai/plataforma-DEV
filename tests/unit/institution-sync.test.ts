@@ -17,40 +17,81 @@ describe("Cognito Chat Role Restrictions", () => {
   const ROLE_RESTRICTIONS = {
     parent: {
       forbiddenTopics: [
-        'admin', 'administrador', 'profesor', 'teacher', 'maestro', 'configurar',
-        'gestionar', 'manejar', 'sistema', 'servidor', 'base de datos', 'usuarios',
-        'permisos', 'roles', 'clases', 'estudiantes', 'calificaciones'
+        "admin",
+        "administrador",
+        "profesor",
+        "teacher",
+        "maestro",
+        "configurar",
+        "gestionar",
+        "manejar",
+        "sistema",
+        "servidor",
+        "base de datos",
+        "usuarios",
+        "permisos",
+        "roles",
+        "clases",
+        "estudiantes",
+        "calificaciones",
       ],
-      redirectMessage: "Lo siento, como apoderado no puedo ayudarte con temas relacionados con la gestión docente o administrativa."
+      redirectMessage:
+        "Lo siento, como apoderado no puedo ayudarte con temas relacionados con la gestión docente o administrativa.",
     },
     teacher: {
       forbiddenTopics: [
-        'admin', 'administrador', 'master', 'maestro', 'sistema', 'servidor',
-        'base de datos', 'configurar', 'usuarios', 'permisos', 'roles',
-        'finanzas', 'presupuesto', 'institución', 'centro educativo'
+        "admin",
+        "administrador",
+        "master",
+        "maestro",
+        "sistema",
+        "servidor",
+        "base de datos",
+        "configurar",
+        "usuarios",
+        "permisos",
+        "roles",
+        "finanzas",
+        "presupuesto",
+        "institución",
+        "centro educativo",
       ],
-      redirectMessage: "Lo siento, como profesor no puedo ayudarte con temas administrativos o de configuración del sistema."
+      redirectMessage:
+        "Lo siento, como profesor no puedo ayudarte con temas administrativos o de configuración del sistema.",
     },
     admin: {
       forbiddenTopics: [
-        'master', 'maestro', 'sistema', 'servidor', 'base de datos',
-        'configurar', 'usuarios', 'permisos', 'roles', 'finanzas'
+        "master",
+        "maestro",
+        "sistema",
+        "servidor",
+        "base de datos",
+        "configurar",
+        "usuarios",
+        "permisos",
+        "roles",
+        "finanzas",
       ],
-      redirectMessage: "Lo siento, como administrador no puedo ayudarte con temas técnicos avanzados del sistema."
+      redirectMessage:
+        "Lo siento, como administrador no puedo ayudarte con temas técnicos avanzados del sistema.",
     },
     master: {
       forbiddenTopics: [], // Master can ask about everything
-      redirectMessage: ""
-    }
+      redirectMessage: "",
+    },
   };
 
-  const checkRoleViolation = (message: string, userRole: string): string | null => {
-    const restrictions = ROLE_RESTRICTIONS[userRole as keyof typeof ROLE_RESTRICTIONS];
+  const checkRoleViolation = (
+    message: string,
+    userRole: string,
+  ): string | null => {
+    const restrictions =
+      ROLE_RESTRICTIONS[userRole as keyof typeof ROLE_RESTRICTIONS];
     if (!restrictions) return null;
 
     const lowerMessage = message.toLowerCase();
-    const hasForbiddenTopic = restrictions.forbiddenTopics.some(topic =>
-      lowerMessage.includes(topic.toLowerCase())
+    const hasForbiddenTopic = restrictions.forbiddenTopics.some((topic) =>
+      lowerMessage.includes(topic.toLowerCase()),
     );
 
     return hasForbiddenTopic ? restrictions.redirectMessage : null;
@@ -61,10 +102,10 @@ describe("Cognito Chat Role Restrictions", () => {
       const violations = [
         "Cómo gestionan los profesores las calificaciones?",
         "¿Puedo ver cómo los maestros configuran las clases?",
-        "Explícame cómo manejar estudiantes"
+        "Explícame cómo manejar estudiantes",
       ];
 
-      violations.forEach(message => {
+      violations.forEach((message) => {
         const result = checkRoleViolation(message, "parent");
         expect(result).toBeTruthy();
         expect(result).toContain("apoderado no puedo ayudarte");
@@ -75,10 +116,10 @@ describe("Cognito Chat Role Restrictions", () => {
       const allowedMessages = [
         "¿Cómo va mi estudiante en matemáticas?",
         "Quiero ver el progreso de mi hijo",
-        "¿Cuándo es la reunión de apoderados?"
+        "¿Cuándo es la reunión de apoderados?",
       ];
 
-      allowedMessages.forEach(message => {
+      allowedMessages.forEach((message) => {
         const result = checkRoleViolation(message, "parent");
         expect(result).toBeNull();
       });
@@ -90,10 +131,10 @@ describe("Cognito Chat Role Restrictions", () => {
       const violations = [
         "¿Cómo configuran los administradores el sistema?",
         "Explícame cómo manejar usuarios y permisos",
-        "¿Cómo gestionan las finanzas del centro?"
+        "¿Cómo gestionan las finanzas del centro?",
       ];
 
-      violations.forEach(message => {
+      violations.forEach((message) => {
         const result = checkRoleViolation(message, "teacher");
         expect(result).toBeTruthy();
         expect(result).toContain("profesor no puedo ayudarte");
@@ -104,10 +145,10 @@ describe("Cognito Chat Role Restrictions", () => {
       const allowedMessages = [
         "¿Cómo planifico mis clases?",
         "Necesito ayuda con las actividades de estudiantes",
-        "¿Cómo registro asistencia?"
+        "¿Cómo registro asistencia?",
       ];
 
-      allowedMessages.forEach(message => {
+      allowedMessages.forEach((message) => {
         const result = checkRoleViolation(message, "teacher");
         expect(result).toBeNull();
       });
@@ -119,10 +160,10 @@ describe("Cognito Chat Role Restrictions", () => {
       const violations = [
         "¿Cómo configura el maestro el sistema?",
         "Explícame la base de datos del servidor",
-        "¿Cómo manejo usuarios a nivel técnico?"
+        "¿Cómo manejo usuarios a nivel técnico?",
       ];
 
-      violations.forEach(message => {
+      violations.forEach((message) => {
         const result = checkRoleViolation(message, "admin");
         expect(result).toBeTruthy();
         expect(result).toContain("administrador no puedo ayudarte");
@@ -133,10 +174,10 @@ describe("Cognito Chat Role Restrictions", () => {
       const allowedMessages = [
         "¿Cómo gestiono los horarios?",
         "Necesito crear un nuevo usuario profesor",
-        "¿Cómo configuro las reuniones?"
+        "¿Cómo configuro las reuniones?",
       ];
 
-      allowedMessages.forEach(message => {
+      allowedMessages.forEach((message) => {
         const result = checkRoleViolation(message, "admin");
         expect(result).toBeNull();
       });
@@ -149,10 +190,10 @@ describe("Cognito Chat Role Restrictions", () => {
         "¿Cómo configuran los administradores?",
         "¿Cómo gestionan profesores las clases?",
         "¿Cómo ven padres el progreso?",
-        "¿Cómo manejo el sistema técnico?"
+        "¿Cómo manejo el sistema técnico?",
       ];
 
-      messages.forEach(message => {
+      messages.forEach((message) => {
         const result = checkRoleViolation(message, "master");
         expect(result).toBeNull();
       });

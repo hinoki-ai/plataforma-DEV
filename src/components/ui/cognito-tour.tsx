@@ -442,7 +442,12 @@ export function CognitoTour({
             // Try again with longer delay
             setTimeout(findElements, attempts * 200);
           } else {
-            console.log("Tour elements not found after", maxAttempts, "attempts:", selectors);
+            console.log(
+              "Tour elements not found after",
+              maxAttempts,
+              "attempts:",
+              selectors,
+            );
             // If no elements found, center the tooltip
             setTooltipPosition({
               top: window.innerHeight / 2 - 100,
