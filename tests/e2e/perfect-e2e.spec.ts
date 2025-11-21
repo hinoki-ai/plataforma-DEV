@@ -1138,9 +1138,6 @@ const DASHBOARD_ROUTES = {
     { path: "/master/security", description: "Security Page" },
     { path: "/master/security-alerts", description: "Security Alerts" },
     { path: "/master/database-tools", description: "Database Tools" },
-    { path: "/master/god-mode", description: "God Mode" },
-    { path: "/master/debug-console", description: "Debug Console" },
-    { path: "/master/advanced-operations", description: "Advanced Operations" },
     { path: "/master/audit-logs", description: "Audit Logs" },
     { path: "/master/audit-master", description: "Audit Master" },
     { path: "/master/system-monitor", description: "System Monitor" },
@@ -1940,11 +1937,7 @@ test.describe("Perfect E2E Test Suite with Error Monitoring and Auto-Fixing", ()
       expect(page.url()).toContain("/master");
 
       // Test navigation to a page that might have issues
-      const testRoutes = [
-        "/master/system-health",
-        "/master/debug-console",
-        "/master/god-mode",
-      ];
+      const testRoutes = ["/master/system-health"];
 
       for (const route of testRoutes) {
         logger.log("info", "recovery", `Testing error recovery for ${route}`);

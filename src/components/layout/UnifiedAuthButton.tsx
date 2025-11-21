@@ -36,7 +36,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { AdvancedButton } from "@/components/master/SmartSettingsButton";
 import SkyToggle from "@/components/ui/sky-toggle";
 import SoundToggle from "@/components/ui/sound-toggle";
 import { LanguageToggle } from "@/components/language/LanguageToggle";
@@ -349,7 +348,7 @@ export default function UnifiedAuthButton() {
       {/* Advanced Settings Gear Button - Only when authenticated on desktop */}
       {isAuthenticatedRoute && (
         <div className="hidden md:block">
-          <AdvancedButton />
+          {/* Advanced settings removed - component was deleted */}
         </div>
       )}
     </div>

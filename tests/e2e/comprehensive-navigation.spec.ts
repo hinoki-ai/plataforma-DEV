@@ -674,25 +674,6 @@ function getPageSpecificChecks(
         required: false,
       },
     ],
-    "/master/god-mode": [
-      {
-        selector:
-          '.god-mode, .admin, [data-testid*="god"], .console, .terminal',
-        description: "God mode interface",
-        required: false,
-      },
-      {
-        selector:
-          'button:has-text("Execute"), button:has-text("Run"), button:has-text("Ejecutar")',
-        description: "Advanced actions",
-        required: false,
-      },
-      {
-        selector: '.console, .terminal, [data-testid*="console"]',
-        description: "Console interface",
-        required: false,
-      },
-    ],
   };
 
   // Return checks for exact path match or partial match
@@ -782,12 +763,6 @@ test.describe("Comprehensive Navigation Tests - Production Site", () => {
         { path: "/master/security", description: "Security Page" },
         { path: "/master/security-alerts", description: "Security Alerts" },
         { path: "/master/database-tools", description: "Database Tools" },
-        { path: "/master/god-mode", description: "God Mode" },
-        { path: "/master/debug-console", description: "Debug Console" },
-        {
-          path: "/master/advanced-operations",
-          description: "Advanced Operations",
-        },
         { path: "/master/audit-logs", description: "Audit Logs" },
         { path: "/master/audit-master", description: "Audit Master" },
         { path: "/master/system-monitor", description: "System Monitor" },

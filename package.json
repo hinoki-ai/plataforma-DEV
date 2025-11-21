@@ -24,7 +24,11 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:perfect-e2e": "./scripts/run-perfect-e2e.sh",
-    "test:perfect-e2e:dev": "NODE_ENV=development E2E_DEV_MODE=true ./scripts/run-perfect-e2e.sh"
+    "test:perfect-e2e:dev": "NODE_ENV=development E2E_DEV_MODE=true ./scripts/run-perfect-e2e.sh",
+    "test:deployment": "node scripts/test-deployment.js",
+    "test:deployment:quick": "node scripts/test-deployment.js --quick",
+    "test:deployment:verbose": "node scripts/test-deployment.js --verbose",
+    "test:health": "node scripts/test-deployment.js --quick --url=https://plataforma.aramac.dev"
   },
   "dependencies": {
     "@clerk/backend": "^2.4.1",

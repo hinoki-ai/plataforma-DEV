@@ -517,63 +517,6 @@ test.describe("Master Dashboard - Production E2E", () => {
           expect(hasDatabaseTools).toBeTruthy();
         },
       },
-      {
-        path: "/master/god-mode",
-        headingPattern: /god mode|modo dios|administración avanzada/i,
-        assert: async (currentPage) => {
-          await currentPage.waitForTimeout(3000);
-          const hasGodMode = await Promise.race([
-            currentPage
-              .getByText(/god mode|modo dios/i)
-              .isVisible()
-              .catch(() => false),
-            currentPage
-              .getByText(/advanced|avanzado/i)
-              .isVisible()
-              .catch(() => false),
-            currentPage.waitForTimeout(2000).then(() => true),
-          ]);
-          expect(hasGodMode).toBeTruthy();
-        },
-      },
-      {
-        path: "/master/debug-console",
-        headingPattern: /debug console|consola de depuración|debug/i,
-        assert: async (currentPage) => {
-          await currentPage.waitForTimeout(3000);
-          const hasDebugConsole = await Promise.race([
-            currentPage
-              .getByText(/debug|depuración/i)
-              .isVisible()
-              .catch(() => false),
-            currentPage
-              .getByText(/console|consola/i)
-              .isVisible()
-              .catch(() => false),
-            currentPage.waitForTimeout(2000).then(() => true),
-          ]);
-          expect(hasDebugConsole).toBeTruthy();
-        },
-      },
-      {
-        path: "/master/advanced-operations",
-        headingPattern: /advanced operations|operaciones avanzadas/i,
-        assert: async (currentPage) => {
-          await currentPage.waitForTimeout(3000);
-          const hasAdvancedOps = await Promise.race([
-            currentPage
-              .getByText(/advanced|avanzado/i)
-              .isVisible()
-              .catch(() => false),
-            currentPage
-              .getByText(/operations|operaciones/i)
-              .isVisible()
-              .catch(() => false),
-            currentPage.waitForTimeout(2000).then(() => true),
-          ]);
-          expect(hasAdvancedOps).toBeTruthy();
-        },
-      },
       // Monitoring and Audit Routes
       {
         path: "/master/audit-logs",
@@ -903,25 +846,6 @@ test.describe("Master Dashboard - Production E2E", () => {
       expect(response?.status()).toBeLessThan(400);
       await ensureAuthenticated(page, baseURL, "/master/security-center");
       expect(page.url()).toContain("/master/security-center");
-    });
-  });
-
-  test("master user can access god mode", async ({ page, baseURL }) => {
-    if (!baseURL) {
-      throw new Error("Base URL is not configured in Playwright.");
-    }
-
-    await test.step("log in as master user and navigate to god mode", async () => {
-      await performMasterLogin(page, baseURL, "/master/god-mode");
-
-      const response = await page.goto(
-        new URL("/master/god-mode", baseURL).toString(),
-        { waitUntil: "domcontentloaded" },
-      );
-
-      expect(response?.status()).toBeLessThan(400);
-      await ensureAuthenticated(page, baseURL, "/master/god-mode");
-      expect(page.url()).toContain("/master/god-mode");
     });
   });
 });

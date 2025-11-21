@@ -766,7 +766,7 @@ export default function PricingCalculatorPage({
                             variant="outline"
                             size="icon"
                             onClick={() => adjustStudents(-10)}
-                            disabled={students <= selectedPlan.minStudents}
+                            disabled={students <= 1} // Global minimum from clampStudents
                             aria-label={tc("calculator.decrease_10")}
                           >
                             {tc("calculator.decrease_10_short")}
@@ -775,10 +775,7 @@ export default function PricingCalculatorPage({
                             variant="outline"
                             size="icon"
                             onClick={() => adjustStudents(10)}
-                            disabled={
-                              selectedPlan.maxStudents !== null &&
-                              students >= selectedPlan.maxStudents
-                            }
+                            disabled={students >= 10000} // Global maximum from clampStudents
                             aria-label={tc("calculator.increase_10")}
                           >
                             {tc("calculator.increase_10_short")}

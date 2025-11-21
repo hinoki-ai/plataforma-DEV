@@ -244,17 +244,13 @@ export function FeatureToggle({
   const featureAccess: Record<string, UserRole[]> = {
     // MASTER-Only God Mode Features
     "role-switching": ["MASTER"],
-    "system-god-mode": ["MASTER"],
     "global-oversight": ["MASTER"],
-    "system-configuration": ["MASTER"],
     "audit-master-access": ["MASTER"],
     "user-role-override": ["MASTER"],
     "data-master-export": ["MASTER"],
     "backup-master-control": ["MASTER"],
     "emergency-lockdown": ["MASTER"],
-    "security-master-override": ["MASTER"],
     "metrics-global-view": ["MASTER"],
-    "config-master-reset": ["MASTER"],
 
     // MASTER + ADMIN Features
     "advanced-analytics": ["MASTER", "ADMIN"],

@@ -127,7 +127,7 @@ export function ParentLibroClasesView({
   // Fetch parent's courses (where their children are enrolled) - must be called before early returns
   const courses = useQuery(
     api.courses.getCoursesForParent,
-    currentUser?._id
+    currentUser?._id && tenancyCheck && !("error" in tenancyCheck)
       ? {
           parentId: currentUser._id,
           academicYear: new Date().getFullYear(),

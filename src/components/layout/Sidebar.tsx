@@ -311,7 +311,9 @@ export function Sidebar({
                         aria-label={`${openGroups[group.title] ? t("nav.collapse", "Collapse") : t("nav.expand", "Expand")} ${t("nav.group", "group")} ${group.title}`}
                         suppressHydrationWarning
                       >
-                        <span>{t(group.title, "navigation")}</span>
+                        <span suppressHydrationWarning>
+                          {t(group.title, "navigation")}
+                        </span>
                         <NavigationIcons.ChevronDown
                           className={cn(
                             "h-3 w-3 transition-transform",
@@ -393,7 +395,11 @@ export function Sidebar({
                   <p className="text-sm font-medium" id="user-name">
                     {session?.user?.name}
                   </p>
-                  <p className="text-xs text-muted-foreground" id="user-role">
+                  <p
+                    className="text-xs text-muted-foreground"
+                    id="user-role"
+                    suppressHydrationWarning
+                  >
                     {session?.user?.role === "MASTER"
                       ? t("nav.roles.master", "navigation")
                       : session?.user?.role === "ADMIN"

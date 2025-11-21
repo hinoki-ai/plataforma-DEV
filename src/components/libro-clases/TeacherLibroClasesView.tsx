@@ -103,16 +103,19 @@ export function TeacherLibroClasesView({
     setActiveTab(view);
   }, [view]);
 
+  // Check tenancy first - this must be called before tenant queries
+  const tenancyCheck = useQuery(api.tenancy.getCurrentTenancy, {});
+
   // Get current user - must be called before any early returns
   const currentUser = useQuery(
     api.users.getUserByClerkId,
     userId && isLoaded && isSignedIn ? { clerkId: userId } : "skip",
   );
 
-  // Fetch teacher's courses - must be called before early returns
+  // Fetch teacher's courses - only call if tenancy is working
   const courses = useQuery(
     api.courses.getCourses,
-    currentUser?._id
+    currentUser?._id && tenancyCheck && !("error" in tenancyCheck)
       ? {
           teacherId: currentUser._id,
           academicYear: new Date().getFullYear(),
@@ -124,12 +127,18 @@ export function TeacherLibroClasesView({
   // Get selected course details - must be called before early returns
   const selectedCourse = useQuery(
     api.courses.getCourseById,
-    selectedCourseId ? { courseId: selectedCourseId } : "skip",
+    selectedCourseId && tenancyCheck && !("error" in tenancyCheck)
+      ? { courseId: selectedCourseId }
+      : "skip",
   );
 
   const isCurrentUserLoading = currentUser === undefined;
+  const isTenancyLoading = tenancyCheck === undefined;
+  const hasTenancyError = tenancyCheck && "error" in tenancyCheck;
   const isLoading =
-    isCurrentUserLoading || (currentUser ? courses === undefined : false);
+    isCurrentUserLoading ||
+    isTenancyLoading ||
+    (currentUser && !hasTenancyError ? courses === undefined : false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -216,6 +225,44 @@ export function TeacherLibroClasesView({
               <div className="flex flex-wrap gap-3 mt-4">
                 <Button onClick={() => router.push("/login")}>
                   Ir a iniciar sesión
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </PageTransition>
+    );
+  }
+
+  // Check for tenancy errors
+  if (tenancyCheck && "error" in tenancyCheck) {
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Problema de configuración institucional"
+            subtitle="No se pudo establecer el contexto de la institución"
+          />
+          <Card>
+            <CardContent className="py-10">
+              <p className="text-muted-foreground mb-4">
+                Hay un problema con la configuración de tu institución. Esto
+                puede deberse a:
+              </p>
+              <ul className="text-muted-foreground text-sm space-y-2 mb-6">
+                <li>• No tienes una institución asignada</li>
+                <li>• Tu membresía institucional no está activa</li>
+                <li>• Hay un problema con la configuración del sistema</li>
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" onClick={() => router.refresh()}>
+                  Reintentar
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/contacto")}
+                >
+                  Contactar soporte
                 </Button>
               </div>
             </CardContent>

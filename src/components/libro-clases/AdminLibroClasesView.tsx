@@ -65,11 +65,26 @@ export function AdminLibroClasesView({
 }: AdminLibroClasesViewProps) {
   const { t } = useDivineParsing(["libro-clases", "common"]);
   const [searchQuery, setSearchQuery] = useState("");
+  // Initialize with current year - this is safe for client components
   const [selectedYear, setSelectedYear] = useState<number | undefined>(
-    new Date().getFullYear(),
+    typeof window !== "undefined" ? new Date().getFullYear() : undefined,
   );
+  
+  // Ensure selectedYear is set on mount
+  useEffect(() => {
+    if (selectedYear === undefined && typeof window !== "undefined") {
+      setSelectedYear(new Date().getFullYear());
+    }
+  }, [selectedYear]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
+  const [queryStartTime] = useState(() => {
+    // Use a stable initial value to avoid hydration mismatches
+    if (typeof window !== "undefined") {
+      return Date.now();
+    }
+    return 0;
+  });
   const { isConnected, connectionError, hasConnectionIssue } =
     useConvexConnection();
 
@@ -89,39 +104,61 @@ export function AdminLibroClasesView({
   // Check for tenancy errors using a debug query
   const tenancyCheck = useQuery(api.tenancy.getCurrentTenancy, {});
 
-  // Fetch courses
+  // Fetch courses - ensure we always pass valid parameters or "skip"
   const courses = useQuery(
     api.courses.getCourses,
-    selectedYear !== undefined
+    selectedYear !== undefined && selectedYear > 0
       ? { academicYear: selectedYear, isActive: true }
       : "skip",
   );
 
   // Detect if queries are stuck (connection issue)
+  // Use a more aggressive timeout and better state detection
   useEffect(() => {
+    const now = Date.now();
+    const elapsed = now - queryStartTime;
+
+    // Check if queries are still loading
     const isLoading = courses === undefined || tenancyCheck === undefined;
+
     if (!isLoading) {
+      // Queries resolved, reset timeout
       setLoadingTimedOut(false);
       return;
     }
 
+    // If we've been loading for more than 5 seconds, show timeout
+    // This is more aggressive than before to catch issues faster
+    const timeoutDuration = 5000; // 5 second timeout
+
+    if (elapsed > timeoutDuration) {
+      setLoadingTimedOut(true);
+      return;
+    }
+
+    const remainingTime = timeoutDuration - elapsed;
     const timeout = setTimeout(() => {
       setLoadingTimedOut(true);
-    }, 8000); // 8 second timeout
+    }, remainingTime);
 
     return () => clearTimeout(timeout);
-  }, [courses, tenancyCheck]);
+  }, [courses, tenancyCheck, queryStartTime]);
 
   const filteredCourses = useMemo(() => {
-    if (!courses) {
+    // Handle undefined, null, or non-array cases
+    if (!courses || !Array.isArray(courses)) {
       return [];
     }
-    const query = searchQuery.toLowerCase();
+    const query = searchQuery.toLowerCase().trim();
+    if (!query) {
+      return courses;
+    }
     return courses.filter((course) => {
+      if (!course) return false;
       return (
-        course.name.toLowerCase().includes(query) ||
-        course.grade.toLowerCase().includes(query) ||
-        course.section.toLowerCase().includes(query) ||
+        course.name?.toLowerCase().includes(query) ||
+        course.grade?.toLowerCase().includes(query) ||
+        course.section?.toLowerCase().includes(query) ||
         course.level?.toLowerCase().includes(query)
       );
     });
@@ -147,10 +184,15 @@ export function AdminLibroClasesView({
     };
   }, [filteredCourses]);
 
-  const hasTenancyError = tenancyCheck && "error" in tenancyCheck;
+  // Check if tenancyCheck has an error
+  const hasTenancyError =
+    tenancyCheck !== undefined &&
+    tenancyCheck !== null &&
+    typeof tenancyCheck === "object" &&
+    "error" in tenancyCheck;
 
   // Show tenancy error if present
-  if (hasTenancyError && tenancyCheck) {
+  if (hasTenancyError && tenancyCheck && typeof tenancyCheck === "object") {
     const errorMessage =
       typeof tenancyCheck.error === "string"
         ? tenancyCheck.error
@@ -188,7 +230,11 @@ export function AdminLibroClasesView({
   }
 
   // Loading state with connection timeout detection
-  if (courses === undefined || tenancyCheck === undefined) {
+  // Check if queries are still loading (undefined means still loading in Convex)
+  const isQueriesLoading = courses === undefined || tenancyCheck === undefined;
+
+  if (isQueriesLoading) {
+    // Show timeout/error state if queries are taking too long or connection has issues
     if (loadingTimedOut || hasConnectionIssue) {
       return (
         <PageTransition>
@@ -270,13 +316,21 @@ export function AdminLibroClasesView({
       );
     }
 
+    // Show loading skeleton
     return (
       <PageTransition>
         <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <div className="h-8 w-64 bg-muted animate-pulse rounded" />
+          <RoleAwareHeader title={header.title} subtitle={header.subtitle} />
+          <div className="flex gap-4 items-center flex-wrap">
+            <div className="h-10 w-64 bg-muted animate-pulse rounded" />
+            <div className="h-10 w-32 bg-muted animate-pulse rounded" />
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-32 bg-muted animate-pulse rounded-lg" />
+            ))}
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="h-48 bg-muted animate-pulse rounded-lg" />
             ))}
@@ -285,6 +339,9 @@ export function AdminLibroClasesView({
       </PageTransition>
     );
   }
+
+  // Handle case where courses is null or not an array (query returned but with no data)
+  const safeCourses = Array.isArray(courses) ? courses : [];
 
   const createCourseAction = (
     <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -559,6 +616,18 @@ export function AdminLibroClasesView({
         {/* Course Management Dashboard */}
         {filteredCourses.length > 0 && (
           <CourseManagementDashboard courses={filteredCourses} />
+        )}
+
+        {/* Debug info in development */}
+        {process.env.NODE_ENV === "development" && (
+          <div className="mt-4 p-4 bg-muted rounded-lg text-xs space-y-2">
+            <p className="font-medium">Debug Info:</p>
+            <p>Courses loaded: {safeCourses.length}</p>
+            <p>Filtered courses: {filteredCourses.length}</p>
+            <p>Tenancy check: {tenancyCheck ? "OK" : "Loading"}</p>
+            <p>Connection: {isConnected ? "Connected" : "Disconnected"}</p>
+            <p>Loading timeout: {loadingTimedOut ? "Yes" : "No"}</p>
+          </div>
         )}
       </div>
     </PageTransition>

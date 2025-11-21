@@ -55,23 +55,6 @@ import {
   BookOpen,
 } from "lucide-react";
 import { MasterPageTemplate } from "./MasterPageTemplate";
-import { MasterActionCard } from "./MasterActionCard";
-
-interface QuickAction {
-  id: string;
-  title: string;
-  description: string;
-  icon: LucideIcon;
-  href: string;
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
-  category: string;
-}
 
 function SystemHealthCard({ stats }: { stats: any }) {
   const realMetrics = useMemo(() => {
@@ -332,90 +315,8 @@ export function MasterDashboard() {
   const loading = initialLoading && !dashboardData;
   const isRealTime = !!dashboardData;
 
-  const masterQuickActions: QuickAction[] = useMemo(
-    () => [
-      // Core Master Functions
-      {
-        id: "system-overview",
-        title: "System Overview",
-        description:
-          "Comprehensive system monitoring and performance analytics",
-        icon: Activity,
-        href: "/master/system-overview",
-        category: "Core",
-      },
-      {
-        id: "institution-creation",
-        title: "New Institution",
-        description: "Create new institution",
-        icon: Building2,
-        href: "/master/institution-creation",
-        category: "Core",
-      },
-      {
-        id: "user-management",
-        title: "User Management",
-        description: "Manage users and roles",
-        icon: Users,
-        href: "/master/user-management",
-        category: "Core",
-      },
-      {
-        id: "database-tools",
-        title: "Database Tools",
-        description: "Database operations and maintenance",
-        icon: Database,
-        href: "/master/database-tools",
-        category: "Core",
-      },
-      {
-        id: "security-center",
-        title: "Security Center",
-        description: "Security monitoring and controls",
-        icon: Shield,
-        href: "/master/security-center",
-        category: "Core",
-      },
-
-      // Advanced Administration
-      {
-        id: "advanced-admin",
-        title: "Advanced Administration",
-        description: "Full system control and monitoring",
-        icon: Shield,
-        href: "/master/god-mode",
-        variant: "secondary",
-        category: "Advanced",
-      },
-    ],
-    [],
-  );
-
-  const quickActions = masterQuickActions.map((action) => ({
-    id: action.id,
-    title: action.title,
-    description: action.description,
-    icon: action.icon,
-    variant: action.variant as
-      | "default"
-      | "destructive"
-      | "outline"
-      | "secondary",
-    href: action.href,
-  }));
-
   return (
     <MasterPageTemplate title="" subtitle="" context="MASTER_DASHBOARD">
-      {/* Quick Actions */}
-      <div className="mb-4">
-        <MasterActionCard
-          title=""
-          description=""
-          actions={quickActions}
-          columns={4}
-        />
-      </div>
-
       {/* System Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <SystemHealthCard stats={stats} />

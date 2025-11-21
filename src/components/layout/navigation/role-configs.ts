@@ -475,14 +475,30 @@ export const MASTER_NAVIGATION = [
         icon: NavigationIcons.Eye,
       },
       {
-        title: "nav.system_stats",
-        href: "/master/system-stats",
-        icon: NavigationIcons.Chart,
-      },
-      {
         title: "nav.system_health",
         href: "/master/system-health",
         icon: NavigationIcons.ServerStack,
+      },
+    ],
+  },
+  {
+    title: ROLE_SPECIFIC_SECTIONS.MASTER.system,
+    defaultOpen: false,
+    items: [
+      {
+        title: "nav.global_settings",
+        href: "/master/global-settings",
+        icon: NavigationIcons.Settings,
+      },
+      {
+        title: "nav.performance",
+        href: "/master/performance",
+        icon: NavigationIcons.Analytics,
+      },
+      {
+        title: "nav.god_mode",
+        href: "/master/god-mode",
+        icon: NavigationIcons.Shield,
       },
     ],
   },
@@ -495,47 +511,6 @@ export const MASTER_NAVIGATION = [
         href: "/master/institutions",
         icon: NavigationIcons.Building,
       },
-      {
-        title: "nav.users",
-        href: "/master/user-management",
-        icon: NavigationIcons.Profile,
-      },
-      {
-        title: "nav.roles",
-        href: "/master/role-management",
-        icon: NavigationIcons.Team,
-      },
-      {
-        title: "nav.user_analytics",
-        href: "/master/user-analytics",
-        icon: NavigationIcons.Analytics,
-      },
-    ],
-  },
-  {
-    title: ROLE_SPECIFIC_SECTIONS.MASTER.system,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.configuration",
-        href: "/master/system-config",
-        icon: NavigationIcons.Settings,
-      },
-      {
-        title: "nav.security",
-        href: "/master/security-center",
-        icon: NavigationIcons.Shield,
-      },
-      {
-        title: "nav.database",
-        href: "/master/database-tools",
-        icon: NavigationIcons.Archive,
-      },
-      {
-        title: "nav.global_settings",
-        href: "/master/global-settings",
-        icon: NavigationIcons.Wrench,
-      },
     ],
   },
   {
@@ -543,97 +518,9 @@ export const MASTER_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
-        title: "nav.god_mode",
-        href: "/master/god-mode",
-        icon: NavigationIcons.Key,
-      },
-      {
-        title: "nav.debug_console",
-        href: "/master/debug-console",
-        icon: NavigationIcons.Terminal,
-      },
-      {
         title: "nav.audit_logs",
         href: "/master/audit-logs",
         icon: NavigationIcons.DocumentList,
-      },
-      {
-        title: "nav.system_monitor",
-        href: "/master/system-monitor",
-        icon: NavigationIcons.ServerStack,
-      },
-      {
-        title: "nav.performance",
-        href: "/master/performance",
-        icon: NavigationIcons.Analytics,
-      },
-    ],
-  },
-  {
-    title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.calendar",
-        href: "/admin/libro-clases/asistencia",
-        icon: NavigationIcons.Calendar,
-      },
-      {
-        title: "nav.calificaciones",
-        href: "/admin/libro-clases/calificaciones",
-        icon: NavigationIcons.Academic,
-        requiredFeature: "grading_system",
-      },
-      {
-        title: "nav.documents",
-        href: "/admin/libro-clases/observaciones",
-        icon: NavigationIcons.Documents,
-      },
-      {
-        title: "nav.students",
-        href: "/admin/libro-clases/estudiantes",
-        icon: NavigationIcons.UserGroup,
-      },
-    ],
-  },
-  {
-    title: STANDARD_SECTION_ORDER.CONVIVENCIA,
-    defaultOpen: false,
-    items: [
-      {
-        title: "nav.protocolos_convivencia",
-        href: "/master/protocolos-convivencia",
-        icon: NavigationIcons.Documents,
-      },
-      {
-        title: "nav.protocolos_convivencia.normas",
-        href: "/master/protocolos-convivencia/normas",
-        icon: NavigationIcons.Shield,
-      },
-      {
-        title: "nav.protocolos_convivencia.disciplina",
-        href: "/master/protocolos-convivencia/disciplina",
-        icon: NavigationIcons.Scale,
-      },
-      {
-        title: "nav.protocolos_convivencia.medidas",
-        href: "/master/protocolos-convivencia/medidas",
-        icon: NavigationIcons.Clock,
-      },
-      {
-        title: "nav.protocolos_convivencia.reconocimientos",
-        href: "/master/protocolos-convivencia/reconocimientos",
-        icon: NavigationIcons.Star,
-      },
-      {
-        title: "nav.protocolos_convivencia.actas_apoderados",
-        href: "/master/protocolos-convivencia/actas-apoderados",
-        icon: NavigationIcons.UserGroup, // Use UserGroup instead of Team
-      },
-      {
-        title: "nav.protocolos_convivencia.actas_alumnos",
-        href: "/master/protocolos-convivencia/actas-alumnos",
-        icon: NavigationIcons.Building, // Use Building for school context
       },
     ],
   },
