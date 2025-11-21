@@ -10,6 +10,52 @@ export const GET = createApiRoute(
     const client = await getAuthenticatedConvexClient();
 
     // Parallel system metrics queries for maximum performance
+    // Add error handling to identify which query is failing
+    const queryPromises = [
+      // System health metrics
+      Promise.resolve({
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+        nodeVersion: process.version,
+        environment: process.env.NODE_ENV,
+      }),
+
+      // User analytics - wrapped for error tracking
+      client.query(api.users.getUsers, { isActive: true }).catch((error) => {
+        console.error("Dashboard: getUsers query failed:", error);
+        throw new Error(`getUsers query failed: ${error.message}`);
+      }),
+
+      // Content metrics - wrapped for error tracking
+      client.query(api.calendar.getCalendarEvents, {}).catch((error) => {
+        console.error("Dashboard: getCalendarEvents query failed:", error);
+        throw new Error(`getCalendarEvents query failed: ${error.message}`);
+      }),
+      client.query(api.planning.getPlanningDocuments, {}).catch((error) => {
+        console.error("Dashboard: getPlanningDocuments query failed:", error);
+        throw new Error(`getPlanningDocuments query failed: ${error.message}`);
+      }),
+      client.query(api.meetings.getMeetings, {}).catch((error) => {
+        console.error("Dashboard: getMeetings query failed:", error);
+        throw new Error(`getMeetings query failed: ${error.message}`);
+      }),
+      client.query(api.media.getPhotos, {}).catch((error) => {
+        console.error("Dashboard: getPhotos query failed:", error);
+        throw new Error(`getPhotos query failed: ${error.message}`);
+      }),
+      client.query(api.media.getVideos, {}).catch((error) => {
+        console.error("Dashboard: getVideos query failed:", error);
+        throw new Error(`getVideos query failed: ${error.message}`);
+      }),
+
+      // Error tracking (will work once ErrorLog model is added)
+      Promise.resolve({
+        totalErrors: 0,
+        criticalErrors: 0,
+        recentErrors: 0,
+      }),
+    ];
+
     const [
       systemMetrics,
       allUsers,
@@ -19,32 +65,7 @@ export const GET = createApiRoute(
       allPhotos,
       allVideos,
       errorMetrics,
-    ] = await Promise.all([
-      // System health metrics
-      Promise.resolve({
-        uptime: process.uptime(),
-        memory: process.memoryUsage(),
-        nodeVersion: process.version,
-        environment: process.env.NODE_ENV,
-      }),
-
-      // User analytics
-      client.query(api.users.getUsers, { isActive: true }),
-
-      // Content metrics
-      client.query(api.calendar.getCalendarEvents, {}),
-      client.query(api.planning.getPlanningDocuments, {}),
-      client.query(api.meetings.getMeetings, {}),
-      client.query(api.media.getPhotos, {}),
-      client.query(api.media.getVideos, {}),
-
-      // Error tracking (will work once ErrorLog model is added)
-      Promise.resolve({
-        totalErrors: 0,
-        criticalErrors: 0,
-        recentErrors: 0,
-      }),
-    ]);
+    ] = await Promise.all(queryPromises);
 
     // Performance metrics - not available (would need proper monitoring infrastructure)
     const performanceMetrics = {

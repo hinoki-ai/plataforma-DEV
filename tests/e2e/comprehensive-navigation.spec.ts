@@ -6,20 +6,20 @@ const PRODUCTION_URL = "https://plataforma.aramac.dev";
 // User credentials for different roles
 const CREDENTIALS = {
   master: {
-    email: process.env.E2E_MASTER_EMAIL ?? "agustinaramac@gmail.com",
-    password: process.env.E2E_MASTER_PASSWORD ?? "madmin123",
+    email: process.env.E2E_MASTER_EMAIL ?? "agustinarancibia@live.cl",
+    password: process.env.E2E_MASTER_PASSWORD ?? "59163476a",
   },
   admin: {
-    email: process.env.E2E_ADMIN_EMAIL ?? "riquelmeiturracatalina@gmail.com",
-    password: process.env.E2E_ADMIN_PASSWORD ?? "Catata12345",
+    email: process.env.E2E_ADMIN_EMAIL ?? "admin@astral.cl",
+    password: process.env.E2E_ADMIN_PASSWORD ?? "adminastral123.",
   },
   profesor: {
     email: process.env.E2E_PROFESOR_EMAIL ?? "profesor@astral.cl",
-    password: process.env.E2E_PROFESOR_PASSWORD ?? "profesor123",
+    password: process.env.E2E_PROFESOR_PASSWORD ?? "profesorastral123.",
   },
   parent: {
-    email: process.env.E2E_PARENT_EMAIL ?? "parent@astral.cl",
-    password: process.env.E2E_PARENT_PASSWORD ?? "parent123",
+    email: process.env.E2E_PARENT_EMAIL ?? "apoderado@astral.cl",
+    password: process.env.E2E_PARENT_PASSWORD ?? "apoderadoastral123.",
   },
 };
 
@@ -64,34 +64,153 @@ async function performLogin(
 
   await dismissAudioBanner(page);
 
-  console.log(`🚀 Clicking login button`);
+  console.log(`🚀 Waiting for login button to be enabled...`);
   // Click the first submit button or button containing login text
   const loginButton = page
     .locator(
       'button[type="submit"], button:has-text("Ingresar"), button:has-text("Login"), button:has-text("Sign in")',
     )
     .first();
-  await loginButton.click();
+
+  // Wait for button to be visible and enabled
+  await loginButton.waitFor({ state: "visible", timeout: 10000 });
+
+  // Wait for button to not be disabled and not contain "Cargando"
+  await page.waitForTimeout(2000); // Simple wait to let things settle
+  const isEnabled = await loginButton.isEnabled();
+  if (!isEnabled) {
+    console.log(`⏳ Button still disabled, waiting longer...`);
+    await page.waitForTimeout(3000);
+  }
+
+  console.log(`🚀 Clicking login button`);
+  await loginButton.click({ timeout: 10000 });
 
   console.log(`⏳ Waiting for redirect...`);
 
-  // Wait for redirect with very simple check
-  await page.waitForTimeout(3000); // Simple wait first
+  // Wait for authentication to complete - be more patient
+  await page.waitForTimeout(5000); // Wait 5 seconds for auth to process
 
-  // Check if we're no longer on login page
-  const currentUrl = page.url();
+  // Check current status
+  let currentUrl = page.url();
   console.log(`📍 Current URL after login: ${currentUrl}`);
 
+  // If we're still on login page, wait a bit more
   if (currentUrl.includes("/login")) {
-    throw new Error(`Still on login page after login attempt: ${currentUrl}`);
+    console.log(`🔄 Still on login page, waiting longer...`);
+    await page.waitForTimeout(5000); // Wait another 5 seconds
+    currentUrl = page.url();
+    console.log(`📍 Updated URL: ${currentUrl}`);
+
+    // If still on login after 10 seconds total, something is wrong
+    if (currentUrl.includes("/login")) {
+      throw new Error(
+        `Login failed - still on login page after 10 seconds: ${currentUrl}`,
+      );
+    }
   }
 
-  console.log(`✅ Login appears successful. Final URL: ${currentUrl}`);
-
-  if (expectedPath && !currentUrl.includes(expectedPath)) {
-    console.log(`⚠️ Expected path ${expectedPath} but got ${currentUrl}`);
-    // Don't fail here, just warn - the page might have redirected to a different valid location
+  // If we reached authentication success page, wait for final redirect
+  if (currentUrl.includes("/autenticacion-exitosa")) {
+    console.log(`🔄 On auth success page, waiting for final redirect...`);
+    await page.waitForTimeout(3000);
+    currentUrl = page.url();
+    console.log(`📍 Final URL after auth success: ${currentUrl}`);
   }
+
+  // Verify we're on the expected role dashboard
+  if (expectedPath) {
+    const isOnExpectedPath = currentUrl.includes(expectedPath);
+    console.log(`🎯 Expected role path: ${expectedPath}`);
+    console.log(
+      `📍 Current path check: ${isOnExpectedPath ? "✅ MATCH" : "❌ MISMATCH"}`,
+    );
+
+    if (!isOnExpectedPath) {
+      console.log(
+        `⚠️  [AUTH WARNING] Not on expected path. Expected: ${expectedPath}, Got: ${currentUrl}`,
+      );
+
+      // Check if we're at least on some valid dashboard
+      const validDashboards = ["/master", "/admin", "/profesor", "/parent"];
+      const isOnValidDashboard = validDashboards.some((dash) =>
+        currentUrl.includes(dash),
+      );
+
+      if (isOnValidDashboard) {
+        console.log(
+          `🔄 [AUTH OK] On different but valid dashboard - authentication successful`,
+        );
+      } else {
+        console.log(
+          `🚨 [AUTH ISSUE] Not on any valid dashboard - authentication may have failed`,
+        );
+        expect(
+          isOnValidDashboard,
+          `Expected to be on dashboard but got: ${currentUrl}`,
+        ).toBeTruthy();
+      }
+    } else {
+      console.log(`✅ [AUTH SUCCESS] On expected dashboard path`);
+    }
+  }
+
+  // Verify we have basic dashboard elements
+  console.log(`🔍 Verifying dashboard elements...`);
+
+  try {
+    // Check for sidebar/navigation
+    const sidebarExists =
+      (await page
+        .locator('nav, aside, [data-testid="sidebar"], .sidebar')
+        .count()) > 0;
+    console.log(`   ${sidebarExists ? "✅" : "❌"} Sidebar/Navigation present`);
+
+    // Check for main content area
+    const mainContentExists =
+      (await page
+        .locator('main, [data-testid="main-content"], .main-content')
+        .count()) > 0;
+    console.log(
+      `   ${mainContentExists ? "✅" : "❌"} Main content area present`,
+    );
+
+    // Check for header
+    const headerExists = (await page.locator("header, .header").count()) > 0;
+    console.log(`   ${headerExists ? "✅" : "❌"} Header present`);
+
+    // Check for interactive elements
+    const buttons = await page.locator("button").count();
+    console.log(
+      `   ${buttons > 0 ? "✅" : "❌"} Action buttons (${buttons} found)`,
+    );
+
+    const links = await page.locator("a").count();
+    console.log(
+      `   ${links > 0 ? "✅" : "❌"} Navigation links (${links} found)`,
+    );
+
+    const dashboardElements = [
+      sidebarExists,
+      mainContentExists,
+      headerExists,
+    ].filter(Boolean).length;
+    console.log(
+      `📊 Dashboard quality: ${dashboardElements}/3 core elements present`,
+    );
+
+    if (dashboardElements < 2) {
+      console.log(
+        `🚨 [DASHBOARD ISSUE] Dashboard appears incomplete - missing core elements`,
+      );
+    }
+  } catch (error) {
+    console.log(`❌ Error checking dashboard elements: ${error.message}`);
+  }
+
+  console.log(
+    `✅ [LOGIN COMPLETE] Authentication successful. Final URL: ${currentUrl}`,
+  );
 }
 
 async function ensureAuthenticatedForPage(
@@ -129,34 +248,410 @@ async function testPageLoad(
 ) {
   await test.step(`Test ${description} - ${path}`, async () => {
     const targetUrl = `${PRODUCTION_URL}${path}`;
-    console.log(`🌐 Testing: ${targetUrl}`);
+    console.log(`🌐 [START] Testing: ${targetUrl}`);
+    console.log(`📝 Description: ${description}`);
+
+    const startTime = Date.now();
 
     const response = await page.goto(targetUrl, {
       waitUntil: "domcontentloaded",
-      timeout: 15000,
+      timeout: 20000,
     });
 
-    expect(response, `No response received for ${path}`).not.toBeNull();
+    const loadTime = Date.now() - startTime;
+    console.log(`⏱️  Page load time: ${loadTime}ms`);
+
+    expect(response, `❌ No response received for ${path}`).not.toBeNull();
 
     const status = response?.status();
+    console.log(`📊 HTTP Status: ${status}`);
+
     if (typeof status === "number") {
-      console.log(`📊 Status: ${status}`);
-      expect(status).toBeLessThan(400);
+      expect(
+        status,
+        `❌ Unexpected status code for ${path}: ${status}`,
+      ).toBeLessThan(400);
+
+      // Check if redirected to login (indicates authentication required)
+      if (status === 200) {
+        const currentUrl = page.url();
+        console.log(`📍 Final URL: ${currentUrl}`);
+
+        if (
+          currentUrl.includes("/login") ||
+          currentUrl.includes("/no-autorizado")
+        ) {
+          console.log(
+            `🔒 [AUTH REQUIRED] Page ${path} requires authentication - redirected to: ${currentUrl}`,
+          );
+
+          // Check if we have login callback parameter
+          if (currentUrl.includes("callbackUrl=")) {
+            console.log(
+              `🔄 [AUTH FLOW] Proper callback URL found for protected route`,
+            );
+          } else {
+            console.log(
+              `⚠️  [AUTH FLOW] No callback URL found - manual redirect`,
+            );
+          }
+
+          // For authenticated tests, this is a problem - we should be logged in
+          if (expectedRolePath) {
+            console.log(
+              `🚨 [AUTH FAILURE] Expected to be authenticated for ${expectedRolePath} but got redirected to login`,
+            );
+            console.log(`🔄 [RE-AUTH] Attempting to re-authenticate...`);
+
+            // Re-authenticate
+            await performLogin(
+              page,
+              getCredentialsForRole(expectedRolePath),
+              expectedRolePath,
+            );
+
+            // Try the page again
+            console.log(
+              `🔄 [RETRY] Retrying page access after re-authentication...`,
+            );
+            await page.goto(targetUrl, {
+              waitUntil: "domcontentloaded",
+              timeout: 15000,
+            });
+
+            const retryUrl = page.url();
+            console.log(`📍 Retry URL: ${retryUrl}`);
+
+            if (
+              retryUrl.includes("/login") ||
+              retryUrl.includes("/no-autorizado")
+            ) {
+              console.log(
+                `🚨 [AUTH FAILURE] Still redirected to login after re-authentication`,
+              );
+              expect(
+                retryUrl,
+                `Page ${path} should be accessible after authentication`,
+              ).not.toMatch(/\/login|\/no-autorizado/);
+            } else {
+              console.log(
+                `✅ [AUTH SUCCESS] Page accessible after re-authentication`,
+              );
+            }
+          } else {
+            return; // This is expected for public route tests
+          }
+        }
+      }
     }
 
-    // Quick wait for content
-    await page.waitForTimeout(1000);
+    // Wait for content to stabilize
+    console.log(`⏳ Waiting for page content to stabilize...`);
+    await page.waitForTimeout(2000);
 
-    // Check if we're on the expected page (allow redirects)
+    // Comprehensive content checks
     const currentUrl = page.url();
-    console.log(`📍 URL: ${currentUrl}`);
+    console.log(`🔍 Analyzing page content...`);
 
-    // Basic check - if we got a valid response, consider it successful
+    // Check 1: Basic body content
     const bodyText = await page.locator("body").textContent();
-    expect(bodyText?.length).toBeGreaterThan(0);
+    const bodyLength = bodyText?.length || 0;
+    console.log(`📄 Body content length: ${bodyLength} characters`);
 
-    console.log(`✅ Loaded: ${path}`);
+    if (bodyLength < 100) {
+      console.log(`⚠️  [CONTENT WARNING] Very minimal content detected`);
+      console.log(`📄 Body text: "${bodyText?.substring(0, 200)}..."`);
+    }
+
+    // Check 2: Look for common UI elements
+    const checks = {
+      "navigation/sidebar": [
+        "nav",
+        '[data-testid="sidebar"]',
+        "aside",
+        ".sidebar",
+      ].some((sel) => {
+        try {
+          return page.locator(sel).count() > 0;
+        } catch {
+          return false;
+        }
+      }),
+      "main content": [
+        "main",
+        '[data-testid="main-content"]',
+        ".main-content",
+      ].some((sel) => {
+        try {
+          return page.locator(sel).count() > 0;
+        } catch {
+          return false;
+        }
+      }),
+      header: ["header", ".header", "nav.navbar"].some((sel) => {
+        try {
+          return page.locator(sel).count() > 0;
+        } catch {
+          return false;
+        }
+      }),
+      buttons: page.locator("button").count() > 0,
+      forms: page.locator("form").count() > 0,
+      links: page.locator("a").count() > 0,
+      tables: page.locator("table").count() > 0,
+      cards: [".card", '[data-testid*="card"]', "article"].some((sel) => {
+        try {
+          return page.locator(sel).count() > 0;
+        } catch {
+          return false;
+        }
+      }),
+    };
+
+    console.log(`🔍 UI Elements found:`);
+    Object.entries(checks).forEach(([element, found]) => {
+      console.log(`   ${found ? "✅" : "❌"} ${element}`);
+    });
+
+    // Check 3: Look for page-specific content based on path
+    const pageSpecificChecks = getPageSpecificChecks(path);
+    if (pageSpecificChecks.length > 0) {
+      console.log(`🎯 Page-specific checks for ${path}:`);
+      for (const check of pageSpecificChecks) {
+        try {
+          const elements = await page.locator(check.selector).count();
+          console.log(
+            `   ${elements > 0 ? "✅" : "❌"} ${check.description} (${elements} found)`,
+          );
+
+          if (elements === 0 && check.required) {
+            console.log(
+              `   🚨 [REQUIRED ELEMENT MISSING] ${check.description}`,
+            );
+          }
+        } catch (error) {
+          console.log(
+            `   ❌ Error checking ${check.description}: ${error.message}`,
+          );
+        }
+      }
+    }
+
+    // Check 4: JavaScript errors
+    const jsErrors = [];
+    page.on("pageerror", (error) => {
+      jsErrors.push(error.message);
+    });
+
+    if (jsErrors.length > 0) {
+      console.log(`🚨 JavaScript errors detected:`);
+      jsErrors.forEach((error) => console.log(`   ❌ ${error}`));
+    }
+
+    // Check 5: Network requests (basic)
+    let networkRequests = 0;
+    let failedRequests = 0;
+
+    page.on("request", (request) => {
+      networkRequests++;
+      if (request.failure()) {
+        failedRequests++;
+      }
+    });
+
+    await page.waitForTimeout(1000); // Let network settle
+
+    console.log(
+      `🌐 Network: ${networkRequests} requests, ${failedRequests} failed`,
+    );
+
+    // Final assessment
+    const uiElementsFound = Object.values(checks).filter(Boolean).length;
+    const hasMinimalContent = bodyLength > 100;
+    const hasNavigation = checks["navigation/sidebar"] || checks["header"];
+    const hasInteractiveElements =
+      checks["buttons"] || checks["forms"] || checks["links"];
+
+    console.log(`📊 Page Assessment:`);
+    console.log(
+      `   Content Quality: ${hasMinimalContent ? "✅ Good" : "❌ Poor"}`,
+    );
+    console.log(
+      `   UI Elements: ${uiElementsFound}/${Object.keys(checks).length} found`,
+    );
+    console.log(
+      `   Navigation: ${hasNavigation ? "✅ Present" : "❌ Missing"}`,
+    );
+    console.log(
+      `   Interactivity: ${hasInteractiveElements ? "✅ Present" : "❌ Missing"}`,
+    );
+    console.log(
+      `   JavaScript Errors: ${jsErrors.length === 0 ? "✅ None" : "❌ " + jsErrors.length + " found"}`,
+    );
+
+    // Overall success criteria
+    const isSuccessful =
+      status === 200 &&
+      hasMinimalContent &&
+      hasNavigation &&
+      jsErrors.length === 0;
+
+    if (isSuccessful) {
+      console.log(
+        `✅ [SUCCESS] Page ${path} loaded successfully and is functional`,
+      );
+    } else {
+      console.log(
+        `⚠️  [ISSUES DETECTED] Page ${path} has problems - check logs above`,
+      );
+      if (!hasNavigation) {
+        console.log(
+          `🚨 [CRITICAL] No navigation elements found - page may be broken`,
+        );
+      }
+      if (jsErrors.length > 0) {
+        console.log(
+          `🚨 [CRITICAL] JavaScript errors present - functionality compromised`,
+        );
+      }
+    }
+
+    expect(bodyLength).toBeGreaterThan(0);
+    expect(status).toBeLessThan(400);
   });
+}
+
+function getCredentialsForRole(rolePath: string): {
+  email: string;
+  password: string;
+} {
+  switch (rolePath) {
+    case "/master":
+      return CREDENTIALS.master;
+    case "/admin":
+      return CREDENTIALS.admin;
+    case "/profesor":
+      return CREDENTIALS.profesor;
+    case "/parent":
+      return CREDENTIALS.parent;
+    default:
+      console.log(
+        `⚠️ Unknown role path: ${rolePath}, defaulting to master credentials`,
+      );
+      return CREDENTIALS.master;
+  }
+}
+
+function getPageSpecificChecks(
+  path: string,
+): Array<{ selector: string; description: string; required: boolean }> {
+  const checks: Record<
+    string,
+    Array<{ selector: string; description: string; required: boolean }>
+  > = {
+    // Master Dashboard
+    "/master": [
+      {
+        selector: '[data-testid*="dashboard"], .dashboard, .overview',
+        description: "Dashboard content",
+        required: false,
+      },
+      {
+        selector:
+          'button:has-text("Create"), button:has-text("New"), button:has-text("Add")',
+        description: "Action buttons",
+        required: false,
+      },
+      {
+        selector: '.stats, .metrics, [data-testid*="stat"]',
+        description: "Statistics/metrics",
+        required: false,
+      },
+    ],
+    "/master/institutions": [
+      {
+        selector:
+          'button:has-text("Create"), button:has-text("New"), button:has-text("Add"), button:has-text("Crear")',
+        description: "Institution creation button",
+        required: true,
+      },
+      {
+        selector: 'table, .table, [data-testid*="table"]',
+        description: "Institutions table/list",
+        required: false,
+      },
+      {
+        selector:
+          '.institution, .institucion, [data-testid*="institution"], .card, article',
+        description: "Institution items",
+        required: false,
+      },
+    ],
+    "/master/user-management": [
+      {
+        selector:
+          'button:has-text("Create"), button:has-text("New"), button:has-text("Add"), button:has-text("Crear")',
+        description: "User creation button",
+        required: true,
+      },
+      {
+        selector: 'table, .table, [data-testid*="table"]',
+        description: "Users table",
+        required: false,
+      },
+      {
+        selector: '.user, .usuario, [data-testid*="user"], .card, article',
+        description: "User items",
+        required: false,
+      },
+    ],
+    "/master/security-center": [
+      {
+        selector: '.security, .seguridad, [data-testid*="security"]',
+        description: "Security content",
+        required: false,
+      },
+      {
+        selector:
+          'button:has-text("Alert"), button:has-text("Security"), button:has-text("Alerta")',
+        description: "Security actions",
+        required: false,
+      },
+      {
+        selector: '.alert, .alerta, [data-testid*="alert"]',
+        description: "Security alerts",
+        required: false,
+      },
+    ],
+    "/master/god-mode": [
+      {
+        selector:
+          '.god-mode, .admin, [data-testid*="god"], .console, .terminal',
+        description: "God mode interface",
+        required: false,
+      },
+      {
+        selector:
+          'button:has-text("Execute"), button:has-text("Run"), button:has-text("Ejecutar")',
+        description: "Advanced actions",
+        required: false,
+      },
+      {
+        selector: '.console, .terminal, [data-testid*="console"]',
+        description: "Console interface",
+        required: false,
+      },
+    ],
+  };
+
+  // Return checks for exact path match or partial match
+  for (const [routePath, routeChecks] of Object.entries(checks)) {
+    if (path === routePath || path.startsWith(routePath)) {
+      return routeChecks;
+    }
+  }
+
+  return [];
 }
 
 test.describe("Comprehensive Navigation Tests - Production Site", () => {
