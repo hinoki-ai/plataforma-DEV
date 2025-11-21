@@ -208,7 +208,9 @@ export function Sidebar({
               <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                 <NavigationIcons.Planning className="h-4 w-4 text-primary" />
               </div>
-              <span className="font-semibold text-sm">Plataforma Astral</span>
+              <span className="font-semibold text-sm">
+                {institution?.name || "Plataforma Astral"}
+              </span>
             </div>
           )}
           {!isCollapsed && (
@@ -217,7 +219,7 @@ export function Sidebar({
               size="icon"
               className="h-8 w-8 ml-auto"
               onClick={onToggle}
-              aria-label={t("nav.sidebar.collapse")}
+              aria-label={t("nav.sidebar.collapse", "navigation")}
             >
               <NavigationIcons.ChevronLeft
                 className="h-4 w-4"
@@ -233,7 +235,7 @@ export function Sidebar({
                   size="icon"
                   className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/15 to-primary/5 hover:from-primary/25 hover:to-primary/10 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
                   onClick={onToggle}
-                  aria-label={t("nav.sidebar.expand")}
+                  aria-label={t("nav.sidebar.expand", "navigation")}
                 >
                   <svg
                     className="w-5 h-5 text-primary"
@@ -253,7 +255,7 @@ export function Sidebar({
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                <p>{t("nav.sidebar.expand")}</p>
+                <p>{t("nav.sidebar.expand", "navigation")}</p>
               </TooltipContent>
             </Tooltip>
           )}
@@ -407,8 +409,8 @@ export function Sidebar({
                 size="sm"
                 onClick={handleLogout}
                 className="text-xs"
-                aria-label={t("nav.logout.button")}
-                title={t("nav.logout.button")}
+                aria-label={t("nav.logout.button", "navigation")}
+                title={t("nav.logout.button", "navigation")}
               >
                 <ThemeIcons.Logout className="h-4 w-4" aria-hidden="true" />
               </Button>
@@ -422,14 +424,14 @@ export function Sidebar({
                   size="sm"
                   className="w-full mt-2"
                   onClick={handleLogout}
-                  aria-label={t("nav.logout.button")}
-                  title={t("nav.logout.button")}
+                  aria-label={t("nav.logout.button", "navigation")}
+                  title={t("nav.logout.button", "navigation")}
                 >
                   <ThemeIcons.Logout className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                <p>{t("nav.logout.button")}</p>
+                <p>{t("nav.logout.button", "navigation")}</p>
               </TooltipContent>
             </Tooltip>
           )}
