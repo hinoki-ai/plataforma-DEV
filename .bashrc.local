@@ -7,3 +7,4 @@ if [[ "$PWD" == "/mnt/Secondary/projects/websites/plataforma" ]]; then
 fi
 
 
+

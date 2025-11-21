@@ -1,6 +1,7 @@
 import { expect, Page, test } from "@playwright/test";
 
-const PRODUCTION_URL = "https://plataforma.aramac.dev";
+// Use environment variable or default to localhost for dev mode
+const PRODUCTION_URL = process.env.E2E_BASE_URL || (process.env.NODE_ENV === "development" || process.env.E2E_DEV_MODE ? "http://localhost:3000" : "https://plataforma.aramac.dev");
 
 // User credentials for different roles
 const CREDENTIALS = {
@@ -63,27 +64,76 @@ async function performLogin(
 
   await dismissAudioBanner(page);
 
-  console.log(`🚀 Waiting for login button to be enabled...`);
-  // Click the first submit button or button containing login text
-  const loginButton = page
-    .locator(
-      'button[type="submit"], button:has-text("Ingresar"), button:has-text("Login"), button:has-text("Sign in")',
-    )
-    .first();
+  // Check if we're in dev mode (localhost)
+  const isDevMode = PRODUCTION_URL.includes("localhost");
 
-  // Wait for button to be visible and enabled
-  await loginButton.waitFor({ state: "visible", timeout: 10000 });
+  if (isDevMode) {
+    console.log(`🛠️  Using dev mode login for ${credentials.email}`);
 
-  // Wait for button to not be disabled and not contain "Cargando"
-  await page.waitForTimeout(2000); // Simple wait to let things settle
-  const isEnabled = await loginButton.isEnabled();
-  if (!isEnabled) {
-    console.log(`⏳ Button still disabled, waiting longer...`);
-    await page.waitForTimeout(3000);
+    // Map email to role for dev mode buttons
+    const roleMap: Record<string, string> = {
+      "agustinarancibia@live.cl": "MASTER",
+      "admin@astral.cl": "ADMIN",
+      "profesor@astral.cl": "PROFESOR",
+      "apoderado@astral.cl": "PARENT",
+    };
+
+    const role = roleMap[credentials.email];
+    if (!role) {
+      console.log(`No dev role mapping found for email: ${credentials.email}`);
+      return false;
+    }
+
+    console.log(`🎯 Clicking ${role} dev login button`);
+    const buttonText =
+      role === "MASTER"
+        ? "Master"
+        : role === "ADMIN"
+          ? "Admin"
+          : role === "PROFESOR"
+            ? "Profesor"
+            : "Parent";
+    const devButton = page.locator(`button:has-text("${buttonText}")`);
+
+    await devButton.waitFor({ state: "visible", timeout: 5000 });
+    await devButton.click();
+
+    // In dev mode, the button redirects to autenticacion-exitosa which then redirects to the dashboard
+    console.log(`⏳ Waiting for dev authentication redirect...`);
+    await page.waitForTimeout(2000);
+
+    // Check if redirect happened
+    const postClickUrl = page.url();
+    console.log(`📍 URL after dev button click: ${postClickUrl}`);
+
+    if (postClickUrl.includes("/login")) {
+      console.log(`Dev authentication failed - still on login page`);
+      return false;
+    }
+  } else {
+    // Production mode login
+    console.log(`🚀 Waiting for login button to be enabled...`);
+    // Click the first submit button or button containing login text
+    const loginButton = page
+      .locator(
+        'button[type="submit"], button:has-text("Ingresar"), button:has-text("Login"), button:has-text("Sign in")',
+      )
+      .first();
+
+    // Wait for button to be visible and enabled
+    await loginButton.waitFor({ state: "visible", timeout: 10000 });
+
+    // Wait for button to not be disabled and not contain "Cargando"
+    await page.waitForTimeout(2000); // Simple wait to let things settle
+    const isEnabled = await loginButton.isEnabled();
+    if (!isEnabled) {
+      console.log(`⏳ Button still disabled, waiting longer...`);
+      await page.waitForTimeout(3000);
+    }
+
+    console.log(`🚀 Clicking login button`);
+    await loginButton.click({ timeout: 10000 });
   }
-
-  console.log(`🚀 Clicking login button`);
-  await loginButton.click({ timeout: 10000 });
 
   console.log(`⏳ Waiting for redirect...`);
 

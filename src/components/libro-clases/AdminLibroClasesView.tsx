@@ -66,7 +66,7 @@ export function AdminLibroClasesView({
   const { t } = useDivineParsing(["libro-clases", "common"]);
   const [searchQuery, setSearchQuery] = useState("");
   // Initialize with current year - safe for client components
-  const [selectedYear, setSelectedYear] = useState<number>(
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(
     () => new Date().getFullYear()
   );
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -100,7 +100,7 @@ export function AdminLibroClasesView({
   // Fetch courses - ensure we always pass valid parameters or "skip"
   const courses = useQuery(
     api.courses.getCourses,
-    selectedYear > 0
+    selectedYear !== undefined && selectedYear > 0
       ? { academicYear: selectedYear, isActive: true }
       : "skip",
   );

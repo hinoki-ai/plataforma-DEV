@@ -136,3 +136,4 @@ export function DynamicDataTable<T>({
     </div>
   );
 }
+

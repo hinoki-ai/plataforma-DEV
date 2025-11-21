@@ -72,3 +72,4 @@ export const auditLogs = defineTable({
   .index("by_action", ["action"])
   .index("by_user_timestamp", ["userId", "timestamp"])
   .index("by_category_timestamp", ["category", "timestamp"]);
+
