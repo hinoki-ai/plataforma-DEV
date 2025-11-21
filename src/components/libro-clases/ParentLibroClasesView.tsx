@@ -28,7 +28,7 @@ import UnifiedCalendarView from "@/components/calendar/UnifiedCalendarView";
 import { Id } from "@/convex/_generated/dataModel";
 import { RoleAwareHeader } from "@/components/layout/RoleAwareNavigation";
 import { usePathname, useRouter } from "next/navigation";
-import { useConvexConnection } from "@/hooks/useConvexConnection";
+// Removed complex connection hook for simplicity
 // Removed complex language hook - using hardcoded Spanish strings for performance
 import Link from "next/link";
 
@@ -98,7 +98,78 @@ const PARENT_TAB_HEADERS: Record<
 export function ParentLibroClasesView({
   view = "overview",
 }: ParentLibroClasesViewProps) {
-  const { t } = useLanguage();
+  // Simplified translation function for performance
+  const t = (key: string) => {
+    const translations: Record<string, string> = {
+      "parent.libro_clases.errors.auth_required": "Autenticación requerida",
+      "parent.libro_clases.errors.auth_required_desc": "Debes iniciar sesión para acceder al libro de clases",
+      "parent.libro_clases.errors.login": "Ir a iniciar sesión",
+      "parent.libro_clases.errors.tenancy_error": "Error de configuración institucional",
+      "parent.libro_clases.errors.tenancy_error_desc": "Problema con la configuración de la institución",
+      "parent.libro_clases.errors.institution_selection_desc": "Contacta al administrador para configurar tu institución",
+      "parent.libro_clases.errors.retry": "Reintentar",
+      "parent.libro_clases.errors.contact_admin": "Contactar administrador",
+      "parent.libro_clases.loading.connection_error": "Conexión inestable",
+      "parent.libro_clases.loading.connection_error_desc": "Revisa tu conexión o que el servidor esté disponible",
+      "parent.libro_clases.loading.connection_error_detail": "Detalles del error de conexión",
+      "parent.libro_clases.loading.reload_page": "Recargar página",
+      "parent.libro_clases.loading.reconnect": "Reconectar",
+      "parent.libro_clases.loading.development_info": "Información de desarrollo",
+      "parent.libro_clases.loading.convex_dev_note": "Asegúrate de que npx convex dev esté ejecutándose",
+      "parent.libro_clases.loading.connection_status": "Estado de conexión",
+      "parent.libro_clases.loading.connected": "Conectado",
+      "parent.libro_clases.loading.disconnected": "Desconectado",
+      "parent.libro_clases.loading.configured": "Configurado",
+      "parent.libro_clases.loading.not_configured": "No configurado",
+      "parent.libro_clases.errors.profile_not_found": "Perfil no encontrado",
+      "parent.libro_clases.errors.profile_not_found_desc": "Contacta al administrador para completar tu registro",
+      "parent.libro_clases.course_selection.active_courses": "Cursos Activos",
+      "parent.libro_clases.course_selection.total_students": "Total Estudiantes",
+      "parent.libro_clases.course_selection.academic_year": "Año Académico",
+      "parent.libro_clases.course_selection.subjects": "Asignaturas",
+      "parent.libro_clases.course_selection.select_course": "Seleccionar Curso",
+      "parent.libro_clases.course_selection.no_courses": "No hay cursos disponibles",
+      "parent.libro_clases.course_selection.no_courses_desc": "No tienes hijos inscritos en cursos activos",
+      "parent.libro_clases.course_details.students": "Estudiantes",
+      "parent.libro_clases.course_details.subjects": "Asignaturas",
+      "parent.libro_clases.course_details.head_teacher": "Profesor Jefe",
+      "parent.libro_clases.course_details.academic_year": "Año Académico",
+      "parent.libro_clases.status.read_only": "Solo lectura",
+      "parent.libro_clases.overview.my_students": "Mis Hijos",
+      "parent.libro_clases.overview.my_students_desc": "Estudiantes a tu cargo",
+      "parent.libro_clases.overview.subjects": "Asignaturas",
+      "parent.libro_clases.overview.subjects_desc": "Materias del curso",
+      "parent.libro_clases.overview.no_students": "No hay estudiantes inscritos",
+      "parent.libro_clases.tabs.overview": "Resumen",
+      "parent.libro_clases.tabs.grades": "Calificaciones",
+      "parent.libro_clases.tabs.attendance": "Asistencia",
+      "parent.libro_clases.tabs.observations": "Observaciones",
+      "parent.libro_clases.tabs.meetings": "Reuniones",
+      "parent.libro_clases.grades.read_only_notice": "Vista de solo lectura - las calificaciones son gestionadas por el profesor",
+      "parent.libro_clases.attendance.calendar_title": "Calendario Académico",
+      "parent.libro_clases.attendance.calendar_desc": "Calendario escolar completo con eventos y seguimiento de asistencia",
+      "parent.libro_clases.attendance.current_course": "Curso Actual",
+      "parent.libro_clases.attendance.events_this_month": "Eventos este mes",
+      "parent.libro_clases.attendance.integrated_calendar": "Calendario Integrado",
+      "parent.libro_clases.attendance.academic_events": "Eventos académicos",
+      "parent.libro_clases.attendance.family_attendance": "Asistencia Familiar",
+      "parent.libro_clases.attendance.real_time_tracking": "Seguimiento en Tiempo Real",
+      "parent.libro_clases.attendance.automatic_notifications": "Notificaciones Automáticas",
+      "parent.libro_clases.observations.title": "Observaciones y Comunicaciones",
+      "parent.libro_clases.observations.desc": "Accede a anotaciones formativas, reconocimientos y compromisos",
+      "parent.libro_clases.observations.recognitions": "Reconocimientos",
+      "parent.libro_clases.observations.recognitions_desc": "Logros y reconocimientos destacados",
+      "parent.libro_clases.observations.commitments": "Compromisos",
+      "parent.libro_clases.observations.commitments_desc": "Acuerdos y compromisos asumidos",
+      "parent.libro_clases.observations.school_regulations": "Todas las observaciones cumplen con las normativas escolares vigentes",
+      "parent.libro_clases.meetings.title": "Reuniones y Entrevistas",
+      "parent.libro_clases.meetings.desc": "Confirma y registra acuerdos con profesorado e inspectoría",
+      "parent.libro_clases.meetings.calendar_access": "Accede al calendario completo de reuniones programadas",
+      "parent.libro_clases.meetings.actions.go_to_meetings": "Ir a Reuniones",
+      "parent.libro_clases.meetings.actions.contact_inspection": "Contactar Inspectoría",
+    };
+    return translations[key] || key;
+  };
   const { userId, isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -106,8 +177,7 @@ export function ParentLibroClasesView({
     useState<Id<"courses"> | null>(null);
   const [activeTab, setActiveTab] = useState<TabValue>(view);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
-  const { isConnected, connectionError, hasConnectionIssue } =
-    useConvexConnection();
+  // Simplified connection logic - assume connection is working
 
   useEffect(() => {
     setActiveTab(view);
@@ -116,7 +186,7 @@ export function ParentLibroClasesView({
   // DEV MODE: Use mock user ID for testing
   const mockUserId = isDev ? "dev-parent-user" : userId;
 
-  // Get current user - must be called before any early returns
+  // Get current user
   const currentUser = useQuery(
     api.users.getUserByClerkId,
     (mockUserId || userId) && (isLoaded || isDev) && (isSignedIn || isDev)
@@ -124,37 +194,24 @@ export function ParentLibroClasesView({
       : "skip",
   );
 
-  // Fetch parent's courses (where their children are enrolled) - must be called before early returns
+  // Fetch parent's courses (where their children are enrolled)
   const courses = useQuery(
     api.courses.getCoursesForParent,
-    currentUser?._id && tenancyCheck && !("error" in tenancyCheck)
-      ? {
-          parentId: currentUser._id,
-          academicYear: new Date().getFullYear(),
-          isActive: true,
-        }
-      : "skip",
+    currentUser?._id ? {
+      parentId: currentUser._id,
+      academicYear: new Date().getFullYear(),
+      isActive: true,
+    } : "skip",
   );
 
-  // Get selected course details - must be called before early returns
+  // Get selected course details
   const selectedCourse = useQuery(
     api.courses.getCourseById,
     selectedCourseId ? { courseId: selectedCourseId } : "skip",
   );
 
-  // Check for tenancy errors using a debug query
-  const tenancyCheck = useQuery(
-    api.tenancy.getCurrentTenancy,
-    currentUser?._id ? {} : "skip",
-  );
-
-  const isCurrentUserLoading = currentUser === undefined;
-  const isTenancyLoading = tenancyCheck === undefined;
-  const hasTenancyError = tenancyCheck && "error" in tenancyCheck;
-  const isLoading =
-    isCurrentUserLoading ||
-    isTenancyLoading ||
-    (currentUser ? courses === undefined : false);
+  // Simplified loading logic
+  const isLoading = currentUser === undefined || courses === undefined || (selectedCourseId && selectedCourse === undefined);
 
   useEffect(() => {
     if (!isLoading) {
@@ -162,7 +219,7 @@ export function ParentLibroClasesView({
       return;
     }
 
-    const timeout = setTimeout(() => setLoadingTimedOut(true), 6000);
+    const timeout = setTimeout(() => setLoadingTimedOut(true), 10000); // Increased timeout
     return () => clearTimeout(timeout);
   }, [isLoading]);
 
@@ -227,129 +284,34 @@ export function ParentLibroClasesView({
     }
   };
 
-  // Show tenancy error if present
-  if (hasTenancyError && tenancyCheck) {
-    const errorMessage =
-      typeof tenancyCheck.error === "string"
-        ? tenancyCheck.error
-        : "Error de configuración de institución";
-    return (
-      <PageTransition>
-        <div className="space-y-6">
-          <RoleAwareHeader
-            title={t("parent.libro_clases.errors.tenancy_error")}
-            subtitle={t("parent.libro_clases.errors.tenancy_error_desc")}
-          />
-          <Card>
-            <CardContent className="py-10 space-y-4">
-              <p className="text-muted-foreground mb-4">{errorMessage}</p>
-              {errorMessage.includes("No institution selected") && (
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>
-                    {t("parent.libro_clases.errors.institution_selection_desc")}
-                  </p>
-                </div>
-              )}
-              <div className="flex flex-wrap gap-3 mt-4">
-                <Button variant="outline" onClick={() => router.refresh()}>
-                  {t("parent.libro_clases.errors.retry")}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => router.push("/contacto")}
-                >
-                  {t("parent.libro_clases.errors.contact_admin")}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </PageTransition>
-    );
-  }
 
   if (isLoading) {
-    if (loadingTimedOut || hasConnectionIssue) {
+    if (loadingTimedOut) {
       return (
         <PageTransition>
           <div className="space-y-6">
             <RoleAwareHeader
-              title={t("parent.libro_clases.loading.connection_error")}
-              subtitle={t("parent.libro_clases.loading.connection_error_desc")}
+              title="Cargando Libro de Clases"
+              subtitle="Los datos están tardando más de lo esperado. Revisa tu conexión."
             />
             <Card>
               <CardContent className="py-10 space-y-4">
                 <p className="text-muted-foreground mb-4">
-                  {t("parent.libro_clases.loading.connection_error_desc")}
+                  Estamos intentando cargar tu libro de clases. Si persiste el problema:
                 </p>
-                {connectionError && (
-                  <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-                    <p className="text-sm font-medium text-destructive mb-2">
-                      {t("parent.libro_clases.loading.connection_error_detail")}
-                      :
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {connectionError}
-                    </p>
-                  </div>
-                )}
-                {tenancyCheck && "error" in tenancyCheck && (
-                  <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-                    <p className="text-sm font-medium text-destructive mb-2">
-                      {t("parent.libro_clases.errors.tenancy_error")}:
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {(() => {
-                        const error = (
-                          tenancyCheck as unknown as { error?: unknown }
-                        ).error;
-                        return typeof error === "string"
-                          ? error
-                          : t("parent.libro_clases.errors.tenancy_error");
-                      })()}
-                    </p>
-                  </div>
-                )}
+                <ul className="text-muted-foreground text-sm space-y-2 mb-6">
+                  <li>• Verifica tu conexión a internet</li>
+                  <li>• Asegúrate de estar autenticado</li>
+                  <li>• Contacta al administrador si el problema continúa</li>
+                </ul>
                 <div className="flex flex-wrap gap-3 mt-6">
-                  <Button
-                    onClick={() =>
-                      typeof window !== "undefined" && window.location.reload()
-                    }
-                  >
-                    {t("parent.libro_clases.loading.reload_page")}
+                  <Button onClick={() => typeof window !== "undefined" && window.location.reload()}>
+                    Recargar página
                   </Button>
                   <Button variant="outline" onClick={() => router.refresh()}>
-                    {t("parent.libro_clases.loading.reconnect")}
+                    Reintentar
                   </Button>
                 </div>
-                {process.env.NODE_ENV === "development" && (
-                  <div className="mt-4 p-4 bg-muted rounded-lg text-xs space-y-2">
-                    <p className="font-medium mb-2">
-                      {t("parent.libro_clases.loading.development_info")}:
-                    </p>
-                    <p>{t("parent.libro_clases.loading.convex_dev_note")}</p>
-                    <p className="mt-2">
-                      {t("parent.libro_clases.loading.connection_status")}:{" "}
-                      <span
-                        className={
-                          isConnected
-                            ? "text-green-600 font-medium"
-                            : "text-red-600 font-medium"
-                        }
-                      >
-                        {isConnected
-                          ? t("parent.libro_clases.loading.connected")
-                          : t("parent.libro_clases.loading.disconnected")}
-                      </span>
-                    </p>
-                    <p>
-                      {t("parent.libro_clases.loading.next_public_convex")}:{" "}
-                      {process.env.NEXT_PUBLIC_CONVEX_URL
-                        ? `✅ ${t("parent.libro_clases.loading.configured")}`
-                        : `❌ ${t("parent.libro_clases.loading.not_configured")}`}
-                    </p>
-                  </div>
-                )}
               </CardContent>
             </Card>
           </div>
@@ -378,14 +340,62 @@ export function ParentLibroClasesView({
       <PageTransition>
         <div className="space-y-6">
           <RoleAwareHeader
-            title={t("parent.libro_clases.errors.profile_not_found")}
-            subtitle={t("parent.libro_clases.errors.profile_not_found_desc")}
+            title="Perfil de apoderado no encontrado"
+            subtitle="Contacta al administrador para completar tu registro"
           />
           <Card>
             <CardContent className="py-10">
-              <p className="text-muted-foreground">
-                {t("parent.libro_clases.errors.profile_not_found_desc")}
+              <p className="text-muted-foreground mb-4">
+                No pudimos encontrar tu perfil de apoderado en la plataforma.
+                Por favor verifica que tu cuenta esté correctamente configurada.
               </p>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" onClick={() => router.refresh()}>
+                  Reintentar
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/contacto")}
+                >
+                  Contactar soporte
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </PageTransition>
+    );
+  }
+
+  if (!courses) {
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Cursos no encontrados"
+            subtitle="No se pudieron cargar los cursos de tus hijos"
+          />
+          <Card>
+            <CardContent className="py-10">
+              <p className="text-muted-foreground mb-4">
+                No se encontraron cursos asociados a tus hijos. Esto puede deberse a:
+              </p>
+              <ul className="text-muted-foreground text-sm space-y-2 mb-6">
+                <li>• Tus hijos no están inscritos en cursos activos</li>
+                <li>• Hay un problema con la configuración de tu institución</li>
+                <li>• Los datos están siendo sincronizados</li>
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" onClick={() => router.refresh()}>
+                  Reintentar
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/contacto")}
+                >
+                  Contactar soporte
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -528,21 +538,31 @@ export function ParentLibroClasesView({
                     </Card>
                   ))}
                 </div>
-              ) : (
+              ) : courses.length === 0 ? (
                 <Card>
                   <CardContent className="py-12 text-center">
                     <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <h3 className="text-lg font-semibold mb-2">
-                      {t("parent.libro_clases.course_selection.no_courses")}
+                      No hay cursos disponibles
                     </h3>
-                    <p className="text-muted-foreground">
-                      {t(
-                        "parent.libro_clases.course_selection.no_courses_desc",
-                      )}
+                    <p className="text-muted-foreground mb-4">
+                      No se encontraron cursos asociados a tus hijos para el año académico actual.
+                      Esto puede deberse a que tus hijos no están inscritos en cursos activos.
                     </p>
+                    <div className="flex flex-wrap gap-3 justify-center">
+                      <Button variant="outline" onClick={() => router.refresh()}>
+                        Reintentar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => router.push("/contacto")}
+                      >
+                        Contactar soporte
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
-              )}
+              ) : null}
             </div>
           </div>
         ) : (

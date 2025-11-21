@@ -334,11 +334,58 @@ export function TeacherLibroClasesView({
           />
           <Card>
             <CardContent className="py-10">
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground mb-4">
                 No pudimos encontrar tu perfil en el libro de clases. Por favor
                 verifica que tu cuenta esté asociada a un usuario docente en la
                 plataforma.
               </p>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" onClick={() => router.refresh()}>
+                  Reintentar
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/contacto")}
+                >
+                  Contactar soporte
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </PageTransition>
+    );
+  }
+
+  if (!courses) {
+    return (
+      <PageTransition>
+        <div className="space-y-6">
+          <RoleAwareHeader
+            title="Cursos no encontrados"
+            subtitle="No se pudieron cargar tus cursos asignados"
+          />
+          <Card>
+            <CardContent className="py-10">
+              <p className="text-muted-foreground mb-4">
+                No se encontraron cursos asignados a tu cuenta docente. Esto puede deberse a:
+              </p>
+              <ul className="text-muted-foreground text-sm space-y-2 mb-6">
+                <li>• No tienes cursos asignados este año académico</li>
+                <li>• Hay un problema con la configuración de tu institución</li>
+                <li>• Los datos están siendo sincronizados</li>
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" onClick={() => router.refresh()}>
+                  Reintentar
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/contacto")}
+                >
+                  Contactar soporte
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -474,23 +521,31 @@ export function TeacherLibroClasesView({
                     </Card>
                   ))}
                 </div>
-              ) : (
+              ) : courses.length === 0 ? (
                 <Card>
                   <CardContent className="py-12 text-center">
                     <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <h3 className="text-lg font-semibold mb-2">
-                      {t(
-                        "profesor.libro_clases.course_selection.no_assigned_courses",
-                      )}
+                      No tienes cursos asignados
                     </h3>
-                    <p className="text-muted-foreground">
-                      {t(
-                        "profesor.libro_clases.course_selection.contact_admin",
-                      )}
+                    <p className="text-muted-foreground mb-4">
+                      No se encontraron cursos asignados para el año académico actual.
+                      Contacta al administrador para asignarte cursos.
                     </p>
+                    <div className="flex flex-wrap gap-3 justify-center">
+                      <Button variant="outline" onClick={() => router.refresh()}>
+                        Reintentar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => router.push("/contacto")}
+                      >
+                        Contactar soporte
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
-              )}
+              ) : null}
             </div>
           </div>
         ) : (

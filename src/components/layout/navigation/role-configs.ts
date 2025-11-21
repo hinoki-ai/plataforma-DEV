@@ -25,6 +25,12 @@ export const ADMIN_NAVIGATION = [
     defaultOpen: false,
     items: [
       {
+        title: "nav.libro_clases",
+        href: "/admin/libro-clases",
+        icon: NavigationIcons.BookOpen,
+        description: "nav.libro_clases.description",
+      },
+      {
         title: "nav.calendar",
         href: "/admin/libro-clases/asistencia",
         icon: NavigationIcons.Calendar,
@@ -156,6 +162,12 @@ export const PROFESOR_NAVIGATION = [
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
     defaultOpen: false,
     items: [
+      {
+        title: "nav.libro_clases",
+        href: "/profesor/libro-clases",
+        icon: NavigationIcons.BookOpen,
+        description: "nav.libro_clases.description",
+      },
       {
         title: "nav.calendar",
         href: "/profesor/libro-clases/asistencia",
@@ -291,6 +303,12 @@ export const PARENT_NAVIGATION = [
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
     defaultOpen: false,
     items: [
+      {
+        title: "nav.libro_clases",
+        href: "/parent/libro-clases",
+        icon: NavigationIcons.BookOpen,
+        description: "nav.libro_clases.description",
+      },
       {
         title: "nav.calendar",
         href: "/parent/libro-clases/asistencia",
@@ -432,6 +450,12 @@ export const MASTER_NAVIGATION = [
     title: STANDARD_SECTION_ORDER.LIBRO_CLASES,
     defaultOpen: false,
     items: [
+      {
+        title: "nav.libro_clases",
+        href: "/master/libro-clases",
+        icon: NavigationIcons.BookOpen,
+        description: "nav.libro_clases.description",
+      },
       {
         title: "nav.asistencia",
         href: "/master/libro-clases/asistencia",
