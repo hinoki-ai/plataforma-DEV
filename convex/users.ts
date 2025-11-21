@@ -25,6 +25,53 @@ import {
   type BaseUserData,
 } from "../src/lib/user-creation";
 
+// Institution Assignment Strategy: Email Domain Mapping
+// Maps email domains to institution IDs
+const INSTITUTION_DOMAIN_MAPPING: Record<string, Id<"institutionInfo">> = {
+  // Academia Astral institution for astral.cl emails
+  "astral.cl": "n571tjxrjdrnktzzrg9zp8p6a97vtxna",
+  // Add more domain mappings here as needed
+};
+
+// Fallback institution for unknown domains
+let DEFAULT_INSTITUTION_ID: Id<"institutionInfo"> | null = null;
+
+/**
+ * Audit log entry for institution assignments
+ */
+interface AuditLogEntry {
+  action:
+    | "USER_ASSIGNED"
+    | "USER_REASSIGNED"
+    | "MEMBERSHIP_CREATED"
+    | "MEMBERSHIP_UPDATED";
+  userId: Id<"users">;
+  institutionId: Id<"institutionInfo">;
+  previousInstitutionId?: Id<"institutionInfo">;
+  performedBy: Id<"users">;
+  metadata?: Record<string, any>;
+  timestamp: number;
+}
+
+/**
+ * Log institution assignment actions for audit trail
+ */
+async function logInstitutionAssignment(
+  ctx: MutationCtx,
+  entry: AuditLogEntry,
+): Promise<void> {
+  console.log(`📊 AUDIT: ${entry.action}`, {
+    userId: entry.userId,
+    institutionId: entry.institutionId,
+    previousInstitutionId: entry.previousInstitutionId,
+    performedBy: entry.performedBy,
+    timestamp: entry.timestamp,
+  });
+
+  // TODO: Implement persistent audit logging if needed
+  // For now, using console.log for audit trail
+}
+
 const ROLE_VALUES = [
   "MASTER",
   "ADMIN",
@@ -54,6 +101,231 @@ function extractUserName(data: any): string | null {
   const full = `${first} ${last}`.trim();
   if (full.length > 0) return full;
   return data?.username ?? null;
+}
+
+/**
+ * Resolve institution ID from email domain
+ * Uses email domain mapping strategy for automatic institution assignment
+ */
+async function resolveInstitutionFromEmail(
+  ctx: MutationCtx,
+  email: string,
+): Promise<Id<"institutionInfo"> | null> {
+  const domain = email.split("@")[1]?.toLowerCase();
+  if (!domain) return null;
+
+  // Check explicit domain mapping first
+  const mappedInstitutionId = INSTITUTION_DOMAIN_MAPPING[domain];
+  if (mappedInstitutionId) {
+    // Verify institution exists and is active
+    const institution = await ctx.db.get(mappedInstitutionId);
+    if (institution?.isActive !== false) {
+      return mappedInstitutionId;
+    }
+  }
+
+  // Fallback to default institution if available
+  if (DEFAULT_INSTITUTION_ID) {
+    const defaultInstitution = await ctx.db.get(DEFAULT_INSTITUTION_ID);
+    if (defaultInstitution?.isActive !== false) {
+      return DEFAULT_INSTITUTION_ID;
+    }
+  }
+
+  // Find first active institution as last resort
+  const institutions = await ctx.db
+    .query("institutionInfo")
+    .filter((q) => q.eq(q.field("isActive"), true))
+    .collect();
+
+  return institutions.length > 0 ? institutions[0]._id : null;
+}
+
+/**
+ * Create user with institution membership atomically
+ * Ensures user creation and membership creation succeed/fail together
+ */
+async function createUserWithInstitutionMembership(
+  ctx: MutationCtx,
+  clerkUser: any,
+  institutionId: Id<"institutionInfo">,
+): Promise<{
+  userId: Id<"users">;
+  membershipId: Id<"institutionMemberships">;
+}> {
+  const email = extractPrimaryEmail(clerkUser);
+  const name = extractUserName(clerkUser);
+  const image = clerkUser?.image_url ?? null;
+  const now = Date.now();
+
+  // Extract role from Clerk metadata (default to PUBLIC)
+  const metadataRole =
+    clerkUser?.public_metadata?.role ?? clerkUser?.private_metadata?.role;
+  const normalizedRole = normalizeRole(metadataRole, "PUBLIC");
+
+  // Determine membership role based on user role
+  let membershipRole: "ADMIN" | "PROFESOR" | "PARENT" | "STAFF" | "MENTOR" =
+    "PARENT";
+  if (normalizedRole === "ADMIN") membershipRole = "ADMIN";
+  else if (normalizedRole === "PROFESOR") membershipRole = "PROFESOR";
+  else if (normalizedRole === "PARENT") membershipRole = "PARENT";
+  else membershipRole = "STAFF"; // Default for other roles
+
+  const isOAuthUser = Array.isArray(clerkUser?.external_accounts)
+    ? clerkUser.external_accounts.length > 0
+    : false;
+  const isBanned = Boolean(clerkUser?.banned);
+
+  // Verify institution exists and is active
+  const institution = await ctx.db.get(institutionId);
+  if (!institution || institution.isActive === false) {
+    throw new Error(`Institution ${institutionId} not found or inactive`);
+  }
+
+  if (!email) {
+    throw new Error("Email is required for user creation");
+  }
+
+  // Check for existing user (shouldn't happen but safety check)
+  const existingUser = await ctx.db
+    .query("users")
+    .withIndex("by_email", (q) => q.eq("email", email))
+    .first();
+
+  if (existingUser) {
+    throw new Error(`User with email ${email} already exists`);
+  }
+
+  // Use a transaction-like approach with error handling
+  let userId: Id<"users"> | undefined;
+  let membershipId: Id<"institutionMemberships"> | undefined;
+
+  try {
+    // 1. Create user
+    userId = await ctx.db.insert("users", {
+      name: name ?? email,
+      email,
+      image,
+      role: normalizedRole,
+      isActive: !isBanned,
+      parentRole: undefined,
+      status: "ACTIVE",
+      provider: isOAuthUser ? "oauth" : "clerk",
+      isOAuthUser,
+      clerkId: clerkUser.id,
+      createdByAdmin: undefined,
+      currentInstitutionId: institutionId,
+      createdAt: now,
+      updatedAt: now,
+      emailVerified: undefined,
+      password: undefined,
+      phone: undefined,
+    });
+
+    // 2. Create institution membership
+    membershipId = await ctx.db.insert("institutionMemberships", {
+      institutionId,
+      userId,
+      role: membershipRole,
+      status: "ACTIVE",
+      invitedBy: undefined, // Auto-assigned by system
+      joinedAt: now,
+      leftAt: undefined,
+      lastAccessAt: now,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    // 3. Log successful creation
+    console.log(
+      `✅ User ${email} created and assigned to institution ${institution.name}`,
+      {
+        userId,
+        membershipId,
+        institutionId,
+        role: normalizedRole,
+        membershipRole,
+      },
+    );
+
+    return { userId, membershipId };
+  } catch (error) {
+    // Rollback: Delete created records on failure
+    try {
+      if (userId) {
+        await ctx.db.delete(userId);
+      }
+      if (membershipId) {
+        await ctx.db.delete(membershipId);
+      }
+    } catch (rollbackError) {
+      console.error("❌ Failed to rollback user creation:", rollbackError);
+    }
+
+    // Re-throw the original error
+    throw error;
+  }
+}
+
+/**
+ * Update existing user with institution membership if needed
+ */
+async function updateUserWithInstitutionMembership(
+  ctx: MutationCtx,
+  userId: Id<"users">,
+  clerkUser: any,
+  institutionId: Id<"institutionInfo">,
+): Promise<void> {
+  const now = Date.now();
+  const metadataRole =
+    clerkUser?.public_metadata?.role ?? clerkUser?.private_metadata?.role;
+  const normalizedRole = normalizeRole(metadataRole, "PUBLIC");
+  const isBanned = Boolean(clerkUser?.banned);
+
+  // Update user
+  await ctx.db.patch(userId, {
+    role: normalizedRole,
+    isActive: !isBanned,
+    updatedAt: now,
+  });
+
+  // Check if membership exists
+  const existingMembership = await ctx.db
+    .query("institutionMemberships")
+    .withIndex("by_user_institution", (q) =>
+      q.eq("userId", userId).eq("institutionId", institutionId),
+    )
+    .first();
+
+  if (!existingMembership) {
+    // Create membership if it doesn't exist
+    const membershipRole =
+      normalizedRole === "ADMIN"
+        ? "ADMIN"
+        : normalizedRole === "PROFESOR"
+          ? "PROFESOR"
+          : normalizedRole === "PARENT"
+            ? "PARENT"
+            : "STAFF";
+
+    await ctx.db.insert("institutionMemberships", {
+      institutionId,
+      userId,
+      role: membershipRole,
+      status: "ACTIVE",
+      invitedBy: undefined,
+      joinedAt: now,
+      lastAccessAt: now,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    console.log(`✅ Membership created for existing user`, {
+      userId,
+      institutionId,
+      membershipRole,
+    });
+  }
 }
 
 // ==================== QUERIES ====================
@@ -108,6 +380,7 @@ export const currentSession = query({
         name: user.name ?? null,
         image: user.image ?? null,
         role: user.role,
+        currentInstitutionId: user.currentInstitutionId,
         needsRegistration,
         isOAuthUser: user.isOAuthUser ?? false,
       },
@@ -123,82 +396,74 @@ export const syncFromClerk = internalMutation({
     const email = extractPrimaryEmail(data);
 
     if (!clerkId || !email) {
-      return;
-    }
-
-    const name = extractUserName(data);
-    const image = data?.image_url ?? null;
-    const now = Date.now();
-    const metadataRole =
-      data?.public_metadata?.role ?? data?.private_metadata?.role;
-    const isOAuthUser = Array.isArray(data?.external_accounts)
-      ? data.external_accounts.length > 0
-      : false;
-    const isBanned = Boolean(data?.banned);
-
-    const existingByClerk = await ctx.db
-      .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
-      .first();
-
-    if (existingByClerk) {
-      const normalizedRole = normalizeRole(
-        metadataRole,
-        existingByClerk.role as RoleValue,
-      );
-      await ctx.db.patch(existingByClerk._id, {
-        email,
-        name: name ?? existingByClerk.name,
-        image: image ?? existingByClerk.image,
-        role: normalizedRole,
-        isOAuthUser,
-        isActive: !isBanned,
-        updatedAt: now,
-      });
-      return;
-    }
-
-    const existingByEmail = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", email))
-      .first();
-
-    if (existingByEmail) {
-      const normalizedRole = normalizeRole(
-        metadataRole,
-        existingByEmail.role as RoleValue,
-      );
-      await ctx.db.patch(existingByEmail._id, {
+      console.error("❌ Invalid Clerk webhook data: missing clerkId or email", {
         clerkId,
-        name: name ?? existingByEmail.name,
-        image: image ?? existingByEmail.image,
-        role: normalizedRole,
-        isOAuthUser,
-        isActive: !isBanned,
-        updatedAt: now,
+        email,
+        dataKeys: Object.keys(data || {}),
       });
       return;
     }
 
-    const normalizedRole = normalizeRole(metadataRole, "PUBLIC");
-    await ctx.db.insert("users", {
-      email,
-      name: name ?? email,
-      image,
-      role: normalizedRole,
-      isActive: !isBanned,
-      parentRole: undefined,
-      status: "ACTIVE",
-      provider: isOAuthUser ? "oauth" : "clerk",
-      isOAuthUser,
-      clerkId,
-      createdByAdmin: undefined,
-      createdAt: now,
-      updatedAt: now,
-      emailVerified: undefined,
-      password: undefined,
-      phone: undefined,
-    });
+    try {
+      // Resolve institution for this user
+      const institutionId = await resolveInstitutionFromEmail(ctx, email);
+
+      if (!institutionId) {
+        console.error(
+          `❌ No institution found for user ${email} (domain: ${email.split("@")[1]})`,
+        );
+        throw new Error(
+          `No institution available for user ${email}. Please configure institution domain mapping.`,
+        );
+      }
+
+      // Check if user already exists by Clerk ID
+      const existingByClerk = await ctx.db
+        .query("users")
+        .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+        .first();
+
+      if (existingByClerk) {
+        // Update existing user and ensure membership exists
+        await updateUserWithInstitutionMembership(
+          ctx,
+          existingByClerk._id,
+          data,
+          institutionId,
+        );
+        return;
+      }
+
+      // Check if user exists by email (migration case)
+      const existingByEmail = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", email))
+        .first();
+
+      if (existingByEmail) {
+        // Link existing user to Clerk ID and ensure membership
+        await updateUserWithInstitutionMembership(
+          ctx,
+          existingByEmail._id,
+          data,
+          institutionId,
+        );
+        return;
+      }
+
+      // Create new user with institution membership
+      await createUserWithInstitutionMembership(ctx, data, institutionId);
+    } catch (error) {
+      console.error("❌ Failed to sync user from Clerk:", {
+        clerkId,
+        email,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
+      // Re-throw to ensure webhook knows about the failure
+      throw error;
+    }
   },
 });
 
@@ -621,6 +886,283 @@ export const removeClerkId = mutation({
     });
 
     return await ctx.db.get(userId);
+  },
+});
+
+/**
+ * Reassign user to a different institution (Admin/Master only)
+ * Updates user's currentInstitutionId and creates/updates membership
+ */
+export const reassignUserToInstitution = mutation({
+  args: {
+    userId: v.id("users"),
+    newInstitutionId: v.id("institutionInfo"),
+    reason: v.optional(v.string()),
+  },
+  handler: async (ctx, { userId, newInstitutionId, reason }) => {
+    // Get current user (performer)
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+
+    const performer = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .first();
+
+    if (!performer) {
+      throw new Error("Performer user not found");
+    }
+
+    // Check if performer is MASTER or ADMIN
+    if (performer.role !== "MASTER" && performer.role !== "ADMIN") {
+      throw new Error(
+        "Only MASTER or ADMIN users can reassign users between institutions",
+      );
+    }
+
+    // Get target user
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Verify new institution exists and is active
+    const newInstitution = await ctx.db.get(newInstitutionId);
+    if (!newInstitution || newInstitution.isActive === false) {
+      throw new Error("New institution not found or inactive");
+    }
+
+    const previousInstitutionId = user.currentInstitutionId;
+    const now = Date.now();
+
+    // Update user's current institution
+    await ctx.db.patch(userId, {
+      currentInstitutionId: newInstitutionId,
+      updatedAt: now,
+    });
+
+    // Handle membership changes
+    if (previousInstitutionId) {
+      // Deactivate old membership
+      const oldMembership = await ctx.db
+        .query("institutionMemberships")
+        .withIndex("by_user_institution", (q) =>
+          q.eq("userId", userId).eq("institutionId", previousInstitutionId),
+        )
+        .first();
+
+      if (oldMembership) {
+        await ctx.db.patch(oldMembership._id, {
+          status: "LEFT",
+          leftAt: now,
+          updatedAt: now,
+        });
+      }
+    }
+
+    // Create or reactivate membership in new institution
+    const existingNewMembership = await ctx.db
+      .query("institutionMemberships")
+      .withIndex("by_user_institution", (q) =>
+        q.eq("userId", userId).eq("institutionId", newInstitutionId),
+      )
+      .first();
+
+    if (existingNewMembership) {
+      // Reactivate existing membership
+      await ctx.db.patch(existingNewMembership._id, {
+        status: "ACTIVE",
+        leftAt: undefined,
+        lastAccessAt: now,
+        updatedAt: now,
+      });
+    } else {
+      // Create new membership
+      const membershipRole =
+        user.role === "ADMIN"
+          ? "ADMIN"
+          : user.role === "PROFESOR"
+            ? "PROFESOR"
+            : user.role === "PARENT"
+              ? "PARENT"
+              : "STAFF";
+
+      await ctx.db.insert("institutionMemberships", {
+        institutionId: newInstitutionId,
+        userId,
+        role: membershipRole,
+        status: "ACTIVE",
+        invitedBy: performer._id,
+        joinedAt: now,
+        lastAccessAt: now,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+
+    // Log audit trail
+    await logInstitutionAssignment(ctx, {
+      action: previousInstitutionId ? "USER_REASSIGNED" : "USER_ASSIGNED",
+      userId,
+      institutionId: newInstitutionId,
+      previousInstitutionId,
+      performedBy: performer._id,
+      metadata: { reason, userRole: user.role },
+      timestamp: now,
+    });
+
+    console.log(
+      `✅ User ${user.email} reassigned to institution ${newInstitution.name}`,
+      {
+        userId,
+        previousInstitutionId,
+        newInstitutionId,
+        performedBy: performer.email,
+        reason,
+      },
+    );
+
+    return {
+      success: true,
+      userId,
+      previousInstitutionId,
+      newInstitutionId,
+      performedBy: performer._id,
+    };
+  },
+});
+
+/**
+ * Get all users in an institution with their membership details
+ */
+export const getInstitutionUsers = query({
+  args: { institutionId: v.id("institutionInfo") },
+  handler: async (ctx, { institutionId }) => {
+    const memberships = await ctx.db
+      .query("institutionMemberships")
+      .filter((q) => q.eq(q.field("institutionId"), institutionId))
+      .collect();
+
+    const userIds = memberships.map((m) => m.userId);
+    const users = await Promise.all(
+      userIds.map((userId) => ctx.db.get(userId)),
+    );
+
+    return memberships
+      .map((membership, index) => ({
+        membership,
+        user: users[index],
+      }))
+      .filter((item) => item.user !== null);
+  },
+});
+
+/**
+ * Get institutions available for reassignment
+ */
+export const getActiveInstitutions = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("institutionInfo")
+      .filter((q) => q.eq(q.field("isActive"), true))
+      .collect();
+  },
+});
+
+/**
+ * Configure institution domain mappings (Master only)
+ */
+export const configureInstitutionDomains = mutation({
+  args: {
+    domainMappings: v.record(v.string(), v.id("institutionInfo")),
+    defaultInstitutionId: v.optional(v.id("institutionInfo")),
+  },
+  handler: async (ctx, { domainMappings, defaultInstitutionId }) => {
+    // Get current user
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .first();
+
+    if (!user || user.role !== "MASTER") {
+      throw new Error("Only MASTER users can configure institution domains");
+    }
+
+    // Verify all institution IDs exist and are active
+    const institutionIds = [
+      ...Object.values(domainMappings),
+      defaultInstitutionId,
+    ].filter(Boolean);
+    for (const institutionId of institutionIds) {
+      const institution = await ctx.db.get(institutionId!);
+      if (!institution || institution.isActive === false) {
+        throw new Error(`Institution ${institutionId} not found or inactive`);
+      }
+    }
+
+    // Update in-memory mappings (in production, this should be stored in DB)
+    Object.assign(INSTITUTION_DOMAIN_MAPPING, domainMappings);
+    DEFAULT_INSTITUTION_ID = defaultInstitutionId || null;
+
+    console.log("✅ Institution domain mappings updated", {
+      mappings: domainMappings,
+      defaultInstitutionId,
+      performedBy: user.email,
+    });
+
+    return {
+      success: true,
+      domainMappings,
+      defaultInstitutionId,
+    };
+  },
+});
+
+/**
+ * Get current institution domain configuration
+ */
+export const getInstitutionDomainConfig = query({
+  args: {},
+  handler: async (ctx) => {
+    return {
+      domainMappings: INSTITUTION_DOMAIN_MAPPING,
+      defaultInstitutionId: DEFAULT_INSTITUTION_ID,
+    };
+  },
+});
+
+/**
+ * Initialize default institution from existing data
+ */
+export const initializeDefaultInstitution = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    if (DEFAULT_INSTITUTION_ID) {
+      return DEFAULT_INSTITUTION_ID;
+    }
+
+    // Find first active institution
+    const institutions = await ctx.db
+      .query("institutionInfo")
+      .filter((q) => q.eq(q.field("isActive"), true))
+      .collect();
+
+    if (institutions.length === 0) {
+      throw new Error("No active institutions found");
+    }
+
+    DEFAULT_INSTITUTION_ID = institutions[0]._id;
+    console.log("✅ Default institution initialized:", DEFAULT_INSTITUTION_ID);
+
+    return DEFAULT_INSTITUTION_ID;
   },
 });
 

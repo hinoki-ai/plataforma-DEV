@@ -155,6 +155,7 @@ export function AppSessionProvider({
           name: sessionQuery.user.name ?? user?.fullName ?? null,
           image: sessionQuery.user.image ?? user?.imageUrl ?? null,
           role: sessionQuery.user.role,
+          currentInstitutionId: sessionQuery.user.currentInstitutionId,
           needsRegistration: sessionQuery.user.needsRegistration,
           isOAuthUser: sessionQuery.user.isOAuthUser,
         },

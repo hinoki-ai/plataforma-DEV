@@ -16,24 +16,42 @@ http.route({
       return new Response("Invalid webhook signature", { status: 400 });
     }
 
-    switch (event.type) {
-      case "user.created":
-      case "user.updated":
-        await ctx.runMutation(internal.users.syncFromClerk, {
-          data: event.data as unknown,
-        });
+    try {
+      switch (event.type) {
+        case "user.created":
+        case "user.updated":
+          // Ensure default institution is initialized before syncing user
+          await ctx.runMutation(
+            internal.users.initializeDefaultInstitution,
+            {},
+          );
 
-        break;
-      case "user.deleted":
-        await ctx.runMutation(internal.users.disableUserFromClerk, {
-          clerkId: (event.data as any).id,
-        });
+          await ctx.runMutation(internal.users.syncFromClerk, {
+            data: event.data as unknown,
+          });
 
-        break;
-      default:
+          break;
+        case "user.deleted":
+          await ctx.runMutation(internal.users.disableUserFromClerk, {
+            clerkId: (event.data as any).id,
+          });
+
+          break;
+        default:
+          console.log(`ℹ️ Unhandled webhook event type: ${event.type}`);
+      }
+
+      return new Response(null, { status: 200 });
+    } catch (error) {
+      console.error("❌ Webhook processing failed:", {
+        eventType: event.type,
+        eventId: event.data?.id,
+        error: error instanceof Error ? error.message : String(error),
+      });
+
+      // Return 500 to indicate failure - Clerk will retry
+      return new Response("Internal server error", { status: 500 });
     }
-
-    return new Response(null, { status: 200 });
   }),
 });
 

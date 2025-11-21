@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "@/lib/auth-client";
-import { Plus, Search, Edit, Trash2 } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Shuffle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,6 +31,7 @@ import {
 import { PageTransition } from "@/components/ui/page-transition";
 import { UserForm } from "@/components/users/UserForm";
 import { ParentCreationForm } from "@/components/users/ParentCreationForm";
+import { InstitutionReassignmentDialog } from "@/components/users/InstitutionReassignmentDialog";
 import { User } from "@/lib/types";
 import { ActionLoader } from "@/components/ui/dashboard-loader";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -48,6 +49,7 @@ export default function UsersPage() {
   const [isCreateParentDialogOpen, setIsCreateParentDialogOpen] =
     useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isReassignDialogOpen, setIsReassignDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -203,6 +205,11 @@ export default function UsersPage() {
     setIsEditDialogOpen(true);
   };
 
+  const openReassignDialog = (user: User) => {
+    setSelectedUser(user);
+    setIsReassignDialogOpen(true);
+  };
+
   if (loading) {
     return (
       <div
@@ -336,14 +343,25 @@ export default function UsersPage() {
                             variant="outline"
                             size="sm"
                             onClick={() => openEditDialog(user)}
+                            title="Editar usuario"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
+                            onClick={() => openReassignDialog(user)}
+                            title="Reasignar institución"
+                            className="text-blue-600 hover:text-blue-700"
+                          >
+                            <Shuffle className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
                             onClick={() => handleDeleteUser(user.id)}
                             className="text-destructive hover:text-destructive"
+                            title="Eliminar usuario"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -424,6 +442,19 @@ export default function UsersPage() {
             />
           </DialogContent>
         </Dialog>
+
+        {/* Institution Reassignment Dialog */}
+        <InstitutionReassignmentDialog
+          isOpen={isReassignDialogOpen}
+          onClose={() => {
+            setIsReassignDialogOpen(false);
+            setSelectedUser(null);
+          }}
+          userId={selectedUser?.id as any}
+          userName={selectedUser?.name || ""}
+          userEmail={selectedUser?.email || ""}
+          currentInstitutionId={selectedUser?.currentInstitutionId as any}
+        />
       </div>
     </PageTransition>
   );

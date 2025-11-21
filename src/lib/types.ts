@@ -7,6 +7,7 @@ export interface User {
   emailVerified: Date | null;
   image: string | null;
   role: ExtendedUserRole;
+  currentInstitutionId?: string;
   createdAt: Date;
   updatedAt: Date;
   googleUserId: string | null;

@@ -94,23 +94,23 @@ export function CognitoChat({
   const getWelcomeMessage = (context: any): Message => {
     const welcomeMessages = {
       admin: t(
-        "cognito.chat.welcome.admin",
+        "Cogníto.chat.welcome.admin",
         "¡Hola! Soy Cogníto, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?",
       ),
       teacher: t(
-        "cognito.chat.welcome.teacher",
+        "Cogníto.chat.welcome.teacher",
         "¡Hola profesor! Soy Cogníto, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
       ),
       parent: t(
-        "cognito.chat.welcome.parent",
+        "Cogníto.chat.welcome.parent",
         "¡Hola apoderado! Soy Cogníto, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?",
       ),
       master: t(
-        "cognito.chat.welcome.master",
+        "Cogníto.chat.welcome.master",
         "¡Hola maestro del sistema! Soy Cogníto, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?",
       ),
       general: t(
-        "cognito.chat.welcome.general",
+        "Cogníto.chat.welcome.general",
         "¡Hola! Soy Cogníto, tu asistente educativo. ¿En qué puedo ayudarte hoy?",
       ),
     };
@@ -299,7 +299,7 @@ export function CognitoChat({
           className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg select-none relative group"
           onMouseDown={handleResizeStart}
           title={t(
-            "cognito.chat.resize",
+            "Cogníto.chat.resize",
             "Arrastra hacia arriba para redimensionar",
           )}
         >
@@ -340,10 +340,10 @@ export function CognitoChat({
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
               aria-label={t(
-                "cognito.tour.button.accessible",
+                "Cogníto.tour.button.accessible",
                 "Start interactive tour with Cognito",
               )}
-              title={t("cognito.tour.button", "Tour Interactivo")}
+              title={t("Cogníto.tour.button", "Tour Interactivo")}
             >
               <Map className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -355,8 +355,8 @@ export function CognitoChat({
                 onMinimizeChange?.(newMinimized);
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
-              aria-label={t("cognito.chat.minimize", "Minimizar chat")}
-              title={t("cognito.chat.minimize", "Minimizar chat")}
+              aria-label={t("Cogníto.chat.minimize", "Minimizar chat")}
+              title={t("Cogníto.chat.minimize", "Minimizar chat")}
             >
               <ChevronDown className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -366,8 +366,8 @@ export function CognitoChat({
                 onToggle();
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
-              aria-label={t("cognito.chat.close", "Cerrar chat")}
-              title={t("cognito.chat.close", "Cerrar chat")}
+              aria-label={t("Cogníto.chat.close", "Cerrar chat")}
+              title={t("Cogníto.chat.close", "Cerrar chat")}
             >
               <X className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -385,7 +385,7 @@ export function CognitoChat({
             <div
               className="flex-1 overflow-y-auto p-4 space-y-4"
               role="log"
-              aria-label={t("cognito.chat.messages", "Mensajes del chat")}
+              aria-label={t("Cogníto.chat.messages", "Mensajes del chat")}
               aria-live="polite"
               aria-atomic="false"
             >
@@ -448,7 +448,7 @@ export function CognitoChat({
               <div className="flex space-x-1">
                 <label htmlFor="cognito-chat-input" className="sr-only">
                   {t(
-                    "cognito.chat.input.label",
+                    "Cogníto.chat.input.label",
                     "Escribe tu mensaje para Cognito",
                   )}
                 </label>
@@ -460,7 +460,7 @@ export function CognitoChat({
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder={t(
-                    "cognito.chat.placeholder",
+                    "Cogníto.chat.placeholder",
                     "Escribe tu mensaje...",
                   )}
                   className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
@@ -474,8 +474,8 @@ export function CognitoChat({
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isTyping}
                   className="ml-[5px] px-2.5 py-0.5 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0 scale-[0.85]"
-                  aria-label={t("cognito.chat.send", "Enviar mensaje")}
-                  title={t("cognito.chat.send", "Enviar mensaje")}
+                  aria-label={t("Cogníto.chat.send", "Enviar mensaje")}
+                  title={t("Cogníto.chat.send", "Enviar mensaje")}
                 >
                   <Send className="w-2.5 h-2.5" aria-hidden="true" />
                 </button>
@@ -486,7 +486,7 @@ export function CognitoChat({
                   className="sr-only"
                   aria-live="assertive"
                 >
-                  {t("cognito.chat.typing", "Cognito está escribiendo")}
+                  {t("Cogníto.chat.typing", "Cognito está escribiendo")}
                 </div>
               )}
             </div>
