@@ -77,6 +77,66 @@ export function CognitoChat({
     return role || "guest";
   };
 
+  // Role hierarchy and restrictions
+  const ROLE_HIERARCHY = {
+    guest: 0,
+    parent: 1,
+    teacher: 2,
+    admin: 3,
+    master: 4,
+  };
+
+  const ROLE_RESTRICTIONS = {
+    parent: {
+      forbiddenTopics: [
+        'admin', 'administrador', 'profesor', 'teacher', 'maestro', 'configurar',
+        'gestionar', 'manejar', 'sistema', 'servidor', 'base de datos', 'usuarios',
+        'permisos', 'roles', 'clases', 'estudiantes', 'calificaciones'
+      ],
+      redirectMessage: t(
+        "cognito.chat.role.parent.restriction",
+        "Lo siento, como apoderado no puedo ayudarte con temas relacionados con la gestión docente o administrativa. ¿Quieres saber sobre el progreso de tu estudiante o contactar a profesores?"
+      )
+    },
+    teacher: {
+      forbiddenTopics: [
+        'admin', 'administrador', 'master', 'maestro', 'sistema', 'servidor',
+        'base de datos', 'configurar', 'usuarios', 'permisos', 'roles',
+        'finanzas', 'presupuesto', 'institución', 'centro educativo'
+      ],
+      redirectMessage: t(
+        "cognito.chat.role.teacher.restriction",
+        "Lo siento, como profesor no puedo ayudarte con temas administrativos o de configuración del sistema. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?"
+      )
+    },
+    admin: {
+      forbiddenTopics: [
+        'master', 'maestro', 'sistema', 'servidor', 'base de datos',
+        'configurar', 'usuarios', 'permisos', 'roles', 'finanzas'
+      ],
+      redirectMessage: t(
+        "cognito.chat.role.admin.restriction",
+        "Lo siento, como administrador no puedo ayudarte con temas técnicos avanzados del sistema. ¿Necesitas ayuda con la gestión del centro educativo?"
+      )
+    },
+    master: {
+      forbiddenTopics: [], // Master can ask about everything
+      redirectMessage: ""
+    }
+  };
+
+  const checkRoleViolation = (message: string, userRole: string): string | null => {
+    const restrictions = ROLE_RESTRICTIONS[userRole as keyof typeof ROLE_RESTRICTIONS];
+    if (!restrictions) return null;
+
+    const lowerMessage = message.toLowerCase();
+    const hasForbiddenTopic = restrictions.forbiddenTopics.some(topic =>
+      lowerMessage.includes(topic.toLowerCase())
+    );
+
+    return hasForbiddenTopic ? restrictions.redirectMessage : null;
+  };
+
   const getPageContext = () => {
     // Use provided context function if available, otherwise use local implementation
     if (getPageContextProp) {
@@ -96,23 +156,23 @@ export function CognitoChat({
   const getWelcomeMessage = (context: any): Message => {
     const welcomeMessages = {
       admin: t(
-        "Cogníto.chat.welcome.admin",
+        "cognito.chat.welcome.admin",
         "¡Hola! Soy Cogníto, tu asistente administrativo. ¿En qué puedo ayudarte con la gestión del centro educativo?",
       ),
       teacher: t(
-        "Cogníto.chat.welcome.teacher",
+        "cognito.chat.welcome.teacher",
         "¡Hola profesor! Soy Cogníto, tu asistente educativo. ¿Necesitas ayuda con tus clases, planificaciones o estudiantes?",
       ),
       parent: t(
-        "Cogníto.chat.welcome.parent",
+        "cognito.chat.welcome.parent",
         "¡Hola apoderado! Soy Cogníto, tu asistente familiar. ¿Quieres saber sobre el progreso de tu estudiante o necesitas contactar a profesores?",
       ),
       master: t(
-        "Cogníto.chat.welcome.master",
+        "cognito.chat.welcome.master",
         "¡Hola maestro del sistema! Soy Cogníto, tu asistente técnico. ¿Necesitas ayuda con configuraciones avanzadas o monitoreo del sistema?",
       ),
       general: t(
-        "Cogníto.chat.welcome.general",
+        "cognito.chat.welcome.general",
         "¡Hola! Soy Cogníto, tu asistente educativo. ¿En qué puedo ayudarte hoy?",
       ),
     };
@@ -211,12 +271,23 @@ export function CognitoChat({
     setInputValue("");
     setIsTyping(true);
 
+    // Check for role violations
+    const userRole = getUserRole();
+    const roleViolation = checkRoleViolation(userMessage.content, userRole);
+
     // Simulate typing delay
     setTimeout(
       async () => {
-        const cognitoResponse = await generateCognitoResponse(
-          userMessage.content,
-        );
+        let cognitoResponse: string;
+
+        if (roleViolation) {
+          // Use role violation message instead of AI response
+          cognitoResponse = roleViolation;
+        } else {
+          // Generate normal AI response
+          cognitoResponse = await generateCognitoResponse(userMessage.content);
+        }
+
         const cognitoMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: cognitoResponse,
@@ -296,7 +367,7 @@ export function CognitoChat({
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 20 }}
-        className="fixed bottom-4 right-4 z-50 w-80 bg-white dark:bg-gray-800 rounded-tl-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out"
+        className="fixed bottom-0 right-0 z-50 w-80 bg-white dark:bg-gray-800 rounded-tl-lg shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 ease-in-out"
         style={{ height: `${chatHeight}px` }}
         role="dialog"
         aria-modal="true"
@@ -308,7 +379,7 @@ export function CognitoChat({
           className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg select-none relative group"
           onMouseDown={(e) => handleResizeStart(e, "top")}
           title={t(
-            "Cogníto.chat.resize",
+            "cognito.chat.resize",
             "Arrastra hacia arriba para redimensionar",
           )}
         >
@@ -318,7 +389,7 @@ export function CognitoChat({
             <img
               src={cognitoImage}
               alt=""
-              className="w-8 h-8 rounded-full border-2 border-white object-contain flex-shrink-0"
+              className="w-9 h-9 rounded-full border-2 border-accent object-contain flex-shrink-0"
               aria-hidden="true"
             />
             <div className="min-w-0">
@@ -326,14 +397,13 @@ export function CognitoChat({
                 id="cognito-chat-title"
                 className="font-semibold text-sm truncate"
               >
-                Cognito - Compañero Organizado Guía Nuestra Inteligencia Tiempo
-                Optimizado
+                Cogníto
               </h3>
               <p
                 id="cognito-chat-description"
                 className="text-xs opacity-90 truncate"
               >
-                Tu asistente educativo
+                Asistente Tecnico
               </p>
             </div>
           </div>
@@ -349,10 +419,10 @@ export function CognitoChat({
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
               aria-label={t(
-                "Cogníto.tour.button.accessible",
+                "cognito.tour.button.accessible",
                 "Start interactive tour with Cognito",
               )}
-              title={t("Cogníto.tour.button", "Tour Interactivo")}
+              title={t("cognito.tour.button", "Tour Interactivo")}
             >
               <Map className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -364,8 +434,8 @@ export function CognitoChat({
                 onMinimizeChange?.(newMinimized);
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
-              aria-label={t("Cogníto.chat.minimize", "Minimizar chat")}
-              title={t("Cogníto.chat.minimize", "Minimizar chat")}
+              aria-label={t("cognito.chat.minimize", "Minimizar chat")}
+              title={t("cognito.chat.minimize", "Minimizar chat")}
             >
               <ChevronDown className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -375,8 +445,8 @@ export function CognitoChat({
                 onToggle();
               }}
               className="p-2 hover:bg-white/20 rounded-md transition-colors focus:bg-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none cursor-pointer"
-              aria-label={t("Cogníto.chat.close", "Cerrar chat")}
-              title={t("Cogníto.chat.close", "Cerrar chat")}
+              aria-label={t("cognito.chat.close", "Cerrar chat")}
+              title={t("cognito.chat.close", "Cerrar chat")}
             >
               <X className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -394,7 +464,7 @@ export function CognitoChat({
             <div
               className="flex-1 overflow-y-auto p-4 space-y-4"
               role="log"
-              aria-label={t("Cogníto.chat.messages", "Mensajes del chat")}
+              aria-label={t("cognito.chat.messages", "Mensajes del chat")}
               aria-live="polite"
               aria-atomic="false"
             >
@@ -470,7 +540,7 @@ export function CognitoChat({
               <div className="flex space-x-1">
                 <label htmlFor="cognito-chat-input" className="sr-only">
                   {t(
-                    "Cogníto.chat.input.label",
+                    "cognito.chat.input.label",
                     "Escribe tu mensaje para Cognito",
                   )}
                 </label>
@@ -482,7 +552,7 @@ export function CognitoChat({
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder={t(
-                    "Cogníto.chat.placeholder",
+                    "cognito.chat.placeholder",
                     "Escribe tu mensaje...",
                   )}
                   className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
@@ -496,8 +566,8 @@ export function CognitoChat({
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isTyping}
                   className="ml-[5px] px-2.5 py-0.5 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center focus:ring-2 focus:ring-blue-300 disabled:focus:ring-0 scale-[0.85]"
-                  aria-label={t("Cogníto.chat.send", "Enviar mensaje")}
-                  title={t("Cogníto.chat.send", "Enviar mensaje")}
+                  aria-label={t("cognito.chat.send", "Enviar mensaje")}
+                  title={t("cognito.chat.send", "Enviar mensaje")}
                 >
                   <Send className="w-2.5 h-2.5" aria-hidden="true" />
                 </button>
@@ -508,7 +578,7 @@ export function CognitoChat({
                   className="sr-only"
                   aria-live="assertive"
                 >
-                  {t("Cogníto.chat.typing", "Cognito está escribiendo")}
+                  {t("cognito.chat.typing", "Cognito está escribiendo")}
                 </div>
               )}
             </div>
@@ -524,7 +594,7 @@ export function CognitoChat({
             handleResizeStart(e, "bottom");
           }}
           title={t(
-            "Cogníto.chat.resize",
+            "cognito.chat.resize",
             "Arrastra hacia abajo para agrandar, hacia arriba para achicar",
           )}
         >

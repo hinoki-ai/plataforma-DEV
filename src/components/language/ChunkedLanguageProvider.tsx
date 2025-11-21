@@ -1160,14 +1160,26 @@ const DivineParsingOracleProvider: React.FC<{
   const t = useMemo(() => {
     return (
       key: string,
-      namespace: string | Record<string, any> = "common",
+      namespace?: string | Record<string, any>,
       variables?: Record<string, any>,
     ): string => {
       let actualNamespace = "common";
       let actualVariables: Record<string, any> | undefined = variables;
+      let fallbackText: string | undefined;
+
+      // Helper to detect if a string is likely a fallback text rather than a namespace
+      const isLikelyFallback = (str: string): boolean => {
+        // If it contains spaces, punctuation, or is longer than typical namespace names, it's likely a fallback
+        return str.length > 20 || /\s/.test(str) || /[.!?¿¡]/.test(str);
+      };
 
       if (typeof namespace === "string") {
-        actualNamespace = namespace;
+        // Check if this looks like a fallback string rather than a namespace
+        if (isLikelyFallback(namespace)) {
+          fallbackText = namespace;
+        } else {
+          actualNamespace = namespace;
+        }
       } else if (typeof namespace === "object" && namespace !== null) {
         actualVariables = namespace;
       }
@@ -1312,8 +1324,8 @@ const DivineParsingOracleProvider: React.FC<{
         if (process.env.NODE_ENV === "development") {
         }
 
-        // 8. Final fallback - return a formatted version of the key
-        const finalResult = formatMissingKey(key);
+        // 8. Final fallback - use provided fallback text or format the key
+        const finalResult = fallbackText || formatMissingKey(key);
 
         // Cache the result for future lookups
         return cacheAndReturn(finalResult);
@@ -1321,7 +1333,7 @@ const DivineParsingOracleProvider: React.FC<{
         // Log error in development
         if (process.env.NODE_ENV === "development") {
         }
-        const errorResult = formatMissingKey(key);
+        const errorResult = fallbackText || formatMissingKey(key);
         // Cache error results too to avoid repeated errors
         return cacheAndReturn(errorResult);
       }

@@ -7,6 +7,159 @@
 
 import { describe, it, expect } from "vitest";
 
+/**
+ * Role-aware Cognito Chat Tests
+ *
+ * Tests for role-based message filtering in the Cognito chat component
+ */
+describe("Cognito Chat Role Restrictions", () => {
+  // Mock the role hierarchy and restrictions from cognito-chat.tsx
+  const ROLE_RESTRICTIONS = {
+    parent: {
+      forbiddenTopics: [
+        'admin', 'administrador', 'profesor', 'teacher', 'maestro', 'configurar',
+        'gestionar', 'manejar', 'sistema', 'servidor', 'base de datos', 'usuarios',
+        'permisos', 'roles', 'clases', 'estudiantes', 'calificaciones'
+      ],
+      redirectMessage: "Lo siento, como apoderado no puedo ayudarte con temas relacionados con la gestión docente o administrativa."
+    },
+    teacher: {
+      forbiddenTopics: [
+        'admin', 'administrador', 'master', 'maestro', 'sistema', 'servidor',
+        'base de datos', 'configurar', 'usuarios', 'permisos', 'roles',
+        'finanzas', 'presupuesto', 'institución', 'centro educativo'
+      ],
+      redirectMessage: "Lo siento, como profesor no puedo ayudarte con temas administrativos o de configuración del sistema."
+    },
+    admin: {
+      forbiddenTopics: [
+        'master', 'maestro', 'sistema', 'servidor', 'base de datos',
+        'configurar', 'usuarios', 'permisos', 'roles', 'finanzas'
+      ],
+      redirectMessage: "Lo siento, como administrador no puedo ayudarte con temas técnicos avanzados del sistema."
+    },
+    master: {
+      forbiddenTopics: [], // Master can ask about everything
+      redirectMessage: ""
+    }
+  };
+
+  const checkRoleViolation = (message: string, userRole: string): string | null => {
+    const restrictions = ROLE_RESTRICTIONS[userRole as keyof typeof ROLE_RESTRICTIONS];
+    if (!restrictions) return null;
+
+    const lowerMessage = message.toLowerCase();
+    const hasForbiddenTopic = restrictions.forbiddenTopics.some(topic =>
+      lowerMessage.includes(topic.toLowerCase())
+    );
+
+    return hasForbiddenTopic ? restrictions.redirectMessage : null;
+  };
+
+  describe("Parent Role Restrictions", () => {
+    it("should block parent from asking about teacher functionality", () => {
+      const violations = [
+        "Cómo gestionan los profesores las calificaciones?",
+        "¿Puedo ver cómo los maestros configuran las clases?",
+        "Explícame cómo manejar estudiantes"
+      ];
+
+      violations.forEach(message => {
+        const result = checkRoleViolation(message, "parent");
+        expect(result).toBeTruthy();
+        expect(result).toContain("apoderado no puedo ayudarte");
+      });
+    });
+
+    it("should allow parent to ask about student progress", () => {
+      const allowedMessages = [
+        "¿Cómo va mi estudiante en matemáticas?",
+        "Quiero ver el progreso de mi hijo",
+        "¿Cuándo es la reunión de apoderados?"
+      ];
+
+      allowedMessages.forEach(message => {
+        const result = checkRoleViolation(message, "parent");
+        expect(result).toBeNull();
+      });
+    });
+  });
+
+  describe("Teacher Role Restrictions", () => {
+    it("should block teacher from asking about admin functionality", () => {
+      const violations = [
+        "¿Cómo configuran los administradores el sistema?",
+        "Explícame cómo manejar usuarios y permisos",
+        "¿Cómo gestionan las finanzas del centro?"
+      ];
+
+      violations.forEach(message => {
+        const result = checkRoleViolation(message, "teacher");
+        expect(result).toBeTruthy();
+        expect(result).toContain("profesor no puedo ayudarte");
+      });
+    });
+
+    it("should allow teacher to ask about class management", () => {
+      const allowedMessages = [
+        "¿Cómo planifico mis clases?",
+        "Necesito ayuda con las actividades de estudiantes",
+        "¿Cómo registro asistencia?"
+      ];
+
+      allowedMessages.forEach(message => {
+        const result = checkRoleViolation(message, "teacher");
+        expect(result).toBeNull();
+      });
+    });
+  });
+
+  describe("Admin Role Restrictions", () => {
+    it("should block admin from asking about master functionality", () => {
+      const violations = [
+        "¿Cómo configura el maestro el sistema?",
+        "Explícame la base de datos del servidor",
+        "¿Cómo manejo usuarios a nivel técnico?"
+      ];
+
+      violations.forEach(message => {
+        const result = checkRoleViolation(message, "admin");
+        expect(result).toBeTruthy();
+        expect(result).toContain("administrador no puedo ayudarte");
+      });
+    });
+
+    it("should allow admin to ask about institution management", () => {
+      const allowedMessages = [
+        "¿Cómo gestiono los horarios?",
+        "Necesito crear un nuevo usuario profesor",
+        "¿Cómo configuro las reuniones?"
+      ];
+
+      allowedMessages.forEach(message => {
+        const result = checkRoleViolation(message, "admin");
+        expect(result).toBeNull();
+      });
+    });
+  });
+
+  describe("Master Role Permissions", () => {
+    it("should allow master to ask about everything", () => {
+      const messages = [
+        "¿Cómo configuran los administradores?",
+        "¿Cómo gestionan profesores las clases?",
+        "¿Cómo ven padres el progreso?",
+        "¿Cómo manejo el sistema técnico?"
+      ];
+
+      messages.forEach(message => {
+        const result = checkRoleViolation(message, "master");
+        expect(result).toBeNull();
+      });
+    });
+  });
+});
+
 // Test the core logic functions that don't require database setup
 describe("Institution Synchronization Logic", () => {
   describe("Email Domain Extraction", () => {

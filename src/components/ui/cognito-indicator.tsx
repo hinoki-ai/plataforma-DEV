@@ -105,30 +105,32 @@ export function CognitoIndicator() {
   };
 
   // Get drag constraints based on viewport size
-  const [dragConstraints, setDragConstraints] = useState({
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-  });
+  const getDragConstraints = () => {
+    if (typeof window === "undefined") {
+      return { left: 0, right: 0, top: 0, bottom: 0 };
+    }
+    const maxX = window.innerWidth - 80;
+    const maxY = window.innerHeight - 80;
+    return {
+      left: 0,
+      right: maxX,
+      top: 0,
+      bottom: maxY,
+    };
+  };
+
+  const [dragConstraints, setDragConstraints] = useState(getDragConstraints);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const updateConstraints = () => {
-        const maxX = window.innerWidth - 80;
-        const maxY = window.innerHeight - 80;
-
-        setDragConstraints({
-          left: 0,
-          right: maxX,
-          top: 0,
-          bottom: maxY,
-        });
+        const newConstraints = getDragConstraints();
+        setDragConstraints(newConstraints);
 
         // Adjust position if Cognito is outside viewport after resize
         setPosition((prev) => ({
-          x: Math.max(0, Math.min(prev.x, maxX)),
-          y: Math.max(0, Math.min(prev.y, maxY)),
+          x: Math.max(0, Math.min(prev.x, newConstraints.right)),
+          y: Math.max(0, Math.min(prev.y, newConstraints.bottom)),
         }));
       };
 
@@ -247,6 +249,7 @@ export function CognitoIndicator() {
   const startTour = () => {
     const context = getPageContext();
     const tourId = getTourForContext(context);
+
     if (tourId) {
       setActiveTour(tourId);
       setIsTourActive(true);
@@ -402,17 +405,14 @@ export function CognitoIndicator() {
               left: 0,
               top: 0,
             }}
+            whileHover={{ scale: isDragging ? 1 : 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <motion.div
-              className="relative group cursor-pointer"
-              whileHover={{ scale: isDragging ? 1 : 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleClick}
-            >
+            <div className="relative group">
               {/* Cognito Image */}
               <motion.img
                 src={cognitoImage}
-                alt={t("cognito.alt", "Cognito - Educational Assistant")}
+                alt={t("cognito.alt", "Cognito - Asistente Educativo")}
                 className="w-20 h-20 cursor-pointer object-contain"
                 role="button"
                 tabIndex={0}
@@ -431,6 +431,8 @@ export function CognitoIndicator() {
                   scale: 1.1,
                 }}
                 whileTap={{ scale: 0.95 }}
+                drag={false} // Prevent image from being dragged independently
+                dragConstraints={false}
               />
 
               {/* Tooltip */}
@@ -445,7 +447,7 @@ export function CognitoIndicator() {
                 )}
                 <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

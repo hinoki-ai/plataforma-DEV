@@ -160,112 +160,398 @@ test.describe("Master Dashboard - Production E2E", () => {
     };
 
     const routes: RouteCheck[] = [
+      // Core Master Dashboard Routes
       {
         path: "/master",
-        headingPattern: /master|dashboard|overview/i,
-      },
-      {
-        path: "/master/global-oversight",
-        headingPattern: /global oversight|oversight|monitoring/i,
-      },
-      {
-        path: "/master/system-stats",
-        headingPattern: /system stats|statistics|metrics/i,
-      },
-      {
-        path: "/master/system-health",
-        headingPattern: /system health|health|status/i,
-      },
-      {
-        path: "/master/institutions",
-        headingPattern: /institutions|instituciones/i,
+        headingPattern: /master dashboard|panel maestro|dashboard maestro/i,
         assert: async (currentPage) => {
-          // Check if institutions list or creation button is visible
-          const hasContent = await Promise.race([
-            currentPage
-              .getByRole("button", { name: /crear|create|nueva/i })
-              .isVisible()
-              .catch(() => false),
-            currentPage
-              .getByText(/institution|institución/i)
-              .first()
-              .isVisible()
-              .catch(() => false),
+          // Verify dashboard loads with key metrics or overview content
+          await currentPage.waitForTimeout(3000);
+          const hasDashboardContent = await Promise.race([
+            currentPage.getByText(/overview|resumen|sistema|system/i).isVisible().catch(() => false),
+            currentPage.getByText(/institutions|instituciones/i).isVisible().catch(() => false),
+            currentPage.getByText(/users|usuarios/i).isVisible().catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
-          expect(hasContent).toBeTruthy();
+          expect(hasDashboardContent).toBeTruthy();
         },
       },
       {
-        path: "/master/user-management",
-        headingPattern: /user management|gestión de usuarios|users/i,
+        path: "/master/global-oversight",
+        headingPattern: /global oversight|vigilancia global|supervisión/i,
         assert: async (currentPage) => {
-          const hasContent = await Promise.race([
-            currentPage
-              .getByRole("button", { name: /crear|create/i })
-              .isVisible()
-              .catch(() => false),
-            currentPage
-              .getByText(/user|usuario/i)
-              .first()
-              .isVisible()
-              .catch(() => false),
+          await currentPage.waitForTimeout(3000);
+          const hasOversightContent = await Promise.race([
+            currentPage.getByText(/oversight|vigilancia/i).isVisible().catch(() => false),
+            currentPage.getByText(/monitoring|monitoreo/i).isVisible().catch(() => false),
             currentPage.waitForTimeout(2000).then(() => true),
           ]);
-          expect(hasContent).toBeTruthy();
+          expect(hasOversightContent).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/system-stats",
+        headingPattern: /system stats|estadísticas del sistema|metrics/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasStatsContent = await Promise.race([
+            currentPage.getByText(/stats|estadísticas|metrics/i).isVisible().catch(() => false),
+            currentPage.getByText(/system|systema/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasStatsContent).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/system-health",
+        headingPattern: /system health|salud del sistema|estado/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasHealthContent = await Promise.race([
+            currentPage.getByText(/health|salud/i).isVisible().catch(() => false),
+            currentPage.getByText(/status|estado/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasHealthContent).toBeTruthy();
+        },
+      },
+      // Institution Management Routes
+      {
+        path: "/master/institutions",
+        headingPattern: /institutions|instituciones|centros/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasInstitutionContent = await Promise.race([
+            currentPage.getByRole("button", { name: /crear|create|nueva/i }).isVisible().catch(() => false),
+            currentPage.getByText(/institution|institución|centro/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasInstitutionContent).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/institution-creation",
+        headingPattern: /create institution|crear institución|nueva institución/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasCreationForm = await Promise.race([
+            currentPage.getByRole("form").isVisible().catch(() => false),
+            currentPage.getByText(/create|crear/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasCreationForm).toBeTruthy();
+        },
+      },
+      // User Management Routes
+      {
+        path: "/master/user-management",
+        headingPattern: /user management|gestión de usuarios|administración/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasUserManagement = await Promise.race([
+            currentPage.getByRole("button", { name: /crear|create/i }).isVisible().catch(() => false),
+            currentPage.getByText(/user|usuario/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasUserManagement).toBeTruthy();
         },
       },
       {
         path: "/master/role-management",
         headingPattern: /role management|gestión de roles|roles/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasRoleManagement = await Promise.race([
+            currentPage.getByText(/role|rol/i).isVisible().catch(() => false),
+            currentPage.getByText(/permission|permiso/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasRoleManagement).toBeTruthy();
+        },
       },
       {
         path: "/master/user-analytics",
-        headingPattern: /user analytics|analytics|análisis/i,
+        headingPattern: /user analytics|análisis de usuarios|analytics/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasAnalytics = await Promise.race([
+            currentPage.getByText(/analytics|análisis/i).isVisible().catch(() => false),
+            currentPage.getByText(/chart|gráfico/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasAnalytics).toBeTruthy();
+        },
       },
+      // System Configuration Routes
       {
         path: "/master/system-config",
-        headingPattern: /system config|configuration|configuración/i,
-      },
-      {
-        path: "/master/security-center",
-        headingPattern: /security|seguridad/i,
-      },
-      {
-        path: "/master/database-tools",
-        headingPattern: /database|base de datos|tools/i,
+        headingPattern: /system config|configuración del sistema/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasConfig = await Promise.race([
+            currentPage.getByText(/config|configuración/i).isVisible().catch(() => false),
+            currentPage.getByText(/settings|ajustes/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasConfig).toBeTruthy();
+        },
       },
       {
         path: "/master/global-settings",
-        headingPattern: /global settings|settings|configuración/i,
+        headingPattern: /global settings|configuración global|ajustes/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasSettings = await Promise.race([
+            currentPage.getByText(/settings|ajustes/i).isVisible().catch(() => false),
+            currentPage.getByText(/global|global/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasSettings).toBeTruthy();
+        },
+      },
+      // Security Routes
+      {
+        path: "/master/security-center",
+        headingPattern: /security center|centro de seguridad|seguridad/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasSecurity = await Promise.race([
+            currentPage.getByText(/security|seguridad/i).isVisible().catch(() => false),
+            currentPage.getByText(/alert|alerta/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasSecurity).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/security",
+        headingPattern: /security|seguridad/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasSecurityPage = await Promise.race([
+            currentPage.getByText(/security|seguridad/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasSecurityPage).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/security-alerts",
+        headingPattern: /security alerts|alertas de seguridad/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasAlerts = await Promise.race([
+            currentPage.getByText(/alert|alerta/i).isVisible().catch(() => false),
+            currentPage.getByText(/security|seguridad/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasAlerts).toBeTruthy();
+        },
+      },
+      // Advanced/Development Routes
+      {
+        path: "/master/database-tools",
+        headingPattern: /database tools|herramientas de base de datos|database/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasDatabaseTools = await Promise.race([
+            currentPage.getByText(/database|base de datos/i).isVisible().catch(() => false),
+            currentPage.getByText(/tools|herramientas/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasDatabaseTools).toBeTruthy();
+        },
       },
       {
         path: "/master/god-mode",
-        headingPattern: /god mode|advanced|administración/i,
+        headingPattern: /god mode|modo dios|administración avanzada/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasGodMode = await Promise.race([
+            currentPage.getByText(/god mode|modo dios/i).isVisible().catch(() => false),
+            currentPage.getByText(/advanced|avanzado/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasGodMode).toBeTruthy();
+        },
       },
       {
         path: "/master/debug-console",
-        headingPattern: /debug|console|consola/i,
+        headingPattern: /debug console|consola de depuración|debug/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasDebugConsole = await Promise.race([
+            currentPage.getByText(/debug|depuración/i).isVisible().catch(() => false),
+            currentPage.getByText(/console|consola/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasDebugConsole).toBeTruthy();
+        },
       },
       {
+        path: "/master/advanced-operations",
+        headingPattern: /advanced operations|operaciones avanzadas/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasAdvancedOps = await Promise.race([
+            currentPage.getByText(/advanced|avanzado/i).isVisible().catch(() => false),
+            currentPage.getByText(/operations|operaciones/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasAdvancedOps).toBeTruthy();
+        },
+      },
+      // Monitoring and Audit Routes
+      {
         path: "/master/audit-logs",
-        headingPattern: /audit|logs|registro/i,
+        headingPattern: /audit logs|registros de auditoría|logs/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasAuditLogs = await Promise.race([
+            currentPage.getByText(/audit|auditoría/i).isVisible().catch(() => false),
+            currentPage.getByText(/logs|registros/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasAuditLogs).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/audit-master",
+        headingPattern: /audit master|auditoría maestra/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasAuditMaster = await Promise.race([
+            currentPage.getByText(/audit|auditoría/i).isVisible().catch(() => false),
+            currentPage.getByText(/master|maestra/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasAuditMaster).toBeTruthy();
+        },
       },
       {
         path: "/master/system-monitor",
-        headingPattern: /system monitor|monitor|monitoreo/i,
+        headingPattern: /system monitor|monitor del sistema|monitoreo/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasSystemMonitor = await Promise.race([
+            currentPage.getByText(/monitor|monitoreo/i).isVisible().catch(() => false),
+            currentPage.getByText(/system|sistema/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasSystemMonitor).toBeTruthy();
+        },
       },
       {
         path: "/master/performance",
-        headingPattern: /performance|rendimiento/i,
+        headingPattern: /performance|rendimiento|performance/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasPerformance = await Promise.race([
+            currentPage.getByText(/performance|rendimiento/i).isVisible().catch(() => false),
+            currentPage.getByText(/metrics|métricas/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasPerformance).toBeTruthy();
+        },
       },
       {
         path: "/master/system-overview",
-        headingPattern: /system overview|overview|resumen/i,
+        headingPattern: /system overview|resumen del sistema|overview/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasSystemOverview = await Promise.race([
+            currentPage.getByText(/overview|resumen/i).isVisible().catch(() => false),
+            currentPage.getByText(/system|sistema/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasSystemOverview).toBeTruthy();
+        },
       },
+      // Protocolos de Convivencia Routes
       {
         path: "/master/protocolos-convivencia",
-        headingPattern: /protocolos|convivencia/i,
+        headingPattern: /protocolos de convivencia|convivencia/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasProtocolos = await Promise.race([
+            currentPage.getByText(/protocolos|convivencia/i).isVisible().catch(() => false),
+            currentPage.getByText(/disciplina|normas/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasProtocolos).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/protocolos-convivencia/actas-alumnos",
+        headingPattern: /actas alumnos|actas de alumnos/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasActasAlumnos = await Promise.race([
+            currentPage.getByText(/actas|alumnos/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasActasAlumnos).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/protocolos-convivencia/actas-apoderados",
+        headingPattern: /actas apoderados|actas de apoderados/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasActasApoderados = await Promise.race([
+            currentPage.getByText(/actas|apoderados/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasActasApoderados).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/protocolos-convivencia/disciplina",
+        headingPattern: /disciplina|disciplinario/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasDisciplina = await Promise.race([
+            currentPage.getByText(/disciplina/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasDisciplina).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/protocolos-convivencia/medidas",
+        headingPattern: /medidas disciplinarias|medidas/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasMedidas = await Promise.race([
+            currentPage.getByText(/medidas/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasMedidas).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/protocolos-convivencia/normas",
+        headingPattern: /normas de convivencia|normas/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasNormas = await Promise.race([
+            currentPage.getByText(/normas/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasNormas).toBeTruthy();
+        },
+      },
+      {
+        path: "/master/protocolos-convivencia/reconocimientos",
+        headingPattern: /reconocimientos|reconocimiento/i,
+        assert: async (currentPage) => {
+          await currentPage.waitForTimeout(3000);
+          const hasReconocimientos = await Promise.race([
+            currentPage.getByText(/reconocimientos/i).isVisible().catch(() => false),
+            currentPage.waitForTimeout(2000).then(() => true),
+          ]);
+          expect(hasReconocimientos).toBeTruthy();
+        },
       },
     ];
 

@@ -280,9 +280,12 @@ export function CognitoTour({
   // Load tour based on tourId
   useEffect(() => {
     if (tourId && tours[tourId]) {
+      console.log("Starting tour:", tourId);
       setTour(tours[tourId]);
       setCurrentStep(0);
       setIsVisible(true);
+    } else if (tourId) {
+      console.log("Tour not found:", tourId);
     }
   }, [tourId]);
 
@@ -418,7 +421,11 @@ export function CognitoTour({
     if (tour && isVisible) {
       const step = tour.steps[currentStep];
       if (step?.highlight && step.target) {
-        setTimeout(() => {
+        // Try multiple times with increasing delays to find elements
+        let attempts = 0;
+        const maxAttempts = 5;
+        const findElements = () => {
+          attempts++;
           highlightElement(step.target);
           // Calculate position after element is highlighted
           const selectors = Array.isArray(step.target)
@@ -427,17 +434,23 @@ export function CognitoTour({
           const elements = selectors
             .map((sel) => document.querySelector(sel))
             .filter((el) => el !== null);
+
           if (elements.length > 0) {
             const position = getTooltipPosition(elements);
             setTooltipPosition(position);
+          } else if (attempts < maxAttempts) {
+            // Try again with longer delay
+            setTimeout(findElements, attempts * 200);
           } else {
+            console.log("Tour elements not found after", maxAttempts, "attempts:", selectors);
             // If no elements found, center the tooltip
             setTooltipPosition({
               top: window.innerHeight / 2 - 100,
               left: window.innerWidth / 2 - 150,
             });
           }
-        }, 100);
+        };
+        setTimeout(findElements, 200);
       }
     }
   }, [currentStep, tour, isVisible]);
